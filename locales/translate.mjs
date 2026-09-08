@@ -14,6 +14,15 @@ for(const e of Object.values(encounters)){
  }
 }
 const ui={
+ 'Choose your side and character.':'Roghnaigh do thaobh agus do charachtar.',
+ 'Pick your character, then a situation. You can change character or switch sides at any stage.':'Roghnaigh do charachtar, ansin cás. Is féidir carachtar nó taobh a athrú ag aon chéim.',
+ 'Choose your character':'Roghnaigh do charachtar','Change your character':'Athraigh do charachtar','Change character':'Athraigh carachtar',
+ 'Choose how you appear in the game. Each situation keeps its own names and facts.':'Roghnaigh do chuma sa chluiche. Coinníonn gach cás a ainmneacha agus a fhíricí féin.',
+ 'Your stage, answers and scores stay in place.':'Coinnítear do chéim, do fhreagraí agus do scóir.',
+ 'The other character is chosen at random when you start. Both characters stay with the situation until you change them.':'Roghnaítear an carachtar eile go randamach nuair a thosaíonn tú. Fanann an dá charachtar leis an gcás go dtí go n-athraíonn tú iad.',
+ 'Switch sides to play as the other character. You can change that character too.':'Athraigh taobh chun imirt mar an carachtar eile. Is féidir an carachtar sin a athrú freisin.',
+ 'Available characters':'Carachtair atá ar fáil','Characters in this situation':'Carachtair sa chás seo','You':'Tusa','Other side':'An taobh eile','Choose':'Roghnaigh','Done':'Críochnaithe',
+ 'Character selected.':'Carachtar roghnaithe.','Character changed. Your progress is unchanged.':'Carachtar athraithe. Tá do dhul chun cinn mar a bhí.',
  'Selected':'Roghnaithe','Play':'Baile','Play both sides':'An dá thaobh','Progress':'Dul chun cinn','Rights & sources':'Cearta agus foinsí','Evidence & sources':'Fianaise agus foinsí','About':'Eolas','Accessibility':'Inrochtaineacht',
  'Skip to the game':'Léim chuig an ábhar','Main navigation':'Príomhloingseoireacht','Language & reading':'Teanga agus léamh','Close settings':'Dún na socruithe','Language':'Teanga','Text size':'Méid an téacs','Standard (100%)':'Caighdeánach (100%)','Larger (115%)':'Níos mó (115%)','Large (130%)':'Mór (130%)','Extra large (150%)':'An-mhór (150%)','Contrast':'Codarsnacht','Standard':'Caighdeánach','High':'Ard','More reading space':'Níos mó spáis don léamh','Reduce motion':'Laghdaigh gluaiseacht','Apply preferences':'Cuir socruithe i bhfeidhm','Cancel':'Cealaigh','Reset reading preferences':'Athshocraigh socruithe léitheoireachta',
  'Your language and reading preferences are saved in this browser. Applying them keeps your answers, role and scores.':'Sábháiltear do theanga agus socruithe léitheoireachta sa bhrabhsálaí seo. Coinnítear do fhreagraí, do ról agus do scóir nuair a chuirtear i bhfeidhm iad.',
@@ -66,6 +75,7 @@ export function translateText(text,lang='en'){
  if(lang!=='ga')return text;
  const s=String(text).trim();if(dictionary.has(s))return dictionary.get(s);
  let m;
+ if((m=s.match(/^Choose character: (.+)$/)))return 'Roghnaigh carachtar: '+m[1];
  if((m=s.match(/^(.*?)(\s+[⇄→↗])$/)))return translateText(m[1],lang)+m[2];
  if((m=s.match(/^(.*):$/))&&dictionary.has(m[1]))return translateText(m[1],lang)+':';
  if((m=s.match(/^(\d+)\. (.+)$/)))return m[1]+'. '+translateText(m[2],lang);

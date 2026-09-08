@@ -30,7 +30,8 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - **14 shared situations and 59 stages**, each with perspectives for a member of the public and a Garda.
 - Public-rights situations about street questions, a bag search, arrest, the station, a young person and concerns about racism.
 - Garda situations about suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision.
-- Perspective switching at each stage, preserving the situation and each role's answers.
+- **18 selectable LEGO-style characters**: nine for each side, with a randomly assigned character opposite you.
+- Character changes and perspective switching at each stage, preserving the situation and each role's answers.
 - Immediate explanations, source links and a final comparison of both perspectives.
 - Saved learning progress, separate role scores, replay and a resume point.
 - English and Gaeilge in shared play, with adjustable reading settings.
@@ -39,9 +40,9 @@ The original single-role practice remains available: six public situations with 
 
 ## How to play
 
-1. **Choose a starting perspective.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/), then choose a situation.
+1. **Choose a side and character.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/), select a LEGO character, then choose a situation. The other character is assigned at random and stays with that encounter.
 2. **Read the scene and choose a response.** Each choice has an explanation and a sourced learning point.
-3. **Switch perspectives.** Explore the same stage through the other role's information and choices. Earlier answers are retained separately.
+3. **Change character or switch sides.** Use **Change character** at any stage, including feedback and recap. Switching sides puts you in the other character's place; you can change that character too. Both role answers and scores are retained.
 4. **Continue the situation.** The active role's choice determines the next branch; the other answer remains available for comparison.
 5. **Review and replay.** Compare the decisions in the recap, revisit a learning point, or return later using saved progress.
 
@@ -70,11 +71,11 @@ Reading controls provide larger text, high contrast, increased spacing and reduc
 
 The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) for coverage and review opportunities.
 
-Both perspectives use a shared **mobile-first layout**, with **66 browser checks in Chromium, Firefox and WebKit**, from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
+Both perspectives use a shared **mobile-first layout**, with **72 browser checks in Chromium, Firefox and WebKit**, from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
 
 ## Privacy
 
-Choices, scores, reading preferences and a resume point are saved in browser storage. There are no accounts, analytics, tracking scripts or forms for real incidents.
+Choices, scores, character selections, reading preferences and a resume point are saved in browser storage. There are no accounts, analytics, tracking scripts or forms for real incidents.
 
 Each perspective keeps a separate record. Switching between them carries and merges progress through the game link. Copying that link can share the learning record it contains. Separate browsers and devices do not synchronise automatically; clearing one perspective's progress does not clear the other's record or previously copied links. Hosting services may retain ordinary access logs.
 
@@ -126,7 +127,7 @@ npm test
 | `npm run test:browser` | Run browser, responsive layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration runs **77 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, progress transfer, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration runs **86 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, progress transfer, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 
@@ -163,6 +164,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 | Guide | What it covers |
 | --- | --- |
 | [Garda learning](docs/GARDA-LEARNING.md) | Learning aims, situations and evidence boundaries |
+| [Characters](docs/CHARACTERS.md) | Character selection, random casting, saved state and artwork |
 | [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) | Shared play, scoring, transfer, privacy and maintenance |
 | [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) | Controls, translation coverage and review needs |
 | [Browser compatibility](docs/BROWSER-COMPATIBILITY.md) | Mobile-first layout, browser coverage, touch tests and device-review limits |
@@ -178,7 +180,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 | [encounters/](encounters/) | Shared scenarios, role switching, branching, scores and progress |
 | [accessibility/](accessibility/), [locales/](locales/) | Reading controls, perspective palettes and translations |
 | [site.mjs](site.mjs) | Resolves both entry-point addresses within one deployment |
-| [assets/](assets/) | Responsive hero images, local fonts and third-party licence notices |
+| [assets/](assets/) | Responsive hero images, character artwork, local fonts and third-party licence notices |
 | [tests/](tests/), [scripts/](scripts/), [package.json](package.json) | Automated checks and content-maintenance commands |
 
 ## Contributing and support
@@ -197,7 +199,7 @@ Created by **Sam O’Brien-Olinger** / [Sam Tim Solutions](https://samobrienolin
 
 The visual language draws on [INAR’s website](https://inar.ie/): teal accents, white surfaces, rounded cards and Open Sans. This is not an INAR website and does not use its logo.
 
-The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links centred at the top of each image. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md).
+The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links centred at the top of each image. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md). The same selected cast is available in a locally hosted, text-free character sheet; [character documentation](docs/CHARACTERS.md) records its generation and use.
 
 The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
 

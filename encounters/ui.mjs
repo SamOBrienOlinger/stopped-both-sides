@@ -1,6 +1,7 @@
 import {encounters,roles,roleLabels,sites,references,stageCount} from './catalog.mjs';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
+import {characters,characterFor,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate>${ids.map(id=>{const s=references[id];return `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)} ↗</a></li>`;}).join('')}</ul></details>`;
@@ -9,7 +10,8 @@ const scoreExplanation='<p class="score-explanation">1 point for a choice that s
 export function createEncounterMode({siteRole,main,rerender,getOriginalSession,resetOriginalSession,announce=()=>{}}){
  let browserStorage;try{browserStorage=globalThis.localStorage;}catch{}
  const store=createProgressStore(browserStorage,siteRole);
- let state=null,clearPending=false;
+ const characterPreferences=createCharacterPreferences(browserStorage),legacyCasts=new Map();
+ let state=null,clearPending=false,characterPickerOpen=false;
  const handles=hash=>hash==='encounters'||hash.startsWith('encounters/')||hash.startsWith('encounter/')||hash==='progress'||hash.startsWith('progress~')||hash.startsWith('encounters~');
  function saveState(next){state=next;store.save(recordProgress(store.value,state));}
  function navigate(next,replace=false,focus=true){
@@ -22,12 +24,28 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const scores=runScores(s);
   return `<div class="role-scores ${compact?'compact':''}" aria-label="Scores on this route">${roles.map(role=>`<div class="role-score ${s.role===role?'active':''}" data-role-tone="${role}"><span>${roleLabels[role]}</span><strong>${scores[role].points} / ${scores[role].answered} <small>points</small></strong><span>${scores[role].answered?`${scores[role].answered} decision${scores[role].answered===1?'':'s'} answered`:'No answers yet'}</span></div>`).join('')}</div>`;
  }
+ function characterImage(role,id){
+  const c=characterFor(role,id),src=new URL('../assets/characters/cast.webp',import.meta.url).href;
+  return `<span class="character-image" aria-hidden="true"><img src="${src}" width="1774" height="887" alt="" decoding="async" style="left:-${c.column*100}%;top:-${c.row*100}%"></span>`;
+ }
+ function castDisplay(s){
+  return `<div class="encounter-cast" aria-label="Characters in this situation">${[s.role,otherRole(s.role)].map(role=>`<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${s.cast[role]}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,s.cast[role])}<div><span class="cast-label">${role===s.role?'You':'Other side'}</span><strong data-no-translate>${esc(characterFor(role,s.cast[role]).name)}</strong></div></div>`).join('')}</div>`;
+ }
+ function characterPicker(role,selected,inGame=false){
+  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change your character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose how you appear in the game. Each situation keeps its own names and facts.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div><div class="character-options" role="group" aria-label="Available characters">${characters[role].map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div><p class="character-help">${inGame?'Switch sides to play as the other character. You can change that character too.':'The other character is chosen at random when you start. Both characters stay with the situation until you change them.'}</p></section>`;
+ }
+ function focusCharacterPicker(){document.querySelector('#character-picker-title')?.focus({preventScroll:true});document.querySelector('#character-picker')?.scrollIntoView({block:'nearest',behavior:'instant'});}
+ function legacyState(original,targetRole=siteRole){
+  const key=siteRole+'-'+original.scenarioId;
+  if(!legacyCasts.has(key))legacyCasts.set(key,createCast(siteRole,characterPreferences.value[siteRole]));
+  return fromOriginal(original,siteRole,targetRole,legacyCasts.get(key));
+ }
  function roleBar(s){
   const e=encounters[s.id],person=currentStage(s)?.people?.[s.role]||e.people[s.role];
-  return `<section class="perspective-bar" aria-label="Current perspective"><div><span class="eyebrow">PLAYING AS ${s.role==='garda'?'A GARDA':'A MEMBER OF THE PUBLIC'}</span><strong>${esc(person)}</strong><span>Same situation · ${s.complete?'recap':`stage ${s.history.length+1}`}</span></div><button class="primary perspective-toggle" data-action="paired-switch">Switch to ${s.role==='garda'?'the public':'the Garda'} perspective <span aria-hidden="true">⇄</span></button></section>`;
+  return `<section class="perspective-bar" aria-label="Current perspective"><div><span class="eyebrow">PLAYING AS ${s.role==='garda'?'A GARDA':'A MEMBER OF THE PUBLIC'}</span><strong>${esc(person)}</strong><span>Same situation · ${s.complete?'recap':`stage ${s.history.length+1}`}</span></div><div class="character-actions"><button class="primary secondary" data-action="paired-characters" aria-expanded="${characterPickerOpen}" aria-controls="character-picker">Change character</button><button class="primary perspective-toggle" data-action="paired-switch">Switch to ${s.role==='garda'?'the public':'the Garda'} perspective <span aria-hidden="true">⇄</span></button></div></section>${characterPickerOpen?characterPicker(s.role,s.cast[s.role],true):'<div id="character-picker" hidden></div>'}${castDisplay(s)}`;
  }
  function selection(role=siteRole){
-  return `<section class="paired-picker"><p class="eyebrow">ONE SITUATION · TWO PERSPECTIVES</p><h1>Which role will you start with?</h1><p class="page-lead">Choose a role, then a situation. Switch sides at any stage to explore the same moment with different choices and responsibilities.</p><div class="role-picker" role="group" aria-label="Starting role">${roles.map(r=>`<a class="primary ${role===r?'':'secondary'}" href="#encounters/${r}" data-role-tone="${r}" ${role===r?'aria-current="true"':''}>${r==='public'?'Member of the public':'Member of An Garda Síochána'}</a>`).join('')}</div>${resumeLink()}<p><a class="text-button" href="#progress">View your saved scores & progress</a></p><div class="paired-catalog">${Object.values(encounters).map(e=>`<article class="scenario encounter-card"><p class="eyebrow">${e.origin==='public'?'RIGHTS & RESPONSIBILITIES':'BIAS & DECISION-MAKING'}</p><h2>${esc(e.title)}</h2><p class="person">${esc(e.people.public)} · ${esc(e.people.garda)}</p><p>${esc(e.description)}</p><button class="primary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Play as ${role==='public'?'the member of the public':'the Garda'}: ${esc(e.title)}">Play as ${role==='public'?'the member of the public':'the Garda'}</button></article>`).join('')}</div></section>`;
+  return `<section class="paired-picker"><p class="eyebrow">ONE SITUATION · TWO PERSPECTIVES</p><h1>Choose your side and character.</h1><p class="page-lead">Pick your character, then a situation. You can change character or switch sides at any stage.</p><div class="role-picker" role="group" aria-label="Starting role">${roles.map(r=>`<a class="primary ${role===r?'':'secondary'}" href="#encounters/${r}" data-role-tone="${r}" ${role===r?'aria-current="true"':''}>${r==='public'?'Member of the public':'Member of An Garda Síochána'}</a>`).join('')}</div>${characterPicker(role,characterPreferences.value[role])}${resumeLink()}<p><a class="text-button" href="#progress">View your saved scores & progress</a></p><div class="paired-catalog">${Object.values(encounters).map(e=>`<article class="scenario encounter-card"><p class="eyebrow">${e.origin==='public'?'RIGHTS & RESPONSIBILITIES':'BIAS & DECISION-MAKING'}</p><h2>${esc(e.title)}</h2><p class="person">${esc(e.people.public)} · ${esc(e.people.garda)}</p><p>${esc(e.description)}</p><button class="primary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Play as ${role==='public'?'the member of the public':'the Garda'}: ${esc(e.title)}">Play as ${role==='public'?'the member of the public':'the Garda'}</button></article>`).join('')}</div></section>`;
  }
  function resumeLink(){
   const saved=store.value.last&&decodeState(store.value.last);
@@ -69,15 +87,15 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  }
  function missing(message='This page was not found.'){return `<div class="content-page"><h1>Unable to open this situation</h1><p>${esc(message)}</p><a class="primary" href="#encounters">Choose a situation</a> <a class="primary secondary" href="#progress">Saved progress</a></div>`;}
  function legacyBar(original){
-  const s=fromOriginal(original,siteRole,siteRole);store.save(recordProgress(store.value,s));
-  return `<section class="legacy-perspective"><div><strong>Explore this same situation from both sides.</strong><span>Keep this stage and your earlier choices.</span></div><button class="primary secondary" data-action="paired-transfer">Switch to ${siteRole==='public'?'the Garda':'the public'} perspective ⇄</button></section>${scoreStrip(s,true)}<p class="small-note"><a href="#progress">Scores & saved progress</a> · 1 point for an appropriate response; 0 when reasoning needs review.</p>`;
+  const s=legacyState(original);store.save(recordProgress(store.value,s));
+  return `<section class="legacy-perspective"><div><strong>Explore this same situation from both sides.</strong><span>Keep this stage and your earlier choices.</span></div><button class="primary secondary" data-action="paired-transfer">Switch to ${siteRole==='public'?'the Garda':'the public'} perspective ⇄</button><button class="primary secondary" data-action="paired-character-transfer">Change character</button></section>${castDisplay(s)}${scoreStrip(s,true)}<p class="small-note"><a href="#progress">Scores & saved progress</a> · 1 point for an appropriate response; 0 when reasoning needs review.</p>`;
  }
  function updateSiteLink(hash){
   const anchor=document.querySelector('[data-site-switch]');if(!anchor)return;
   const targetRole=otherRole(siteRole),original=getOriginalSession();
   const route=hash.split('~')[0];let transfer=null;
   if(route.startsWith('encounter/'))transfer=decodeState(route.slice(10));
-  else if(route.startsWith('scenario/')&&original)transfer=fromOriginal(original,siteRole,siteRole);
+  else if(route.startsWith('scenario/')&&original)transfer=legacyState(original);
   else if(state)transfer=state;
   else if(store.value.last)transfer=decodeState(store.value.last);
   const dest=transfer?stateHash(switchRole(transfer,targetRole)):'#encounters/'+targetRole;
@@ -87,23 +105,28 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  function handleClick(event){
   const button=event.target.closest('button[data-action]');if(!button||!button.dataset.action.startsWith('paired-'))return false;
   const action=button.dataset.action,role=button.dataset.role||siteRole;
-  if(action==='paired-start'){navigate(startEncounter(button.dataset.id,role));return true;}
-  if(action==='paired-transfer'){navigate(fromOriginal(getOriginalSession(),siteRole));return true;}
+  if(action==='paired-start'){characterPickerOpen=false;navigate(startEncounter(button.dataset.id,role,{characterId:characterPreferences.value[role]}));return true;}
+  if(action==='paired-transfer'){characterPickerOpen=false;navigate(legacyState(getOriginalSession(),otherRole(siteRole)));return true;}
+  if(action==='paired-character-transfer'){characterPickerOpen=true;navigate(legacyState(getOriginalSession()),true,false);focusCharacterPicker();return true;}
+  if(action==='paired-character-select'){characterPreferences.choose(role,button.dataset.character);rerender(false);document.querySelector('[data-character="'+characterPreferences.value[role]+'"]')?.focus({preventScroll:true});announce('Character selected.');return true;}
   if(action==='paired-clear'){clearPending=true;rerender(false);document.querySelector('[data-action="paired-clear-confirm"]')?.focus();return true;}
   if(action==='paired-clear-cancel'){clearPending=false;rerender(false);document.querySelector('[data-action="paired-clear"]')?.focus();return true;}
   if(action==='paired-clear-confirm'){store.clear();state=null;resetOriginalSession?.();clearPending=false;rerender(false);document.querySelector('[data-action="paired-clear"]')?.focus();announce('Your saved progress on this site has been cleared.');return true;}
   if(!state)return true;
-  if(action==='paired-switch'){navigate(switchRole(state),true,false);const target=document.querySelector(state.complete?'h1':'#choice-title');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',behavior:'instant'});announce(state.role==='garda'?'Garda perspective':'Public perspective');}
+  if(action==='paired-characters'){characterPickerOpen=!characterPickerOpen;rerender(false);if(characterPickerOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-characters"]')?.focus({preventScroll:true});return true;}
+  if(action==='paired-character-close'){characterPickerOpen=false;rerender(false);document.querySelector('[data-action="paired-characters"]')?.focus({preventScroll:true});return true;}
+  if(action==='paired-character-choose'){const next=changeCharacter(state,button.dataset.character);if(next!==state){characterPreferences.choose(state.role,button.dataset.character);navigate(next,true,false);}document.querySelector('[data-character="'+state.cast[state.role]+'"]')?.focus({preventScroll:true});announce('Character changed. Your progress is unchanged.');return true;}
+  if(action==='paired-switch'){characterPickerOpen=false;navigate(switchRole(state),true,false);const target=document.querySelector(state.complete?'h1':'#choice-title');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',behavior:'instant'});announce(state.role==='garda'?'Garda perspective':'Public perspective');}
   else if(action==='paired-answer'){
    const next=answer(state,Number(button.dataset.index));if(next===state)return true;navigate(next,true,false);
    const feedback=document.querySelector('#feedback');feedback?.focus({preventScroll:true});feedback?.scrollIntoView({block:'nearest',behavior:'instant'});
   }
-  else if(action==='paired-next'){const next=continueEncounter(state);if(next!==state)navigate(next);}
+  else if(action==='paired-next'){const next=continueEncounter(state);if(next!==state){characterPickerOpen=false;navigate(next);}}
   else if(action==='paired-back')navigate(revisit(state));
   else if(action==='paired-revisit')navigate(revisit(state,Number(button.dataset.index)));
   else if(action==='paired-change'){navigate(changeAnswer(state),true,false);document.querySelector('#choice-title')?.focus();}
-  else if(action==='paired-replay-role')navigate(startEncounter(state.id,role));
+  else if(action==='paired-replay-role'){characterPickerOpen=false;navigate(startEncounter(state.id,role,{characterId:state.cast[role]}));}
   return true;
  }
- return {handles,view,landing,legacyBar,updateSiteLink,handleClick,transferOriginal:(original,focus=true)=>navigate(fromOriginal(original,siteRole,siteRole),true,focus)};
+ return {handles,view,landing,legacyBar,updateSiteLink,handleClick,transferOriginal:(original,focus=true)=>navigate(legacyState(original),true,focus)};
 }

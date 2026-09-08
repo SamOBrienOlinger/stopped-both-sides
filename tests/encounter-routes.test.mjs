@@ -44,6 +44,19 @@ test('A selected answer, both scores and the exact stage survive switches, sourc
  route(link.hash);assert.equal(state().nodeId,before.nodeId);assert.deepEqual(state().answers,before.answers);assert.equal(location.hash.includes('~'),false,'Transfer is merged and removed from the active URL');
  action('paired-switch');assert.equal(state().answers[state().role],state().role==='public'?0:1);
 });
+test('Chosen characters remain editable without replacing the opposing character or route',()=>{
+ route('#encounters/public');assert.equal((main.innerHTML.match(/data-action="paired-character-select"/g)||[]).length,9);
+ action('paired-character-select',{role:'public',character:'public-6'});
+ action('paired-start',{id:'public-search',role:'public'});assert.equal(state().cast.public,'public-6');
+ action('paired-answer',{index:'0'});const before=state();
+ action('paired-characters');assert.match(main.innerHTML,/Change your character/);
+ action('paired-character-choose',{character:'public-9'});assert.equal(state().cast.public,'public-9');assert.equal(state().cast.garda,before.cast.garda);
+ assert.deepEqual(state().answers,before.answers);assert.deepEqual(state().history,before.history);
+ assert.match(main.innerHTML,/data-character-id="public-9"/);action('paired-character-close');
+ action('paired-switch');action('paired-characters');action('paired-character-choose',{character:'garda-8'});
+ assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});assert.deepEqual(state().answers,before.answers);
+ const link=new URL(siteLink.href);route(link.hash);assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});
+});
 test('Every shared situation reaches a scored two-role recap and can revisit or replay either role',()=>{
  for(const e of Object.values(encounters)){
   action('paired-start',{id:e.id,role:'public'});let steps=0;
@@ -62,6 +75,13 @@ test('Original mode transfers a live selection into the same stage and records i
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
  assert.match(main.innerHTML,/data-action="paired-transfer"/);assert.match(main.innerHTML,/Scores & saved progress/);
  action('paired-transfer');assert.equal(state().id,siteRole+'-'+e.id);assert.equal(state().nodeId,e.start);assert.equal(state().answers[siteRole],1);assert.notEqual(state().role,siteRole);
+});
+test('Original practice can change character while carrying its stage and answer into shared play',()=>{
+ const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
+ assert.match(main.innerHTML,/data-action="paired-character-transfer"/);
+ action('paired-character-transfer');assert.equal(state().role,siteRole);assert.equal(state().answers[siteRole],1);
+ assert.match(main.innerHTML,/Change your character/);action('paired-character-choose',{character:siteRole+'-7'});
+ assert.equal(state().cast[siteRole],siteRole+'-7');assert.equal(state().answers[siteRole],1);
 });
 test('Unknown routes and corrupted progress show a recovery view while saved records remain available',()=>{
  const before=memory.get(siteStorageKey);

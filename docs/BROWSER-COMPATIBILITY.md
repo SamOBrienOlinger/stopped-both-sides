@@ -8,9 +8,10 @@ The support target is current Chrome, Edge, Firefox and Safari on desktop, and c
 - Text and controls wrap instead of forcing horizontal scrolling. Enlarged text, Irish content and long headings are included in the checks.
 - Navigation and primary controls have at least 44 CSS pixel targets. Browser zoom remains enabled; reading preferences supplement it.
 - Hero perspective links stay centred near the top of their images, with at least 48px height. The images stack below 900px and use two columns on wider screens. Browser checks measure alignment, containment and image loading in English and enlarged Irish text.
+- The character picker reflows from two to five columns. Controls use keyboard focus, pressed states and Irish labels. Tests cover character changes during feedback and recap, stable random counterparts, reload and transfer between sites.
 - Safe-area padding protects controls on displays with cutouts. The reading dialog uses dynamic viewport height with a conventional viewport-height fallback for short landscape screens and older browsers.
 - Native dialogs are preferred, with explicit Tab/Shift+Tab wrapping and focus restoration. Browsers without native modal methods get a backdrop, keyboard containment, Escape/close controls and background accessibility isolation.
-- Progress copying and property checks do not require `structuredClone` or `Object.hasOwn`. The stored learning-record format is unchanged.
+- Progress copying and property checks do not require `structuredClone` or `Object.hasOwn`. Existing learning records remain readable; encounter links now include validated character IDs and still accept older links.
 - Blocked browser storage allows play and reading preferences for the current visit. No browser extension or third-party runtime service is required.
 
 ## Reproducible browser checks
@@ -30,7 +31,7 @@ Branch and pull-request runs exercise both entry points under `/stopped-both-sid
 | Main journeys | Home, original practice and feedback, shared play, other-side switching, reload, recap, progress and reference pages |
 | Compatibility fallback | Missing clone/property/modal APIs and blocked storage simulated in each engine |
 
-The 66 browser checks cover page overflow, clipped text, dialog bounds and navigation target sizes. Functional assertions check choices, preserved answers, language, saved state and completion. Tests fail on page errors or missing local assets. Failure reports include screenshots and traces, retained by GitHub Actions for seven days.
+The 72 browser checks cover page overflow, clipped text, dialog bounds and navigation target sizes. Functional assertions check choices, preserved answers, language, saved state and completion. Tests fail on page errors or missing local assets. Failure reports include screenshots and traces, retained by GitHub Actions for seven days.
 
 To run the browser suite:
 

@@ -12,7 +12,7 @@ async function ready(page){
 async function fits(page,label){
  const result=await page.evaluate(()=>{
   const width=document.documentElement.clientWidth;
-  const clips=[...document.querySelectorAll('h1,h2,.story,.scenario,.choice,.role-score,.recap-role,.info-block,.settings-content')]
+  const clips=[...document.querySelectorAll('h1,h2,.story,.scenario,.choice,.role-score,.recap-role,.info-block,.settings-content,.character-picker,.character-option,.cast-character,.character-actions')]
    .filter(el=>el.getClientRects().length&&el.scrollWidth>el.clientWidth+2)
    .map(el=>({element:el.tagName+'.'+el.className,text:el.textContent.slice(0,70),width:el.clientWidth,content:el.scrollWidth}));
   return {width,scroll:document.documentElement.scrollWidth,clips};
@@ -65,6 +65,8 @@ async function chooseFirst(page,role){
  await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.encounter-card')).toHaveCount(14);
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
+ await expect(page.locator('.character-option')).toHaveCount(9);
+ await fits(page,'character picker');
  await expect(page.locator(`[data-action="paired-start"]`).first()).toHaveAttribute('data-role',role);
  await page.locator('[data-action="paired-start"]').first().click();
  await expect(page.locator('.paired-game')).toBeVisible();
@@ -94,6 +96,11 @@ for(const role of ['public','garda']){
    await page.locator('#reading-form [type="submit"]').click();
    await expect(page.locator('html')).toHaveAttribute('lang','ga');
    await fits(page,'large Irish feedback');
+   await page.locator('[data-action="paired-characters"]').click();
+   await expect(page.locator('#character-picker-title')).toBeFocused();
+   await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'large Irish character picker');
+   await page.locator('[data-action="paired-character-close"]').click();
+   await expect(page.locator('[data-action="paired-characters"]')).toBeFocused();
    await page.locator('.perspective-bar [data-action="paired-switch"]').click();
    await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
    await fits(page,'other perspective');

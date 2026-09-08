@@ -1,12 +1,14 @@
 import {hasOwn} from '../compatibility.mjs';
 import {encounters, roles} from './catalog.mjs';
+import {createCast,defaultCast,validCast} from './characters.mjs';
 
 export const otherRole = role => role === 'public' ? 'garda' : 'public';
 const validRole = role => roles.includes(role);
 const answers = () => ({public:null,garda:null});
-export function startEncounter(id,role='public') {
+export function startEncounter(id,role='public',options={}) {
   if (!hasOwn(encounters,id) || !validRole(role)) throw new Error('Unknown encounter or role');
-  return {id,role,nodeId:encounters[id].start,history:[],answers:answers(),complete:false};
+  const cast=validCast(options.cast)?{...options.cast}:createCast(role,options.characterId,options.random);
+  return {id,role,nodeId:encounters[id].start,history:[],answers:answers(),complete:false,cast};
 }
 export const currentStage = state => state && !state.complete ? encounters[state.id].nodes[state.nodeId] : null;
 export function switchRole(state,role=otherRole(state.role)) {
@@ -31,18 +33,21 @@ export function revisit(state,index=state.history.length-1) {
 export function changeAnswer(state) {
   return state.complete ? state : {...state,answers:{...state.answers,[state.role]:null}};
 }
-// Only fictional scenario IDs, role IDs and numeric choice indexes enter the URL.
+// Only fictional scenario/character IDs, role IDs and numeric choices enter the URL.
 // Rebuild the route from validated decisions rather than trusting submitted node IDs.
 export function encodeState(state) {
-  const data={v:1,e:state.id,r:state.role,p:state.history.map(h=>[h.answers.public,h.answers.garda,roles.indexOf(h.continuedAs)]),a:[state.answers.public,state.answers.garda]};
+  const data={v:2,e:state.id,r:state.role,p:state.history.map(h=>[h.answers.public,h.answers.garda,roles.indexOf(h.continuedAs)]),a:[state.answers.public,state.answers.garda],c:[state.cast.public,state.cast.garda]};
   return btoa(JSON.stringify(data)).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
 }
 export function decodeState(token) {
   try {
     if (typeof token!=='string'||token.length>6000||!/^[A-Za-z0-9_-]+$/.test(token)) return null;
     const d=JSON.parse(atob(token.replaceAll('-','+').replaceAll('_','/')));
-    if (d?.v!==1||!validRole(d.r)||!Array.isArray(d.p)||d.p.length>20||!Array.isArray(d.a)||d.a.length!==2) return null;
-    let state=startEncounter(d.e,d.r);
+    if (![1,2].includes(d?.v)||!validRole(d.r)||!Array.isArray(d.p)||d.p.length>20||!Array.isArray(d.a)||d.a.length!==2) return null;
+    const cast=d.v===1?defaultCast():Array.isArray(d.c)&&d.c.length===2?{public:d.c[0],garda:d.c[1]}:null;
+    if(!validCast(cast))return null;
+    // Decoding is deterministic, including older links without a cast.
+    let state=startEncounter(d.e,d.r,{cast});
     const apply=(values)=>{
       for (let i=0;i<2;i++) {
         const index=values[i];
@@ -64,8 +69,8 @@ export function decodeState(token) {
   } catch {return null;}
 }
 export const stateHash = state => '#encounter/'+encodeState(state);
-export function fromOriginal(original,role,targetRole=otherRole(role)) {
-  let state=startEncounter(role+'-'+original.scenarioId,role);
+export function fromOriginal(original,role,targetRole=otherRole(role),cast=defaultCast()) {
+  let state=startEncounter(role+'-'+original.scenarioId,role,{cast});
   for(const step of original.history) {
     if(state.nodeId!==step.nodeId) throw Error('The original route has changed');
     state=continueEncounter(answer(state,step.choiceIndex));
