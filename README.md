@@ -70,6 +70,8 @@ Reading controls provide larger text, high contrast, increased spacing and reduc
 
 The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) for coverage and review opportunities.
 
+Both perspectives use a shared **mobile-first layout**, with **66 browser checks in Chromium, Firefox and WebKit**, from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
+
 ## Privacy
 
 Choices, scores, reading preferences and a resume point are saved in browser storage. There are no accounts, analytics, tracking scripts or forms for real incidents.
@@ -120,11 +122,20 @@ npm test
 | --- | --- |
 | `npm run check` | Check JavaScript syntax across both games, tests and maintenance scripts |
 | `npm test` | Run the Node test suites for both perspectives |
+| `npm run test:browser` | Run browser, responsive layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The current test configuration runs **77 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, progress transfer, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration runs **77 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, progress transfer, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
-Application interaction checks use a minimal DOM adapter, not a real browser. Manual review should include both perspectives, language changes, keyboard navigation, narrow screens, browser zoom and screen readers. Legal correctness, operational suitability and learning effectiveness require separate specialist review.
+The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
+
+```bash
+npm ci
+npx playwright install --with-deps chromium firefox webkit
+npm run test:browser
+```
+
+These tools are not loaded by the live site. Physical-device, browser-zoom and screen-reader reviews remain necessary, alongside specialist review of legal correctness, operational suitability and learning effectiveness.
 
 [View automated check runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/checks.yml).
 
@@ -153,6 +164,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 | [Garda learning](docs/GARDA-LEARNING.md) | Learning aims, situations and evidence boundaries |
 | [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) | Shared play, scoring, transfer, privacy and maintenance |
 | [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) | Controls, translation coverage and review needs |
+| [Browser compatibility](docs/BROWSER-COMPATIBILITY.md) | Mobile-first layout, browser coverage, touch tests and device-review limits |
 | [Content review](docs/CONTENT-REVIEW.md) | Source provenance, legal-content decisions and contributor opportunities |
 | [Research record](research/README.md) | Review method, bibliography and scenario evidence map |
 | [GitHub Pages](docs/GITHUB-PAGES.md) | Publishing settings, local use and progress migration |

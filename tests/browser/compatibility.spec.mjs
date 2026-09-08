@@ -55,6 +55,10 @@ for(const role of ['public','garda']){
    await page.setViewportSize({width,height});
    await page.goto(paths[role]);await ready(page);await fits(page,'home');
    await page.locator('.single-mode summary').click();await fits(page,'original situations');
+   await page.locator('.single-mode [data-action="start"]').first().click();
+   await expect(page.locator('.story')).toBeVisible();
+   await page.locator('[data-action="choose"]').first().click();
+   await expect(page.locator('#feedback')).toBeVisible();await fits(page,'original practice feedback');
    await chooseFirst(page,role);await fits(page,'shared situation');
    await page.locator('[data-action="paired-answer"]').first().click();
    await expect(page.locator('#feedback')).toBeVisible();await fits(page,'feedback');
