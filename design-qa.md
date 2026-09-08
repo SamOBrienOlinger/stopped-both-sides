@@ -6,7 +6,7 @@ final result: passed
 
 The requested change is to put the Public perspective and Garda perspective controls at the top centre of their images and keep them responsive. The annotated screenshot specifies placement; the previously selected option 1 supplies the characters and illustration style. This review covers the hero component on both existing entrypoints.
 
-- Source visual truth: [annotated placement reference](docs/design/hero-buttons-source.jpg), 1125 × 373 pixels.
+- Source visual truth: [annotated placement reference](docs/design/hero-buttons-source.jpg), 1125 × 372 pixels.
 - Implementation: [browser-rendered desktop capture](docs/design/hero-buttons-desktop.jpg), 1363 × 936 pixels, CSS viewport 1363 × 936, device scale 1, home route scrolled 204px to show the full hero component.
 - Selected character source: the combined option 1 concept, `exec-30743afb-725c-473a-8b43-9cde145dc15d.png`, supplied in the design conversation.
 - The source annotation and implementation capture were opened together. Comparison focused on the two image/control regions, rather than comparing the cropped source with the full page. Image density was 1:1; the source and implementation have different surrounding crops and were not treated as pixel-identical pages.
@@ -31,6 +31,7 @@ No actionable P0, P1 or P2 differences remain within this scope.
 - No application console errors were found in the local preview.
 - All 77 Node checks passed.
 - All 66 browser checks passed in Chromium, Firefox and WebKit on application commit `1dfdc33b38c378e5d4e4428dc9bd446bb180f5e1`: [workflow result](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34276968356).
+- The same 66 checks also passed against the live GitHub Pages site after publication of `ba1753a94b84303caa97ed545ecc3b53042c0774`: [live-site workflow result](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34277557372).
 - Hero assertions cover loaded images, top-centre alignment, full control containment, text clipping, touch target size and stacked/two-column layouts at 320, 390, 568, 768, 1024, 1366, 1920 and 2560 CSS pixel widths, in English and enlarged Irish. Existing touch, rotation, gameplay and progress checks also passed.
 
 ## Comparison history and limits
