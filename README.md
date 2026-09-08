@@ -121,6 +121,7 @@ npm test
 | Command | Purpose |
 | --- | --- |
 | `npm run check` | Check JavaScript syntax across both games, tests and maintenance scripts |
+| `npm run dev` | Serve the static site locally on port 4173 without a build step |
 | `npm test` | Run the Node test suites for both perspectives |
 | `npm run test:browser` | Run browser, responsive layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
@@ -177,7 +178,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 | [encounters/](encounters/) | Shared scenarios, role switching, branching, scores and progress |
 | [accessibility/](accessibility/), [locales/](locales/) | Reading controls, perspective palettes and translations |
 | [site.mjs](site.mjs) | Resolves both entry-point addresses within one deployment |
-| [assets/](assets/) | Local fonts and third-party licence notices |
+| [assets/](assets/) | Responsive hero images, local fonts and third-party licence notices |
 | [tests/](tests/), [scripts/](scripts/), [package.json](package.json) | Automated checks and content-maintenance commands |
 
 ## Contributing and support
@@ -195,6 +196,8 @@ Created by **Sam O’Brien-Olinger** / [Sam Tim Solutions](https://samobrienolin
 ### Design and acknowledgements
 
 The visual language draws on [INAR’s website](https://inar.ie/): teal accents, white surfaces, rounded cards and Open Sans. This is not an INAR website and does not use its logo.
+
+The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links centred at the top of each image. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md).
 
 The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
 

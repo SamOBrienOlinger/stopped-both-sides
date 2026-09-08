@@ -7,6 +7,7 @@ The support target is current Chrome, Edge, Firefox and Safari on desktop, and c
 - A shared mobile-first layout starts with one column and expands to two or three columns where space permits. Both perspectives load the same layout rules.
 - Text and controls wrap instead of forcing horizontal scrolling. Enlarged text, Irish content and long headings are included in the checks.
 - Navigation and primary controls have at least 44 CSS pixel targets. Browser zoom remains enabled; reading preferences supplement it.
+- Hero perspective links stay centred near the top of their images, with at least 48px height. The images stack below 900px and use two columns on wider screens. Browser checks measure alignment, containment and image loading in English and enlarged Irish text.
 - Safe-area padding protects controls on displays with cutouts. The reading dialog uses dynamic viewport height with a conventional viewport-height fallback for short landscape screens and older browsers.
 - Native dialogs are preferred, with explicit Tab/Shift+Tab wrapping and focus restoration. Browsers without native modal methods get a backdrop, keyboard containment, Escape/close controls and background accessibility isolation.
 - Progress copying and property checks do not require `structuredClone` or `Object.hasOwn`. The stored learning-record format is unchanged.
