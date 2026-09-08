@@ -4,7 +4,7 @@ Players can choose from nine LEGO-style characters for each perspective. The 18 
 
 ## Play behaviour
 
-- Choose a side and character before starting one of the 14 shared situations.
+- Choose a side, then start the recommended situation with the ready-selected character. **Choose a different character** opens the optional picker; **Done** closes it. **Browse all 14 situations** opens the full catalogue.
 - A character for the opposite side is sampled uniformly from that side's nine characters when the encounter starts. Randomness does not depend on answers, scores or appearance.
 - Both characters appear at every stage, during feedback and in the recap. The same pair remains in place across stages and reloads.
 - **Change character** opens an inline picker. Choosing a character updates only the active side's appearance and leaves the opposing character, stage, answers and scores intact.

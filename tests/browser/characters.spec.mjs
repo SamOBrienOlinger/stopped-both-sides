@@ -6,14 +6,16 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  page.on('pageerror',e=>errors.push(e.message));
  await page.setViewportSize({width:390,height:844});
  await page.goto((role==='public'?'./':'garda/')+'#encounters/'+role);
+ await page.locator('[data-action="paired-setup-characters"]').click();
  await expect(page.locator('.character-option')).toHaveCount(9);
  await expect.poll(()=>page.locator('.character-image img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  const chosen=page.locator(`[data-character="${role}-6"]`);
  await chosen.focus();await page.keyboard.press('Space');
  await expect(page.locator(`[data-character="${role}-6"]`)).toHaveAttribute('aria-pressed','true');
  await expect(page.locator(`[data-character="${role}-6"]`)).toBeFocused();
- await page.reload();await expect(page.locator(`[data-character="${role}-6"]`)).toHaveAttribute('aria-pressed','true');
- await page.locator('[data-action="paired-start"]').first().click();
+ await page.reload();await page.locator('[data-action="paired-setup-characters"]').click();await expect(page.locator(`[data-character="${role}-6"]`)).toHaveAttribute('aria-pressed','true');
+ await page.locator('[data-action="paired-setup-done"]').click();
+ await page.locator('[data-action="paired-quick-start"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();
  const initial=current(page);expect(initial.cast[role]).toBe(role+'-6');expect(initial.cast[other]).toMatch(new RegExp('^'+other+'-[1-9]$'));
  await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',role+'-6');

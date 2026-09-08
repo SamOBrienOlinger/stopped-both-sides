@@ -41,11 +41,13 @@ The original single-role practice remains available: six public situations with 
 
 ## How to play
 
-1. **Choose a side and character.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/), select a LEGO character, then choose a situation. The other character is assigned at random and stays with that encounter.
+1. **Choose a side and start.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/). Select a perspective, then **Start this situation** to try the suggested street encounter. A character is ready for you; use **Choose a different character** if you wish. **Browse all 14 situations** opens the full catalogue.
 2. **Read the scene and choose a response.** Each choice has an explanation and a sourced learning point.
 3. **Change character or switch sides.** Use **Change character** at any stage, including feedback and recap. Switching sides puts you in the other character's place; you can change that character too. Both role answers and scores are retained.
-4. **Continue the situation.** The active role's choice determines the next branch; the other answer remains available for comparison.
+4. **Read the explanation, then take the next step.** Use **Next step** to continue, or **Try another answer** to reconsider. The active role's choice determines the next branch; the other answer remains available for comparison.
 5. **Review and replay.** Compare the decisions in the recap, revisit a learning point, or return later using saved progress.
+
+The homepage explains the purpose and the three-part learning loop: **read a situation → choose a response → learn why it matters**. During play, compact character controls leave space for the scene and choices. Detailed scores and supporting guidance are under **Scores, sources and help**; source links also appear with each explanation.
 
 There is no sign-up or timer. All gameplay runs in the browser, with no AI service involved during play.
 
@@ -155,14 +157,16 @@ npm test
 | `npm run test:browser` | Run browser, responsive layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration runs **86 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, character selection, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration runs **88 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, character selection, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
-The character-selection release, commit [`109ae45`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/109ae45fb5e5aa795ee50d185cd53d3520373ab6), passed both verification suites:
+The previous character-selection release, commit [`109ae45`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/109ae45fb5e5aa795ee50d185cd53d3520373ab6), passed both verification suites:
 
 | Verified checks | Result |
 | --- | --- |
 | [Game checks](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34281449058) | **86 passed** across the public and Garda entrypoints. |
 | [Browser checks against the deployed site](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34281471349) | **72 passed**: 24 each in Chromium, Firefox and WebKit, including character changes, retained counterparts, responsive layouts and enlarged Irish text. |
+
+The current browser suite contains **78 checks**: 26 per engine. It adds first-play and keyboard catalogue journeys to the character, translation, layout and touch checks.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 
@@ -199,6 +203,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 | Guide | What it covers |
 | --- | --- |
 | [Garda learning](docs/GARDA-LEARNING.md) | Learning aims, situations and evidence boundaries |
+| [Clearer first play](docs/UX-REVIEW.md) | Before/after interface review, simpler onboarding and decision flow |
 | [Characters](docs/CHARACTERS.md) | Character selection, random casting, saved state and artwork |
 | [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) | Shared play, scoring, transfer, privacy and maintenance |
 | [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) | Controls, translation coverage and review needs |

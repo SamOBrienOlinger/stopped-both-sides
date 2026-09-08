@@ -27,9 +27,20 @@ test('Both roles can start every situation; the shared facts and role controls r
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
   for(const e of Object.values(encounters)){
    action('paired-start',{id:e.id,role});assert.equal(state().role,role);assert.equal(state().nodeId,e.start);
-   assert.equal((main.innerHTML.match(/data-action="paired-switch"/g)||[]).length,2);
+   assert.equal((main.innerHTML.match(/data-action="paired-switch"/g)||[]).length,1);
    const before=state();action('paired-switch');assert.equal(state().nodeId,before.nodeId);assert.deepEqual(state().history,before.history);
   }
+ }
+});
+test('The recommended start keeps the chosen role and avatar without requiring customisation',()=>{
+ for(const role of roles){
+  route('#encounters/'+role);
+  assert.doesNotMatch(main.innerHTML,/data-action="paired-character-select"/);
+  action('paired-quick-start',{id:role+'-street',role});
+  assert.equal(state().id,role+'-street');assert.equal(state().role,role);
+  const cast=state().cast;assert.ok(cast[role].startsWith(role+'-'));
+  action('paired-answer',{index:'0'});action('paired-next');
+  assert.equal(state().history.length,1);assert.deepEqual(state().cast,cast);
  }
 });
 test('A selected answer, both scores and the exact stage survive switches, source visits and transferred links',()=>{
@@ -45,7 +56,7 @@ test('A selected answer, both scores and the exact stage survive switches, sourc
  action('paired-switch');assert.equal(state().answers[state().role],state().role==='public'?0:1);
 });
 test('Chosen characters remain editable without replacing the opposing character or route',()=>{
- route('#encounters/public');assert.equal((main.innerHTML.match(/data-action="paired-character-select"/g)||[]).length,9);
+ route('#encounters/public');action('paired-setup-characters');assert.equal((main.innerHTML.match(/data-action="paired-character-select"/g)||[]).length,9);
  action('paired-character-select',{role:'public',character:'public-6'});
  action('paired-start',{id:'public-search',role:'public'});assert.equal(state().cast.public,'public-6');
  action('paired-answer',{index:'0'});const before=state();
@@ -66,7 +77,7 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
    action('paired-next');
   }
   assert.match(main.innerHTML,/YOUR SCORES & REFLECTION RECAP/);assert.match(main.innerHTML,/Best completed route/);assert.equal(state().history.length,steps);
-  action('paired-switch');assert.ok(state().complete);assert.match(main.innerHTML,/Switch recap perspective/);
+  action('paired-switch');assert.ok(state().complete);assert.match(main.innerHTML,/data-action="paired-switch"/);
   action('paired-revisit',{index:'0'});assert.equal(state().nodeId,e.start);assert.equal(state().history.length,0);
  }
  route('#progress');assert.match(main.innerHTML,/14 of 14 situations completed/);assert.match(main.innerHTML,/Best completed:/);

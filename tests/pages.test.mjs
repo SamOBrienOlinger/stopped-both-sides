@@ -12,12 +12,14 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));
  assert.equal(pkg.name,'stopped-both-sides');
  const subtitle='An interactive learning game for the public and Gardaí.';
+ const shared=readFileSync(new URL('../encounters/ui.mjs',import.meta.url),'utf8');
+ assert.ok(shared.includes(subtitle));
+ assert.match(shared,/<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides<\/h1>/);
  for(const path of ['','garda/']){
   const html=readFileSync(new URL('../'+path+'index.html',import.meta.url),'utf8');
   const app=readFileSync(new URL('../'+path+'app.mjs',import.meta.url),'utf8');
   assert.match(html,/<title>Stopped: Both Sides \| (Public|Garda) perspective<\/title>/);
-  assert.ok(html.includes(subtitle));assert.ok(app.includes(subtitle));
-  assert.match(app,/<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides<\/h1>/);
+  assert.ok(html.includes(subtitle));assert.ok(app.includes('paired.introduction()'));
   assert.doesNotMatch(html+app,/Why are you stopping me\?|Why am I stopping you\?/);
  }
  assert.notEqual(translateText(subtitle,'ga'),subtitle);

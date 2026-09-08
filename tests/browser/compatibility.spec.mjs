@@ -12,7 +12,7 @@ async function ready(page){
 async function fits(page,label){
  const result=await page.evaluate(()=>{
   const width=document.documentElement.clientWidth;
-  const clips=[...document.querySelectorAll('h1,h2,.story,.scenario,.choice,.role-score,.recap-role,.info-block,.settings-content,.character-picker,.character-option,.cast-character,.character-actions')]
+  const clips=[...document.querySelectorAll('h1,h2,.story,.scenario,.choice,.role-score,.recap-role,.info-block,.settings-content,.character-picker,.character-option,.cast-character,.character-actions,.start-panel,.recommended-situation')]
    .filter(el=>el.getClientRects().length&&el.scrollWidth>el.clientWidth+2)
    .map(el=>({element:el.tagName+'.'+el.className,text:el.textContent.slice(0,70),width:el.clientWidth,content:el.scrollWidth}));
   return {width,scroll:document.documentElement.scrollWidth,clips};
@@ -65,10 +65,13 @@ async function chooseFirst(page,role){
  await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.encounter-card')).toHaveCount(14);
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
- await expect(page.locator('.character-option')).toHaveCount(9);
- await fits(page,'character picker');
+ await expect(page.locator('.character-option')).toHaveCount(0);
+ await fits(page,'simple setup');
+ await page.locator('[data-action="paired-setup-characters"]').click();
+ await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'character picker');
+ await page.locator('[data-action="paired-setup-done"]').click();
  await expect(page.locator(`[data-action="paired-start"]`).first()).toHaveAttribute('data-role',role);
- await page.locator('[data-action="paired-start"]').first().click();
+ await page.locator('[data-action="paired-quick-start"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();
 }
 
@@ -177,7 +180,7 @@ for(const role of ['public','garda']){
    await checkHeroControls(page);
    await page.locator(`.paired-entry a[href="#encounters/${role}"]`).tap();
    await expect(page.locator('.encounter-card')).toHaveCount(14);
-   await page.locator('[data-action="paired-start"]').first().tap();
+   await page.locator('[data-action="paired-quick-start"]').tap();
    await expect(page.locator('.paired-game')).toBeVisible();
    await page.locator('[data-action="paired-answer"]').first().tap();
    await expect(page.locator('#feedback')).toBeVisible();

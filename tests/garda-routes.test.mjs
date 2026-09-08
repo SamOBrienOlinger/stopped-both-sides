@@ -59,5 +59,5 @@ test('Skip link focuses the current content without changing the route or select
  const content=main.innerHTML,hash=location.hash;let prevented=false;
  callbacks.skip({preventDefault(){prevented=true;}});
  assert.ok(prevented);assert.equal(focused.at(-1),'main');assert.equal(location.hash,hash);assert.equal(main.innerHTML,content);
- route('#main');assert.match(main.innerHTML,/One encounter. Two perspectives./);
+ route('#main');assert.match(main.innerHTML,/Which side will you try first\?/);
 });
