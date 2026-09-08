@@ -8,7 +8,7 @@ Explore encounters with An Garda Síochána through fictional situations, choice
 
 **HTML · CSS · JavaScript modules · GitHub Pages · No application dependencies**
 
-[How to play](#how-to-play) · [Scoring](#scores-and-progress) · [Evidence](#evidence-and-content-review) · [Getting started](#getting-started) · [Documentation](#documentation-and-repository-guide) · [Credits](#credits-and-reuse)
+[How to play](#how-to-play) · [Characters](#characters-and-switching-sides) · [Scoring](#scores-and-progress) · [Evidence](#evidence-and-content-review) · [Getting started](#getting-started) · [Documentation](#documentation-and-repository-guide) · [Credits](#credits-and-reuse)
 
 > **Project status:** An independent educational prototype about the **Republic of Ireland**. It provides general learning, not legal advice or accredited Garda training. The documented source review is dated **7 September 2026**; specialist legal, community and language review remain opportunities for further development. Northern Ireland has different laws.
 
@@ -35,6 +35,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - Immediate explanations, source links and a final comparison of both perspectives.
 - Saved learning progress, separate role scores, replay and a resume point.
 - English and Gaeilge in shared play, with adjustable reading settings.
+- Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top. Images stack on smaller screens and sit side by side on wider screens.
 
 The original single-role practice remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original practice can transfer into its matching shared situation.
 
@@ -46,7 +47,30 @@ The original single-role practice remains available: six public situations with 
 4. **Continue the situation.** The active role's choice determines the next branch; the other answer remains available for comparison.
 5. **Review and replay.** Compare the decisions in the recap, revisit a learning point, or return later using saved progress.
 
-There is no sign-up, timer or external AI service. All gameplay runs in the browser.
+There is no sign-up or timer. All gameplay runs in the browser, with no AI service involved during play.
+
+## Characters and switching sides
+
+Choose from **18 LEGO-style characters — nine for each side**. The cast includes men, women and characters with an ambiguous gender presentation. The picker asks you to select a fictional character; it does not collect personal identity information.
+
+![The 18 selectable LEGO-style characters. In each row, the first three figures are public characters and the remaining three are Garda characters.](assets/characters/cast.webp)
+
+**[Choose a public character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Choose a Garda character](https://samobrienolinger.github.io/stopped-both-sides/garda/#encounters/garda)**
+
+Your character and the person on the other side appear throughout the encounter, including feedback and the final recap. **You** and **Other side** labels identify who you are currently playing.
+
+| Action | What happens to the characters |
+| --- | --- |
+| **Start a shared situation** | Your selected character appears, and the character opposite you is chosen at random. |
+| **Continue or revisit a stage** | The same pair stays with the situation. |
+| **Switch perspective** | You take the existing opposite character's place. Both sides' answers and scores are retained. |
+| **Change character** | Only your active character changes. The other character, current stage, answers and scores stay in place. To change the other character, switch sides first. |
+| **Reload, resume or switch sites** | The saved encounter keeps both characters alongside your progress. |
+| **Replay a shared situation** | You keep the character for the chosen role and receive a newly randomised counterpart, which may be the same character by chance. |
+
+Characters are visual avatars. Each situation retains its own names, ages and facts; appearance does not alter legal responsibilities, available choices or scoring. Older saved encounters and links remain readable. In original single-role practice, **Change character** opens the matching shared situation at the same stage and preserves the selected answer.
+
+See the [character guide](docs/CHARACTERS.md) for persistence, compatibility and artwork details.
 
 ## Scores and progress
 
@@ -69,6 +93,8 @@ Shared play supports **English and Gaeilge**, including all 14 situations, 59 st
 
 Reading controls provide larger text, high contrast, increased spacing and reduced motion. The interface includes semantic controls, visible keyboard focus, status announcements, responsive layouts and locally hosted fonts. Role labels supplement the different perspective colours.
 
+Character controls work with a keyboard and have English/Gaeilge labels, visible selected states and touch targets of at least 48px. Opening the in-game picker focuses its heading; **Done** returns focus to **Change character**. Its heading and controls wrap on narrow screens, including with enlarged Irish text.
+
 The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) for coverage and review opportunities.
 
 Both perspectives use a shared **mobile-first layout**, with **72 browser checks in Chromium, Firefox and WebKit**, from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
@@ -78,6 +104,8 @@ Both perspectives use a shared **mobile-first layout**, with **72 browser checks
 Choices, scores, character selections, reading preferences and a resume point are saved in browser storage. There are no accounts, analytics, tracking scripts or forms for real incidents.
 
 Each perspective keeps a separate record. Switching between them carries and merges progress through the game link. Copying that link can share the learning record it contains. Separate browsers and devices do not synchronise automatically; clearing one perspective's progress does not clear the other's record or previously copied links. Hosting services may retain ordinary access logs.
+
+Preferred characters are stored separately from scores. Clearing progress keeps those character preferences. If browser saving is blocked, character selection and changes still work for the current visit.
 
 See [Persistence and transfer](docs/PERSPECTIVES-AND-SCORES.md#persistence-and-transfer) for storage limits and recovery behaviour.
 
@@ -127,7 +155,14 @@ npm test
 | `npm run test:browser` | Run browser, responsive layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration runs **86 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, progress transfer, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration runs **86 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, character selection, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+
+The character-selection release, commit [`109ae45`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/109ae45fb5e5aa795ee50d185cd53d3520373ab6), passed both verification suites:
+
+| Verified checks | Result |
+| --- | --- |
+| [Game checks](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34281449058) | **86 passed** across the public and Garda entrypoints. |
+| [Browser checks against the deployed site](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34281471349) | **72 passed**: 24 each in Chromium, Firefox and WebKit, including character changes, retained counterparts, responsive layouts and enlarged Irish text. |
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 
