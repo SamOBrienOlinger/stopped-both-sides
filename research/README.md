@@ -56,4 +56,4 @@ For an evaluation, first define learning, delayed retention, observed decision q
 
 ## Reproducible content records
 
-The canonical source annotations are in `dist/garda/sources.mjs`; the original fictional material is in `dist/garda/data.mjs`. The [scenario map](scenario-evidence-map.md) records the sources linked to every decision. The bibliography contains references rather than reproduced papers. Run `node scripts/research-index.mjs` after changing source metadata or scenario links.
+The canonical source annotations are in `garda/sources.mjs`; the original fictional material is in `garda/data.mjs`. The [scenario map](scenario-evidence-map.md) records the sources linked to every decision. The bibliography contains references rather than reproduced papers. Run `node scripts/research-index.mjs` after changing source metadata or scenario links.

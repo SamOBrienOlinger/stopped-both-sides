@@ -1,6 +1,6 @@
 # Garda learning experience
 
-**Stopped: Both Sides** includes the Garda perspective within the shared `stopped-both-sides` repository. Its entrypoint is `dist/garda/index.html`, published at `/garda/` beneath the project address.
+**Stopped: Both Sides** includes the Garda perspective within the shared `stopped-both-sides` repository. Its entrypoint is `garda/index.html`, published at `/garda/` beneath the project address.
 
 ## The experience
 
@@ -36,6 +36,6 @@ The game has not received independent Irish criminal-law, Garda operational, com
 
 ## Maintaining this experience
 
-Edit the Garda material in `dist/garda/data.mjs` and `dist/garda/sources.mjs`. Both original practice and shared play read that material directly. Keep the counterpart scenes and Irish translations aligned. Run `npm run research:index` after source metadata or scenario citations change, then `npm run check` and `npm test`. One deployment publishes both perspectives together.
+Edit the Garda material in `garda/data.mjs` and `garda/sources.mjs`. Both original practice and shared play read that material directly. Keep the counterpart scenes and Irish translations aligned. Run `npm run research:index` after source metadata or scenario citations change, then `npm run check` and `npm test`. One deployment publishes both perspectives together.
 
 See the [project README](../README.md), [research approach](../research/README.md), [bibliography](../research/bibliography.md), [scenario evidence map](../research/scenario-evidence-map.md), and [Pages setup](GITHUB-PAGES.md).

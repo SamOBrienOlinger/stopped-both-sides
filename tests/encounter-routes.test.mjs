@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {encounters,roles,sites} from '../dist/encounters/catalog.mjs';
-import {decodeState,switchRole,stateHash} from '../dist/encounters/engine.mjs';
-import {unpackProgress,progressTotals,progressStorageKey} from '../dist/encounters/progress.mjs';
+import {encounters,roles,sites} from '../encounters/catalog.mjs';
+import {decodeState,switchRole,stateHash} from '../encounters/engine.mjs';
+import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
 const {scenarios}=await import(new URL('data.mjs',siteBase));
 const siteStorageKey=progressStorageKey(siteRole);

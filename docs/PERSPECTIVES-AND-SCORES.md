@@ -36,7 +36,7 @@ Malformed links, unsupported versions and invalid indexes are rejected. Scores i
 
 ## Content and maintenance
 
-Both entrypoints import the same `dist/encounters/` directory in this repository:
+Both entrypoints import the same `encounters/` directory in this repository:
 
 | File | Responsibility |
 | --- | --- |
@@ -47,7 +47,7 @@ Both entrypoints import the same `dist/encounters/` directory in this repository
 | `progress.mjs` | Scores, best results, persistence, validation and merge rules |
 | `ui.mjs`, `styles.css` | Selection, shared play, feedback, comparison recap, progress page and responsive controls |
 
-Edit public content in `dist/data.mjs`, or Garda content in `dist/garda/data.mjs` and `dist/garda/sources.mjs`. Edit the corresponding shared scene in `dist/encounters/counterparts.mjs` and its Irish translation alongside it. Both modes read the original data directly; there is no snapshot generator or companion checkout to synchronise. Run `npm run check` and `npm test`, then publish one checked revision through the Pages workflow.
+Edit public content in `data.mjs`, or Garda content in `garda/data.mjs` and `garda/sources.mjs`. Edit the corresponding shared scene in `encounters/counterparts.mjs` and its Irish translation alongside it. Both modes read the original data directly; there is no snapshot generator or companion checkout to synchronise. Run `npm run check` and `npm test`, then push the checked revision to `main` for GitHub Pages branch publication.
 
 Old links carry a version identifier; a breaking format or scoring change requires an explicit migration or new version handling.
 

@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {scenarios,sources,groups} from '../dist/garda/data.mjs';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../dist/garda/engine.mjs';
+import {scenarios,sources,groups} from '../garda/data.mjs';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../garda/engine.mjs';
 let allPaths=0;
 for(const scenario of scenarios){
  test(`${scenario.title}: every possible choice path reaches a sourced recap`,()=>{
@@ -34,7 +34,7 @@ test('Sources have explicit external HTTPS URLs and descriptions',()=>{
  for(const [id,s] of Object.entries(sources)){for(const field of ['title','short','authors','year','publication','group','kind','place','url','access','note','limit','use'])assert.ok(typeof s[field]==='string'&&s[field].length,`${id}: missing ${field}`);assert.ok(groups[s.group],id);assert.equal(new URL(s.url).protocol,'https:');}
 });
 test('Static entrypoint, local imports, fonts and icon are available',()=>{
- const base=new URL('../dist/garda/',import.meta.url);const html=readFileSync(new URL('index.html',base),'utf8');
+ const base=new URL('../garda/',import.meta.url);const html=readFileSync(new URL('index.html',base),'utf8');
  for(const match of html.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g))assert.ok(existsSync(new URL(match[1],base)),`Missing ${match[1]}`);
  for(const file of ['app.mjs','engine.mjs']){const s=readFileSync(new URL(file,base),'utf8');for(const m of s.matchAll(/from ['"](\.\/[^'"]+)['"]/g))assert.ok(existsSync(new URL(m[1],base)),`Missing ${m[1]}`);}
  const css=readFileSync(new URL('styles.css',base),'utf8');for(const m of css.matchAll(/url\(['"]?(\.\/[^)'" ]+)['"]?\)/g))assert.ok(existsSync(new URL(m[1],base)),`Missing font ${m[1]}`);

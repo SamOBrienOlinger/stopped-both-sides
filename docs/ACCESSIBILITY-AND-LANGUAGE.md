@@ -19,7 +19,7 @@ The public site uses deep teal and soft mint surfaces; the Garda site uses muted
 
 ## Language coverage and review status
 
-`dist/locales/ga-content.mjs` contains a working Irish translation of all **14 shared situations / 59 stages**, including the neutral scene and both roles' prompts, lessons, choices and feedback. `translate.mjs` adds role labels, controls, score explanations and progress/recap language. It translates trusted UI templates while preserving IDs, choice order, links and state tokens. Published source titles remain in their original English, marked with `lang="en-IE"`.
+`locales/ga-content.mjs` contains a working Irish translation of all **14 shared situations / 59 stages**, including the neutral scene and both roles' prompts, lessons, choices and feedback. `translate.mjs` adds role labels, controls, score explanations and progress/recap language. It translates trusted UI templates while preserving IDs, choice order, links and state tokens. Published source titles remain in their original English, marked with `lang="en-IE"`.
 
 The shared mode can change between English and Gaeilge without losing the stage, role, either answer, history or scores. Choosing Irish in an original single-role session transfers the exact existing session to the matching shared situation in the same role. The original English practice remains available. About, accessibility and source-reference sections remain in English; an Irish notice explains this, and their content language is declared. The brand names are marked English.
 

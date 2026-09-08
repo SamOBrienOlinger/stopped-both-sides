@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-const css=readFileSync(new URL('../dist/accessibility/styles.css',import.meta.url),'utf8');
+const css=readFileSync(new URL('../accessibility/styles.css',import.meta.url),'utf8');
 function luminance(hex){const rgb=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return rgb.reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);}
 function contrast(a,b){const values=[luminance(a),luminance(b)].sort((a,b)=>a-b);return (values[1]+.05)/(values[0]+.05);}
 test('The implemented core text, focus, control-border and progress colours meet their contrast targets',()=>{
@@ -11,7 +11,7 @@ test('The implemented core text, focus, control-border and progress colours meet
 });
 
 test('Both perspective palettes retain readable text and controls in standard and high contrast modes',()=>{
- const palettes=readFileSync(new URL('../dist/accessibility/perspectives.css',import.meta.url),'utf8');
+ const palettes=readFileSync(new URL('../accessibility/perspectives.css',import.meta.url),'utf8');
  for(const role of ['public','garda'])for(const high of [false,true]){
   const marker=`[data-perspective="${role}"]${high?'.contrast-high':''}{`;
   const block=palettes.split(marker)[1]?.split('}')[0];assert.ok(block,marker);

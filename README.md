@@ -6,8 +6,8 @@ One repository for two connected, situation-based learning games about encounter
 
 | Experience | Entry point | Focus |
 | --- | --- | --- |
-| **Public perspective** | `dist/index.html` | A member of the public’s rights and responsibilities |
-| **Garda perspective** | `dist/garda/index.html` | Garda decision-making, bias, evidence and fair treatment |
+| **Public perspective** | `index.html` | A member of the public’s rights and responsibilities |
+| **Garda perspective** | `garda/index.html` | Garda decision-making, bias, evidence and fair treatment |
 
 Both experiences share one scenario engine, scoring system, translation catalogue, accessibility implementation and GitHub Pages deployment. See the [Garda learning guide](docs/GARDA-LEARNING.md), [research approach](research/README.md), [bibliography](research/bibliography.md) and [deployment setup](docs/GITHUB-PAGES.md).
 
@@ -37,11 +37,11 @@ See [Perspectives, scoring, persistence and maintenance](docs/PERSPECTIVES-AND-S
 
 ## Play
 
-[Existing public preview](https://why-are-you-stopping-me.samobo.chatgpt.site) · [Existing Garda preview](https://why-am-i-stopping-you.samobo.chatgpt.site)
+[Play as a member of the public](https://samobrienolinger.github.io/stopped-both-sides/) · [Play as a Garda](https://samobrienolinger.github.io/stopped-both-sides/garda/)
 
-The [GitHub repository](https://github.com/SamOBrienOlinger/stopped-both-sides) holds both experiences. GitHub Pages publication is not yet verified; the configured deployment serves the public experience at the project root and the Garda experience at `/garda/`. See [deployment setup](docs/GITHUB-PAGES.md).
+The [GitHub repository](https://github.com/SamOBrienOlinger/stopped-both-sides) holds both experiences. GitHub Pages is configured to publish from **main → /(root)**, serving the public experience at the project root and the Garda experience at `/garda/`. See [deployment setup](docs/GITHUB-PAGES.md) for the settings and how to confirm a publication.
 
-Serve the `dist` directory with any static web server, then open its address in a modern browser. There is no sign-up, account, timer or external AI service. All gameplay runs in the browser.
+Serve the repository root with any static web server, then open its address in a modern browser. There is no sign-up, account, timer or external AI service. All gameplay runs in the browser.
 
 | Situation | What it explores |
 | --- | --- |
@@ -60,7 +60,7 @@ Requirements: Python 3 for the server; Node.js 20 or later for the checks. No `n
 
 ```bash
 cd stopped-both-sides
-python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
+python3 -m http.server 8000 --bind 127.0.0.1 --directory .
 ```
 
 Open [the public experience](http://localhost:8000/) or [the Garda experience](http://localhost:8000/garda/). Use HTTP instead of double-clicking `index.html`, because the game imports JavaScript modules.
@@ -74,24 +74,25 @@ npm test
 
 | File | Purpose |
 | --- | --- |
-| `dist/index.html` | Accessible page shell, metadata and no-JavaScript fallback |
-| `dist/styles.css` | INAR-inspired theme and responsive layouts |
-| `dist/app.mjs` | Rendering, navigation, choices, feedback and learning recaps |
-| `dist/data.mjs` | Characters, scenario graphs, feedback and source register |
-| `dist/engine.mjs` | Original public game state, branching, backtracking and recaps |
-| `dist/garda/` | Garda page, original scenarios, evidence library and presentation |
-| `dist/encounters/` | One shared scenario engine, counterpart views, scoring and progress |
-| `dist/accessibility/`, `dist/locales/` | Shared reading controls, perspective palettes and translations |
-| `dist/site.mjs` | Resolves both entrypoint addresses within the current deployment |
+| `index.html` | Accessible page shell, metadata and no-JavaScript fallback |
+| `styles.css` | INAR-inspired theme and responsive layouts |
+| `app.mjs` | Rendering, navigation, choices, feedback and learning recaps |
+| `data.mjs` | Characters, scenario graphs, feedback and source register |
+| `engine.mjs` | Original public game state, branching, backtracking and recaps |
+| `garda/` | Garda page, original scenarios, evidence library and presentation |
+| `encounters/` | One shared scenario engine, counterpart views, scoring and progress |
+| `accessibility/`, `locales/` | Shared reading controls, perspective palettes and translations |
+| `site.mjs` | Resolves both entrypoint addresses within the current deployment |
 | `research/` | Garda research approach, bibliography and scenario evidence map |
-| `dist/assets/` | Locally hosted fonts and third-party licence notices |
+| `assets/` | Locally hosted fonts and third-party licence notices |
 | `tests/game.test.mjs` | Complete route traversal, navigation-state and static-asset checks |
 | `docs/CONTENT-REVIEW.md` | Source provenance, legal-content decisions and opportunities for review |
-| `.github/workflows/pages.yml` | Test and deploy `dist/` to GitHub Pages |
+| `.nojekyll` | Tells branch publishing to serve the authored static files directly |
+| `.github/workflows/checks.yml` | Check both games on pushes and pull requests |
 
 ## Adding or reviewing content
 
-Keep public-mode legal claims in `dist/data.mjs` and Garda-mode content in `dist/garda/data.mjs` and `dist/garda/sources.mjs`, with clear source references. The shared game imports these originals directly; no cross-repository synchronisation is needed. Each decision needs a setting, question, choices, feedback, learning point, suggested words and source IDs. Every next-step ID must exist in the same scenario or equal `end`. Run the checks after editing a route.
+Keep public-mode legal claims in `data.mjs` and Garda-mode content in `garda/data.mjs` and `garda/sources.mjs`, with clear source references. The shared game imports these originals directly; no cross-repository synchronisation is needed. Each decision needs a setting, question, choices, feedback, learning point, suggested words and source IDs. Every next-step ID must exist in the same scenario or equal `end`. Run the checks after editing a route.
 
 Do not imply that identity determines guilt, that cooperation guarantees safety, or that a correct choice prevents discrimination. Distinguish a legal duty from practical advice. Introduce new legal settings as separate, reviewed scenarios; do not generalise the street-enquiry example to traffic, immigration or border checks.
 
@@ -114,9 +115,9 @@ Automated checks cover all 594 original public-mode and 630 Garda-mode answer se
 
 ## Hosting
 
-The complete application is the authored `dist/` directory. It can be served at a domain root or a subdirectory because asset imports are relative and views use hash navigation. No build output is hidden or generated during deployment.
+The application files are authored at the repository root, with the Garda experience in `garda/` and shared code and assets alongside them. They can be served at a domain root or a subdirectory because asset imports are relative and views use hash navigation. No installation, compilation or generated build directory is required.
 
-GitHub Pages deployment is configured in `.github/workflows/pages.yml`. It checks both games before publishing the complete `dist/` directory on pushes to `main`. The repository is `SamOBrienOlinger/stopped-both-sides`, with the Garda experience under `/garda/`. Initial Pages setup and a successful deployment must be verified before claiming the Pages address is live. See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md). The links above remain the existing Sites previews until publication is verified.
+In **Settings → Pages**, use **Deploy from a branch**, branch **main**, folder **/(root)**. GitHub publishes updates when changes reach `main`; `.nojekyll` skips Jekyll processing. The checks workflow runs independently and does not block branch publication, so run `npm run check` and `npm test` before pushing. See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md).
 
 ## Credits and rights
 
@@ -130,6 +131,6 @@ The choice-and-explanation approach builds on [Beaver v Otter](https://samobrien
 
 No endorsement by INAR, ICCL or An Garda Síochána is claimed.
 
-Open Sans is distributed under the SIL Open Font License; see `dist/assets/OFL-Open-Sans.txt`. Interface icons include adapted Feather paths; see `dist/assets/LICENSE-Feather.txt`. Source publications retain their own rights and are linked, not reproduced wholesale.
+Open Sans is distributed under the SIL Open Font License; see `assets/OFL-Open-Sans.txt`. Interface icons include adapted Feather paths; see `assets/LICENSE-Feather.txt`. Source publications retain their own rights and are linked, not reproduced wholesale.
 
 Copyright © 2026 Sam O’Brien-Olinger. No licence to reuse original project code or content is granted by this README. Third-party assets retain their respective licence terms.

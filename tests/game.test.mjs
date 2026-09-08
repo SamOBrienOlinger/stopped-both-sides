@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {scenarios,sources} from '../dist/data.mjs';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../dist/engine.mjs';
+import {scenarios,sources} from '../data.mjs';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../engine.mjs';
 let allPaths=0;
 for(const scenario of scenarios){
  test(`${scenario.title}: every possible choice path reaches a sourced recap`,()=>{
@@ -30,7 +30,7 @@ test('Sources have explicit external HTTPS URLs and descriptions',()=>{
  for(const [id,s] of Object.entries(sources)){assert.ok(s.title&&s.note,id);assert.equal(new URL(s.url).protocol,'https:');}
 });
 test('Static entrypoint, local imports, fonts and icon are available',()=>{
- const base=new URL('../dist/',import.meta.url);const html=readFileSync(new URL('index.html',base),'utf8');
+ const base=new URL('../',import.meta.url);const html=readFileSync(new URL('index.html',base),'utf8');
  for(const match of html.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g))assert.ok(existsSync(new URL(match[1],base)),`Missing ${match[1]}`);
  for(const file of ['app.mjs','engine.mjs']){const s=readFileSync(new URL(file,base),'utf8');for(const m of s.matchAll(/from ['"](\.\/[^'"]+)['"]/g))assert.ok(existsSync(new URL(m[1],base)),`Missing ${m[1]}`);}
  const css=readFileSync(new URL('styles.css',base),'utf8');for(const m of css.matchAll(/url\(['"]?(\.\/[^)'" ]+)['"]?\)/g))assert.ok(existsSync(new URL(m[1],base)),`Missing font ${m[1]}`);

@@ -1,5 +1,5 @@
 import {writeFileSync} from 'node:fs';
-import {sources,groups,CHECKED,scenarios} from '../dist/garda/data.mjs';
+import {sources,groups,CHECKED,scenarios} from '../garda/data.mjs';
 const root=new URL('../research/',import.meta.url);
 let refs=`# Bibliography\n\nReview date: ${CHECKED}. ${Object.keys(sources).length} sources, including ${Object.values(sources).filter(s=>s.kind.startsWith('Academic')).length} academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.\n\n`;
 for(const [id,label] of Object.entries(groups)){

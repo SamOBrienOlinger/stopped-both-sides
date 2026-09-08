@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 let checked=0;
 function walk(directory){
  for(const entry of readdirSync(directory,{withFileTypes:true})){
+  if(entry.name.startsWith('.')||entry.name==='node_modules')continue;
   const file=new URL(entry.name+(entry.isDirectory()?'/':''),directory);
   if(entry.isDirectory()){walk(file);continue;}
   if(!entry.name.endsWith('.mjs'))continue;
@@ -13,6 +14,5 @@ function walk(directory){
   checked++;
  }
 }
-walk(new URL('../dist/',import.meta.url));
-walk(new URL('./',import.meta.url));
-console.log(`Checked ${checked} JavaScript modules across both games and maintenance scripts.`);
+walk(new URL('../',import.meta.url));
+console.log(`Checked ${checked} JavaScript modules across both games, tests and maintenance scripts.`);

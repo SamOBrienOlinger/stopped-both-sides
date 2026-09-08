@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {scenarios,sources,groups} from '../dist/garda/data.mjs';
+import {scenarios,sources,groups} from '../garda/data.mjs';
 
 // Small DOM adapter: verifies application routing and state integration without a browser.
 const callbacks={};
@@ -13,7 +13,7 @@ globalThis.location={get hash(){return currentHash;},set hash(value){currentHash
 globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='.skip')return skip;if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,callback){callbacks[type]=callback;}};
-await import('../dist/garda/app.mjs');
+await import('../garda/app.mjs');
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
 function action(name,extra={}){callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(name==='start')callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
 

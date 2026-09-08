@@ -1,20 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
-import {siteAddresses} from '../dist/site.mjs';
+import {siteAddresses} from '../site.mjs';
 const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides/');
-import {startEncounter,answer,switchRole,stateHash,decodeState} from '../dist/encounters/engine.mjs';
-import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../dist/encounters/progress.mjs';
-import {createPreferences} from '../dist/accessibility/preferences.mjs';
-import {translateText,translateHTML} from '../dist/locales/translate.mjs';
+import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs';
+import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs';
+import {createPreferences} from '../accessibility/preferences.mjs';
+import {translateText,translateHTML} from '../locales/translate.mjs';
 
 test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));
  assert.equal(pkg.name,'stopped-both-sides');
  const subtitle='An interactive learning game for the public and Gardaí.';
  for(const path of ['','garda/']){
-  const html=readFileSync(new URL('../dist/'+path+'index.html',import.meta.url),'utf8');
-  const app=readFileSync(new URL('../dist/'+path+'app.mjs',import.meta.url),'utf8');
+  const html=readFileSync(new URL('../'+path+'index.html',import.meta.url),'utf8');
+  const app=readFileSync(new URL('../'+path+'app.mjs',import.meta.url),'utf8');
   assert.match(html,/<title>Stopped: Both Sides \| (Public|Garda) perspective<\/title>/);
   assert.ok(html.includes(subtitle));assert.ok(app.includes(subtitle));
   assert.match(app,/<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides<\/h1>/);
@@ -47,12 +47,14 @@ test('The two Pages paths keep independent progress and preferences while transf
 });
 
 test('HTML, CSS and module assets resolve inside the GitHub Pages project directory',()=>{
- const root=new URL('../dist/',import.meta.url);
+ const root=new URL('../',import.meta.url);
+ assert.ok(statSync(new URL('.nojekyll',root)).isFile(),'Branch publishing must serve the authored static files');
  const name=JSON.parse(readFileSync(new URL('../package.json',import.meta.url))).name;
  const base=new URL(`https://samobrienolinger.github.io/${name}/`);
  let checked=0;
  function walk(directory,relative=''){
   for(const entry of readdirSync(directory,{withFileTypes:true})){
+   if(entry.name.startsWith('.')||['node_modules','scripts','tests','docs','research'].includes(entry.name))continue;
    const path=relative+entry.name,file=new URL(path,root);
    assert.equal(entry.isSymbolicLink(),false,'Pages artifacts must not contain symlinks');
    if(entry.isDirectory()){walk(file,path+'/');continue;}
@@ -77,15 +79,15 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
   const addresses=siteAddresses(base);
   assert.equal(addresses.public,base);assert.equal(addresses.garda,base+'garda/');
   for(const [role,path] of [['public','index.html'],['garda','garda/index.html']]){
-   const html=readFileSync(new URL('../dist/'+path,import.meta.url),'utf8');
+   const html=readFileSync(new URL('../'+path,import.meta.url),'utf8');
    const fallback=html.match(/data-site-switch href="([^"]+)"/)[1];
    const target=new URL(fallback,addresses[role]);
    assert.equal(new URL('./',target).href,addresses[role==='public'?'garda':'public']);
   }
  }
- const gardaShell=readFileSync(new URL('../dist/garda/index.html',import.meta.url),'utf8');
+ const gardaShell=readFileSync(new URL('../garda/index.html',import.meta.url),'utf8');
  assert.match(gardaShell,/\.\.\/accessibility\/perspectives\.css/);
  assert.match(gardaShell,/\.\.\/encounters\/styles\.css/);
- const gardaApp=readFileSync(new URL('../dist/garda/app.mjs',import.meta.url),'utf8');
+ const gardaApp=readFileSync(new URL('../garda/app.mjs',import.meta.url),'utf8');
  assert.match(gardaApp,/from '\.\.\/encounters\/ui\.mjs'/);
 });
