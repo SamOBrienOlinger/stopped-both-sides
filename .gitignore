@@ -3,3 +3,5 @@ node_modules/
 .env.*
 *.tar.gz
 .DS_Store
+playwright-report/
+test-results/

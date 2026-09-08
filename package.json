@@ -7,9 +7,13 @@
   "scripts": {
     "test": "node scripts/test.mjs",
     "check": "node scripts/check.mjs",
-    "research:index": "node scripts/research-index.mjs"
+    "research:index": "node scripts/research-index.mjs",
+    "test:browser": "playwright test --config=tests/browser/playwright.config.mjs"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
   }
 }
