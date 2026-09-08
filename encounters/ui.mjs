@@ -114,7 +114,7 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   if(action==='paired-start'||action==='paired-quick-start'){characterPickerOpen=false;setupCharacterOpen=false;navigate(startEncounter(button.dataset.id,role,{characterId:characterPreferences.value[role]}));return true;}
   if(action==='paired-transfer'){characterPickerOpen=false;navigate(legacyState(getOriginalSession(),otherRole(siteRole)));return true;}
   if(action==='paired-character-transfer'){characterPickerOpen=true;navigate(legacyState(getOriginalSession()),true,false);focusCharacterPicker();return true;}
-  if(action==='paired-setup-characters'){setupCharacterOpen=!setupCharacterOpen;rerender(false);if(setupCharacterOpen)focusCharacterPicker();return true;}
+  if(action==='paired-setup-characters'){setupCharacterOpen=!setupCharacterOpen;rerender(false);if(setupCharacterOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-setup-done'){setupCharacterOpen=false;rerender(false);document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-character-select'){characterPreferences.choose(role,button.dataset.character);rerender(false);document.querySelector('[data-character="'+characterPreferences.value[role]+'"]')?.focus({preventScroll:true});announce('Character selected.');return true;}
   if(action==='paired-clear'){clearPending=true;rerender(false);document.querySelector('[data-action="paired-clear-confirm"]')?.focus();return true;}

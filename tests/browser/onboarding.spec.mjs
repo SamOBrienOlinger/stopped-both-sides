@@ -11,6 +11,11 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  await expect(page.locator('.character-option')).toHaveCount(0);
  await expect(page.locator('.scenario-library')).not.toHaveAttribute('open','');
  await expect(page.locator('[data-action="paired-start"]:visible')).toHaveCount(0);
+ await page.locator('[data-action="paired-setup-characters"]').click();
+ await expect(page.locator('#character-picker-title')).toBeFocused();
+ await page.locator('[data-action="paired-setup-characters"]').click();
+ await expect(page.locator('[data-action="paired-setup-characters"]')).toBeFocused();
+ await expect(page.locator('.character-option')).toHaveCount(0);
  await page.locator('[data-action="paired-quick-start"]').click();
  await expect(page.locator('#scene-title')).toBeFocused();
  expect(state(page).id).toBe(role+'-street');
