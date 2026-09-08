@@ -1,0 +1,15 @@
+{
+  "name": "stopped-both-sides",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Two-perspective learning about Garda encounters, rights, responsibilities and decision-making in Ireland",
+  "scripts": {
+    "test": "node scripts/test.mjs",
+    "check": "node scripts/check.mjs",
+    "research:index": "node scripts/research-index.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
