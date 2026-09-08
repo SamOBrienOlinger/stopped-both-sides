@@ -9,7 +9,7 @@ Players can choose from nine LEGO-style characters for each perspective. The 18 
 - Both characters appear at every stage, during feedback and in the recap. The same pair remains in place across stages and reloads.
 - **Change character** opens an inline picker. Choosing a character updates only the active side's appearance and leaves the opposing character, stage, answers and scores intact.
 - **Switch perspective** puts the player in the existing opposite character's place. That character can then be changed using the same control.
-- Starting or replaying a situation assigns a new random counterpart; it may select the same character by chance.
+- Starting or replaying a shared situation assigns a new random counterpart; it may select the same character by chance.
 - Original single-role practice also displays the pair. Its change-character control opens shared play at the same stage, with the existing choice retained.
 
 The chosen figure represents the player's role visually. Scenario names, ages, facts, legal responsibilities, branches and scoring do not change with appearance. This distinction is stated in the picker.
