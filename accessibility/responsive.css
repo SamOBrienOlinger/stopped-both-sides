@@ -1,0 +1,66 @@
+/* Shared mobile-first layout. Wider columns are enhancements to this base. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-width:0;overflow-wrap:anywhere}
+h1,h2,h3,p,li,blockquote{overflow-wrap:anywhere}
+img,svg,video{max-width:100%}
+.header-inner,main,.footer{padding-left:1rem;padding-right:1rem;padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+.header-inner{padding-top:max(1rem,env(safe-area-inset-top));align-items:center}
+.footer{padding-bottom:max(1.375rem,env(safe-area-inset-bottom))}
+main,.header-inner,.footer>div,.footer>p{width:100%;max-width:1280px;min-width:0}
+.header-actions{display:grid;grid-template-columns:minmax(0,1fr);width:100%;margin-left:0}
+.header nav{width:100%;min-width:0;margin:0;flex-wrap:wrap;justify-content:flex-start}
+.header nav a{min-width:44px;justify-content:center}
+.site-switch,.settings-button{width:100%;margin:0}
+.primary,.choice,.site-switch,.settings-button,.text-button{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.choice>span:last-child,.settings-heading>h2{min-width:0}
+.dialog-close{flex-shrink:0}
+.home-intro h1,.paired-picker>h1{font-size:clamp(2rem,6vw,4rem)}
+.paired-entry,.paired-catalog,.game-grid,.summary-grid,.scenarios,.role-results,.progress-situations,.recap-comparison,.role-picker{
+ display:grid;grid-template-columns:minmax(0,1fr)
+}
+.paired-entry>*,.game-grid>*,.summary-grid>*,.scenarios>*,.role-picker>*{min-width:0}
+.role-scores{grid-template-columns:minmax(0,1fr)}
+.role-score{display:flex;flex-direction:column;align-items:flex-start}
+.perspective-bar,.legacy-perspective{flex-direction:column;align-items:stretch}
+.perspective-toggle,.legacy-perspective .primary{width:100%;flex-shrink:1}
+.paired-stage-footer{flex-direction:column;align-items:stretch}
+.session-return{display:block}
+.session-return a{display:inline-flex;margin-top:.5rem}
+.story,.info-block,.paired-recap .summary-item{padding:clamp(1.125rem,3vw,1.875rem)}
+.settings-dialog:not([open]){display:none}
+.settings-dialog{
+ width:calc(100% - 2rem);max-width:40rem;min-width:0;
+ max-height:calc(100vh - 2rem);max-height:calc(100dvh - 2rem);
+ margin:auto;overflow:auto;overscroll-behavior:contain
+}
+.settings-content{padding:1.25rem;min-width:0;overflow-wrap:anywhere}
+.settings-actions{display:grid;grid-template-columns:minmax(0,1fr)}
+.settings-actions .primary{width:100%}
+.settings-dialog[data-dialog-fallback][open]{display:block;position:fixed;z-index:1001;top:1rem;right:0;bottom:auto;left:0;margin:0 auto}
+.dialog-backdrop{position:fixed;inset:0;z-index:1000;background:#142c4170}
+.dialog-open{overflow:hidden}
+a:focus,button:focus,summary:focus,select:focus,input:focus{outline:3px solid var(--focus);outline-offset:4px}
+a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:focus-visible),select:focus:not(:focus-visible),input:focus:not(:focus-visible){outline:none;box-shadow:none}
+
+@media(min-width:24rem){.role-scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:41.25rem){
+ .header-inner,main,.footer{padding-left:1.75rem;padding-right:1.75rem;padding-left:max(1.75rem,env(safe-area-inset-left));padding-right:max(1.75rem,env(safe-area-inset-right))}
+ .header-actions{display:flex;width:auto;margin-left:auto}
+ .site-switch,.settings-button{width:auto}
+ .paired-entry,.paired-catalog,.scenarios,.role-picker,.role-results{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .perspective-bar,.legacy-perspective{flex-direction:row;align-items:center;flex-wrap:wrap}
+ .perspective-toggle,.legacy-perspective .primary{width:auto}
+ .paired-stage-footer{flex-direction:row;align-items:center}
+ .session-return{display:flex;flex-wrap:wrap}
+ .session-return a{margin-top:0}
+ .settings-content{padding:1.75rem}
+ .settings-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:56.25rem){
+ .game-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr)}
+ .summary-grid{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+ .paired-recap .recap-comparison,.progress-situations{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .scenarios{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(forced-colors:active){.dialog-backdrop{background:Canvas;opacity:.8}.settings-dialog{border:2px solid CanvasText}}
+@media print{.dialog-backdrop{display:none!important}.dialog-open{overflow:visible}.summary-grid,.paired-recap .recap-comparison{display:block}}

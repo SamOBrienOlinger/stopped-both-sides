@@ -1,5 +1,8 @@
 import {encounters,roles} from './catalog.mjs';
 import {decodeState,encodeState} from './engine.mjs';
+import {hasOwn} from '../compatibility.mjs';
+// This validated storage schema contains only JSON values; never requires structuredClone.
+const cloneProgress=progress=>JSON.parse(JSON.stringify(progress));
 export const STORAGE_KEY='garda-encounter-progress-v1';
 export const emptyProgress=()=>({records:{},last:null});
 const validIndex=(n,max)=>Number.isInteger(n)&&n>=0&&n<max;
@@ -14,7 +17,7 @@ export function runScores(state){
  }));
 }
 export function recordProgress(progress,state){
- const next=structuredClone(progress),encounter=encounters[state.id];
+ const next=cloneProgress(progress),encounter=encounters[state.id];
  const steps=[...state.history,...(state.complete?[]:[{nodeId:state.nodeId,answers:state.answers}])];
  const scores=runScores(state);
  for(const role of roles){
@@ -49,12 +52,12 @@ export function unpackProgress(token){
   if(d.v!==1||!Array.isArray(d.rows)||d.rows.length>Object.keys(encounters).length*2)return null;
   const p=emptyProgress();
   for(const row of d.rows){
-   if(!Array.isArray(row)||row.length!==5||!Object.hasOwn(encounters,row[0])||![0,1].includes(row[1])||!Array.isArray(row[2]))return null;
+   if(!Array.isArray(row)||row.length!==5||!hasOwn(encounters,row[0])||![0,1].includes(row[1])||!Array.isArray(row[2]))return null;
    const [id,role,values,best,last]=row,ids=Object.keys(encounters[id].nodes),key=id+'/'+roles[role];
-   if(Object.hasOwn(p.records,key)||values.length>ids.length||best!==null&&!validResult(best)||last!==null&&!validResult(last))return null;
+   if(hasOwn(p.records,key)||values.length>ids.length||best!==null&&!validResult(best)||last!==null&&!validResult(last))return null;
    const decisions={};
    for(const v of values){
-    if(!Array.isArray(v)||v.length!==3||!validIndex(v[0],ids.length)||![0,1].includes(v[1])||![0,1].includes(v[2])||v[2]<v[1]||Object.hasOwn(decisions,ids[v[0]]))return null;
+    if(!Array.isArray(v)||v.length!==3||!validIndex(v[0],ids.length)||![0,1].includes(v[1])||![0,1].includes(v[2])||v[2]<v[1]||hasOwn(decisions,ids[v[0]]))return null;
     decisions[ids[v[0]]]=[v[1],v[2]];
    }
    if(best&&(!last||best[0]/best[1]<last[0]/last[1]||best[1]>ids.length)||last&&last[1]>ids.length)return null;
@@ -65,7 +68,7 @@ export function unpackProgress(token){
  }catch{return null;}
 }
 export function mergeProgress(a,b){
- const p=structuredClone(a);
+ const p=cloneProgress(a);
  for(const [key,r] of Object.entries(b.records)){
   const existing=p.records[key]||{decisions:{},best:null,last:null};
   for(const [id,value] of Object.entries(r.decisions))existing.decisions[id]=[value[0],Math.max(value[1],existing.decisions[id]?.[1]||0)];

@@ -1,3 +1,4 @@
+import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs';
 import {createEncounterMode} from '../encounters/ui.mjs';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs';
@@ -62,8 +63,8 @@ function render(focus=true){
   document.title='Play both sides | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(focus)focusMain();return;
  }
  let view='play',target='';
-  if(hash.startsWith('scenario/')){const id=hash.slice(9);if(!Object.hasOwn(scenarioById,id)){main.innerHTML=notFound();view='missing';}else{if(!session||session.scenarioId!==id)session=startSession(id);if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}main.innerHTML=game();}}
-  else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!Object.hasOwn(sources,id)&&!(id.startsWith('group-')&&Object.hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(Object.hasOwn(sources,id)?`source-${id}`:id):'';}}
+  if(hash.startsWith('scenario/')){const id=hash.slice(9);if(!hasOwn(scenarioById,id)){main.innerHTML=notFound();view='missing';}else{if(!session||session.scenarioId!==id)session=startSession(id);if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}main.innerHTML=game();}}
+  else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
   else if(hash==='about'){view='about';main.innerHTML=about();}
   else if(hash==='play'||hash==='main'){main.innerHTML=home();}
   else{view='missing';main.innerHTML=notFound();}

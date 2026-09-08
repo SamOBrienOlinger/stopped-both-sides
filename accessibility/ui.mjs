@@ -1,5 +1,6 @@
 import {decodeState} from '../encounters/engine.mjs';
 import {createPreferences,defaults} from './preferences.mjs';
+import {createDialogController} from './dialog.mjs';
 import {translateText,translateHTML,escapeHTML as esc} from '../locales/translate.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 export function perspectiveForRoute(hash,siteRole='public'){
@@ -14,6 +15,7 @@ export function createReadingTools({main,rerender,siteRole='public'}){
  const preferences=createPreferences(storage,globalThis.location?.search||'',siteRole);
  const root=document.documentElement,dialog=document.querySelector('#reading-dialog'),live=document.querySelector('#page-status');
  let opener=null;
+ const modal=createDialogController(dialog,()=>{if(opener?.isConnected)opener.focus();else document.querySelector('[data-reading-open]')?.focus();});
  const shell=['.header nav','.skip','.footer'].map(selector=>{const el=document.querySelector(selector);return el?{el,html:el.innerHTML}:null;}).filter(Boolean);
  const t=text=>translateText(text,preferences.value.language);
  function announce(message){if(live){live.textContent='';queueMicrotask(()=>{live.textContent=t(message);});}}
@@ -25,12 +27,11 @@ export function createReadingTools({main,rerender,siteRole='public'}){
   document.querySelectorAll('[data-reading-open]').forEach(button=>button.textContent=t('Language & reading')+' · English / Gaeilge');
  }
  function dialogHTML(){const p=preferences.value;return translateHTML(`<form class="settings-content" id="reading-form"><div class="settings-heading"><h2 id="reading-title" tabindex="-1">Language & reading</h2><button class="dialog-close" type="button" data-reading-close aria-label="Close settings">×</button></div><p id="reading-intro" class="settings-help">Your language and reading preferences are saved in this browser. Applying them keeps your answers, role and scores.</p><div class="settings-field"><label for="reading-language">Language</label><select id="reading-language" name="language" aria-describedby="language-help translation-help"><option value="en" lang="en" data-no-translate ${p.language==='en'?'selected':''}>English</option><option value="ga" lang="ga" data-no-translate ${p.language==='ga'?'selected':''}>Gaeilge</option></select><p class="settings-help" id="language-help">Irish covers all 14 shared situations, choices, explanations and progress. Source publications and the separate reference sections remain in English.</p><p class="settings-help" id="translation-help">${translateNotice}</p></div><div class="settings-field"><label for="reading-size">Text size</label><select id="reading-size" name="size">${[[100,'Standard (100%)'],[115,'Larger (115%)'],[130,'Large (130%)'],[150,'Extra large (150%)']].map(([n,label])=>`<option value="${n}" ${p.size===n?'selected':''}>${label}</option>`).join('')}</select></div><div class="settings-field"><label for="reading-contrast">Contrast</label><select id="reading-contrast" name="contrast"><option value="standard" ${p.contrast==='standard'?'selected':''}>Standard</option><option value="high" ${p.contrast==='high'?'selected':''}>High</option></select></div><label class="settings-check"><input type="checkbox" name="spacing" ${p.spacing?'checked':''}>More reading space</label><label class="settings-check"><input type="checkbox" name="motion" ${p.motion?'checked':''}>Reduce motion</label><div class="settings-actions"><button class="primary" type="submit">Apply preferences</button><button class="primary secondary" type="button" data-reading-close>Cancel</button></div><button class="plain-link settings-reset" type="button" data-reading-reset>Reset reading preferences</button></form>`,p.language);}
- function close(){dialog?.close();if(opener?.isConnected)opener.focus();else document.querySelector('[data-reading-open]')?.focus();}
- function open(button){if(!dialog)return;opener=button;dialog.innerHTML=dialogHTML();dialog.showModal();dialog.querySelector('#reading-title')?.focus();}
+ function close(){modal.close();}
+ function open(button){if(!dialog)return;opener=button;dialog.innerHTML=dialogHTML();modal.open();}
  function setLanguageQuery(){if(typeof location.href!=='string')return;const url=new URL(location.href);url.searchParams.set('lang',preferences.value.language);history.replaceState(null,'',url.pathname+url.search+url.hash);}
  function save(next){preferences.save(next);setLanguageQuery();applyDisplay();close();rerender(false);document.querySelector('[data-reading-open]')?.focus();announce(preferences.available?'Reading preferences applied. Your progress is unchanged.':'Preferences apply for this visit; browser saving is unavailable.');}
- // Native dialog supplies modal focus containment, Escape and inert background. No custom keyboard trap.
- dialog?.addEventListener('close',()=>{if(opener?.isConnected)opener.focus();else document.querySelector('[data-reading-open]')?.focus();});
+ // The controller supplies native modal behaviour or an older-browser fallback.
  dialog?.addEventListener('submit',event=>{event.preventDefault();const form=event.target;save({language:form.elements.language.value,size:Number(form.elements.size.value),contrast:form.elements.contrast.value,spacing:form.elements.spacing.checked,motion:form.elements.motion.checked});});
  document.addEventListener?.('click',event=>{
   const button=event.target.closest('button');if(!button)return;

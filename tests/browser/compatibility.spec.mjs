@@ -116,11 +116,39 @@ for(const role of ['public','garda']){
   await page.addInitScript(()=>{
    window.structuredClone=undefined;Object.hasOwn=undefined;
    HTMLDialogElement.prototype.showModal=undefined;HTMLDialogElement.prototype.close=undefined;
+   Object.defineProperty(window,'localStorage',{get(){throw new DOMException('Storage blocked','SecurityError');}});
   });
   await page.setViewportSize({width:320,height:568});
   await page.goto(paths[role]);await ready(page);await chooseFirst(page,role);
   await page.locator('[data-action="paired-answer"]').first().click();
   await expect(page.locator('#feedback')).toBeVisible();
   await checkDialog(page);
+  await settings(page);await page.locator('#reading-language').selectOption('ga');
+  await page.locator('#reading-form [type="submit"]').click();
+  await expect(page.locator('html')).toHaveAttribute('lang','ga');
+  await expect(page.locator('#feedback')).toBeVisible();
+  await expect(page.locator('.dialog-backdrop')).toHaveCount(0);
+  await expect(page.locator('#main')).not.toHaveAttribute('aria-hidden','true');
+ });
+
+ test(`${role} touch input survives portrait and landscape`,async({browser,browserName,baseURL})=>{
+  const context=await browser.newContext({baseURL,viewport:{width:390,height:844},
+   hasTouch:true,isMobile:browserName!=='firefox',deviceScaleFactor:3});
+  const page=await context.newPage();
+  try{
+   await page.goto(paths[role]);await ready(page);
+   await page.locator(`.paired-entry a[href="#encounters/${role}"]`).tap();
+   await expect(page.locator('.encounter-card')).toHaveCount(14);
+   await page.locator('[data-action="paired-start"]').first().tap();
+   await expect(page.locator('.paired-game')).toBeVisible();
+   await page.locator('[data-action="paired-answer"]').first().tap();
+   await expect(page.locator('#feedback')).toBeVisible();
+   const before=readState(page);await page.setViewportSize({width:844,height:390});
+   await fits(page,'touch landscape');expect(readState(page)).toEqual(before);
+   await page.locator('.perspective-bar [data-action="paired-switch"]').tap();
+   await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
+   expect(readState(page).answers).toEqual(before.answers);
+   await page.setViewportSize({width:390,height:844});await fits(page,'touch portrait');
+  }finally{await context.close();}
  });
 }

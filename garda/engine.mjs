@@ -1,5 +1,6 @@
+import {hasOwn} from '../compatibility.mjs';
 import {scenarioById} from './data.mjs';
-export function startSession(id){const s=Object.hasOwn(scenarioById,id)?scenarioById[id]:null;if(!s)throw new Error('Unknown scenario');return {scenarioId:id,nodeId:s.start,history:[],selected:null,complete:false};}
+export function startSession(id){const s=hasOwn(scenarioById,id)?scenarioById[id]:null;if(!s)throw new Error('Unknown scenario');return {scenarioId:id,nodeId:s.start,history:[],selected:null,complete:false};}
 export function currentNode(state){return state&&!state.complete?scenarioById[state.scenarioId].nodes[state.nodeId]:null;}
 export function choose(state,index){const node=currentNode(state);if(!node||state.selected!==null||!Number.isInteger(index)||!node.choices[index])return state;return {...state,selected:index};}
 export function advance(state){const node=currentNode(state);if(!node||state.selected===null)return state;const choice=node.choices[state.selected];return {...state,nodeId:choice.next,history:[...state.history,{nodeId:state.nodeId,choiceIndex:state.selected}],selected:null,complete:choice.next==='end'};}

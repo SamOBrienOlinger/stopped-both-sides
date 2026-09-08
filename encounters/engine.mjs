@@ -1,10 +1,11 @@
+import {hasOwn} from '../compatibility.mjs';
 import {encounters, roles} from './catalog.mjs';
 
 export const otherRole = role => role === 'public' ? 'garda' : 'public';
 const validRole = role => roles.includes(role);
 const answers = () => ({public:null,garda:null});
 export function startEncounter(id,role='public') {
-  if (!Object.hasOwn(encounters,id) || !validRole(role)) throw new Error('Unknown encounter or role');
+  if (!hasOwn(encounters,id) || !validRole(role)) throw new Error('Unknown encounter or role');
   return {id,role,nodeId:encounters[id].start,history:[],answers:answers(),complete:false};
 }
 export const currentStage = state => state && !state.complete ? encounters[state.id].nodes[state.nodeId] : null;
