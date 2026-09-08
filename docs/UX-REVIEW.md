@@ -35,6 +35,7 @@ The full catalogue and supporting scores/help use native expandable sections. Ch
 
 - JavaScript syntax checks pass across 41 modules.
 - 88 Node checks pass across both entrypoints, including all existing branch, score, transfer and character checks and the new recommended-start journey.
+- [All 78 browser checks passed before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442), 26 each in Chromium, Firefox and WebKit, against implementation commit `5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d`.
 - Browser coverage includes direct starts, keyboard access to all 14 situations, feedback focus, optional scores, reconsidering an answer and advancing to the next stage. The existing responsive matrix covers both roles at widths from 320 to 2560 CSS pixels, enlarged Irish text, reading settings, touch, saved progress and recap.
 
 This is a reasoned interface improvement supported by inspection and automated checks. It does not establish a measured improvement in comprehension or an accessibility certification. Testing the first-play journey with public and Garda learners, including disabled users, remains the next research step.

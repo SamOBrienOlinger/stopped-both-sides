@@ -28,10 +28,10 @@ Branch and pull-request runs exercise both entry points under `/stopped-both-sid
 | Desktop | 1366 × 768, 1920 × 1080 and 2560 × 1440 CSS pixels |
 | Touch and rotation | 390 × 844 portrait and 844 × 390 landscape; touch-enabled contexts |
 | Reading settings | 150% text, increased spacing, high contrast, English/Gaeilge and dialog keyboard use |
-| Main journeys | Home, original practice and feedback, shared play, other-side switching, reload, recap, progress and reference pages |
+| Main journeys | Home, recommended start, optional character picker, keyboard catalogue access, original practice and feedback, shared play, other-side switching, reload, recap, progress and reference pages |
 | Compatibility fallback | Missing clone/property/modal APIs and blocked storage simulated in each engine |
 
-The 72 browser checks cover page overflow, clipped text, dialog bounds and navigation target sizes. Functional assertions check choices, preserved answers, language, saved state and completion. Tests fail on page errors or missing local assets. Failure reports include screenshots and traces, retained by GitHub Actions for seven days.
+The 78 browser checks cover page overflow, clipped text, dialog bounds and navigation target sizes. Functional assertions check choices, preserved answers, language, saved state and completion. Tests fail on page errors or missing local assets. Failure reports include screenshots and traces, retained by GitHub Actions for seven days.
 
 To run the browser suite:
 

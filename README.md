@@ -159,14 +159,9 @@ npm test
 
 The Node test configuration runs **88 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, character selection, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
-The previous character-selection release, commit [`109ae45`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/109ae45fb5e5aa795ee50d185cd53d3520373ab6), passed both verification suites:
+The clearer-first-play implementation at commit [`5d8a9dd`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d) passed **88 Node checks locally** and [all 78 browser checks before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442): **26 each in Chromium, Firefox and WebKit**. These include recommended starts, keyboard catalogue access, character changes, retained counterparts, responsive layouts and enlarged Irish text. The [interface review](docs/UX-REVIEW.md) includes before/after captures and the limits of this verification.
 
-| Verified checks | Result |
-| --- | --- |
-| [Game checks](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34281449058) | **86 passed** across the public and Garda entrypoints. |
-| [Browser checks against the deployed site](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34281471349) | **72 passed**: 24 each in Chromium, Firefox and WebKit, including character changes, retained counterparts, responsive layouts and enlarged Irish text. |
-
-The current browser suite contains **78 checks**: 26 per engine. It adds first-play and keyboard catalogue journeys to the character, translation, layout and touch checks.
+On `main`, the browser workflow waits for that commit's GitHub Pages publication and repeats the suite against the live site. [See browser runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) for deployment-specific results.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 
