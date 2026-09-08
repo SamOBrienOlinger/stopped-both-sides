@@ -16,7 +16,7 @@ The support target is current Chrome, Edge, Firefox and Safari on desktop, and c
 
 [Browser compatibility](../.github/workflows/browsers.yml) runs Playwright in three independent jobs: **Chromium, Firefox and WebKit**. Chromium provides coverage of the engine used by Chrome and Edge; WebKit tests are useful Safari-engine coverage, not a substitute for running shipping Safari on Apple hardware.
 
-Branch and pull-request runs exercise both entry points under `/stopped-both-sides/` on a temporary server, matching the GitHub Pages project path. After a successful Pages publication from `main`, the same suite automatically runs against the live address. It checks:
+Branch and pull-request runs exercise both entry points under `/stopped-both-sides/` on a temporary server, matching the GitHub Pages project path. On `main`, successful game checks trigger the browser workflow, which waits for that exact commit's Pages publication before running the same suite against the live address. It checks:
 
 | Coverage | Cases |
 | --- | --- |
