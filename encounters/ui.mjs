@@ -33,7 +33,14 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const saved=store.value.last&&decodeState(store.value.last);
   return saved?`<div class="info-block session-return"><span><strong>${saved.complete?'Last recap':'Continue your situation'}:</strong> ${esc(encounters[saved.id].title)} · ${roleLabels[saved.role]}</span><a class="text-button" href="${stateHash(saved)}">${saved.complete?'Open recap':'Resume play'} →</a></div>`:'';
  }
- function landing(){return `<section class="paired-entry" aria-labelledby="paired-title"><div><p class="eyebrow">PLAY BOTH SIDES</p><h2 id="paired-title">One encounter. Two perspectives.</h2><p>Start as either character, switch sides at any stage and build your learning score.</p></div><div class="paired-entry-actions"><a class="primary" href="#encounters/public" data-role-tone="public">Start as a member of the public</a><a class="primary secondary" href="#encounters/garda" data-role-tone="garda">Start as a Garda</a><a class="text-button" href="#progress">My scores & progress</a></div></section>${resumeLink()}`;}
+ function landing(){
+  const heroes=roles.map(role=>{
+   const image=new URL(`../assets/heroes/${role}-960.webp`,import.meta.url).href;
+   const srcset=[480,960,1600].map(width=>`${new URL(`../assets/heroes/${role}-${width}.webp`,import.meta.url).href} ${width}w`).join(', ');
+   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(min-width: 1280px) 598px, (min-width: 900px) calc((100vw - 84px) / 2), calc(100vw - 56px)" width="1672" height="941" alt="" decoding="async"><a class="primary perspective-hero-button" href="#encounters/${role}">${role==='public'?'Public perspective':'Garda perspective'}</a></div>`;
+  }).join('');
+  return `<section class="paired-entry paired-entry-visual" aria-labelledby="paired-title"><div><p class="eyebrow">PLAY BOTH SIDES</p><h2 id="paired-title">One encounter. Two perspectives.</h2><p>Start as either character, switch sides at any stage and build your learning score.</p></div><div class="perspective-heroes">${heroes}</div><a class="text-button" href="#progress">My scores & progress</a></section>${resumeLink()}`;
+ }
  function game(){
   if(state.complete)return recap();
   const e=encounters[state.id],stage=currentStage(state),view=stage.views[state.role],selected=state.answers[state.role],choice=selected===null?null:view.choices[selected];

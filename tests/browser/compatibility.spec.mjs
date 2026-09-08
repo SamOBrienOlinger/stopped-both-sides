@@ -25,6 +25,29 @@ async function settings(page){
  await expect(page.locator('#reading-dialog')).toBeVisible();
  await expect(page.locator('#reading-title')).toBeFocused();
 }
+async function checkHeroControls(page){
+ await expect(page.locator('.perspective-hero')).toHaveCount(2);
+ await expect.poll(()=>page.locator('.perspective-hero img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+ const measurements=await page.locator('.perspective-hero').evaluateAll(cards=>cards.map(card=>{
+  const image=card.querySelector('img').getBoundingClientRect();
+  const link=card.querySelector('a'),button=link.getBoundingClientRect();
+  return {centre:Math.abs(button.x+button.width/2-image.x-image.width/2),top:button.y-image.y,
+   inside:button.x>=image.x&&button.right<=image.right&&button.bottom<=image.bottom,
+   height:button.height,width:button.width,clipped:link.scrollWidth>link.clientWidth+1,
+   x:image.x,y:image.y,imageHeight:image.height};
+ }));
+ for(const result of measurements){
+  expect(result.centre,'perspective control stays horizontally centred').toBeLessThanOrEqual(1);
+  expect(result.top,'perspective control is inset from the top').toBeGreaterThanOrEqual(10);
+  expect(result.top,'perspective control stays near the top').toBeLessThanOrEqual(40);
+  expect(result.inside,'entire control stays inside its image').toBe(true);
+  expect(result.height,'touch target height').toBeGreaterThanOrEqual(48);
+  expect(result.width,'touch target width').toBeGreaterThanOrEqual(44);
+  expect(result.clipped,'translated control text must not clip').toBe(false);
+ }
+ if(page.viewportSize().width>=900)expect(Math.abs(measurements[0].y-measurements[1].y)).toBeLessThanOrEqual(1);
+ else expect(measurements[1].y).toBeGreaterThanOrEqual(measurements[0].y+measurements[0].imageHeight);
+}
 async function checkDialog(page){
  await settings(page);
  await fits(page,'reading settings');
@@ -53,7 +76,7 @@ for(const role of ['public','garda']){
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
    page.on('response',response=>{if(response.status()>=400&&response.url().includes('/stopped-both-sides/'))errors.push(response.status()+' '+response.url());});
    await page.setViewportSize({width,height});
-   await page.goto(paths[role]);await ready(page);await fits(page,'home');
+   await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
    await page.locator('.single-mode summary').click();await fits(page,'original situations');
    await page.locator('.single-mode [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
@@ -75,6 +98,9 @@ for(const role of ['public','garda']){
    await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
    await fits(page,'other perspective');
    await checkDialog(page);
+   await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
+   await expect(page.locator('.perspective-hero-button').first()).toHaveText('Dearcadh an phobail');
+   await expect(page.locator('.perspective-hero-button').last()).toHaveText('Dearcadh an Gharda');
    for(const target of ['encounters','progress','about',role==='public'?'rights':'evidence']){
     await page.locator(`.header [data-nav="${target}"]`).click();await ready(page);await fits(page,target);
    }
@@ -141,6 +167,7 @@ for(const role of ['public','garda']){
   const page=await context.newPage();
   try{
    await page.goto(paths[role]);await ready(page);
+   await checkHeroControls(page);
    await page.locator(`.paired-entry a[href="#encounters/${role}"]`).tap();
    await expect(page.locator('.encounter-card')).toHaveCount(14);
    await page.locator('[data-action="paired-start"]').first().tap();

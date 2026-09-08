@@ -42,6 +42,30 @@ main,.header-inner,.footer>div,.footer>p{width:100%;max-width:1280px;min-width:0
 a:focus,button:focus,summary:focus,select:focus,input:focus{outline:3px solid var(--focus);outline-offset:4px}
 a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:focus-visible),select:focus:not(:focus-visible),input:focus:not(:focus-visible){outline:none;box-shadow:none}
 
+/* One shared grid cell keeps each real control centred over its image.
+   The control stays in flow, so enlarged or translated text can grow. */
+.paired-entry.paired-entry-visual{display:block;padding:0;background:none;border:0;box-shadow:none}
+.paired-entry-visual>div:first-child{margin-bottom:1rem}
+.paired-entry-visual>.text-button{display:inline-flex;margin-top:1rem}
+.perspective-heroes{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem}
+.perspective-hero{display:grid;grid-template-columns:minmax(0,1fr);min-width:0;isolation:isolate;border-radius:1rem;background:var(--tone-pale)}
+.perspective-hero>img{grid-area:1/1;display:block;width:100%;height:100%;min-height:12rem;aspect-ratio:1672/941;object-fit:cover;border-radius:inherit}
+.perspective-hero-button.primary{
+ grid-area:1/1;z-index:1;align-self:start;justify-self:center;
+ width:fit-content;max-width:calc(100% - 2rem);min-width:44px;min-height:48px;
+ margin:clamp(.75rem,2vw,1.25rem) 1rem 1rem;padding:.6em 1.1em;
+ border:2px solid #fff;border-radius:999px;background:var(--tone-deep);color:#fff;
+ font-size:1rem;line-height:1.35;text-align:center;white-space:normal;overflow-wrap:anywhere;
+ box-shadow:0 2px 10px #10282e30;transition:box-shadow .15s ease
+}
+.perspective-hero-button.primary:hover{background:var(--tone-deep);color:#fff;text-decoration:underline;text-underline-offset:.2em;box-shadow:0 3px 14px #10282e50;transform:none}
+.perspective-hero-button.primary:focus{outline:3px solid var(--focus);outline-offset:3px}
+.perspective-hero-button.primary:focus:not(:focus-visible){outline:none}
+@media(min-width:56.25rem){.perspective-heroes{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}}
+@media(prefers-reduced-motion:reduce){.perspective-hero-button.primary{transition:none}}
+.motion-reduce .perspective-hero-button.primary{transition:none}
+@media(forced-colors:active){.perspective-hero-button.primary,.perspective-hero-button.primary:hover{background:Canvas;color:LinkText;border-color:LinkText;box-shadow:none}}
+
 @media(min-width:24rem){.role-scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:41.25rem){
  .header-inner,main,.footer{padding-left:1.75rem;padding-right:1.75rem;padding-left:max(1.75rem,env(safe-area-inset-left));padding-right:max(1.75rem,env(safe-area-inset-right))}

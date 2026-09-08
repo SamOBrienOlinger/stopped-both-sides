@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Two-perspective learning about Garda encounters, rights, responsibilities and decision-making in Ireland",
   "scripts": {
+    "dev": "node tests/browser/server.mjs",
     "test": "node scripts/test.mjs",
     "check": "node scripts/check.mjs",
     "research:index": "node scripts/research-index.mjs",
