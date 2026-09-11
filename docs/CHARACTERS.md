@@ -30,6 +30,8 @@ Node coverage includes all random-selection intervals, character edits without s
 
 ## Artwork record
 
+- Faces, heads, necks and hands use a natural skin-tone spectrum from cream through tan to dark brown across both roles. Each character's exposed skin matches, and the two hero viewpoints use the same tones for Alex and Ciara. Appearance has no effect on scenario facts or scoring.
+- The September 2026 colour revision uses the built-in image-generation tool to edit the original artwork, retaining the cast layout, clothing, assistive devices and role colours. All responsive hero sizes derive from the same revised image for their viewpoint.
 - Asset: [cast.webp](../assets/characters/cast.webp), 1774 × 887 pixels, a six-column, three-row sheet displayed through equal square image windows.
 - Generated with the built-in OpenAI image-generation tool, using the selected combined design concept as its identity reference. The result was inspected before integration and converted to WebP for local delivery.
 - The final generation prompt is retained in [character-art-prompt.txt](character-art-prompt.txt).
