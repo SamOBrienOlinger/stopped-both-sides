@@ -28,3 +28,5 @@ body{background:#fff}
 .reference-landing .landing-instructions{display:block}
 .reference-landing .landing-instructions p{max-width:none;text-align:center}
 @media(min-width:56.25rem){.reference-landing .perspective-entry+ .perspective-entry{padding-left:0;border:0}.reference-landing .perspective-entry+ .perspective-entry .landing-cast{border-left:1px solid #c4dee0}}
+@media(forced-colors:active){.landing-character{border-color:ButtonText}.landing-character:focus-visible{outline-color:Highlight}.landing-avatar{border-color:Canvas}}
+.motion-reduce .landing-character{transition:none}
