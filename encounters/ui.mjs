@@ -53,7 +53,7 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   return saved?`<div class="info-block session-return"><span><strong>${saved.complete?'Last recap':'Continue your situation'}:</strong> ${esc(encounters[saved.id].title)} · ${roleLabels[saved.role]}</span><a class="text-button" href="${stateHash(saved)}">${saved.complete?'Open recap':'Resume play'} →</a></div>`:'';
  }
  function introduction(){
-  const logo=new URL('../assets/brand/profiles.webp',import.meta.url).href;
+  const logo=new URL('../assets/brand/profiles-hexagon.webp',import.meta.url).href;
   return `<section class="home-intro clear-intro brand-intro" aria-labelledby="game-title"><img class="brand-profiles" src="${logo}" width="512" height="512" alt=""><div><h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h1><p>An interactive learning game for the public and Gardaí.</p></div></section>`;
  }
  function landing(){
