@@ -1,6 +1,6 @@
 import {hasOwn} from './compatibility.mjs';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=quiet-settings-1';
-import {createEncounterMode} from './encounters/ui.mjs?v=hexagon-1';
+import {createEncounterMode} from './encounters/ui.mjs?v=clear-flow-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');

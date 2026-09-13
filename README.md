@@ -249,3 +249,5 @@ Copyright © 2026 Sam O’Brien-Olinger. No licence to reuse original project co
 ### Reference-led landing page
 
 The homepage now uses the selected two-profile identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The two columns stack on small screens, while the perspective links remain at the top centre of each scene.
+
+The landing page explains the learning goal before role selection. Character cards show each person's name and provide visible hover and keyboard-focus states. Navigation fits on one row on wide screens and wraps on smaller screens; saved-progress notices use a compact layout.
