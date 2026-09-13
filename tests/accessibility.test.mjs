@@ -39,7 +39,7 @@ const siteStorageKey=progressStorageKey(role);
 const memory=new Map(),callbacks={},dialogCallbacks={},focused=[],classes=new Set();let address=new URL('https://example.test/?lang=en'),assignments=0;
 const main={innerHTML:'',attrs:{},setAttribute(k,v){this.attrs[k]=v;},focus(){focused.push('main');},scrollIntoView(){},addEventListener(k,v){callbacks[k]=v;}};
 const heading=id=>({focus(){focused.push(id);},scrollIntoView(){}});
-const openButton={isConnected:true,hasAttribute:k=>k==='data-reading-open',focus(){focused.push('settings');},textContent:''};
+const openButton={isConnected:true,classList:{contains:k=>k==='utility-settings'},hasAttribute:k=>k==='data-reading-open',focus(){focused.push('settings');},textContent:''};
 const siteLink={href:'',textContent:''};
 const dialog={open:false,innerHTML:'',addEventListener(k,v){dialogCallbacks[k]=v;},showModal(){this.open=true;},close(){this.open=false;dialogCallbacks.close?.();},querySelector:()=>heading('reading-title')};
 globalThis.localStorage={getItem:k=>memory.get(k)||null,setItem:(k,v)=>memory.set(k,v),removeItem:k=>memory.delete(k)};
