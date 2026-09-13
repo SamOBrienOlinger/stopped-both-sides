@@ -1,48 +1,16 @@
-# Hero perspective controls — design review
+# Selected landing-page implementation review
 
-final result: passed
+Source: user-supplied IMG_1223.jpeg (1125 × 1396), viewed in this session.
+Implementation: cloud browser at terminal.local:4173, public homepage, desktop viewport approximately 1363 × 936 CSS pixels; full-page screenshots returned in the conversation. Source and implementation were emitted together for comparison. Comparison is by content region because the reference is an artwork board, while the live page retains navigation, instructions, resume state and footer. No pixel-perfect claim is made.
 
-## Scope and visual evidence
+Typography: Open Sans 800, two-line title, navy text and readable live subtitle match the reference hierarchy.
+Layout: paired scenes, two 3-column cast groups, matching circular avatars and centre divider. Columns stack below 900px. Initial uneven scene widths and off-centre instructions were corrected and rechecked in the second full-page capture.
+Colours: white canvas, public teal, Garda blue; cream-to-dark-brown skin retained across scenes, figures and portraits. Yellow clothing remains intentional; skin is not yellow.
+Assets: image-generated extraction of the supplied profile mark; existing recoloured cast and scene assets. No illustrated role captions are rendered beneath characters.
+Content: real perspective links and accessible named character buttons replace flat image controls. Educational instructions and persistent navigation are intentional additions to the supplied board.
 
-The requested change is to put the Public perspective and Garda perspective controls at the top centre of their images and keep them responsive. The annotated screenshot specifies placement; the previously selected option 1 supplies the characters and illustration style. This review covers the hero component on both existing entrypoints.
+Interactions checked: selected Jo from the homepage, confirmed Jo on setup, started the first situation, confirmed Jo persisted alongside a randomly chosen Conor, returned home and confirmed resume available. Existing 88 game and interaction checks pass; module checks pass. Browser console entries reviewed showed extension metadata errors, not application errors.
 
-- Source visual truth: [annotated placement reference](docs/design/hero-buttons-source.jpg), 1125 × 372 pixels.
-- Implementation: [browser-rendered desktop capture](docs/design/hero-buttons-desktop.jpg), 1363 × 936 pixels, CSS viewport 1363 × 936, device scale 1, home route scrolled 204px to show the full hero component.
-- Selected character source: the combined option 1 concept, `exec-30743afb-725c-473a-8b43-9cde145dc15d.png`, supplied in the design conversation.
-- The source annotation and implementation capture were opened together. Comparison focused on the two image/control regions, rather than comparing the cropped source with the full page. Image density was 1:1; the source and implementation have different surrounding crops and were not treated as pixel-identical pages.
+Final result: passed
 
-## Findings
-
-No actionable P0, P1 or P2 differences remain within this scope.
-
-| Fidelity surface | Review |
-| --- | --- |
-| Fonts and typography | Existing Open Sans, bold readable button labels, 1rem text with normal wrapping. Labels translate to Irish and remain unclipped at 150% text and increased spacing. |
-| Spacing and layout | Each link shares its image's grid cell, aligns to the top and centres horizontally. Desktop measurements: zero horizontal centre error, 20px top inset and 48px target height. Images stack below 900px. |
-| Colour | Public teal and Garda blue use the existing role tokens. Opaque backgrounds, white text and white borders separate controls from detailed artwork. High-contrast and forced-colour treatments are included. |
-| Image quality | Separate text-free generated illustrations match the selected LEGO characters. Three local WebP widths (480, 960 and 1600) allow responsive selection. Image dimensions reserve space; images stay inside rounded frames. |
-| Copy and content | The two visible labels match the user's request. Both links open the matching role chooser and update its perspective palette. No character captions or concept names are baked into these hero assets. |
-
-## Interaction and responsive verification
-
-- Both links activated in the cloud browser, including Enter on the Garda control. The matching role was selected and all 14 situations were available.
-- Tab continued from the Garda link to scores and progress. Existing focus outlines remained visible.
-- Garda entrypoint checked with Irish, 150% text, high contrast and increased spacing.
-- No application console errors were found in the local preview.
-- All 77 Node checks passed.
-- All 66 browser checks passed in Chromium, Firefox and WebKit on application commit `1dfdc33b38c378e5d4e4428dc9bd446bb180f5e1`: [workflow result](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34276968356).
-- The same 66 checks also passed against the live GitHub Pages site after publication of `ba1753a94b84303caa97ed545ecc3b53042c0774`: [live-site workflow result](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34277557372).
-- Hero assertions cover loaded images, top-centre alignment, full control containment, text clipping, touch target size and stacked/two-column layouts at 320, 390, 568, 768, 1024, 1366, 1920 and 2560 CSS pixel widths, in English and enlarged Irish. Existing touch, rotation, gameplay and progress checks also passed.
-
-## Comparison history and limits
-
-The first usable viewport comparison passed. Full-page capture attempts omitted some decoded images in the capture, so they were excluded from visual evidence; a normal viewport screenshot with both images visible was used instead. No visual code fix was required by the comparison. An existing Node assertion was updated to expect the requested perspective labels rather than the previous start-link wording.
-
-Physical-device and assistive-technology testing are separate work; these checks do not certify every browser/device combination.
-
-## Implementation checklist
-
-- [x] Separate image content from the translated interactive controls.
-- [x] Centre both controls at the top with flexible dimensions and visible keyboard focus.
-- [x] Verify both entrypoints, reading preferences and responsive layouts.
-- [x] Preserve the current game routes, scores and progress behaviour.
+Limits: desktop rendered comparison completed. New mobile and multi-engine coverage relies on the repository CI browser workflow; physical device inspection has not been performed for this revision. Screenshot evidence is in the conversation rather than a repository file.

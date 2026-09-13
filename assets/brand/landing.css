@@ -1,0 +1,30 @@
+/* Selected two-perspective board, implemented as accessible game controls. */
+.nav-profiles{width:46px;height:46px;object-fit:contain;flex:none}
+.brand-intro.home-intro{display:flex;align-items:center;justify-content:center;gap:1rem;max-width:54rem;margin:0 auto 1.5rem;padding:0;text-align:left}
+.brand-profiles{width:clamp(5rem,17vw,11rem);height:auto;flex:none}
+.brand-intro #game-title{max-width:8em;margin:0 0 .35rem;font-size:clamp(2rem,5.5vw,4.5rem);line-height:.98;letter-spacing:-.045em;color:#0b2132}
+.brand-intro p{font-size:clamp(.875rem,1.5vw,1.1rem);margin:0;color:#234e78}
+.reference-landing{background:#fff;border:0;padding:0;border-radius:0}
+.landing-instructions{text-align:center;margin:0 0 1.25rem}
+.landing-instructions h2{font-size:1.25rem;margin:0 0 .3rem}
+.landing-instructions p{margin:0}
+.reference-landing .perspective-heroes{gap:1rem}
+.reference-landing .perspective-entry{min-width:0}
+.reference-landing .perspective-hero{border-radius:.25rem}
+.reference-landing .perspective-entry>p{font-size:.9rem;padding:.6rem .5rem;margin:0;min-height:4.3em}
+.landing-cast{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem .25rem;padding:.5rem}
+.landing-character{position:relative;display:block;min-width:0;width:100%;border:2px solid transparent;border-radius:.75rem;padding:0 0 1.25rem;background:#fff;transition:border-color .15s,box-shadow .15s}
+.landing-character>.character-image{width:100%;max-width:none;border-radius:.5rem}
+.landing-character:hover{border-color:var(--tone-deep);box-shadow:0 3px 12px #173e4918}
+.landing-character:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.landing-avatar{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:39%;aspect-ratio:1;border:3px solid #fff;border-radius:50%;overflow:hidden;background:#d7ecec;box-shadow:0 0 0 1px #bdd8db;pointer-events:none}
+.landing-avatar>.character-image{width:190%;max-width:none;position:absolute;left:-45%;top:-7%;border-radius:0}
+@media(min-width:56.25rem){.reference-landing .perspective-entry+ .perspective-entry{border-left:1px solid #c4dee0;padding-left:1rem}}
+@media(max-width:25rem){.brand-intro.home-intro{gap:.4rem}.brand-profiles{width:4rem}.brand-intro #game-title{font-size:1.8rem}.landing-cast{gap:.75rem 0;padding:.25rem}}
+@media(prefers-reduced-motion:reduce){.landing-character{transition:none}}
+.contrast-high .brand-intro p,.contrast-high .brand-intro #game-title{color:var(--ink)}
+body{background:#fff}
+.reference-landing.paired-entry{background:#fff}
+.reference-landing .landing-instructions{display:block}
+.reference-landing .landing-instructions p{max-width:none;text-align:center}
+@media(min-width:56.25rem){.reference-landing .perspective-entry+ .perspective-entry{padding-left:0;border:0}.reference-landing .perspective-entry+ .perspective-entry .landing-cast{border-left:1px solid #c4dee0}}
