@@ -91,5 +91,5 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
  assert.match(gardaShell,/\.\.\/accessibility\/perspectives\.css/);
  assert.match(gardaShell,/\.\.\/encounters\/styles\.css/);
  const gardaApp=readFileSync(new URL('../garda/app.mjs',import.meta.url),'utf8');
- assert.match(gardaApp,/from '\.\.\/encounters\/ui\.mjs'/);
+ assert.match(gardaApp,/from '\.\.\/encounters\/ui\.mjs(?:\?[^']+)?'/);
 });
