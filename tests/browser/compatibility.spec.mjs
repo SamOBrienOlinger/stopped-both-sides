@@ -33,20 +33,34 @@ async function checkHeroControls(page){
   const link=card.querySelector('a'),button=link.getBoundingClientRect();
   return {centre:Math.abs(button.x+button.width/2-image.x-image.width/2),top:button.y-image.y,
    inside:button.x>=image.x&&button.right<=image.right&&button.bottom<=image.bottom,
-   height:button.height,width:button.width,clipped:link.scrollWidth>link.clientWidth+1,
-   x:image.x,y:image.y,imageHeight:image.height};
+   above:button.bottom<=image.y+1,separate:getComputedStyle(card).display==='contents',
+   buttonX:button.x,buttonRight:button.right,height:button.height,width:button.width,clipped:link.scrollWidth>link.clientWidth+1,
+   x:image.x,y:image.y,imageRight:image.right,imageHeight:image.height};
  }));
  for(const result of measurements){
   expect(result.centre,'perspective control stays horizontally centred').toBeLessThanOrEqual(1);
-  expect(result.top,'perspective control is inset from the top').toBeGreaterThanOrEqual(10);
-  expect(result.top,'perspective control stays near the top').toBeLessThanOrEqual(40);
-  expect(result.inside,'entire control stays inside its image').toBe(true);
+  if(result.separate)expect(result.above,'small-screen controls leave the faces visible').toBe(true);
+  else {
+   expect(result.top,'perspective control is inset from the top').toBeGreaterThanOrEqual(10);
+   expect(result.top,'perspective control stays near the top').toBeLessThanOrEqual(40);
+  }
+  expect(result.inside,'entire control stays inside its scene card').toBe(true);
   expect(result.height,'touch target height').toBeGreaterThanOrEqual(48);
   expect(result.width,'touch target width').toBeGreaterThanOrEqual(44);
   expect(result.clipped,'translated control text must not clip').toBe(false);
  }
- if(page.viewportSize().width>=900)expect(Math.abs(measurements[0].y-measurements[1].y)).toBeLessThanOrEqual(1);
- else expect(measurements[1].y).toBeGreaterThanOrEqual(measurements[0].y+measurements[0].imageHeight);
+ expect(measurements[0].buttonRight,'role links never overlap').toBeLessThanOrEqual(measurements[1].buttonX);
+ expect(Math.abs(measurements[0].y-measurements[1].y),'both scenes remain horizontal at every viewport').toBeLessThanOrEqual(1);
+ expect(measurements[1].x,'the Garda scene stays opposite the public scene').toBeGreaterThan(measurements[0].x);
+ expect(measurements[0].imageRight-measurements[1].x,'the scene edges overlap').toBeGreaterThan(5);
+ await expect(page.locator('.brick-cloud')).toHaveAttribute('alt','');
+ await expect.poll(()=>page.locator('.brick-cloud').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+ const cloud=await page.locator('.brick-cloud').evaluate(img=>{
+  const box=img.getBoundingClientRect(),stage=img.parentElement.getBoundingClientRect();
+  return {centre:Math.abs(box.x+box.width/2-stage.x-stage.width/2),pointerEvents:getComputedStyle(img).pointerEvents};
+ });
+ expect(cloud.centre,'brick cloud stays centred over the overlap').toBeLessThanOrEqual(1);
+ expect(cloud.pointerEvents,'decorative bricks do not block the role controls').toBe('none');
 }
 async function checkDialog(page){
  await settings(page);

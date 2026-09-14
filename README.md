@@ -35,7 +35,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - Immediate explanations, source links and a final comparison of both perspectives.
 - Saved learning progress, separate role scores, replay and a resume point.
 - English and Gaeilge in shared play, with adjustable reading settings.
-- Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top. Images stack on smaller screens and sit side by side on wider screens.
+- Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top on desktop and given their own row above the scenes on small screens. The scenes remain side by side on phones, tablets and desktops, overlapping beneath a cloud of small LEGO-style bricks in the site palette.
 
 The original single-role practice remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original practice can transfer into its matching shared situation.
 
@@ -234,7 +234,7 @@ Created by **Sam O’Brien-Olinger** / [Sam Tim Solutions](https://samobrienolin
 
 The visual language draws on [INAR’s website](https://inar.ie/): teal accents, white surfaces, rounded cards and Open Sans. This is not an INAR website and does not use its logo.
 
-The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links centred at the top of each image. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md). The same selected cast is available in a locally hosted, text-free character sheet; [character documentation](docs/CHARACTERS.md) records its generation and use.
+The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links: over the image on desktop and in a shared row above it on small screens so larger labels cannot hide faces. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md). The same selected cast is available in a locally hosted, text-free character sheet; [character documentation](docs/CHARACTERS.md) records its generation and use.
 
 The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
 
@@ -248,6 +248,6 @@ Copyright © 2026 Sam O’Brien-Olinger. No licence to reuse original project co
 
 ### Reference-led landing page
 
-The homepage now uses the selected two-profile identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The two columns stack on small screens, while the perspective links remain at the top centre of each scene.
+The homepage now uses the selected two-profile identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The scenes stay horizontally opposed at every screen width, with an overlapping LEGO-brick cloud in teal, blue, mint, ivory and muted red. The character galleries stack on small screens. Perspective links remain keyboard accessible and the decorative cloud never intercepts taps.
 
 The landing page explains the learning goal before role selection. Character cards show each person's name and provide visible hover and keyboard-focus states. Navigation fits on one row on wide screens and wraps on smaller screens; saved-progress notices use a compact layout.
