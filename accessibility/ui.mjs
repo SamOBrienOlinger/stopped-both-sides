@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs';
 import {createPreferences,defaults} from './preferences.mjs';
 import {createDialogController} from './dialog.mjs';
-import {translateText,translateHTML,escapeHTML as esc} from '../locales/translate.mjs';
+import {translateText,translateHTML,escapeHTML as esc} from '../locales/translate.mjs?v=clear-buttons-1';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 export function perspectiveForRoute(hash,siteRole='public'){
  const route=hash.replace(/^#/, '').split('~')[0];

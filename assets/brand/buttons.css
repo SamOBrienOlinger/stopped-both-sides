@@ -1,0 +1,78 @@
+/* Shared controls: clear actions, steady hit areas and visible state changes. */
+[data-role-tone="public"]{--tone-hover:#104e50}
+[data-role-tone="garda"]{--tone-hover:#1e3e64}
+.contrast-high [data-role-tone="public"]{--tone-hover:#003439}
+.contrast-high [data-role-tone="garda"]{--tone-hover:#102841}
+.primary,.header .site-switch{
+ min-height:48px;min-width:44px;border-radius:.75rem;line-height:1.45;
+ padding:.75rem 1.125rem;gap:.65rem;white-space:normal;text-align:center;
+ transition:background-color .15s,border-color .15s,box-shadow .15s;
+}
+.primary{font-size:1rem;font-weight:700;box-shadow:0 2px 0 #10282e24}
+.primary:hover:not(:disabled),.primary[data-role-tone]:hover{
+ background:var(--tone-hover,var(--hover));border-color:var(--tone-hover,var(--hover));color:#fff;
+}
+.primary.secondary{background:#fff;color:var(--deep);border-color:var(--control);box-shadow:none}
+.primary.secondary:hover:not(:disabled),.primary.secondary[data-role-tone]:hover{
+ background:var(--pale);color:var(--deep);border-color:var(--deep);
+}
+.primary:active:not(:disabled){box-shadow:inset 0 2px 3px #10282e35}
+.primary.secondary:active:not(:disabled){box-shadow:inset 0 0 0 1px var(--deep)}
+.text-button{
+ display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;
+ border-radius:.375rem;padding:.5rem .375rem;line-height:1.5;white-space:normal;
+ text-decoration-thickness:1px;text-underline-offset:.22em;
+}
+.text-button:hover:not(:disabled){background:var(--pale);text-decoration-thickness:2px}
+.header .site-switch{font-size:.8125rem;padding:.5rem .75rem;box-shadow:none}
+.reference-landing .overlapping-heroes .perspective-hero-button{
+ flex-direction:column;gap:.2em;border-radius:.75rem;font-size:1rem;
+ padding:.65em .9em;min-height:64px;border:2px solid #fff;
+ box-shadow:0 2px 8px #10282e35;line-height:1.35;
+}
+.perspective-button-label{display:block;min-width:0}
+.perspective-button-action{display:block;font-size:.8125em;font-weight:400;line-height:1.4}
+.reference-landing .overlapping-heroes .perspective-hero-button:hover{
+ background:var(--tone-hover);color:#fff;text-decoration:none;
+}
+.perspective-hero-button:hover .perspective-button-action{text-decoration:underline;text-underline-offset:.2em}
+.role-picker .primary{flex-direction:column;gap:.15rem;box-shadow:none}
+.role-status{font-size:.8125em;font-weight:400}
+.role-picker .primary[aria-current="true"]{box-shadow:inset 0 -3px 0 #ffffff70}
+.choice,.choice.selected{
+ border-width:2px;border-radius:.75rem;padding:1rem;gap:.875rem;
+ transition:background-color .15s,border-color .15s,box-shadow .15s;
+}
+.choice:hover:not(:disabled){border-color:var(--deep);background:var(--pale);box-shadow:inset 0 0 0 1px var(--deep)}
+.choice:active:not(:disabled){box-shadow:inset 0 0 0 2px var(--deep)}
+.choice.selected{box-shadow:inset 4px 0 0 var(--deep)}
+.choice-letter{min-width:2rem;min-height:2rem;border-width:2px}
+.primary:disabled,.text-button:disabled,.choice:disabled{cursor:default}
+.primary:disabled{background:var(--pale);border-color:var(--control);color:var(--slate);box-shadow:none}
+.primary:focus,.text-button:focus,.header .site-switch:focus,.choice:focus{
+ outline:3px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 3px #fff;
+}
+.primary:focus:not(:focus-visible),.text-button:focus:not(:focus-visible),
+.header .site-switch:focus:not(:focus-visible),.choice:focus:not(:focus-visible){outline:none}
+/* The focus ring remains visible over either the scene artwork or a pale panel. */
+.reference-landing .overlapping-heroes .perspective-hero-button:focus-visible,
+.primary:focus-visible,.text-button:focus-visible,.header .site-switch:focus-visible,.choice:focus-visible{
+ outline:3px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 3px #fff;
+}
+.paired-feedback-actions{gap:1rem}
+@media(max-width:41.249rem){
+ .reference-landing .overlapping-heroes .perspective-hero-button{font-size:.9375rem;padding:.65em .45em;align-self:stretch;justify-content:center}
+ .character-actions .primary,.paired-feedback-actions .primary{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.primary,.header .site-switch,.choice{transition:none}}
+.motion-reduce .primary,.motion-reduce .header .site-switch,.motion-reduce .choice{transition:none}
+@media(forced-colors:active){
+ .primary,.primary.secondary,.primary[data-role-tone],.primary:hover:not(:disabled),.primary.secondary:hover:not(:disabled),
+ .reference-landing .overlapping-heroes .perspective-hero-button,.reference-landing .overlapping-heroes .perspective-hero-button:hover{
+  background:ButtonFace;color:ButtonText;border-color:ButtonText;box-shadow:none;
+ }
+ .choice,.choice.selected,.choice:hover:not(:disabled){background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none}
+ .role-picker .primary[aria-current="true"],.choice.selected{outline:2px solid Highlight;outline-offset:-5px;box-shadow:none}
+ .primary:focus-visible,.text-button:focus-visible,.header .site-switch:focus-visible,.choice:focus-visible,
+ .reference-landing .overlapping-heroes .perspective-hero-button:focus-visible{outline:3px solid Highlight;outline-offset:3px;box-shadow:none}
+}

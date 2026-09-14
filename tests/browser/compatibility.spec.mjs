@@ -116,8 +116,8 @@ for(const role of ['public','garda']){
    await fits(page,'other perspective');
    await checkDialog(page);
    await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
-   await expect(page.locator('.perspective-hero-button').first()).toHaveText('Dearcadh an phobail');
-   await expect(page.locator('.perspective-hero-button').last()).toHaveText('Dearcadh an Gharda');
+   await expect(page.locator('.perspective-button-label').first()).toHaveText('Dearcadh an phobail');
+   await expect(page.locator('.perspective-button-label').last()).toHaveText('Dearcadh an Gharda');
    for(const target of ['encounters','progress','about',role==='public'?'rights':'evidence']){
     await page.locator(`.header [data-nav="${target}"]`).click();await ready(page);await fits(page,target);
    }

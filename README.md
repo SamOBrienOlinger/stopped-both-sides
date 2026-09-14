@@ -36,6 +36,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - Saved learning progress, separate role scores, replay and a resume point.
 - English and Gaeilge in shared play, with adjustable reading settings.
 - Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top on desktop and given their own row above the scenes on small screens. The scenes remain side by side on phones, tablets and desktops, with slightly overlapping edges.
+- Clearer action buttons: “Choose this side” on each hero, visible selected-role text, distinct primary and secondary styles, and consistent keyboard focus and touch targets. See the [button design notes](docs/button-design.md).
 
 The original single-role practice remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original practice can transfer into its matching shared situation.
 
