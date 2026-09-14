@@ -30,7 +30,9 @@
  padding:.65em .9em;min-height:64px;border:2px solid #fff;
  box-shadow:0 2px 8px #10282e35;line-height:1.35;
 }
+.perspective-button-short,.perspective-button-action-short{display:none}
 .perspective-button-label{display:block;min-width:0}
+.perspective-button-action,.perspective-button-action-short{font-size:.8125em;font-weight:400;line-height:1.4}
 .perspective-button-action{display:block;font-size:.8125em;font-weight:400;line-height:1.4}
 .reference-landing .overlapping-heroes .perspective-hero-button:hover{
  background:var(--tone-hover);color:#fff;text-decoration:none;
@@ -62,6 +64,8 @@
 .paired-feedback-actions{gap:1rem}
 @media(max-width:41.249rem){
  .reference-landing .overlapping-heroes .perspective-hero-button{font-size:.9375rem;padding:.65em .45em;align-self:stretch;justify-content:center}
+ .perspective-button-label,.perspective-button-action{display:none}
+ .perspective-button-short,.perspective-button-action-short{display:block}
  .character-actions .primary,.paired-feedback-actions .primary{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.primary,.header .site-switch,.choice{transition:none}}

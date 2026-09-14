@@ -6,7 +6,7 @@ Stopped: Both Sides uses one shared control style across the public and Garda ex
 
 Homepage controls retain the perspective name and add “Choose this side.” The second line makes it clear that the panel is interactive and opens role setup. Both perspectives receive equal emphasis because either is a valid starting point. The setup screen then gives “Start this situation” the primary emphasis. “Selected” and “Choose” labels make the active role understandable without relying only on colour. All added labels have Irish translations.
 
-The hero controls remain at the top centre of their scenes on desktop. On narrow screens they share a row above the artwork, with flexible heights for translated or enlarged text. The two scenes remain horizontal with slightly overlapping edges. The decorative LEGO-brick cloud is absent. Existing character artwork, skin tones, scores and stored progress are preserved.
+The hero controls remain at the top centre of their scenes on desktop. On narrow screens they share a row above the artwork, with flexible heights for translated or enlarged text. The phone labels shorten to “Public / Play” and “Garda / Play” (“An pobal / Imir” and “Garda / Imir” in Irish) so large text does not break long perspective names across letters. The two scenes remain horizontal with slightly overlapping edges. The decorative LEGO-brick cloud is absent. Existing character artwork, skin tones, scores and stored progress are preserved.
 
 ## Control behaviour
 

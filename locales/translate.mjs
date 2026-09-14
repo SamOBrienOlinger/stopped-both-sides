@@ -16,6 +16,7 @@ for(const e of Object.values(encounters)){
 const ui={
  'Home':'Baile',
  'Choose this side':'Roghnaigh an taobh seo',
+ 'Public':'An pobal',
  'LEARN THROUGH EVERYDAY SITUATIONS':'FOGHLAIM TRÍ CHÁSANNA LAETHÚLA',
  'Know your rights. Understand fair decisions.':'Bíodh do chearta ar eolas agat. Tuig cinntí córa.',
  'Practise what to say and do in encounters with An Garda Síochána. Learn about rights, responsibilities and bias by trying the same situation from either side.':'Cleachtaigh cad atá le rá agus le déanamh i dteagmhálacha leis an nGarda Síochána. Foghlaim faoi chearta, freagrachtaí agus claonadh tríd an gcás céanna a thriail ón dá thaobh.',
