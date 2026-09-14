@@ -16,7 +16,7 @@ Explore encounters with An Garda Síochána through fictional situations, choice
 
 > **One encounter. Two perspectives. Explore public rights and Garda decision-making in the same fictional situation, then compare the reasoning with sources.**
 
-The strongest proposition is the **combination of public-rights education and reflective Garda decision-making within the same branching encounter**. Learners can switch roles without losing the situation or either role's answers. This makes the relationship between decisions available for comparison, rather than presenting the public and Garda perspectives as unrelated lessons.
+The strongest proposition is the **combination of public-rights education and reflective Garda decision-making within the same branching encounter**. Learners can switch roles without losing the situation or either role's answers. This makes it possible to compare how the two sets of decisions relate to one another, rather than presenting the public and Garda perspectives as unrelated lessons.
 
 ### A potentially useful educational combination
 
@@ -24,7 +24,7 @@ The strongest proposition is the **combination of public-rights education and re
 | --- | --- |
 | A shared situation, persistent characters and retained answers for both roles | Let learners compare perspectives within the same encounter and revisit the reasoning behind each decision. |
 | Public rights and responsibilities alongside Garda powers, evidence and professional judgement | Support discussion of how individual rights and the exercise of state authority interact in a specific Irish setting. |
-| Branching choices, immediate explanations, source links and a paired recap | Turn a decision into an opportunity to examine assumptions, communication, bias and reasons to reconsider, rather than only a right-or-wrong score. |
+| Branching choices, immediate explanations, source links and a paired recap | Turn each decision into an opportunity to examine assumptions, communication, bias and reasons to reconsider, rather than reducing it to a right-or-wrong score. |
 | Browser-based play, replay and reading controls without an account requirement | Offer a low-barrier format for independent exploration and potential facilitated discussion without requiring reports of real incidents. |
 
 **Its distinctiveness lies in the paired, Ireland-specific examination of an encounter.** The learner can ask both “What are this person's rights?” and “What evidence and responsibilities should guide this Garda's decision?” within one exercise. The potential contribution is a shared reference point for rights literacy, critical reflection and informed community dialogue.
@@ -33,15 +33,15 @@ Perspective-taking does **not** imply equal legal powers, equal responsibility f
 
 ### Similar product: PLUS
 
-[**PLUS — Police Training Using Simulations, Bournemouth University and Dorset Police, UK**](https://www.bournemouth.ac.uk/research/projects/plus-project-serious-games-police-training) is a documented research prototype using simulated stop-and-search encounters and role-playing for police training. Its published focus is preparing police officers and trainees for practice. It is a close methodological comparator, not a confirmed currently available public app.
+[**PLUS — Police Training Using Simulations, Bournemouth University and Dorset Police, UK**](https://www.bournemouth.ac.uk/research/projects/plus-project-serious-games-police-training) is a documented research prototype using simulated stop-and-search encounters and role-playing for police training. Its published focus is preparing police officers and trainees for practice. It is a close methodological comparator, not a public app confirmed to be currently available.
 
-Stopped: Both Sides' distinguishing proposition is **a public-facing Republic of Ireland learning experience in which the same learner can explore both sides of the same encounter, retain both sets of answers and compare sourced explanations**. The contribution is this combination of rights education, paired perspectives and reflective reasoning, not the invention of police simulations or a claim of professional training equivalence.
+Stopped: Both Sides' distinguishing proposition is **a public-facing Republic of Ireland learning experience in which the same learner can explore both sides of the same encounter, retain both sets of answers and compare sourced explanations**. The contribution lies in this combination of rights education, paired perspectives and reflective reasoning, not in the invention of police simulations or a claim of professional training equivalence.
 
 ### Contribution within the wider learning portfolio
 
 Alongside [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/), which explores migration and settlement, and [Saggart & Citywest Together](https://samobrienolinger.github.io/saggart-and-citywest-together/), which connects local knowledge and community supports, this game supplies the **encounter-based rights-and-responsibilities learning layer**. Together they offer a potentially useful combination of migration understanding, local belonging and rights literacy. They remain separate resources; this game addresses public/Garda encounters generally, not migrants as a policing category.
 
-Specialist legal review, community and Garda-educator input, accessibility testing and learner evaluation are opportunities to establish accuracy, relevance and educational benefit. Improved conduct, reduced bias or accredited training effectiveness are not claimed as measured outcomes. The comparator description was checked against its official project page on **14 September 2026**; no affiliation, endorsement or exhaustive claim of uniqueness is implied.
+Specialist legal review, input from communities and Garda educators, accessibility testing and learner evaluation are opportunities to establish accuracy, relevance and educational benefit. Improved conduct, reduced bias or accredited training effectiveness are not claimed as measured outcomes. The comparator description was checked against its official project page on **14 September 2026**; no affiliation, endorsement or exhaustive claim of uniqueness is implied.
 
 ## Purpose and audience
 
@@ -69,7 +69,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top on desktop and given their own row above the scenes on small screens. The scenes remain side by side on phones, tablets and desktops, with slightly overlapping edges.
 - Clearer action buttons: “Choose this side” on each hero, visible selected-role text, distinct primary and secondary styles, and consistent keyboard focus and touch targets. See the [button design notes](docs/button-design.md).
 
-The original single-role practice remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original practice can transfer into its matching shared situation.
+The original single-role practice remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original single-role practice can transfer into its matching shared situation.
 
 ## How to play
 
@@ -131,7 +131,7 @@ Character controls work with a keyboard and have English/Gaeilge labels, visible
 
 The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) for coverage and review opportunities.
 
-Both perspectives use a shared **mobile-first layout**, with **72 browser checks in Chromium, Firefox and WebKit**, from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
+Both perspectives use a shared **mobile-first layout**. **Seventy-two browser checks run in Chromium, Firefox and WebKit** across viewport sizes from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
 
 ## Privacy
 
@@ -186,7 +186,7 @@ npm test
 | `npm run check` | Check JavaScript syntax across both games, tests and maintenance scripts |
 | `npm run dev` | Serve the static site locally on port 4173 without a build step |
 | `npm test` | Run the Node test suites for both perspectives |
-| `npm run test:browser` | Run browser, responsive layout and touch checks; requires the development-tool setup below |
+| `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
 The Node test configuration runs **88 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, character selection, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
@@ -266,7 +266,7 @@ Created by **Sam O’Brien-Olinger** / [Sam Tim Solutions](https://samobrienolin
 
 The visual language draws on [INAR’s website](https://inar.ie/): teal accents, white surfaces, rounded cards and Open Sans. This is not an INAR website and does not use its logo.
 
-The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links: over the image on desktop and in a shared row above it on small screens so larger labels cannot hide faces. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md). The same selected cast is available in a locally hosted, text-free character sheet; [character documentation](docs/CHARACTERS.md) records its generation and use.
+The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links. They appear over the image on desktop and in a shared row above it on small screens, so larger labels cannot hide faces. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md). The same selected cast is available in a locally hosted, text-free character sheet; [character documentation](docs/CHARACTERS.md) records its generation and use.
 
 The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
 
@@ -280,6 +280,6 @@ Copyright © 2026 Sam O’Brien-Olinger. No licence to reuse original project co
 
 ### Reference-led landing page
 
-The homepage now uses the selected two-profile identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The scenes stay horizontally opposed at every screen width, with slightly overlapping edges and no decorative brick cloud. The character galleries stack on small screens. Perspective links remain keyboard accessible.
+The homepage now uses the selected two-profile visual identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The scenes stay horizontally opposed at every screen width, with slightly overlapping edges and no decorative brick cloud. The character galleries stack on small screens. Perspective links remain keyboard accessible.
 
 The landing page explains the learning goal before role selection. Character cards show each person's name and provide visible hover and keyboard-focus states. Navigation fits on one row on wide screens and wraps on smaller screens; saved-progress notices use a compact layout.
