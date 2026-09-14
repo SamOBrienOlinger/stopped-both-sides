@@ -65,3 +65,5 @@ Mobile emulation and engine tests do not certify every physical phone or tablet.
 Both browser checks and Node checks run independently of GitHub Pages branch publishing. Review their results before moving a tested revision to `main`.
 
 Reference: [Playwright browser coverage](https://playwright.dev/docs/browsers) and [CI setup](https://playwright.dev/docs/ci).
+
+The live-check gate compares SHA-256 hashes of both published entrypoints and all tracked runtime code, styles, images and fonts against the checked-out revision. This handles branch Pages jobs that report an older commit ID while publishing the current tree; differing or unavailable files keep the gate closed.

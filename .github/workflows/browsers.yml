@@ -35,12 +35,11 @@ jobs:
           node-version: '24'
           cache: npm
       # The built-in branch Pages workflow does not emit the expected follow-on
-      # event here. Start after the game checks, then wait for this commit's Pages run.
+      # event here. Verify the served client bytes against the checked-out revision.
       - name: Wait for this Pages publication
         if: github.event_name == 'workflow_run'
         run: node tests/browser/wait-for-pages.mjs
         env:
-          GH_TOKEN: ${{ github.token }}
           PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
