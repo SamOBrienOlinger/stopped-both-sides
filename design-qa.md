@@ -17,7 +17,7 @@ Date: 14 September 2026
 3. **P2, fixed:** the initial narrow-screen cloud was too small to read as the overlap. Its proportional width now scales independently on small screens, with visible bricks and clear principal faces.
 4. **P2, fixed:** long labels could touch, and tall pill corners reduced the readable area. Mobile controls now have a capped width, sufficient separation and gentler rounded corners.
 
-The final phone capture was taken after all four fixes. No actionable P0/P1/P2 visual issues remain in the reviewed states.
+The final phone capture was taken after these four fixes. The first CI run subsequently found a tablet-specific control collision at 768px with enlarged Irish text; the same proportional width cap was extended to desktop/tablet controls to preserve separation. The [768px tablet recheck](docs/visual/brick-cloud-tablet-large.jpg), captured at scale 1 with 150% Irish text and increased spacing, confirms the labels are separated, fully visible and centred above their respective faces. Both scene edges remain aligned. The CI rerun is a separate deployment gate.
 
 ## Required fidelity surfaces
 
