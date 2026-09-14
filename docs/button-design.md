@@ -31,3 +31,7 @@ The automated browser suite covers both entry points in Chromium, Firefox and We
 Physical-device, assistive-technology and independent language review remain separate tasks. The changes are a component improvement, not certification of accessibility or proof of usability for every person or browser version.
 
 Sources reviewed 14 September 2026.
+
+The revised client passed all 78 browser checks (26 per engine) on the implementation branch, and all 88 game checks. The publication pipeline reruns the same browser suite against the live Pages files.
+
+[Canva button reference](https://www.canva.com/d/4DSRcYhUi8-bboY) · [HTML reference](button-reference.html)
