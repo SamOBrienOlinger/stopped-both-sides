@@ -35,7 +35,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - Immediate explanations, source links and a final comparison of both perspectives.
 - Saved learning progress, separate role scores, replay and a resume point.
 - English and Gaeilge in shared play, with adjustable reading settings.
-- Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top on desktop and given their own row above the scenes on small screens. The scenes remain side by side on phones, tablets and desktops, overlapping beneath a cloud of small LEGO-style bricks in the site palette.
+- Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top on desktop and given their own row above the scenes on small screens. The scenes remain side by side on phones, tablets and desktops, with slightly overlapping edges.
 
 The original single-role practice remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original practice can transfer into its matching shared situation.
 
@@ -248,6 +248,6 @@ Copyright © 2026 Sam O’Brien-Olinger. No licence to reuse original project co
 
 ### Reference-led landing page
 
-The homepage now uses the selected two-profile identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The scenes stay horizontally opposed at every screen width, with an overlapping LEGO-brick cloud in teal, blue, mint, ivory and muted red. The character galleries stack on small screens. Perspective links remain keyboard accessible and the decorative cloud never intercepts taps.
+The homepage now uses the selected two-profile identity, paired street scenes and a selectable gallery of all 18 characters. Select a figure to enter that perspective with the chosen avatar. Circular portraits use the same character artwork. Skin tones vary from cream to dark brown and remain consistent during play; there is no yellow skin. Repeated role captions beneath characters are omitted. The scenes stay horizontally opposed at every screen width, with slightly overlapping edges and no decorative brick cloud. The character galleries stack on small screens. Perspective links remain keyboard accessible.
 
 The landing page explains the learning goal before role selection. Character cards show each person's name and provide visible hover and keyboard-focus states. Navigation fits on one row on wide screens and wraps on smaller screens; saved-progress notices use a compact layout.

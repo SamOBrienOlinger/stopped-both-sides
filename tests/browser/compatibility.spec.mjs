@@ -53,14 +53,7 @@ async function checkHeroControls(page){
  expect(Math.abs(measurements[0].y-measurements[1].y),'both scenes remain horizontal at every viewport').toBeLessThanOrEqual(1);
  expect(measurements[1].x,'the Garda scene stays opposite the public scene').toBeGreaterThan(measurements[0].x);
  expect(measurements[0].imageRight-measurements[1].x,'the scene edges overlap').toBeGreaterThan(5);
- await expect(page.locator('.brick-cloud')).toHaveAttribute('alt','');
- await expect.poll(()=>page.locator('.brick-cloud').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
- const cloud=await page.locator('.brick-cloud').evaluate(img=>{
-  const box=img.getBoundingClientRect(),stage=img.parentElement.getBoundingClientRect();
-  return {centre:Math.abs(box.x+box.width/2-stage.x-stage.width/2),pointerEvents:getComputedStyle(img).pointerEvents};
- });
- expect(cloud.centre,'brick cloud stays centred over the overlap').toBeLessThanOrEqual(1);
- expect(cloud.pointerEvents,'decorative bricks do not block the role controls').toBe('none');
+ await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
 async function checkDialog(page){
  await settings(page);
