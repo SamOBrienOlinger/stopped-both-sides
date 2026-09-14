@@ -8,9 +8,40 @@ Explore encounters with An Garda Síochána through fictional situations, choice
 
 **HTML · CSS · JavaScript modules · GitHub Pages · No application dependencies**
 
-[How to play](#how-to-play) · [Characters](#characters-and-switching-sides) · [Scoring](#scores-and-progress) · [Evidence](#evidence-and-content-review) · [Getting started](#getting-started) · [Documentation](#documentation-and-repository-guide) · [Credits](#credits-and-reuse)
+[Distinctive proposition](#distinctive-proposition-and-educational-contribution) · [How to play](#how-to-play) · [Characters](#characters-and-switching-sides) · [Scoring](#scores-and-progress) · [Evidence](#evidence-and-content-review) · [Getting started](#getting-started) · [Documentation](#documentation-and-repository-guide) · [Credits](#credits-and-reuse)
 
 > **Project status:** An independent educational prototype about the **Republic of Ireland**. It provides general learning, not legal advice or accredited Garda training. The documented source review is dated **7 September 2026**; specialist legal, community and language review remain opportunities for further development. Northern Ireland has different laws.
+
+## Distinctive proposition and educational contribution
+
+> **One encounter. Two perspectives. Explore public rights and Garda decision-making in the same fictional situation, then compare the reasoning with sources.**
+
+The strongest proposition is the **combination of public-rights education and reflective Garda decision-making within the same branching encounter**. Learners can switch roles without losing the situation or either role's answers. This makes the relationship between decisions available for comparison, rather than presenting the public and Garda perspectives as unrelated lessons.
+
+### A potentially useful educational combination
+
+| What the game brings together | Potential educational contribution |
+| --- | --- |
+| A shared situation, persistent characters and retained answers for both roles | Let learners compare perspectives within the same encounter and revisit the reasoning behind each decision. |
+| Public rights and responsibilities alongside Garda powers, evidence and professional judgement | Support discussion of how individual rights and the exercise of state authority interact in a specific Irish setting. |
+| Branching choices, immediate explanations, source links and a paired recap | Turn a decision into an opportunity to examine assumptions, communication, bias and reasons to reconsider, rather than only a right-or-wrong score. |
+| Browser-based play, replay and reading controls without an account requirement | Offer a low-barrier format for independent exploration and potential facilitated discussion without requiring reports of real incidents. |
+
+**Its distinctiveness lies in the paired, Ireland-specific examination of an encounter.** The learner can ask both “What are this person's rights?” and “What evidence and responsibilities should guide this Garda's decision?” within one exercise. The potential contribution is a shared reference point for rights literacy, critical reflection and informed community dialogue.
+
+Perspective-taking does **not** imply equal legal powers, equal responsibility for an encounter or that a member of the public is responsible for Garda misconduct. The learning model preserves those distinctions; it does not score compliance as a guarantee of safety or claim that the game measures personal bias.
+
+### Similar product: PLUS
+
+[**PLUS — Police Training Using Simulations, Bournemouth University and Dorset Police, UK**](https://www.bournemouth.ac.uk/research/projects/plus-project-serious-games-police-training) is a documented research prototype using simulated stop-and-search encounters and role-playing for police training. Its published focus is preparing police officers and trainees for practice. It is a close methodological comparator, not a confirmed currently available public app.
+
+Stopped: Both Sides' distinguishing proposition is **a public-facing Republic of Ireland learning experience in which the same learner can explore both sides of the same encounter, retain both sets of answers and compare sourced explanations**. The contribution is this combination of rights education, paired perspectives and reflective reasoning, not the invention of police simulations or a claim of professional training equivalence.
+
+### Contribution within the wider learning portfolio
+
+Alongside [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/), which explores migration and settlement, and [Saggart & Citywest Together](https://samobrienolinger.github.io/saggart-and-citywest-together/), which connects local knowledge and community supports, this game supplies the **encounter-based rights-and-responsibilities learning layer**. Together they offer a potentially useful combination of migration understanding, local belonging and rights literacy. They remain separate resources; this game addresses public/Garda encounters generally, not migrants as a policing category.
+
+Specialist legal review, community and Garda-educator input, accessibility testing and learner evaluation are opportunities to establish accuracy, relevance and educational benefit. Improved conduct, reduced bias or accredited training effectiveness are not claimed as measured outcomes. The comparator description was checked against its official project page on **14 September 2026**; no affiliation, endorsement or exhaustive claim of uniqueness is implied.
 
 ## Purpose and audience
 
