@@ -29,31 +29,39 @@ async function checkHeroControls(page){
  await expect(page.locator('.perspective-hero')).toHaveCount(2);
  await expect.poll(()=>page.locator('.perspective-hero img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  const measurements=await page.locator('.perspective-hero').evaluateAll(cards=>cards.map(card=>{
-  const image=card.querySelector('img').getBoundingClientRect();
+  const img=card.querySelector('img'),image=img.getBoundingClientRect();
   const link=card.querySelector('a'),button=link.getBoundingClientRect();
-  return {centre:Math.abs(button.x+button.width/2-image.x-image.width/2),top:button.y-image.y,
-   inside:button.x>=image.x&&button.right<=image.right&&button.bottom<=image.bottom,
-   above:button.bottom<=image.y+1,separate:getComputedStyle(card).display==='contents',
-   buttonX:button.x,buttonRight:button.right,height:button.height,width:button.width,clipped:link.scrollWidth>link.clientWidth+1,
-   x:image.x,y:image.y,imageRight:image.right,imageHeight:image.height};
+  return {centre:Math.abs(button.x+button.width/2-image.x-image.width/2),
+   inside:button.x>=image.x&&button.right<=image.right,
+   above:button.bottom<=image.y+1,
+   buttonX:button.x,buttonRight:button.right,height:button.height,width:button.width,
+   clipped:link.scrollWidth>link.clientWidth+1||link.scrollHeight>link.clientHeight+1,
+   x:image.x,y:image.y,imageRight:image.right,imageHeight:image.height,
+   imageWidth:image.width,sourceRatio:img.naturalWidth/img.naturalHeight,
+   displayedRatio:image.width/image.height,fit:getComputedStyle(img).objectFit};
  }));
  for(const result of measurements){
   expect(result.centre,'perspective control stays horizontally centred').toBeLessThanOrEqual(1);
-  if(result.separate)expect(result.above,'small-screen controls leave the faces visible').toBe(true);
-  else {
-   expect(result.top,'perspective control is inset from the top').toBeGreaterThanOrEqual(10);
-   expect(result.top,'perspective control stays near the top').toBeLessThanOrEqual(40);
-  }
-  expect(result.inside,'entire control stays inside its scene card').toBe(true);
+  expect(result.above,'controls must never cover the scene artwork').toBe(true);
+  expect(result.inside,'control stays within its column').toBe(true);
   expect(result.height,'touch target height').toBeGreaterThanOrEqual(48);
   expect(result.width,'touch target width').toBeGreaterThanOrEqual(44);
   expect(result.clipped,'translated control text must not clip').toBe(false);
+  expect(result.fit,'show the full source scene, not a portrait crop').toBe('contain');
+  expect(Math.abs(result.displayedRatio-result.sourceRatio),'preserve the source image proportions').toBeLessThan(.01);
  }
  expect(measurements[0].buttonRight,'role links never overlap').toBeLessThanOrEqual(measurements[1].buttonX);
- expect(Math.abs(measurements[0].y-measurements[1].y),'both scenes remain horizontal at every viewport').toBeLessThanOrEqual(1);
- expect(measurements[1].x,'the Garda scene stays opposite the public scene').toBeGreaterThan(measurements[0].x);
- expect(measurements[0].imageRight-measurements[1].x,'the scene edges overlap').toBeGreaterThan(5);
+ expect(Math.abs(measurements[0].y-measurements[1].y),'both scenes stay level at every viewport').toBeLessThanOrEqual(1);
+ expect(Math.abs(measurements[0].imageWidth-measurements[1].imageWidth),'both scenes get equal space').toBeLessThanOrEqual(1);
+ expect(measurements[1].x-measurements[0].imageRight,'a visible gutter prevents one scene obscuring the other').toBeGreaterThanOrEqual(4);
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
+}
+async function captureHero(page,role,width,state,testInfo){
+ if(![390,768,1366].includes(width))return;
+ await testInfo.attach(`hero-${role}-${width}-${state}`,{
+  body:await page.locator('.overlapping-heroes').screenshot({animations:'disabled'}),
+  contentType:'image/png'
+ });
 }
 async function checkDialog(page){
  await settings(page);
@@ -84,11 +92,12 @@ async function chooseFirst(page,role){
 
 for(const role of ['public','garda']){
  for(const [width,height] of sizes){
-  test(`${role} fits ${width}x${height} with large Irish text`,async({page})=>{
+  test(`${role} fits ${width}x${height} with large Irish text`,async({page},testInfo)=>{
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
    page.on('response',response=>{if(response.status()>=400&&response.url().includes('/stopped-both-sides/'))errors.push(response.status()+' '+response.url());});
    await page.setViewportSize({width,height});
    await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
+   await captureHero(page,role,width,'standard',testInfo);
    await page.locator('.single-mode summary').click();await fits(page,'original situations');
    await page.locator('.single-mode [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
@@ -116,6 +125,7 @@ for(const role of ['public','garda']){
    await fits(page,'other perspective');
    await checkDialog(page);
    await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
+   await captureHero(page,role,width,'large-text',testInfo);
    await expect(page.locator('.perspective-button-label').first()).toHaveText('Dearcadh an phobail');
    await expect(page.locator('.perspective-button-label').last()).toHaveText('Dearcadh an Gharda');
    for(const target of ['encounters','progress','about',role==='public'?'rights':'evidence']){
