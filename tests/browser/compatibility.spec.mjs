@@ -79,6 +79,7 @@ async function checkDialog(page){
 async function chooseFirst(page,role){
  await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.encounter-card')).toHaveCount(14);
+ await page.locator('.setup-role summary').click();
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
  await expect(page.locator('.character-option')).toHaveCount(0);
  await fits(page,'simple setup');
