@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {encounters,roles,sites} from '../encounters/catalog.mjs';
-import {decodeState,switchRole,stateHash} from '../encounters/engine.mjs';
+import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs';
 import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs';
+import {storyIdentity} from '../encounters/narrative.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
 const {scenarios}=await import(new URL('data.mjs',siteBase));
 const siteStorageKey=progressStorageKey(siteRole);
@@ -103,4 +104,49 @@ test('Unknown routes and corrupted progress show a recovery view while saved rec
 test('Clearing requires the in-page confirmation and resets the local record and resume point',()=>{
  route('#progress');assert.ok(memory.has(siteStorageKey));action('paired-clear');assert.match(main.innerHTML,/Clear this site’s saved progress/);assert.ok(memory.has(siteStorageKey));
  action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.match(main.innerHTML,/0 <span>\/ 14 situations completed/);
+});
+
+
+test('Every stage and every choice render the selected cast and preserve the next-stage contract',()=>{
+ let stages=0,choices=0;
+ for(const e of Object.values(encounters)){
+  const pending=[startEncounter(e.id,'public',{cast:{public:'public-2',garda:'garda-5'}})],seen=new Set();
+  while(pending.length){
+   const base=pending.shift();if(base.complete||seen.has(base.nodeId))continue;seen.add(base.nodeId);stages++;
+   const node=e.nodes[base.nodeId],identity=storyIdentity(e);
+   for(const role of roles)for(const [index,choice] of node.views[role].choices.entries()){
+    const active=switchRole(base,role);route(stateHash(active));action('paired-character-close');
+    assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
+    const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
+    if(identity&&node.scene.includes(identity.name)){assert.ok(story.includes('Noor'));assert.ok(!story.includes(identity.name));}
+    action('paired-answer',{index:String(index)});choices++;
+    assert.equal(state().answers[role],index);assert.match(main.innerHTML,/id="feedback"/);
+    const before=state();action('paired-switch');assert.deepEqual(state().answers,before.answers);action('paired-switch');assert.deepEqual(state(),before);
+    action('paired-next');assert.equal(state().nodeId,choice.next);assert.equal(state().complete,choice.next==='end');assert.deepEqual(state().cast,base.cast);
+    assert.equal(state().history.at(-1).continuedAs,role);assert.equal(state().history.at(-1).answers[role],index);
+    assert.match(main.innerHTML,state().complete?/YOUR LEARNING RECAP/:/class="story-text"/);
+    pending.push(continueEncounter(answer(active,index)));
+   }
+  }
+  assert.equal(seen.size,Object.keys(e.nodes).length);
+ }
+ assert.equal(stages,59);assert.equal(choices,295);
+});
+
+
+test('Original practice uses its pictured character in every named scene and completed recap',()=>{
+ for(const original of scenarios){
+  route('#play');action('start',{id:original.id});
+  const encounter=encounters[siteRole+'-'+original.id],identity=storyIdentity(encounter);
+  const selected=main.innerHTML.match(/data-cast-role="public"[\s\S]*?<strong data-no-translate>([^<]+)<\/strong>/)[1];
+  let count=0;
+  while(main.innerHTML.includes('class="story-text"')){
+   assert.ok(++count<12);
+   const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
+   if(identity&&selected!==identity.name)assert.ok(!story.includes(identity.name));
+   action('choose',{index:'0'});action('next');
+  }
+  assert.match(main.innerHTML,/RECAP/);assert.ok(main.innerHTML.includes(selected));
+  assert.match(main.innerHTML,/data-action="paired-transfer"/);
+ }
 });

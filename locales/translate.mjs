@@ -1,6 +1,6 @@
 import {encounters} from '../encounters/catalog.mjs';
-import {gaContent} from './ga-content.mjs';
-import {refinementIrish} from './refinements-ga.mjs';
+import {gaContent} from './ga-content.mjs?v=character-story-1';
+import {refinementIrish} from './refinements-ga.mjs?v=character-story-1';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -107,6 +107,7 @@ export function translateText(text,lang='en'){
  if(lang!=='ga')return text;
  const s=String(text).trim();if(dictionary.has(s))return dictionary.get(s);
  let m;
+ if((m=s.match(/^(\d+) years old$/)))return m[1]+' bliain d’aois';
  if((m=s.match(/^Stage (\d+)$/)))return 'Céim '+m[1];
  if((m=s.match(/^([\d–]+) decisions remaining, including this one$/)))return m[1]+' cinneadh fágtha, an ceann seo san áireamh';
  if((m=s.match(/^(\d+) stages explored · (\d+) learning points$/)))return m[1]+' céim scrúdaithe · '+m[2]+' pointe foghlama';

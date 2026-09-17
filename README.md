@@ -91,7 +91,7 @@ Choose from **18 LEGO-style characters — nine for each side**. The cast includ
 
 **[Choose a public character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Choose a Garda character](https://samobrienolinger.github.io/stopped-both-sides/garda/#encounters/garda)**
 
-Your character and the person on the other side appear throughout the encounter, including feedback and the final recap. **You** and **Other side** labels identify who you are currently playing.
+Your character and the person on the other side appear throughout the encounter, including feedback and the final recap. **Your character** and **Other character** labels identify who you are currently playing.
 
 | Action | What happens to the characters |
 | --- | --- |
@@ -100,9 +100,9 @@ Your character and the person on the other side appear throughout the encounter,
 | **Switch perspective** | You take the existing opposite character's place. Both sides' answers and scores are retained. |
 | **Change character** | Only your active character changes. The other character, current stage, answers and scores stay in place. To change the other character, switch sides first. |
 | **Reload, resume or switch sites** | The saved encounter keeps both characters alongside your progress. |
-| **Replay a shared situation** | You keep the character for the chosen role and receive a newly randomised counterpart, which may be the same character by chance. |
+| **Replay a shared situation** | Replaying from the recap keeps both selected characters. Starting a new situation chooses a random counterpart. |
 
-Characters are visual avatars. Each situation retains its own names, ages and facts; appearance does not alter legal responsibilities, available choices or scoring. Older saved encounters and links remain readable. In original single-role practice, **Change character** opens the matching shared situation at the same stage and preserves the selected answer.
+The selected character’s name is used throughout the situation, choices, explanations and recap in English and Irish. Changing a character updates both name and picture. Scenario ages and teaching facts remain fixed, including explicit identity comparisons; choices, legal responsibilities and scores do not change. Older saved encounters and links remain readable. In original single-role practice, **Change character** opens the matching shared situation at the same stage and preserves the selected answer.
 
 See the [character guide](docs/CHARACTERS.md) for persistence, compatibility and artwork details.
 
@@ -131,7 +131,7 @@ Character controls work with a keyboard and have English/Gaeilge labels, visible
 
 The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) for coverage and review opportunities.
 
-Both perspectives use a shared **mobile-first layout**. **Seventy-two browser checks run in Chromium, Firefox and WebKit** across viewport sizes from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
+Both perspectives use a shared **mobile-first layout**. **Browser checks run in Chromium, Firefox and WebKit** across viewport sizes from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
 
 ## Privacy
 
@@ -189,11 +189,13 @@ npm test
 | `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration runs **88 tests**, covering 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus scores, character selection, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus every one of the 295 role-specific choices at 59 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
 The clearer-first-play implementation at commit [`5d8a9dd`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d) passed **88 Node checks locally** and [all 78 browser checks before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442): **26 each in Chromium, Firefox and WebKit**. These include recommended starts, keyboard catalogue access, character changes, retained counterparts, responsive layouts and enlarged Irish text. The [interface review](docs/UX-REVIEW.md) includes before/after captures and the limits of this verification.
 
 On `main`, the browser workflow waits for that commit's GitHub Pages publication and repeats the suite against the live site. [See browser runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) for deployment-specific results.
+
+The browser suite also completes all 14 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 

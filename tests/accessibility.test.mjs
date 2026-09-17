@@ -57,9 +57,9 @@ function settings(language='ga'){
 }
 const current=()=>decodeState(location.hash.slice(11).split('~')[0]);
 test('Applying Irish in a live situation retains both answers, stage, role and saved scores; companion links carry language',()=>{
- route('#encounters/public');assert.equal(document.documentElement.attrs['data-perspective'],'public');action('paired-start',{id:'public-search',role:'public'});action('paired-answer',{index:'0'});assert.equal(focused.at(-1),'#feedback');
+ route('#encounters/public');action('paired-character-select',{role:'public',character:'public-2'});assert.equal(document.documentElement.attrs['data-perspective'],'public');action('paired-start',{id:'public-search',role:'public'});action('paired-answer',{index:'0'});assert.equal(focused.at(-1),'#feedback');
  action('paired-switch');assert.equal(document.documentElement.attrs['data-perspective'],'garda');assert.equal(focused.at(-1),'#choice-title');action('paired-answer',{index:'1'});
- const before=current(),saved=memory.get(siteStorageKey);settings('ga');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.equal(document.documentElement.lang,'ga');assert.equal(main.attrs.lang,'ga');assert.match(main.innerHTML,/Athraigh go dearcadh an phobail/);assert.match(main.innerHTML,/Roghnaithe/);assert.equal(new URL(siteLink.href).searchParams.get('lang'),'ga');
+ const before=current(),saved=memory.get(siteStorageKey);settings('ga');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.equal(document.documentElement.lang,'ga');assert.equal(main.attrs.lang,'ga');const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];assert.match(story,/Noor/);assert.doesNotMatch(story,/Niamh/);assert.match(main.innerHTML,/Athraigh go dearcadh an phobail/);assert.match(main.innerHTML,/Roghnaithe/);assert.equal(new URL(siteLink.href).searchParams.get('lang'),'ga');
  settings('en');assert.equal(document.documentElement.attrs['data-perspective'],'garda');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.match(main.innerHTML,/Your answer is recorded/);
 });
 test('Choosing Irish during original play transfers the exact active choice into the matching shared situation',()=>{
