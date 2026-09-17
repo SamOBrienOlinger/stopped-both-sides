@@ -1,5 +1,6 @@
 import {encounters} from '../encounters/catalog.mjs';
 import {gaContent} from './ga-content.mjs';
+import {refinementIrish} from './refinements-ga.mjs';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -99,11 +100,17 @@ const ui={
 Object.assign(ui,{
  'On the street':'Ar an tsráid','At the bus stop':'Ag stad an bhus','At the station':'Ag an stáisiún','Time to reflect':'Am le machnamh','Reviewing the encounter':'Ag athbhreithniú na teagmhála','In the community':'Sa phobal','Private advice · separate perspectives':'Comhairle phríobháideach · dearcthaí ar leith','Separate reflections':'Machnamh ar leith','Same facts · compare the written scenarios':'Na fíricí céanna · cuir na cásanna scríofa i gcomparáid','Your chosen response':'An freagra a roghnaigh tú','The scene':'An radharc'
 });
+Object.assign(ui,refinementIrish);
+for(const [key,value] of Object.entries(ui))if(key.includes('site-switch button'))ui[key.replaceAll('site-switch button','resource-site link')]=value;
 Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
 export function translateText(text,lang='en'){
  if(lang!=='ga')return text;
  const s=String(text).trim();if(dictionary.has(s))return dictionary.get(s);
  let m;
+ if((m=s.match(/^Stage (\d+)$/)))return 'Céim '+m[1];
+ if((m=s.match(/^([\d–]+) decisions remaining, including this one$/)))return m[1]+' cinneadh fágtha, an ceann seo san áireamh';
+ if((m=s.match(/^(\d+) stages explored · (\d+) learning points$/)))return m[1]+' céim scrúdaithe · '+m[2]+' pointe foghlama';
+ if((m=s.match(/^(.*) situations completed$/)))return translateText(m[1],lang)+' — cásanna críochnaithe';
  if((m=s.match(/^Choose character: (.+)$/)))return 'Roghnaigh carachtar: '+m[1];
  if((m=s.match(/^(.*?)(\s+[⇄→↗])$/)))return translateText(m[1],lang)+m[2];
  if((m=s.match(/^(.*):$/))&&dictionary.has(m[1]))return translateText(m[1],lang)+':';

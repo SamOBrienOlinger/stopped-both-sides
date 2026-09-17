@@ -79,6 +79,7 @@ async function checkDialog(page){
 async function chooseFirst(page,role){
  await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.encounter-card')).toHaveCount(14);
+ await page.locator('.setup-role summary').click();
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
  await expect(page.locator('.character-option')).toHaveCount(0);
  await fits(page,'simple setup');
@@ -147,7 +148,11 @@ for(const role of ['public','garda']){
   await expect(page.locator('#feedback')).toBeVisible();
   const before=readState(page);
   await page.locator('[data-site-switch]').click();
+  await expect(page.locator('.content-page h1')).toContainText('sources');
+  await page.locator('.session-return a').click();
   await expect(page.locator('.paired-game')).toBeVisible();
+  expect(readState(page)).toEqual(before);
+  await page.locator('[data-action="paired-switch"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
   expect(readState(page).answers).toEqual(before.answers);
   expect(readState(page).nodeId).toEqual(before.nodeId);

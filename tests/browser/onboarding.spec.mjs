@@ -6,7 +6,7 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  await page.setViewportSize({width:390,height:844});
  await page.goto(role==='public'?'./':'garda/');
  await expect(page.getByText('An interactive learning game for the public and Gardaí.',{exact:true})).toBeVisible();
- await expect(page.locator('.landing-character')).toHaveCount(18);
+ await expect(page.locator('.landing-character')).toHaveCount(0);
  await page.locator(`.perspective-hero a[href="#encounters/${role}"]`).click();
  await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
  await expect(page.locator('.character-option')).toHaveCount(0);
