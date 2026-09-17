@@ -245,7 +245,7 @@ Object.assign(gaContent,{
   ],[
    'Mar Gharda atá ag athbhreithniú na teagmhála, cad is gá a scrúdú?','Glac imní faoi roghnú agus cóireáil dáiríre. Scrúdaigh na forais agus an t-iompar; ná glac leis go gcruthaíonn imní idirdhealú ná nach bhfuil rud le scrúdú mar nár gabhadh duine.',
    'An roghnú, na forais agus an chóireáil a scrúdú agus éisteacht leis an imní.','Coinníonn tú cuntasacht oscailte agus an fhianaise á meas agat.',
-   'An imní a dhíbhe mar gur ceadaíodh d’Amina imeacht.','Ní fhreagraíonn scaoileadh ceisteanna faoin teagmháil roimhe sin.'
+   'An imní a dhíbhe mar go raibh cead ag Amina imeacht.','Ní fhreagraíonn scaoileadh ceisteanna faoin teagmháil roimhe sin.'
   ]),
   'fair-record':n('Sula n-imíonn na sonraí as cuimhne','Tá Amina in áit shábháilte ag scríobh nóta pearsanta. Níl ainm an Gharda ar eolas aici. Déanann an Garda machnamh ar leith ar an taifead oifigiúil; ní fheiceann ceachtar ról nótaí príobháideacha an róil eile.',[
    'Cad atá úsáideach a thaifeadadh?','Taifead am, áit, focail, gníomhartha, finnéithe agus aon sonraí aitheantais atá agat. Coinnigh fianaise atá ann go sábháilte. Is féidir gearán a dhéanamh gan ainm an Gharda.',
@@ -309,7 +309,7 @@ Object.assign(gaContent,{
    'Cad a athraíonn i do mheasúnú?','Ní sholáthraíonn diúltú d’fhiosrú atá deonach i ndáiríre na forais atá in easnamh. Teastaíonn coinníollacha reachtúla ar leith do dhualgais aitheantais.',
    'An diúltú a mheas mar an fhíric bhreise a údaraíonn cuardach.','Pionósaíonn sé an rogha dheonach agus ní aithníonn sé cumhacht chuardaigh fós.',
    'Ainm agus seoladh a éileamh mar ghnáthsheiceáil éigeantach.','Teastaíonn cumhacht ábhartha agus a coinníollacha; ní hé sin an gnáthfhreagra ar dhiúltú comhrá.',
-   'Ligean d’Alex imeacht agus an difríocht idir diúltú agus fianaise a choinneáil.','Fanann an teagmháil ag teacht leis an stádas a mhínigh tú.'
+   'Gan bac a chur ar Alex imeacht agus an difríocht idir diúltú agus fianaise a choinneáil.','Fanann an teagmháil ag teacht leis an stádas a mhínigh tú.'
   ]),
   'street-information':n('Míniú eile','Míníonn glantóir an tsiopa go bhfuil Alex ag fanacht le rothar a bhailiú tar éis seal oibre. Tagann an míniú leis an méid atá le feiceáil. Níl nasc le cion sonrach ann.',[
    'Conas ba chóir an t-eolas nua a thuiscint?','D’fhéadfadh míniú eile an teagmháil a shoiléiriú. Ní gá gach sonra de do shaol a chruthú chun toimhde gan bhunús a shárú.',

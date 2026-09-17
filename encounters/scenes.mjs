@@ -126,6 +126,6 @@ export function renderScene(state,options={}){
  }).join('');
  const propIndex=props[m.prop];
  const prop=propIndex===undefined?'':`<span class="scene-prop" aria-hidden="true"><img src="${asset('props')}" width="1536" height="1024" alt="" decoding="async" ${compact?'loading="lazy"':''} style="left:-${propIndex%3*100}%;top:-${Math.floor(propIndex/3)*100}%"></span>`;
- const names=roles.map(role=>`<span data-role-tone="${role}"><strong><span>Avatar:</span> <span data-no-translate>${esc(characterFor(role,state.cast[role]).name)}</span></strong><span>${roleLabels[role]}</span></span>`).join('');
+ const names=roles.map(role=>`<span data-role-tone="${role}"><strong><span data-no-translate>${esc(characterFor(role,state.cast[role]).name)}</span></strong><span>${roleLabels[role]}</span></span>`).join('');
  return `<figure class="encounter-scene ${compact?'encounter-scene--compact':''}" data-scene-id="${esc(state.id+'/'+m.nodeId)}" data-scene-phase="${m.phase}" data-scene-mode="${m.mode}"><div class="scene-stage ${m.separate?'scene-stage--separate':''}" role="img" aria-label="${esc(m.stage.title)}">${background(m.place,m.separate?'scene-location--public':'')}${m.separate?background(m.otherPlace,'scene-location--garda'):''}${actors}${prop}${m.separate?'<span class="scene-divider" aria-hidden="true"></span>':''}<span class="scene-setting">${esc(m.label)}</span></div><figcaption><div class="scene-cast-names">${names}</div></figcaption></figure>`;
 }

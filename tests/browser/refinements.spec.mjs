@@ -8,7 +8,7 @@ for(const role of ['public','garda'])test(`${role}: facts, identity and variatio
  await page.goto((role==='garda'?'garda/':'./')+stateHash(state));
  await expect(page.locator('.variation-notice strong')).toHaveText('New variation');
  await expect(page.locator('.cast-character[data-cast-role="public"]')).toContainText('Noor');
- await expect(page.locator('.cast-character[data-cast-role="public"]')).toContainText('Alex, 24');
+ await expect(page.locator('.cast-character[data-cast-role="public"]')).toContainText('24 years old');
  for(const width of [320,390,768,1366]){
   await page.setViewportSize({width,height:844});
   const context=await page.locator('.decision-context').boundingBox(),choices=await page.locator('.decision-choices').boundingBox();

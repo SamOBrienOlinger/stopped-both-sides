@@ -7,12 +7,14 @@ Players can choose from nine LEGO-style characters for each perspective. The 18 
 - Choose a side, then start the recommended situation with the ready-selected character. **Choose a different character** opens the optional picker; **Done** closes it. **Browse all 14 situations** opens the full catalogue.
 - A character for the opposite side is sampled uniformly from that side's nine characters when the encounter starts. Randomness does not depend on answers, scores or appearance.
 - Both characters appear at every stage, during feedback and in the recap. The same pair remains in place across stages and reloads.
-- **Change character** opens an inline picker. Choosing a character updates only the active side's appearance and leaves the opposing character, stage, answers and scores intact.
+- **Change character** opens an inline picker. Choosing a character updates only the active side's name and picture and leaves the opposing character, stage, answers and scores intact.
 - **Switch perspective** puts the player in the existing opposite character's place. That character can then be changed using the same control.
 - Starting a new shared situation assigns a random counterpart. Replaying the same situation from its recap keeps both characters, including when replaying the other role.
 - Original single-role practice also displays the pair. Its change-character control opens shared play at the same stage, with the existing choice retained.
 
-The chosen figure represents the player's role visually. Scenario names, ages, facts, legal responsibilities, branches and scoring do not change with appearance. This distinction is stated in the picker.
+The selected cast supplies the names and pictures shown throughout the running game, including story text, prompts, choices, explanations and recap. Portraits show the scenario age or role without introducing a second name. Changing a character updates their displayed name everywhere while preserving ages, teaching facts, legal responsibilities, branches and scoring.
+
+`encounters/narrative.mjs` resolves the catalogue’s story identity against the saved public cast. It runs after translation so English and Irish use the same selected name without breaking sentence translations. Protected character-picker labels, selected names, source publications, links and saved-state tokens are never rewritten. Both shared play and original individual practice use this rendering path.
 
 ## Persistence and compatibility
 

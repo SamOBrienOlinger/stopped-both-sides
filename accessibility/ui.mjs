@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs';
 import {createPreferences,defaults} from './preferences.mjs';
 import {createDialogController} from './dialog.mjs';
-import {translateText,translateHTML,escapeHTML as esc} from '../locales/translate.mjs?v=clear-buttons-1';
+import {translateText,translateHTML,escapeHTML as esc} from '../locales/translate.mjs?v=character-story-1';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 export function perspectiveForRoute(hash,siteRole='public'){
  const route=hash.replace(/^#/, '').split('~')[0];
@@ -10,7 +10,7 @@ export function perspectiveForRoute(hash,siteRole='public'){
  if(route==='encounters/garda')return 'garda';
  return siteRole;
 }
-export function createReadingTools({main,rerender,siteRole='public'}){
+export function createReadingTools({main,rerender,siteRole='public',transformContent=html=>html}){
  let storage;try{storage=globalThis.localStorage;}catch{}
  const preferences=createPreferences(storage,globalThis.location?.search||'',siteRole);
  const root=document.documentElement,dialog=document.querySelector('#reading-dialog'),live=document.querySelector('#page-status');
@@ -50,6 +50,7 @@ export function createReadingTools({main,rerender,siteRole='public'}){
    if(reference)main.innerHTML=`<div class="translation-note" lang="ga"><p>Tá an rannóg thagartha seo i mBéarla. Tá na cásanna roinnte ar fáil i nGaeilge. <a href="#encounters">Roghnaigh cás</a></p></div>`+main.innerHTML;
    else main.innerHTML=`<div class="translation-note"><p>${esc(t(translateNotice))} <button class="plain-link" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+translateHTML(main.innerHTML,language);
   }
+  main.innerHTML=transformContent(main.innerHTML,hash);
   main.querySelectorAll?.('h1,h2[id]').forEach(h=>h.setAttribute('tabindex','-1'));
   main.querySelectorAll?.('a[target="_blank"]').forEach(a=>{if(!a.querySelector('.sr-only')){const hint=document.createElement('span');hint.className='sr-only';hint.lang=language==='ga'?'ga':'en';hint.textContent=' ('+t('opens in a new tab')+')';a.append(hint);}});
   const anchor=document.querySelector('[data-site-switch]');if(anchor){try{const url=new URL(anchor.href);url.searchParams.set('lang',language);anchor.href=url.href;}catch{}anchor.textContent=t(anchor.textContent);}
