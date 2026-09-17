@@ -96,6 +96,9 @@ const ui={
  'General information, not legal advice. Not endorsed by INAR, ICCL or An Garda Síochána. © 2026 Sam O’Brien-Olinger.':'Eolas ginearálta, ní comhairle dlí. Gan formhuiniú ó INAR, ICCL ná ón nGarda Síochána. © 2026 Sam O’Brien-Olinger.',
  'Reflective learning, not operational guidance. Independent; not endorsed by An Garda Síochána, INAR or ICCL. © 2026 Sam O’Brien-Olinger.':'Foghlaim mhachnamhach, ní treoir oibríochtúil. Neamhspleách; gan formhuiniú ón nGarda Síochána, INAR ná ICCL. © 2026 Sam O’Brien-Olinger.'
 };
+Object.assign(ui,{
+ 'On the street':'Ar an tsráid','At the bus stop':'Ag stad an bhus','At the station':'Ag an stáisiún','Time to reflect':'Am le machnamh','Reviewing the encounter':'Ag athbhreithniú na teagmhála','In the community':'Sa phobal','Private advice · separate perspectives':'Comhairle phríobháideach · dearcthaí ar leith','Separate reflections':'Machnamh ar leith','Same facts · compare the written scenarios':'Na fíricí céanna · cuir na cásanna scríofa i gcomparáid','Your chosen response':'An freagra a roghnaigh tú','The scene':'An radharc'
+});
 Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
 export function translateText(text,lang='en'){
  if(lang!=='ga')return text;

@@ -78,6 +78,7 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
   }
   assert.match(main.innerHTML,/YOUR SCORES & REFLECTION RECAP/);assert.match(main.innerHTML,/Best completed route/);assert.equal(state().history.length,steps);
   action('paired-switch');assert.ok(state().complete);assert.match(main.innerHTML,/data-action="paired-switch"/);
+  const completed=state();action('paired-replay-role',{role:'public'});assert.deepEqual(state().cast,completed.cast);route(stateHash(completed));
   action('paired-revisit',{index:'0'});assert.equal(state().nodeId,e.start);assert.equal(state().history.length,0);
  }
  route('#progress');assert.match(main.innerHTML,/14 of 14 situations completed/);assert.match(main.innerHTML,/Best completed:/);
