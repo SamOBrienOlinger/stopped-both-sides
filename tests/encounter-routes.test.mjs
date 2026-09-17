@@ -48,11 +48,11 @@ test('A selected answer, both scores and the exact stage survive switches, sourc
  action('paired-switch');action('paired-answer',{index:'1'});const before=state();
  assert.deepEqual(before.answers,{public:0,garda:1});
  const link=new URL(siteLink.href),destination=new URL(sites[siteRole==='public'?'garda':'public']);assert.equal(link.origin,destination.origin);assert.equal(link.pathname,destination.pathname);
- const [saved,progressToken]=link.hash.slice(11).split('~');const carried=decodeState(saved);
+ const [resource,progressToken]=link.hash.slice(1).split('~');assert.ok(['rights','evidence'].includes(resource));const carried=decodeState(unpackProgress(progressToken).last);
  assert.equal(carried.nodeId,before.nodeId);assert.deepEqual(carried.answers,before.answers);
  assert.equal(progressTotals(unpackProgress(progressToken),'public').points>=1,true);
- route(siteRole==='garda'?'#evidence':'#rights');route(stateHash(before));assert.deepEqual(state(),before);assert.match(main.innerHTML,/0 POINTS/);
- route(link.hash);assert.equal(state().nodeId,before.nodeId);assert.deepEqual(state().answers,before.answers);assert.equal(location.hash.includes('~'),false,'Transfer is merged and removed from the active URL');
+ route(siteRole==='garda'?'#evidence':'#rights');route(stateHash(before));assert.deepEqual(state(),before);assert.match(main.innerHTML,/YOUR LEARNING POINT/);
+ route((siteRole==='garda'?'#evidence':'#rights')+'~'+progressToken);assert.match(main.innerHTML,/session-return/);route(stateHash(carried));assert.equal(state().nodeId,before.nodeId);assert.deepEqual(state().answers,before.answers);assert.equal(location.hash.includes('~'),false,'Transfer is merged and removed from the active URL');
  action('paired-switch');assert.equal(state().answers[state().role],state().role==='public'?0:1);
 });
 test('Chosen characters remain editable without replacing the opposing character or route',()=>{
@@ -66,7 +66,7 @@ test('Chosen characters remain editable without replacing the opposing character
  assert.match(main.innerHTML,/data-character-id="public-9"/);action('paired-character-close');
  action('paired-switch');action('paired-characters');action('paired-character-choose',{character:'garda-8'});
  assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});assert.deepEqual(state().answers,before.answers);
- const link=new URL(siteLink.href);route(link.hash);assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});
+ const link=new URL(siteLink.href),carried=decodeState(unpackProgress(link.hash.split('~')[1]).last);route((siteRole==='garda'?'#evidence':'#rights')+'~'+link.hash.split('~')[1]);route(stateHash(carried));assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});
 });
 test('Every shared situation reaches a scored two-role recap and can revisit or replay either role',()=>{
  for(const e of Object.values(encounters)){
@@ -76,16 +76,16 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
    for(const role of roles){if(state().role!==role)action('paired-switch');const view=e.nodes[state().nodeId].views[role];action('paired-answer',{index:String(view.choices.findIndex(c=>c.points===1))});}
    action('paired-next');
   }
-  assert.match(main.innerHTML,/YOUR SCORES & REFLECTION RECAP/);assert.match(main.innerHTML,/Best completed route/);assert.equal(state().history.length,steps);
+  assert.match(main.innerHTML,/YOUR LEARNING RECAP/);assert.match(main.innerHTML,/Best completed route/);assert.equal(state().history.length,steps);
   action('paired-switch');assert.ok(state().complete);assert.match(main.innerHTML,/data-action="paired-switch"/);
   const completed=state();action('paired-replay-role',{role:'public'});assert.deepEqual(state().cast,completed.cast);route(stateHash(completed));
   action('paired-revisit',{index:'0'});assert.equal(state().nodeId,e.start);assert.equal(state().history.length,0);
  }
- route('#progress');assert.match(main.innerHTML,/14 of 14 situations completed/);assert.match(main.innerHTML,/Best completed:/);
+ route('#progress');assert.match(main.innerHTML,/14 <span>\/ 14 situations completed/);assert.match(main.innerHTML,/Best completed:/);
 });
 test('Original mode transfers a live selection into the same stage and records its score',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
- assert.match(main.innerHTML,/data-action="paired-transfer"/);assert.match(main.innerHTML,/Scores & saved progress/);
+ assert.match(main.innerHTML,/data-action="paired-transfer"/);assert.match(main.innerHTML,/Individual practice/);
  action('paired-transfer');assert.equal(state().id,siteRole+'-'+e.id);assert.equal(state().nodeId,e.start);assert.equal(state().answers[siteRole],1);assert.notEqual(state().role,siteRole);
 });
 test('Original practice can change character while carrying its stage and answer into shared play',()=>{
@@ -102,5 +102,5 @@ test('Unknown routes and corrupted progress show a recovery view while saved rec
 });
 test('Clearing requires the in-page confirmation and resets the local record and resume point',()=>{
  route('#progress');assert.ok(memory.has(siteStorageKey));action('paired-clear');assert.match(main.innerHTML,/Clear this site’s saved progress/);assert.ok(memory.has(siteStorageKey));
- action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.match(main.innerHTML,/0 of 14 situations completed/);
+ action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.match(main.innerHTML,/0 <span>\/ 14 situations completed/);
 });

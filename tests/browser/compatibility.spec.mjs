@@ -147,7 +147,11 @@ for(const role of ['public','garda']){
   await expect(page.locator('#feedback')).toBeVisible();
   const before=readState(page);
   await page.locator('[data-site-switch]').click();
+  await expect(page.locator('.content-page h1')).toContainText('sources');
+  await page.locator('.session-return a').click();
   await expect(page.locator('.paired-game')).toBeVisible();
+  expect(readState(page)).toEqual(before);
+  await page.locator('[data-action="paired-switch"]').click();
   await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
   expect(readState(page).answers).toEqual(before.answers);
   expect(readState(page).nodeId).toEqual(before.nodeId);
