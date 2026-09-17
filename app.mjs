@@ -1,6 +1,6 @@
 import {hasOwn} from './compatibility.mjs';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=learning-flow-2';
-import {createEncounterMode} from './encounters/ui.mjs?v=learning-flow-2';
+import {createEncounterMode} from './encounters/ui.mjs?v=aisling-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');

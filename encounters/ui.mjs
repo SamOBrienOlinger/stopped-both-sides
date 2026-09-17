@@ -1,8 +1,8 @@
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
-import {characters,characterFor,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs';
-import {renderScene} from './scenes.mjs';
+import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=aisling-1';
+import {renderScene} from './scenes.mjs?v=aisling-1';
 import {variationFor,remainingDecisions,learningStatus,topicGroups} from './presentation.mjs';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
@@ -27,8 +27,8 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   return `<div class="role-scores ${compact?'compact':''}" aria-label="Scores on this route">${roles.map(role=>`<div class="role-score ${s.role===role?'active':''}" data-role-tone="${role}"><span>${roleLabels[role]}</span><strong>${scores[role].points} / ${scores[role].answered} <small>points</small></strong><span>${scores[role].answered?`${scores[role].answered} decision${scores[role].answered===1?'':'s'} answered`:'No answers yet'}</span></div>`).join('')}</div>`;
  }
  function characterImage(role,id){
-  const c=characterFor(role,id),src=new URL('../assets/characters/cast.webp',import.meta.url).href;
-  return `<span class="character-image" aria-hidden="true"><img src="${src}" width="1774" height="887" alt="" decoding="async" style="left:-${c.column*100}%;top:-${c.row*100}%"></span>`;
+  const art=characterArtwork(characterFor(role,id));
+  return `<span class="character-image" aria-hidden="true"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" style="${art.style}"></span>`;
  }
  function castDisplay(s){
   const e=encounters[s.id],stage=s.complete?e.nodes[s.history.at(-1).nodeId]:currentStage(s),people={...e.people,...stage.people};

@@ -1,5 +1,5 @@
 import {encounters,roles,roleLabels} from './catalog.mjs';
-import {characterFor} from './characters.mjs';
+import {characterFor,characterArtwork} from './characters.mjs?v=aisling-1';
 
 // Explicit art direction for every decision. Illustrations never decide the law,
 // scoring, identity cues or facts; those remain in the scenario's written account.
@@ -122,7 +122,7 @@ export function renderScene(state,options={}){
  const background=(place,side='')=>`<div class="scene-location ${side}" aria-hidden="true"><img src="${asset(place)}" alt="" width="680" height="380" decoding="async" ${compact?'loading="lazy"':''}></div>`;
  const actors=roles.map(role=>{
   const c=characterFor(role,state.cast[role]);
-  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" data-pose="${m.poses[role]}" aria-hidden="true"><div class="scene-sprite">${['listening','speaking','reflecting'].map(pose=>`<img class="scene-pose ${pose===m.poses[role]?'is-visible':''}" src="${asset(pose)}" width="1774" height="887" alt="" decoding="async" ${compact?'loading="lazy"':''} style="left:-${c.column*100}%;top:-${c.row*100}%">`).join('')}</div></div>`;
+  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" data-pose="${m.poses[role]}" aria-hidden="true"><div class="scene-sprite">${['listening','speaking','reflecting'].map(pose=>{const art=characterArtwork(c,pose);return `<img class="scene-pose ${pose===m.poses[role]?'is-visible':''}" src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" ${compact?'loading="lazy"':''} style="${art.style}">`;}).join('')}</div></div>`;
  }).join('');
  const propIndex=props[m.prop];
  const prop=propIndex===undefined?'':`<span class="scene-prop" aria-hidden="true"><img src="${asset('props')}" width="1536" height="1024" alt="" decoding="async" ${compact?'loading="lazy"':''} style="left:-${propIndex%3*100}%;top:-${Math.floor(propIndex/3)*100}%"></span>`;
