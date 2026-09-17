@@ -32,7 +32,8 @@
 .legacy-scene{max-width:720px;margin:0 auto 24px}
 .scene-feedback-preview{display:none}
 @media(min-width:1000px){.paired-game>.story{position:sticky;top:16px}}
-@media(max-width:660px){.story>.encounter-scene{margin-left:-12px;margin-right:-12px}.scene-setting{font-size:.6875rem;top:8px;left:8px;right:8px;padding:5px 9px;max-width:calc(100% - 16px)}.encounter-scene figcaption{padding:11px 12px}.scene-cast-names strong{font-size:.8125rem}.scene-moment{font-size:.8125rem!important}.scene-feedback-preview{display:block;margin:0 0 20px}.scene-feedback-preview .encounter-scene{margin:0}.scene-feedback-preview .scene-stage{aspect-ratio:16/9}.scene-feedback-preview .scene-moment{display:none}}
+@media(max-width:660px){.story>.encounter-scene{margin-left:-12px;margin-right:-12px}.scene-setting{font-size:.6875rem;top:8px;left:8px;right:8px;padding:5px 9px;max-width:calc(100% - 16px)}.encounter-scene figcaption{padding:11px 12px}.scene-cast-names strong{font-size:.8125rem}.scene-moment{font-size:.8125rem!important}}
+@media(max-width:900px){.scene-feedback-preview{display:block;margin:0 0 20px}.scene-feedback-preview .encounter-scene{margin:0}.scene-feedback-preview .scene-stage{aspect-ratio:16/9}.scene-feedback-preview .scene-moment{display:none}}
 @media(prefers-reduced-motion:no-preference){.scene-stage{animation:scene-arrive .2s ease-out}@keyframes scene-arrive{from{opacity:.65}to{opacity:1}}}
 @media(forced-colors:active){.encounter-scene,.scene-setting{border:1px solid CanvasText}.scene-setting,.encounter-scene figcaption,.scene-cast-names>span,.scene-moment{background:Canvas;color:CanvasText!important}.scene-cast-names>span>span,.scene-moment>span:first-child{color:CanvasText}.scene-divider{background:CanvasText}}
 @media print{.encounter-scene{break-inside:avoid}.paired-game>.story{position:static}.scene-feedback-preview{display:none}}
