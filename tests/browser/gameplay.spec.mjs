@@ -47,6 +47,11 @@ for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mism
  await expect(page.locator('.story-text')).toContainText('Noor, 24, stands beside a closed shop');
  await expect(page.locator('[data-cast-role="public"]')).toContainText('24 years old');
  await expect.poll(()=>page.locator('.story img').evaluateAll(images=>images.length>0&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+ // Full-page captures can precede async decoding of off-screen artwork. Also
+ // inspect the actual scene in the viewport, as a player sees it after scrolling.
+ await page.locator('.story>.encounter-scene').scrollIntoViewIfNeeded();
+ await page.locator('.story img').evaluateAll(images=>Promise.all(images.map(img=>img.decode())));
+ await page.locator('.story>.encounter-scene').screenshot({path:testInfo.outputPath(`${entry}-visible-character-scene.png`)});
  await page.screenshot({path:testInfo.outputPath(`${entry}-consistent-names.png`),fullPage:true});
  await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
  await page.locator('[data-action="paired-switch"]').click();
