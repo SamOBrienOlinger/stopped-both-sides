@@ -34,6 +34,7 @@ async function fits(page,label){
 
 async function knowledge(page,language,{focused=false}={}){
  const state=current(page),view=encounters[state.id].nodes[state.nodeId].views[state.role];
+ await expect(page.locator('.story>.encounter-scene')).toHaveAttribute('data-scene-id',state.id+'/'+state.nodeId);
  await expect(page.locator('#knowledge-panel-title')).toHaveText(translateText('Your view of the incident',language));
  await expect(page.locator('.knowledge-panel section')).toHaveCount(3);
  for(const [i,key] of ['know','think','unknown'].entries()){
@@ -115,8 +116,9 @@ for(const entry of roles)for(const id of ids)for(const language of ['en','ga'])f
   let steps=0;
   while(!current(page).complete){
    expect(++steps).toBeLessThanOrEqual(Object.keys(encounters[id].nodes).length);
-   const before=current(page),node=encounters[id].nodes[before.nodeId],scene=await page.locator('.story-text').innerText();
+   const before=current(page),node=encounters[id].nodes[before.nodeId];
    await knowledge(page,language);
+   const scene=await page.locator('.story-text').innerText();
    // Switch from the toolbar before answering, including a keyboard path from
    // the knowledge heading to the first choice in the newly selected role.
    await activate(page.locator('[data-action="paired-switch"]'));

@@ -1,5 +1,8 @@
 # Clearer first play: review and changes
 
+This is the historical first-play review. The later reporting-scenario fixes and
+homepage-to-recap checks are documented in [reporting UX verification](REPORTING-UX-VERIFICATION.md).
+
 Scope: homepage → setup → first decision, on both entrypoints. The purpose is to help people begin learning about rights, responsibilities and fair decisions in Garda encounters. This is an interface review, not a new legal-content review or a usability study with participants.
 
 ## Observed starting flow

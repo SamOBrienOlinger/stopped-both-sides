@@ -84,6 +84,17 @@ test('Both reporting switch controls focus translated knowledge before choices w
  }
 });
 
+test('Reading settings recover lost focus after layout without stealing a new focus or reopened dialog',()=>{
+ const frames=[];globalThis.requestAnimationFrame=callback=>frames.push(callback);
+ document.body={};document.activeElement=document.body;
+ const flush=()=>{for(const callback of frames.splice(0))callback();};
+ try{
+  settings('en');let count=focused.length;flush();assert.ok(focused.length>count);assert.equal(focused.at(-1),'settings');
+  settings('ga');document.activeElement={id:'another-control'};count=focused.length;flush();assert.equal(focused.length,count);
+  settings('en');document.activeElement=document.body;dialog.open=true;count=focused.length;flush();assert.equal(focused.length,count);
+ }finally{dialog.open=false;delete globalThis.requestAnimationFrame;delete document.body;delete document.activeElement;}
+});
+
 test('Choosing Irish during original play transfers the exact active choice into the matching shared situation',()=>{
  settings('en');route('#scenario/street');action('choose',{index:'1'});settings('ga');const s=current();assert.equal(s.id,role+'-street');assert.equal(s.role,role);assert.equal(document.documentElement.attrs['data-perspective'],role);assert.equal(s.nodeId,'street-start');assert.equal(s.answers[role],1);assert.match(main.innerHTML,/SCÉAL ROINNTE/);
 });

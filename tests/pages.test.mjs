@@ -56,7 +56,8 @@ test('HTML, CSS and module assets resolve inside the GitHub Pages project direct
  let checked=0;
  function walk(directory,relative=''){
   for(const entry of readdirSync(directory,{withFileTypes:true})){
-   if(entry.name.startsWith('.')||['node_modules','scripts','tests','docs','research'].includes(entry.name))continue;
+   // Browser-runner reports are ignored development output, not Pages assets.
+   if(entry.name.startsWith('.')||['node_modules','scripts','tests','docs','research','playwright-report','test-results'].includes(entry.name))continue;
    const path=relative+entry.name,file=new URL(path,root);
    assert.equal(entry.isSymbolicLink(),false,'Pages artifacts must not contain symlinks');
    if(entry.isDirectory()){walk(file,path+'/');continue;}

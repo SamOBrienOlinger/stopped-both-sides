@@ -22,6 +22,12 @@ The review identified three gaps in the earlier verification:
   tests start at the homepage and use the visible controls, with no prebuilt game
   state, recap links or seeded storage.
 
+The expanded run also exposed lost keyboard focus when WebKit applied enlarged
+Irish text from setup. Reading preferences now close the dialog before rebuilding
+navigation and recover lost focus after layout. This recovery does not override a
+different control the learner has focused or a newly opened dialog. The tests also
+wait for the rendered stage, not only the changed URL, before comparing scenes.
+
 ## Reproducible checks
 
 `tests/browser/reporting-journeys.spec.mjs` adds 18 tests per browser engine:
