@@ -51,6 +51,8 @@ globalThis.history={replaceState(_state,_title,url){address=new URL(url,address)
 globalThis.document={title:'',documentElement:{lang:'en-IE',attrs:{},setAttribute(k,v){this.attrs[k]=v;},style:{setProperty(){}},classList:{toggle(k,v){if(v)classes.add(k);else classes.delete(k);}}},querySelector(q){if(q==='#main')return main;if(q==='#reading-dialog')return dialog;if(q==='[data-reading-open]')return openButton;if(q==='[data-site-switch]')return siteLink;if(q==='#page-status')return {textContent:''};if(q==='#feedback'||q==='#choice-title'||q==='h1'||q==='[data-action="paired-clear"]'||q==='[data-action="paired-clear-confirm"]')return heading(q);return null;},querySelectorAll(q){return q==='[data-reading-open]'?[openButton]:[];},addEventListener(k,v){callbacks['document-'+k]=v;}};
 globalThis.window={scrollTo(){},addEventListener(k,v){callbacks[k]=v;}};
 await import(new URL('app.mjs',siteBase));
+const baseQuery=document.querySelector;
+document.querySelector=q=>q==='#knowledge-panel-title'&&main.innerHTML.includes('id="knowledge-panel-title"')?heading(q):baseQuery(q);
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(n!==assignments)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
 function settings(language='ga'){
@@ -65,6 +67,23 @@ test('Applying Irish in a live situation retains both answers, stage, role and s
  const before=current(),saved=memory.get(siteStorageKey);settings('ga');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.equal(document.documentElement.lang,'ga');assert.equal(main.attrs.lang,'ga');const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];assert.match(story,/Noor/);assert.doesNotMatch(story,/Niamh/);assert.match(main.innerHTML,/Athraigh go dearcadh an phobail/);assert.match(main.innerHTML,/Roghnaithe/);assert.equal(new URL(siteLink.href).searchParams.get('lang'),'ga');
  settings('en');assert.equal(document.documentElement.attrs['data-perspective'],'garda');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.match(main.innerHTML,/Your answer is recorded/);
 });
+test('Both reporting switch controls focus translated knowledge before choices without losing answers',()=>{
+ for(const id of ['public-witness','public-corruption'])for(const language of ['en','ga']){
+  settings(language);route('#encounters/public');action('paired-start',{id,role:'public'});
+  assert.match(main.innerHTML,/<h2 id="knowledge-panel-title" tabindex="-1">/);
+  assert.ok(main.innerHTML.indexOf('id="knowledge-panel-title"')<main.innerHTML.indexOf('id="choice-title"'));
+  const before=current();action('paired-switch');
+  assert.equal(focused.at(-1),'#knowledge-panel-title');assert.equal(current().role,'garda');
+  assert.deepEqual(current().cast,before.cast);assert.deepEqual(current().answers,before.answers);
+  assert.match(main.innerHTML,new RegExp(translateText('Your view of the incident',language)));
+  action('paired-answer',{index:'0'});const answered=current();action('paired-compare');
+  assert.equal(focused.at(-1),'#knowledge-panel-title');assert.equal(current().role,'public');
+  assert.deepEqual(current().answers,answered.answers);assert.deepEqual(current().history,answered.history);
+  while(!current().complete){if(current().answers[current().role]===null)action('paired-answer',{index:'0'});action('paired-next');}
+  action('paired-switch');assert.equal(focused.at(-1),'h1');assert.equal(current().complete,true);
+ }
+});
+
 test('Choosing Irish during original play transfers the exact active choice into the matching shared situation',()=>{
  settings('en');route('#scenario/street');action('choose',{index:'1'});settings('ga');const s=current();assert.equal(s.id,role+'-street');assert.equal(s.role,role);assert.equal(document.documentElement.attrs['data-perspective'],role);assert.equal(s.nodeId,'street-start');assert.equal(s.answers[role],1);assert.match(main.innerHTML,/SCÉAL ROINNTE/);
 });

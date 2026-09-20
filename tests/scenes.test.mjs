@@ -57,6 +57,29 @@ test('Private advice and independent reflections keep the selected pair in separ
  }
 });
 
+test('Reporting follow-up scenes stay separate before answers, after answers and in recaps',()=>{
+ for(const id of ['public-witness','public-corruption']){
+  const e=encounters[id];
+  for(const nodeId of Object.keys(e.nodes).filter(nodeId=>nodeId!==e.start))for(const role of roles){
+   const initial={...startEncounter(id,role),nodeId};
+   for(const state of [initial,...e.nodes[nodeId].views[role].choices.map((_,index)=>answer(initial,index))]){
+    const model=sceneModel(state);
+    assert.equal(model.mode,'separate',`${id}/${nodeId}/${role}`);
+    assert.equal(model.speaker,null);
+    assert.notEqual(model.place,model.otherPlace);
+    assert.match(renderScene(state),/scene-divider/);
+    assert.match(renderScene(state),/Separate reflections/);
+    if(nodeId==='witness-evidence')assert.equal(model.prop,'phone');
+    if(model.choice){
+     const step={nodeId,continuedAs:role,answers:state.answers};
+     assert.equal(sceneModel(state,{step}).separate,true);
+     assert.match(renderScene(state,{step,compact:true}),/data-scene-mode="separate"/);
+    }
+   }
+  }
+ }
+});
+
 test('Recap pictures, replays and reloads keep the same pair throughout both perspectives',()=>{
  for(const e of Object.values(encounters))for(const role of roles){
   let state=startEncounter(e.id,role,{cast:{public:'public-9',garda:'garda-5'}});

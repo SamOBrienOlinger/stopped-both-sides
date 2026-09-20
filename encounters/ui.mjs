@@ -9,7 +9,7 @@ const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 const situationCount=Object.keys(encounters).length;
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate>${ids.map(id=>{const s=references[id];return `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)} ↗</a></li>`;}).join('')}</ul></details>`;
-const knowledgePanel=knowledge=>knowledge?`<aside class="knowledge-panel" aria-labelledby="knowledge-panel-title"><h2 id="knowledge-panel-title">Your view of the incident</h2><div><section><h3>WHAT YOU KNOW</h3><p>${esc(knowledge.know)}</p></section><section><h3>WHAT YOU THINK</h3><p>${esc(knowledge.think)}</p></section><section><h3>WHAT YOU DO NOT KNOW</h3><p>${esc(knowledge.unknown)}</p></section></div></aside>`:'';
+const knowledgePanel=knowledge=>knowledge?`<aside class="knowledge-panel" aria-labelledby="knowledge-panel-title"><h2 id="knowledge-panel-title" tabindex="-1">Your view of the incident</h2><div><section><h3>WHAT YOU KNOW</h3><p>${esc(knowledge.know)}</p></section><section><h3>WHAT YOU THINK</h3><p>${esc(knowledge.think)}</p></section><section><h3>WHAT YOU DO NOT KNOW</h3><p>${esc(knowledge.unknown)}</p></section></div></aside>`:'';
 const scoreExplanation='<p class="score-explanation">1 point for a choice that supports an appropriate resolution on these facts; 0 when the reasoning needs review. This measures learning, not personal bias or responsibility for someone else’s conduct.</p>';
 
 export function createEncounterMode({siteRole,main,rerender,getOriginalSession,resetOriginalSession,announce=()=>{}}){
@@ -154,7 +154,15 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   if(action==='paired-characters'){characterPickerOpen=!characterPickerOpen;rerender(false);if(characterPickerOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-character-close'){characterPickerOpen=false;rerender(false);document.querySelector('[data-action="paired-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-character-choose'){const next=changeCharacter(state,button.dataset.character);if(next!==state){characterPreferences.choose(state.role,button.dataset.character);navigate(next,true,false);}document.querySelector('[data-character="'+state.cast[state.role]+'"]')?.focus({preventScroll:true});announce('Character changed. Your progress is unchanged.');return true;}
-  if(action==='paired-switch'||action==='paired-compare'){characterPickerOpen=false;navigate(switchRole(state),true,false);const target=document.querySelector(state.complete?'h1':'#choice-title');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',behavior:'instant'});announce(state.role==='garda'?'Garda perspective':'Public perspective');}
+  if(action==='paired-switch'||action==='paired-compare'){
+   characterPickerOpen=false;navigate(switchRole(state),true,false);
+   // Start at the changed context, not below it. A focused heading lets screen
+   // readers continue through all three knowledge sections in document order.
+   const hasKnowledge=!state.complete&&!!currentStage(state).views[state.role].knowledge;
+   const target=document.querySelector(state.complete?'h1':hasKnowledge?'#knowledge-panel-title':'#choice-title');
+   target?.focus({preventScroll:true});target?.scrollIntoView({block:hasKnowledge?'start':'nearest',behavior:'instant'});
+   announce(state.role==='garda'?'Garda perspective':'Public perspective');
+  }
   else if(action==='paired-answer'){
    const next=answer(state,Number(button.dataset.index));if(next===state)return true;navigate(next,true,false);
    const feedback=document.querySelector('#feedback');feedback?.focus({preventScroll:true});feedback?.scrollIntoView({block:'nearest',behavior:'instant'});

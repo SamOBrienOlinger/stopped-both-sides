@@ -38,6 +38,8 @@ main{padding-top:1.75rem}
 .decision-context .story-text{max-width:85ch;font-size:1.0625rem;line-height:1.65;margin-bottom:0;color:var(--ink)}
 .knowledge-panel{margin-top:1.15rem;padding-top:1rem;border-top:1px solid var(--line)}
 .knowledge-panel>h2{font-size:1rem;line-height:1.4;margin:0 0 .75rem;color:var(--deep)}
+.knowledge-panel>h2{scroll-margin-top:1rem}
+.knowledge-panel>h2:focus-visible{outline:3px solid var(--deep);outline-offset:4px;border-radius:.15rem}
 .knowledge-panel>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
 .knowledge-panel section{padding:.85rem;border:1px solid var(--line);border-radius:.75rem;background:var(--paper,#fff)}
 .knowledge-panel h3{font-size:.75rem;line-height:1.35;letter-spacing:.055em;margin:0 0 .4rem;color:var(--deep)}

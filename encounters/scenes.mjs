@@ -46,7 +46,7 @@ export const sceneDirections={
  'public-witness':{
   'witness-start':scene('street',null),
   'witness-record':scene('advice-room',null,'notebook','separate','station'),
-  'witness-evidence':scene('street','public','phone'),
+  'witness-evidence':scene('advice-room',null,'phone','separate','station'),
   'witness-standing':scene('advice-room',null,'forms','separate','station'),
   'witness-route':scene('advice-room',null,'laptop','separate','station'),
   'witness-outcome':scene('advice-room',null,'forms','separate','station')
