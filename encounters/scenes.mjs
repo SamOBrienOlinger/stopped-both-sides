@@ -43,6 +43,18 @@ export const sceneDirections={
   'fair-route':scene('advice-room',null,'laptop','separate','station'),
   'fair-deadline':scene('advice-room',null,'forms','separate','station')
  },
+ 'public-witness':{
+  'witness-start':scene('street',null),
+  'witness-record':scene('advice-room',null,'notebook','separate','station'),
+  'witness-evidence':scene('street','public','phone'),
+  'witness-standing':scene('advice-room',null,'forms','separate','station'),
+  'witness-route':scene('advice-room',null,'laptop','separate','station'),
+  'witness-outcome':scene('advice-room',null,'forms','separate','station')
+ },
+ 'public-corruption':{
+  'envelope-start':scene('street',null,'forms'),
+  'envelope-route':scene('advice-room',null,'notebook','separate','station')
+ },
  'garda-street':{
   'street-start':scene('street',null,'phone'),
   'street-reset':scene('street','public'),

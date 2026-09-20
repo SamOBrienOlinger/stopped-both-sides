@@ -15,12 +15,13 @@ export const encounters=Object.fromEntries(roles.flatMap(origin=>{
    const p=paired[nodeId];if(!p)throw Error('Missing matched stage: '+id+'/'+nodeId);
    const fallback=node.choices.find(c=>!c.review).next;
    const refs=[...new Set([...node.sources.map(ref=>origin+':'+ref),...p.refs])];
-   const original={prompt:node.prompt,lesson:node.lesson,choices:node.choices.map(c=>({...c,points:c.review?0:1})),refs};
-   const counterpart={prompt:p.prompt,lesson:p.lesson,choices:p.choices.map(c=>({...c,next:c.next||fallback,points:c.review?0:1})),refs};
+   const original={prompt:node.prompt,lesson:node.lesson,choices:node.choices.map(c=>({...c,points:c.review?0:1})),refs,...(node.knowledge?{knowledge:node.knowledge}:{})};
+   const counterpart={prompt:p.prompt,lesson:p.lesson,choices:p.choices.map(c=>({...c,next:c.next||fallback,points:c.review?0:1})),refs,...(p.knowledge?{knowledge:p.knowledge}:{})};
    const people=id==='garda-description'&&nodeId==='description-power'?{public:'Person matching the fuller description'}:undefined;
    return [nodeId,{id:nodeId,title:node.title,scene:p.scene,people,views:{[origin]:original,[opposite]:counterpart}}];
   }));
-  return [id,{id,origin,originalId:s.id,title:s.title,description:s.description,start:s.start,nodes,people:{public:origin==='public'?s.person:names[s.id],garda:origin==='garda'?s.person:s.id==='custody'?'Garda in the custody team':'Garda involved in the encounter'},minutes:s.minutes}];
+  const publicCounterpart=origin==='public'&&(s.id==='witness'||s.id==='corruption')?'Second Garda at the scene':s.id==='custody'?'Garda in the custody team':'Garda involved in the encounter';
+  return [id,{id,origin,originalId:s.id,title:s.title,description:s.description,start:s.start,nodes,people:{public:origin==='public'?s.person:names[s.id],garda:origin==='garda'?s.person:publicCounterpart},minutes:s.minutes}];
  });
 }));
 export const stageCount=Object.values(encounters).reduce((n,e)=>n+Object.keys(e.nodes).length,0);

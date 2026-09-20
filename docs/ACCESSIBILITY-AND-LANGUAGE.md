@@ -4,7 +4,7 @@ Both companion sites now offer the same Language & reading control, shared game 
 
 ## Interaction and visual design
 
-- The home page leads with a plain English description, then a choice of starting role. The 14 shared situations support both roles. Original single-role practice is retained in a native disclosure.
+- The home page leads with a plain English description, then a choice of starting role. The 16 shared situations support both roles. Original single-role practice is retained in a native disclosure.
 - Navigation gives direct access to progress; the companion-site button remains available on every page. Situation cards have descriptive action names. Reading controls are available in the header, footer and accessibility page.
 - The shared scene, active role, question, selected answer and feedback have distinct visual hierarchy. A selected answer has a visible text label as well as a border and programmatic pressed state.
 - Native buttons, links, select elements, checkboxes, disclosures and a modal dialog support keyboard interaction. The dialog uses native modal behaviour where available, explicit Tab wrapping, and an older-browser fallback with Escape, background isolation and focus restoration to the opener or stable header control.
@@ -19,7 +19,7 @@ The public site uses deep teal and soft mint surfaces; the Garda site uses muted
 
 ## Language coverage and review status
 
-`locales/ga-content.mjs` contains a working Irish translation of all **14 shared situations / 59 stages**, including the neutral scene and both roles' prompts, lessons, choices and feedback. `translate.mjs` adds role labels, controls, score explanations and progress/recap language. It translates trusted UI templates while preserving IDs, choice order, links and state tokens. Published source titles remain in their original English, marked with `lang="en-IE"`.
+`locales/ga-content.mjs` contains a working Irish translation of all **16 shared situations / 67 stages**, including the neutral scene and both roles' prompts, lessons, choices, feedback and the fact/inference panels used by the witness scenarios. `translate.mjs` adds role labels, controls, score explanations and progress/recap language. It translates trusted UI templates while preserving IDs, choice order, links and state tokens. Published source titles remain in their original English, marked with `lang="en-IE"`.
 
 The shared mode can change between English and Gaeilge without losing the stage, role, either answer, history or scores. Choosing Irish in an original single-role session transfers the exact existing session to the matching shared situation in the same role. The original English practice remains available. About, accessibility and source-reference sections remain in English; an Irish notice explains this, and their content language is declared. The brand names are marked English.
 
@@ -35,7 +35,7 @@ The companion link carries `?lang=en` or `?lang=ga` alongside the existing fragm
 
 ## Verification and remaining work
 
-Node integration tests cover translation completeness for all 59 stages and both roles, preservation of links and semantic attributes, invalid preferences, blocked storage, live language changes, original-session transfer, role/feedback/confirmation focus targets, language-marked reference pages and separate progress storage. Existing tests traverse every original route and **11,150 mixed-role routes**, plus score and transfer behaviour. The interaction tests use a small DOM adapter, not a real browser.
+Node integration tests cover translation completeness for all 67 stages and both roles, preservation of links and semantic attributes, invalid preferences, blocked storage, live language changes, original-session transfer, role/feedback/confirmation focus targets, language-marked reference pages and separate progress storage. Existing tests traverse every original route and **57,842 mixed-role routes**, plus score and transfer behaviour. The interaction tests use a small DOM adapter, not a real browser.
 
 The separate [browser and responsive suite](BROWSER-COMPATIBILITY.md) checks real Chromium, Firefox and WebKit engines, including 320px reflow, 150% text, increased spacing, dialog keyboard behaviour and touch input. These automated checks supplement the Node adapter tests. Physical-device browser zoom, text-spacing overrides, VoiceOver, TalkBack, NVDA/JAWS, forced colours and testing with disabled users remain necessary before asserting conformance. Further languages should receive qualified translation and review before publication. This change does not constitute legal, operational, language or independent accessibility sign-off.
 

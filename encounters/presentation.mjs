@@ -27,10 +27,20 @@ export function learningStatus(progress,id,role){
  return record?.best?'Completed':record&&Object.keys(record.decisions).length?'In progress':'Not started';
 }
 
+const reportingPicture={
+ eyebrow:'THE FULLER PICTURE',
+ title:'Neither person had all the information.',
+ introduction:'Good decisions depended on:',
+ steps:['Accurate observation','Safety','Preserve evidence','Speak up','Independent review'],
+ note:'This recap assesses whether you separated fact from inference, preserved evidence and used an appropriate reporting channel. It does not decide whether the conduct was unlawful or corrupt.'
+};
+export const fullerPictureFor=id=>['public-witness','public-corruption'].includes(id)?reportingPicture:null;
+
 export const topicGroups=[
  {id:'street',title:'Street stops',encounters:['public-street','garda-street','garda-description']},
  {id:'search',title:'Searches',encounters:['public-search','garda-search','garda-new-evidence']},
  {id:'custody',title:'Arrest and custody',encounters:['public-arrest','public-custody']},
  {id:'young',title:'Young people',encounters:['public-young-person','garda-young-person']},
+ {id:'reporting',title:'Reporting wrongdoing',encounters:['public-witness','public-corruption']},
  {id:'fairness',title:'Fair treatment',encounters:['public-fair-treatment','garda-communication','garda-colleague','garda-supervision']}
 ];

@@ -5,7 +5,7 @@ Scope: homepage → setup → first decision, on both entrypoints. The purpose i
 ## Observed starting flow
 
 1. **Homepage — purpose present, action unclear.** [Captured homepage](design/ux/01-before-home.jpg). “Play” and “Play both sides” compete in navigation. A large title and repeated introductory sections separate the purpose from the first action. The existing paired images and perspective colours give useful context.
-2. **Setup — too much before the first situation.** [Captured setup](design/ux/02-before-setup.jpg). The player sees role selection, nine character cards and a catalogue of 14 situations together. No first situation is recommended. Starting requires scrolling past the character grid.
+2. **Setup — too much before the first situation.** [Captured setup](design/ux/02-before-setup.jpg). The earlier player view showed role selection, nine character cards and the full situation catalogue together. No first situation was recommended. Starting required scrolling past the character grid.
 3. **First decision — controls crowd the learning task.** [Captured decision](design/ux/03-before-decision.jpg). A perspective panel, two character panels and two score panels precede the actual scene. The same switch action appears repeatedly. The character name and scenario name are presented as competing identities.
 
 The screenshots were captured and inspected during this review at the same desktop viewport. The browser had existing progress; the revised homepage shows its resume point. The captures therefore include a returning-player state. DOM inspection confirmed the controls and reading order. Screenshots alone cannot establish accessibility conformance or show whether learners understand the material.
@@ -36,6 +36,6 @@ The full catalogue and supporting scores/help use native expandable sections. Ch
 - JavaScript syntax checks pass across 41 modules.
 - 88 Node checks pass across both entrypoints, including all existing branch, score, transfer and character checks and the new recommended-start journey.
 - [All 78 browser checks passed before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442), 26 each in Chromium, Firefox and WebKit, against implementation commit `5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d`.
-- Browser coverage includes direct starts, keyboard access to all 14 situations, feedback focus, optional scores, reconsidering an answer and advancing to the next stage. The existing responsive matrix covers both roles at widths from 320 to 2560 CSS pixels, enlarged Irish text, reading settings, touch, saved progress and recap.
+- Browser coverage includes direct starts, keyboard access to all 16 situations, feedback focus, optional scores, reconsidering an answer and advancing to the next stage. The existing responsive matrix covers both roles at widths from 320 to 2560 CSS pixels, enlarged Irish text, reading settings, touch, saved progress and recap.
 
 This is a reasoned interface improvement supported by inspection and automated checks. It does not establish a measured improvement in comprehension or an accessibility certification. Testing the first-play journey with public and Garda learners, including disabled users, remains the next research step.

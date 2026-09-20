@@ -23,6 +23,9 @@ The uploaded webarchive contained a minimal page titled `My-New-Life-in-Ireland`
 - Revised Children Act 2001 sections 60 and 61 support the youth scenarios. Adult presence and independent legal advice are distinct; the statutory exceptions are acknowledged.
 - DPP custody guidance supports legal advice, interpretation, medical care and notification. The game does not promise unrestricted personal phone use.
 - Fiosrú’s current official FAQ confirms its replacement of GSOC in April 2025, its normal 12-month complaint limit, possible late acceptance for good reason, and the ability to complain without knowing an officer’s name.
+- The same FAQ confirms that a person may complain about conduct they directly witnessed, even when they were not personally affected. The witness scenario distinguishes making a complaint from proving misconduct.
+- Current Garda public guidance identifies the Protected Disclosures Office for confidential reports by workers who reasonably believe information tends to show relevant work-related wrongdoing. It says anonymous disclosures are assessed but may be harder to investigate; the game therefore does not promise absolute anonymity.
+- Current Garda corruption signposting directs reports about corruption involving Garda members to Fiosrú. The envelope variation asks players to report observation and uncertainty rather than decide guilt.
 - The game does not give a universal detention limit. General online guides describe different maxima. The correct limit depends on the specific statutory basis, authorised extensions and calculation of detention time.
 - The game does not promise universal free representation. Users are directed to ask about the applicable legal-aid scheme and eligibility.
 
@@ -48,6 +51,6 @@ Before presenting the prototype as a relied-upon rights resource, arrange the le
 
 ## Verification performed
 
-JavaScript syntax and local entrypoint/import/font/icon checks; complete traversal of all 594 possible answer sequences; no unreachable nodes; branch changes discard abandoned choices; replay creates a fresh session; repeated or invalid choices cannot advance twice. These tests cover game logic and source references, not the legal correctness of the cited propositions.
+JavaScript syntax and local entrypoint/import/font/icon checks; complete traversal of 1,332 public-mode paths, 630 Garda-mode paths and 57,842 mixed-role paths; all 343 role-specific choices at 67 shared stages; no unreachable nodes; branch changes discard abandoned choices; replay creates a fresh session; repeated or invalid choices cannot advance twice. These tests cover game logic and source references, not the legal correctness of the cited propositions.
 
-Browser, device, screen-reader and moderated community testing have not been performed. Responsive CSS includes layouts for narrow screens and reduced-motion settings, but those provisions are not a claim of real-device certification.
+Automated browser checks cover Chromium, Firefox and WebKit at phone, tablet and desktop sizes, including keyboard, touch, enlarged Irish text, reflow, saved progress and recaps. Physical-device, screen-reader, disabled-user and moderated community testing have not been performed; automated checks are not a claim of accessibility certification.

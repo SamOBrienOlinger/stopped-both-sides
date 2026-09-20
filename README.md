@@ -58,7 +58,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 
 ## What you can explore
 
-- **14 shared situations and 59 stages**, each with perspectives for a member of the public and a Garda.
+- **16 shared situations and 67 stages**, each with perspectives for a member of the public and a Garda.
 - Public-rights situations about street questions, a bag search, arrest, the station, a young person and concerns about racism.
 - Garda situations about suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision.
 - **18 selectable LEGO-style characters**: nine for each side, with a randomly assigned character opposite you.
@@ -73,7 +73,7 @@ The original single-role practice remains available: six public situations with 
 
 ## How to play
 
-1. **Choose a side and start.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/). Select a perspective, then **Start this situation** to try the suggested street encounter. A character is ready for you; use **Choose a different character** if you wish. **Browse all 14 situations** opens the full catalogue.
+1. **Choose a side and start.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/). Select a perspective, then **Start this situation** to try the suggested street encounter. A character is ready for you; use **Choose a different character** if you wish. **Browse all 16 situations** opens the full catalogue.
 2. **Read the scene and choose a response.** Each choice has an explanation and a sourced learning point.
 3. **Change character or switch sides.** Use **Change character** at any stage, including feedback and recap. Switching sides puts you in the other character's place; you can change that character too. Both role answers and scores are retained.
 4. **Read the explanation, then take the next step.** Use **Next step** to continue, or **Try another answer** to reconsider. The active role's choice determines the next branch; the other answer remains available for comparison.
@@ -114,7 +114,7 @@ Scoring adapts the running points, feedback, final result and saved best-score a
 | --- | --- |
 | **Stage feedback** | 1 point for an appropriate response on the stated facts; 0 where the reasoning needs review. More than one response can earn a point. |
 | **Current route** | Separate scores for each role. A completed role result requires an answer in that role at every stage on the finished route. |
-| **Saved learning progress** | The best point earned at each unique stage, up to 59 per role. Repeating a mastered stage does not add points. |
+| **Saved learning progress** | The best point earned at each unique stage, up to 67 per role. Repeating a mastered stage does not add points. |
 | **Replay** | Latest and best completed results are retained. Revisiting a stage can improve learning progress. |
 
 There are no point penalties for taking time, switching perspective or requesting help. Scores reflect the reasoning taught in the exercise; they do not measure personal bias, reward avoiding arrest or establish that the game changes behaviour.
@@ -123,7 +123,7 @@ See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) for the rubric, b
 
 ## Accessibility and language
 
-Shared play supports **English and Gaeilge**, including all 14 situations, 59 stages, both roles' choices, feedback and recaps. Changing language preserves the active situation and scores. About, accessibility and source-reference sections remain in English and are labelled accordingly. The Irish translation is a draft learning aid awaiting independent language and legal review.
+Shared play supports **English and Gaeilge**, including all 16 situations, 67 stages, both roles' choices, feedback and recaps. Changing language preserves the active situation and scores. About, accessibility and source-reference sections remain in English and are labelled accordingly. The Irish translation is a draft learning aid awaiting independent language and legal review.
 
 Reading controls provide larger text, high contrast, increased spacing and reduced motion. The interface includes semantic controls, visible keyboard focus, status announcements, responsive layouts and locally hosted fonts. Role labels supplement the different perspective colours.
 
@@ -153,6 +153,7 @@ Key public-rights resources include:
 - [INAR — policing resources](https://inar.ie/?s=Police) and the [INAR / ICCL community and rights report on policing and racial discrimination (PDF)](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf).
 - [ICCL — Criminal Justice and Garda Powers guide, second edition (2014)](https://www.iccl.ie/resources/know-your-rights-criminal-justice-and-garda-powers-2nd-edition-june-2014/).
 - [DPP — Letters of rights](https://www.dppireland.ie/criminal-justice-system/letters-of-rights/), the [Legal Aid Board — Garda Station Legal Advice Revised Scheme](https://www.legalaidboard.ie/about-the-legal-aid-board/criminal-legal-aid/the-garda-station-legal-advice-revised-scheme/) and [Fiosrú — FAQs](https://www.fiosru.ie/about-us/faqs/).
+- [An Garda Síochána — Protected Disclosures](https://www.garda.ie/en/about-us/our-departments/governance-and-accountability/garda-professional-standards-unit/protected-disclosures.html) and [reporting bribery and corruption](https://www.garda.ie/en/about-us/organised-serious-crime/garda-national-economic-crime-bureau/confidential-line-for-the-reporting-of-bribery-and-corruption-gnecb.html).
 
 Revised legislation and Garda professional sources are recorded alongside the scenarios. Older publications are dated and are not treated as current authority for every procedure. The [content review record](docs/CONTENT-REVIEW.md) documents source access and editorial decisions; the [research approach](research/README.md), [bibliography](research/bibliography.md) and [scenario evidence map](research/scenario-evidence-map.md) explain the Garda learning foundations.
 
@@ -189,13 +190,13 @@ npm test
 | `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus every one of the 295 role-specific choices at 59 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration covers 1,332 original public-mode routes, 630 original Garda-mode routes and 57,842 mixed-role routes, plus every one of the 343 role-specific choices at 67 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
 The clearer-first-play implementation at commit [`5d8a9dd`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d) passed **88 Node checks locally** and [all 78 browser checks before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442): **26 each in Chromium, Firefox and WebKit**. These include recommended starts, keyboard catalogue access, character changes, retained counterparts, responsive layouts and enlarged Irish text. The [interface review](docs/UX-REVIEW.md) includes before/after captures and the limits of this verification.
 
 On `main`, the browser workflow waits for that commit's GitHub Pages publication and repeats the suite against the live site. [See browser runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) for deployment-specific results.
 
-The browser suite also completes all 14 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
+The browser suite also completes all 16 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 

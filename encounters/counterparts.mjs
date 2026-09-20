@@ -1,5 +1,5 @@
 const choice=(text,feedback,review=false,next)=>({text,feedback,review,...(next?{next}:{})});
-const pair=(scene,prompt,lesson,choices,refs=[])=>({scene,prompt,lesson,choices,refs});
+const pair=(scene,prompt,lesson,choices,refs=[],knowledge=null)=>({scene,prompt,lesson,choices,refs,...(knowledge?{knowledge}:{})});
 
 // Shared scenes are authored in the third person. They stay identical on a role switch.
 // Private thoughts are given to the learner, never presented as information Gardaí possess.
@@ -123,6 +123,66 @@ export const counterparts={
    'Make room to read, understand and correct an account, with appropriate support and advice. A signature is not a shortcut around an accuracy concern.',[
     choice('Pause, check the disputed wording and facilitate clarification, correction and advice.','The account should accurately reflect what Jamie means.'),
     choice('Ask for a signature now and promise that any misunderstanding can always be fixed later.','That pressures the child to endorse disputed wording.',true)],['garda:ethics'])
+ },
+ 'public-witness':{
+  'witness-start':pair('Alex, 24, arrives part-way through an encounter outside a closed shop. Cian steps backwards with his hands visible and one Garda pushes him firmly against a wall. A second Garda is nearby. Alex and the second Garda have different information about the same moment.',
+   'As the second Garda, what should guide your immediate response?',
+   'Make the situation safe and use independent professional judgement. Teamwork does not remove the responsibility to assess what you actually observed, the applicable power and the circumstances.',[
+    choice('Automatically defend the action because the person involved is your colleague.','Professional support does not require you to adopt a conclusion that the facts have not established.',true),
+    choice('Make the situation safe, observe carefully and assess the action against the facts and applicable powers.','This keeps immediate safety and independent judgement together.'),
+    choice('Announce immediately that your colleague has committed a criminal offence.','A serious concern may require action, but investigation and legal conclusions remain separate from your immediate professional responsibilities.',true)
+   ],['garda:ethics'],{know:'From where you stood, you did not see Cian strike, lunge at or threaten either Garda before the push.',think:'The use of force may require immediate professional response and later examination.',unknown:'Everything your colleague perceived at the exact moment and any eventual legal finding.'}),
+  'witness-record':pair('After the encounter, Alex and the second Garda separately decide how to describe the same moment. Each person is responsible for the accuracy of their own account.',
+   'Your colleague says, “Put in your note that he lunged at me first. That keeps this simple.” You did not see Cian lunge. What do you do?',
+   'You are responsible for the honesty and accuracy of your own account. Do not include something you did not observe, and do not omit material facts merely to avoid discomfort.',[
+    choice('Record your colleague’s version because they used the force.','You remain responsible for the accuracy of your own account.',true),
+    choice('Record honestly what you personally observed and do not add the claimed lunge.','Accurate records protect the public, colleagues, investigations and the integrity of policing.'),
+    choice('Leave the entire incident out of your record.','Omission can also undermine an accurate account. Avoiding the issue does not resolve it.',true)
+   ],['garda:ethics'],{know:'You did not see Cian lunge, and your colleague asked you to write that he did.',think:'The request raises a separate integrity concern in addition to the use of force.',unknown:'Why your colleague used force and what a full investigation will establish.'}),
+  'witness-evidence':pair('Alex preserves an original phone recording. Separately, the second Garda must preserve an honest account while facing pressure from a colleague.',
+   'Your colleague says, “We are supposed to back each other up. Do not turn this into something bigger.” What does professional support mean here?',
+   'Team loyalty does not require false or misleading information. State the concern clearly, refuse to conceal it and preserve an accurate record through the appropriate process.',[
+    choice('Agree with the account so that the team stays united.','Supporting false information would undermine both the record and professional integrity.',true),
+    choice('Say you cannot record something you did not see and preserve your factual account.','Professional challenge can protect the public, colleagues and the organisation from a more serious failure.'),
+    choice('Tell everyone in the station before deciding how to report it.','Possible wrongdoing should be handled through appropriate channels rather than informal circulation.',true)
+   ],['garda:ethics','garda:protectedDisclosures'],{know:'Your own observations and record are evidence, and the colleague has asked you to support a disputed account.',think:'The pressure may indicate possible concealment of wrongdoing.',unknown:'Whether others witnessed the request and how the full evidence will be assessed.'}),
+  'witness-standing':pair('Alex asks whether a public witness can report what happened. The second Garda separately asks whether the concern is merely a disagreement between colleagues or something that may require formal reporting.',
+   'You now have concerns about both the use of force and a request to record something you did not see. Is this necessarily just a personality disagreement?',
+   'An interpersonal grievance affecting only the reporting person is different from information reasonably believed to show work-related wrongdoing. The substance of the information matters more than the discomfort of reporting it.',[
+    choice('Yes. Anything involving two colleagues is only a personal grievance.','A workplace relationship issue can be a grievance, but possible work-related wrongdoing raises a different question.',true),
+    choice('Consider whether the information may show work-related wrongdoing and use the appropriate route.','You distinguish the substance of the concern from an ordinary personal disagreement.'),
+    choice('Report only if you can personally prove a criminal offence beyond doubt.','A reporting person is not expected to carry out the final investigation or determine criminal liability.',true)
+   ],['garda:protectedDisclosures','garda:ethics'],{know:'The concern arose in a work context and includes a request to enter information you believe is false.',think:'The information may amount to relevant work-related wrongdoing rather than a personal grievance.',unknown:'Whether the legal definition is met and what an authorised assessment will find.'}),
+  'witness-route':pair('Alex considers a complaint to Fiosrú. The second Garda separately considers the current internal route for reporting possible work-related wrongdoing.',
+   'Which route exists for a Garda worker who reasonably believes work-related wrongdoing may have occurred?',
+   'The Garda Protected Disclosures Office receives confidential disclosures from employees and other workers about relevant wrongdoing arising in a work-related context. Give a clear factual account and use the current policy rather than conducting your own secret investigation.',[
+    choice('Change your record anonymously and hope somebody notices.','That neither clearly reports the concern nor preserves the integrity of your own record.',true),
+    choice('Use the current Garda protected-disclosure arrangements and provide a clear factual account.','This uses the identified structure while separating observation, what you were told and what you believe needs examination.'),
+    choice('Investigate your colleague secretly before reporting anything.','Your role is to preserve and report the information appropriately, not conduct an unauthorised parallel investigation.',true)
+   ],['garda:protectedDisclosures','garda:ethics'],{know:'The Garda Protected Disclosures Office is the designated recipient for confidential reports of relevant work-related wrongdoing.',think:'A clear report through that structure is warranted.',unknown:'Whether the disclosure will meet every legal requirement or be referred for another form of examination.'}),
+  'witness-outcome':pair('Alex has submitted a factual complaint. The second Garda is preparing a confidential report and is worried that colleagues may work out who raised the concern. Neither report is a finding of guilt.',
+   'What is the careful way to understand confidentiality and responsibility here?',
+   'Protected disclosures are handled confidentially, but the game must not promise absolute anonymity. Current Garda guidance says anonymous reports can be assessed, though anonymity may restrict assessment or investigation. Reporting enables fair examination; it is not a finding of guilt.',[
+    choice('Assume nobody could ever discover your identity in any circumstances.','That overstates confidentiality. Current policy and law contain limited exceptions.',true),
+    choice('Use the current reporting route, give a factual account and check the official policy on confidentiality and protections.','This supports speaking up without making a promise the process cannot guarantee.'),
+    choice('Assume an anonymous report can never be considered.','Current Garda guidance says an anonymous report can be assessed, although it may be harder to examine.',true)
+   ],['garda:protectedDisclosures','garda:ethics'],{know:'The current process is confidential, with limited exceptions, and anonymous reports can be assessed.',think:'Speaking up and accurate reporting are part of professional responsibility.',unknown:'Whether others may infer the reporter’s identity and what outcome the assessment will reach.'})
+ },
+ 'public-corruption':{
+  'envelope-start':pair('Robin, 31, sees a business owner hand a sealed envelope to a Garda and hears, “That sorts everything between us.” A second Garda sees the same exchange from nearby. Nobody in the exercise knows what the envelope contains.',
+   'As the second Garda, what is the most accurate first response?',
+   'Preserve what you actually observed and distinguish it from the conclusion you suspect. A concerning exchange can justify reporting without establishing that corruption has occurred.',[
+    choice('Ignore the exchange because you cannot see inside the envelope.','Important information can warrant assessment even when it does not answer every question.',true),
+    choice('Record the words and actions you observed and preserve the information for an appropriate report.','This keeps the concern visible without exaggerating what the evidence proves.'),
+    choice('Announce that your colleague is guilty of corruption.','That converts a reasonable concern into a final conclusion before the facts are examined.',true)
+   ],['garda:ethics','garda:protectedDisclosures'],{know:'You saw the envelope change hands and heard the words quoted.',think:'The exchange may relate to the colleague’s duties and possible wrongdoing.',unknown:'What the envelope contained, the purpose of the exchange and whether an offence occurred.'}),
+  'envelope-route':pair('Robin considers reporting the exchange to Fiosrú. Separately, the Garda colleague tells the second Garda, “Do not put that meeting in anything. It has nothing to do with work.”',
+   'What should the second Garda do?',
+   'Do not falsify or conceal relevant information. Record what you know, avoid investigating secretly and use the current confidential or protected-disclosure route where you reasonably believe the information tends to show work-related wrongdoing.',[
+    choice('Leave the exchange out because your colleague asked you to.','A colleague’s request does not remove your responsibility for an honest account or an appropriate report.',true),
+    choice('Preserve a factual account and report the concern through the current protected-disclosure arrangements.','This separates observation from proof and sends the concern to the structure designed to assess it.'),
+    choice('Confront the business owner and conduct your own investigation.','An unauthorised parallel investigation can create risk and is not a substitute for reporting through the proper structure.',true)
+   ],['garda:protectedDisclosures','garda:ethics','public:gardaCorruption'],{know:'Your colleague asked you to omit the exchange, and a confidential reporting structure exists.',think:'The exchange and request to omit it may show work-related wrongdoing.',unknown:'The full facts, whether the concern qualifies as a protected disclosure and the eventual finding.'})
  },
  'public-fair-treatment':{
   'fair-start':pair('Amina, a Black Irish woman, has been questioned while other people nearby were not approached. Amina is free to leave and feels singled out. This brief account does not by itself determine the cause or lawfulness of the encounter.',

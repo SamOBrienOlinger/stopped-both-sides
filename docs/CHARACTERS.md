@@ -4,7 +4,7 @@ Players can choose from nine LEGO-style characters for each perspective. The 18 
 
 ## Play behaviour
 
-- Choose a side, then start the recommended situation with the ready-selected character. **Choose a different character** opens the optional picker; **Done** closes it. **Browse all 14 situations** opens the full catalogue.
+- Choose a side, then start the recommended situation with the ready-selected character. **Choose a different character** opens the optional picker; **Done** closes it. **Browse all 16 situations** opens the full catalogue.
 - A character for the opposite side is sampled uniformly from that side's nine characters when the encounter starts. Randomness does not depend on answers, scores or appearance.
 - Both characters appear at every stage, during feedback and in the recap. The same pair remains in place across stages and reloads.
 - **Change character** opens an inline picker. Choosing a character updates only the active side's name and picture and leaves the opposing character, stage, answers and scores intact.
@@ -44,7 +44,7 @@ Credits and design acknowledgements remain in the README. No LEGO affiliation or
 
 ## Illustrated decisions (September 2026)
 
-Every one of the 59 stages across all 14 situations now has an explicitly mapped scene in `encounters/scenes.mjs`. Three generated pose sheets retain all 18 original identities and natural skin tones, clothing, head coverings, glasses, wheelchair and cane. The scene combines the saved public and Garda characters with the relevant setting. Choosing an answer changes the visual moment and its caption; progressing changes the stage's setting, conversation, or context.
+Every one of the 67 stages across all 16 situations now has an explicitly mapped scene in `encounters/scenes.mjs`. Three generated pose sheets retain all 18 original identities and natural skin tones, clothing, head coverings, glasses, wheelchair and cane. The scene combines the saved public and Garda characters with the relevant setting. Choosing an answer changes the visual moment and its caption; progressing changes the stage's setting, conversation, or context.
 
 Pictures appear alongside the shared decision, in feedback on narrow screens, at every stage in the recap, and in original individual practice. Recap replay now preserves the complete cast. Original practice also recovers its pair from the saved route when available. Changing appearance deliberately remains possible without altering learning progress.
 
@@ -52,4 +52,4 @@ Private advice and independent reflections use separated backgrounds so the illu
 
 Scenes load from static local WebP assets: no runtime AI calls, extra service accounts or loading between generated images. The three pose sheets are fetched when an active scene first appears and reused thereafter; recap images load lazily. Fixed aspect ratios reserve their space. Labels and response captions remain ordinary accessible, translatable text. Reduced-motion and forced-colour settings are respected.
 
-The final prompts and references are recorded in [scene-art-prompts.md](scene-art-prompts.md). The scene tests cover all 81 possible pairs at all 59 stages, every answer's visual change, cast continuity and independent reflection boundaries. Browser coverage checks loaded assets, character bounds and horizontal reflow at phone, tablet and desktop widths.
+The final prompts and references are recorded in [scene-art-prompts.md](scene-art-prompts.md). The scene tests cover all 81 possible pairs at all 67 stages, every answer's visual change, cast continuity and independent reflection boundaries. Browser coverage checks loaded assets, character bounds and horizontal reflow at phone, tablet and desktop widths.

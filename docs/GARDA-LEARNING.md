@@ -16,10 +16,11 @@
 | What the numbers leave out | What can search records and training results actually demonstrate? |
 
 - Original Garda mode: eight situations, 33 decision points and 630 complete choice sequences.
+- Shared play adds **You saw what happened** and **The envelope**, with distinct Garda-colleague decisions about accurate records, professional challenge and protected disclosures.
 - Authored branching routes, including opportunities to reconsider a proposed action.
 - Source-linked feedback, a reflection question and a recap of the chosen path.
 - Same-facts identity comparisons; explicitly not psychological tests.
-- An annotated library of 35 sources, including 26 academic publications and nine legal, professional or community sources.
+- An annotated library of 36 sources, including 26 academic publications and ten legal, professional or community sources.
 - Source details distinguish findings, limitations, jurisdiction, review access and the design interpretation.
 - The current choice survives visits to the evidence or About page in the same open tab.
 - Learning scores with browser-local saving; no timer, account, analytics, uploads, incident collection or automated legal judgments.

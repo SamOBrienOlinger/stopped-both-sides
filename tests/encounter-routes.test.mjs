@@ -25,13 +25,24 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');assert.match(main.innerHTML,/href="#encounters\/public"><span class="perspective-button-label">Public perspective<\/span>/);assert.match(main.innerHTML,/href="#encounters\/garda"><span class="perspective-button-label">Garda perspective<\/span>/);
- for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+ for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,16);
   for(const e of Object.values(encounters)){
    action('paired-start',{id:e.id,role});assert.equal(state().role,role);assert.equal(state().nodeId,e.start);
    assert.equal((main.innerHTML.match(/data-action="paired-switch"/g)||[]).length,1);
    const before=state();action('paired-switch');assert.equal(state().nodeId,before.nodeId);assert.deepEqual(state().history,before.history);
   }
  }
+});
+test('The witness incidents show role-specific facts, concerns and unknowns without changing the shared scene',()=>{
+ action('paired-start',{id:'public-witness',role:'public'});
+ const shared=encounters['public-witness'].nodes['witness-start'].scene;
+ assert.ok(main.innerHTML.includes('class="knowledge-panel"'));
+ assert.match(main.innerHTML,/WHAT YOU KNOW/);assert.match(main.innerHTML,/WHAT YOU THINK/);assert.match(main.innerHTML,/WHAT YOU DO NOT KNOW/);
+ assert.ok(main.innerHTML.includes(encounters['public-witness'].nodes['witness-start'].views.public.knowledge.know));
+ action('paired-switch');assert.equal(encounters['public-witness'].nodes['witness-start'].scene,shared);
+ assert.ok(main.innerHTML.includes(encounters['public-witness'].nodes['witness-start'].views.garda.knowledge.know));
+ assert.ok(!main.innerHTML.includes(encounters['public-witness'].nodes['witness-start'].views.public.knowledge.know));
+ action('paired-start',{id:'public-corruption',role:'garda'});assert.match(main.innerHTML,/WHAT YOU DO NOT KNOW/);
 });
 test('The recommended start keeps the chosen role and avatar without requiring customisation',()=>{
  for(const role of roles){
@@ -78,11 +89,15 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
    action('paired-next');
   }
   assert.match(main.innerHTML,/YOUR LEARNING RECAP/);assert.match(main.innerHTML,/Best completed route/);assert.equal(state().history.length,steps);
+  if(['public-witness','public-corruption'].includes(e.id)){
+   assert.match(main.innerHTML,/THE FULLER PICTURE/);assert.match(main.innerHTML,/Accurate observation/);
+   assert.match(main.innerHTML,/It does not decide whether the conduct was unlawful or corrupt/);
+  }else assert.doesNotMatch(main.innerHTML,/class="fuller-picture"/);
   action('paired-switch');assert.ok(state().complete);assert.match(main.innerHTML,/data-action="paired-switch"/);
   const completed=state();action('paired-replay-role',{role:'public'});assert.deepEqual(state().cast,completed.cast);route(stateHash(completed));
   action('paired-revisit',{index:'0'});assert.equal(state().nodeId,e.start);assert.equal(state().history.length,0);
  }
- route('#progress');assert.match(main.innerHTML,/14 <span>\/ 14 situations completed/);assert.match(main.innerHTML,/Best completed:/);
+ route('#progress');assert.match(main.innerHTML,/16 <span>\/ 16 situations completed/);assert.match(main.innerHTML,/Best completed:/);
 });
 test('Original mode transfers a live selection into the same stage and records its score',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
@@ -103,7 +118,7 @@ test('Unknown routes and corrupted progress show a recovery view while saved rec
 });
 test('Clearing requires the in-page confirmation and resets the local record and resume point',()=>{
  route('#progress');assert.ok(memory.has(siteStorageKey));action('paired-clear');assert.match(main.innerHTML,/Clear this site’s saved progress/);assert.ok(memory.has(siteStorageKey));
- action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.match(main.innerHTML,/0 <span>\/ 14 situations completed/);
+ action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.match(main.innerHTML,/0 <span>\/ 16 situations completed/);
 });
 
 
@@ -130,7 +145,7 @@ test('Every stage and every choice render the selected cast and preserve the nex
   }
   assert.equal(seen.size,Object.keys(e.nodes).length);
  }
- assert.equal(stages,59);assert.equal(choices,295);
+ assert.equal(stages,67);assert.equal(choices,343);
 });
 
 

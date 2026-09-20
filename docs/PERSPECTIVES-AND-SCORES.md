@@ -1,6 +1,6 @@
 # Shared perspectives and learning scores
 
-Both sites now offer **Play both sides**, covering all 14 original situations and all 59 stages, with two authored role views per stage. The existing six public-rights situations and eight Garda situations remain available.
+Both sites now offer **Play both sides**, covering all 16 situations and all 67 stages, with two authored role views per stage. The eight public-rights/reporting situations and eight Garda situations remain available.
 
 ## Interaction contract
 
@@ -22,7 +22,7 @@ Appropriateness includes identifying actual legal requirements, using relevant e
 Two distinct results are shown:
 
 1. **Current route:** points out of the decisions answered by that role. A completed role score requires an answer in that role at every stage on the finished route. Latest and best completed results are retained per situation and role; percentages allow comparison between routes of different lengths.
-2. **Saved learning progress:** the best point earned at each unique stage per role, up to 59 points per role. Repeating a mastered stage never adds another point. Reconsidering a 0-point answer can improve that stage's best result to 1.
+2. **Saved learning progress:** the best point earned at each unique stage per role, up to 67 points per role. Repeating a mastered stage never adds another point. Reconsidering a 0-point answer can improve that stage's best result to 1.
 
 Revisiting a stage discards the subsequent active route and starts that stage's answers again. Previously learned points remain in the progress record. Replaying a lower-scoring route updates the latest completed result while retaining the best result. Simply viewing another perspective does not award points or mark its route complete.
 
@@ -53,6 +53,6 @@ Old links carry a version identifier; a breaking format or scoring change requir
 
 ## Verification and review
 
-Automated checks traverse 11,150 mixed-role choice routes across the shared graphs, inspect every role pairing at all 59 stages and verify original-mode transfers at every stage and recap. Focused checks cover double selection, score separation, best-score persistence, lower later results, partial-role completion, blocked storage, malformed data, cross-site link transfer, source visits, replay and clearing. The previous 594 public-mode and 630 Garda-mode paths remain covered.
+Automated checks traverse 57,842 mixed-role choice routes across the shared graphs, inspect every role pairing at all 67 stages and verify original-mode transfers at every stage and recap. Focused checks cover double selection, score separation, best-score persistence, lower later results, partial-role completion, blocked storage, malformed data, cross-site link transfer, source visits, replay and clearing. The public-mode suite covers 1,332 paths and the Garda-mode suite covers 630.
 
 Application-route checks use a minimal DOM adapter, not a real browser. Device, screen-reader, legal, Garda operational and community reviews remain outstanding. The academic and legal limitations already documented for the prototypes continue to apply. Further review should test whether the scoring encourages good reasoning without reducing nuanced rights and duties to a simplistic compliance reward.

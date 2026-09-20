@@ -16,15 +16,18 @@ test('Irish content covers every shared stage and both roles without altering ch
    assert.notEqual(translateText(node.scene,'ga'),node.scene);
    for(const role of ['public','garda']){const v=node.views[role],a=translated[role];assert.equal(a.length,2+2*v.choices.length);assert.ok(a.every(s=>typeof s==='string'&&s.trim().length>5));
     for(const s of [v.prompt,v.lesson,...v.choices.flatMap(c=>[c.text,c.feedback])])assert.notEqual(translateText(s,'ga'),s,`${e.id}/${node.id}: ${s}`);
+    if(v.knowledge)for(const key of ['know','think','unknown'])assert.notEqual(translateText(v.knowledge[key],'ga'),v.knowledge[key],`${e.id}/${node.id}/${role}/${key}`);
    }
   }
  }
- assert.equal(stages,59);
+ assert.equal(stages,67);
 });
 test('Translation preserves routes, semantic attributes, source language and escaped content',()=>{
  const html='<section aria-labelledby="title"><h1 id="title">Scores &amp; progress</h1><button data-action="paired-start" data-id="garda-street" aria-label="Play as the Garda: A hunch on the street">Play as the Garda</button><details><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate><li><a href="https://example.org/?a=1&amp;b=2" target="_blank">A hunch on the street</a></li></ul></details><p>Why this matters</p></section>';
  const out=translateHTML(html,'ga');assert.match(out,/Scóir agus dul chun cinn/);assert.match(out,/data-action="paired-start" data-id="garda-street"/);assert.match(out,/aria-label="Imir mar Gharda: Amhras ar an tsráid"/);assert.match(out,/>A hunch on the street<\/a>/);assert.match(out,/a=1&amp;b=2/);assert.match(out,/>Cén fáth a bhfuil sé seo tábhachtach<\/p>/);assert.equal(translateHTML(html,'en'),html);
  assert.equal(translateHTML('<p>&lt;script&gt;&amp;"</p>','ga'),'<p>&lt;script&gt;&amp;&quot;</p>');
+ assert.equal(translateText('THE FULLER PICTURE','ga'),'AN PICTIÚR NÍOS IOMLÁINE');
+ assert.notEqual(translateText('This recap assesses whether you separated fact from inference, preserved evidence and used an appropriate reporting channel. It does not decide whether the conduct was unlawful or corrupt.','ga'),'This recap assesses whether you separated fact from inference, preserved evidence and used an appropriate reporting channel. It does not decide whether the conduct was unlawful or corrupt.');
 });
 test('Invalid reading settings are normalised, blocked storage remains usable, and reading data never overwrites scores',()=>{
  assert.deepEqual(normalisePreferences({language:'javascript:',size:999,contrast:'no',spacing:'true'}),defaults);

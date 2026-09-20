@@ -1,6 +1,6 @@
 # Bibliography
 
-Review date: 7 September 2026. 35 sources, including 26 academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.
+Review date: 7 September 2026. 36 sources, including 26 academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.
 
 ## Irish law and professional practice
 
@@ -13,6 +13,8 @@ Review date: 7 September 2026. 35 sources, including 26 academic publications. T
 - **An Garda Síochána (Public edition listed 2022).** [Garda Decision Making Model](https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf). *Garda policy document*. Professional framework; Republic of Ireland. Review access: Decision stages and rights provisions reviewed. Source key: `model`.
 
 - **An Garda Síochána (2020 public edition).** [Code of Ethics for the Garda Síochána](https://www.garda.ie/en/about-us/publications/policy-documents/code-of-ethics-2020.pdf). *Code of Ethics*. Professional framework; Republic of Ireland. Review access: Relevant commitments reviewed. Source key: `ethics`.
+
+- **An Garda Síochána (Current page checked 2026).** [Protected Disclosures](https://www.garda.ie/en/about-us/our-departments/governance-and-accountability/garda-professional-standards-unit/protected-disclosures.html). *Garda public guidance*. Professional reporting guidance; Republic of Ireland. Review access: Current public guidance reviewed. Source key: `protectedDisclosures`.
 
 - **European Union Agency for Fundamental Rights (2018).** [Preventing unlawful profiling today and in the future: a guide](https://fra.europa.eu/en/publication/2018/preventing-unlawful-profiling-today-and-future-guide). *FRA guide*. European guidance; European Union. Review access: Guide overview and main principles reviewed. Source key: `fraProfiling`.
 

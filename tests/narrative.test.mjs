@@ -3,7 +3,26 @@ import assert from 'node:assert/strict';
 import {encounters,roles} from '../encounters/catalog.mjs';
 import {characters} from '../encounters/characters.mjs';
 import {personalizeText,personalizeHTML,storyIdentity,characterContext} from '../encounters/narrative.mjs';
-import {translateText,translateHTML} from '../locales/translate.mjs';
+import {gaContent,translateText,translateHTML} from '../locales/translate.mjs';
+import {scenarios} from '../data.mjs';
+
+test('Witness and affected person stay distinct for every avatar in English and Irish',()=>{
+ const e=encounters['public-witness'],original=scenarios.find(s=>s.id==='witness');
+ const strings=value=>typeof value==='string'?[value]:value&&typeof value==='object'?Object.values(value).flatMap(strings):[];
+ const texts=[...strings(e.nodes),...strings(original.nodes),...strings(gaContent[e.id].nodes)];
+ assert.ok(!characters.public.some(c=>c.name==='Cian'),'The affected person must not share an avatar name');
+ assert.ok(e.nodes[e.start].scene.includes('Cian'));
+ for(const text of texts)assert.doesNotMatch(text,/\bDaniel\b/,'The former affected-person name must not remain in witness content');
+ for(const lang of ['en','ga'])for(const character of characters.public){
+  const cast={public:character.id,garda:'garda-5'};
+  const scene=personalizeText(translateText(e.nodes[e.start].scene,lang),e,cast);
+  assert.ok(scene.includes(character.name));assert.ok(scene.includes('Cian'));
+  for(const source of texts){
+   const translated=translateText(source,lang),out=personalizeHTML(`<p>${translated}</p>`,e,cast);
+   assert.equal((out.match(/\bCian\b/g)||[]).length,(translated.match(/\bCian\b/g)||[]).length);
+  }
+ }
+});
 
 test('Noor and Aisling have one identity in the reported street situation',()=>{
  const e=encounters['garda-street'],cast={public:'public-2',garda:'garda-5'};

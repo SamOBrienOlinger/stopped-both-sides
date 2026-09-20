@@ -90,7 +90,24 @@ test('Broken storage, invalid links and malformed transferred records recover sa
 });
 test('Both shared perspectives read the original content directly and all imports exist',()=>{
  assert.equal(publicData.scenarios,localData.scenarios);assert.equal(publicData.sources,localData.sources);
- assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,59);
+ assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,67);
  const base=new URL('../encounters/',import.meta.url);
  for(const file of readdirSync(base).filter(f=>f.endsWith('.mjs'))){const content=readFileSync(new URL(file,base),'utf8');for(const m of content.matchAll(/from ['"](\.\/[^'"]+)['"]/g))assert.doesNotThrow(()=>readFileSync(new URL(m[1],base)));}
+});
+test('Witnessing and corruption situations keep facts, concerns and unknowns separate for both roles',()=>{
+ for(const id of ['public-witness','public-corruption']){
+  const encounter=encounters[id];assert.ok(encounter);
+  for(const stage of Object.values(encounter.nodes))for(const role of roles){
+   const knowledge=stage.views[role].knowledge;
+   assert.deepEqual(Object.keys(knowledge),['know','think','unknown']);
+   assert.ok(Object.values(knowledge).every(value=>value.length>20));
+  }
+ }
+ const witness=encounters['public-witness'];
+ assert.ok(witness.nodes['witness-standing'].views.public.refs.includes('public:fiosru'));
+ assert.ok(witness.nodes['witness-route'].views.garda.refs.includes('garda:protectedDisclosures'));
+ assert.notEqual(witness.nodes['witness-start'].views.public.knowledge.know,witness.nodes['witness-start'].views.garda.knowledge.know);
+ const corruption=encounters['public-corruption'];
+ assert.ok(corruption.nodes['envelope-route'].views.public.refs.includes('public:gardaCorruption'));
+ assert.ok(corruption.nodes['envelope-route'].views.garda.refs.includes('garda:protectedDisclosures'));
 });

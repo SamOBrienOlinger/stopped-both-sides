@@ -36,6 +36,12 @@ main{padding-top:1.75rem}
 .decision-context .eyebrow{margin-bottom:.6rem;font-size:.8125rem}
 .decision-context h1{font-size:clamp(1.7rem,3.2vw,2.35rem);line-height:1.2;margin-bottom:.85rem}
 .decision-context .story-text{max-width:85ch;font-size:1.0625rem;line-height:1.65;margin-bottom:0;color:var(--ink)}
+.knowledge-panel{margin-top:1.15rem;padding-top:1rem;border-top:1px solid var(--line)}
+.knowledge-panel>h2{font-size:1rem;line-height:1.4;margin:0 0 .75rem;color:var(--deep)}
+.knowledge-panel>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
+.knowledge-panel section{padding:.85rem;border:1px solid var(--line);border-radius:.75rem;background:var(--paper,#fff)}
+.knowledge-panel h3{font-size:.75rem;line-height:1.35;letter-spacing:.055em;margin:0 0 .4rem;color:var(--deep)}
+.knowledge-panel p{font-size:.9375rem;line-height:1.55;margin:0;color:var(--ink)}
 .variation-notice{padding:.75rem 1rem;border:1px solid var(--control);border-radius:.65rem;background:var(--paper,#fff);margin:0 0 1rem;max-width:85ch}
 .variation-notice strong{color:var(--deep);font-size:1rem}
 .variation-notice p{font-size:.9375rem;line-height:1.5;margin:.25rem 0 0}
@@ -62,6 +68,13 @@ main{padding-top:1.75rem}
 .encounter-scene figcaption{padding:.65rem .8rem}
 .summary-heading{margin:1.5rem auto;max-width:56rem;text-align:left}
 .summary-heading h1{font-size:clamp(1.9rem,4vw,3rem)}
+.fuller-picture{width:100%;max-width:64rem;margin:0 auto 1.25rem;padding:clamp(1.15rem,3vw,2rem);border:2px solid var(--deep);border-radius:1rem;background:var(--pale)}
+.fuller-picture h2{font-size:clamp(1.45rem,3vw,2rem);margin:.25rem 0 .5rem}
+.fuller-picture>p{max-width:75ch}
+.fuller-picture ol{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;padding:0;margin:1.1rem 0}
+.fuller-picture li{display:flex;align-items:center;gap:.6rem;padding:.65rem .8rem;border:1px solid var(--line);border-radius:999px;background:var(--paper,#fff);font-weight:700}
+.fuller-picture li:not(:last-child)::after{content:'→';margin-left:.25rem;color:var(--muted)}
+.fuller-picture-note{margin-bottom:0;font-size:.9375rem;line-height:1.6;color:var(--muted)}
 .recap-takeaways,.recap-scores,.recap-review-title,.paired-recap,.facilitator-note{width:100%;max-width:64rem;margin-inline:auto}
 .recap-takeaways li{margin-bottom:.75rem;max-width:85ch}
 .recap-next{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.25rem}
@@ -93,6 +106,6 @@ main{padding-top:1.75rem}
 .legacy-perspective .text-button{min-height:44px}
 @media(min-width:42rem){.character-options{grid-template-columns:repeat(5,minmax(0,1fr))}.recap-overview{grid-template-columns:minmax(12rem,.7fr) minmax(0,1.4fr)}.recap-overview .encounter-scene{max-width:none}.setup-character>.character-image{width:4rem}}
 @media(min-width:56.25rem){.paired-game{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)}.paired-game>.story.story--illustrated{position:sticky;top:1rem}}
-@media(max-width:41.25rem){main{padding-top:1.25rem}.header nav{gap:.2rem}.header nav a,.header nav .utility-settings{padding:.4rem .55rem}.perspective-casts p{font-size:.875rem}.play-toolbar~.encounter-cast .character-image{width:2.5rem}.play-toolbar~.encounter-cast .cast-character{padding:0;gap:.4rem}.play-toolbar~.encounter-cast .cast-character strong{font-size:.875rem}.play-toolbar.perspective-bar{padding:.6rem 0}.play-toolbar .character-actions{width:100%;align-items:center}.play-toolbar .character-actions .primary{flex:1}.play-toolbar .character-actions .text-button{flex:0 1 7rem}.paired-recap .summary-item{padding:1rem}.recap-next{display:grid;grid-template-columns:minmax(0,1fr)}.scene-cast-names strong{font-size:.8125rem}.scene-cast-names>span>span{font-size:.75rem}}
-@media(forced-colors:active){.variation-notice,.decision-context,.recap-scores,.score-mechanics,.topic-filter{background:Canvas;color:CanvasText;border-color:CanvasText}.topic-filter[aria-pressed=true]{outline:2px solid Highlight;outline-offset:-4px;background:Canvas;color:CanvasText}}
+@media(max-width:41.25rem){main{padding-top:1.25rem}.header nav{gap:.2rem}.header nav a,.header nav .utility-settings{padding:.4rem .55rem}.perspective-casts p{font-size:.875rem}.play-toolbar~.encounter-cast .character-image{width:2.5rem}.play-toolbar~.encounter-cast .cast-character{padding:0;gap:.4rem}.play-toolbar~.encounter-cast .cast-character strong{font-size:.875rem}.play-toolbar.perspective-bar{padding:.6rem 0}.play-toolbar .character-actions{width:100%;align-items:center}.play-toolbar .character-actions .primary{flex:1}.play-toolbar .character-actions .text-button{flex:0 1 7rem}.knowledge-panel>div{grid-template-columns:1fr}.fuller-picture ol{display:grid}.fuller-picture li{justify-content:space-between;border-radius:.7rem}.paired-recap .summary-item{padding:1rem}.recap-next{display:grid;grid-template-columns:minmax(0,1fr)}.scene-cast-names strong{font-size:.8125rem}.scene-cast-names>span>span{font-size:.75rem}}
+@media(forced-colors:active){.variation-notice,.decision-context,.knowledge-panel section,.fuller-picture,.fuller-picture li,.recap-scores,.score-mechanics,.topic-filter{background:Canvas;color:CanvasText;border-color:CanvasText}.topic-filter[aria-pressed=true]{outline:2px solid Highlight;outline-offset:-4px;background:Canvas;color:CanvasText}}
 @media print{.paired-game>.story.story--illustrated{position:static}.paired-recap{max-width:none}.recap-detail:not([open])>*{display:block}.recap-detail>summary{display:none}}
