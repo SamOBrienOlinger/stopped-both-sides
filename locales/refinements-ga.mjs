@@ -2,6 +2,8 @@
 export const refinementIrish={
  'Your character':'Do charachtar',
  'Other character':'An carachtar eile',
+ 'Public witness':'Finné ón bpobal',
+ 'Second Garda':'An dara Garda',
  'Choose your character. Their name and picture will follow the situation.':'Roghnaigh do charachtar. Beidh an t-ainm agus an pictiúr céanna sa chás.',
  'Your chosen characters stay with the situation. Changing a character updates their name and picture throughout the story.':'Fanann na carachtair a roghnaíonn tú leis an gcás. Nuair a athraíonn tú carachtar, athraíonn an t-ainm agus an pictiúr ar fud an scéil.',
  'Your avatar':'D’avatar',

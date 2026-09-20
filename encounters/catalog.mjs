@@ -18,10 +18,11 @@ export const encounters=Object.fromEntries(roles.flatMap(origin=>{
    const original={prompt:node.prompt,lesson:node.lesson,choices:node.choices.map(c=>({...c,points:c.review?0:1})),refs,...(node.knowledge?{knowledge:node.knowledge}:{})};
    const counterpart={prompt:p.prompt,lesson:p.lesson,choices:p.choices.map(c=>({...c,next:c.next||fallback,points:c.review?0:1})),refs,...(p.knowledge?{knowledge:p.knowledge}:{})};
    const people=id==='garda-description'&&nodeId==='description-power'?{public:'Person matching the fuller description'}:undefined;
-   return [nodeId,{id:nodeId,title:node.title,scene:p.scene,people,views:{[origin]:original,[opposite]:counterpart}}];
+   return [nodeId,{id:nodeId,title:p.title||node.title,scene:p.scene,people,views:{[origin]:original,[opposite]:counterpart}}];
   }));
-  const publicCounterpart=origin==='public'&&(s.id==='witness'||s.id==='corruption')?'Second Garda at the scene':s.id==='custody'?'Garda in the custody team':'Garda involved in the encounter';
-  return [id,{id,origin,originalId:s.id,title:s.title,description:s.description,start:s.start,nodes,people:{public:origin==='public'?s.person:names[s.id],garda:origin==='garda'?s.person:publicCounterpart},minutes:s.minutes}];
+  const reporting=origin==='public'&&(s.id==='witness'||s.id==='corruption');
+  const publicCounterpart=reporting?'Second Garda at the scene':s.id==='custody'?'Garda in the custody team':'Garda involved in the encounter';
+  return [id,{id,origin,originalId:s.id,title:s.title,description:s.description,start:s.start,nodes,roleLabels:reporting?{public:'Public witness',garda:'Second Garda'}:roleLabels,people:{public:origin==='public'?s.person:names[s.id],garda:origin==='garda'?s.person:publicCounterpart},minutes:s.minutes}];
  });
 }));
 export const stageCount=Object.values(encounters).reduce((n,e)=>n+Object.keys(e.nodes).length,0);

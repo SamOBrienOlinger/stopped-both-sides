@@ -48,6 +48,9 @@ async function knowledge(page,language,{focused=false}={}){
   expect(bounds.y,'changed knowledge begins near the top, not below the choices').toBeLessThan(80);
  }
  const scene=page.locator('.story>.encounter-scene');
+ await expect(scene.locator('.scene-cast-names [data-role-tone="public"]>span')).toHaveText(translateText('Public witness',language));
+ await expect(scene.locator('.scene-cast-names [data-role-tone="garda"]>span')).toHaveText(translateText('Second Garda',language));
+ if(state.nodeId==='witness-evidence')await expect(page.locator('#scene-title')).toHaveText(translateText('Preserving the evidence',language));
  await expect(scene).toHaveAttribute('data-scene-mode',state.nodeId===encounters[state.id].start?'together':'separate');
  if(state.nodeId!==encounters[state.id].start){
   await expect(scene.locator('.scene-location--public')).toHaveCount(1);
