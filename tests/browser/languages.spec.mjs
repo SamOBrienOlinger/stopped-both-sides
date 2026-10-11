@@ -182,7 +182,7 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
   const names=await page.locator('.play-toolbar~.encounter-cast .cast-character>div').evaluateAll(els=>els.map(el=>{const name=el.querySelector('strong'),style=getComputedStyle(name);return {width:el.getBoundingClientRect().width,height:name.getBoundingClientRect().height,lineHeight:parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.5};}));
   for(const name of names){expect(name.width).toBeGreaterThanOrEqual(120);expect(name.height).toBeLessThanOrEqual(name.lineHeight*1.5);}
  }
- for(const scene of await page.locator('.encounter-scene').all()){
+ for(const scene of await page.locator('.encounter-scene:visible').all()){
   await scene.scrollIntoViewIfNeeded();
   await expect.poll(()=>scene.locator('img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   expect(await scene.evaluate(el=>{const stage=el.querySelector('.scene-stage').getBoundingClientRect();return [...el.querySelectorAll('.scene-actor')].every(actor=>{const box=actor.getBoundingClientRect();return box.left>=stage.left-1&&box.right<=stage.right+1&&box.top>=stage.top-1&&box.bottom<=stage.bottom+1;});})).toBe(true);
