@@ -69,9 +69,12 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   announce(!preferences.available?'Preferences apply for this visit; browser saving is unavailable.':languageChanged?'Language changed. Your progress is unchanged.':'Reading preferences applied. Your progress is unchanged.');
  }
  function busy(value,message=''){
-  dialog?.querySelector?.('#reading-form')?.setAttribute?.('aria-busy',String(value));
-  const submit=dialog?.querySelector?.('[type="submit"]');if(submit)submit.disabled=value;
+  const submit=dialog?.querySelector?.('[type="submit"]');
   const status=dialog?.querySelector?.('#reading-status');if(status)status.textContent=translateText(message,dialogLanguage);
+  // Disabling the focused button can blur to the page without a focusin event.
+  // Keep keyboard events inside the fallback dialog while the download runs.
+  if(value&&submit===document.activeElement)dialog?.querySelector?.('.settings-actions [data-reading-close]')?.focus?.({preventScroll:true});
+  if(submit)submit.disabled=value;
  }
  function save(value){
   const next={...value,language:normaliseLanguage(value.language)},generation=++loadGeneration;

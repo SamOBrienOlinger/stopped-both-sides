@@ -175,6 +175,18 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  expect(await first.getAttribute('aria-label')).toContain(translateText('Play this situation',language));
  await first.click();await expect(page.locator('.paired-game')).toBeVisible();
  await page.locator('[data-action="paired-answer"]').first().click();await fits(page,'game');
+ if(width===320){
+  const actions=page.locator('.play-toolbar .character-actions');
+  const available=(await actions.boundingBox()).width;
+  for(const button of await actions.locator(':scope > button').all())expect((await button.boundingBox()).width).toBeGreaterThanOrEqual(available-2);
+  const names=await page.locator('.play-toolbar~.encounter-cast .cast-character>div').evaluateAll(els=>els.map(el=>{const name=el.querySelector('strong'),style=getComputedStyle(name);return {width:el.getBoundingClientRect().width,height:name.getBoundingClientRect().height,lineHeight:parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.5};}));
+  for(const name of names){expect(name.width).toBeGreaterThanOrEqual(120);expect(name.height).toBeLessThanOrEqual(name.lineHeight*1.5);}
+ }
+ for(const scene of await page.locator('.encounter-scene').all()){
+  await scene.scrollIntoViewIfNeeded();
+  await expect.poll(()=>scene.locator('img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+  expect(await scene.evaluate(el=>{const stage=el.querySelector('.scene-stage').getBoundingClientRect();return [...el.querySelectorAll('.scene-actor')].every(actor=>{const box=actor.getBoundingClientRect();return box.left>=stage.left-1&&box.right<=stage.right+1&&box.top>=stage.top-1&&box.bottom<=stage.bottom+1;});})).toBe(true);
+ }
  await page.screenshot({path:testInfo.outputPath(`${language}-${width}-feedback.png`),fullPage:true});
  await openSettings(page);await fits(page,'dialog');
  const targets=await page.locator('#reading-dialog button,#reading-dialog select,#reading-dialog .settings-check').evaluateAll(els=>els.map(el=>({text:el.textContent.slice(0,40),width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})));
@@ -314,8 +326,12 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  const before=current(page),record=await saved(page,'public');let release,held=false;
  await page.route('**/fr-content.mjs*',async route=>{held=true;await new Promise(resolve=>{release=resolve;});await route.continue();});
  await openSettings(page);await page.locator('#reading-language').selectOption('fr');
+ await page.locator('#reading-form [type="submit"]').focus();
  await page.locator('#reading-form [type="submit"]').click();
  await expect.poll(()=>held).toBe(true);await expect(page.locator('#reading-status')).toContainText('Loading');
+ expect(await page.locator('#reading-status').evaluate(status=>status.closest('[aria-busy="true"]')===null)).toBe(true);
+ await expect(page.locator('#reading-form [type="submit"]')).toBeDisabled();
+ await expect(page.locator('#reading-dialog .settings-actions [data-reading-close]')).toBeFocused();
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.

@@ -43,5 +43,22 @@ html:lang(ar) :is(p,li,button,summary,select){line-height:1.75}
 [dir="rtl"] .progress-number{direction:ltr;unicode-bidi:isolate;text-align:right}
 @media(min-width:640px){[dir="rtl"] :is(.cast-character,.play-toolbar~.encounter-cast .cast-character){text-align:start}}
 @media(max-width:639px){[dir="rtl"] .header-actions{margin-inline-start:0}}
+/* Longer translated labels need a full row at phone widths, especially with
+   enlarged text. Keep each cast portrait beside an uncompressed name block. */
+@media(max-width:639px){
+ html:not(:lang(en)):not(:lang(ga)) .play-toolbar.perspective-bar>.character-actions{
+  display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;
+  inline-size:100%;max-inline-size:100%;gap:.5rem
+ }
+ html:not(:lang(en)):not(:lang(ga)) .play-toolbar .character-actions>button{
+  inline-size:100%;min-inline-size:0;text-align:center
+ }
+ html:not(:lang(en)):not(:lang(ga)) .play-toolbar~.encounter-cast{
+  grid-template-columns:minmax(0,1fr)
+ }
+ html:not(:lang(en)):not(:lang(ga)) .play-toolbar~.encounter-cast .cast-character{
+  text-align:start
+ }
+}
 @media(prefers-reduced-motion:reduce){.settings-content{scroll-behavior:auto}}
 @media(forced-colors:active){#reading-status:not(:empty){border-color:CanvasText;background:Canvas;color:CanvasText}.settings-field select{border-color:ButtonText}}
