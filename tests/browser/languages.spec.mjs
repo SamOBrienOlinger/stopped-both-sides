@@ -179,8 +179,9 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
   const actions=page.locator('.play-toolbar .character-actions');
   const available=(await actions.boundingBox()).width;
   for(const button of await actions.locator(':scope > button').all())expect((await button.boundingBox()).width).toBeGreaterThanOrEqual(available-2);
-  const names=await page.locator('.play-toolbar~.encounter-cast .cast-character>div').evaluateAll(els=>els.map(el=>{const name=el.querySelector('strong'),style=getComputedStyle(name);return {width:el.getBoundingClientRect().width,height:name.getBoundingClientRect().height,lineHeight:parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.5};}));
-  for(const name of names){expect(name.width).toBeGreaterThanOrEqual(120);expect(name.height).toBeLessThanOrEqual(name.lineHeight*1.5);}
+  const castGroup=page.locator('.play-toolbar~.encounter-cast'),castWidth=(await castGroup.boundingBox()).width;
+  const names=await castGroup.locator('.cast-character').evaluateAll(els=>els.map(el=>{const name=el.querySelector('strong'),style=getComputedStyle(name);return {width:el.getBoundingClientRect().width,height:name.getBoundingClientRect().height,lineHeight:parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.5};}));
+  for(const name of names){expect(name.width).toBeGreaterThanOrEqual(castWidth-2);expect(name.height).toBeLessThanOrEqual(name.lineHeight*1.5);}
  }
  for(const scene of await page.locator('.encounter-scene:visible').all()){
   await scene.scrollIntoViewIfNeeded();
