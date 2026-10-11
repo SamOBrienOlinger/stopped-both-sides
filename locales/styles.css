@@ -39,7 +39,10 @@ html:lang(ar) :is(p,li,button,summary,select){line-height:1.75}
    must not be mirrored when the surrounding document changes direction. */
 .scene-stage,.character-image,.scene-sprite{direction:ltr}
 [dir="rtl"] .scene-setting{direction:rtl}
-[dir="rtl"] .scene-cast-names{direction:rtl}
+/* Captions follow the fixed public/Garda artwork positions. Each caption's
+   text keeps Arabic direction without reversing the pair's visual order. */
+[dir="rtl"] .scene-cast-names{direction:ltr}
+[dir="rtl"] .scene-cast-names>span{direction:rtl}
 [dir="rtl"] .progress-number{direction:ltr;unicode-bidi:isolate;text-align:right}
 @media(min-width:640px){[dir="rtl"] :is(.cast-character,.play-toolbar~.encounter-cast .cast-character){text-align:start}}
 @media(max-width:639px){[dir="rtl"] .header-actions{margin-inline-start:0}}

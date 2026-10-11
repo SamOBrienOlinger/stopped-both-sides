@@ -187,6 +187,12 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
   await scene.scrollIntoViewIfNeeded();
   await expect.poll(()=>scene.locator('img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   expect(await scene.evaluate(el=>{const stage=el.querySelector('.scene-stage').getBoundingClientRect();return [...el.querySelectorAll('.scene-actor')].every(actor=>{const box=actor.getBoundingClientRect();return box.left>=stage.left-1&&box.right<=stage.right+1&&box.top>=stage.top-1&&box.bottom<=stage.bottom+1;});})).toBe(true);
+  const publicCaption=await scene.locator('.scene-cast-names>[data-role-tone="public"]').boundingBox();
+  const gardaCaption=await scene.locator('.scene-cast-names>[data-role-tone="garda"]').boundingBox();
+  const publicActor=await scene.locator('[data-scene-role="public"]').boundingBox();
+  const gardaActor=await scene.locator('[data-scene-role="garda"]').boundingBox();
+  expect(publicCaption.x,'Public caption follows the public figure on the left').toBeLessThan(gardaCaption.x);
+  expect(publicActor.x,'Artwork keeps its original public/Garda placement').toBeLessThan(gardaActor.x);
  }
  await page.screenshot({path:testInfo.outputPath(`${language}-${width}-feedback.png`),fullPage:true});
  await openSettings(page);await fits(page,'dialog');
