@@ -65,7 +65,7 @@ The guiding principles are clear information, evidence-based reasoning, dignity 
 - Character changes and perspective switching at each stage, preserving the situation and each role's answers.
 - Immediate explanations, source links and a final comparison of both perspectives.
 - Saved learning progress, separate role scores, replay and a resume point.
-- English and Gaeilge in shared play, with adjustable reading settings.
+- Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese throughout both game modes and information pages, alongside English and existing Gaeilge shared play, with adjustable reading settings.
 - Paired hero images with **Public perspective** and **Garda perspective** controls centred at the top on desktop and given their own row above the scenes on small screens. The scenes remain side by side on phones, tablets and desktops, with slightly overlapping edges.
 - Clearer action buttons: “Choose this side” on each hero, visible selected-role text, distinct primary and secondary styles, and consistent keyboard focus and touch targets. See the [button design notes](docs/button-design.md).
 
@@ -102,7 +102,7 @@ Your character and the person on the other side appear throughout the encounter,
 | **Reload, resume or switch sites** | The saved encounter keeps both characters alongside your progress. |
 | **Replay a shared situation** | Replaying from the recap keeps both selected characters. Starting a new situation chooses a random counterpart. |
 
-The selected character’s name is used throughout the situation, choices, explanations and recap in English and Irish. Changing a character updates both name and picture. Scenario ages and teaching facts remain fixed, including explicit identity comparisons; choices, legal responsibilities and scores do not change. Older saved encounters and links remain readable. In original single-role practice, **Change character** opens the matching shared situation at the same stage and preserves the selected answer.
+The selected character’s name is used throughout the situation, choices, explanations and recap in every supported language. Changing a character updates both name and picture. Scenario ages and teaching facts remain fixed, including explicit identity comparisons; choices, legal responsibilities and scores do not change. Older saved encounters and links remain readable. In original single-role practice, **Change character** opens the matching shared situation at the same stage and preserves the selected answer.
 
 See the [character guide](docs/CHARACTERS.md) for persistence, compatibility and artwork details.
 
@@ -123,13 +123,15 @@ See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) for the rubric, b
 
 ## Accessibility and language
 
-Shared play supports **English and Gaeilge**, including all 14 situations, 59 stages, both roles' choices, feedback and recaps. Changing language preserves the active situation and scores. About, accessibility and source-reference sections remain in English and are labelled accordingly. The Irish translation is a draft learning aid awaiting independent language and legal review.
+**Portuguese, Arabic, Polish, Romanian, French, Spanish and Mandarin Chinese in Simplified script** cover both game modes and the information pages, including all 14 shared situations, 59 stages, choices, feedback and recaps. Open **Language & reading** from the header or footer, choose a native language name and select **Apply preferences**. The locally hosted translations include accessible descriptions; Arabic uses right-to-left text. Changing language keeps characters, answers, stage, role and scores in place. A failed language download can be retried without losing progress, and cancelling a pending change prevents it from applying later.
+
+English remains available. Existing **Gaeilge** shared play is preserved: its reference pages remain explicitly labelled English, and selecting Irish during original practice opens the matching shared situation. Published source names retain their original form. All translations remain learning aids awaiting independent language and legal review.
 
 Reading controls provide larger text, high contrast, increased spacing and reduced motion. The interface includes semantic controls, visible keyboard focus, status announcements, responsive layouts and locally hosted fonts. Role labels supplement the different perspective colours.
 
-Character controls work with a keyboard and have English/Gaeilge labels, visible selected states and touch targets of at least 48px. Opening the in-game picker focuses its heading; **Done** returns focus to **Change character**. Its heading and controls wrap on narrow screens, including with enlarged Irish text.
+Character controls work with a keyboard and have translated labels, visible selected states and touch targets of at least 48px. Opening the in-game picker focuses its heading; **Done** returns focus to **Change character**. Its heading and controls wrap on narrow screens, including with enlarged text.
 
-The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) for coverage and review opportunities.
+The implementation targets **WCAG 2.2 AA**. Automated checks cover selected contrast, navigation and translation behaviours; they are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary. See [Accessibility and languages](docs/ACCESSIBILITY-AND-LANGUAGES.md) for coverage, maintenance, verification commands and outstanding review.
 
 Both perspectives use a shared **mobile-first layout**. **Browser checks run in Chromium, Firefox and WebKit** across viewport sizes from 320px phones to 2560px desktops, including landscape and touch input. The checks also run against the live site after Pages publication. Reading settings work when native dialog support is unavailable. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the matrix, commands and limits; engine tests do not certify every browser version or physical device.
 
@@ -235,7 +237,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 | [Clearer first play](docs/UX-REVIEW.md) | Before/after interface review, simpler onboarding and decision flow |
 | [Characters](docs/CHARACTERS.md) | Character selection, random casting, saved state and artwork |
 | [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) | Shared play, scoring, transfer, privacy and maintenance |
-| [Accessibility and language](docs/ACCESSIBILITY-AND-LANGUAGE.md) | Controls, translation coverage and review needs |
+| [Accessibility and languages](docs/ACCESSIBILITY-AND-LANGUAGES.md) | Controls, nine language options, translation maintenance, regression checks and review needs |
 | [Browser compatibility](docs/BROWSER-COMPATIBILITY.md) | Mobile-first layout, browser coverage, touch tests and device-review limits |
 | [Content review](docs/CONTENT-REVIEW.md) | Source provenance, legal-content decisions and contributor opportunities |
 | [Research record](research/README.md) | Review method, bibliography and scenario evidence map |

@@ -14,7 +14,8 @@ export function characterContext(encounter,stage,role){
 export function personalizeText(text,encounter,cast){
  const identity=storyIdentity(encounter),selected=characterFor('public',cast.public);
  if(!identity||!selected||identity.name===selected.name)return text;
- const pattern=new RegExp(`(^|[^\\p{L}\\p{N}_])${identity.name}(?=$|[^\\p{L}\\p{N}_])`,'gu');
+ // Latin name boundaries also work when Chinese or Arabic text touches a name.
+ const pattern=new RegExp(`(^|[^\\p{Script=Latin}\\p{N}_])${identity.name}(?=$|[^\\p{Script=Latin}\\p{N}_])`,'gu');
  return text.replace(pattern,(_,prefix)=>prefix+selected.name);
 }
 // Applied after translation, to trusted app HTML. Never rewrite selected cast
@@ -31,3 +32,4 @@ export function personalizeHTML(html,encounter,cast){
   return preserve?part:part.replace(/((?:aria-label|title)=")([^"]*)"/g,(_,attribute,value)=>attribute+replace(value)+'"');
  }).join('');
 }
+

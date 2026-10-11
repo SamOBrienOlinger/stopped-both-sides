@@ -1,3 +1,6 @@
+import {messages} from './messages.mjs';
+import {matchMessage,untranslatedNames} from './patterns.mjs';
+import {normaliseLanguage} from './languages.mjs';
 import {encounters} from '../encounters/catalog.mjs';
 import {gaContent} from './ga-content.mjs?v=character-story-1';
 import {refinementIrish} from './refinements-ga.mjs?v=character-story-1';
@@ -103,7 +106,7 @@ Object.assign(ui,{
 Object.assign(ui,refinementIrish);
 for(const [key,value] of Object.entries(ui))if(key.includes('site-switch button'))ui[key.replaceAll('site-switch button','resource-site link')]=value;
 Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
-export function translateText(text,lang='en'){
+function translateIrishText(text,lang='en'){
  if(lang!=='ga')return text;
  const s=String(text).trim();if(dictionary.has(s))return dictionary.get(s);
  let m;
@@ -128,21 +131,119 @@ export function translateText(text,lang='en'){
  if((m=s.match(/^(.*) saved learning points$/)))return translateText(m[1],lang)+' — pointí foghlama sábháilte';
  if((m=s.match(/^(\d+) \/ 1 point$/)))return m[1]+' / 1 phointe';
  if(s.includes(' — '))return s.split(' — ').map(x=>translateText(x,lang)).join(' — ');
- if((m=s.match(/^(Play as the member of the public|Play as the Garda|Play this role): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
+ if((m=s.match(/^(Play as the member of the public|Play as the Garda|Play this role|Play this situation): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
  if(s.includes(' · '))return s.split(' · ').map(x=>translateText(x,lang)).join(' · ');
  return text;
 }
 // Translate trusted app templates only. Identifiers, route tokens, links and source publications are preserved.
-export function translateHTML(html,lang='en'){
+function translateIrishHTML(html,lang='en'){
  if(lang!=='ga')return html;
  const stack=[];let skip=false;
  return html.split(/(<[^>]*>)/g).map(part=>{
   if(!part.startsWith('<'))return skip?part:part.replace(/^(\s*)([\s\S]*?)(\s*)$/,(_,a,b,c)=>a+escapeHTML(translateText(decode(b),lang))+c);
   if(/^<\//.test(part)){skip=stack.pop()??false;return part;}
   if(/^<!/.test(part))return part;
-  const preserve=skip||/\bdata-no-translate\b/.test(part);
+  const preserve=skip||/\bdata-no-translate\b|\bdata-english-practice\b/.test(part);
+  if(/\bdata-english-practice\b/.test(part))part=part.replace(/>$/, ' lang="en-IE">');
   if(!/^<(?:br|hr|img|input|meta|link|wbr|source)\b/i.test(part)&&!part.endsWith('/>')){stack.push(skip);skip=preserve;}
   return preserve?part:part.replace(/((?:aria-label|title)=")([^"]*)"/g,(_,a,b)=>a+escapeHTML(translateText(decode(b),lang))+'"');
  }).join('');
 }
 export {gaContent};
+
+
+// Each pack is hosted with the game and loaded only when selected. Translation
+// never sends answers, saved characters or progress to an external service.
+const loaders={
+ pt:retry=>import('./pt-content.mjs?v=site-languages-1'+retry),
+ ar:retry=>import('./ar-content.mjs?v=site-languages-1'+retry),
+ pl:retry=>import('./pl-content.mjs?v=site-languages-1'+retry),
+ ro:retry=>import('./ro-content.mjs?v=site-languages-1'+retry),
+ fr:retry=>import('./fr-content.mjs?v=site-languages-1'+retry),
+ es:retry=>import('./es-content.mjs?v=site-languages-1'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=site-languages-1'+retry)
+};
+const packs=new Map(),pending=new Map(),attempts=new Map();
+const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
+const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
+const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation'};
+export function languageLoaded(language){return ['en','ga'].includes(language)||packs.has(language);}
+export function loadLanguage(value){
+ const language=normaliseLanguage(value);
+ if(languageLoaded(language))return Promise.resolve();
+ if(pending.has(language))return pending.get(language);
+ // A failed ES-module fetch can be cached by the browser. A retry gets a new
+ // URL while successful packs remain shared in memory for this visit.
+ const attempt=attempts.get(language)||0;attempts.set(language,attempt+1);
+ const request=loaders[language](attempt?'&retry='+attempt:'').then(({default:pack})=>{
+  // Reject incomplete/corrupt packs as a whole, rather than mixing languages.
+  for(const id of sourceIds.values())if(typeof pack[id]!=='string'||!pack[id].trim())throw Error('Incomplete language pack: '+language+'/'+id);
+  packs.set(language,Object.freeze(pack));
+ }).finally(()=>pending.delete(language));
+ pending.set(language,request);return request;
+}
+export function translateText(text,lang='en'){
+ if(lang==='ga')return translateIrishText(text,lang);
+ if(lang==='en'||!packs.has(lang))return text;
+ const original=String(text),s=original.trim(),pack=packs.get(lang);
+ const id=sourceIds.get(s)||lowercaseIds.get(s.toLowerCase());
+ if(id)return pack[id];
+ if(messageAliases[s])return translateText(messageAliases[s],lang);
+ if(untranslatedNames.includes(s)||!/[\p{L}]/u.test(s))return text;
+ const completedTotal=s.match(/^\/ (\d+) situations completed$/);
+ if(completedTotal)return '/ '+completedTotal[1]+' '+translateText('Completed',lang);
+ const message=matchMessage(s);
+ if(message){
+  const templateId=sourceIds.get(message.template);
+  if(templateId)return pack[templateId].replace(/\{(\w+)\}/g,(token,name)=>{
+   const value=message.values[name];return value===undefined?token:name==='name'?value:translateText(value,lang);
+  });
+ }
+ let m;
+ if((m=s.match(/^([·—]\s+)(.+)$/)))return m[1]+translateText(m[2],lang);
+ if((m=s.match(/^(.*?)(\s+[⇄→↗])$/)))return translateText(m[1],lang)+m[2];
+ if((m=s.match(/^(\d+)\. (.+)$/)))return m[1]+'. '+translateText(m[2],lang);
+ if((m=s.match(/^(.*):$/)))return translateText(m[1],lang)+':';
+ if((m=s.match(/^(Play as the member of the public|Play as the Garda|Play this role|Play this situation|Latest completed|Best completed|Explore this situation): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
+ if(s.includes(' — '))return s.split(' — ').map(x=>translateText(x,lang)).join(' — ');
+ if(s.includes(' · '))return s.split(' · ').map(x=>translateText(x,lang)).join(' · ');
+ return text;
+}
+// Trusted templates only: translate text and human-readable attributes while
+// preserving route tokens, IDs, event delegation, source links and saved state.
+export function translateHTML(html,lang='en'){
+ if(lang==='en')return html;
+ if(lang==='ga')return translateIrishHTML(html,lang);
+ const stack=[];let skip=false;
+ return html.split(/(<[^>]*>)/g).map(part=>{
+  if(!part.startsWith('<'))return skip?part:part.replace(/^(\s*)([\s\S]*?)(\s*)$/,(_,a,b,c)=>{
+   const translated=escapeHTML(translateText(decode(b),lang));
+   // A ratio must keep numerator / denominator order inside an RTL paragraph.
+   const display=lang==='ar'?translated.replace(/\d+(?:[.,]\d+)?\s*\/\s*\d+(?:[.,]\d+)?(?:\s*·\s*\d+(?:[.,]\d+)?%)?/g,number=>'<bdi dir="ltr">'+number+'</bdi>'):translated;
+   return a+display+c;
+  });
+  if(/^<\//.test(part)){skip=stack.pop()??false;return part;}
+  if(/^<!/.test(part))return part;
+  const preserve=skip||/\bdata-no-translate\b|\btranslate="no"/.test(part)||/^<(?:script|style)\b/i.test(part);
+  if(!/^<(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i.test(part)&&!part.endsWith('/>')){stack.push(skip);skip=preserve;}
+  if(preserve){
+   if(/\bdata-no-translate\b/.test(part)){
+    if(!/[\s]lang=/.test(part))part=part.replace(/>$/, ' lang="en-IE">');
+    if(!/[\s]dir=/.test(part))part=part.replace(/>$/, ' dir="ltr">');
+   }
+   return part;
+  }
+  return part.replace(/((?:aria-label|aria-description|aria-valuetext|title|alt|placeholder)=")([^"]*)"/g,(_,a,b)=>a+escapeHTML(translateText(decode(b),lang))+'"');
+ }).join('');
+}
+
+// Existing Irish support gains the shared controls without changing its routes.
+for(const [source,irish] of Object.entries({
+ 'Choose a language, then select Apply preferences. Your game will stay at the same point.':'Roghnaigh teanga, ansin roghnaigh Cuir socruithe i bhfeidhm. Fanfaidh do chluiche ag an bpointe céanna.',
+ 'Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the whole site, including both game modes and reference pages. Irish covers the shared game.':'Tá an suíomh iomlán ar fáil i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe, an dá mhodh imeartha agus na leathanaigh thagartha san áireamh. Tá an cluiche roinnte ar fáil i nGaeilge.',
+ 'Loading the selected language…':'An teanga roghnaithe á lódáil…',
+ 'The language could not be loaded. Your current language and progress are unchanged. Check your connection and try again.':'Níorbh fhéidir an teanga a lódáil. Níor athraíodh do theanga reatha ná do dhul chun cinn. Seiceáil do nasc agus bain triail eile as.',
+ 'Language changed. Your progress is unchanged.':'Teanga athraithe. Tá do dhul chun cinn mar a bhí.',
+ 'Individual practice · single-role scenarios':'Cleachtadh aonair · cásanna le ról amháin',
+ 'Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.':'Úsáid cleachtadh aonair le haghaidh plé dírithe ar ról amháin. Roghnaigh an cluiche roinnte thuas chun an dá dhearcadh a chur i gcomparáid.'
+}))dictionary.set(source,irish);

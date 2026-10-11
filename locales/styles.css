@@ -1,0 +1,47 @@
+/* Language support is additive: existing colours, artwork and game layouts stay
+   in place. Logical properties let the same interface follow Arabic direction. */
+html:lang(ar) body{font-family:Tahoma,"Noto Sans Arabic",Arial,sans-serif;line-height:1.85}
+html:lang(zh-Hans) body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif}
+html:lang(ar) :is(h1,h2,h3,.eyebrow,.scene-number,.cast-label,.scene-setting){letter-spacing:normal}
+html:lang(ar) :is(h1,h2,h3){line-height:1.45}
+html:not(:lang(en)):not(:lang(ga)) main :is(h1,h2,h3,p,li,button,summary){overflow-wrap:anywhere;hyphens:auto}
+html:lang(ar).reading-spacious main{letter-spacing:normal}
+html:lang(zh-Hans) :is(h1,h2,h3,.eyebrow){letter-spacing:normal}
+html:lang(ar) :is(p,li,button,summary,select){line-height:1.75}
+.settings-field select{min-inline-size:0;max-inline-size:100%;min-block-size:48px;font-family:inherit;line-height:1.5}
+.settings-field option{font-family:system-ui,Tahoma,"Microsoft YaHei",sans-serif}
+.settings-content :is(label,p,button,h2){overflow-wrap:anywhere}
+.settings-content button{min-block-size:44px;min-inline-size:44px}
+.settings-content [aria-busy="true"],.settings-content[aria-busy="true"]{cursor:progress}
+#reading-status:not(:empty){margin-block-start:1rem;padding:1rem;border-inline-start:4px solid var(--deep);background:var(--pale)}
+.settings-heading h2{min-inline-size:0}
+.settings-heading .dialog-close{flex:none}
+.header nav{flex-wrap:wrap}
+.header nav a,.header [data-reading-open]{max-inline-size:100%;overflow-wrap:anywhere}
+.wordmark{direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] :is(.scenario,.choice,.summary-heading,.progress-result .text-button,.setup-character .text-button,.paired-recap .text-button){text-align:start}
+[dir="rtl"] .header nav{margin-left:0;margin-inline-start:0}
+[dir="rtl"] .header-actions{margin-left:0;margin-inline-start:auto}
+[dir="rtl"] .site-switch{margin-left:0}
+[dir="rtl"] .skip{left:auto;right:15px;inset-inline-start:15px;inset-inline-end:auto}
+[dir="rtl"] .story .quote{border-left:0;border-inline-start:3px solid var(--teal)}
+[dir="rtl"] .summary-item .chosen{border-left:0;border-inline-start:2px solid var(--teal);padding-left:0;padding-inline-start:12px}
+[dir="rtl"] :is(.home-evidence,.score-explanation,.decision-context){border-left:0;border-inline-start:4px solid var(--deep)}
+[dir="rtl"] :is(.source-details ul,.facts ul){padding-left:0;padding-inline-start:20px}
+[dir="rtl"] :is(.info-block ul,.discussion-steps){padding-left:0;padding-inline-start:22px}
+[dir="rtl"] .decision-facts ul{padding-left:0;padding-inline-start:1.3rem}
+[dir="rtl"] .how-to-play ol{padding-left:0;padding-inline-start:1.5rem}
+[dir="rtl"] .how-to-play li{padding-left:0;padding-inline-start:.25rem}
+[dir="rtl"] .context-note span+span::before{margin-right:0;margin-inline-end:10px}
+[dir="rtl"] .choice-letter{direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] [data-no-translate]{unicode-bidi:isolate}
+/* Scene atlases use fixed coordinates. Their pixels and character identities
+   must not be mirrored when the surrounding document changes direction. */
+.scene-stage,.character-image,.scene-sprite{direction:ltr}
+[dir="rtl"] .scene-setting{direction:rtl}
+[dir="rtl"] .scene-cast-names{direction:rtl}
+[dir="rtl"] .progress-number{direction:ltr;unicode-bidi:isolate;text-align:right}
+@media(min-width:640px){[dir="rtl"] :is(.cast-character,.play-toolbar~.encounter-cast .cast-character){text-align:start}}
+@media(max-width:639px){[dir="rtl"] .header-actions{margin-inline-start:0}}
+@media(prefers-reduced-motion:reduce){.settings-content{scroll-behavior:auto}}
+@media(forced-colors:active){#reading-status:not(:empty){border-color:CanvasText;background:Canvas;color:CanvasText}.settings-field select{border-color:ButtonText}}
