@@ -13,6 +13,7 @@ The support target is current Chrome, Edge, Firefox and Safari on desktop, and c
 - Native dialogs are preferred, with explicit Tab/Shift+Tab wrapping and focus restoration. Browsers without native modal methods get a backdrop, keyboard containment, Escape/close controls and background accessibility isolation.
 - Progress copying and property checks do not require `structuredClone` or `Object.hasOwn`. Existing learning records remain readable; encounter links now include validated character IDs and still accept older links.
 - Blocked browser storage allows play and reading preferences for the current visit. No browser extension or third-party runtime service is required.
+- Shared [interaction styling and motion](INTERACTION-DESIGN.md) adds short cues to genuine stage, feedback, perspective and disclosure changes. The operating system and site reduced-motion settings suppress them; preference and character redraws do not replay the stage.
 
 ## Reproducible browser checks
 
@@ -31,7 +32,7 @@ Branch and pull-request runs exercise both entry points under `/stopped-both-sid
 | Main journeys | Home, recommended start, optional character picker, keyboard catalogue access, original practice and feedback, shared play, other-side switching, reload, recap, progress and reference pages |
 | Compatibility fallback | Missing clone/property/modal APIs and blocked storage simulated in each engine |
 
-The 78 browser checks cover page overflow, clipped text, dialog bounds and navigation target sizes. Functional assertions check choices, preserved answers, language, saved state and completion. Tests fail on page errors or missing local assets. Failure reports include screenshots and traces, retained by GitHub Actions for seven days.
+The browser checks cover page overflow, clipped text, dialog bounds and navigation target sizes. Functional assertions check choices, preserved answers, language, saved state, completion and event-driven motion. Tests fail on page errors or missing local assets. Failure reports include screenshots and traces, retained by GitHub Actions for seven days.
 
 To run the browser suite:
 

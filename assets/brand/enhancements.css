@@ -1,0 +1,347 @@
+/* Shared visual refinements. Load after the perspective and language styles.
+   Motion is an event cue: JavaScript adds data-motion only to the changed part.
+   Text, actions, focus targets and scores remain available for the whole cue. */
+:root{
+ --ui-control-time:150ms;
+ --ui-step-time:200ms;
+ --ui-reveal-time:280ms;
+ --ui-ease:cubic-bezier(.2,.65,.3,1);
+ --ui-radius-control:.75rem;
+ --ui-radius-panel:1rem;
+ --ui-panel-space:clamp(1rem,2.5vw,1.5rem);
+ --ui-shadow-rest:0 2px 8px #20394108;
+ --ui-shadow-hover:0 4px 14px #20394112;
+}
+
+/* Stable geometry and the same state vocabulary for pointer and keyboard use. */
+.primary,.text-button,.choice,.topic-filter,.source-topic-nav a,.evidence-nav a,.source-card,.evidence-record,
+.character-option,.landing-character,.header nav a,.header .site-switch,
+.utility-settings,.settings-button,.dialog-close,main summary{
+ transition-property:background-color,border-color,box-shadow,color,text-decoration-color;
+ transition-duration:var(--ui-control-time);
+ transition-timing-function:var(--ui-ease);
+}
+.primary,.choice,.character-option,.landing-character,.source-card{
+ border-radius:var(--ui-radius-control);
+}
+.paired-game .choice,.paired-game .choice.selected{
+ border-width:2px;
+ padding:1rem;
+}
+.topic-filter,.source-topic-nav a,.evidence-nav a{
+ min-block-size:44px;
+ min-inline-size:44px;
+ max-inline-size:100%;
+ white-space:normal;
+ overflow-wrap:anywhere;
+ font-weight:600;
+}
+.topic-filter{border-color:var(--control)}
+.topic-filter[aria-pressed="true"]{
+ background:var(--deep);
+ border-color:var(--deep);
+ color:#fff;
+ box-shadow:inset 0 -2px 0 #ffffff50;
+}
+.source-topic-nav a[aria-current="location"],.evidence-nav a[aria-current="location"]{
+ background:var(--pale);
+ color:var(--deep);
+ border-color:var(--deep);
+ box-shadow:inset 0 -3px 0 var(--deep);
+ text-decoration:underline;
+ text-decoration-thickness:2px;
+ text-underline-offset:.25em;
+}
+.character-option[aria-pressed="true"]{
+ background:var(--tone-pale,var(--pale));
+ border-color:var(--tone-deep,var(--deep));
+ box-shadow:0 0 0 1px var(--tone-deep,var(--deep));
+}
+.character-option .character-selected{margin-block-start:auto}
+.source-card,.evidence-record{box-shadow:var(--ui-shadow-rest)}
+.scenario:focus-within,.evidence-record:focus-within{
+ border-color:var(--deep);
+ box-shadow:var(--ui-shadow-hover);
+}
+.source-card:focus-visible,
+.landing-character:focus-visible,
+.character-option:focus-visible{
+ background:var(--tone-pale,var(--pale));
+ border-color:var(--tone-deep,var(--deep));
+}
+@media(hover:hover) and (pointer:fine){
+ .topic-filter:not([aria-pressed="true"]):hover,
+ .source-topic-nav a:hover,.evidence-nav a:hover{background:var(--pale);border-color:var(--deep)}
+ .character-option:hover{background:var(--tone-pale,var(--pale));border-color:var(--tone-deep,var(--deep))}
+ .landing-character:hover,.source-card:hover{box-shadow:var(--ui-shadow-hover)}
+ .header nav a:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.3em}
+ main summary:hover{background:var(--pale)}
+}
+.topic-filter:active,.source-topic-nav a:active,.evidence-nav a:active,.source-card:active,
+.character-option:active,.landing-character:active{
+ border-color:var(--tone-deep,var(--deep));
+ box-shadow:inset 0 0 0 2px var(--tone-deep,var(--deep));
+}
+.header nav a[aria-current="page"]{
+ background:var(--pale);
+ color:var(--deep);
+ box-shadow:inset 0 -3px 0 var(--deep);
+}
+.header nav a:active,.utility-settings:active,main summary:active{background:var(--soft)}
+.primary:focus-visible,.text-button:focus-visible,.choice:focus-visible,
+.topic-filter:focus-visible,.source-topic-nav a:focus-visible,.evidence-nav a:focus-visible,.source-card:focus-visible,
+.character-option:focus-visible,.landing-character:focus-visible,
+.header nav a:focus-visible,.header .site-switch:focus-visible,
+.utility-settings:focus-visible,.settings-button:focus-visible,
+.dialog-close:focus-visible,main summary:focus-visible{
+ outline:3px solid var(--focus);
+ outline-offset:3px;
+ box-shadow:0 0 0 3px #fff;
+}
+
+/* Separate the current task, optional detail and learning recap with spacing
+   and the established role colours. No new text or fixed content heights. */
+.start-panel,.character-picker,.scenario-library,.play-help,
+.recap-takeaways,.recap-scores,.score-mechanics,.facilitator-note,
+.summary-item,.evidence-record,.progress-situations .info-block{
+ border-radius:var(--ui-radius-panel);
+ box-shadow:var(--ui-shadow-rest);
+}
+.start-panel,.character-picker,.recap-takeaways,
+.paired-recap .summary-item{padding:var(--ui-panel-space)}
+.simple-setup .start-panel+.scenario-library{margin-block-start:1.5rem}
+.paired-catalog,.sources-grid,.summary-list.paired-recap{gap:1rem}
+.decision-context{border-radius:var(--ui-radius-panel)}
+.decision-context .story-text,.feedback-takeaway,
+.recap-takeaways li,.recap-overview p{max-inline-size:72ch}
+.feedback{
+ --ui-surface-end:var(--paper,#fff);
+ --ui-surface-start:var(--pale);
+ border-radius:var(--ui-radius-panel);
+ border-inline-start:4px solid var(--deep);
+ box-shadow:var(--ui-shadow-rest);
+}
+.feedback.revisit{border-inline-start-color:var(--rose-dark)}
+.feedback .lesson,.feedback .source-details{margin-block:1rem}
+.paired-feedback-actions{gap:.75rem}
+.paired-feedback-actions>.primary{min-block-size:48px}
+.recap-takeaways{border-inline-start:4px solid var(--deep)}
+.paired-recap .summary-item{scroll-margin-block:1rem}
+.recap-detail{margin-block-start:1.25rem}
+
+/* Keep stage and remaining-route information together, without assuming that
+   every branching situation has a fixed number of decisions. */
+.play-toolbar.perspective-bar{
+ --ui-surface-end:var(--pale);
+ --ui-surface-start:var(--soft);
+ background:var(--pale);
+ border:1px solid var(--line);
+ border-radius:var(--ui-radius-panel);
+ padding:.75rem 1rem;
+ margin-block-end:.75rem;
+ gap:.75rem 1rem;
+}
+.play-toolbar.perspective-bar>div:first-child{min-inline-size:0;gap:.375rem}
+.play-toolbar .route-remaining{
+ align-self:flex-start;
+ max-inline-size:100%;
+ padding:.25rem .5rem;
+ border:1px solid var(--line);
+ border-radius:.375rem;
+ background:var(--paper,#fff);
+ color:var(--muted);
+ font-size:.8125rem;
+ line-height:1.5;
+ overflow-wrap:anywhere;
+}
+.play-toolbar~.encounter-cast .cast-character{
+ padding:.5rem .625rem;
+ border:1px solid var(--tone-line,var(--line));
+ border-radius:var(--ui-radius-control);
+ background:var(--tone-pale,var(--pale));
+}
+.play-toolbar~.encounter-cast .cast-character.is-you{
+ border-inline-start:3px solid var(--tone-deep,var(--deep));
+}
+.progress-page progress{
+ -webkit-appearance:none;
+ appearance:none;
+ inline-size:100%;
+ block-size:.75rem;
+ border:1px solid var(--tone-line,var(--control));
+ border-radius:999px;
+ overflow:hidden;
+ background:var(--tone-pale,var(--pale));
+ color:var(--tone-deep,var(--deep));
+ accent-color:var(--tone-deep,var(--deep));
+}
+.progress-page progress::-webkit-progress-bar{
+ background:var(--tone-pale,var(--pale));
+ border-radius:inherit;
+}
+.progress-page progress::-webkit-progress-value{
+ background:var(--tone-deep,var(--deep));
+ border-radius:inherit;
+}
+.progress-page progress::-moz-progress-bar{
+ background:var(--tone-deep,var(--deep));
+ border-radius:inherit;
+}
+.progress-page .progress-number{font-variant-numeric:tabular-nums}
+
+/* Native disclosure markers communicate open/closed state without replacing
+   their accessible behaviour or measuring translated content heights. */
+main summary{
+ min-block-size:44px;
+ border-radius:.375rem;
+ padding-inline:.375rem;
+ overflow-wrap:anywhere;
+}
+main summary::marker{color:var(--deep)}
+main details[open]>summary{color:var(--deep)}
+.settings-dialog{border-radius:var(--ui-radius-panel)}
+.settings-dialog,.settings-content{
+ --ui-surface-end:var(--paper,#fff);
+ --ui-surface-start:var(--pale);
+}
+.settings-field{padding-block-end:.5rem}
+.settings-field+.settings-field{border-block-start:1px solid var(--line);padding-block-start:1rem}
+.settings-check{padding-block:.375rem}
+.settings-check:focus-within{background:var(--pale);border-radius:.375rem}
+
+/* Root rendering replaces the scene on many unrelated actions. The old
+   unconditional entrance is suppressed; only an explicit event animates art. */
+.scene-stage{animation:none}
+.decision-context{
+ --ui-surface-end:var(--pale);
+ --ui-surface-start:var(--soft);
+}
+.decision-choices,.game-grid>section[aria-labelledby="choice-title"]{
+ --ui-surface-end:transparent;
+ --ui-surface-start:var(--pale);
+ border-radius:var(--ui-radius-panel);
+}
+.game-grid>.story:not(.story--illustrated){
+ --ui-surface-start:var(--deep);
+ --ui-surface-end:var(--story);
+}
+.legacy-perspective{
+ --ui-surface-start:var(--soft);
+ --ui-surface-end:var(--pale);
+}
+@keyframes ui-surface-cue{
+ from{background-color:var(--ui-surface-start,var(--pale))}
+ to{background-color:var(--ui-surface-end,transparent)}
+}
+@keyframes ui-settle{
+ from{transform:translateY(4px)}
+ to{transform:translateY(0)}
+}
+@keyframes ui-art-arrive{
+ from{opacity:.78}
+ to{opacity:1}
+}
+@keyframes ui-progress-cue{
+ from{box-shadow:0 0 0 3px var(--soft)}
+ to{box-shadow:0 0 0 0 transparent}
+}
+@keyframes ui-selection-cue{
+ from{background-color:var(--paper,#fff);border-color:var(--tone-line,var(--control))}
+ to{background-color:var(--tone-pale,var(--pale));border-color:var(--tone-deep,var(--deep))}
+}
+@media(prefers-reduced-motion:no-preference){
+ [data-motion="stage"],[data-motion="perspective"],[data-motion="feedback"],
+ [data-motion="dialog"]{
+  animation:ui-surface-cue var(--ui-step-time) var(--ui-ease);
+ }
+ [data-motion="picker"],[data-motion="recap"],[data-motion="reveal"],
+ [data-motion="disclosure"]{
+  animation:ui-settle var(--ui-reveal-time) var(--ui-ease);
+ }
+ [data-motion="scene"] .scene-location,
+ [data-motion="scene"] .scene-sprite,
+ [data-motion="scene"] .scene-prop,
+ img[data-motion="scene"],img[data-motion="reveal"]{
+  animation:ui-art-arrive var(--ui-step-time) var(--ui-ease);
+ }
+ [data-motion="progress"]{
+  animation:ui-progress-cue var(--ui-step-time) var(--ui-ease);
+ }
+ .character-option[data-motion="selection"]{
+  animation:ui-selection-cue var(--ui-control-time) var(--ui-ease);
+ }
+}
+
+/* RTL changes interface direction, never the public/Garda sprite positions. */
+[dir="rtl"] .choice.selected{box-shadow:inset -4px 0 0 var(--deep)}
+[dir="rtl"] .choice:focus-visible{box-shadow:0 0 0 3px #fff}
+[dir="rtl"] .play-toolbar~.encounter-cast .cast-character{text-align:start}
+@media(max-width:41.25rem){
+ .play-toolbar.perspective-bar{padding:.75rem}
+ .play-toolbar.perspective-bar>.character-actions{inline-size:100%}
+ .play-toolbar~.encounter-cast{gap:.5rem}
+ .play-toolbar~.encounter-cast .cast-character{padding:.5rem;min-inline-size:0}
+ .paired-game .choice,.paired-game .choice.selected{padding:.875rem}
+ .paired-feedback-actions>.primary{inline-size:100%}
+ .topic-filters,.source-topic-nav,.evidence-nav{gap:.5rem}
+}
+
+/* Both motion preferences are authoritative. Static artwork transforms are
+   deliberately untouched, including sprite placement and portrait cropping. */
+.motion-reduce [data-motion],.motion-reduce [data-motion] *{
+ animation:none!important;
+ transition:none!important;
+}
+@media(prefers-reduced-motion:reduce){
+ [data-motion],[data-motion] *{animation:none!important;transition:none!important}
+}
+@media(forced-colors:active){
+ *,*::before,*::after{animation:none!important;transition:none!important}
+ .start-panel,.character-picker,.scenario-library,.play-help,.recap-takeaways,
+ .recap-scores,.score-mechanics,.facilitator-note,.paired-recap .summary-item,
+ .progress-situations .info-block,.feedback,.play-toolbar.perspective-bar,
+ .play-toolbar .route-remaining,.play-toolbar~.encounter-cast .cast-character,
+ .decision-choices,.settings-content{
+  background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none;
+ }
+ .topic-filter,.topic-filter[aria-pressed="true"],.source-topic-nav a,.evidence-nav a,.evidence-record,
+ .character-option,.character-option[aria-pressed="true"],.landing-character,
+ .source-card{background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none}
+ .topic-filter[aria-pressed="true"],.character-option[aria-pressed="true"],
+ .choice.selected,[dir="rtl"] .choice.selected{outline:2px solid Highlight;outline-offset:-5px;box-shadow:none}
+ .header nav a[aria-current="page"]{background:Canvas;color:LinkText;box-shadow:none;text-decoration:underline;text-decoration-thickness:3px}
+ .source-topic-nav a[aria-current="location"],.evidence-nav a[aria-current="location"]{
+  background:Canvas;color:LinkText;border-color:Highlight;box-shadow:none;
+  text-decoration:underline;text-decoration-thickness:3px;
+ }
+ .progress-page progress{
+  -webkit-appearance:auto;appearance:auto;accent-color:auto;
+  background:Canvas;color:Highlight;border-color:CanvasText;box-shadow:none;
+ }
+ .progress-page progress::-webkit-progress-bar{background:Canvas}
+ .progress-page progress::-webkit-progress-value{background:Highlight}
+ .progress-page progress::-moz-progress-bar{background:Highlight}
+ main summary,main details[open]>summary,main summary::marker{color:CanvasText}
+ .primary:focus-visible,.text-button:focus-visible,.choice:focus-visible,
+ [dir="rtl"] .choice:focus-visible,.topic-filter:focus-visible,
+ .source-topic-nav a:focus-visible,.evidence-nav a:focus-visible,.source-card:focus-visible,
+ .character-option:focus-visible,.landing-character:focus-visible,
+ .header nav a:focus-visible,.header .site-switch:focus-visible,
+ .utility-settings:focus-visible,.settings-button:focus-visible,
+ .dialog-close:focus-visible,main summary:focus-visible{
+  outline:3px solid Highlight;outline-offset:3px;box-shadow:none;
+ }
+}
+@media print{
+ *,*::before,*::after{animation:none!important;transition:none!important}
+ .start-panel,.character-picker,.scenario-library,.play-help,.recap-takeaways,
+ .recap-scores,.score-mechanics,.facilitator-note,.paired-recap .summary-item,
+ .progress-situations .info-block,.feedback,.play-toolbar.perspective-bar,
+ .play-toolbar .route-remaining,.play-toolbar~.encounter-cast .cast-character{
+  background:#fff;color:#000;border-color:#aaa;box-shadow:none;
+ }
+ .progress-page progress{background:#fff;color:#000;border-color:#777;box-shadow:none}
+ .progress-page progress::-webkit-progress-bar{background:#fff}
+ .progress-page progress::-webkit-progress-value{background:#000}
+ .progress-page progress::-moz-progress-bar{background:#000}
+}
