@@ -14,7 +14,7 @@ export function perspectiveForRoute(hash,siteRole='public'){
  if(route==='encounters/garda')return 'garda';
  return siteRole;
 }
-export function createReadingTools({main,rerender,siteRole='public',transformContent=html=>html}){
+export function createReadingTools({main,rerender,siteRole='public',transformContent=html=>html,onRender=()=>{},onDialogOpen=()=>{}}){
  let storage;try{storage=globalThis.localStorage;}catch{}
  const preferences=createPreferences(storage,globalThis.location?.search||'',siteRole);
  const root=document.documentElement,dialog=document.querySelector('#reading-dialog'),live=document.querySelector('#page-status');
@@ -55,7 +55,7 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   opener=button;openerId=button?.id||'';dialogLanguage=activeLanguage;
   const language=languageInfo(dialogLanguage);
   dialog.setAttribute?.('lang',language.tag);dialog.setAttribute?.('dir',language.dir);
-  dialog.innerHTML=dialogHTML();modal.open();
+  dialog.innerHTML=dialogHTML();modal.open();onDialogOpen(dialog);
  }
  function setLanguageQuery(){if(typeof location.href!=='string')return;const url=new URL(location.href);url.searchParams.set('lang',activeLanguage);history.replaceState(null,'',url.pathname+url.search+url.hash);}
  function commit(next){
@@ -109,10 +109,18 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   }else if(language!=='en')main.innerHTML=translateHTML(main.innerHTML,language);
   main.innerHTML=transformContent(main.innerHTML,hash);
   main.querySelectorAll?.('h1,h2[id]').forEach(h=>h.setAttribute('tabindex','-1'));
+  const referenceRoute=hash.split('~')[0];
+  const evidenceGroup=referenceRoute.startsWith('evidence/')?document.getElementById?.('source-'+referenceRoute.slice(9))?.closest?.('.evidence-group')?.id:null;
+  const currentTopic='#'+(evidenceGroup?'evidence/'+evidenceGroup:referenceRoute);
+  main.querySelectorAll?.('.source-topic-nav a,.evidence-nav a').forEach(a=>{
+   if(a.getAttribute('href')===currentTopic)a.setAttribute('aria-current','location');
+   else a.removeAttribute('aria-current');
+  });
   main.querySelectorAll?.('a[target="_blank"]').forEach(a=>{if(!a.querySelector('.sr-only')){const hint=document.createElement('span');hint.className='sr-only';hint.lang=info.tag;hint.dir=info.dir;hint.textContent=' ('+t('opens in a new tab')+')';a.append(hint);}});
   const anchor=document.querySelector('[data-site-switch]');if(anchor){try{const url=new URL(anchor.href);url.searchParams.set('lang',language);anchor.href=url.href;}catch{}anchor.textContent=t(anchor.textContent);}
   const heading=main.querySelector?.('h1')?.textContent?.replace(/\s+/g,' ').trim();
   if(!irishReference&&(heading||language!=='en'))document.title=(heading==='Stopped: Both Sides'?'Stopped: Both Sides — '+t(siteRole==='garda'?'Garda perspective':'Public perspective'):(heading||t('Play both sides'))+' | Stopped: Both Sides');
+  onRender(hash);
  }
  applyDisplay();
  // A dialog keeps its rendered language and drafts while the initial pack loads.
