@@ -74,6 +74,20 @@ The event cues deliberately stay short and local. There is no bounce, large
 opposing slide, pronounced zoom, shrinking header, animated counter or delayed
 scroll journey.
 
+## Shared footer
+
+Both entrypoints use the same footer structure and content width as the main
+page. The platform description and creator link form one group; accessibility
+and reading controls form another. The groups sit side by side on wider
+screens and stack in reading order on smaller screens. The perspective-specific
+disclaimer and copyright sit below a divider. Text and controls can wrap without
+fixed heights, including at larger reading sizes and in right-to-left layouts.
+
+The tagline is “Independent educational platform prototype.” in English, with
+matching entries in all supported languages. The creator link keeps its English
+direction. Keep `language-settings-footer` on the settings button: applying a
+language rebuilds the footer and uses this ID to restore keyboard focus.
+
 ## Verification
 
 `tests/browser/motion.spec.mjs` exercises actual rendered interactions in

@@ -1,5 +1,5 @@
 import {hasOwn} from './compatibility.mjs';
-import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=interaction-polish-1';
+import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=footer-1';
 import {createMotion} from './accessibility/motion.mjs?v=interaction-polish-1';
 import {createEncounterMode} from './encounters/ui.mjs?v=site-languages-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
