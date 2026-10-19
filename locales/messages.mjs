@@ -1769,7 +1769,7 @@ export const messages=[
   "The progress in this link could not be read.",
   "This situation link is incomplete or from an unsupported version. Your saved scores are still available.",
   "Choose a situation",
-  "Independent educational prototype",
+  "Independent educational platform prototype.",
   "General information, not legal advice. Not endorsed by INAR, ICCL or An Garda Síochána. © 2026 Sam O’Brien-Olinger.",
   "Reflective learning, not operational guidance. Independent; not endorsed by An Garda Síochána, INAR or ICCL. © 2026 Sam O’Brien-Olinger.",
   "On the street",

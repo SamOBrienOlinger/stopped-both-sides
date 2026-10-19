@@ -1,4 +1,4 @@
-import {messages} from './messages.mjs';
+import {messages} from './messages.mjs?v=footer-1';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
 import {encounters} from '../encounters/catalog.mjs';
@@ -96,7 +96,7 @@ const ui={
  'Clear the scores and resume point saved on this site in this browser? The companion site and previously copied links may still hold their own copy.':'An nglanfar na scóir agus an pointe atosaithe ar an suíomh seo sa bhrabhsálaí seo? D’fhéadfadh cóip a bheith ar an suíomh eile agus i naisc a cóipeáladh roimhe.',
  'Clear this site’s saved progress':'Glan dul chun cinn sábháilte an tsuímh seo','Keep progress':'Coinnigh dul chun cinn','Your saved progress on this site has been cleared.':'Glanadh do dhul chun cinn sábháilte ar an suíomh seo.',
  'Unable to open this situation':'Ní féidir an cás seo a oscailt','This page was not found.':'Níor aimsíodh an leathanach seo.','The progress in this link could not be read.':'Níorbh fhéidir an dul chun cinn sa nasc seo a léamh.','This situation link is incomplete or from an unsupported version. Your saved scores are still available.':'Tá an nasc neamhiomlán nó ó leagan nach dtacaítear leis. Tá do scóir sábháilte ar fáil fós.','Choose a situation':'Roghnaigh cás',
- 'Independent educational prototype · Republic of Ireland':'Fréamhshamhail oideachais neamhspleách · Poblacht na hÉireann',
+ 'Independent educational platform prototype.':'Fréamhshamhail d’ardán oideachais neamhspleách.',
  'General information, not legal advice. Not endorsed by INAR, ICCL or An Garda Síochána. © 2026 Sam O’Brien-Olinger.':'Eolas ginearálta, ní comhairle dlí. Gan formhuiniú ó INAR, ICCL ná ón nGarda Síochána. © 2026 Sam O’Brien-Olinger.',
  'Reflective learning, not operational guidance. Independent; not endorsed by An Garda Síochána, INAR or ICCL. © 2026 Sam O’Brien-Olinger.':'Foghlaim mhachnamhach, ní treoir oibríochtúil. Neamhspleách; gan formhuiniú ón nGarda Síochána, INAR ná ICCL. © 2026 Sam O’Brien-Olinger.'
 };
@@ -155,13 +155,13 @@ export {gaContent};
 // Each pack is hosted with the game and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=site-languages-1'+retry),
- ar:retry=>import('./ar-content.mjs?v=site-languages-1'+retry),
- pl:retry=>import('./pl-content.mjs?v=site-languages-1'+retry),
- ro:retry=>import('./ro-content.mjs?v=site-languages-1'+retry),
- fr:retry=>import('./fr-content.mjs?v=site-languages-1'+retry),
- es:retry=>import('./es-content.mjs?v=site-languages-1'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=site-languages-1'+retry)
+ pt:retry=>import('./pt-content.mjs?v=footer-1'+retry),
+ ar:retry=>import('./ar-content.mjs?v=footer-1'+retry),
+ pl:retry=>import('./pl-content.mjs?v=footer-1'+retry),
+ ro:retry=>import('./ro-content.mjs?v=footer-1'+retry),
+ fr:retry=>import('./fr-content.mjs?v=footer-1'+retry),
+ es:retry=>import('./es-content.mjs?v=footer-1'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=footer-1'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
