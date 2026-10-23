@@ -8,7 +8,7 @@ Explore encounters with An Garda Síochána through fictional situations, choice
 
 **HTML · CSS · JavaScript modules · GitHub Pages · No application dependencies**
 
-[Distinctive proposition](#distinctive-proposition-and-educational-contribution) · [How to play](#how-to-play) · [Characters](#characters-and-switching-sides) · [Scoring](#scores-and-progress) · [Evidence](#evidence-and-content-review) · [Getting started](#getting-started) · [Documentation](#documentation-and-repository-guide) · [Credits](#credits-and-reuse)
+[Distinctive proposition](#distinctive-proposition-and-educational-contribution) · [How to play](#how-to-play) · [User-flow infographic](#user-flow-infographic) · [Characters](#characters-and-switching-sides) · [Scoring](#scores-and-progress) · [Evidence](#evidence-and-content-review) · [Getting started](#getting-started) · [Documentation](#documentation-and-repository-guide) · [Credits](#credits-and-reuse)
 
 > **Project status:** An independent educational prototype about the **Republic of Ireland**. It provides general learning, not legal advice or accredited Garda training. The documented source review is dated **7 September 2026**; specialist legal, community and language review remain opportunities for further development. Northern Ireland has different laws.
 
@@ -82,6 +82,14 @@ The original single-role practice remains available: six public situations with 
 The homepage explains the purpose and the three-part learning loop: **read a situation → choose a response → learn why it matters**. During play, compact character controls leave space for the scene and choices. Detailed scores and supporting guidance are under **Scores, sources and help**; source links also appear with each explanation.
 
 There is no sign-up or timer. All gameplay runs in the browser, with no AI service involved during play.
+
+### User-flow infographic
+
+Follow the main steps, try another answer or switch perspectives to explore the same moment.
+
+![User flow: choose a side, start a situation, read and choose, learn from feedback, continue, then review and replay. Optional paths let you try another answer or see the same moment from the other side.](docs/user-guide/stopped-both-sides-user-flow.png)
+
+**[View the full-size infographic (PNG)](docs/user-guide/stopped-both-sides-user-flow.png?raw=true)** · **[Download the infographic (PDF)](docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true)**
 
 ## Characters and switching sides
 
