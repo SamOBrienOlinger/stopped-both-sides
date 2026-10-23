@@ -1,0 +1,180 @@
+/* Shared control geometry. Keep this after the page, language and theme styles
+   so both entry points use the same wrapping, alignment and touch targets. */
+:root{--ui-control-line:1.5}
+html:lang(ar){--ui-control-line:1.75}
+html.reading-spacious{--ui-control-line:1.9}
+
+.primary,.text-button,.plain-link,.topic-filter,.source-topic-nav a,.evidence-nav a{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ min-inline-size:44px;
+ min-block-size:48px;
+ max-inline-size:100%;
+ block-size:auto;
+ gap:.5em;
+ line-height:var(--ui-control-line);
+ text-align:center;
+ white-space:normal;
+ overflow-wrap:anywhere;
+ word-break:normal;
+}
+.primary>*,.text-button>*{min-inline-size:0;max-inline-size:100%}
+.primary>[aria-hidden="true"],.text-button>[aria-hidden="true"]{flex:none}
+.reading-spacious :is(.primary,.text-button,.plain-link,.topic-filter){line-height:var(--ui-control-line)}
+
+/* The brand and navigation can reflow independently. A consistent two-column
+   menu on phones keeps the two resource destinations together and visible. */
+.header-inner{
+ flex-wrap:wrap;
+ align-items:center;
+ gap:.75rem 1.5rem;
+ padding-block:.875rem;
+}
+.header .wordmark{flex:0 1 auto;min-inline-size:0;min-block-size:48px}
+.header .nav-profiles{flex:none}
+.header nav{
+ display:flex;
+ flex:1 0 100%;
+ flex-wrap:wrap;
+ align-items:stretch;
+ justify-content:flex-start;
+ order:3;
+ inline-size:100%;
+ min-inline-size:0;
+ margin:0;
+ padding-block-start:.75rem;
+ border-block-start:1px solid var(--line);
+ gap:.375rem;
+}
+.header nav>a,.header nav>.utility-settings{
+ display:inline-flex;
+ flex:1 1 auto;
+ align-items:center;
+ justify-content:center;
+ min-inline-size:44px;
+ min-block-size:48px;
+ max-inline-size:100%;
+ inline-size:auto;
+ block-size:auto;
+ margin:0;
+ padding:.625rem .75rem;
+ border-radius:var(--ui-radius-control,.75rem);
+ font-size:.9375rem;
+ line-height:var(--ui-control-line);
+ text-align:center;
+ white-space:normal;
+ overflow-wrap:anywhere;
+}
+.header nav>.utility-settings{
+ border:1px solid var(--line);
+ font-weight:600;
+ text-underline-offset:.2em;
+}
+@media(min-width:75rem){
+ .header-inner{flex-wrap:wrap}
+ .header nav{flex:1 1 44rem;order:0;inline-size:auto;padding-block-start:0;border-block-start:0}
+}
+@media(max-width:41.249rem){
+ .header nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+ .header nav>a,.header nav>.utility-settings{min-inline-size:0;padding:.625rem .5rem}
+ .header nav>.utility-settings{grid-column:1/-1}
+}
+
+/* Both role labels share a width and a content-sized row. The scenes remain
+   complete, side by side, below the controls at every screen width. */
+.reference-landing .overlapping-heroes .perspective-hero-button{
+ inline-size:100%;
+ max-inline-size:min(100%,20rem);
+ min-block-size:64px;
+ justify-self:center;
+ align-self:stretch;
+ padding:.75em .5em;
+ margin:0 0 .75rem;
+ line-height:var(--ui-control-line);
+ text-wrap:balance;
+}
+.perspective-hero-button>span{inline-size:100%;line-height:inherit}
+.role-picker{
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));
+ align-items:stretch;
+}
+.role-picker .primary{inline-size:100%;line-height:var(--ui-control-line)}
+.role-status{line-height:inherit}
+
+/* Answer letters stay beside the first line, even when an answer is long.
+   Logical alignment also supports right-to-left languages. */
+.choice,.paired-game .choice{
+ display:grid;
+ grid-template-columns:auto minmax(0,1fr);
+ align-items:start;
+ gap:.875rem;
+ text-align:start;
+ line-height:var(--ui-control-line);
+}
+.choice .choice-letter{
+ align-self:start;
+ inline-size:2rem;
+ block-size:2rem;
+ min-inline-size:2rem;
+ min-block-size:2rem;
+ line-height:1;
+}
+.choice>span:last-child{min-inline-size:0}
+
+/* Choose the number of character columns from the space actually available.
+   The rem minimum grows with the reader's text-size preference. */
+.character-options{
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,max(6.5rem,18%)),1fr));
+ align-items:stretch;
+ gap:.75rem;
+}
+.character-option{gap:.5rem;padding:.75rem .5rem;line-height:var(--ui-control-line)}
+.character-option>strong{font-size:1rem;line-height:inherit}
+.character-option>.character-selected{max-inline-size:100%;line-height:inherit}
+
+/* Related actions fill equal tracks and grow vertically with their labels.
+   There is no narrow, fixed-width slot for a translated secondary action. */
+.action-group,.recap-next,.settings-actions,.play-toolbar.perspective-bar>.character-actions{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));
+ align-items:stretch;
+ gap:.75rem;
+ min-inline-size:0;
+ max-inline-size:100%;
+}
+.action-group{margin-block-start:1rem}
+.play-toolbar.perspective-bar{align-items:stretch}
+.play-toolbar.perspective-bar>div:first-child{flex:1 1 12rem;justify-content:center}
+.play-toolbar.perspective-bar>.character-actions{flex:2 1 32rem;inline-size:auto}
+.action-group>.primary,.recap-next>.primary,.settings-actions>.primary,
+.play-toolbar.perspective-bar>.character-actions>button,
+.paired-feedback-actions>.primary,.paired-feedback-actions>.text-button{
+ inline-size:100%;
+ min-inline-size:0;
+ align-self:stretch;
+ justify-content:center;
+ margin:0;
+ text-align:center;
+}
+.play-toolbar .primary,.play-toolbar .text-button{padding:.75rem;line-height:var(--ui-control-line)}
+.topline{flex-wrap:wrap;align-items:stretch;gap:.5rem 1rem}
+.topline .text-button,.setup-character .text-button,.paired-recap .text-button,
+.progress-result .text-button,.paired-stage-footer>.text-button{
+ justify-content:flex-start;
+ text-align:start;
+}
+.session-return .text-button{flex:0 1 auto;min-inline-size:0}
+.legacy-perspective{flex-wrap:wrap;align-items:stretch}
+.legacy-perspective>div{flex:1 1 18rem;min-inline-size:0;justify-content:center}
+.legacy-perspective>.primary{flex:1 1 18rem;inline-size:auto}
+.legacy-perspective>.text-button{flex:1 1 10rem}
+@media(max-width:41.249rem){
+ .play-toolbar.perspective-bar>.character-actions{grid-template-columns:minmax(0,1fr);inline-size:100%;flex-basis:auto}
+ .play-toolbar.perspective-bar>div:first-child{flex-basis:auto}
+ .legacy-perspective>div{flex-basis:auto}
+ .legacy-perspective>.primary,.legacy-perspective>.text-button{flex-basis:auto;inline-size:100%}
+}
+@media(forced-colors:active){
+ .header nav>.utility-settings{border-color:ButtonText}
+}

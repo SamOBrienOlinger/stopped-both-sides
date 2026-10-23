@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs';
+import {expectControlsFit} from './control-layout.mjs';
 
 const sizes=[[320,568],[390,844],[568,320],[768,1024],[1024,768],[1366,768],[1920,1080],[2560,1440]];
 const readState=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
@@ -19,6 +20,7 @@ async function fits(page,label){
  });
  expect(result.scroll,label+' must not scroll horizontally').toBeLessThanOrEqual(result.width+2);
  expect(result.clips,label+' must not clip text').toEqual([]);
+ await expectControlsFit(page,label);
 }
 async function settings(page){
  await page.locator('.header [data-reading-open]').click();
@@ -57,11 +59,21 @@ async function checkHeroControls(page){
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
 async function captureHero(page,role,width,state,testInfo){
- if(![390,768,1366].includes(width))return;
+ if(![320,390,768,1366].includes(width))return;
  await testInfo.attach(`hero-${role}-${width}-${state}`,{
   body:await page.locator('.overlapping-heroes').screenshot({animations:'disabled'}),
   contentType:'image/png'
  });
+}
+async function captureControls(page,role,width,state,testInfo,groups){
+ if(!testInfo||![320,390,768,1366].includes(width))return;
+ for(const [name,selector] of groups){
+  const control=page.locator(selector).first();
+  if(!await control.isVisible())continue;
+  await testInfo.attach(`${name}-${role}-${width}-${state}`,{
+   body:await control.screenshot({animations:'disabled'}),contentType:'image/png'
+  });
+ }
 }
 async function checkDialog(page){
  await settings(page);
@@ -76,7 +88,7 @@ async function checkDialog(page){
  await expect(page.locator('#reading-dialog')).not.toBeVisible();
  await expect(page.locator('.header [data-reading-open]')).toBeFocused();
 }
-async function chooseFirst(page,role){
+async function chooseFirst(page,role,testInfo){
  await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.encounter-card')).toHaveCount(14);
  await page.locator('.setup-role summary').click();
@@ -85,6 +97,7 @@ async function chooseFirst(page,role){
  await fits(page,'simple setup');
  await page.locator('[data-action="paired-setup-characters"]').click();
  await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'character picker');
+ await captureControls(page,role,page.viewportSize().width,'standard',testInfo,[['character-picker','.character-picker']]);
  await page.locator('[data-action="paired-setup-done"]').click();
  await expect(page.locator(`[data-action="paired-start"]`).first()).toHaveAttribute('data-role',role);
  await page.locator('[data-action="paired-quick-start"]').click();
@@ -99,12 +112,13 @@ for(const role of ['public','garda']){
    await page.setViewportSize({width,height});
    await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
    await captureHero(page,role,width,'standard',testInfo);
+   await captureControls(page,role,width,'standard',testInfo,[['navbar','.header']]);
    await page.locator('.single-mode summary').click();await fits(page,'original situations');
    await page.locator('.single-mode [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
    await page.locator('[data-action="choose"]').first().click();
    await expect(page.locator('#feedback')).toBeVisible();await fits(page,'original practice feedback');
-   await chooseFirst(page,role);await fits(page,'shared situation');
+   await chooseFirst(page,role,testInfo);await fits(page,'shared situation');
    await page.locator('[data-action="paired-answer"]').first().click();
    await expect(page.locator('#feedback')).toBeVisible();await fits(page,'feedback');
    await checkDialog(page);
@@ -116,9 +130,11 @@ for(const role of ['public','garda']){
    await page.locator('#reading-form [type="submit"]').click();
    await expect(page.locator('html')).toHaveAttribute('lang','ga');
    await fits(page,'large Irish feedback');
+   await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.character-actions'],['feedback-actions','.paired-feedback-actions']]);
    await page.locator('[data-action="paired-characters"]').click();
    await expect(page.locator('#character-picker-title')).toBeFocused();
    await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'large Irish character picker');
+   await captureControls(page,role,width,'large-irish',testInfo,[['character-picker','.character-picker']]);
    await page.locator('[data-action="paired-character-close"]').click();
    await expect(page.locator('[data-action="paired-characters"]')).toBeFocused();
    await page.locator('.perspective-bar [data-action="paired-switch"]').click();

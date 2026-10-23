@@ -3,6 +3,7 @@ import {languages} from '../../locales/languages.mjs';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=pedagogy-1';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
 import {progressStorageKey} from '../../encounters/progress.mjs';
+import {expectControlsFit} from './control-layout.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));
 await Promise.all(added.map(language=>loadLanguage(language.id)));
@@ -39,6 +40,7 @@ async function fits(page,label){
  }));
  expect(measure.scroll,label).toBeLessThanOrEqual(measure.width+2);
  expect(measure.clipped,label).toEqual([]);
+ await expectControlsFit(page,label);
 }
 async function holdInitialArabic(page){
  const initial=answer(startEncounter('public-search','public',{cast}),0);
