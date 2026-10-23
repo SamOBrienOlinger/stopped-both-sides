@@ -106,6 +106,8 @@ Object.assign(ui,{
 Object.assign(ui,refinementIrish);
 ui['member of the public']=ui['Member of the public'];
 ui['Garda member']=ui['Member of An Garda Síochána'];
+ui['Your Rights']=ui['Public rights resources'];
+ui['Garda Guidance']=ui['Garda resources'];
 for(const [key,value] of Object.entries(ui))if(key.includes('site-switch button'))ui[key.replaceAll('site-switch button','resource-site link')]=value;
 Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
 function translateIrishText(text,lang='en'){
@@ -168,7 +170,7 @@ const loaders={
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
-const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána'};
+const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána','Your Rights':'Public rights resources','Garda Guidance':'Garda resources'};
 export function languageLoaded(language){return ['en','ga'].includes(language)||packs.has(language);}
 export function loadLanguage(value){
  const language=normaliseLanguage(value);

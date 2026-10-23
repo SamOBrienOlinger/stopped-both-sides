@@ -82,7 +82,17 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
   assert.equal(addresses.public,base);assert.equal(addresses.garda,base+'garda/');
   for(const [role,path] of [['public','index.html'],['garda','garda/index.html']]){
    const html=readFileSync(new URL('../'+path,import.meta.url),'utf8');
-   const fallback=html.match(/data-site-switch href="([^"]+)"/)[1];
+   const navigation=html.match(/<nav aria-label="Main navigation">([\s\S]*?)<\/nav>/)[1];
+   for(const [label,resourceRole,route] of [['Your Rights','public','rights'],['Garda Guidance','garda','evidence']]){
+    const link=navigation.match(new RegExp('<a([^>]*)>'+label+'<\\/a>'));
+    assert.ok(link,`${path}: ${label} belongs in the main navigation`);
+    const href=link[1].match(/href="([^"]+)"/)[1];
+    assert.equal(new URL(href,addresses[role]).href,addresses[resourceRole]+'#'+route);
+    assert.ok(link[1].includes(`data-nav="${route}"`));
+    assert.equal(link[1].includes('data-site-switch'),role!==resourceRole);
+   }
+   assert.doesNotMatch(html,/class="(?:header-actions|site-switch)"/);
+   const fallback=navigation.match(/data-site-switch href="([^"]+)"/)[1];
    const target=new URL(fallback,addresses[role]);
    assert.equal(new URL('./',target).href,addresses[role==='public'?'garda':'public']);
   }

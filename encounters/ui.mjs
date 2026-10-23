@@ -122,7 +122,6 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const anchor=document.querySelector('[data-site-switch]');if(!anchor)return;
   const targetRole=otherRole(siteRole);
   anchor.href=sites[targetRole]+(targetRole==='garda'?'#evidence':'#rights')+'~'+packProgress(store.value);
-  anchor.textContent=siteRole==='public'?'Garda resources':'Public rights resources';
  }
  function referenceRoute(hash){
   const [route,carried,...extra]=hash.split('~');
