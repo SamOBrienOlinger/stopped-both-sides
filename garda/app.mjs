@@ -1,4 +1,4 @@
-import {learningAbout} from '../learning/about.mjs?v=pedagogy-1';
+import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=pedagogy-1';
 import {createMotion} from '../accessibility/motion.mjs?v=interaction-polish-1';

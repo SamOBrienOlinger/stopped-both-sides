@@ -136,7 +136,7 @@ export function learningAbout() {
    `)}
    ${panel('05','Research references','Eight studies, with original sources and Consensus records',`
     <p>Studies were identified through Consensus and checked against original papers or publisher, author and university records. This focused review was completed on 23 October 2026. Full text was not available or reviewed for every study; some findings were checked through primary abstracts and bibliographic records.</p>
-    <ol class="learning-references">${references.map(([authors,title,journal,doi,consensus,primary])=>`<li><div lang="en-IE" dir="ltr" data-no-translate><p>${authors}</p><h3>${title}</h3><p>${journal}</p></div><div class="learning-reference-links">${external('https://doi.org/'+doi,'DOI')} ${external(consensus,'Consensus record')} ${external(primary,'Original source')}</div></li>`).join('')}</ol>
+    <ol class="learning-references" role="list">${references.map(([authors,title,journal,doi,consensus,primary],index)=>`<li><span class="learning-reference-number" dir="ltr">${index+1}</span><div class="learning-reference-entry"><div lang="en-IE" dir="ltr" data-no-translate><p>${authors}</p><h3>${title}</h3><p>${journal}</p></div><div class="learning-reference-links">${external('https://doi.org/'+doi,'DOI')} ${external(consensus,'Consensus record')} ${external(primary,'Original source')}</div></div></li>`).join('')}</ol>
     <p>This review complements the scenario evidence library and the separate content-review record.</p><p>${external('https://github.com/SamOBrienOlinger/stopped-both-sides/blob/main/README.md#educational-approach-methodology-and-learning-outcomes','Read the full educational methodology in the README')}</p>
    `)}
   </div>

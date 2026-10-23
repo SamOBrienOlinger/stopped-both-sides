@@ -95,10 +95,12 @@
 .learning-levels dd{margin:0;line-height:1.7}
 .learning-note{padding:1rem;background:var(--pale);border-inline-start:3px solid var(--deep);border-radius:0 8px 8px 0;margin-block-start:1.5rem}
 [dir="rtl"] .learning-note{border-radius:8px 0 0 8px}
-.learning-references{padding-inline-start:1.5rem;margin-block:1.5rem}
-.learning-references li{padding-inline-start:.5rem;padding-block:1.25rem;border-block-end:1px solid var(--line);margin:0}
+/* Keep ordinals inside the row: outside RTL markers can overhang mixed-direction
+   bibliographic entries in WebKit. Explicit list semantics remain in the HTML. */
+.learning-references{list-style:none;padding:0;margin-block:1.5rem}
+.learning-references li{display:grid;grid-template-columns:1.5rem minmax(0,1fr);gap:.5rem;padding-block:1.25rem;border-block-end:1px solid var(--line);margin:0}
 .learning-references li:first-child{padding-block-start:0}
-.learning-references li::marker{font-weight:700;color:var(--deep)}
+.learning-reference-number{font-size:.875rem;line-height:1.7;font-weight:700;text-align:center;color:var(--deep)}
 .learning-references h3{font-size:1rem;margin:.35rem 0;line-height:1.6}
 .learning-references p{font-size:.8125rem;line-height:1.7;margin:0;color:var(--muted)}
 .learning-reference-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-block-start:.75rem}
