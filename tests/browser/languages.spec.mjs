@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=footer-1';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=pedagogy-1';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
 import {progressStorageKey} from '../../encounters/progress.mjs';
 
@@ -49,7 +49,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=footer-1',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=pedagogy-1',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -342,7 +342,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=footer-1',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=pedagogy-1',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expect(page.locator('#language-settings-trigger')).toBeFocused();
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);
