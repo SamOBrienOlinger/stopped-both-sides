@@ -92,7 +92,7 @@ html.reading-spacious{--ui-control-line:1.9}
  padding:.75em .25em;
  margin:0 0 .75rem;
  line-height:var(--ui-control-line);
- text-wrap:balance;
+ text-wrap:wrap;
 }
 .perspective-hero-button>span{inline-size:100%;line-height:inherit}
 .role-picker{
