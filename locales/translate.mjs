@@ -104,6 +104,8 @@ Object.assign(ui,{
  'On the street':'Ar an tsráid','At the bus stop':'Ag stad an bhus','At the station':'Ag an stáisiún','Time to reflect':'Am le machnamh','Reviewing the encounter':'Ag athbhreithniú na teagmhála','In the community':'Sa phobal','Private advice · separate perspectives':'Comhairle phríobháideach · dearcthaí ar leith','Separate reflections':'Machnamh ar leith','Same facts · compare the written scenarios':'Na fíricí céanna · cuir na cásanna scríofa i gcomparáid','Your chosen response':'An freagra a roghnaigh tú','The scene':'An radharc'
 });
 Object.assign(ui,refinementIrish);
+ui['member of the public']=ui['Member of the public'];
+ui['Garda member']=ui['Member of An Garda Síochána'];
 for(const [key,value] of Object.entries(ui))if(key.includes('site-switch button'))ui[key.replaceAll('site-switch button','resource-site link')]=value;
 Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
 function translateIrishText(text,lang='en'){
@@ -166,7 +168,7 @@ const loaders={
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
-const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation'};
+const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána'};
 export function languageLoaded(language){return ['en','ga'].includes(language)||packs.has(language);}
 export function loadLanguage(value){
  const language=normaliseLanguage(value);
