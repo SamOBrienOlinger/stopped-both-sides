@@ -10,6 +10,12 @@ export async function expectControlsFit(page,label){
     const style=getComputedStyle(current);
     if(current.hidden||current.inert||current.matches('.sr-only,.visually-hidden')||
       style.display==='none'||style.visibility==='hidden'||style.visibility==='collapse')return true;
+    // Closed details can retain layout boxes for their unpainted contents.
+    // Only the first summary (and its descendants) remains interactive.
+    if(current.matches('details:not([open])')){
+     const summary=[...current.children].find(child=>child.tagName==='SUMMARY');
+     if(!summary?.contains(element))return true;
+    }
    }
    return false;
   };
