@@ -35,6 +35,7 @@
   <a href="#characters-and-switching-sides">Characters</a> ·
   <a href="#accessibility-and-language">Language &amp; reading</a> ·
   <a href="#evidence-and-content-review">Evidence</a> ·
+  <a href="#educational-approach-methodology-and-learning-outcomes">Learning approach</a> ·
   <a href="#getting-started">Developers</a> ·
   <a href="#contributing-and-support">Help &amp; contribute</a>
 </p>
@@ -214,6 +215,281 @@ Specialist legal review, input from communities and Garda educators, accessibili
 
 </details>
 
+## Educational approach, methodology and learning outcomes
+
+**Practise a decision. Examine the reasoning. Compare perspectives. Apply what you learn.**
+
+Stopped: Both Sides uses **scenario-based learning** to help people explore rights, responsibilities and decision-making in fictional encounters involving the public and An Garda Síochána. Its intended contribution is to support **rights literacy, evidence-based reasoning, perspective comparison and reflective judgement**.
+
+The approach draws on research into educational games, explanatory feedback, perspective-taking, reflective review and practice. The studies below support these design principles; **the learning effects of this particular resource remain to be evaluated**. This is a focused pedagogical review, not a systematic review of every relevant study.
+
+**[Teaching examples](#research-and-teaching-examples)** · **[Learning methodology](#learning-methodology)** · **[Learning outcomes](#intended-learning-outcomes)** · **[Evaluation](#evaluating-the-learning)** · **[Research references](#pedagogical-references)**
+
+### Learning approach at a glance
+
+| Approach | What it means for the learner | How the game supports it |
+| --- | --- | --- |
+| **Learning through scenarios** | Apply a principle to a concrete situation involving a decision and incomplete information. | Fictional encounters address questions, searches, communication, assumptions and changing evidence. |
+| **Formative learning** | Use feedback to identify what needs further explanation and reconsider a response. | Choices receive explanations, learning points and sources; learners can try another answer. |
+| **Perspective-taking** | Consider differences in knowledge, concerns, responsibilities and authority. | Switch between public and Garda roles within the same shared situation, keeping both sets of answers. |
+| **Critical reflection** | Examine how identity cues, prior commitments or organisational pressures influence judgement. | Situations address first impressions, group reputations, colleague pressure and revising decisions. |
+| **Practice and revision** | Revisit an idea, explore another response and explain what changed. | Replay, saved progress and paired recaps support returning to earlier decisions. |
+| **Source-based inquiry** | Check the basis of a claim and recognise its limits. | Explanations link to legal, professional, academic and community sources. |
+
+The **59 stages are spread across 14 shared situations**, with a playthrough following one authored route. The active role's selected answer determines the next branch; the other role's answer remains available for comparison. Branches illustrate teaching decisions and opportunities to reconsider. They do not predict what will happen in an actual encounter.
+
+> [!IMPORTANT]
+> **Understanding both perspectives preserves the distinction between individual rights and state authority.** It does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person's misconduct, and rights never depend on a game score.
+
+### Research and teaching examples
+
+The situations named below already exist in the game. **The worksheets, learner-written explanations, facilitated discussions and new-case assessments are suggested teaching activities**, not features that the website automatically administers.
+
+<details>
+<summary><strong>Explore six research-supported teaching activities and two educational comparators</strong></summary>
+
+#### A. Practise decisions in context
+
+**Research.** Wouters and colleagues' meta-analysis included 77 learning comparisons involving 5,547 participants. Serious games showed benefits for learning and retention compared with conventional instruction, while a motivational advantage was not statistically established. Larger learning advantages were associated with supplementary instruction, multiple sessions and group work. Those moderator associations do not establish that adding one feature will cause a particular improvement. [[1]](#pedagogy-reference-1)
+
+**Existing situation: “A hunch on the street.”** A person stands beside a closed shop, looks at a phone and looks away as a Garda approaches. The learner examines what was observed and what was inferred.
+
+**Suggested activity.** Before selecting an answer, complete two columns:
+
+| What the situation states | What I might be assuming |
+| --- | --- |
+| The person looks away. | They are concealing something. |
+| The person stands beside a closed shop. | They are connected with an offence. |
+| A briefing mentioned thefts generally. | This particular person is relevant to those thefts. |
+
+Ask which facts support the proposed response, which interpretations need checking and what alternative explanation could fit the observations.
+
+**Intended learning:** distinguish observation from inference, identify missing information and justify a decision using the supplied facts.
+
+#### B. Learn through explanations
+
+**Research.** Butler, Godbole and Marsh compared feedback supplying a correct answer with feedback explaining it. In two experiments, performance on repeated questions was similar two days later, but explanatory feedback produced better performance on new inference questions. The studies concerned conceptual learning from written material, not operational police decisions. [[2]](#pedagogy-reference-2)
+
+**Existing situation: “When the facts change.”** The exercise stipulates an initial basis for a proposed search, followed by a correction that undermines it before the search begins. Learners consider reassessment, explanation and accurate recording.
+
+**Suggested activity.** Complete three statements:
+
+1. **My initial decision was based on…**
+2. **The new information changes…**
+3. **My revised decision and explanation are…**
+
+After feedback, introduce a different fictional case involving a corrected witness description and ask learners to apply the principle.
+
+**Intended learning:** explain why new information matters and revise a judgement appropriately.
+
+#### C. Compare perspectives while recognising uncertainty
+
+**Research.** Todd and colleagues' five experiments found benefits from explicit perspective-taking exercises on particular measures of interracial evaluation and interaction. These short-term findings do not establish that choosing an avatar or completing a brief game produces lasting reductions in prejudice. [[3]](#pedagogy-reference-3)
+
+Eyal, Steffel and Epley's 25 experiments addressed a different outcome: accuracy in understanding another person's thoughts or feelings. Imagining the other person's perspective did not consistently improve accuracy; obtaining their perspective directly through conversation helped in the final experiment. The two studies concern different outcomes, so a warmer evaluation should not be equated with more accurate understanding. [[4]](#pedagogy-reference-4)
+
+**Existing feature: switch roles within the same shared scene.**
+
+**Suggested activity.** For each role, identify:
+
+- What information the person actually has.
+- A possible concern, with a reason for that interpretation.
+- What remains unknown.
+- A question that would check an assumption.
+
+Finish with: **“What would you ask this person to check an assumption you have made?”** Keep the differences in authority, rights and responsibilities explicit.
+
+**Intended learning:** consider another viewpoint, recognise the limits of one's knowledge and formulate a useful question.
+
+#### D. Turn a playthrough into reflective learning
+
+**Research.** Keiser and Arthur's meta-analysis examined 61 studies of after-action reviews, or debriefs. It found benefits across training outcomes, with effectiveness depending on how the review was designed and matched to the task. Reviewing actual performance information was a useful characteristic. These cross-context findings support a rationale for debriefing; they do not establish an effect size for this game or that one facilitation format always works best. [[5]](#pedagogy-reference-5)
+
+**Existing feature: a paired recap with choices, explanations and sources.**
+
+**Suggested activity.** Use the recap to discuss:
+
+1. What information influenced your first choice?
+2. Which assumption became apparent after feedback?
+3. What became clearer when you switched roles?
+4. Which rights or responsibilities remained the same?
+5. What principle would you carry into a different situation?
+
+**Intended learning:** examine the decision process, identify a reason to revise it and articulate a principle for future use.
+
+The site already provides reflection prompts and discussion guidance. Spoken or written responses would make learners' reasoning visible beyond their selected answers.
+
+#### E. Use replay to support recall and application
+
+**Research.** Butler's four experiments found that repeated testing produced better retention and transfer than repeated study when participants were assessed a week later, including on new inference questions. This concerns learning from written material; repeatedly clicking the same answer in a game is not automatically the same learning activity. [[6]](#pedagogy-reference-6)
+
+**Existing features: replay, multiple situations and saved progress.**
+
+**Suggested activity.** On a later visit, ask: **“Before reopening the explanation, identify the information you would need to justify this decision.”** Then apply the principle to a different situation, such as moving from “A hunch on the street” to “Matches the description”.
+
+A return activity after a week or two is a possible pilot design choice, not an established optimal interval for this resource.
+
+**Intended learning:** recall a principle and recognise when it applies in an unfamiliar context.
+
+#### F. Practise fair and understandable communication
+
+**Research.** Weisburd and colleagues conducted a randomised trial involving 28 officers and 120 crime hot spots in three US cities. The intensive five-day programme included scenario discussion and roleplay and improved observed procedurally just conduct. It did not produce significant improvements in residents' overall assessments of police legitimacy. The whole programme was evaluated; the roleplay component was not isolated, and its findings do not establish that a short online game has the same effects. [[7]](#pedagogy-reference-7)
+
+**Existing situation: “When behaviour is misread.”** Learners examine interpretations of slow responses, looking down and requests for repetition.
+
+**Suggested activity.** Draft a short response that explains the purpose of the exchange, provides an opportunity to speak, checks understanding and separates assumptions about communication style from relevant evidence.
+
+**Intended learning:** communicate clearly and respectfully while recognising when more information or support is needed.
+
+The published [Garda Decision Making Model](https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf) provides an Irish professional connection: it places rights and ethics at its centre and includes gathering information, considering options, justifying choices and reviewing decisions. Compatibility with those principles does not imply Garda endorsement or professional validation.
+
+#### Educational comparators
+
+| Example | Relevance to this project | What the evidence establishes |
+| --- | --- | --- |
+| [**PLUS: Police Training Using Simulations**](https://www.bournemouth.ac.uk/research/projects/plus-project-serious-games-police-training), Bournemouth University and Dorset Police | Uses simulated stop-and-search situations and role-playing to connect theory with practice. | A close subject-matter and teaching-format comparator. The official project description alone does not demonstrate measured effectiveness. |
+| **Quandary**, studied by Hilliard and colleagues | Uses fictional dilemmas to explore ethical decision-making and different perspectives. | In research with 131 middle-school students, qualitative responses showed greater depth, while short-term quantitative measures did not show gains in perspective-taking, empathy or helping behaviour. [[8]](#pedagogy-reference-8) |
+
+These examples support examining the **quality of learners' explanations** as an outcome in its own right. Findings from another game, age group or policing jurisdiction cannot establish the effectiveness of Stopped: Both Sides.
+
+</details>
+
+### Learning methodology
+
+**Orient → explore → compare → examine feedback → reflect → apply.**
+
+The site supports the central play-and-feedback stages. The schedule below adds proposed facilitation and assessment. It is an illustrative **45-minute pilot session**, not an established optimal duration.
+
+| Stage | Time | Suggested activity | Purpose |
+| --- | --- | --- | --- |
+| **Orient** | 5 minutes | Introduce one learning question and obtain an initial response to a short vignette. | Establish the topic and starting reasoning. |
+| **Explore one perspective** | 8 minutes | Play a selected situation and note the reasons for key choices. | Practise applying ideas in context. |
+| **Compare perspectives** | 8 minutes | Switch roles at relevant stages and compare what each person knows and needs clarified. | Examine knowledge, authority and responsibility. |
+| **Examine feedback and sources** | 7 minutes | Read explanations and inspect one or two supporting sources. | Connect judgement to evidence and uncertainty. |
+| **Debrief** | 10 minutes | Discuss assumptions, changed decisions and communication using the recap. | Make reasoning explicit and consider alternatives. |
+| **Apply to a new case** | 7 minutes | Answer an unfamiliar vignette and explain the decision. | Check application beyond the original example. |
+
+A later short activity could revisit the same objectives through another situation.
+
+**Content and facilitation principles**
+
+- **Start with a specific learning problem.** Select situations suited to an objective, such as distinguishing evidence from assumption or revising a decision. Completing every situation is not necessary for every objective.
+- **Keep reasons visible.** Ask learners to explain a choice before feedback and a revised choice afterwards. This helps distinguish understanding from familiarity with the options.
+- **Use shared facts carefully.** Identify what both roles know, what only one character knows and what remains unknown. Maintain the distinction between rights and the exercise of authority.
+- **Ground learning in Irish sources and community knowledge.** Build on the [selected critical evidence review](research/README.md), while seeking independent legal review and meaningful community input. The [INAR/ICCL community and rights report](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf) offers a local methodological example combining desk research with participatory workshops and other engagement. That is a reference point for proposed development, not a claim that this game has already been co-designed or approved by those organisations.
+- **Offer different ways to participate.** Learners can discuss, write, observe or work individually. Participation should not depend on disclosing personal encounters. Use the [language and reading controls](#accessibility-and-language) and assess whether they meet participants' needs.
+- **Invite informed challenge.** Learners should be able to question whether a scene supplies enough information, whether a source supports an explanation and what would change a decision.
+
+### Intended learning outcomes
+
+**After selected situations and associated reflection activities, learners should be able to demonstrate the following.** These are proposed assessment targets, not outcomes already established by evaluation.
+
+| Intended outcome | What the learner should demonstrate | Possible assessment |
+| --- | --- | --- |
+| **Identify rights and sources of support** | Recognise what needs clarification in a fictional encounter and locate an appropriate Irish source. | A short case response with a relevant source and explanation. |
+| **Distinguish observation from assumption** | Separate supplied information from interpretations about intention, guilt or risk. | Annotate a new vignette with facts, inferences and missing information. |
+| **Explain a decision using evidence** | Connect a proposed response to the relevant facts and principles. | A brief written or spoken justification. |
+| **Compare perspectives accurately** | Describe differences in knowledge, concerns, powers and responsibilities. | Compare both roles without assuming equal authority or blame. |
+| **Revise a judgement** | Identify new information that matters and explain its effect on the proposed action. | A staged case with an additional fact introduced midway. |
+| **Recognise unsupported generalisations** | Identify when identity, reputation, appearance or colleague confidence substitutes for relevant individual information. | Explain an assumption and formulate a question to check it. |
+| **Communicate clearly and respectfully** | Explain the situation, acknowledge uncertainty and check understanding. | A short dialogue, written response or facilitated roleplay. |
+| **Evaluate learning and fairness claims** | Explain why a game score or a limited set of statistics cannot establish broader effects. | Interpret a fictional results summary and identify the evidence still needed. |
+
+The existing **“What the numbers leave out”** situation supplies a critical data-literacy example: learners interpret clearly labelled synthetic stop-and-search data and examine whether better quiz answers establish reduced bias. No real incident records are used.
+
+The website records selected answers and learning scores. Written justifications, observed communication and independent new-case assessments require an accompanying teaching or research activity.
+
+### Evaluating the learning
+
+**Proposed research question:** Does using Stopped: Both Sides improve learners' ability to explain and apply relevant principles in unfamiliar fictional encounters, and are those improvements retained?
+
+<details>
+<summary><strong>Read the proposed evaluation approach and evidence boundaries</strong></summary>
+
+#### Assess understanding, transfer and retention
+
+Use a short baseline task, an immediate assessment with a different but comparable case and a delayed follow-up. Include an explanation of the answer so that recognising a preferred option and understanding its basis can be assessed separately.
+
+A rubric could examine identification of relevant facts; separation of evidence from assumptions; recognition of rights, responsibilities and uncertainty; quality of justification; and appropriate revision after new information. For a stronger study, assessors could score responses without knowing whether they were written before or after the activity.
+
+#### Use a meaningful comparison
+
+Where feasible, compare the game with a reading-based version containing the same substantive information and similar learning time. Random allocation, when appropriate and practicable, would strengthen the comparison.
+
+This would help distinguish the contribution of the interactive method from the benefit of receiving information. A later study could compare otherwise similar versions with and without role-switching if that feature is the specific research question.
+
+#### Consider different audiences
+
+Public participants and Garda learners may start with different knowledge and use the resource for different purposes. Report their results separately where the sample permits.
+
+Collect feedback on unclear wording, misleading assumptions, access barriers and whether participants felt able to question explanations. Community review should help assess how appropriately the situations represent relevant concerns and experiences.
+
+#### Keep outcome levels distinct
+
+| Outcome level | Evidence needed |
+| --- | --- |
+| **Participation and usability** | Completion, navigation, understanding of instructions and access barriers. |
+| **Learning** | Better explanations and decisions on independently assessed cases. |
+| **Retention and transfer** | Performance on unfamiliar cases after a delay. |
+| **Attitudes or empathy** | Appropriate measures designed for those constructs, interpreted cautiously. |
+| **Practice and community experience** | Separate, appropriately governed evaluation involving observed conduct and people's experiences. |
+
+The current points system supports learning progress. It has not been validated as a measure of personal bias, professional competence or real-world conduct. See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md).
+
+</details>
+
+### Educational rationale
+
+> Stopped: Both Sides uses scenario-based learning to help people explore rights, responsibilities and decision-making in fictional encounters involving the public and An Garda Síochána. Learners make choices, receive explanations linked to sources, compare perspectives and revisit their reasoning.
+>
+> The approach draws on research into educational games, explanatory feedback, perspective-taking, reflective review and practice. Its intended learning outcomes include distinguishing evidence from assumption, identifying relevant rights and responsibilities, communicating clearly, reconsidering decisions when information changes and applying principles to unfamiliar situations.
+>
+> The resource can support independent exploration and facilitated discussion. Comparing perspectives retains the distinction between individual rights and the powers and responsibilities of state authority. Learning effectiveness should be evaluated through learners' explanations, decisions in new cases and retention over time. Effects on attitudes, professional conduct or community experience would require separate evaluation.
+
+### Pedagogical references
+
+Studies were identified through Consensus and checked against original papers or publisher, author and university records. This focused pedagogical review was completed on **23 October 2026**. It complements the [scenario evidence library](research/bibliography.md) and does not replace the separate [content-review record](docs/CONTENT-REVIEW.md). Full text was not available or reviewed for every study; some findings were checked through primary abstracts and bibliographic records.
+
+<details>
+<summary><strong>Open all eight research references, Consensus records and DOIs</strong></summary>
+
+#### Pedagogy reference 1
+
+**Wouters, P., van Nimwegen, C., van Oostendorp, H., & van der Spek, E. D. (2013).** [A meta-analysis of the cognitive and motivational effects of serious games](https://consensus.app/papers/a-metaanalysis-of-the-cognitive-and-motivational-effects-wouters-nimwegen/5629de92b02e5af8b30fdb4dfa985a19/?utm_source=chatgpt). *Journal of Educational Psychology, 105*(2), 249–265. [DOI: 10.1037/a0031311](https://doi.org/10.1037/a0031311). [University abstract](https://research.tue.nl/en/publications/a-meta-analysis-of-the-cognitive-and-motivational-effects-of-seri/).
+
+#### Pedagogy reference 2
+
+**Butler, A. C., Godbole, N., & Marsh, E. J. (2013).** [Explanation Feedback Is Better Than Correct Answer Feedback for Promoting Transfer of Learning](https://consensus.app/papers/explanation-feedback-is-better-than-correct-answer-butler-godbole/779248c1c5ec5f9c929ef2d41155e9b6/?utm_source=chatgpt). *Journal of Educational Psychology, 105*(2), 290–298. [DOI: 10.1037/a0031026](https://doi.org/10.1037/a0031026). [University abstract](https://profiles.wustl.edu/en/publications/explanation-feedback-is-better-than-correct-answer-feedback-for-p/).
+
+#### Pedagogy reference 3
+
+**Todd, A. R., Bodenhausen, G. V., Richeson, J. A., & Galinsky, A. D. (2011).** [Perspective taking combats automatic expressions of racial bias](https://consensus.app/papers/perspective-taking-combats-automatic-expressions-of-todd-bodenhausen/876fb609f43f5b50b0b74cd260617679/?utm_source=chatgpt). *Journal of Personality and Social Psychology, 100*(6), 1027–1042. [DOI: 10.1037/a0022308](https://doi.org/10.1037/a0022308). [Author manuscript (PDF)](https://groups.psych.northwestern.edu/spcl/documents/JPSP_inpressTodd.pdf).
+
+#### Pedagogy reference 4
+
+**Eyal, T., Steffel, M., & Epley, N. (2018).** [Perspective Mistaking: Accurately Understanding the Mind of Another Requires Getting Perspective, Not Taking Perspective](https://consensus.app/papers/perspective-mistaking-accurately-understanding-the-mind-eyal-steffel/6f2031106e785ee9b3748a702bbb0a24/?utm_source=chatgpt). *Journal of Personality and Social Psychology, 114*(4), 547–571. [DOI: 10.1037/pspa0000115](https://doi.org/10.1037/pspa0000115). [Author's publication record](https://www.nicholasepley.com/publications).
+
+#### Pedagogy reference 5
+
+**Keiser, N. L., & Arthur, W., Jr. (2021; published online in 2020).** [A meta-analysis of the effectiveness of the after-action review (or debrief) and factors that influence its effectiveness](https://consensus.app/papers/a-metaanalysis-of-the-effectiveness-of-the-afteraction-keiser-arthur/1cb95961ce3759b98291f0e1875847d0/?utm_source=chatgpt). *Journal of Applied Psychology, 106*(7), 1007–1032. [DOI: 10.1037/apl0000821](https://doi.org/10.1037/apl0000821). [Indexed primary abstract](https://pubmed.ncbi.nlm.nih.gov/32852990/).
+
+#### Pedagogy reference 6
+
+**Butler, A. C. (2010).** [Repeated testing produces superior transfer of learning relative to repeated studying](https://consensus.app/papers/repeated-testing-produces-superior-transfer-of-learning-butler/a2891bb1b6dc5e3c93866dfd06291350/?utm_source=chatgpt). *Journal of Experimental Psychology: Learning, Memory, and Cognition, 36*(5), 1118–1133. [DOI: 10.1037/a0019902](https://doi.org/10.1037/a0019902). [Indexed primary abstract](https://pubmed.ncbi.nlm.nih.gov/20804289/).
+
+#### Pedagogy reference 7
+
+**Weisburd, D., Telep, C. W., Vovak, H., Zastrow, T., Braga, A. A., & Turchan, B. (2022).** [Reforming the police through procedural justice training: A multicity randomized trial at crime hot spots](https://consensus.app/papers/reforming-the-police-through-procedural-justice-training-weisburd-telep/53c62e9c40d35d41997321b8432aa996/?utm_source=chatgpt). *Proceedings of the National Academy of Sciences, 119*(14), e2118780119. [DOI: 10.1073/pnas.2118780119](https://doi.org/10.1073/pnas.2118780119). [Research article (PDF)](https://crimejusticelab.org/wp-content/uploads/2022/04/Procedural-Justice-Police.pdf).
+
+#### Pedagogy reference 8
+
+**Hilliard, L. J., Buckingham, M. H., Geldhof, G. J., et al. (2018).** [Perspective taking and decision-making in educational game play: A mixed-methods study](https://consensus.app/papers/perspective-taking-and-decisionmaking-in-educational-hilliard-buckingham/5d99c756eccb5453859eeb661504defe/?utm_source=chatgpt). *Applied Developmental Science, 22*(1), 1–13. [DOI: 10.1080/10888691.2016.1204918](https://doi.org/10.1080/10888691.2016.1204918). [Research article (PDF)](https://sites.bc.edu/devtech/wp-content/uploads/sites/181/2018/02/gameplay.pdf).
+
+</details>
+
+[Back to the educational approach](#educational-approach-methodology-and-learning-outcomes)
+
+
 ## Getting started
 
 **For developers and contributors.** The site uses **HTML, CSS and JavaScript modules**, served through **GitHub Pages**. There are no application dependencies, build step, API keys or environment variables needed to play or run it locally.
@@ -322,6 +598,7 @@ The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes
 
 | Guide | What it covers |
 | --- | --- |
+| [Educational approach](#educational-approach-methodology-and-learning-outcomes) | Pedagogical examples, methodology, intended outcomes and research references |
 | [Garda learning](docs/GARDA-LEARNING.md) | Learning aims, situations and evidence boundaries |
 | [Clearer first play](docs/UX-REVIEW.md) | Before/after interface review, simpler onboarding and decision flow |
 | [Characters](docs/CHARACTERS.md) | Character selection, random casting, saved state and artwork |
