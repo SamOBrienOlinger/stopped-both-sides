@@ -23,8 +23,8 @@
  list-style:none;
 }
 .how-to-play li.how-step{
- display:grid;
- grid-template-columns:2.25rem minmax(0,1fr);
+ display:flex;
+ flex-wrap:wrap;
  align-items:start;
  gap:1rem;
  min-inline-size:0;
@@ -38,6 +38,7 @@
 .how-to-play .how-step+.how-step{border-block-start:1px solid var(--line)}
 .how-to-play .how-step-number{
  display:grid;
+ flex:none;
  place-items:center;
  inline-size:2.25rem;
  block-size:2.25rem;
@@ -52,7 +53,7 @@
  letter-spacing:normal;
  word-spacing:normal;
 }
-.how-to-play .how-step-copy{min-inline-size:0}
+.how-to-play .how-step-copy{flex:1 1 12rem;min-inline-size:0}
 .how-to-play .how-step-copy strong{
  display:block;
  margin-block-end:.375rem;
@@ -80,6 +81,7 @@
 @media(min-width:60rem){
  .how-to-play ol.how-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
  .how-to-play li.how-step{
+  display:grid;
   grid-template-columns:minmax(0,1fr);
   align-content:start;
   gap:1rem;
