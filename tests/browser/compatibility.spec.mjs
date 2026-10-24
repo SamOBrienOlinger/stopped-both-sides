@@ -112,7 +112,7 @@ for(const role of ['public','garda']){
    await page.setViewportSize({width,height});
    await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
    await captureHero(page,role,width,'standard',testInfo);
-   await captureControls(page,role,width,'standard',testInfo,[['navbar','.header']]);
+   await captureControls(page,role,width,'standard',testInfo,[['navbar','.header'],['how-it-works','.how-to-play']]);
    await page.locator('.single-mode summary').click();await fits(page,'original situations');
    await page.locator('.single-mode [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
@@ -143,6 +143,7 @@ for(const role of ['public','garda']){
    await checkDialog(page);
    await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
    await captureHero(page,role,width,'large-text',testInfo);
+   await captureControls(page,role,width,'large-text',testInfo,[['how-it-works','.how-to-play']]);
    await expect(page.locator('.perspective-button-label').first()).toHaveText('Duine den phobal');
    await expect(page.locator('.perspective-button-label').last()).toHaveText('Comhalta den Gharda Síochána');
    for(const target of ['encounters','progress','about',role==='public'?'rights':'evidence']){
