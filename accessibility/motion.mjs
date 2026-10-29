@@ -33,7 +33,7 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(!element.isConnected||!element.getClientRects().length||!allowed())return;
    remove(element);element.setAttribute('data-motion',kind);
    // Cleanup is independent of browser animation events (including cancellation).
-   active.set(element,setTimeout(()=>remove(element),360));
+   active.set(element,setTimeout(()=>remove(element),680));
   });
  }
  function snapshot(hash){
@@ -63,7 +63,8 @@ export function createMotion({main,getLegacyState=()=>null}){
   observer?.disconnect();observer=null;
   const selectors=next.complete?['.summary-list > .summary-item']:
    next.mode==='content'?['.content-page > .info-block','.source-card','.evidence-record',
-    '.progress-page > .role-results > .info-block','.progress-situations > .info-block']:[];
+    '.progress-page > .role-results > .info-block','.progress-situations > .info-block',
+    '.landing-overview','.perspective-hero','.how-step','.start-panel','.learning-section']:[];
   const candidates=[];
   for(const selector of selectors)all(selector).forEach((element,index)=>{
    if(element.parentElement?.closest('details'))return;
