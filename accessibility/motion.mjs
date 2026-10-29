@@ -64,7 +64,8 @@ export function createMotion({main,getLegacyState=()=>null}){
   const selectors=next.complete?['.summary-list > .summary-item']:
    next.mode==='content'?['.content-page > .info-block','.source-card','.evidence-record',
     '.progress-page > .role-results > .info-block','.progress-situations > .info-block',
-    '.landing-overview','.perspective-hero','.how-step','.start-panel','.learning-section']:[];
+    '.landing-overview','.perspective-hero','.how-step','.start-panel','.learning-section',
+    '.topic-explorer','.learning-goals','.source-topic']:[];
   const candidates=[];
   for(const selector of selectors)all(selector).forEach((element,index)=>{
    if(element.parentElement?.closest('details'))return;

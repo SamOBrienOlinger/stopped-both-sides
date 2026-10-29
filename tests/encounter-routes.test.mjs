@@ -150,3 +150,33 @@ test('Original practice uses its pictured character in every named scene and com
   assert.match(main.innerHTML,/data-action="paired-transfer"/);
  }
 });
+
+test('Home topic shortcuts open the matching catalogue for each starting role',()=>{
+ const topics={street:3,search:3,custody:2,young:2,fairness:4};
+ route('#play');
+ for(const topic of Object.keys(topics))assert.ok(main.innerHTML.includes(`#encounters/${siteRole}/${topic}`));
+ for(const role of roles)for(const [topic,count] of Object.entries(topics)){
+  route(`#encounters/${role}/${topic}`);
+  assert.match(main.innerHTML,/simple-setup topic-selected/);
+  assert.match(main.innerHTML,/class="scenario-library" open/);
+  assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,count);
+  action('paired-topic',{topic:'all'});
+  assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+ }
+ route('#encounters/public/unknown');assert.match(main.innerHTML,/Unable to open/);
+ route('#encounters/public/street/extra');assert.match(main.innerHTML,/Unable to open/);
+ route('#encounters/public');assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+});
+test('The interactive stage trail revisits the correct scene and retains the cast and role',()=>{
+ for(const role of roles){
+  action('paired-start',{id:'public-street',role});
+  action('paired-answer',{index:'0'});action('paired-next');
+  const before=state();
+  assert.match(main.innerHTML,/class="route-dot is-visited" data-action="paired-revisit" data-index="0"/);
+  assert.match(main.innerHTML,/aria-current="step"/);
+  action('paired-revisit',{index:'0'});
+  assert.equal(state().nodeId,encounters['public-street'].start);
+  assert.equal(state().history.length,0);
+  assert.equal(state().role,role);assert.deepEqual(state().cast,before.cast);
+ }
+});

@@ -48,3 +48,149 @@
  .paired-recap>.summary-item::before{background:CanvasText}
 }
 @media print{.route-trail,.completion-map{display:none}.paired-recap{padding:0;border:0}.paired-recap>.summary-item::before{display:none}}
+
+/* A cohesive learning workspace: clearer hierarchy and shorter action paths. */
+:root{--experience-shadow:0 10px 32px #183e490b;--experience-border:#d5e3e4}
+body{background:#f7fafb}
+main{max-inline-size:1240px;padding-block:2.5rem 4rem}
+.header{background:var(--paper,#fff)}
+.header .header-inner{max-inline-size:1280px}
+.header nav a[aria-current=page]{box-shadow:inset 0 -3px var(--deep)}
+.brand-intro.home-intro{max-inline-size:64rem;padding:1rem 0;margin-block-end:1rem}
+.brand-intro #game-title{font-size:clamp(2rem,4.3vw,3.4rem);letter-spacing:-.045em}
+.landing-overview{max-inline-size:64rem;margin-block:0 2rem;background:var(--paper,#fff);border:0;border-inline-start:4px solid var(--deep);box-shadow:var(--experience-shadow);border-radius:0 1.25rem 1.25rem 0}
+.reference-landing{max-inline-size:64rem;background:transparent!important}
+.reference-landing .landing-instructions{text-align:start;margin-block-end:1.5rem}
+.reference-landing .landing-instructions p{text-align:start}
+.reference-landing .landing-instructions h2{font-size:clamp(1.5rem,3vw,2rem)}
+.reference-landing .perspective-hero{padding:1rem;background:var(--paper,#fff)!important;border-radius:1.25rem!important;border-block-start:4px solid var(--tone-deep,var(--deep));box-shadow:var(--experience-shadow)}
+.reference-landing .overlapping-heroes .perspective-hero-button{inline-size:100%;max-inline-size:100%;border-radius:.75rem;box-shadow:none}
+.reference-landing .perspective-casts p{padding:.2rem .5rem;color:var(--ink)}
+.topic-explorer{max-inline-size:64rem;margin:3rem auto}
+.topic-explorer .section-heading{display:block;margin-block-end:1.25rem}
+.topic-explorer .section-heading h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin-block-end:.5rem}
+.topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.topic-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.75rem;align-content:start;min-inline-size:0;min-block-size:10rem;padding:1.25rem;border:1px solid var(--experience-border);border-radius:1rem;background:var(--paper,#fff);color:var(--ink);text-decoration:none;box-shadow:0 3px 12px #183e4905;overflow-wrap:anywhere}
+.topic-card .learning-icon{grid-column:1;inline-size:2rem;block-size:2rem;padding:0}
+.topic-card strong{grid-column:1/-1;font-size:1rem;line-height:1.4}
+.topic-card-count{grid-column:2;grid-row:1;align-self:center;font-size:.8125rem;font-weight:700;color:var(--slate);font-variant-numeric:tabular-nums}
+.topic-preview{grid-column:1/-1;font-size:.8125rem;color:var(--slate);line-height:1.5}
+.topic-card:hover,.topic-card:focus-visible{border-color:var(--deep);background:var(--pale)}
+.how-to-play{max-inline-size:64rem;background:var(--paper,#fff);border:1px solid var(--experience-border);border-radius:1.25rem;padding:clamp(1.25rem,3vw,2rem)}
+.how-to-play .how-step-number{background:var(--pale);color:var(--deep);border:1px solid var(--line)}
+.how-to-play .how-step-copy{padding-inline-start:0}
+.simple-setup>h1,.progress-page>h1,.content-page>h1{font-size:clamp(2rem,4.2vw,3.3rem);line-height:1.15;max-inline-size:22ch}
+.simple-setup>.page-lead{max-inline-size:65ch}
+.simple-setup .start-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:1.5rem;border:1px solid var(--experience-border);border-radius:1.25rem;background:var(--paper,#fff);box-shadow:var(--experience-shadow);padding:clamp(1.25rem,3vw,2rem)}
+.simple-setup .recommended-situation{margin:0;padding:0;border:0;background:transparent}
+.recommended-situation h2{font-size:clamp(1.5rem,2.7vw,2rem);line-height:1.25}
+.recommended-situation>.primary{min-block-size:52px}
+.simple-setup .setup-character{align-self:start;margin:0;padding:1rem;border-radius:1rem;background:var(--pale);border:1px solid var(--line);min-inline-size:0}
+.start-panel>#setup-characters{grid-column:1/-1}
+.scenario-library{background:var(--paper,#fff);border-radius:1.25rem!important}
+.scenario-library>summary{font-size:1.1rem;padding-block:1rem!important}
+.paired-catalog{gap:1rem}
+.encounter-card{box-shadow:none;border:1px solid var(--experience-border);border-radius:1rem;position:relative;overflow:hidden}
+.catalogue-visual{display:grid;place-items:center;inline-size:3.5rem;block-size:3.5rem;background:var(--pale);border-radius:1rem;margin-block-end:1.2rem}
+.catalogue-visual .learning-icon{inline-size:2rem;block-size:2rem}
+.encounter-card h2{font-size:1.3rem;line-height:1.3;letter-spacing:-.02em}
+.encounter-card .eyebrow{font-size:.7rem;letter-spacing:.07em}
+.encounter-card .catalogue-status{margin-block-start:auto;padding-block:.75rem;border-block-start:1px solid var(--line);inline-size:100%}
+.encounter-card>.primary{inline-size:100%;margin-block-start:.5rem}
+.session-return{border-inline-start:4px solid var(--deep);box-shadow:var(--experience-shadow)}
+.session-return .text-button{padding:.6rem 1rem;border-radius:.65rem;background:var(--deep);color:#fff;text-decoration:none}
+.play-toolbar.perspective-bar{padding:1rem 1.25rem;border-radius:1rem;background:var(--paper,#fff);border:1px solid var(--experience-border)}
+.play-toolbar .character-actions{gap:.5rem}
+.play-toolbar .character-actions .primary{padding:.65rem 1rem;min-block-size:48px}
+.play-toolbar~.encounter-cast .cast-character{background:var(--paper,#fff);padding:.75rem;border-radius:.85rem}
+.route-navigation{max-inline-size:100%;margin:0 0 1rem}
+.route-trail{list-style:none;margin:0;padding:0;gap:.6rem}
+.route-trail li{position:relative;list-style:none;margin:0;padding:0}
+.route-trail li+li::before{content:'';position:absolute;inset-inline-end:100%;inset-block-start:50%;inline-size:.6rem;border-block-start:2px solid var(--line)}
+.route-navigation .route-dot{inline-size:44px;block-size:44px;font:inherit;font-size:.875rem;font-weight:700;line-height:1;outline-offset:2px}
+.route-navigation button.route-dot{background:var(--paper,#fff);color:var(--deep);border:1px solid var(--deep);cursor:pointer}
+.route-navigation button.route-dot:hover{background:var(--pale)}
+.route-navigation .is-current{background:var(--deep);color:#fff;outline:3px solid var(--pale);border:2px solid var(--deep)}
+.decision-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;list-style:none;margin:0 0 1.25rem;padding:0}
+.decision-guide li{display:flex;gap:.65rem;align-items:center;margin:0;padding:.75rem 1rem;border:1px solid var(--line);border-radius:.75rem;background:var(--paper,#fff);color:var(--slate);font-size:.875rem;line-height:1.45;min-inline-size:0;overflow-wrap:anywhere}
+.decision-guide .learning-icon{inline-size:1.5rem;block-size:1.5rem}
+.decision-guide [aria-current=step]{border-color:var(--deep);color:var(--deep);background:var(--pale);font-weight:700;box-shadow:inset 0 -2px var(--deep)}
+.decision-context{background:var(--paper,#fff);padding:clamp(1.25rem,3vw,2rem);border-radius:1rem;box-shadow:var(--experience-shadow)}
+.decision-context .story-text{max-inline-size:78ch;line-height:1.8}
+.paired-game{gap:1.5rem}
+.decision-choices{padding:clamp(1rem,2vw,1.5rem);border:1px solid var(--experience-border);border-radius:1rem;background:var(--paper,#fff);min-inline-size:0}
+.paired-game .prompt h2{font-size:clamp(1.2rem,2.3vw,1.5rem);line-height:1.4}
+.paired-game .choice{border-radius:.85rem;align-items:flex-start;min-block-size:72px;padding:1rem;gap:.75rem;box-shadow:none}
+.paired-game .choice-letter{margin-block-start:.1rem;background:var(--pale);border-color:var(--line);flex-shrink:0}
+.paired-game .choice.selected .choice-letter{background:var(--deep);color:#fff}
+.paired-game .choice:disabled:not(.selected){background:#fafbfc;color:var(--slate);border-color:var(--line)}
+.paired-game .feedback{padding:1.25rem;background:var(--pale);border:1px solid var(--deep);border-block-start:4px solid var(--deep);border-radius:1rem}
+.paired-game .feedback.revisit{border-color:var(--rose-dark);background:#fff8f8}
+.paired-game .feedback h2{font-size:1.25rem;line-height:1.4}
+.paired-game .feedback .scene-feedback-preview{max-inline-size:13rem;margin-block:.75rem}
+.paired-feedback-actions{padding-block-start:1rem;border-block-start:1px solid var(--line)}
+.paired-feedback-actions .primary{min-block-size:50px}
+.paired-feedback-actions .text-button{text-align:center;justify-content:center}
+.progress-page .role-results>.info-block{background:var(--paper,#fff);box-shadow:var(--experience-shadow);padding:1.5rem}
+.progress-page .progress-number{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem;margin:1rem 0;font-variant-numeric:tabular-nums}
+.progress-page .progress-number span{font-size:.875rem;line-height:1.5}
+.progress-page progress{block-size:.55rem;border-radius:1rem}
+.progress-situations .info-block{border:1px solid var(--experience-border);border-radius:1rem;background:var(--paper,#fff)}
+.progress-result{gap:.5rem;padding-block:.85rem}
+.progress-result .text-button{padding:.5rem .75rem;background:var(--pale);border-radius:.5rem;min-block-size:44px}
+.content-page .info-block{border-radius:1rem;border-color:var(--experience-border)}
+.source-topic-nav{padding:1rem;background:var(--paper,#fff);border:1px solid var(--line);border-radius:1rem}
+.source-card{border-radius:.85rem;background:var(--paper,#fff);border-inline-start:3px solid var(--deep);padding:1.2rem 1.4rem}
+.source-card strong{line-height:1.55}
+.source-card span{line-height:1.65;margin-block-start:.4rem}
+.learning-goals{gap:1rem}
+.learning-goal{box-shadow:var(--experience-shadow);border-radius:1rem}
+.learning-panel{border-radius:.85rem}
+.recap-takeaways{background:var(--paper,#fff);border-inline-start:4px solid var(--deep);box-shadow:var(--experience-shadow)}
+.recap-takeaways ul{padding-inline-start:1.25rem}
+.recap-takeaways li{line-height:1.8;padding-inline-start:.3rem}
+.paired-recap>.summary-item{box-shadow:var(--experience-shadow);border-radius:1rem}
+@media(min-width:65rem){.topic-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.simple-setup .start-panel{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
+@media(max-width:41.25rem){
+ main{padding:1.5rem 1rem 3rem}
+ .header nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;inline-size:100%}
+ .header nav a{display:flex;align-items:center;justify-content:center;min-block-size:44px;min-inline-size:0;text-align:center;padding:.55rem .35rem;font-size:.8125rem;line-height:1.4;border-radius:.6rem;background:var(--pale)}
+ .header nav .utility-settings{grid-column:1/-1;justify-self:stretch;justify-content:center;inline-size:100%;margin:0;min-block-size:44px}
+ .brand-intro.home-intro{gap:.8rem;padding:0;margin-block-end:1.25rem}
+ .brand-intro .brand-profiles{inline-size:3.5rem}
+ .brand-intro #game-title{font-size:clamp(1.55rem,7vw,2.1rem)}
+ .landing-overview{padding:1.25rem;margin-block-end:1.75rem}
+ .landing-overview p:first-child{font-size:1.05rem}
+ .reference-landing .overlapping-heroes{gap:.6rem}
+ .reference-landing .perspective-hero{padding:.5rem;border-radius:.75rem!important}
+ .reference-landing .overlapping-heroes .perspective-hero-button{font-size:.8125rem;padding:.6rem .4rem}
+ .topic-explorer{margin-block:2rem}
+ .topic-card{padding:1rem;min-block-size:0}
+ .topic-grid>.topic-card:last-child{grid-column:1/-1}
+ .decision-guide{gap:.4rem}
+ .decision-guide li{flex-direction:column;align-items:flex-start;padding:.65rem .5rem;gap:.5rem;font-size:.75rem}
+ .play-toolbar~.encounter-cast{gap:.5rem}
+ .play-toolbar~.encounter-cast .cast-character{padding:.6rem;flex-wrap:wrap}
+ .play-toolbar .character-actions .text-button{flex:1 1 100%;text-align:start}
+ .play-toolbar .character-actions .primary{flex:1 1 100%;inline-size:100%}
+ .paired-game .choice,.paired-game .choice.selected{padding:.875rem}
+ .decision-choices{padding:1rem}
+ .paired-game .feedback{padding:1rem}
+ .progress-page .role-results>.info-block{padding:1.25rem}
+}
+@media(prefers-reduced-motion:no-preference){
+ html:not(.motion-reduce) .topic-card{transition:border-color .2s,background-color .2s,box-shadow .2s,transform .2s}
+ html:not(.motion-reduce) .route-dot{transition:background-color .2s,box-shadow .2s}
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){html:not(.motion-reduce) .topic-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #183e4912}}
+.contrast-high body,.contrast-high .landing-overview,.contrast-high .decision-context,.contrast-high .decision-choices,.contrast-high .topic-card,.contrast-high .feedback.revisit{background:var(--paper);color:var(--ink)}
+.contrast-high .topic-card,.contrast-high .decision-choices,.contrast-high .start-panel{border-color:var(--control)}
+@media(forced-colors:active){
+ .topic-card,.decision-guide li,.decision-context,.decision-choices,.route-navigation .route-dot,.simple-setup .start-panel,.source-card{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
+ .decision-guide [aria-current=step],.route-navigation .is-current{outline:2px solid Highlight;outline-offset:-3px}
+ .header nav a[aria-current=page]{outline:2px solid Highlight;box-shadow:none}
+}
+@media print{.topic-explorer,.decision-guide,.route-navigation{display:none}body{background:#fff}.paired-game .story{position:static}.info-block,.decision-context,.decision-choices{box-shadow:none}}
+
+.simple-setup.topic-selected .start-panel{display:none}
+.simple-setup.topic-selected .scenario-library{margin-block-start:1rem}

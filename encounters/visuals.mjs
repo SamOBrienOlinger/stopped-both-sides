@@ -1,3 +1,5 @@
+import {encounters} from './catalog.mjs';
+const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){
  const paths={
@@ -8,8 +10,16 @@ export function learningIcon(kind){
  return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind]||paths.reflect}</svg>`;
 }
 export function routeTrail(state){
- const count=state.history.length+(state.complete?0:1);
- return `<div class="route-trail" aria-hidden="true">${Array.from({length:count},(_,i)=>`<span class="route-dot ${i<state.history.length?'is-visited':'is-current'}">${i<state.history.length?'✓':i+1}</span>`).join('')}</div>`;
+ if(state.complete)return '';
+ const e=encounters[state.id];
+ return `<nav class="route-navigation" aria-label="Review each decision"><ol class="route-trail">${state.history.map((step,i)=>`<li><button class="route-dot is-visited" data-action="paired-revisit" data-index="${i}" title="${esc(e.nodes[step.nodeId].title)}" aria-label="${esc(e.nodes[step.nodeId].title)}"><span aria-hidden="true">${i+1}</span></button></li>`).join('')}<li><span class="route-dot is-current" aria-current="step"><span class="sr-only">${esc(e.nodes[state.nodeId].title)}</span><span aria-hidden="true">${state.history.length+1}</span></span></li></ol></nav>`;
+}
+export function decisionGuide(answered){
+ return `<ol class="decision-guide" aria-label="How it works"><li>${learningIcon('read')}<span>Read a situation</span></li><li ${!answered?'aria-current="step"':''}>${learningIcon('choose')}<span>Choose a response</span></li><li ${answered?'aria-current="step"':''}>${learningIcon('reflect')}<span>Learn why it matters</span></li></ol>`;
+}
+export function topicExplorer(groups,role){
+ const icons={street:'read',search:'choose',custody:'reflect',young:'read',fairness:'reflect'};
+ return `<section class="topic-explorer" aria-labelledby="topic-explorer-title"><div class="section-heading"><h2 id="topic-explorer-title">Browse all 14 situations</h2><p>Choose any situation. Each one can be played from both sides.</p></div><div class="topic-grid">${groups.map(t=>`<a class="topic-card" href="#encounters/${role}/${t.id}">${learningIcon(icons[t.id])}<strong>${t.title}</strong><span class="topic-card-count" aria-hidden="true">↗</span><span class="topic-preview">${esc(encounters[t.encounters[0]].title)}</span></a>`).join('')}</div></section>`;
 }
 export function completionMap(completed,total){
  return `<div class="completion-map" aria-hidden="true">${Array.from({length:total},(_,i)=>`<span class="completion-cell ${i<completed?'is-complete':''}">${i<completed?'✓':'○'}</span>`).join('')}</div>`;
