@@ -17,8 +17,8 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
   await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText('Aisling');
   await expect.poll(()=>page.locator('.story img').evaluateAll(images=>images.length>0&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   if(identity&&node.scene.includes(identity.name)){
-   await expect(page.locator('.story-text')).toContainText('Noor');
-   await expect(page.locator('.story-text')).not.toContainText(identity.name);
+   await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor');
+   expect((await page.locator('.story-text').allTextContents()).join(' ')).not.toContain(identity.name);
   }
   for(const role of [base.role,base.role==='public'?'garda':'public']){
    if(current(page).role!==role)await page.locator('[data-action="paired-switch"]').click();
@@ -45,7 +45,7 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
 for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mismatch stays fixed after renaming, Irish, resume and recap`,async({page},testInfo)=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto((entry==='garda'?'garda/':'./')+stateHash(startEncounter('garda-street','garda',{cast})));
- await expect(page.locator('.story-text')).toContainText('Noor, 24, stands beside a closed shop');
+ await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor, 24, stands beside a closed shop');
  await expect(page.locator('[data-cast-role="public"]')).toContainText('24 years old');
  await expect.poll(()=>page.locator('.story img').evaluateAll(images=>images.length>0&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  // Full-page captures can precede async decoding of off-screen artwork. Also
@@ -61,12 +61,12 @@ for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mism
  await page.locator('[data-character="public-3"]').click();
  await page.locator('[data-action="paired-character-close"]').click();
  expect(current(page).answers).toEqual(saved.answers);expect(current(page).history).toEqual(saved.history);
- await expect(page.locator('.story-text')).toContainText('Robin, 24');await expect(page.locator('.story-text')).not.toContainText('Noor');
+ await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin, 24');await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).not.toContain('Noor');
  await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
- await expect(page.locator('.story-text')).toContainText('Robin');await expect(page.locator('.story-text')).not.toContainText('Alex');
+ await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin');await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).not.toContain('Alex');
  await expect(page.locator('[data-cast-role="public"]')).toContainText('24 bliain d’aois');
  await openNavigation(page);await page.locator('[data-site-switch]').click();await page.locator('.session-return a').click();
- await expect(page.locator('.story-text')).toContainText('Robin');expect(current(page).answers).toEqual(saved.answers);
+ await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin');expect(current(page).answers).toEqual(saved.answers);
  while(!current(page).complete){
   if(current(page).answers[current(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();
   await page.locator('[data-action="paired-next"]').click();

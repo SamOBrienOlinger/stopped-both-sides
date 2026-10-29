@@ -66,10 +66,26 @@ export async function expectControlsFit(page,label){
    return box.width<43.5||box.height<43.5?[{...describe(element),width:box.width,height:box.height}]:[];
   });
   const overlaps=[];
+  // A compact menu can scroll independently. Its off-screen link boxes still
+  // exist, but overflow clipping prevents them covering adjacent controls.
+  const paintedBounds=element=>{
+   const rect=element.getBoundingClientRect();
+   const box={left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom};
+   for(let parent=element.parentElement;parent;parent=parent.parentElement){
+    const style=getComputedStyle(parent),clip=parent.getBoundingClientRect();
+    if(/^(hidden|clip|auto|scroll)$/.test(style.overflowX)){
+     box.left=Math.max(box.left,clip.left);box.right=Math.min(box.right,clip.right);
+    }
+    if(/^(hidden|clip|auto|scroll)$/.test(style.overflowY)){
+     box.top=Math.max(box.top,clip.top);box.bottom=Math.min(box.bottom,clip.bottom);
+    }
+   }
+   return box;
+  };
   for(let i=0;i<targets.length;i++)for(let j=i+1;j<targets.length;j++){
    const first=targets[i],second=targets[j];
    if(first.contains(second)||second.contains(first))continue;
-   const a=first.getBoundingClientRect(),b=second.getBoundingClientRect();
+   const a=paintedBounds(first),b=paintedBounds(second);
    if(Math.min(a.right,b.right)-Math.max(a.left,b.left)>tolerance&&
      Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>tolerance)overlaps.push([describe(first),describe(second)]);
   }

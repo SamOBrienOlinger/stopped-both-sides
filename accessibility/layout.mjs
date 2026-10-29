@@ -53,9 +53,9 @@ export function createLayout({main}){
   }
  });
  document.addEventListener('click',event=>{if(open&&!header.contains(event.target)&&!document.querySelector('dialog[open]'))close();});
- header.addEventListener('focusout',event=>{
-  if(open&&event.relatedTarget&&!header.contains(event.relatedTarget)&&!document.querySelector('dialog[open]'))close();
- });
+ // Close outside the header on click, not focusout: pointer focus happens
+ // before mouseup, and collapsing this in-flow menu then would move the
+ // intended button away from the pointer before its click can complete.
  compact.addEventListener('change',()=>{
   const focused=document.activeElement;
   open=false;sync();

@@ -29,6 +29,9 @@ async function settings(page){
  await expect(page.locator('#reading-title')).toBeFocused();
 }
 async function checkHeroControls(page){
+ // Geometry assertions use the settled layout. Dedicated motion suites cover
+ // reveal delays, cancellation and both motion preferences.
+ await page.emulateMedia({reducedMotion:'reduce'});
  await expect(page.locator('.perspective-hero')).toHaveCount(2);
  await expect.poll(()=>page.locator('.perspective-hero img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  const measurements=await page.locator('.perspective-hero').evaluateAll(cards=>cards.map(card=>{

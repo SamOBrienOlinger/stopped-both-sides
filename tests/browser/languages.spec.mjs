@@ -86,7 +86,7 @@ for(const role of ['public','garda'])for(const language of added){
   await expect(page.locator('#language-settings-trigger')).toBeFocused();
   await expect(page.locator('#page-status')).toHaveText(translateText('Language changed. Your progress is unchanged.',language.id));
   expect(current(page)).toEqual(before);expect(await saved(page,role)).toEqual(record);
-  await expect(page.locator('.story-text')).toContainText('Noor');
+  await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor');
   await expect(page.locator('[data-cast-role="public"] strong')).toHaveText('Noor');
   await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText('Aisling');
   if(language.id==='ar'){
@@ -129,7 +129,7 @@ for(const role of ['public','garda'])for(const language of added){
   await applyLanguage(page,'en',{footer:true});
   expect(current(page)).toEqual(before);
   await expect(page.locator('html')).toHaveAttribute('dir','ltr');
-  await expect(page.locator('.story-text')).toContainText('Noor');
+  await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor');
   expect(errors).toEqual([]);
  });
 }
