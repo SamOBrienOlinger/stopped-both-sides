@@ -19,6 +19,8 @@ main :is(img,video):not(.character-image>img){max-inline-size:100%}
 .content-page :is(li,dd){line-height:1.75}
 .content-page .learning-stages,.content-page .learning-references{padding-inline-start:0}
 .content-page .source-topic-nav,.content-page .evidence-nav{gap:.65rem}
+.evidence-body .evidence-explanation{padding-block-start:1rem;border-block-start:1px solid var(--line);margin-block-start:1rem}
+.evidence-body .evidence-explanation h3{font-size:.9375rem;line-height:1.5;color:var(--deep);margin:0 0 .5rem}
 .source-topic-nav a,.evidence-nav a{flex:1 1 10rem;padding:.75rem 1rem}
 .landing-overview p{max-inline-size:68ch;line-height:1.8}
 .landing-overview p+p{margin-block-start:1.15rem}
