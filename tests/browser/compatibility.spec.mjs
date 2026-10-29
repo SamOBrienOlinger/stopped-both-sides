@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs';
 import {expectControlsFit} from './control-layout.mjs';
@@ -23,7 +24,7 @@ async function fits(page,label){
  await expectControlsFit(page,label);
 }
 async function settings(page){
- await page.locator('.header [data-reading-open]').click();
+ await openNavigation(page);await page.locator('.header [data-reading-open]').click();
  await expect(page.locator('#reading-dialog')).toBeVisible();
  await expect(page.locator('#reading-title')).toBeFocused();
 }
@@ -52,10 +53,15 @@ async function checkHeroControls(page){
   expect(result.fit,'show the full source scene, not a portrait crop').toBe('contain');
   expect(Math.abs(result.displayedRatio-result.sourceRatio),'preserve the source image proportions').toBeLessThan(.01);
  }
- expect(measurements[0].buttonRight,'role links never overlap').toBeLessThanOrEqual(measurements[1].buttonX);
- expect(Math.abs(measurements[0].y-measurements[1].y),'both scenes stay level at every viewport').toBeLessThanOrEqual(1);
+ if(page.viewportSize().width<640){
+  expect(measurements[1].y,'phone images stack with their own captions').toBeGreaterThan(measurements[0].y+measurements[0].imageHeight);
+  expect(measurements[0].imageWidth,'phone images make use of the available width').toBeGreaterThan(page.viewportSize().width*.65);
+ }else{
+  expect(measurements[0].buttonRight,'role links never overlap').toBeLessThanOrEqual(measurements[1].buttonX);
+  expect(Math.abs(measurements[0].y-measurements[1].y),'wide-screen scenes stay level').toBeLessThanOrEqual(1);
+  expect(measurements[1].x-measurements[0].imageRight,'a visible gutter separates scenes').toBeGreaterThanOrEqual(4);
+ }
  expect(Math.abs(measurements[0].imageWidth-measurements[1].imageWidth),'both scenes get equal space').toBeLessThanOrEqual(1);
- expect(measurements[1].x-measurements[0].imageRight,'a visible gutter prevents one scene obscuring the other').toBeGreaterThanOrEqual(4);
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
 async function captureHero(page,role,width,state,testInfo){
@@ -89,7 +95,7 @@ async function checkDialog(page){
  await expect(page.locator('.header [data-reading-open]')).toBeFocused();
 }
 async function chooseFirst(page,role,testInfo){
- await page.locator('.header [data-nav="encounters"]').click();
+ await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.encounter-card')).toHaveCount(14);
  await page.locator('.setup-role summary').click();
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
@@ -141,14 +147,15 @@ for(const role of ['public','garda']){
    await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
    await fits(page,'other perspective');
    await checkDialog(page);
-   await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
+   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
    await captureHero(page,role,width,'large-text',testInfo);
    await captureControls(page,role,width,'large-text',testInfo,[['how-it-works','.how-to-play']]);
    await expect(page.locator('.perspective-button-label').first()).toHaveText('Duine den phobal');
    await expect(page.locator('.perspective-button-label').last()).toHaveText('Comhalta den Gharda Síochána');
    for(const target of ['encounters','progress','about',role==='public'?'rights':'evidence']){
-    await page.locator(`.header [data-nav="${target}"]`).click();await ready(page);await fits(page,target);
+    await openNavigation(page);await page.locator(`.header [data-nav="${target}"]`).click();await ready(page);await fits(page,target);
    }
+   await openNavigation(page);
    const undersized=await page.locator('.header nav a,.settings-button,.site-switch').evaluateAll(elements=>elements.filter(el=>{
     const box=el.getBoundingClientRect();return box.width<44||box.height<44;
    }).map(el=>el.textContent));
@@ -164,7 +171,7 @@ for(const role of ['public','garda']){
   await page.locator('[data-action="paired-answer"]').first().click();
   await expect(page.locator('#feedback')).toBeVisible();
   const before=readState(page);
-  await page.locator('[data-site-switch]').click();
+  await openNavigation(page);await page.locator('[data-site-switch]').click();
   await expect(page.locator('.content-page h1')).toContainText('sources');
   await page.locator('.session-return a').click();
   await expect(page.locator('.paired-game')).toBeVisible();
@@ -186,7 +193,7 @@ for(const role of ['public','garda']){
   }
   expect(readState(page).complete).toBe(true);
   await expect(page.locator('.paired-recap')).toBeVisible();await fits(page,'Irish recap');
-  await page.locator('.header [data-nav="progress"]').click();
+  await openNavigation(page);await page.locator('.header [data-nav="progress"]').click();
   await expect(page.locator('.progress-page')).toBeVisible();await fits(page,'saved progress');
   expect(errors).toEqual([]);
  });

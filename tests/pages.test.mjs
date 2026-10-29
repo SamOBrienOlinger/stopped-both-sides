@@ -82,7 +82,7 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
   assert.equal(addresses.public,base);assert.equal(addresses.garda,base+'garda/');
   for(const [role,path] of [['public','index.html'],['garda','garda/index.html']]){
    const html=readFileSync(new URL('../'+path,import.meta.url),'utf8');
-   const navigation=html.match(/<nav aria-label="Main navigation">([\s\S]*?)<\/nav>/)[1];
+   const navigation=html.match(/<nav aria-label="Main navigation"[^>]*>([\s\S]*?)<\/nav>/)[1];
    for(const [label,resourceRole,route] of [['Your Rights','public','rights'],['Garda Guidance','garda','evidence']]){
     const link=navigation.match(new RegExp('<a([^>]*)>'+label+'<\\/a>'));
     assert.ok(link,`${path}: ${label} belongs in the main navigation`);

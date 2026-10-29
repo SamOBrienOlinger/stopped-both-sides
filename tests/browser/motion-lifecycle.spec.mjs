@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
 
@@ -72,14 +73,14 @@ for(const role of ['public','garda']){
   await expect(page.locator('.encounter-card')).toHaveCount(2);
   await frames(page);
   expect(await kinds(page),'filtering changes results without replaying presentation cues').toEqual([]);
-  await page.locator('.header [data-nav="about"]').click();
+  await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
   const group=page.locator('.content-page > .info-block').first();
   await group.scrollIntoViewIfNeeded();
   const heading=await group.locator('h2').textContent();
   await expect.poll(async()=>(await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading)).toBe(true);
   await reset(page);
-  await page.locator('.header [data-nav="play"]').click();
-  await page.locator('.header [data-nav="about"]').click();
+  await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
+  await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
   await page.locator('.content-page > .info-block').first().scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
@@ -104,7 +105,7 @@ for(const role of ['public','garda']){
   expect(current(page)).toEqual(complete);
 
   await reset(page);
-  await page.locator('.header [data-nav="progress"]').click();
+  await openNavigation(page);await page.locator('.header [data-nav="progress"]').click();
   await expect(page.locator('.progress-page')).toBeVisible();
   await expect.poll(async()=>kinds(page)).toContain('progress');
   const before=await page.locator('.progress-page progress').evaluateAll(elements=>elements.map(element=>element.value));

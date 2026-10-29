@@ -1,0 +1,137 @@
+/* Content determines height; available space determines the number of columns. */
+:root{--page-gutter:clamp(1rem,3vw,2rem);--section-gap:clamp(1.5rem,4vw,3rem)}
+main{padding-inline:max(var(--page-gutter),env(safe-area-inset-left));padding-block:clamp(1.5rem,3vw,3rem) clamp(3rem,6vw,5rem)}
+main>*,main :is(section,article,aside,figure,details,fieldset){min-inline-size:0}
+main :is(h1,h2,h3){text-wrap:balance}
+main :is(p,li,dd){text-wrap:pretty}
+main :is(input,select,textarea){max-inline-size:100%;min-inline-size:0}
+main :is(button,a.primary){white-space:normal;block-size:auto;max-inline-size:100%;line-height:var(--ui-control-line,1.5)}
+main :is(img,video):not(.character-image>img){max-inline-size:100%}
+.content-page{max-inline-size:60rem}
+.content-page>h1{max-inline-size:24ch;margin-block-end:1.25rem}
+.content-page>.page-lead{max-inline-size:65ch}
+.content-page>.info-block,.learning-section{margin-block:var(--section-gap)}
+.content-page :is(.info-block,.learning-panel-body,.learning-context,.evidence-body) p{max-inline-size:68ch;line-height:1.8}
+.content-page :is(.info-block,.learning-panel-body,.evidence-body) p+p{margin-block-start:1rem}
+.content-page :is(.info-block,.learning-panel-body) h3{margin-block-start:1.75rem}
+.content-page .info-block h2{max-inline-size:35ch;margin-block-end:1.25rem}
+.content-page :is(ul,ol){padding-inline-start:1.4rem}
+.content-page :is(li,dd){line-height:1.75}
+.content-page .learning-stages,.content-page .learning-references{padding-inline-start:0}
+.content-page .source-topic-nav,.content-page .evidence-nav{gap:.65rem}
+.source-topic-nav a,.evidence-nav a{flex:1 1 10rem;padding:.75rem 1rem}
+.landing-overview p{max-inline-size:68ch;line-height:1.8}
+.landing-overview p+p{margin-block-start:1.15rem}
+.landing-overview p:first-child{font-size:clamp(1.1rem,1.5vw,1.25rem)}
+.decision-context .story-text,.feedback>p,.summary-item>p{max-inline-size:68ch}
+[data-reading-chunk]+[data-reading-chunk]{margin-block-start:1rem}
+.learning-example{padding:clamp(1rem,2vw,1.5rem);border:1px solid var(--line);border-radius:1rem;background:var(--paper,#fff)}
+.learning-evidence{background:var(--pale);border-inline-start:3px solid var(--deep);padding:.875rem 1rem;border-radius:0 .65rem .65rem 0}
+.learning-evidence>h4:first-child{margin-block-start:0}
+.learning-goals,.learning-context,.role-results,.progress-situations{grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))}
+.learning-levels>div{grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr))}
+.scenarios,.paired-catalog{grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))}
+.topic-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))}
+.topic-grid>.topic-card:last-child{grid-column:auto}
+.topic-card{min-block-size:0;height:100%}
+.topic-card strong{font-size:1.05rem}
+.topic-preview{font-size:.875rem}
+.encounter-card p{max-inline-size:58ch}
+.character-options{grid-template-columns:repeat(auto-fit,minmax(min(100%,7.5rem),1fr))}
+.character-picker-heading>.primary{flex:0 1 auto}
+.setup-character>div{flex:1}
+.setup-character>.character-image{flex:0 0 min(4.5rem,25%)}
+.session-return>span{flex:1 1 22rem;min-inline-size:0}
+.session-return .text-button{flex:0 1 auto;max-inline-size:100%}
+.progress-result{flex-wrap:wrap}
+.settings-actions{grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr))}
+
+/* Images and their captions remain a single responsive choice. */
+.reference-landing .overlapping-heroes{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2vw,1.5rem);align-items:stretch}
+.reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:auto auto 1fr;padding:clamp(.75rem,2vw,1.25rem)}
+.reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:4.5rem;margin-block-end:1rem;font-size:1rem;padding:.8rem;align-self:stretch}
+.reference-landing .overlapping-heroes .perspective-hero>img{grid-area:2/1;aspect-ratio:16/9;object-fit:contain;inline-size:100%;block-size:auto;border-radius:.75rem}
+.perspective-hero>.perspective-caption{grid-area:3/1;margin:0;padding-block-start:1rem;font-size:1rem;line-height:1.7;max-inline-size:48ch;align-self:start}
+@supports(grid-template-rows:subgrid){
+ .reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:subgrid;grid-row:span 3;row-gap:0}
+}
+.reference-landing .perspective-hero .perspective-button-label{font-size:1rem}
+.reference-landing .perspective-hero .perspective-button-action{font-size:.8125rem;margin-block-start:.2rem}
+.brand-intro.home-intro{justify-content:flex-start;gap:clamp(.75rem,2vw,1.5rem)}
+.brand-intro.home-intro>div{min-inline-size:0}
+.brand-intro .brand-profiles{inline-size:clamp(3.25rem,10vw,6rem);max-inline-size:20%;block-size:auto}
+.brand-intro #game-title{max-inline-size:none;font-size:clamp(1.65rem,4vw,3.4rem);line-height:1.12}
+.brand-intro p{line-height:1.6}
+.how-to-play{margin-block:var(--section-gap)}
+.how-to-play ol.how-steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
+.decision-guide{grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr))}
+.decision-guide li{flex-direction:row;align-items:center;font-size:.875rem;padding:.75rem;gap:.65rem}
+
+/* Progressive enhancement: all links remain exposed if JavaScript fails. */
+.header{border-block-start:4px solid var(--deep);box-shadow:0 3px 18px #183e4908}
+.header .header-inner{padding:1rem max(var(--page-gutter),env(safe-area-inset-left));min-block-size:5rem;gap:1rem;align-items:center;flex-wrap:wrap}
+.header .wordmark{flex:0 1 auto;min-inline-size:0;min-block-size:48px}
+.header .nav-profiles{inline-size:2.75rem;block-size:2.75rem}
+.nav-toggle{display:none}
+.header nav{display:flex;flex:1 1 45rem;order:0;inline-size:auto;min-inline-size:0;align-items:stretch;gap:.375rem;margin:0;padding:0;border:0}
+.header nav>a,.header nav>.utility-settings{flex:1 1 auto;margin:0;min-block-size:48px;min-inline-size:44px;padding:.65rem .8rem;font-size:.9rem;font-weight:600;text-align:center;justify-content:center;line-height:1.5;border:1px solid transparent;border-radius:.75rem;background:transparent;color:var(--ink);text-decoration:none}
+.header nav>.utility-settings{border-color:var(--line);background:var(--paper,#fff);max-inline-size:14rem}
+.header nav>a[aria-current="page"]{background:var(--pale);color:var(--deep);border-color:var(--line);box-shadow:inset 0 -3px var(--deep)}
+.header nav>a:hover,.header nav>.utility-settings:hover{background:var(--pale);border-color:var(--line)}
+.header nav[hidden]{display:none!important}
+@media(max-width:71.999rem){
+ .header .header-inner{padding-block:.75rem;gap:.65rem 1rem}
+ .header.navigation-ready .nav-toggle{display:flex;flex:0 1 auto;align-items:center;gap:.65rem;margin-inline-start:auto;max-inline-size:100%;min-inline-size:44px;min-block-size:48px;padding:.6rem .8rem;background:var(--pale);color:var(--deep);border:1px solid var(--line);border-radius:.75rem;font:inherit;font-size:.875rem;line-height:1.4;text-align:start}
+ .menu-copy{display:flex;flex-direction:column;min-inline-size:0;gap:.15rem;overflow-wrap:anywhere}
+ [data-menu-label]{font-weight:700}
+ [data-menu-current]{font-size:.75rem;color:var(--muted)}
+ .menu-icon{display:grid;gap:4px;inline-size:1.2rem;flex:none}
+ .menu-icon span{display:block;inline-size:100%;block-size:2px;background:currentColor;border-radius:2px;transform-origin:center}
+ .navigation-open .menu-icon span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+ .navigation-open .menu-icon span:nth-child(2){opacity:0}
+ .navigation-open .menu-icon span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+ .header nav{flex:1 1 100%;order:3;inline-size:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.5rem;padding-block-start:.75rem;border-block-start:1px solid var(--line)}
+ .header nav>a,.header nav>.utility-settings{inline-size:100%;max-inline-size:none;justify-content:flex-start;text-align:start;font-size:1rem;padding:.875rem 1rem;background:var(--paper,#fff);border-color:var(--line)}
+ .header nav>.utility-settings{grid-column:1/-1;justify-content:center;background:var(--pale)}
+ .header.navigation-open nav{max-block-size:65vh;max-block-size:65dvh;overflow:auto;overscroll-behavior:contain;padding:.75rem .25rem .25rem}
+}
+@media(max-width:39.999rem){
+ .reference-landing .overlapping-heroes{grid-template-columns:minmax(0,1fr);gap:1.25rem}
+ .reference-landing .overlapping-heroes .perspective-hero{padding:1rem}
+ .reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:64px;font-size:1rem}
+ .paired-game,.game-grid,.summary-grid{grid-template-columns:minmax(0,1fr)}
+ .session-return .text-button{inline-size:100%;margin-block-start:.5rem}
+ .play-toolbar.perspective-bar{padding:1rem}
+ .play-toolbar.perspective-bar>.character-actions{max-inline-size:100%;grid-template-columns:minmax(0,1fr)}
+ .topline{gap:.5rem;align-items:center}
+ .topline>.text-button{flex:1 1 10rem}
+ .source-card,.evidence-record summary{padding:1rem}
+ .paired-recap{padding-inline-start:.75rem}
+ .paired-recap>.summary-item::before{inset-inline-start:-1.2rem}
+ .learning-panel>summary{align-items:flex-start}
+ .learning-toggle{margin-block-start:.3rem}
+}
+@media(max-width:22rem){
+ .header .wordmark{font-size:.72rem;gap:.5rem}
+ .header .nav-profiles{inline-size:2.25rem;block-size:2.25rem}
+ .header.navigation-ready .nav-toggle{padding:.5rem .65rem;max-inline-size:100%}
+ .play-toolbar~.encounter-cast{grid-template-columns:minmax(0,1fr)}
+ .play-toolbar~.encounter-cast .cast-character{flex-wrap:nowrap}
+}
+@media(prefers-reduced-motion:no-preference){
+ html:not(.motion-reduce) .menu-icon span{transition:transform .18s ease,opacity .18s ease}
+ html:not(.motion-reduce) .navigation-open nav{animation:menu-arrive .2s ease-out}
+ html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:section-arrive .65s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms) backwards}
+}
+@keyframes menu-arrive{from{opacity:.75;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@keyframes section-arrive{from{opacity:.65;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* Focusing a newly reached control always makes the whole section steady. */
+[data-motion="reveal"]:focus-within,[data-motion="recap"]:focus-within{animation:none!important}
+.reading-spacious .content-page :is(p,li,dd),.reading-spacious .landing-overview p{line-height:1.95}
+.contrast-high .learning-evidence,.contrast-high .header{background:var(--paper);color:var(--ink)}
+@media(forced-colors:active){
+ .header,.nav-toggle,.header nav>a,.header nav>.utility-settings,.learning-example,.learning-evidence{background:Canvas!important;color:CanvasText!important;border-color:CanvasText!important;box-shadow:none}
+ .menu-icon span{background:ButtonText}
+ .header nav>a[aria-current="page"]{outline:2px solid Highlight;outline-offset:-4px}
+}
+@media print{.header,.nav-toggle{display:none!important}.content-page{max-inline-size:none}.learning-example,.learning-evidence{background:white;box-shadow:none}}

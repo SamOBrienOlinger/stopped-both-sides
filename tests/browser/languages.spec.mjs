@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {languages} from '../../locales/languages.mjs';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=footer-2';
@@ -12,6 +13,7 @@ const cast={public:'public-2',garda:'garda-5'};
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const saved=(page,role)=>page.evaluate(key=>localStorage.getItem(key),progressStorageKey(role));
 async function openSettings(page,footer=false){
+ if(!footer)await openNavigation(page);
  await page.locator(footer?'#language-settings-footer':'#language-settings-trigger').click();
  await expect(page.locator('#reading-dialog')).toBeVisible();
  await expect(page.locator('#reading-title')).toBeFocused();
@@ -115,7 +117,7 @@ for(const role of ['public','garda'])for(const language of added){
   }
   await page.evaluate(hash=>{location.hash=hash;},stateHash(before));
   await expect(page.locator('.paired-game')).toBeVisible();expect(current(page)).toEqual(before);
-  await page.locator('[data-site-switch]').click();
+  await openNavigation(page);await page.locator('[data-site-switch]').click();
   await expect(page.locator('.session-return a')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang',language.tag);
   const publication=page.locator('[data-no-translate][lang="en-IE"]').filter({hasText:/Citizens Information|Misuse of Drugs|Policing/}).first();
@@ -170,7 +172,7 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await applyLanguage(page,language,{large:true});
  await fits(page,'home');
  await page.locator('.single-mode summary').click();await fits(page,'original cards');
- await page.locator('.header [data-nav="encounters"]').click();
+ await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.paired-picker')).toBeVisible();
  await page.locator('.scenario-library summary').click();await fits(page,'catalogue');
  const first=page.locator('[data-action="paired-start"]').first();

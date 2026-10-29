@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
@@ -61,7 +62,7 @@ test('The rights topic indicator follows the selected source section',async({pag
  await topic.click();
  await expect(page.locator('.source-topic-nav a[aria-current="location"]')).toHaveCount(1);
  await expect(page.locator('.source-topic-nav a[aria-current="location"]')).toHaveAttribute('href',href);
- await page.locator('.header [data-nav="rights"]').click();
+ await openNavigation(page);await page.locator('.header [data-nav="rights"]').click();
  await expect(page.locator('.source-topic-nav a[aria-current]')).toHaveCount(0);
 });
 async function noStageReplay(page){
@@ -182,7 +183,7 @@ for(const role of ['public','garda']){
   await hasCues(page,'disclosure');
   await resetCues(page);
 
-  await page.locator('#language-settings-trigger').click();
+  await openNavigation(page);await page.locator('#language-settings-trigger').click();
   await expect(page.locator('#reading-title')).toBeFocused();
   await hasCues(page,'dialog');
   await page.locator('#reading-language').selectOption('ga');
@@ -244,7 +245,7 @@ for(const role of ['public','garda']){
   await expect(page.locator('#character-picker-title')).toBeFocused();
   await readableLayout(page);await motionSuppressed(page);
   await page.locator('[data-action="paired-character-close"]').click();
-  await page.locator('#language-settings-trigger').click();
+  await openNavigation(page);await page.locator('#language-settings-trigger').click();
   await expect(page.locator('#reading-title')).toBeFocused();
   if(preference==='site')await expect(page.locator('#reading-dialog')).toHaveAttribute('data-dialog-fallback','');
   await readableLayout(page);await motionSuppressed(page);

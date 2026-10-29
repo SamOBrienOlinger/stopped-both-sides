@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=footer-2';
 
@@ -27,7 +28,7 @@ for(const path of ['./','garda/'])for(const {language,width,large} of variants){
   for(const summary of await section.locator('summary').all())await summary.click();
   await expect(section.locator('details[open]')).toHaveCount(5);
   if(large){
-   await page.locator('#language-settings-trigger').click();
+   await openNavigation(page);await page.locator('#language-settings-trigger').click();
    await page.locator('#reading-size').selectOption('150');
    await page.locator('#reading-contrast').selectOption('high');
    await page.locator('[name="spacing"]').check();

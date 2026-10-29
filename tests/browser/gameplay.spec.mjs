@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {encounters,roles} from '../../encounters/catalog.mjs';
 import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
@@ -61,10 +62,10 @@ for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mism
  await page.locator('[data-action="paired-character-close"]').click();
  expect(current(page).answers).toEqual(saved.answers);expect(current(page).history).toEqual(saved.history);
  await expect(page.locator('.story-text')).toContainText('Robin, 24');await expect(page.locator('.story-text')).not.toContainText('Noor');
- await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
+ await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
  await expect(page.locator('.story-text')).toContainText('Robin');await expect(page.locator('.story-text')).not.toContainText('Alex');
  await expect(page.locator('[data-cast-role="public"]')).toContainText('24 bliain d’aois');
- await page.locator('[data-site-switch]').click();await page.locator('.session-return a').click();
+ await openNavigation(page);await page.locator('[data-site-switch]').click();await page.locator('.session-return a').click();
  await expect(page.locator('.story-text')).toContainText('Robin');expect(current(page).answers).toEqual(saved.answers);
  while(!current(page).complete){
   if(current(page).answers[current(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();

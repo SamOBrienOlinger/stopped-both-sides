@@ -17,6 +17,7 @@ export function createMotion({main,getLegacyState=()=>null}){
  function remove(element){
   clearTimeout(active.get(element));active.delete(element);
   element.removeAttribute('data-motion');
+  element.style.removeProperty('--reveal-delay');
  }
  function clear(){
   for(const frame of frames)cancelAnimationFrame(frame);
@@ -27,13 +28,15 @@ export function createMotion({main,getLegacyState=()=>null}){
   const frame=requestAnimationFrame(()=>{frames.delete(frame);callback();});
   frames.add(frame);
  }
- function cue(element,kind){
+ function cue(element,kind,delay=0){
   if(!element||!allowed())return;
   afterFocus(()=>{
    if(!element.isConnected||!element.getClientRects().length||!allowed())return;
-   remove(element);element.setAttribute('data-motion',kind);
+   remove(element);
+   if(delay)element.style.setProperty('--reveal-delay',delay+'ms');
+   element.setAttribute('data-motion',kind);
    // Cleanup is independent of browser animation events (including cancellation).
-   active.set(element,setTimeout(()=>remove(element),680));
+   active.set(element,setTimeout(()=>remove(element),Math.max(680,delay+720)));
   });
  }
  function snapshot(hash){
@@ -64,11 +67,13 @@ export function createMotion({main,getLegacyState=()=>null}){
   const selectors=next.complete?['.summary-list > .summary-item']:
    next.mode==='content'?['.content-page > .info-block','.source-card','.evidence-record',
     '.progress-page > .role-results > .info-block','.progress-situations > .info-block',
-    '.landing-overview','.perspective-hero','.how-step','.start-panel','.learning-section',
-    '.topic-explorer','.learning-goals','.source-topic']:[];
+    '.landing-overview','.perspective-hero','.how-step','.start-panel',
+    '.topic-explorer','.learning-goals','.source-topic',
+    '.learning-intro','.learning-cycle','.learning-context','.learning-panel',
+    '.learning-example','.learning-outcomes > li','.evidence-group > h2']:[];
   const candidates=[];
   for(const selector of selectors)all(selector).forEach((element,index)=>{
-   if(element.parentElement?.closest('details'))return;
+   if(element.parentElement?.closest('details:not([open])'))return;
    const identity=element.id||element.querySelector('[data-action="paired-start"][data-id]')?.dataset.id||element.dataset.roleTone||index;
    const key=`${next.revealScope}|${selector}|${identity}`;
    if(suppress||!allowed()){seen.add(key);return;}
@@ -77,12 +82,13 @@ export function createMotion({main,getLegacyState=()=>null}){
   if(!candidates.length||typeof globalThis.IntersectionObserver!=='function')return;
   const keys=new Map(candidates.map(item=>[item.element,item.key]));
   observer=new IntersectionObserver(entries=>{
+   let visibleIndex=0;
    for(const entry of entries){
     if(!entry.isIntersecting)continue;
     const key=keys.get(entry.target);
     observer?.unobserve(entry.target);
     if(seen.has(key))continue;
-    seen.add(key);cue(entry.target,next.complete?'recap':'reveal');
+    seen.add(key);cue(entry.target,next.complete?'recap':'reveal',Math.min(100+visibleIndex++*100,300));
    }
   },{threshold:0,rootMargin:'0px 0px -24px 0px'});
   for(const {element} of candidates)observer.observe(element);
@@ -126,7 +132,10 @@ export function createMotion({main,getLegacyState=()=>null}){
  main.addEventListener('toggle',event=>{
   const details=event.target;
   if(details.tagName!=='DETAILS')return;
-  if(details.open&&userDisclosures.has(details))cue(details,'disclosure');
+  if(details.open&&userDisclosures.has(details)){
+   cue(details,'disclosure');
+   if(previous)observeReveals(previous,false);
+  }
   else if(!details.open)remove(details);
   userDisclosures.delete(details);
  },true);

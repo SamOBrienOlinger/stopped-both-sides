@@ -1,3 +1,4 @@
+import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
@@ -33,8 +34,8 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  const cast={[role]:role+'-9',[other]:other+'-4'};expect(current(page).cast).toEqual(cast);
  await page.locator('[data-action="paired-character-close"]').click();
  const saved=current(page);await page.reload();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page)).toEqual(saved);
- await page.locator('[data-site-switch]').click();await expect(page.locator('.content-page h1')).toContainText('sources');await page.locator('.session-return a').click();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).cast).toEqual(cast);expect(current(page).answers).toEqual(saved.answers);
- await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
+ await openNavigation(page);await page.locator('[data-site-switch]').click();await expect(page.locator('.content-page h1')).toContainText('sources');await page.locator('.session-return a').click();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).cast).toEqual(cast);expect(current(page).answers).toEqual(saved.answers);
+ await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
  await expect(page.getByRole('button',{name:'Athraigh carachtar',exact:true})).toBeVisible();expect(current(page).cast).toEqual(cast);
  for(let i=0;i<10&&!current(page).complete;i++){
   if(current(page).answers[current(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();
