@@ -1,6 +1,6 @@
 /* Learning-first visual rhythm. Everything remains visible without motion. */
 .landing-overview{max-inline-size:58rem;margin:1.75rem auto 2.25rem;padding:clamp(1.25rem,3vw,2rem);border-inline-start:4px solid var(--deep);background:linear-gradient(120deg,var(--pale),var(--paper,#fff));line-height:1.8}
-.landing-overview p{max-inline-size:70ch;margin-inline:auto}
+.landing-overview p{max-inline-size:none;margin-inline:0}
 .landing-overview p:first-child{font-size:clamp(1.05rem,1.6vw,1.2rem);font-weight:600;color:var(--ink)}
 .reference-landing .perspective-hero{border:1px solid var(--line);padding:clamp(.5rem,1.5vw,1rem);box-shadow:0 8px 24px #183e4910}
 .learning-icon{inline-size:2.75rem;block-size:2.75rem;color:var(--deep);flex:none}
