@@ -22,10 +22,11 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
     assert.match(html,new RegExp(`data-scene-character="${g.id}"`));
     assert.match(html,new RegExp(`left:-${p.column*100}%;top:-${p.row*100}%`));
     if(g.id==='garda-5'){
-     assert.equal((html.match(/characters\/aisling-hijab.webp/g)||[]).length,3);
+     assert.equal((html.match(/characters\/aisling-hijab-clean.webp/g)||[]).length,3);
      for(const position of ['left:-100%;top:-0%','left:-0%;top:-100%','left:-100%;top:-100%'])assert.ok(html.includes(position+';width:200%;height:200%'));
     }else assert.match(html,new RegExp(`left:-${g.column*100}%;top:-${g.row*100}%`));
     assert.doesNotMatch(html,/undefined|NaN/);
+    assert.doesNotMatch(html,/scene-prop|props\.webp/,`${e.id}/${nodeId} must not place loose objects on the floor`);
    }
   }
  }
@@ -72,7 +73,7 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
 });
 
 test('Both entrypoints load scene styles and all locally delivered images exist',()=>{
- assert.ok(existsSync(new URL('../assets/characters/aisling-hijab.webp',import.meta.url)));
+ assert.ok(existsSync(new URL('../assets/characters/aisling-hijab-clean.webp',import.meta.url)));
  for(const name of sceneAssets)assert.ok(existsSync(new URL(`../assets/scenes/${name}.webp`,import.meta.url)),name);
  for(const path of ['../index.html','../garda/index.html'])assert.match(readFileSync(new URL(path,import.meta.url),'utf8'),/encounters\/scenes.css/);
  for(const label of ['On the street','At the bus stop','At the station','Time to reflect','Reviewing the encounter','In the community','Private advice · separate perspectives','Separate reflections','Same facts · compare the written scenarios','Your chosen response','The scene'])assert.notEqual(translateText(label,'ga'),label);

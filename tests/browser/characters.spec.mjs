@@ -10,7 +10,7 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  await expect(page.locator('.character-option')).toHaveCount(9);
  await expect.poll(()=>page.locator('.character-image img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  const chosen=page.locator(`[data-character="${selectedId}"]`);
- if(role==='garda')await expect(chosen.locator('img')).toHaveAttribute('src',/characters\/aisling-hijab.webp$/);
+ if(role==='garda')await expect(chosen.locator('img')).toHaveAttribute('src',/characters\/aisling-hijab-clean.webp$/);
  await chosen.focus();await page.keyboard.press('Space');
  await expect(page.locator(`[data-character="${selectedId}"]`)).toHaveAttribute('aria-pressed','true');
  await expect(page.locator(`[data-character="${selectedId}"]`)).toBeFocused();

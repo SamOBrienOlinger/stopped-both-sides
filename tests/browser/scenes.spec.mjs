@@ -12,13 +12,15 @@ for(const role of ['public','garda'])test(`${role}: illustrated decisions remain
  for(const width of [320,390,768,1366,1920]){
   await page.setViewportSize({width,height:900});
   const scene=page.locator('.story>.encounter-scene');await loaded(scene);
+  await expect(scene.locator('.scene-prop')).toHaveCount(0);
   await expect(scene.locator('[data-scene-character="public-6"]')).toHaveCount(1);
   await expect(scene.locator('[data-scene-character="garda-9"]')).toHaveCount(1);
   const layout=await scene.evaluate(el=>{
    const stage=el.querySelector('.scene-stage').getBoundingClientRect();
-   return {overflow:document.documentElement.scrollWidth>innerWidth+1,actors:[...el.querySelectorAll('.scene-actor')].every(a=>{const r=a.getBoundingClientRect();return r.left>=stage.left&&r.right<=stage.right&&r.top>=stage.top&&r.bottom<=stage.bottom;})};
+   const setting=el.querySelector('.scene-setting').getBoundingClientRect();
+   return {overflow:document.documentElement.scrollWidth>innerWidth+1,settingClear:setting.bottom<=stage.top+1,actors:[...el.querySelectorAll('.scene-actor')].every(a=>{const r=a.getBoundingClientRect();return r.left>=stage.left&&r.right<=stage.right&&r.top>=stage.top&&r.bottom<=stage.bottom;})};
   });
-  expect(layout).toEqual({overflow:false,actors:true});
+  expect(layout).toEqual({overflow:false,settingClear:true,actors:true});
   if(width===390||width===1366)await scene.screenshot({path:testInfo.outputPath(`${role}-scene-${width}.png`)});
  }
  await page.setViewportSize({width:390,height:844});

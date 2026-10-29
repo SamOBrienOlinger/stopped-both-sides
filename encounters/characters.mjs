@@ -12,7 +12,7 @@ const aislingCells={portrait:[0,0],listening:[1,0],speaking:[0,1],reflecting:[1,
 export function characterArtwork(character,pose='portrait'){
  const separate=character.id==='garda-5';
  const [column,row]=separate?aislingCells[pose]:[character.column,character.row];
- const path=separate?'characters/aisling-hijab.webp':pose==='portrait'?'characters/cast.webp':`scenes/${pose}.webp`;
+ const path=separate?'characters/aisling-hijab-clean.webp':pose==='portrait'?'characters/cast.webp':`scenes/${pose}-clean.webp`;
  return {src:new URL('../assets/'+path,import.meta.url).href,
   width:separate?1254:1774,height:separate?1254:887,
   style:`left:-${column*100}%;top:-${row*100}%;width:${separate?200:600}%;height:${separate?200:300}%`};

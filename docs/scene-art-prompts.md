@@ -1,5 +1,7 @@
 # Interaction scene artwork
 
+**Current revision:** see the [29 October 2026 visual audit](visual-audit-2026-10-29.md) for corrected character cutouts, removed loose props and Irish background references. The prompts below document the original generation; the prop atlas is no longer rendered.
+
 Created 17 September 2026 with the built-in OpenAI image-generation tool. The current cast sheet supplied the identity reference; the current public homepage hero supplied the environment style reference. Generated transparent sprite atlases are stored as WebP in `assets/scenes/`, with six backgrounds extracted into individual WebP files. No AI request occurs during play.
 
 ## Listening poses

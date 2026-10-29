@@ -346,7 +346,6 @@ main details[open]>summary{color:var(--deep)}
  }
  [data-motion="scene"] .scene-location,
  [data-motion="scene"] .scene-sprite,
- [data-motion="scene"] .scene-prop,
  img[data-motion="scene"],img[data-motion="reveal"]{
   animation:ui-art-arrive var(--ui-step-time) var(--ui-ease);
  }
