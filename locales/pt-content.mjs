@@ -1769,7 +1769,7 @@ export default {
   "m1767": "Esta ligação de situação está incompleta ou pertence a uma versão não suportada. As suas pontuações guardadas continuam disponíveis.",
   "m1768": "Escolher uma situação",
   "m1769": "Protótipo de uma plataforma educativa independente.",
-  "m1770": "Informação geral, não aconselhamento jurídico. Sem o apoio oficial do INAR, ICCL ou An Garda Síochána. © 2026 Sam O’Brien-Olinger.",
+  "m1770": "Informações gerais, não aconselhamento jurídico. Não é apoiado por qualquer organização nem pela An Garda Síochána.",
   "m1771": "Aprendizagem reflexiva, não orientação operacional. Independente; sem o apoio oficial da An Garda Síochána, INAR ou ICCL. © 2026 Sam O’Brien-Olinger.",
   "m1772": "Na rua",
   "m1773": "Na paragem de autocarro",

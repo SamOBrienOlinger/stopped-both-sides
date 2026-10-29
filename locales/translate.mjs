@@ -1,4 +1,4 @@
-import {messages} from './messages.mjs?v=pedagogy-1';
+import {messages} from './messages.mjs?v=footer-2';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
 import {encounters} from '../encounters/catalog.mjs';
@@ -97,7 +97,7 @@ const ui={
  'Clear this site’s saved progress':'Glan dul chun cinn sábháilte an tsuímh seo','Keep progress':'Coinnigh dul chun cinn','Your saved progress on this site has been cleared.':'Glanadh do dhul chun cinn sábháilte ar an suíomh seo.',
  'Unable to open this situation':'Ní féidir an cás seo a oscailt','This page was not found.':'Níor aimsíodh an leathanach seo.','The progress in this link could not be read.':'Níorbh fhéidir an dul chun cinn sa nasc seo a léamh.','This situation link is incomplete or from an unsupported version. Your saved scores are still available.':'Tá an nasc neamhiomlán nó ó leagan nach dtacaítear leis. Tá do scóir sábháilte ar fáil fós.','Choose a situation':'Roghnaigh cás',
  'Independent educational platform prototype.':'Fréamhshamhail d’ardán oideachais neamhspleách.',
- 'General information, not legal advice. Not endorsed by INAR, ICCL or An Garda Síochána. © 2026 Sam O’Brien-Olinger.':'Eolas ginearálta, ní comhairle dlí. Gan formhuiniú ó INAR, ICCL ná ón nGarda Síochána. © 2026 Sam O’Brien-Olinger.',
+ 'General information, not legal advice. Not endorsed by any organisation or An Garda Síochána.':'Eolas ginearálta, ní comhairle dlí. Gan formhuiniú ó aon eagraíocht ná ón nGarda Síochána.',
  'Reflective learning, not operational guidance. Independent; not endorsed by An Garda Síochána, INAR or ICCL. © 2026 Sam O’Brien-Olinger.':'Foghlaim mhachnamhach, ní treoir oibríochtúil. Neamhspleách; gan formhuiniú ón nGarda Síochána, INAR ná ICCL. © 2026 Sam O’Brien-Olinger.'
 };
 Object.assign(ui,{
@@ -159,13 +159,13 @@ export {gaContent};
 // Each pack is hosted with the game and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=pedagogy-1'+retry),
- ar:retry=>import('./ar-content.mjs?v=pedagogy-1'+retry),
- pl:retry=>import('./pl-content.mjs?v=pedagogy-1'+retry),
- ro:retry=>import('./ro-content.mjs?v=pedagogy-1'+retry),
- fr:retry=>import('./fr-content.mjs?v=pedagogy-1'+retry),
- es:retry=>import('./es-content.mjs?v=pedagogy-1'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=pedagogy-1'+retry)
+ pt:retry=>import('./pt-content.mjs?v=footer-2'+retry),
+ ar:retry=>import('./ar-content.mjs?v=footer-2'+retry),
+ pl:retry=>import('./pl-content.mjs?v=footer-2'+retry),
+ ro:retry=>import('./ro-content.mjs?v=footer-2'+retry),
+ fr:retry=>import('./fr-content.mjs?v=footer-2'+retry),
+ es:retry=>import('./es-content.mjs?v=footer-2'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=footer-2'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {learningAbout} from '../learning/about.mjs';
 import {messages} from '../locales/messages.mjs';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=pedagogy-1';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=footer-2';
 
 test('About learning content has complete translations while retaining identifiable source metadata',async()=>{
  const html=learningAbout();

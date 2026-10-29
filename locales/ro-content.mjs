@@ -1769,7 +1769,7 @@ export default {
   "m1767": "Linkul situației este incomplet sau provine dintr-o versiune neacceptată. Scorurile salvate sunt încă disponibile.",
   "m1768": "Alege o situație",
   "m1769": "Prototip al unei platforme educaționale independente.",
-  "m1770": "Informații generale, nu sfat juridic. Fără susținerea INAR, ICCL sau An Garda Síochána. © 2026 Sam O’Brien-Olinger.",
+  "m1770": "Informații generale, nu consultanță juridică. Nu este aprobat de nicio organizație sau de An Garda Síochána.",
   "m1771": "Învățare reflexivă, nu îndrumare operațională. Independent; fără susținerea An Garda Síochána, INAR sau ICCL. © 2026 Sam O’Brien-Olinger.",
   "m1772": "Pe stradă",
   "m1773": "La stația de autobuz",

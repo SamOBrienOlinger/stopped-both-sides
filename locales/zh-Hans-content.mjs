@@ -1769,7 +1769,7 @@ export default {
   "m1767": "此情境链接不完整，或来自不支持的版本。已保存的得分仍可查看。",
   "m1768": "选择情境",
   "m1769": "独立教育平台原型。",
-  "m1770": "一般信息，不是法律意见。未获INAR、ICCL或An Garda Síochána认可。© 2026 Sam O’Brien-Olinger。",
+  "m1770": "仅供一般参考，不构成法律建议。未经任何组织或爱尔兰警察（An Garda Síochána）认可。",
   "m1771": "反思式学习，不是执法指引。独立项目；未获An Garda Síochána、INAR或ICCL认可。© 2026 Sam O’Brien-Olinger。",
   "m1772": "在街上",
   "m1773": "在公交站",

@@ -1,8 +1,9 @@
+import {scenarioIcon} from './encounters/visuals.mjs?v=context-icons-1';
 import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from './compatibility.mjs';
-import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=pedagogy-1';
+import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=footer-2';
 import {createMotion} from './accessibility/motion.mjs?v=experience-2';
-import {createEncounterMode} from './encounters/ui.mjs?v=experience-2';
+import {createEncounterMode} from './encounters/ui.mjs?v=context-icons-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');
@@ -11,13 +12,11 @@ const paired=createEncounterMode({siteRole:'public',main,rerender:(focus=true)=>
 const motion=createMotion({main,getLegacyState:()=>session});
 const reading=createReadingTools({main,siteRole:'public',rerender:(focus=true)=>render(focus),transformContent:(html,hash)=>paired.personalize(html,hash),onRender:hash=>motion.update(hash),onDialogOpen:dialog=>motion.openDialog(dialog)});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const paths={message:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>',bag:'<path d="M6 7h12l2 14H4L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>',key:'<circle cx="8" cy="8" r="5"/><path d="m12 12 9 9m-4-4 3-3m-6 0 3-3"/>',people:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="9" cy="7" r="4"/>',notes:'<path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4M16 3l5 5-9 9H7v-5l9-9Z"/>'};
-const icon=id=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[id]||paths.message}</svg>`;
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources</summary><ul lang="en-IE" data-no-translate>${[...new Set(ids)].map(id=>`<li><a href="${esc(sources[id].url)}" target="_blank" rel="noopener noreferrer">${esc(sources[id].title)} ↗</a></li>`).join('')}</ul></details>`;
 const focusMain=()=>{const heading=main.querySelector?.('h1');(heading||main).focus({preventScroll:true});main.scrollIntoView?.({block:'start',behavior:'instant'});};
 function home(){
  return `${paired.introduction()}<div class="info-block landing-overview" lang="en-IE"><p>Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication. Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div>${paired.landing()}<p class="focus-note">Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.</p>
- <details class="single-mode"><summary>Individual practice · single-role scenarios</summary><p>Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.</p><div class="scenarios" data-english-practice>${scenarios.map((s,i)=>`<article class="scenario"><div class="card-top"><span class="scene-icon">${icon(s.icon)}</span><span class="scene-number">SITUATION ${String(i+1).padStart(2,'0')}</span></div><h2>${esc(s.title)}</h2><p class="person">${esc(s.person)}</p><p class="description">${esc(s.description)}</p><p class="small-note">${esc(s.minutes)}</p><button class="primary secondary scenario-action" data-action="start" data-id="${s.id}" aria-label="Explore this situation: ${esc(s.title)}">Explore this situation <span aria-hidden="true">→</span></button></article>`).join('')}</div></details>`;
+ <details class="single-mode"><summary>Individual practice · single-role scenarios</summary><p>Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.</p><div class="scenarios" data-english-practice>${scenarios.map((s,i)=>`<article class="scenario"><div class="card-top"><span class="scene-icon">${scenarioIcon('public-'+s.id)}</span><span class="scene-number">SITUATION ${String(i+1).padStart(2,'0')}</span></div><h2>${esc(s.title)}</h2><p class="person">${esc(s.person)}</p><p class="description">${esc(s.description)}</p><p class="small-note">${esc(s.minutes)}</p><button class="primary secondary scenario-action" data-action="start" data-id="${s.id}" aria-label="Explore this situation: ${esc(s.title)}">Explore this situation <span aria-hidden="true">→</span></button></article>`).join('')}</div></details>`;
 }
 function game(){
  if(session.complete)return summary();
