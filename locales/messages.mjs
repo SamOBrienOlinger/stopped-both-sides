@@ -287,7 +287,7 @@ export const messages=[
   "Treat not knowing a solicitor as a decision to proceed without one.",
   "Lack of a contact is not a refusal of legal assistance.",
   "You need your medication",
-  "Maya is due prescribed medication and is beginning to feel unwell. Maya has not yet told custody staff. The learner knows this; the Garda must not be assumed to know undisclosed medical details.",
+  "Maya is due prescribed medication and is beginning to feel unwell. Maya has not yet told custody staff.",
   "What would you do?",
   "Tell the member in charge about illness, injury or medication needs and ask for medical attention. They are responsible for welfare in custody.",
   "Tell the member in charge and request medical help.",

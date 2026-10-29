@@ -1,5 +1,5 @@
-import {encounters,roles} from './catalog.mjs';
-import {decodeState,encodeState} from './engine.mjs';
+import {encounters,roles} from './catalog.mjs?v=scene-review-1';
+import {decodeState,encodeState} from './engine.mjs?v=scene-review-1';
 import {hasOwn} from '../compatibility.mjs';
 // This validated storage schema contains only JSON values; never requires structuredClone.
 const cloneProgress=progress=>JSON.parse(JSON.stringify(progress));

@@ -1,7 +1,7 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {encounters,roles} from '../../encounters/catalog.mjs';
-import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=scene-review-1';
+import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {storyIdentity} from '../../encounters/narrative.mjs';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);

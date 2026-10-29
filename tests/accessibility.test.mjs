@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {siteRole,siteBase} from './site-fixture.mjs';
-import {encounters} from '../encounters/catalog.mjs';
+import {encounters} from '../encounters/catalog.mjs?v=scene-review-1';
 import {gaContent,translateHTML,translateText} from '../locales/translate.mjs';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs';
+import {decodeState} from '../encounters/engine.mjs?v=scene-review-1';
 import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs';
 
 test('Irish content covers every shared stage and both roles without altering choice order or route identifiers',()=>{

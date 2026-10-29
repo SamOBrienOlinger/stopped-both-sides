@@ -1,6 +1,6 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
+import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 const paths={public:'./',garda:'garda/'};

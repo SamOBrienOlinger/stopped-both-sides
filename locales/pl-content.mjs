@@ -286,7 +286,7 @@ export default {
   "m0284": "Uznaj brak znajomości prawnika za decyzję o dalszych czynnościach bez niego.",
   "m0285": "Brak kontaktu do prawnika nie jest odmową pomocy prawnej.",
   "m0286": "Potrzebujesz leków",
-  "m0287": "Nadchodzi pora przyjęcia przepisanego leku i Maya zaczyna źle się czuć. Maya nie informuje jeszcze personelu. Osoba ucząca się o tym wie; nie wolno zakładać, że Garda zna nieujawnione szczegóły medyczne.",
+  "m0287": "Nadchodzi pora przyjęcia przepisanego leku i Maya zaczyna źle się czuć. Maya nie informuje jeszcze personelu.",
   "m0288": "Co zrobisz?",
   "m0289": "Poinformuj osobę odpowiedzialną za zatrzymanych o chorobie, urazie lub potrzebie leków i poproś o pomoc medyczną. Odpowiada ona za dobrostan osób w zatrzymaniu.",
   "m0290": "Poinformuj osobę odpowiedzialną za zatrzymanych i poproś o pomoc medyczną.",

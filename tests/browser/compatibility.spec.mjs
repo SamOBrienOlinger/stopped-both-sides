@@ -1,6 +1,6 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs';
+import {decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {expectControlsFit} from './control-layout.mjs';
 
 const sizes=[[320,568],[390,844],[568,320],[768,1024],[1024,768],[1366,768],[1920,1080],[2560,1440]];

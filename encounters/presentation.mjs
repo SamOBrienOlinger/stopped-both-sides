@@ -1,4 +1,4 @@
-import {encounters,roles} from './catalog.mjs';
+import {encounters,roles} from './catalog.mjs?v=scene-review-1';
 
 // Explicit teaching transitions: these are variations, not consequences of a choice.
 export const variations={

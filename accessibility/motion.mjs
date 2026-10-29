@@ -104,7 +104,7 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(next.complete&&stageChange)cue(main.querySelector('.recap-takeaways')||main.querySelector('.summary-heading'),'recap');
    else if(stageChange){
     cue(main.querySelector('.decision-context,.game-grid > .story'),'stage');
-    for(const scene of all('.story .scene-stage'))cue(scene,'scene');
+    for(const scene of all('.story .scene-stage,.legacy-illustration .scene-stage'))cue(scene,'scene');
    }else if(before&&before.role!==next.role){
     cue(main.querySelector('.play-toolbar,.legacy-perspective,.setup-role'),'perspective');
     cue(main.querySelector(next.complete?'.recap-takeaways':'.decision-choices,.game-grid > section[aria-labelledby="choice-title"]'),'perspective');

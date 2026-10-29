@@ -286,7 +286,7 @@ export default {
   "m0284": "Tratar o facto de não conhecer um advogado como uma decisão de avançar sem ele.",
   "m0285": "A falta de um contacto não é uma recusa de assistência jurídica.",
   "m0286": "Precisa da sua medicação",
-  "m0287": "Está na hora de Maya tomar medicação prescrita e Maya começa a sentir-se mal. Maya ainda não informou a equipa responsável pela detenção. Quem aprende sabe-o; não se deve presumir que o Garda conhece pormenores médicos não revelados.",
+  "m0287": "Está na hora de Maya tomar medicação prescrita e Maya começa a sentir-se mal. Maya ainda não informou a equipa responsável pela detenção.",
   "m0288": "O que faria?",
   "m0289": "Informe o agente responsável sobre doença, lesão ou necessidades de medicação e peça assistência médica. Esse agente é responsável pelo bem-estar durante a detenção.",
   "m0290": "Informar o agente responsável e pedir ajuda médica.",

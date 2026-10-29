@@ -171,7 +171,7 @@ Object.assign(gaContent,{
    'Na socruithe agus an incháilitheacht a mhíniú.','Ní gá do Maya buille faoi thuairim a thabhairt faoi chabhair.',
    'Easpa sonraí teagmhála aturnae a mheas mar cheart a thabhairt suas.','Ní diúltú comhairle é gan teagmhálaí a bheith aici.'
   ]),
-  'custody-health':n('Cógais agus sláinte','Tá cógas ordaithe le glacadh ag Maya agus mothaíonn sí tinn. Níor inis sí don fhoireann fós. Tá a fhios ag an bhfoghlaimeoir; níor cheart don Gharda glacadh leis go bhfuil eolas nár nochtadh aige.',[
+  'custody-health':n('Cógais agus sláinte','Tá cógas ordaithe le glacadh ag Maya agus mothaíonn sí tinn. Níor inis sí don fhoireann fós.',[
    'Cad a dhéanfá?','Inis don chomhalta i bhfeighil faoi thinneas, gortú nó cógas. Iarr aire leighis agus tacaíocht leasa nuair is gá.',
    'An riachtanas a mhíniú agus aire leighis a iarraidh.','Is féidir leis an bhfoireann cabhair chuí a shocrú.',
    'Fanacht i mo thost mar gur gá fanacht go mbeidh an t-agallamh thart.','Luaigh riachtanais sláinte nuair a thagann siad chun cinn.',

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
 import {siteAddresses} from '../site.mjs';
 const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides/');
-import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs';
+import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=scene-review-1';
 import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
 import {translateText,translateHTML} from '../locales/translate.mjs';

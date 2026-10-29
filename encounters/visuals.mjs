@@ -1,4 +1,4 @@
-import {encounters} from './catalog.mjs';
+import {encounters} from './catalog.mjs?v=scene-review-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){

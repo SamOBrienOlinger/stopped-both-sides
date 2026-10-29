@@ -45,7 +45,7 @@ main{padding-top:1.75rem}
 .paired-game{align-items:start;margin-top:0;gap:1.5rem}
 .paired-game>.story.story--illustrated{position:static;padding:0;background:transparent;border:0;border-radius:1rem}
 .paired-game .story>.encounter-scene{margin:0}
-.paired-game .scene-stage{aspect-ratio:16/9}
+.paired-game .scene-stage{aspect-ratio:auto}
 .paired-game .prompt .eyebrow{font-size:.8125rem;margin-bottom:.6rem}
 .paired-game .prompt h2{font-size:clamp(1.25rem,2.3vw,1.6rem)}
 .paired-game .choice{min-height:64px;padding:1rem;line-height:1.5}
@@ -55,7 +55,6 @@ main{padding-top:1.75rem}
 .feedback .lesson p{margin:.35rem 0 .8rem}
 .paired-feedback-actions{display:grid;gap:.75rem}
 .paired-feedback-actions .small-note{font-size:.875rem;color:var(--muted);margin:0}
-.scene-feedback-preview .encounter-scene{max-width:23rem}
 .scene-cast-names strong{font-size:.875rem}
 .scene-cast-names strong>span:first-child{font-weight:400}
 .scene-setting{font-size:.75rem}
@@ -92,7 +91,7 @@ main{padding-top:1.75rem}
 .legacy-perspective{padding:.75rem 1rem}
 .legacy-perspective .text-button{min-height:44px}
 @media(min-width:42rem){.character-options{grid-template-columns:repeat(5,minmax(0,1fr))}.recap-overview{grid-template-columns:minmax(12rem,.7fr) minmax(0,1.4fr)}.recap-overview .encounter-scene{max-width:none}.setup-character>.character-image{width:4rem}}
-@media(min-width:56.25rem){.paired-game{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)}.paired-game>.story.story--illustrated{position:sticky;top:1rem}}
+@media(min-width:56.25rem){.paired-game{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)}.paired-game>.story.story--illustrated{position:sticky;top:1rem}}
 @media(max-width:41.25rem){main{padding-top:1.25rem}.header nav{gap:.2rem}.header nav a,.header nav .utility-settings{padding:.4rem .55rem}.perspective-casts p{font-size:.875rem}.play-toolbar~.encounter-cast .character-image{width:2.5rem}.play-toolbar~.encounter-cast .cast-character{padding:0;gap:.4rem}.play-toolbar~.encounter-cast .cast-character strong{font-size:.875rem}.play-toolbar.perspective-bar{padding:.6rem 0}.play-toolbar .character-actions{width:100%;align-items:center}.play-toolbar .character-actions .primary{flex:1}.play-toolbar .character-actions .text-button{flex:0 1 7rem}.paired-recap .summary-item{padding:1rem}.recap-next{display:grid;grid-template-columns:minmax(0,1fr)}.scene-cast-names strong{font-size:.8125rem}.scene-cast-names>span>span{font-size:.75rem}}
 @media(forced-colors:active){.variation-notice,.decision-context,.recap-scores,.score-mechanics,.topic-filter{background:Canvas;color:CanvasText;border-color:CanvasText}.topic-filter[aria-pressed=true]{outline:2px solid Highlight;outline-offset:-4px;background:Canvas;color:CanvasText}}
 @media print{.paired-game>.story.story--illustrated{position:static}.paired-recap{max-width:none}.recap-detail:not([open])>*{display:block}.recap-detail>summary{display:none}}

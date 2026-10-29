@@ -286,7 +286,7 @@ export default {
   "m0284": "Tratar el hecho de no conocer a un abogado como una decisión de continuar sin uno.",
   "m0285": "No tener un contacto no supone rechazar la asistencia jurídica.",
   "m0286": "Necesitas tu medicación",
-  "m0287": "A Maya le toca tomar medicación prescrita y empieza a encontrarse mal. Maya aún no ha informado al personal de custodia. Quien aprende lo sabe; no debe suponerse que el Garda conoce detalles médicos no comunicados.",
+  "m0287": "A Maya le toca tomar medicación prescrita y empieza a encontrarse mal. Maya aún no ha informado al personal de custodia.",
   "m0288": "¿Qué harías?",
   "m0289": "Informa al agente responsable sobre enfermedades, lesiones o necesidades de medicación y pide atención médica. Es responsable del bienestar durante la custodia.",
   "m0290": "Informar al agente responsable y pedir ayuda médica.",

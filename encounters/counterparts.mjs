@@ -91,7 +91,7 @@ export const counterparts={
    'Explain how to request a solicitor and the relevant assistance arrangements, including eligibility. Do not assume that unfamiliarity or cost concerns mean advice is unwanted.',[
     choice('Explain the available arrangements and how eligibility is assessed.','Maya can ask for advice without having to guess how access works.'),
     choice('Treat not knowing a solicitor as a decision to proceed without one.','Lack of a contact is not a refusal of legal assistance.',true)],['garda:ethics']),
-  'custody-health':pair('Maya is due prescribed medication and is beginning to feel unwell. Maya has not yet told custody staff. The learner knows this; the Garda must not be assumed to know undisclosed medical details.',
+  'custody-health':pair('Maya is due prescribed medication and is beginning to feel unwell. Maya has not yet told custody staff.',
    'What can you do without guessing a diagnosis or prescription?',
    'Make it possible to raise welfare needs, take concerns seriously and arrange appropriate medical attention. Custody staff should not substitute assumptions for clinical assessment.',[
     choice('Ask about welfare needs, explain how to request help and arrange medical attention when needed.','This creates a route for Maya to disclose the concern and obtain appropriate support.'),

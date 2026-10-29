@@ -6,7 +6,7 @@ main :is(h1,h2,h3){text-wrap:balance}
 main :is(p,li,dd){text-wrap:pretty}
 main :is(input,select,textarea){max-inline-size:100%;min-inline-size:0}
 main :is(button,a.primary){white-space:normal;block-size:auto;max-inline-size:100%;line-height:var(--ui-control-line,1.5)}
-main :is(img,video):not(.character-image>img){max-inline-size:100%}
+main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:100%}
 .content-page{max-inline-size:60rem}
 .content-page>h1{max-inline-size:24ch;margin-block-end:1.25rem}
 .content-page>.page-lead{max-inline-size:65ch}

@@ -286,7 +286,7 @@ export default {
   "m0284": "Considérer que ne pas connaître d'avocat signifie décider de poursuivre sans avocat.",
   "m0285": "L'absence de contact n'est pas un refus d'assistance juridique.",
   "m0286": "Vous avez besoin de vos médicaments",
-  "m0287": "Maya doit prendre un médicament prescrit et commence à se sentir mal. Maya n'a pas encore prévenu le personnel de détention. L'apprenant le sait ; on ne doit pas supposer que le Garda connaît des informations médicales non communiquées.",
+  "m0287": "Maya doit prendre un médicament prescrit et commence à se sentir mal. Maya n'a pas encore prévenu le personnel de détention.",
   "m0288": "Que feriez-vous ?",
   "m0289": "Informez le membre responsable de toute maladie, blessure ou besoin de médicaments et demandez des soins médicaux. Il est responsable du bien-être en détention.",
   "m0290": "Informer le membre responsable et demander une aide médicale.",

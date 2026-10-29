@@ -1,10 +1,10 @@
-import {encounters,roles,roleLabels} from './catalog.mjs';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=scene-review-1';
 import {characterFor,characterArtwork} from './characters.mjs?v=scene-art-2';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
-// Explicit art direction for every decision. Illustrations never decide the law,
-// scoring, identity cues or facts; those remain in the scenario's written account.
+// Locations provide context. Framed, neutral portraits identify the chosen
+// characters without staging gestures, distress or knowledge the text does not give.
 const scene=(place,speaker,mode='together',otherPlace=place)=>({place,speaker,mode,otherPlace});
 export const sceneDirections={
  'public-street':{
@@ -96,7 +96,7 @@ export const sceneDirections={
  }
 };
 
-export const sceneAssets=['listening-clean','speaking-clean','reflecting-clean','street','bus-stop','station','advice-room','meeting-room','square'];
+export const sceneAssets=['street','bus-stop','station','advice-room','meeting-room','square'];
 const asset=name=>new URL(`../assets/scenes/${name}.webp?v=irish-art-1`,import.meta.url).href;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community'};
@@ -109,12 +109,7 @@ export function sceneModel(state,{step=null}={}){
  const role=last?.continuedAs||state.role,answers=last?.answers||state.answers;
  const choice=answers[role]===null?null:stage.views[role].choices[answers[role]];
  const separate=['separate','private'].includes(direction.mode);
- const speaker=choice&&!separate?role:direction.speaker;
- const poses=Object.fromEntries(roles.map(r=>[r,separate?'reflecting':speaker===r?'speaking':speaker?'listening':'reflecting']));
- // An answer changes the moment, without inventing another person's reaction.
- if(choice&&separate)poses[role]='listening';
- if(choice&&!separate&&direction.speaker===role)poses[role]='reflecting';
- return {...direction,nodeId,stage,choice,role,poses,separate,phase:choice?'response':'decision',
+ return {...direction,nodeId,stage,choice,role,separate,phase:choice?'response':'decision',
   label:direction.mode==='private'?'Private advice · separate perspectives':separate?'Separate reflections':direction.mode==='comparison'?'Same facts · compare the written scenarios':places[direction.place]};
 }
 
@@ -123,8 +118,9 @@ export function renderScene(state,options={}){
  const background=(place,side='')=>`<div class="scene-location ${side}" aria-hidden="true"><img src="${asset(place)}" alt="" width="680" height="380" decoding="async" ${compact?'loading="lazy"':''}></div>`;
  const actors=roles.map(role=>{
   const c=characterFor(role,state.cast[role]);
-  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" data-pose="${m.poses[role]}" aria-hidden="true"><div class="scene-sprite">${['listening','speaking','reflecting'].map(pose=>{const art=characterArtwork(c,pose);return `<img class="scene-pose ${pose===m.poses[role]?'is-visible':''}" src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" ${compact?'loading="lazy"':''} style="${art.style}">`;}).join('')}</div></div>`;
+  const art=characterArtwork(c,'portrait');
+  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" ${compact?'loading="lazy"':''} style="${art.style}"></div></div>`;
  }).join('');
  const names=roles.map(role=>`<span data-role-tone="${role}"><strong><span data-no-translate>${esc(characterFor(role,state.cast[role]).name)}</span></strong><span>${roleLabels[role]}</span></span>`).join('');
- return `<figure class="encounter-scene ${compact?'encounter-scene--compact':''}" data-scene-id="${esc(state.id+'/'+m.nodeId)}" data-scene-phase="${m.phase}" data-scene-mode="${m.mode}"><div class="scene-setting">${esc(m.label)}</div><div class="scene-stage ${m.separate?'scene-stage--separate':''}" role="img" aria-label="${esc(m.stage.title)}">${background(m.place,m.separate?'scene-location--public':'')}${m.separate?background(m.otherPlace,'scene-location--garda'):''}${actors}${m.separate?'<span class="scene-divider" aria-hidden="true"></span>':''}</div><figcaption><div class="scene-cast-names">${names}</div></figcaption></figure>`;
+ return `<figure class="encounter-scene ${compact?'encounter-scene--compact':''}" data-scene-id="${esc(state.id+'/'+m.nodeId)}" data-scene-phase="${m.phase}" data-scene-mode="${m.mode}"><div class="scene-setting">${esc(m.label)}</div><div class="scene-stage ${m.separate?'scene-stage--separate':''}" aria-hidden="true"><div class="scene-settings">${background(m.place,m.separate?'scene-location--public':'')}${m.separate?background(m.otherPlace,'scene-location--garda'):''}</div><div class="scene-portraits">${actors}</div></div><figcaption><div class="scene-cast-names">${names}</div></figcaption></figure>`;
 }

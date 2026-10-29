@@ -1,6 +1,6 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs';
+import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=scene-review-1';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const cast={public:'public-2',garda:'garda-5'};
 for(const role of ['public','garda'])test(`${role}: facts, identity and variation precede decisions at phone and desktop widths`,async({page},testInfo)=>{

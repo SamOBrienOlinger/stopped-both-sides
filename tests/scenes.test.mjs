@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=scene-review-1';
 import {characters} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=scene-review-1';
 import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs';
 import {translateText} from '../locales/translate.mjs';
 
@@ -22,10 +22,10 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
     assert.match(html,new RegExp(`data-scene-character="${g.id}"`));
     assert.match(html,new RegExp(`left:-${p.column*100}%;top:-${p.row*100}%`));
     if(g.id==='garda-5'){
-     assert.equal((html.match(/characters\/aisling-hijab-clean.webp/g)||[]).length,3);
-     for(const position of ['left:-100%;top:-0%','left:-0%;top:-100%','left:-100%;top:-100%'])assert.ok(html.includes(position+';width:200%;height:200%'));
+     assert.equal((html.match(/characters\/aisling-hijab-clean.webp/g)||[]).length,1);
+     assert.ok(html.includes('left:-0%;top:-0%;width:200%;height:200%'));
     }else assert.match(html,new RegExp(`left:-${g.column*100}%;top:-${g.row*100}%`));
-    assert.doesNotMatch(html,/undefined|NaN/);
+    assert.doesNotMatch(html,/undefined|NaN|data-pose|scene-pose|reflecting-clean|speaking-clean|listening-clean/);
     assert.doesNotMatch(html,/scene-prop|props\.webp/,`${e.id}/${nodeId} must not place loose objects on the floor`);
    }
   }
@@ -33,13 +33,15 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
  assert.equal(covered,stageCount);
 });
 
-test('Every answer updates the visual moment without changing cast, facts or scoring',()=>{
+test('Answers update the phase while portraits never imply an invented reaction',()=>{
  for(const e of Object.values(encounters))for(const stage of Object.values(e.nodes))for(const role of roles){
   const state={...startEncounter(e.id,role,{cast:{public:'public-6',garda:'garda-9'}}),nodeId:stage.id};
   const before=JSON.stringify(state),initial=sceneModel(state);
   stage.views[role].choices.forEach((choice,index)=>{
    const next=answer(state,index),model=sceneModel(next);
-   assert.notDeepEqual(model.poses,initial.poses);
+   assert.equal(initial.phase,'decision');
+   assert.doesNotMatch(renderScene(next),/data-pose|scenes\/(?:listening|speaking|reflecting)-clean/);
+   assert.match(renderScene(next),/characters\/cast.webp/);
    assert.equal(model.phase,'response');assert.equal(model.choice,choice);
    assert.deepEqual(next.cast,state.cast);assert.equal(model.stage,stage);
    const switched=switchRole(next);assert.deepEqual(switched.cast,state.cast);

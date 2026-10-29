@@ -286,7 +286,7 @@ export default {
   "m0284": "Tratezi necunoașterea unui avocat drept decizie de a continua fără unul.",
   "m0285": "Lipsa unui contact nu este un refuz al asistenței juridice.",
   "m0286": "Ai nevoie de medicamente",
-  "m0287": "Maya trebuie să ia medicamente prescrise și începe să se simtă rău. Maya nu a informat încă personalul de custodie. Cursantul știe asta; nu trebuie presupus că membrul Garda cunoaște date medicale nedezvăluite.",
+  "m0287": "Maya trebuie să ia medicamente prescrise și începe să se simtă rău. Maya nu a informat încă personalul de custodie.",
   "m0288": "Ce ai face?",
   "m0289": "Spune membrului responsabil despre boli, răni sau nevoi de medicație și cere îngrijire medicală. El răspunde de bunăstarea persoanelor aflate în custodie.",
   "m0290": "Informezi membrul responsabil și ceri ajutor medical.",
