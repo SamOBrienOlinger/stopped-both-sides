@@ -46,7 +46,11 @@ export function createLayout({main}){
  // Keep the panel open behind reading settings so closing the dialog can
  // restore focus to the same visible control.
  header.addEventListener('click',event=>{
-  if(event.target.closest('nav a,.wordmark'))close();
+  const link=event.target.closest('nav a,.wordmark');
+  if(link){
+   close();
+   if(link.origin===location.origin&&link.pathname===location.pathname&&link.hash===location.hash)main.querySelector('h1')?.focus();
+  }
  });
  document.addEventListener('click',event=>{if(open&&!header.contains(event.target)&&!document.querySelector('dialog[open]'))close();});
  header.addEventListener('focusout',event=>{
@@ -60,7 +64,7 @@ export function createLayout({main}){
  });
  function update(hash){
   const route=String(hash).split('~')[0];
-  if(lastRoute!==route)open=false;
+  if(lastRoute!==route&&!document.activeElement?.matches('[data-reading-open]'))open=false;
   lastRoute=route;sync();
   // Split only plain prose, leaving quotes, controls, source metadata and
   // paragraphs containing links or emphasis exactly as authored.

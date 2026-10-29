@@ -17,6 +17,8 @@ for(const path of ['./','garda/']){
   await nav.locator('[data-nav="about"]').click();
   await expect(nav).toBeHidden();await expect(page.locator('#main h1')).toBeFocused();
   await expect(toggle.locator('[data-menu-current]')).toHaveText('About');
+  await openNavigation(page);await nav.locator('[data-nav="about"]').click();
+  await expect(nav).toBeHidden();await expect(page.locator('#main h1')).toBeFocused();
   await openNavigation(page);await expectControlsFit(page,'open mobile navigation');
   await page.setViewportSize({width:1366,height:900});
   await expect(toggle).toBeHidden();await expect(nav).toBeVisible();
