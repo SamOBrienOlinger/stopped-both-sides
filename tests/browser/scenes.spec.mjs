@@ -18,9 +18,21 @@ for(const role of ['public','garda'])test(`${role}: illustrated decisions remain
   const layout=await scene.evaluate(el=>{
    const stage=el.querySelector('.scene-stage').getBoundingClientRect();
    const setting=el.querySelector('.scene-setting').getBoundingClientRect();
-   return {overflow:document.documentElement.scrollWidth>innerWidth+1,settingClear:setting.bottom<=stage.top+1,actors:[...el.querySelectorAll('.scene-actor')].every(a=>{const r=a.getBoundingClientRect();return r.left>=stage.left&&r.right<=stage.right&&r.top>=stage.top&&r.bottom<=stage.bottom;})};
+   const actors=[...el.querySelectorAll('.scene-actor')].map(a=>{
+    const r=a.getBoundingClientRect();
+    return {character:a.dataset.sceneCharacter,left:stage.left-r.left,right:r.right-stage.right,top:stage.top-r.top,bottom:r.bottom-stage.bottom};
+   });
+   return {overflow:document.documentElement.scrollWidth>innerWidth+1,settingClear:setting.bottom<=stage.top+1,actors};
   });
-  expect(layout).toEqual({overflow:false,settingClear:true,actors:true});
+  expect(layout.overflow,`${role} page fits at ${width}px`).toBe(false);
+  expect(layout.settingClear,`${role} setting clears the portraits at ${width}px`).toBe(true);
+  for(const actor of layout.actors){
+   const overflow=Math.max(0,actor.left,actor.right,actor.top,actor.bottom);
+   // DOMRect edges in Firefox may differ by a fractional layout unit even
+   // for contained grid children. Keep the tolerance below a visible pixel.
+   if(overflow>0)console.info('Portrait edge measurement',JSON.stringify({role,width,...actor,overflow}));
+   expect(overflow,`${role} portrait bounds at ${width}px: ${JSON.stringify(actor)}`).toBeLessThanOrEqual(.05);
+  }
   if(width===390||width===1366)await scene.screenshot({path:testInfo.outputPath(`${role}-scene-${width}.png`)});
  }
  await page.setViewportSize({width:390,height:844});
