@@ -3,7 +3,7 @@ import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=scen
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=scene-review-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=scene-art-2';
-import {renderScene} from './scenes.mjs?v=scene-review-1';
+import {renderScene} from './scenes.mjs?v=context-scenes-1';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=site-languages-1';
 import {variationFor,remainingDecisions,learningStatus,topicGroups} from './presentation.mjs';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

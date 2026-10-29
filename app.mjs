@@ -4,7 +4,7 @@ import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from './compatibility.mjs';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=scene-review-1';
 import {createMotion} from './accessibility/motion.mjs?v=scene-review-1';
-import {createEncounterMode} from './encounters/ui.mjs?v=scene-review-1';
+import {createEncounterMode} from './encounters/ui.mjs?v=context-scenes-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');

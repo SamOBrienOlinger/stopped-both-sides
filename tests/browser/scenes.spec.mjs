@@ -67,6 +67,9 @@ test('Private legal advice illustrates separate locations, with both selected ch
  await expect(scene).toHaveAttribute('data-scene-mode','private');
  await expect(scene.locator('.scene-location--public')).toBeVisible();
  await expect(scene.locator('.scene-location--garda')).toBeVisible();
+ await expect(scene.locator('.scene-location--public [data-scene-role="public"]')).toHaveCount(1);
+ await expect(scene.locator('.scene-location--public [data-scene-role="garda"]')).toHaveCount(0);
+ await expect(scene.locator('.scene-location--garda [data-scene-role="garda"]')).toHaveCount(1);
  await scene.screenshot({path:testInfo.outputPath('private-advice.png')});
 });
 
@@ -93,21 +96,28 @@ function reachStage(id,nodeId,cast){
  }
  throw Error('Unreachable visual-review stage: '+id+'/'+nodeId);
 }
-async function portraitGeometry(scene){
+async function characterGeometry(scene){
  const result=await scene.locator('.scene-sprite').evaluateAll(frames=>frames.map(frame=>{
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
-  const columns=image.src.includes('aisling-hijab-clean')?2:6;
+  const columns=6;
   return {scale:art.width/bounds.width,columns,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
  }));
  for(const portrait of result){
   expect(portrait.scale,'the sprite sheet retains its full width inside the crop').toBeCloseTo(portrait.columns,1);
   expect(portrait.distortion,'portraits retain their source proportions').toBeLessThan(.01);
  }
- const boxes=await scene.evaluate(el=>({
-  backgrounds:[...el.querySelectorAll('.scene-location')].map(n=>n.getBoundingClientRect().bottom),
-  portraits:[...el.querySelectorAll('.scene-actor')].map(n=>n.getBoundingClientRect().top)
+ const actors=await scene.locator('.scene-actor').evaluateAll(nodes=>nodes.map(actor=>{
+  const pane=actor.closest('.scene-location'),bounds=pane.getBoundingClientRect(),box=actor.getBoundingClientRect();
+  return {character:actor.dataset.sceneCharacter,overflow:Math.max(bounds.left-box.left,box.right-bounds.right,bounds.top-box.top,box.bottom-bounds.bottom),floorGap:(bounds.bottom-box.bottom)/bounds.height,height:box.height/bounds.height};
  }));
- expect(Math.max(...boxes.backgrounds),'portraits never overlap or float on the setting image').toBeLessThanOrEqual(Math.min(...boxes.portraits));
+ for(const actor of actors){
+  expect(actor.overflow,`${actor.character} stays inside its background`).toBeLessThanOrEqual(.05);
+  expect(actor.floorGap,'feet remain near the foreground floor').toBeGreaterThan(.04);
+  expect(actor.floorGap,'figures are not suspended above the foreground').toBeLessThan(.08);
+  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(.5);
+  expect(actor.height,'the figure does not dominate the setting').toBeLessThan(.6);
+ }
+ await expect(scene).not.toContainText('Separate reflections');
 }
 test('Visual review: all characters, locations and separate perspectives',async({page},testInfo)=>{
  test.setTimeout(120000);
@@ -117,9 +127,13 @@ test('Visual review: all characters, locations and separate perspectives',async(
   const [id,nodeId]=reviewCases[i],cast={public:'public-'+(i+1),garda:'garda-'+((i+1)%9+1)};
   await page.goto('./'+stateHash(reachStage(id,nodeId,cast)));
   const scene=page.locator('.story>.encounter-scene');
-  await scene.scrollIntoViewIfNeeded();await loaded(scene);await portraitGeometry(scene);
+  await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);
   await expect(scene.locator('.scene-sprite img')).toHaveCount(2);
   await scene.screenshot({path:testInfo.outputPath(`review-${String(i+1).padStart(2,'0')}-${nodeId}.png`)});
+  await page.setViewportSize({width:320,height:900});
+  await scene.scrollIntoViewIfNeeded();await characterGeometry(scene);
+  await scene.screenshot({path:testInfo.outputPath(`review-${String(i+1).padStart(2,'0')}-${nodeId}-phone.png`)});
+  await page.setViewportSize({width:1366,height:900});
  }
 });
 for(const path of ['./','garda/'])test(`${path} medication scene keeps the decision before artwork on phones`,async({page},testInfo)=>{
@@ -134,7 +148,7 @@ for(const path of ['./','garda/'])test(`${path} medication scene keeps the decis
   expect(choices.y+choices.height,'the complete decision precedes decorative artwork').toBeLessThanOrEqual(art.y);
   await page.locator('.decision-context').scrollIntoViewIfNeeded();
   await page.screenshot({path:testInfo.outputPath(`medication-decision-${width}.png`)});
-  const scene=page.locator('.story>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);await portraitGeometry(scene);
+  const scene=page.locator('.story>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);
   await scene.screenshot({path:testInfo.outputPath(`medication-portraits-${width}.png`)});
  }
  await page.locator('[data-action="paired-answer"]').first().click();

@@ -21,10 +21,9 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
     assert.match(html,new RegExp(`data-scene-character="${p.id}"`));
     assert.match(html,new RegExp(`data-scene-character="${g.id}"`));
     assert.match(html,new RegExp(`left:-${p.column*100}%;top:-${p.row*100}%`));
-    if(g.id==='garda-5'){
-     assert.equal((html.match(/characters\/aisling-hijab-clean.webp/g)||[]).length,1);
-     assert.ok(html.includes('left:-0%;top:-0%;width:200%;height:200%'));
-    }else assert.match(html,new RegExp(`left:-${g.column*100}%;top:-${g.row*100}%`));
+    assert.match(html,new RegExp(`left:-${g.column*100}%;top:-${g.row*100}%`));
+    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,2);
+    assert.doesNotMatch(html,/Separate reflections|scene-portraits/);
     assert.doesNotMatch(html,/undefined|NaN|data-pose|scene-pose|reflecting-clean|speaking-clean|listening-clean/);
     assert.doesNotMatch(html,/scene-prop|props\.webp/,`${e.id}/${nodeId} must not place loose objects on the floor`);
    }
@@ -33,7 +32,7 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
  assert.equal(covered,stageCount);
 });
 
-test('Answers update the phase while portraits never imply an invented reaction',()=>{
+test('Answers update the phase while illustrated characters retain their neutral stance',()=>{
  for(const e of Object.values(encounters))for(const stage of Object.values(e.nodes))for(const role of roles){
   const state={...startEncounter(e.id,role,{cast:{public:'public-6',garda:'garda-9'}}),nodeId:stage.id};
   const before=JSON.stringify(state),initial=sceneModel(state);
@@ -41,7 +40,7 @@ test('Answers update the phase while portraits never imply an invented reaction'
    const next=answer(state,index),model=sceneModel(next);
    assert.equal(initial.phase,'decision');
    assert.doesNotMatch(renderScene(next),/data-pose|scenes\/(?:listening|speaking|reflecting)-clean/);
-   assert.match(renderScene(next),/characters\/cast.webp/);
+   assert.match(renderScene(next),/scenes\/contextual-cast.webp/);
    assert.equal(model.phase,'response');assert.equal(model.choice,choice);
    assert.deepEqual(next.cast,state.cast);assert.equal(model.stage,stage);
    const switched=switchRole(next);assert.deepEqual(switched.cast,state.cast);
@@ -56,7 +55,11 @@ test('Private advice and independent reflections keep the selected pair in separ
  for(const [id,nodeId] of keys){
   const state={...startEncounter(id),nodeId},m=sceneModel(state);
   assert.equal(m.separate,true);assert.notEqual(m.place,m.otherPlace);
-  assert.match(renderScene(state),/scene-location--public/);assert.match(renderScene(state),/scene-location--garda/);
+  const html=renderScene(state);
+  assert.match(html,/scene-location--public/);assert.match(html,/scene-location--garda/);
+  const publicPanel=html.slice(html.indexOf('scene-location--public'),html.indexOf('scene-location--garda'));
+  assert.match(publicPanel,/data-scene-role="public"/);assert.doesNotMatch(publicPanel,/data-scene-role="garda"/);
+  if(m.mode==='separate'){assert.equal(m.label,'');assert.doesNotMatch(html,/scene-setting/);}
  }
 });
 
@@ -75,8 +78,8 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
 });
 
 test('Both entrypoints load scene styles and all locally delivered images exist',()=>{
- assert.ok(existsSync(new URL('../assets/characters/aisling-hijab-clean.webp',import.meta.url)));
+ assert.ok(existsSync(new URL('../assets/scenes/contextual-cast.webp',import.meta.url)));
  for(const name of sceneAssets)assert.ok(existsSync(new URL(`../assets/scenes/${name}.webp`,import.meta.url)),name);
  for(const path of ['../index.html','../garda/index.html'])assert.match(readFileSync(new URL(path,import.meta.url),'utf8'),/encounters\/scenes.css/);
- for(const label of ['On the street','At the bus stop','At the station','Time to reflect','Reviewing the encounter','In the community','Private advice · separate perspectives','Separate reflections','Same facts · compare the written scenarios','Your chosen response','The scene'])assert.notEqual(translateText(label,'ga'),label);
+ for(const label of ['On the street','At the bus stop','At the station','Time to reflect','Reviewing the encounter','In the community','Private advice · separate perspectives','Same facts · compare the written scenarios','Your chosen response','The scene'])assert.notEqual(translateText(label,'ga'),label);
 });

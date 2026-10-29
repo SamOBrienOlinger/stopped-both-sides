@@ -1,17 +1,21 @@
-/* Setting images and portrait cards are separate illustrations, not a staged
-   photograph. No figure is pasted onto a floor or assigned an inferred reaction. */
+/* Each figure belongs to its own location panel. Relative sizing keeps the
+   complete character, wheelchair or cane grounded as the illustration resizes. */
 .encounter-scene{margin:0 0 24px;overflow:hidden;border:1px solid var(--line,#b3c8c3);border-radius:1rem;background:var(--paper,#fff);color:var(--ink,#183c3c)}
 .scene-setting{padding:.75rem 1rem;border-bottom:1px solid var(--line,#c5d5cf);background:var(--pale,#f5f7f4);color:var(--deep,#173d3b);font-size:.8125rem;line-height:1.5;font-weight:700}
-.scene-stage{position:relative;aspect-ratio:auto;direction:ltr}
-.scene-settings{display:grid;grid-template-columns:minmax(0,1fr);background:#edf2f0;border-bottom:1px solid var(--line,#c5d5cf);padding:.75rem;gap:.75rem}
-.scene-stage--separate .scene-settings{grid-template-columns:repeat(2,minmax(0,1fr))}
-.scene-location{min-width:0;display:grid;place-items:center}
-.scene-location>img{display:block;width:100%;height:auto;max-height:9rem;object-fit:contain;border-radius:.5rem}
-.scene-portraits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;padding:1rem 1rem 0}
-.scene-actor{display:grid;place-items:center;min-width:0;padding:.6rem;border:1px solid #d6e4e0;border-radius:.85rem;background:#fff}
-.scene-sprite{position:relative;display:block;width:min(100%,6rem);aspect-ratio:1;overflow:hidden;background:#fff}
+.scene-stage{position:relative;display:grid;grid-template-columns:minmax(0,1fr);direction:ltr;isolation:isolate}
+.scene-stage--separate{grid-template-columns:repeat(2,minmax(0,1fr));gap:.375rem}
+.scene-location{position:relative;min-width:0;aspect-ratio:16/9;overflow:hidden;background:#dfe8e3}
+.scene-location--solo{aspect-ratio:4/5}
+.scene-location>.scene-backdrop{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.scene-location--solo>.scene-backdrop{object-position:45% center}
+.scene-location--garda>.scene-backdrop{object-position:60% center}
+.scene-actor{position:absolute;bottom:5%;width:32%;aspect-ratio:1;z-index:1;pointer-events:none}
+.scene-actor--public{left:13%}.scene-actor--garda{right:13%}
+.scene-location--solo .scene-actor{width:68%;left:16%;right:auto;bottom:7%}
+.scene-actor::before{content:"";position:absolute;left:17%;bottom:0;width:66%;height:5%;border-radius:50%;background:radial-gradient(ellipse,#182a3260,transparent 70%)}
+.scene-sprite{position:relative;display:block;width:100%;height:100%;overflow:hidden}
 .scene-sprite>img{position:absolute;display:block;max-width:none;max-inline-size:none;pointer-events:none}
-.encounter-scene figcaption{padding:.65rem 1rem 1rem}
+.encounter-scene figcaption{padding:.8rem 1rem}
 .scene-cast-names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));direction:ltr;gap:1rem}
 .scene-cast-names>span{display:flex;flex-direction:column;gap:.2rem;min-width:0;text-align:center;color:var(--deep,#173d3b);overflow-wrap:anywhere}
 .scene-cast-names strong{font-size:.875rem;line-height:1.4}
@@ -21,11 +25,8 @@
 .story>.encounter-scene{margin-left:-16px;margin-right:-16px}
 .paired-game>.story{align-self:start}
 .encounter-scene--compact{max-width:560px;margin:0 auto 22px}
-.encounter-scene--compact .scene-location>img{max-height:6rem}
-.encounter-scene--compact .scene-sprite{width:min(100%,4.5rem)}
 .legacy-scene{max-width:720px;margin:0 auto 24px}
-@media(max-width:660px){.story>.encounter-scene{margin-left:-12px;margin-right:-12px}.scene-setting{padding:.65rem .8rem}.scene-portraits{padding:.8rem .8rem 0;gap:.75rem}.scene-cast-names{gap:.75rem}.scene-cast-names strong{font-size:.8125rem}}
-@media(forced-colors:active){.encounter-scene,.scene-setting,.scene-settings,.scene-actor{border-color:CanvasText}.scene-setting,.encounter-scene,.scene-cast-names>span{background:Canvas;color:CanvasText!important}.scene-cast-names>span>span{color:CanvasText}.scene-actor{background:white}}
-@media print{.encounter-scene{break-inside:avoid}.paired-game>.story{position:static}}
-
 .legacy-illustration{max-width:28rem;margin:1.5rem auto}
+@media(max-width:660px){.story>.encounter-scene{margin-left:-12px;margin-right:-12px}.scene-setting{padding:.65rem .8rem}.scene-cast-names{gap:.75rem}.scene-cast-names strong{font-size:.8125rem}}
+@media(forced-colors:active){.encounter-scene,.scene-setting{border-color:CanvasText}.scene-setting,.encounter-scene,.scene-cast-names>span{background:Canvas;color:CanvasText!important}.scene-cast-names>span>span{color:CanvasText}.scene-actor::before{display:none}}
+@media print{.encounter-scene{break-inside:avoid}.paired-game>.story{position:static}}
