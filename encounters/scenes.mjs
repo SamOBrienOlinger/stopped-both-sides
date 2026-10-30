@@ -98,7 +98,7 @@ export const sceneDirections={
 };
 
 export const sceneAssets=['street','bus-stop','station','advice-room','meeting-room','square'];
-const asset=name=>new URL(`../assets/scenes/${name}.webp?v=irish-art-1`,import.meta.url).href;
+const asset=name=>new URL(`../assets/scenes/${name}.webp?v=irish-streetlights-1`,import.meta.url).href;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community'};
 
