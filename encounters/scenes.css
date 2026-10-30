@@ -15,6 +15,8 @@
 .scene-actor::before{content:"";position:absolute;left:17%;bottom:0;width:66%;height:5%;border-radius:50%;background:radial-gradient(ellipse,#182a3260,transparent 70%)}
 .scene-sprite{position:relative;display:block;width:100%;height:100%;overflow:hidden}
 .scene-sprite>img{position:absolute;display:block;max-width:none;max-inline-size:none;pointer-events:none}
+/* These source figures look right; face them towards the public character. */
+.scene-actor:is([data-scene-character="garda-2"],[data-scene-character="garda-4"],[data-scene-character="garda-7"],[data-scene-character="garda-8"]) .scene-sprite{transform:scaleX(-1)}
 .encounter-scene figcaption{padding:.8rem 1rem}
 .scene-cast-names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));direction:ltr;gap:1rem}
 .scene-cast-names>span{display:flex;flex-direction:column;gap:.2rem;min-width:0;text-align:center;color:var(--deep,#173d3b);overflow-wrap:anywhere}
