@@ -121,7 +121,7 @@ for(const role of ['public','garda']){
    await page.setViewportSize({width,height});
    await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
    await captureHero(page,role,width,'standard',testInfo);
-   await captureControls(page,role,width,'standard',testInfo,[['navbar','.header'],['how-it-works','.how-to-play']]);
+   await captureControls(page,role,width,'standard',testInfo,[['navbar','.header'],['how-it-works','.how-to-play'],['footer','.footer']]);
    await page.locator('.single-mode summary').click();await fits(page,'original situations');
    await page.locator('.single-mode [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
@@ -139,7 +139,7 @@ for(const role of ['public','garda']){
    await page.locator('#reading-form [type="submit"]').click();
    await expect(page.locator('html')).toHaveAttribute('lang','ga');
    await fits(page,'large Irish feedback');
-   await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.character-actions'],['feedback-actions','.paired-feedback-actions']]);
+   await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.character-actions'],['feedback-actions','.paired-feedback-actions'],['footer','.footer']]);
    await page.locator('[data-action="paired-characters"]').click();
    await expect(page.locator('#character-picker-title')).toBeFocused();
    await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'large Irish character picker');

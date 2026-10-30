@@ -13,13 +13,14 @@
  --ui-shadow-hover:0 4px 14px #20394112;
 }
 
-/* One content-aligned footer for both perspectives. Group utility controls
-   together, with the disclaimer in its own row and room for translated text. */
+/* Compact shared footer. Keep readable text, full touch targets and natural
+   wrapping when translations or reading preferences need more space. */
 .footer{
  padding-inline:0;
- padding-block-start:clamp(1.5rem,3vw,2rem);
- padding-block-end:max(1.5rem,env(safe-area-inset-bottom));
+ padding-block-start:.75rem;
+ padding-block-end:max(.75rem,env(safe-area-inset-bottom));
  background:var(--paper,#fff);
+ color:var(--muted);
  text-align:start;
 }
 .footer>.footer-inner{
@@ -32,23 +33,30 @@
  padding-right:max(1rem,env(safe-area-inset-right));
 }
 .footer-top{
- display:grid;
- grid-template-columns:minmax(0,1fr);
+ display:flex;
+ flex-wrap:wrap;
  align-items:center;
- gap:.75rem 2rem;
+ justify-content:space-between;
+ gap:0 1.5rem;
 }
-.footer-identity{min-inline-size:0}
+.footer-identity{
+ display:flex;
+ flex:1 1 24rem;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:0 .75rem;
+ min-inline-size:0;
+}
 .footer .footer-tagline{
  margin:0;
- color:var(--ink);
- font-size:1rem;
- font-weight:600;
- line-height:1.6;
+ color:var(--muted);
+ font-size:.8125rem;
+ font-weight:400;
+ line-height:1.5;
 }
 .footer .footer-creator{
  max-inline-size:100%;
- padding-block:.5rem;
- line-height:1.5;
+ color:var(--ink);
  unicode-bidi:isolate;
 }
 .footer .footer-tools{
@@ -57,21 +65,21 @@
  justify-content:flex-start;
  align-items:center;
  min-inline-size:0;
- gap:.25rem 1.5rem;
+ gap:0 1rem;
 }
-.footer .footer-tools>a,.footer .footer-tools>.utility-settings{
+.footer .footer-creator,.footer .footer-tools>a,.footer .footer-tools>.utility-settings{
  display:inline-flex;
  align-items:center;
  justify-content:flex-start;
  min-block-size:44px;
  min-inline-size:44px;
  max-inline-size:100%;
- padding:.5rem 0;
+ padding:.375rem 0;
  border-radius:.25rem;
  color:var(--deep);
  font-size:.875rem;
- font-weight:600;
- line-height:1.5;
+ font-weight:400;
+ line-height:var(--ui-control-line,1.5);
  text-align:start;
  white-space:normal;
  overflow-wrap:anywhere;
@@ -79,13 +87,15 @@
  text-decoration-thickness:1px;
  text-underline-offset:.25em;
 }
+.footer .footer-creator{color:var(--ink);font-weight:600}
+.footer :is(a,button):hover{text-decoration-thickness:2px}
 .footer .footer-note{
  max-inline-size:none;
- margin:1rem 0 0;
- padding-block-start:1rem;
- border-block-start:1px solid var(--line);
- font-size:.875rem;
- line-height:1.65;
+ margin:.25rem 0 0;
+ padding:0;
+ border:0;
+ font-size:.8125rem;
+ line-height:1.6;
 }
 @media(min-width:41.25rem){
  .footer>.footer-inner{
@@ -93,10 +103,6 @@
   padding-left:max(1.75rem,env(safe-area-inset-left));
   padding-right:max(1.75rem,env(safe-area-inset-right));
  }
-}
-@media(min-width:56.25rem){
- .footer-top{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
- .footer .footer-tools{justify-content:flex-end}
 }
 
 /* Stable geometry and the same state vocabulary for pointer and keyboard use. */
