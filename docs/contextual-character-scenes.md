@@ -28,6 +28,10 @@ of the atlas created with the built-in image-generation tool. It contains all
 hijab is included in her original cast position. Existing portrait controls
 retain their original assets.
 
+`encounters/scene-artwork.mjs` records the measured source boundaries and foot
+positions. CSS crops each complete figure independently and aligns its feet or
+wheels to a common floor, avoiding clipping caused by uneven atlas spacing.
+
 The inputs were `assets/characters/cast.webp` for identities and ordering, and
 `assets/characters/aisling-hijab-clean.webp` for Aisling's appearance.
 

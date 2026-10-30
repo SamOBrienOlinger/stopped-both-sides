@@ -99,11 +99,11 @@ function reachStage(id,nodeId,cast){
 async function characterGeometry(scene){
  const result=await scene.locator('.scene-sprite').evaluateAll(frames=>frames.map(frame=>{
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
-  const columns=6;
+  const columns=1774/320;
   return {scale:art.width/bounds.width,columns,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
  }));
  for(const portrait of result){
-  expect(portrait.scale,'the sprite sheet retains its full width inside the crop').toBeCloseTo(portrait.columns,1);
+  expect(portrait.scale,'the sprite sheet retains the calibrated scale inside the crop').toBeCloseTo(portrait.columns,1);
   expect(portrait.distortion,'portraits retain their source proportions').toBeLessThan(.01);
  }
  const actors=await scene.locator('.scene-actor').evaluateAll(nodes=>nodes.map(actor=>{

@@ -20,9 +20,8 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
     assert.ok(sceneAssets.includes(model.place));assert.ok(sceneAssets.includes(model.otherPlace));
     assert.match(html,new RegExp(`data-scene-character="${p.id}"`));
     assert.match(html,new RegExp(`data-scene-character="${g.id}"`));
-    assert.match(html,new RegExp(`left:-${p.column*100}%;top:-${p.row*100}%`));
-    assert.match(html,new RegExp(`left:-${g.column*100}%;top:-${g.row*100}%`));
     assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,2);
+    assert.equal((html.match(/clip-path:inset\(/g)||[]).length,2,'each character is isolated from neighbouring figures');
     assert.doesNotMatch(html,/Separate reflections|scene-portraits/);
     assert.doesNotMatch(html,/undefined|NaN|data-pose|scene-pose|reflecting-clean|speaking-clean|listening-clean/);
     assert.doesNotMatch(html,/scene-prop|props\.webp/,`${e.id}/${nodeId} must not place loose objects on the floor`);

@@ -1,5 +1,6 @@
 import {encounters,roles,roleLabels} from './catalog.mjs?v=scene-review-1';
 import {characterFor} from './characters.mjs?v=scene-art-2';
+import {sceneCharacterArtwork} from './scene-artwork.mjs?v=context-scenes-1';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
@@ -117,9 +118,8 @@ export function renderScene(state,options={}){
  const m=sceneModel(state,options),compact=!!options.compact;
  const actor=role=>{
   const c=characterFor(role,state.cast[role]);
-  const src=new URL('../assets/scenes/contextual-cast.webp?v=context-scenes-1',import.meta.url).href;
-  const style=`left:-${c.column*100}%;top:-${c.row*100}%;width:600%;height:300%`;
-  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" aria-hidden="true"><div class="scene-sprite"><img src="${src}" width="1774" height="887" alt="" decoding="async" ${compact?'loading="lazy"':''} style="${style}"></div></div>`;
+  const art=sceneCharacterArtwork(c);
+  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" ${compact?'loading="lazy"':''} style="${art.style}"></div></div>`;
  };
  const location=(place,members,side='')=>`<div class="scene-location ${members.length===1?'scene-location--solo':''} ${side}" data-scene-place="${place}" aria-hidden="true"><img class="scene-backdrop" src="${asset(place)}" alt="" width="680" height="380" decoding="async" ${compact?'loading="lazy"':''}>${members.map(actor).join('')}</div>`;
  const panels=m.separate?location(m.place,['public'],'scene-location--public')+location(m.otherPlace,['garda'],'scene-location--garda'):location(m.place,roles);
