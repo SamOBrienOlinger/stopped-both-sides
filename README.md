@@ -155,58 +155,13 @@ The approach adapts running points, feedback and saved best results from **AllyI
 
 Each encounter contains a set of stages. A stage presents the same scene through exactly two views, one public and one Garda. Each view offers choices that lead to another stage in that encounter or end the route. Source references are attached to the views. [Encounter catalogue](encounters/catalog.mjs) · [Branching and role switching](encounters/engine.mjs)
 
-```mermaid
-erDiagram
-    accTitle: Shared encounters and role-specific decisions
-    accDescr: Each encounter contains stages. Each stage has a public and a Garda view, and each view has choices with feedback and a next stage or an ending.
-    Encounter ||--|{ Stage : contains
-    Stage ||--|{ "Role View" : presents
-    "Role View" ||--|{ Choice : offers
-
-    Encounter {
-        string id
-        string title
-        string start
-    }
-    Stage {
-        string id
-        string scene
-    }
-    "Role View" {
-        string role "Public or Garda"
-        string prompt
-        list refs
-    }
-    Choice {
-        string next "Stage ID or end"
-        number points
-        string feedback
-    }
-```
+[![Each encounter contains stages. Each stage has a public and a Garda view, and each view has choices with feedback and a next stage or an ending.](docs/diagrams/shared-encounters-and-role-specific-decisions.svg)](docs/diagrams/shared-encounters-and-role-specific-decisions.svg)
 
 ### Saved learning progress
 
 Each saved record belongs to one encounter and one role. It keeps the latest and best points earned at answered stages, plus the latest and best completed result where available. Local storage and share links carry these records. [Progress records and transfer format](encounters/progress.mjs)
 
-```mermaid
-erDiagram
-    accTitle: Learning progress by encounter and role
-    accDescr: Each record tracks a single encounter and perspective. It holds scores for the stages that were answered in that perspective.
-    Encounter ||..o{ "Role Progress" : "tracked in"
-    "Role Progress" ||--|{ "Decision Score" : records
-    Stage ||..o{ "Decision Score" : "scored in"
-
-    "Role Progress" {
-        string role "Public or Garda"
-        pair best "Completed result, when available"
-        pair last "Completed result, when available"
-    }
-    "Decision Score" {
-        string stageId
-        number latestPoints
-        number bestPoints
-    }
-```
+[![Each record tracks a single encounter and perspective. It holds scores for the stages that were answered in that perspective.](docs/diagrams/learning-progress-by-encounter-and-role.svg)](docs/diagrams/learning-progress-by-encounter-and-role.svg)
 
 ## Privacy
 
