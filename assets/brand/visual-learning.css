@@ -62,7 +62,7 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .reference-landing{max-inline-size:64rem;background:transparent!important}
 .reference-landing .landing-instructions{text-align:start;margin-block-end:1.5rem}
 .reference-landing .landing-instructions p{text-align:start}
-.reference-landing .landing-instructions h2{font-size:clamp(1.5rem,3vw,2rem)}
+.reference-landing .landing-instructions :is(h1,h2){font-size:clamp(1.5rem,3vw,2rem)}
 .reference-landing .perspective-hero{padding:1rem;background:var(--paper,#fff)!important;border-radius:1.25rem!important;border-block-start:4px solid var(--tone-deep,var(--deep));box-shadow:var(--experience-shadow)}
 .reference-landing .overlapping-heroes .perspective-hero-button{inline-size:100%;max-inline-size:100%;border-radius:.75rem;box-shadow:none}
 .reference-landing .perspective-casts p{padding:.2rem .5rem;color:var(--ink)}

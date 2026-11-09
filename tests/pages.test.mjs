@@ -19,7 +19,7 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
   const html=readFileSync(new URL('../'+path+'index.html',import.meta.url),'utf8');
   const app=readFileSync(new URL('../'+path+'app.mjs',import.meta.url),'utf8');
   assert.match(html,/<title>Stopped: Both Sides \| (Public|Garda) perspective<\/title>/);
-  assert.ok(html.includes(subtitle));assert.ok(app.includes('paired.introduction()'));
+  assert.ok(html.includes(subtitle));assert.ok(app.includes('paired.introduction('));
   assert.doesNotMatch(html+app,/Why are you stopping me\?|Why am I stopping you\?/);
  }
  assert.notEqual(translateText(subtitle,'ga'),subtitle);

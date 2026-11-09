@@ -6,7 +6,7 @@
 .brand-intro p{font-size:clamp(.875rem,1.5vw,1.1rem);margin:0;color:#234e78}
 .reference-landing{background:#fff;border:0;padding:0;border-radius:0}
 .landing-instructions{text-align:center;margin:0 0 1.25rem}
-.landing-instructions h2{font-size:1.25rem;margin:0 0 .3rem}
+.landing-instructions :is(h1,h2){font-size:1.25rem;margin:0 0 .3rem}
 .landing-instructions p{margin:0}
 .reference-landing .perspective-heroes{gap:1rem}
 .reference-landing .perspective-entry{min-width:0}
@@ -67,7 +67,7 @@ body{background:#fff}
 .session-return.info-block{padding:.85rem 1rem;border-radius:.75rem;gap:.5rem 1rem;margin-bottom:1.25rem;font-size:.875rem;align-items:center}
 .session-return .text-button{flex:none;display:inline-flex;align-items:center;margin:0}
 .reference-landing .landing-instructions{margin-bottom:1.25rem}
-.reference-landing .landing-instructions h2{font-size:clamp(1.35rem,2.5vw,1.75rem);margin-bottom:.45rem}
+.reference-landing .landing-instructions :is(h1,h2){font-size:clamp(1.35rem,2.5vw,1.75rem);margin-bottom:.45rem}
 .reference-landing .landing-purpose{font-weight:600;color:var(--ink)}
 .reference-landing .perspective-entry>p{max-width:none;min-height:0;line-height:1.55;padding:.85rem .65rem;color:var(--ink)}
 .cast-heading{font-size:.9rem;color:var(--tone-deep);margin:.25rem .65rem .55rem;font-weight:600}
