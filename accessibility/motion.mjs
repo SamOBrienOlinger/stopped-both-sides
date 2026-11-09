@@ -35,8 +35,12 @@ export function createMotion({main,getLegacyState=()=>null}){
    remove(element);
    if(delay)element.style.setProperty('--reveal-delay',delay+'ms');
    element.setAttribute('data-motion',kind);
-   // Cleanup is independent of browser animation events (including cancellation).
-   active.set(element,setTimeout(()=>remove(element),Math.max(680,delay+720)));
+   // Follow the rendered duration and stagger so slower cues finish naturally.
+   // The timeout still cleans up if animation events are cancelled or missing.
+   const ends=(element.getAnimations?.({subtree:true})||[])
+    .map(animation=>animation.effect?.getComputedTiming().endTime).filter(Number.isFinite);
+   const end=ends.length?Math.max(...ends):delay+1400;
+   active.set(element,setTimeout(()=>remove(element),end+100));
   });
  }
  function snapshot(hash){

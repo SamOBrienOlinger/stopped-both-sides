@@ -4,7 +4,8 @@
 :root{
  --ui-control-time:150ms;
  --ui-step-time:200ms;
- --ui-reveal-time:280ms;
+ --ui-reveal-time:1200ms;
+ --ui-reveal-ease:cubic-bezier(.4,0,.2,1);
  --ui-ease:cubic-bezier(.2,.65,.3,1);
  --ui-radius-control:.75rem;
  --ui-radius-panel:1rem;
@@ -348,7 +349,7 @@ main details[open]>summary{color:var(--deep)}
  }
  [data-motion="picker"],[data-motion="recap"],[data-motion="reveal"],
  [data-motion="disclosure"]{
-  animation:ui-settle var(--ui-reveal-time) var(--ui-ease);
+  animation:ui-settle var(--ui-reveal-time) var(--ui-reveal-ease);
  }
  [data-motion="scene"] .scene-location,
  [data-motion="scene"] .scene-sprite,

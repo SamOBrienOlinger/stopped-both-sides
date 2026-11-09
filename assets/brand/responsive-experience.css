@@ -123,10 +123,10 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
 @media(prefers-reduced-motion:no-preference){
  html:not(.motion-reduce) .menu-icon span{transition:transform .18s ease,opacity .18s ease}
  html:not(.motion-reduce) .navigation-open nav{animation:menu-arrive .2s ease-out}
- html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:section-arrive .65s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms) backwards}
+ html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:section-arrive var(--ui-reveal-time) var(--ui-reveal-ease) var(--reveal-delay,0ms) backwards}
 }
 @keyframes menu-arrive{from{opacity:.75;transform:translateY(-4px)}to{opacity:1;transform:none}}
-@keyframes section-arrive{from{opacity:.65;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes section-arrive{from{opacity:.78;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 /* Focusing a newly reached control always makes the whole section steady. */
 [data-motion="reveal"]:focus-within,[data-motion="recap"]:focus-within{animation:none!important}
 .reading-spacious .content-page :is(p,li,dd),.reading-spacious .landing-overview p{line-height:1.95}

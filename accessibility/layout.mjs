@@ -35,8 +35,8 @@ export function createLayout({main}){
   toggle.querySelector('[data-menu-label]').textContent=labels[root.lang.split('-')[0]]||labels.en;
   const active=nav.querySelector('[aria-current="page"]');
   const current=toggle.querySelector('[data-menu-current]');
-  current.textContent=active?.textContent||'';
-  current.hidden=!active;
+  current.textContent=active?.dataset.nav==='play'?'':active?.textContent||'';
+  current.hidden=!current.textContent;
  }
  function close(restore=false){open=false;sync();if(restore)toggle.focus({preventScroll:true});}
  toggle.addEventListener('click',()=>{open=!open;sync();});

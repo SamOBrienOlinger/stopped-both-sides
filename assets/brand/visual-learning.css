@@ -29,10 +29,10 @@
 @keyframes learning-rise{from{opacity:.72;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes learning-draw{from{stroke-dashoffset:140}to{stroke-dashoffset:0}}
 @media(prefers-reduced-motion:no-preference){
- html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:learning-rise .6s cubic-bezier(.2,.7,.2,1)}
- html:not(.motion-reduce) .how-step[data-motion] .learning-icon{stroke-dasharray:140;animation:learning-draw .65s ease-out}
+ html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:learning-rise var(--ui-reveal-time) var(--ui-reveal-ease)}
+ html:not(.motion-reduce) .how-step[data-motion] .learning-icon{stroke-dasharray:140;animation:learning-draw var(--ui-reveal-time) var(--ui-reveal-ease)}
  html:not(.motion-reduce) #feedback[data-motion]{animation:learning-rise .4s ease-out}
- html:not(.motion-reduce) .primary,html:not(.motion-reduce) .choice,html:not(.motion-reduce) .source-card,html:not(.motion-reduce) .perspective-hero{transition:background-color .2s,border-color .2s,box-shadow .2s,transform .2s}
+ html:not(.motion-reduce) .primary,html:not(.motion-reduce) .choice,html:not(.motion-reduce) .source-card,html:not(.motion-reduce) .perspective-hero{transition:background-color .3s,border-color .3s,box-shadow .3s,transform .3s var(--ui-reveal-ease)}
 }
 @media(hover:hover) and (prefers-reduced-motion:no-preference){
  html:not(.motion-reduce) .primary:hover,html:not(.motion-reduce) .source-card:hover,html:not(.motion-reduce) .choice:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 5px 15px #183e4915}
@@ -179,7 +179,7 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
  .progress-page .role-results>.info-block{padding:1.25rem}
 }
 @media(prefers-reduced-motion:no-preference){
- html:not(.motion-reduce) .topic-card{transition:border-color .2s,background-color .2s,box-shadow .2s,transform .2s}
+ html:not(.motion-reduce) .topic-card{transition:border-color .3s,background-color .3s,box-shadow .3s,transform .3s var(--ui-reveal-ease)}
  html:not(.motion-reduce) .route-dot{transition:background-color .2s,box-shadow .2s}
 }
 @media(hover:hover) and (prefers-reduced-motion:no-preference){html:not(.motion-reduce) .topic-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #183e4912}}

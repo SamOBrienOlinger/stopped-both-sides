@@ -12,11 +12,11 @@ blue palettes, typography and artwork.
 | Start, advance or revisit a stage | Brief context surface cue and artwork fade | 200ms |
 | Choose an answer | Feedback surface cue, selected label and border | 200ms |
 | Switch perspective | Current-role toolbar and question surface cue | 200ms |
-| Open the character picker | The complete picker settles by 4px, with every character available immediately | 280ms |
+| Open the character picker | The complete picker settles by 4px, with every character available immediately | 1200ms |
 | Select a character | Selected card border and surface cue | 150ms |
-| Reach the recap | Takeaway group cue, then each review card once as it enters the viewport | 280ms |
-| Read information or sources | Each visible information/source group settles once per page during the visit | 280ms |
-| Open an optional section | Native disclosure opens immediately, followed by a small surface movement | 280ms |
+| Reach the recap | Takeaway group cue, then each review card once as it enters the viewport | 1200ms |
+| Read information or sources | Each visible information/source group settles by 10px once per page during the visit | 1200ms |
+| Open an optional section | Native disclosure opens immediately, followed by a small surface movement | 1200ms |
 | Open language and reading settings | Dialog content surface cue after native or fallback opening | 200ms |
 | Review completed situations | Brief outline cue around the actual overall progress value | 200ms |
 | Hover, focus or press a control | Consistent colour, border, underline and focus treatment | 150ms |
@@ -40,8 +40,8 @@ Cues are added on the next animation frame, after the existing synchronous
 focus and scroll operations. All text and actions are visible and usable from
 the first render. Only scene artwork fades; captions, headings and choices
 remain opaque. Animation completion never advances the game, updates a score,
-enables a button or moves focus. A short timeout removes the cue independently
-of browser animation events.
+enables a button or moves focus. A timeout follows the rendered animation duration and stagger, then removes the cue
+independently of browser animation events so slower transitions are not cut short.
 
 Changing a language, text size, contrast, spacing or motion preference does
 not replay the current stage or reset one-time reveals. Selecting a character
