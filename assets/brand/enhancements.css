@@ -2,16 +2,16 @@
    Motion is an event cue: JavaScript adds data-motion only to the changed part.
    Text, actions, focus targets and scores remain available for the whole cue. */
 :root{
- --ui-control-time:150ms;
- --ui-step-time:200ms;
- --ui-reveal-time:2200ms;
+ --ui-control-time:320ms;
+ --ui-step-time:1000ms;
+ --ui-reveal-time:1600ms;
  --ui-reveal-ease:cubic-bezier(.45,0,.55,1);
- --ui-ease:cubic-bezier(.2,.65,.3,1);
+ --ui-ease:cubic-bezier(.25,.1,.25,1);
  --ui-radius-control:.75rem;
  --ui-radius-panel:1rem;
  --ui-panel-space:clamp(1rem,2.5vw,1.5rem);
- --ui-shadow-rest:0 2px 8px #20394108;
- --ui-shadow-hover:0 4px 14px #20394112;
+ --ui-shadow-rest:0 1px 3px #20394106,0 8px 24px #20394106;
+ --ui-shadow-hover:0 2px 5px #20394108,0 10px 26px #2039410c;
 }
 
 /* Compact shared footer. Keep readable text, full touch targets and natural
@@ -107,7 +107,9 @@
 }
 
 /* Stable geometry and the same state vocabulary for pointer and keyboard use. */
-.primary,.text-button,.choice,.topic-filter,.source-topic-nav a,.evidence-nav a,.source-card,.evidence-record,
+.primary,.perspective-hero-button.primary,.text-button,.choice,.choice.selected,
+.topic-filter,.topic-card,.source-topic-nav a,.evidence-nav a,.source-card,.evidence-record,
+.scenario,.perspective-hero,
 .character-option,.landing-character,.header nav a,.header .site-switch,
 .utility-settings,.settings-button,.dialog-close,main summary{
  transition-property:background-color,border-color,box-shadow,color,text-decoration-color;
@@ -322,16 +324,14 @@ main details[open]>summary{color:var(--deep)}
  --ui-surface-start:var(--soft);
  --ui-surface-end:var(--pale);
 }
-@keyframes ui-surface-cue{
- from{background-color:var(--ui-surface-start,var(--pale))}
- to{background-color:var(--ui-surface-end,transparent)}
-}
-@keyframes ui-settle{
- from{transform:translateY(3px)}
- to{transform:translateY(0)}
+/* A single stationary cue avoids fighting hover, focus or the card's own
+   background. The final frame is identical to its normal rendered state. */
+@keyframes ui-content-arrive{
+ from{opacity:.94}
+ to{opacity:1}
 }
 @keyframes ui-art-arrive{
- from{opacity:.78}
+ from{opacity:.9}
  to{opacity:1}
 }
 @keyframes ui-progress-cue{
@@ -345,14 +345,13 @@ main details[open]>summary{color:var(--deep)}
 @media(prefers-reduced-motion:no-preference){
  [data-motion="stage"],[data-motion="perspective"],[data-motion="feedback"],
  [data-motion="dialog"]{
-  animation:ui-surface-cue var(--ui-step-time) var(--ui-ease);
+  animation:ui-content-arrive var(--ui-step-time) var(--ui-reveal-ease);
  }
  [data-motion="picker"],[data-motion="recap"],[data-motion="reveal"],
  [data-motion="disclosure"]{
-  animation:ui-settle var(--ui-reveal-time) var(--ui-reveal-ease);
+  animation:ui-content-arrive var(--ui-reveal-time) var(--ui-reveal-ease);
  }
  [data-motion="scene"] .scene-location,
- [data-motion="scene"] .scene-sprite,
  img[data-motion="scene"],img[data-motion="reveal"]{
   animation:ui-art-arrive var(--ui-step-time) var(--ui-ease);
  }

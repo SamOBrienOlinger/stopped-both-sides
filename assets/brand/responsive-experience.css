@@ -50,20 +50,23 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
 
 /* Images and their captions remain a single responsive choice. */
 .reference-landing .overlapping-heroes{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2vw,1.5rem);align-items:stretch}
-.reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:auto auto 1fr;padding:clamp(.75rem,2vw,1.25rem)}
+.reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:auto auto 1fr;padding:clamp(1rem,2.4vw,1.5rem)}
 .reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:4.5rem;margin-block-end:1rem;font-size:1rem;padding:.8rem;align-self:stretch}
 .reference-landing .overlapping-heroes .perspective-hero>img{grid-area:2/1;aspect-ratio:16/9;object-fit:contain;inline-size:100%;block-size:auto;border-radius:.75rem}
-.perspective-hero>.perspective-caption{grid-area:3/1;margin:0;padding-block-start:1rem;font-size:1rem;line-height:1.7;max-inline-size:48ch;align-self:start}
+.perspective-hero>.perspective-caption{grid-area:3/1;margin:0;padding-block-start:1.25rem;font-size:1rem;line-height:1.75;max-inline-size:48ch;align-self:start}
 @supports(grid-template-rows:subgrid){
  .reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:subgrid;grid-row:span 3;row-gap:0}
 }
-.reference-landing .perspective-hero .perspective-button-label{font-size:1rem}
-.reference-landing .perspective-hero .perspective-button-action{font-size:.8125rem;margin-block-start:.2rem}
+.reference-landing .perspective-hero .perspective-button-label{font-size:1.0625rem;line-height:1.45}
+.reference-landing .perspective-hero .perspective-button-action{font-size:.875rem;margin-block-start:.25rem}
 .brand-intro.home-intro{justify-content:flex-start;gap:clamp(.75rem,2vw,1.5rem)}
 .brand-intro.home-intro>div{min-inline-size:0}
 .brand-intro .brand-profiles{inline-size:clamp(3.25rem,10vw,6rem);max-inline-size:20%;block-size:auto}
 .brand-intro #game-title{max-inline-size:none;font-size:clamp(1.65rem,4vw,3.4rem);line-height:1.12}
 .brand-intro p{line-height:1.6}
+.reference-landing+.brand-intro{margin-block-start:2.5rem;padding-block-start:2rem;border-block-start:1px solid var(--experience-border)}
+.brand-intro h2#game-title{font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.025em}
+.brand-intro:has(h2#game-title) .brand-profiles{inline-size:clamp(3.25rem,7vw,4.5rem)}
 .how-to-play{margin-block:var(--section-gap)}
 .how-to-play ol.how-steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
 .decision-guide{grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr))}
@@ -121,14 +124,28 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
  .play-toolbar~.encounter-cast .cast-character{flex-wrap:nowrap}
 }
 @media(prefers-reduced-motion:no-preference){
- html:not(.motion-reduce) .menu-icon span{transition:transform .18s ease,opacity .18s ease}
- html:not(.motion-reduce) .navigation-open nav{animation:menu-arrive .2s ease-out}
- html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:section-arrive var(--ui-reveal-time) var(--ui-reveal-ease) var(--reveal-delay,0ms) backwards}
+ html:not(.motion-reduce) .menu-icon span{transition:transform var(--ui-control-time) var(--ui-ease),opacity var(--ui-control-time) var(--ui-ease)}
+ html:not(.motion-reduce) .navigation-open nav{animation:ui-content-arrive 600ms var(--ui-reveal-ease)}
 }
-@keyframes menu-arrive{from{opacity:.75;transform:translateY(-4px)}to{opacity:1;transform:none}}
-@keyframes section-arrive{from{opacity:.88;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-/* Focusing a newly reached control always makes the whole section steady. */
-[data-motion="reveal"]:focus-within,[data-motion="recap"]:focus-within{animation:none!important}
+/* Expand the content itself while keeping the summary in place. Browsers
+   without intrinsic-size transitions retain ordinary native disclosures. */
+.learning-panel>summary{border-block-end:1px solid transparent}
+.single-mode[open]>summary{margin-block-end:0}
+@supports (interpolate-size:allow-keywords) and selector(details::details-content){
+ @media(prefers-reduced-motion:no-preference){
+  html:not(.motion-reduce) main details{interpolate-size:allow-keywords}
+  html:not(.motion-reduce) main details::details-content{
+   block-size:0;
+   overflow:clip;
+   transition:block-size 700ms var(--ui-reveal-ease),content-visibility 700ms allow-discrete;
+  }
+  html:not(.motion-reduce) main details[open]::details-content{block-size:auto}
+  html:not(.motion-reduce) main details[data-motion="disclosure"]{animation:none}
+ }
+}
+.motion-reduce details::details-content{transition:none!important}
+@media(prefers-reduced-motion:reduce){details::details-content{transition:none!important}}
+@media(forced-colors:active){details::details-content{transition:none!important}}
 .reading-spacious .content-page :is(p,li,dd),.reading-spacious .landing-overview p{line-height:1.95}
 .contrast-high .learning-evidence,.contrast-high .header{background:var(--paper);color:var(--ink)}
 @media(forced-colors:active){

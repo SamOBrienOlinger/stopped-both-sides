@@ -13,7 +13,7 @@ test.beforeEach(async({page})=>{
   window.__lifecycleCues=[];
   const record=element=>{
    const kind=element.getAttribute?.('data-motion');
-   if(kind)window.__lifecycleCues.push({kind,className:String(element.className),
+   if(kind)window.__lifecycleCues.push({kind,className:String(element.className),roleTone:element.dataset.roleTone||'',
     heading:element.querySelector?.('h2')?.textContent||''});
   };
   new MutationObserver(records=>{
@@ -74,31 +74,49 @@ for(const role of ['public','garda']){
   await frames(page);
   expect(await kinds(page),'filtering changes results without replaying presentation cues').toEqual([]);
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
-  const group=page.locator('.content-page > .info-block').first();
+  const group=page.locator('.content-page > .info-block').last();
   await group.scrollIntoViewIfNeeded();
   const heading=await group.locator('h2').textContent();
   await expect.poll(async()=>(await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading)).toBe(true);
   await reset(page);
   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
-  await page.locator('.content-page > .info-block').first().scrollIntoViewIfNeeded();
+  await page.locator('.content-page > .info-block').last().scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
    'returning to a reference group does not replay its reveal').toBe(false);
+ });
+
+ test(`${role}: focusing a card cancels its entrance permanently`,async({page})=>{
+  await page.setViewportSize({width:390,height:568});
+  await page.goto(paths[role]);await page.evaluate(()=>document.fonts.ready);
+  const card=page.locator('.perspective-hero').last();
+  await card.scrollIntoViewIfNeeded();
+  await expect(card).toHaveAttribute('data-motion','reveal');
+  const cardRole=await card.getAttribute('data-role-tone');
+  await card.locator('a').focus();
+  await expect(card).not.toHaveAttribute('data-motion','reveal');
+  await page.locator('.wordmark').evaluate(element=>element.focus({preventScroll:true}));
+  await frames(page);
+  await expect(card).not.toHaveAttribute('data-motion','reveal');
+  await page.locator('.wordmark').scrollIntoViewIfNeeded();
+  await card.scrollIntoViewIfNeeded();await frames(page);
+  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.roleTone===cardRole),
+   'leaving focus or scrolling back cannot restart the cancelled card entrance').toHaveLength(1);
  });
 
  test(`${role}: recap cards and progress avoid replaying cues when controls redraw them`,async({page})=>{
   const complete=completedRoute(role);
   await page.goto(paths[role]+stateHash(complete));
   await expect(page.locator('.recap-takeaways')).toBeVisible();
-  const card=page.locator('.paired-recap > .summary-item').first();
+  const card=page.locator('.paired-recap > .summary-item').last();
   await card.scrollIntoViewIfNeeded();
   const heading=await card.locator('h2').textContent();
   await expect.poll(async()=>(await events(page)).some(event=>event.kind==='recap'&&event.heading===heading)).toBe(true);
   await reset(page);
   await page.locator('[data-action="paired-characters"]').click();
   await page.locator('[data-action="paired-character-close"]').click();
-  await page.locator('.paired-recap > .summary-item').first().scrollIntoViewIfNeeded();
+  await page.locator('.paired-recap > .summary-item').last().scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='recap'&&event.heading===heading),
    'an already read recap card remains steady after a redraw').toBe(false);
