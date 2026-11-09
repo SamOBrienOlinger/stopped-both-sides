@@ -143,6 +143,8 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
 .single-mode[open]>summary{margin-block-end:0}
 .setup-role details{flex-basis:100%;inline-size:100%}
 main details[data-motion="disclosure"]{animation:none}
+/* Height clipping must not hide the keyboard focus indicator. */
+main details[data-disclosure-state]:has(>summary:focus-visible){outline:3px solid var(--focus);outline-offset:3px}
 .reading-spacious .content-page :is(p,li,dd),.reading-spacious .landing-overview p{line-height:1.95}
 .contrast-high .learning-evidence,.contrast-high .header{background:var(--paper);color:var(--ink)}
 @media(forced-colors:active){
