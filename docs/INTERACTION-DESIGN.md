@@ -12,14 +12,15 @@ blue palettes, typography and artwork.
 | Start, advance or revisit a stage | Brief context surface cue and artwork fade | 200ms |
 | Choose an answer | Feedback surface cue, selected label and border | 200ms |
 | Switch perspective | Current-role toolbar and question surface cue | 200ms |
-| Open the character picker | The complete picker settles by 4px, with every character available immediately | 1200ms |
+| Open the character picker | The complete picker settles by 3px, with every character available immediately | 2200ms |
 | Select a character | Selected card border and surface cue | 150ms |
-| Reach the recap | Takeaway group cue, then each review card once as it enters the viewport | 1200ms |
-| Read information or sources | Each visible information/source group settles by 10px once per page during the visit | 1200ms |
-| Open an optional section | Native disclosure opens immediately, followed by a small surface movement | 1200ms |
+| Reach the recap | Takeaway group cue, then each review card once as it enters the viewport | 2200ms |
+| Read information or sources | Each visible information/source group settles by 6px once per page during the visit | 2200ms |
+| Open an optional section | Native disclosure opens immediately, followed by a small surface movement | 2200ms |
 | Open language and reading settings | Dialog content surface cue after native or fallback opening | 200ms |
 | Review completed situations | Brief outline cue around the actual overall progress value | 200ms |
-| Hover, focus or press a control | Consistent colour, border, underline and focus treatment | 150ms |
+| Hover, focus or press a control | Consistent colour, border, underline and focus treatment | 150–300ms |
+| Hover a content card | Gentle 1px lift and gradual shadow change | 550ms |
 
 Stage and remaining-decision labels stay together. The remaining range comes
 from the branching engine; no fixed percentage is inferred for the current

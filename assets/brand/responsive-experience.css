@@ -126,7 +126,7 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
  html:not(.motion-reduce) [data-motion="reveal"],html:not(.motion-reduce) [data-motion="recap"]{animation:section-arrive var(--ui-reveal-time) var(--ui-reveal-ease) var(--reveal-delay,0ms) backwards}
 }
 @keyframes menu-arrive{from{opacity:.75;transform:translateY(-4px)}to{opacity:1;transform:none}}
-@keyframes section-arrive{from{opacity:.78;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes section-arrive{from{opacity:.88;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 /* Focusing a newly reached control always makes the whole section steady. */
 [data-motion="reveal"]:focus-within,[data-motion="recap"]:focus-within{animation:none!important}
 .reading-spacious .content-page :is(p,li,dd),.reading-spacious .landing-overview p{line-height:1.95}

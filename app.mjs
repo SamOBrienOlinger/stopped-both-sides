@@ -3,7 +3,7 @@ import {scenarioIcon} from './encounters/visuals.mjs?v=context-icons-1';
 import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from './compatibility.mjs';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=scene-review-1';
-import {createMotion} from './accessibility/motion.mjs?v=calm-motion-1';
+import {createMotion} from './accessibility/motion.mjs?v=gentle-motion-2';
 import {createEncounterMode} from './encounters/ui.mjs?v=choice-first-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';

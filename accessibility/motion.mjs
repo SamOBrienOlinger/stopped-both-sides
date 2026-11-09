@@ -39,7 +39,9 @@ export function createMotion({main,getLegacyState=()=>null}){
    // The timeout still cleans up if animation events are cancelled or missing.
    const ends=(element.getAnimations?.({subtree:true})||[])
     .map(animation=>animation.effect?.getComputedTiming().endTime).filter(Number.isFinite);
-   const end=ends.length?Math.max(...ends):delay+1400;
+   const duration=(globalThis.getComputedStyle?.(root).getPropertyValue('--ui-reveal-time')||'2200ms').trim();
+   const fallback=parseFloat(duration)*(duration.endsWith('ms')?1:1000)||2200;
+   const end=ends.length?Math.max(...ends):delay+fallback;
    active.set(element,setTimeout(()=>remove(element),end+100));
   });
  }
