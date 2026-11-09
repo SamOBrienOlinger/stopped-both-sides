@@ -6,6 +6,11 @@ const paths={public:'./',garda:'garda/'};
 const cast={public:'public-2',garda:'garda-5'};
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+async function revealsReady(page){
+ await frames(page);
+ await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');
+ await frames(page);
+}
 
 test.beforeEach(async({page})=>{
  await page.emulateMedia({reducedMotion:'no-preference'});
@@ -74,6 +79,9 @@ for(const role of ['public','garda']){
   await frames(page);
   expect(await kinds(page),'filtering changes results without replaying presentation cues').toEqual([]);
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
+  await expect.poll(()=>kinds(page)).toContain('page');
+  await expect(page.locator('#main h1')).toBeFocused();
+  await revealsReady(page);
   const group=page.locator('.content-page > .info-block').last();
   await group.scrollIntoViewIfNeeded();
   const heading=await group.locator('h2').textContent();
@@ -81,6 +89,7 @@ for(const role of ['public','garda']){
   await reset(page);
   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
+  await revealsReady(page);
   await page.locator('.content-page > .info-block').last().scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
@@ -90,6 +99,10 @@ for(const role of ['public','garda']){
  test(`${role}: focusing a card cancels its entrance permanently`,async({page})=>{
   await page.setViewportSize({width:390,height:568});
   await page.goto(paths[role]);await page.evaluate(()=>document.fonts.ready);
+  // Rendering registers its observer after route focus/scroll has settled.
+  // Scrolling in that first frame can correctly classify this as visible on
+  // arrival, so wait for registration before testing a later entrance.
+  await revealsReady(page);
   const card=page.locator('.perspective-hero').last();
   await card.scrollIntoViewIfNeeded();
   await expect(card).toHaveAttribute('data-motion','reveal');

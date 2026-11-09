@@ -1,4 +1,5 @@
 import {decodeState} from '../encounters/engine.mjs';
+import {createDisclosures} from './disclosures.mjs';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.
@@ -7,7 +8,7 @@ export function createMotion({main,getLegacyState=()=>null}){
  const root=document.documentElement;
  const reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
  const forced=globalThis.matchMedia?.('(forced-colors: active)');
- const active=new Map(),frames=new Map(),seen=new Set(),userDisclosures=new WeakSet();
+ const active=new Map(),frames=new Map(),seen=new Set();
  let previous=null,observer=null;
  const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce');
  const all=selector=>Array.from(main.querySelectorAll(selector));
@@ -31,11 +32,11 @@ export function createMotion({main,getLegacyState=()=>null}){
   const frame=requestAnimationFrame(()=>{frames.delete(frame);callback();});
   frames.set(frame,{element,kind});
  }
- function cue(element,kind){
+ function cue(element,kind,finished=()=>{}){
   if(!element||!allowed())return;
   afterFocus(element,kind,()=>{
-   if(!element.isConnected||!element.getClientRects().length||!allowed())return;
-   if(isEntrance(kind)&&element.contains(document.activeElement))return;
+   if(!element.isConnected||!element.getClientRects().length||!allowed()){finished();return;}
+   if(isEntrance(kind)&&element.contains(document.activeElement)){finished();return;}
    remove(element);
    element.setAttribute('data-motion',kind);
    // Follow the rendered duration so cues finish naturally.
@@ -45,7 +46,7 @@ export function createMotion({main,getLegacyState=()=>null}){
    const duration=(globalThis.getComputedStyle?.(root).getPropertyValue('--ui-reveal-time')||'1600ms').trim();
    const fallback=parseFloat(duration)*(duration.endsWith('ms')?1:1000)||1600;
    const end=ends.length?Math.max(...ends):fallback;
-   active.set(element,setTimeout(()=>remove(element),end+100));
+   active.set(element,setTimeout(()=>{remove(element);finished();},end+100));
   });
  }
  function snapshot(hash){
@@ -120,6 +121,8 @@ export function createMotion({main,getLegacyState=()=>null}){
  }
 
  function update(hash){
+  disclosures.settle();
+  observer?.disconnect();observer=null;
   clear();
   const next=snapshot(hash),before=previous;
   previous=next;
@@ -146,34 +149,23 @@ export function createMotion({main,getLegacyState=()=>null}){
   // The caller applies route focus and scrolling after update(). Measure the
   // new viewport afterwards; a second render cancels this queued registration.
   // A preference redraw must not replay either on-screen or later-scroll cues.
-  afterFocus(main,'observe',()=>observeReveals(next,preferenceChange));
+  const pageChange=before&&next.mode==='content'&&before.page!==next.page&&!preferenceChange;
+  if(pageChange&&allowed())cue(main,'page',()=>{if(previous===next)observeReveals(next,false);});
+  else afterFocus(main,'observe',()=>observeReveals(next,preferenceChange));
  }
 
- // Only an actual summary activation starts a disclosure cue. Programmatically
- // restored open sections (preferences, deep links) do not imitate a new action.
- main.addEventListener('click',event=>{
-  const summary=event.target.closest?.('summary');
-  const details=summary?.parentElement;
-  if(details?.tagName==='DETAILS'&&!details.open)userDisclosures.add(details);
- },true);
- main.addEventListener('toggle',event=>{
-  const details=event.target;
-  if(details.tagName!=='DETAILS')return;
-  if(details.open&&userDisclosures.has(details)){
-   // Opening a disclosure is one native interaction, not a parent reveal plus
-   // a second set of entrances for the newly exposed children.
+ const disclosures=createDisclosures({main,allowed,onStart(details){
+   // A disclosure is one height transition, not a page fade, parent reveal and
+   // second set of entrances competing with its newly exposed children.
    for(const element of [...active.keys()]){
-    if(details.contains(element)||(isEntrance(element.getAttribute('data-motion'))&&element.contains(details)))remove(element);
+    if(details.contains(element)||element.contains(details))remove(element);
    }
    for(const {element,kind} of [...frames.values()]){
-    if(details.contains(element)||(isEntrance(kind)&&element.contains(details)))remove(element);
+    if(details.contains(element)||(kind!=='observe'&&element.contains(details)))remove(element);
    }
-   cue(details,'disclosure');
+   details.setAttribute('data-motion','disclosure');
    if(previous)observeReveals(previous,false,details);
-  }
-  else if(!details.open)remove(details);
-  userDisclosures.delete(details);
- },true);
+  },onFinish:details=>details.removeAttribute('data-motion')});
  // Cancelling the attribute as well as the animation makes focus cancellation
  // permanent; moving focus away cannot restart an entrance from its first frame.
  main.addEventListener('focusin',event=>{
@@ -184,7 +176,7 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(isEntrance(kind)&&element.contains(event.target))remove(element);
   }
  });
- const stopIfReduced=()=>{if(!allowed()){clear();observer?.disconnect();}};
+ const stopIfReduced=()=>{if(!allowed()){disclosures.settle();clear();observer?.disconnect();}};
  reduced?.addEventListener?.('change',stopIfReduced);
  forced?.addEventListener?.('change',stopIfReduced);
  return {update,openDialog:dialog=>cue(dialog.querySelector('.settings-content')||dialog,'dialog')};

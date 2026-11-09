@@ -330,6 +330,10 @@ main details[open]>summary{color:var(--deep)}
  from{opacity:.94}
  to{opacity:1}
 }
+@keyframes ui-page-arrive{
+ from{opacity:.82}
+ to{opacity:1}
+}
 @keyframes ui-art-arrive{
  from{opacity:.9}
  to{opacity:1}
@@ -343,6 +347,9 @@ main details[open]>summary{color:var(--deep)}
  to{background-color:var(--tone-pale,var(--pale));border-color:var(--tone-deep,var(--deep))}
 }
 @media(prefers-reduced-motion:no-preference){
+ [data-motion="page"]{
+  animation:ui-page-arrive 900ms var(--ui-reveal-ease);
+ }
  [data-motion="stage"],[data-motion="perspective"],[data-motion="feedback"],
  [data-motion="dialog"]{
   animation:ui-content-arrive var(--ui-step-time) var(--ui-reveal-ease);

@@ -23,13 +23,38 @@ export function createLayout({main}){
  const nav=header.querySelector('nav'),toggle=header.querySelector('[data-nav-toggle]');
  if(!nav||!toggle)return {update(){}};
  const compact=matchMedia('(max-width: 71.999rem)');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const forced=matchMedia('(forced-colors: active)');
  const root=document.documentElement;
  const labels={en:'Menu',ga:'Roghchlár',pt:'Menu',ar:'القائمة',pl:'Menu',ro:'Meniu',fr:'Menu',es:'Menú',zh:'菜单'};
- let open=false,lastRoute='';
+ let open=false,lastRoute='',panelAnimation=null;
  header.classList.add('navigation-ready');
- function sync(){
+ const motionAllowed=()=>!reduced.matches&&!forced.matches&&!root.classList.contains('motion-reduce');
+ function showPanel(visible,animate){
+  const wasHidden=nav.hidden;
+  const opacity=wasHidden?0:Number(getComputedStyle(nav).opacity);
+  panelAnimation?.cancel();panelAnimation=null;
+  // A closing panel is immediately unavailable to keyboard and pointer input,
+  // while its surface can finish fading without moving the content below it.
+  nav.inert=!visible;
+  if(visible)nav.removeAttribute('aria-hidden');else nav.setAttribute('aria-hidden','true');
+  if(!animate||!compact.matches||!motionAllowed()||typeof nav.animate!=='function'||(!visible&&wasHidden)){
+   nav.hidden=!visible;return;
+  }
+  nav.hidden=false;
+  const animation=nav.animate([{opacity},{opacity:visible?1:0}],{
+   duration:400,easing:'cubic-bezier(.4,0,.2,1)',fill:'both'
+  });
+  panelAnimation=animation;
+  animation.onfinish=()=>{
+   if(panelAnimation!==animation)return;
+   nav.hidden=!visible;
+   panelAnimation=null;animation.cancel();
+  };
+ }
+ function sync(animate=false){
   const collapsed=compact.matches&&!open;
-  nav.hidden=collapsed;
+  showPanel(!collapsed,animate);
   toggle.setAttribute('aria-expanded',String(!collapsed));
   header.classList.toggle('navigation-open',compact.matches&&open);
   toggle.querySelector('[data-menu-label]').textContent=labels[root.lang.split('-')[0]]||labels.en;
@@ -38,8 +63,8 @@ export function createLayout({main}){
   current.textContent=active?.dataset.nav==='play'?'':active?.textContent||'';
   current.hidden=!current.textContent;
  }
- function close(restore=false){open=false;sync();if(restore)toggle.focus({preventScroll:true});}
- toggle.addEventListener('click',()=>{open=!open;sync();});
+ function close(restore=false,animate=true){open=false;sync(animate);if(restore)toggle.focus({preventScroll:true});}
+ toggle.addEventListener('click',()=>{open=!open;sync(true);});
  header.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&open){event.preventDefault();close(true);}
  });
@@ -48,20 +73,22 @@ export function createLayout({main}){
  header.addEventListener('click',event=>{
   const link=event.target.closest('nav a,.wordmark');
   if(link){
-   close();
+   close(false,false);
    if(link.origin===location.origin&&link.pathname===location.pathname&&link.hash===location.hash)main.querySelector('h1')?.focus();
   }
  });
  document.addEventListener('click',event=>{if(open&&!header.contains(event.target)&&!document.querySelector('dialog[open]'))close();});
  // Close outside the header on click, not focusout: pointer focus happens
- // before mouseup, and collapsing this in-flow menu then would move the
- // intended button away from the pointer before its click can complete.
+ // before mouseup, so keep the menu stable until activation has completed.
  compact.addEventListener('change',()=>{
   const focused=document.activeElement;
   open=false;sync();
   if(compact.matches&&nav.contains(focused))toggle.focus({preventScroll:true});
   else if(!compact.matches&&focused===toggle)(nav.querySelector('[aria-current="page"]')||nav.querySelector('a'))?.focus({preventScroll:true});
  });
+ const settlePanel=()=>sync();
+ reduced.addEventListener('change',settlePanel);
+ forced.addEventListener('change',settlePanel);
  function update(hash){
   const route=String(hash).split('~')[0];
   if(lastRoute!==route&&!document.activeElement?.matches('[data-reading-open]'))open=false;

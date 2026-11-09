@@ -61,7 +61,7 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
  function commit(next){
   // Re-render only presentation. The app continues to own every session object.
   const hash=globalThis.location?.hash;
-  const disclosures=Array.from(main.querySelectorAll?.('details')||[],element=>element.open);
+  const disclosures=Array.from(main.querySelectorAll?.('details')||[],element=>element.dataset.disclosureState==='closing'?false:element.open);
   const languageChanged=activeLanguage!==next.language;
   preferences.save(next);activeLanguage=preferences.value.language;initialLoadFailed=false;setLanguageQuery();applyDisplay();close();rerender(false);
   if(globalThis.location?.hash===hash)Array.from(main.querySelectorAll?.('details')||[]).forEach((element,index)=>{if(index<disclosures.length)element.open=disclosures[index];});
