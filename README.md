@@ -661,7 +661,13 @@ Open Sans is distributed under the [SIL Open Font License](assets/OFL-Open-Sans.
 
 </details>
 
-Copyright © 2026 Sam O’Brien-Olinger. No licence to reuse original project code or content is granted by this README. Third-party assets retain their respective licence terms.
+## Copyright & reuse
+
+Copyright © 2026 Sam O’Brien-Olinger. All rights reserved for original project code and content.
+
+You may use the [live website](https://samobrienolinger.github.io/stopped-both-sides/) as intended. [GitHub’s Terms of Service](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users) govern viewing and forking this public repository through GitHub.
+
+For other copying, adaptation, redistribution, rehosting or commercial reuse of original project materials, obtain prior written permission from the relevant rights holder unless an applicable licence or law permits it. Third-party materials are governed by their own licences and terms.
 
 ---
 
