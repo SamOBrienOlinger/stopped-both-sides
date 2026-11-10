@@ -1,4 +1,4 @@
-import {openNavigation} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
@@ -192,7 +192,7 @@ for(const role of ['public','garda']){
   await resetCues(page);
   await page.locator('#reading-form [type="submit"]').click();
   await expect(page.locator('html')).toHaveAttribute('lang','ga');
-  await expect(page.locator('#language-settings-trigger')).toBeFocused();
+  await expectSettingsFocusReturn(page);
   await expect(page.locator('.play-help')).toHaveAttribute('open','');
   expect(current(page)).toEqual(initial);
   await noStageReplay(page);
@@ -255,7 +255,7 @@ for(const role of ['public','garda']){
   for(const box of targets){expect(box.width).toBeGreaterThanOrEqual(44);expect(box.height).toBeGreaterThanOrEqual(44);}
   await page.keyboard.press('Escape');
   await expect(page.locator('#reading-dialog')).not.toBeVisible();
-  await expect(page.locator('#language-settings-trigger')).toBeFocused();
+  await expectSettingsFocusReturn(page);
   expect(current(page).answers).toEqual(answered.answers);
   await answerImmediately(page);
   await page.locator('[data-action="paired-next"]').click();

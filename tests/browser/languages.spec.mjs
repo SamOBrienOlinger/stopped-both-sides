@@ -1,4 +1,4 @@
-import {openNavigation} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {languages} from '../../locales/languages.mjs';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=scene-review-1';
@@ -31,7 +31,7 @@ async function applyLanguage(page,language,{large=false,footer=false}={}){
  await page.locator('#reading-form [type="submit"]').click();
  await expect(page.locator('html')).toHaveAttribute('lang',languages.find(x=>x.id===language).tag);
  await expect(page.locator('#reading-dialog')).not.toBeVisible();
- await expect(page.locator(footer?'#language-settings-footer':'#language-settings-trigger')).toBeFocused();
+ await expectSettingsFocusReturn(page,footer);
 }
 async function fits(page,label){
  const measure=await page.evaluate(()=>({
@@ -83,7 +83,7 @@ for(const role of ['public','garda'])for(const language of added){
   await expect(page.locator('#main')).toHaveAttribute('lang',language.tag);
   await expect(page.locator('#main')).toHaveAttribute('dir',language.dir);
   await expect(page.locator('#reading-dialog')).not.toBeVisible();
-  await expect(page.locator('#language-settings-trigger')).toBeFocused();
+  await expectSettingsFocusReturn(page);
   await expect(page.locator('#page-status')).toHaveText(translateText('Language changed. Your progress is unchanged.',language.id));
   expect(current(page)).toEqual(before);expect(await saved(page,role)).toEqual(record);
   await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor');
@@ -102,7 +102,7 @@ for(const role of ['public','garda'])for(const language of added){
   expect(await page.evaluate(()=>!!document.activeElement.closest('#reading-dialog'))).toBe(true);
   await page.keyboard.press('Shift+Tab');await page.keyboard.press('Escape');
   await expect(page.locator('#reading-dialog')).not.toBeVisible();
-  await expect(page.locator('#language-settings-trigger')).toBeFocused();
+  await expectSettingsFocusReturn(page);
   expect(current(page)).toEqual(before);
   await page.locator('[data-action="paired-characters"]').click();
   await expect(page.locator('[data-character="garda-5"]')).toHaveAttribute('aria-label',translateText('Choose character: Aisling',language.id));
@@ -278,7 +278,7 @@ test('An open settings dialog retains its language, draft controls and focus dur
  const record=await saved(page,'public');
  await page.locator('#reading-form [type="submit"]').click();
  await expect(page.locator('#reading-dialog')).not.toBeVisible();
- await expect(page.locator('#language-settings-trigger')).toBeFocused();
+ await expectSettingsFocusReturn(page);
  await expect(page.locator('html')).toHaveAttribute('lang','ar');
  await expect(page.locator('html')).toHaveCSS('--reading-size','150%');
  await expect(page.locator('html')).toHaveClass(/contrast-high/);
@@ -324,7 +324,7 @@ for(const chosen of ['en','fr'])test(`An explicit ${chosen} preference takes pre
  await expect(page.locator('html')).toHaveAttribute('lang',tag);
  await expect(page.locator('#main')).toHaveAttribute('lang',tag);
  await expect(page.locator('html')).toHaveCSS('--reading-size','150%');
- await expect(page.locator('#language-settings-trigger')).toBeFocused();
+ await expectSettingsFocusReturn(page);
  expect(new URL(page.url()).searchParams.get('lang')).toBe(chosen);
  expect(current(page)).toEqual(startup.initial);expect(await saved(page,'public')).toEqual(record);
  await openSettings(page);await expect(page.locator('#reading-language')).toHaveValue(chosen);
@@ -348,6 +348,6 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  // Wait for the caught import promise and its cancellation guard to settle.
  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=scene-review-1',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
- await expect(page.locator('#language-settings-trigger')).toBeFocused();
+ await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);
 });

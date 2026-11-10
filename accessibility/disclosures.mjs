@@ -2,6 +2,7 @@
 // element, so opening and closing behave the same in all supported browsers.
 export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}}){
  const active=new Map();
+ let pointerFocus=false;
  const properties=['height','overflow','overflow-anchor'];
  const restore=(element,property,value)=>{
   if(value.value)element.style.setProperty(property,value.value,value.priority);
@@ -32,6 +33,23 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   onFinish(state.details);
  }
  function settle(){for(const state of [...active.values()])finish(state);}
+ function retarget(state,open){
+  // Read the visible size before changing intent. Reversing a pending WAAPI
+  // timeline can resample a later frame in Firefox; a new pixel start keeps
+  // the pressed panel exactly where it was when the user changed direction.
+  const from=state.details.getBoundingClientRect().height,to=open?state.openHeight:state.closedHeight;
+  state.details.style.setProperty('height',from+'px');
+  state.animation.onfinish=null;state.animation.oncancel=null;state.animation.cancel();
+  intent(state,open);
+  if(!allowed()||Math.abs(to-from)<1){finish(state);return;}
+  const remaining=Math.abs(to-from)/Math.abs(state.openHeight-state.closedHeight);
+  try{
+   state.animation=state.details.animate([{height:from+'px'},{height:to+'px'}],{
+    duration:Math.max(120,Math.min(800,800*remaining)),easing:'cubic-bezier(.4,0,.2,1)',fill:'both'
+   });
+   state.animation.onfinish=()=>finish(state);state.animation.oncancel=()=>finish(state);
+  }catch{finish(state);}
+ }
  main.addEventListener('click',event=>{
   const summary=event.target.closest?.('summary'),details=summary?.parentElement;
   if(event.defaultPrevented||event.button>0||details?.tagName!=='DETAILS'||summary!==details.querySelector('summary'))return;
@@ -40,8 +58,7 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   if(control&&summary.contains(control))return;
   const running=active.get(details);
   if(running){
-   event.preventDefault();intent(running,!running.open);
-   if(allowed())running.animation.reverse();else finish(running);
+   event.preventDefault();retarget(running,!running.open);
    return;
   }
   if(!allowed()||typeof details.animate!=='function')return;
@@ -61,7 +78,9 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   details.open=true;
   if(Math.abs(to-from)<1){details.open=open;event.preventDefault();return;}
   details.style.setProperty('height',from+'px');
-  details.style.setProperty('overflow','hidden');
+  // clip does not create a scroll container. In particular, scrolling a newly
+  // revealed button into view must not scroll its summary out of the panel.
+  details.style.setProperty('overflow',globalThis.CSS?.supports?.('overflow','clip')?'clip':'hidden');
   details.style.setProperty('overflow-anchor','none');
   let animation;
   try{
@@ -73,7 +92,8 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
    details.open=!open;return;
   }
   event.preventDefault();
-  const state={details,summary,animation,styles,open,expanded:summary.getAttribute('aria-expanded'),
+  const state={details,summary,animation,styles,open,openHeight:open?to:from,closedHeight:open?from:to,
+   expanded:summary.getAttribute('aria-expanded'),
    contents:Array.from(details.children).filter(element=>element!==summary).map(element=>[element,element.inert])};
   active.set(details,state);intent(state,open);
   animation.onfinish=()=>finish(state);
@@ -86,9 +106,22 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   const state=active.get(event.target);
   if(state&&!event.target.open)finish(state,false);
  },true);
+ main.addEventListener('pointerdown',()=>{pointerFocus=true;},true);
+ globalThis.addEventListener?.('pointerup',()=>setTimeout(()=>{pointerFocus=false;},0));
+ globalThis.addEventListener?.('pointercancel',()=>{pointerFocus=false;});
+ main.addEventListener('click',event=>{
+  pointerFocus=false;
+  // Pointer focus happens between down and up. Changing a clipped layout then
+  // can move the pressed control and lose its click. Once activation reaches
+  // click, its target is fixed and the presentation can safely settle.
+  for(const state of [...active.values()]){
+   if(state.open&&state.details.contains(event.target)&&!state.summary.contains(event.target))finish(state);
+  }
+ });
  main.addEventListener('focusin',event=>{
   // Tabbing into newly opened content must never leave the focused control
   // clipped while a presentation effect is still drawing the panel.
+  if(pointerFocus)return;
   for(const state of [...active.values()]){
    if(state.open&&state.details.contains(event.target)&&!state.summary.contains(event.target))finish(state);
   }

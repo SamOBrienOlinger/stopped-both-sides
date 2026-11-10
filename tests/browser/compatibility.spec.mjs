@@ -1,4 +1,4 @@
-import {openNavigation} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {expectControlsFit} from './control-layout.mjs';
@@ -95,7 +95,7 @@ async function checkDialog(page){
  expect(await page.evaluate(()=>!!document.activeElement.closest('#reading-dialog'))).toBe(true);
  await page.keyboard.press('Escape');
  await expect(page.locator('#reading-dialog')).not.toBeVisible();
- await expect(page.locator('.header [data-reading-open]')).toBeFocused();
+ await expectSettingsFocusReturn(page);
 }
 async function chooseFirst(page,role,testInfo){
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();

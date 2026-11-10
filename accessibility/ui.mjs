@@ -23,7 +23,11 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
  let dialogLanguage=activeLanguage;
  const t=text=>translateText(text,activeLanguage);
  const restoreFocus=()=>{
-  const target=(openerId&&document.getElementById?.(openerId))||(opener?.isConnected?opener:null)||document.querySelector('[data-reading-open]');
+  let target=(openerId&&document.getElementById?.(openerId))||(opener?.isConnected?opener:null)||document.querySelector('[data-reading-open]');
+  // A compact menu closes when settings open. Restore its visible entry point
+  // instead of trying to focus a settings button in the now-hidden panel.
+  const toggle=document.querySelector('[data-nav-toggle]');
+  if(target?.closest?.('.header nav')&&(target.closest('[hidden],[inert]')||target.getClientRects?.().length===0)&&toggle?.getClientRects?.().length)target=toggle;
   target?.focus?.({preventScroll:true});
   const box=target?.getBoundingClientRect?.();
   if(box&&(box.top<0||box.bottom>window.innerHeight))target.scrollIntoView?.({block:'nearest',behavior:'instant'});

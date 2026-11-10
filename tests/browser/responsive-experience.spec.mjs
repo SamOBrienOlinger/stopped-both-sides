@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {openNavigation} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
 import {expectControlsFit} from './control-layout.mjs';
 
 const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -53,6 +53,9 @@ for(const path of ['./','garda/']){
    header:document.querySelector('.header').getBoundingClientRect().height}));
   const beforeMenu=await layout();
   await toggle.focus();await page.keyboard.press('Enter');await expect(nav).toBeVisible();
+  await expect(page.locator('#main')).toHaveAttribute('inert','');
+  await expect(page.locator('.footer')).toHaveAttribute('inert','');
+  await expectControlsFit(page,'open mobile navigation');
   for(let frame=0;frame<8;frame++){
    await frames(page);
    const duringMenu=await layout();
@@ -61,11 +64,15 @@ for(const path of ['./','garda/']){
   }
   await page.keyboard.press('Tab');await expect(nav.locator('a').first()).toBeFocused();
   await page.keyboard.press('Escape');await expect(toggle).toBeFocused();await expect(nav).toBeHidden();
+  await expect(page.locator('#main')).not.toHaveAttribute('inert');
+  await expect(page.locator('.footer')).not.toHaveAttribute('inert');
   for(const [dimension,value] of Object.entries(await layout()))expect(Math.abs(value-beforeMenu[dimension]),
    'closing navigation leaves the page in the same position').toBeLessThan(1);
   await openNavigation(page);await page.locator('#language-settings-trigger').click();
   await expect(page.locator('#reading-dialog')).toBeVisible();
-  await page.keyboard.press('Escape');await expect(page.locator('#language-settings-trigger')).toBeFocused();
+  await expect(nav).toBeHidden();
+  await page.keyboard.press('Escape');await expectSettingsFocusReturn(page);
+  await openNavigation(page);
   await nav.locator('[data-nav="about"]').click();
   await expect(nav).toBeHidden();await expect(page.locator('#main h1')).toBeFocused();
   await expect(toggle.locator('[data-menu-current]')).toHaveText('About');
@@ -120,6 +127,9 @@ for(const path of ['./','garda/']){
   await page.goto(path+'#about');
   await expect(page.locator('[data-reading-chunk]').first()).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);
+  // A hash-only goto stays in this document. Let the route's page cue settle
+  // and register later-scroll targets before deliberately reaching one.
+  await frames(page);await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');await frames(page);
   const initialGroup=page.locator('.content-page > .info-block').first();
   const initialHeading=await initialGroup.locator('h2').textContent();
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -186,7 +196,8 @@ for(const path of ['./','garda/']){
    await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);
    const beforeReopen=height();summary.click();const afterReopen=height();
    const reopenIntent=summary.getAttribute('aria-expanded');
-   await animation.finished;await new Promise(requestAnimationFrame);
+   const current=element.getAnimations().find(item=>item.effect.getKeyframes().some(frame=>'height' in frame));
+   await current?.finished;await new Promise(requestAnimationFrame);
    return {animated:true,beforeClose,afterClose,beforeReopen,afterReopen,closeIntent,reopenIntent,
     open:element.open,height:element.style.height,state:element.getAttribute('data-disclosure-state'),
     inert:Array.from(element.children).some(child=>child.inert)};

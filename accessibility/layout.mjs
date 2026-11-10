@@ -28,8 +28,21 @@ export function createLayout({main}){
  const root=document.documentElement;
  const labels={en:'Menu',ga:'Roghchlár',pt:'Menu',ar:'القائمة',pl:'Menu',ro:'Meniu',fr:'Menu',es:'Menú',zh:'菜单'};
  let open=false,lastRoute='',panelAnimation=null;
+ const background=new Map();
  header.classList.add('navigation-ready');
  const motionAllowed=()=>!reduced.matches&&!forced.matches&&!root.classList.contains('motion-reduce');
+ function blockBackground(blocked){
+  if(blocked){
+   for(const element of Array.from(document.body.children)){
+    if(element===header||element.contains(header)||element.matches('dialog,script,[role="status"],.dialog-backdrop'))continue;
+    if(!background.has(element))background.set(element,element.inert);
+    element.inert=true;
+   }
+  }else{
+   for(const [element,inert] of background)element.inert=inert;
+   background.clear();
+  }
+ }
  function showPanel(visible,animate){
   const wasHidden=nav.hidden;
   const opacity=wasHidden?0:Number(getComputedStyle(nav).opacity);
@@ -55,6 +68,7 @@ export function createLayout({main}){
  function sync(animate=false){
   const collapsed=compact.matches&&!open;
   showPanel(!collapsed,animate);
+  blockBackground(compact.matches&&open);
   toggle.setAttribute('aria-expanded',String(!collapsed));
   header.classList.toggle('navigation-open',compact.matches&&open);
   toggle.querySelector('[data-menu-label]').textContent=labels[root.lang.split('-')[0]]||labels.en;
@@ -68,9 +82,12 @@ export function createLayout({main}){
  header.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&open){event.preventDefault();close(true);}
  });
- // Keep the panel open behind reading settings so closing the dialog can
- // restore focus to the same visible control.
+ // Settings replace the compact menu. Returning from the dialog then restores
+ // focus to Menu, leaving the learning content visible and usable.
  header.addEventListener('click',event=>{
+  if(compact.matches&&event.target.closest('[data-reading-open]')){
+   close(false,false);return;
+  }
   const link=event.target.closest('nav a,.wordmark');
   if(link){
    close(false,false);

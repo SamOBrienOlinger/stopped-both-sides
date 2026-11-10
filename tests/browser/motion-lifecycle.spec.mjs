@@ -96,25 +96,29 @@ for(const role of ['public','garda']){
    'returning to a reference group does not replay its reveal').toBe(false);
  });
 
- test(`${role}: focusing a card cancels its entrance permanently`,async({page})=>{
+ test(`${role}: focusing a newly revealed card cancels its group entrance permanently`,async({page})=>{
   await page.setViewportSize({width:390,height:568});
-  await page.goto(paths[role]);await page.evaluate(()=>document.fonts.ready);
-  // Rendering registers its observer after route focus/scroll has settled.
-  // Scrolling in that first frame can correctly classify this as visible on
-  // arrival, so wait for registration before testing a later entrance.
+  await page.goto(paths[role]);
+  // The hero can be classified as initially visible while the first layout
+  // settles. Use a group well below the initial viewport so this test starts
+  // with an actual later entrance rather than depending on initial geometry.
+  const group=page.locator('.topic-explorer');
+  await expect(group).toBeVisible();await page.evaluate(()=>document.fonts.ready);
   await revealsReady(page);
-  const card=page.locator('.perspective-hero').last();
-  await card.scrollIntoViewIfNeeded();
-  await expect(card).toHaveAttribute('data-motion','reveal');
-  const cardRole=await card.getAttribute('data-role-tone');
-  await card.locator('a').focus();
-  await expect(card).not.toHaveAttribute('data-motion','reveal');
+  const heading=await group.locator('h2').textContent();
+  expect(await group.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
+   'the target starts below the viewport and the observer’s 80px preload margin').toBeGreaterThan(80);
+  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.heading===heading)).toHaveLength(0);
+  await group.scrollIntoViewIfNeeded();
+  await expect(group).toHaveAttribute('data-motion','reveal');
+  await group.locator('.topic-card').first().focus();
+  await expect(group).not.toHaveAttribute('data-motion','reveal');
   await page.locator('.wordmark').evaluate(element=>element.focus({preventScroll:true}));
   await frames(page);
-  await expect(card).not.toHaveAttribute('data-motion','reveal');
+  await expect(group).not.toHaveAttribute('data-motion','reveal');
   await page.locator('.wordmark').scrollIntoViewIfNeeded();
-  await card.scrollIntoViewIfNeeded();await frames(page);
-  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.roleTone===cardRole),
+  await group.scrollIntoViewIfNeeded();await frames(page);
+  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.heading===heading),
    'leaving focus or scrolling back cannot restart the cancelled card entrance').toHaveLength(1);
  });
 
