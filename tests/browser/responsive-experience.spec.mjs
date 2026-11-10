@@ -81,7 +81,12 @@ for(const path of ['./','garda/']){
   await openNavigation(page);await expectControlsFit(page,'open mobile navigation');
   await page.setViewportSize({width:1366,height:900});
   await expect(toggle).toBeHidden();await expect(nav).toBeVisible();
+  // CSS visibility precedes asynchronous media-query state. Let the desktop
+  // state settle before resizing again so both breakpoint changes are observed.
+  await expect(page.locator('.header')).not.toHaveClass(/navigation-open/);
+  await expect(page.locator('#main')).not.toHaveAttribute('inert');
   await nav.locator('[data-nav="play"]').focus();
+  await expect(nav.locator('[data-nav="play"]')).toBeFocused();
   await page.setViewportSize({width:390,height:844});
   await expect(toggle).toBeFocused();await expect(nav).toBeHidden();
  });
