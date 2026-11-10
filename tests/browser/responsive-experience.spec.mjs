@@ -176,7 +176,13 @@ for(const path of ['./','garda/']){
  test(`${path} mobile disclosures reverse smoothly and settle on resize or navigation`,async({page},testInfo)=>{
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'no-preference'});
-  await page.goto(path+'#about');await page.evaluate(()=>document.fonts.ready);await frames(page);
+  await page.goto(path);
+  await expect(page.locator('.reference-landing')).toBeVisible();await page.evaluate(()=>document.fonts.ready);await frames(page);
+  await expect.poll(()=>page.locator('.perspective-hero img').evaluateAll(images=>images.length===2&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+  if(path==='./')await page.screenshot({path:testInfo.outputPath('mobile-landing-390.png')});
+  await page.goto(path+'#about');await expect(page.locator('.learning-panel').first()).toBeVisible();
+  await page.evaluate(()=>document.fonts.ready);await frames(page);
+  await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');await frames(page);
   const toggle=page.locator('[data-nav-toggle]'),nav=page.locator('#main-navigation');
   await toggle.click();await expect(nav).toBeVisible();
   await nav.evaluate(element=>Promise.all(element.getAnimations().map(animation=>animation.finished.catch(()=>{}))));

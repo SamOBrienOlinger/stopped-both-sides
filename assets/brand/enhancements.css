@@ -327,11 +327,15 @@ main details[open]>summary{color:var(--deep)}
 /* A single stationary cue avoids fighting hover, focus or the card's own
    background. The final frame is identical to its normal rendered state. */
 @keyframes ui-content-arrive{
- from{opacity:.94}
+ from{opacity:.7}
  to{opacity:1}
 }
 @keyframes ui-page-arrive{
- from{opacity:.82}
+ from{opacity:.45}
+ to{opacity:1}
+}
+@keyframes ui-reveal-arrive{
+ from{opacity:.4}
  to{opacity:1}
 }
 @keyframes ui-art-arrive{
@@ -347,16 +351,19 @@ main details[open]>summary{color:var(--deep)}
  to{background-color:var(--tone-pale,var(--pale));border-color:var(--tone-deep,var(--deep))}
 }
 @media(prefers-reduced-motion:no-preference){
+ [data-reveal-pending]{opacity:.4}
  [data-motion="page"]{
-  animation:ui-page-arrive 900ms var(--ui-reveal-ease);
+  animation:ui-page-arrive 1100ms var(--ui-reveal-ease);
  }
  [data-motion="stage"],[data-motion="perspective"],[data-motion="feedback"],
  [data-motion="dialog"]{
   animation:ui-content-arrive var(--ui-step-time) var(--ui-reveal-ease);
  }
- [data-motion="picker"],[data-motion="recap"],[data-motion="reveal"],
- [data-motion="disclosure"]{
+ [data-motion="picker"],[data-motion="disclosure"]{
   animation:ui-content-arrive var(--ui-reveal-time) var(--ui-reveal-ease);
+ }
+ [data-motion="recap"],[data-motion="reveal"]{
+  animation:ui-reveal-arrive var(--ui-reveal-time) var(--ui-reveal-ease);
  }
  [data-motion="scene"] .scene-location,
  img[data-motion="scene"],img[data-motion="reveal"]{
@@ -390,11 +397,14 @@ main details[open]>summary{color:var(--deep)}
  animation:none!important;
  transition:none!important;
 }
+.motion-reduce [data-reveal-pending]{opacity:1!important}
 @media(prefers-reduced-motion:reduce){
  [data-motion],[data-motion] *{animation:none!important;transition:none!important}
+ [data-reveal-pending]{opacity:1!important}
 }
 @media(forced-colors:active){
  *,*::before,*::after{animation:none!important;transition:none!important}
+ [data-reveal-pending]{opacity:1!important}
  .start-panel,.character-picker,.scenario-library,.play-help,.recap-takeaways,
  .recap-scores,.score-mechanics,.facilitator-note,.paired-recap .summary-item,
  .progress-situations .info-block,.feedback,.play-toolbar.perspective-bar,
@@ -432,6 +442,7 @@ main details[open]>summary{color:var(--deep)}
 }
 @media print{
  *,*::before,*::after{animation:none!important;transition:none!important}
+ [data-reveal-pending],[data-motion]{opacity:1!important}
  .start-panel,.character-picker,.scenario-library,.play-help,.recap-takeaways,
  .recap-scores,.score-mechanics,.facilitator-note,.paired-recap .summary-item,
  .progress-situations .info-block,.feedback,.play-toolbar.perspective-bar,

@@ -48,17 +48,23 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
 .progress-result{flex-wrap:wrap}
 .settings-actions{grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr))}
 
-/* Images and their captions remain a single responsive choice. */
-.reference-landing .overlapping-heroes{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2vw,1.5rem);align-items:stretch}
-.reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:auto auto 1fr;padding:clamp(1rem,2.4vw,1.5rem)}
-.reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:4.5rem;margin-block-end:1rem;font-size:1rem;padding:.8rem;align-self:stretch}
+/* Two choices fit on a regular phone. Narrow screens and larger reading text
+   grow the rem-based minimum and naturally restore a single readable column. */
+.reference-landing .overlapping-heroes{grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:clamp(.75rem,2vw,1.5rem);align-items:stretch;margin-block:1.5rem 1rem}
+.reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:auto auto 1fr;padding:clamp(.75rem,2vw,1.5rem)}
+.reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:4.5rem;margin-block-end:1rem;font-size:1rem;padding:.4rem .25rem;align-self:stretch;flex-direction:column;gap:.625rem}
 .reference-landing .overlapping-heroes .perspective-hero>img{grid-area:2/1;aspect-ratio:16/9;object-fit:contain;inline-size:100%;block-size:auto;border-radius:.75rem}
-.perspective-hero>.perspective-caption{grid-area:3/1;margin:0;padding-block-start:1.25rem;font-size:1rem;line-height:1.75;max-inline-size:48ch;align-self:start}
+.perspective-hero>.perspective-caption{grid-area:3/1;margin:0;padding-block-start:1rem;font-size:1rem;line-height:1.7;max-inline-size:48ch;align-self:start;color:var(--ink)}
 @supports(grid-template-rows:subgrid){
  .reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:subgrid;grid-row:span 3;row-gap:0}
 }
-.reference-landing .perspective-hero .perspective-button-label{font-size:1.0625rem;line-height:1.45}
-.reference-landing .perspective-hero .perspective-button-action{font-size:.875rem;margin-block-start:.25rem}
+.reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){inline-size:auto;max-inline-size:100%;font-size:1.25rem;font-weight:800;line-height:1.35;text-wrap:balance}
+.reference-landing .perspective-hero :is(.perspective-button-action,.perspective-button-action-short){font-size:.875rem;line-height:1.4;margin-block-start:0}
+@media(min-width:54rem){
+ .reference-landing .overlapping-heroes .perspective-hero-button{flex-direction:row;flex-wrap:wrap;justify-content:space-between;gap:.75rem;text-align:start}
+ .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){flex:1 1 11rem}
+ .reference-landing .perspective-hero :is(.perspective-button-action,.perspective-button-action-short){flex:0 1 auto;text-align:center}
+}
 .brand-intro.home-intro{justify-content:flex-start;gap:clamp(.75rem,2vw,1.5rem)}
 .brand-intro.home-intro>div{min-inline-size:0}
 .brand-intro .brand-profiles{inline-size:clamp(3.25rem,10vw,6rem);max-inline-size:20%;block-size:auto}
@@ -112,9 +118,12 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
  .header.navigation-ready nav[inert]{pointer-events:none}
 }
 @media(max-width:39.999rem){
- .reference-landing .overlapping-heroes{grid-template-columns:minmax(0,1fr);gap:1.25rem}
- .reference-landing .overlapping-heroes .perspective-hero{padding:1rem}
- .reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:64px;font-size:1rem}
+ .reference-landing .overlapping-heroes{margin-block-start:1.25rem}
+ .reference-landing .overlapping-heroes .perspective-hero-button{min-block-size:64px;margin-block-end:.75rem;padding:.25rem 0;gap:.5rem;font-size:1rem}
+ .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){font-size:1rem;line-height:1.4}
+ .reference-landing .perspective-hero :is(.perspective-button-action,.perspective-button-action-short){font-size:.8125rem;padding:.35rem .8rem}
+ .reference-landing .overlapping-heroes .perspective-hero>img{border-radius:.5rem}
+ .perspective-hero>.perspective-caption{padding-block-start:.75rem;font-size:.875rem;line-height:1.65}
  .paired-game,.game-grid,.summary-grid{grid-template-columns:minmax(0,1fr)}
  .session-return .text-button{inline-size:100%;margin-block-start:.5rem}
  .play-toolbar.perspective-bar{padding:1rem}

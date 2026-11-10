@@ -34,14 +34,22 @@ async function checkHeroControls(page){
  await page.emulateMedia({reducedMotion:'reduce'});
  await expect(page.locator('.perspective-hero')).toHaveCount(2);
  await expect.poll(()=>page.locator('.perspective-hero img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+ const grid=await page.locator('.overlapping-heroes').evaluate(element=>{
+  const style=getComputedStyle(element);
+  return {width:element.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),
+   gap:parseFloat(style.columnGap),rootSize:parseFloat(getComputedStyle(document.documentElement).fontSize)};
+ });
  const measurements=await page.locator('.perspective-hero').evaluateAll(cards=>cards.map(card=>{
   const img=card.querySelector('img'),image=img.getBoundingClientRect();
   const link=card.querySelector('a'),button=link.getBoundingClientRect();
+  const bounds=card.getBoundingClientRect(),style=getComputedStyle(card);
   return {centre:Math.abs(button.x+button.width/2-image.x-image.width/2),
    inside:button.x>=image.x&&button.right<=image.right,
    above:button.bottom<=image.y+1,
    buttonX:button.x,buttonRight:button.right,height:button.height,width:button.width,
    clipped:link.scrollWidth>link.clientWidth+1||link.scrollHeight>link.clientHeight+1,
+   cardX:bounds.x,cardY:bounds.y,cardRight:bounds.right,cardBottom:bounds.bottom,cardWidth:bounds.width,
+   contentWidth:card.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),
    x:image.x,y:image.y,imageRight:image.right,imageHeight:image.height,
    imageWidth:image.width,sourceRatio:img.naturalWidth/img.naturalHeight,
    displayedRatio:image.width/image.height,fit:getComputedStyle(img).objectFit};
@@ -55,16 +63,26 @@ async function checkHeroControls(page){
   expect(result.clipped,'translated control text must not clip').toBe(false);
   expect(result.fit,'show the full source scene, not a portrait crop').toBe('contain');
   expect(Math.abs(result.displayedRatio-result.sourceRatio),'preserve the source image proportions').toBeLessThan(.01);
+  expect(Math.abs(result.imageWidth-result.contentWidth),'the scene fills its own card content width').toBeLessThanOrEqual(1);
  }
- if(page.viewportSize().width<640){
-  expect(measurements[1].y,'phone images stack with their own captions').toBeGreaterThan(measurements[0].y+measurements[0].imageHeight);
-  expect(measurements[0].imageWidth,'phone images make use of the available width').toBeGreaterThan(page.viewportSize().width*.65);
+ const [first,second]=measurements,twoColumns=grid.width+1>=20*grid.rootSize+grid.gap;
+ const overlapWidth=Math.min(first.cardRight,second.cardRight)-Math.max(first.cardX,second.cardX);
+ const overlapHeight=Math.min(first.cardBottom,second.cardBottom)-Math.max(first.cardY,second.cardY);
+ expect(overlapWidth>1&&overlapHeight>1,'perspective cards never overlap').toBe(false);
+ if(twoColumns){
+  expect(Math.abs(first.cardY-second.cardY),'two choices share a row whenever their readable minimum fits').toBeLessThanOrEqual(1);
+  expect(second.cardX-first.cardRight,'a visible gutter separates the cards').toBeGreaterThanOrEqual(grid.gap-1);
+  expect(first.buttonRight,'role links never overlap').toBeLessThanOrEqual(second.buttonX);
+  expect(Math.abs(first.y-second.y),'scenes stay level within a shared card row').toBeLessThanOrEqual(1);
+  expect(Math.abs(first.cardWidth+second.cardWidth+grid.gap-grid.width),'both columns use the available grid width').toBeLessThanOrEqual(2);
  }else{
-  expect(measurements[0].buttonRight,'role links never overlap').toBeLessThanOrEqual(measurements[1].buttonX);
-  expect(Math.abs(measurements[0].y-measurements[1].y),'wide-screen scenes stay level').toBeLessThanOrEqual(1);
-  expect(measurements[1].x-measurements[0].imageRight,'a visible gutter separates scenes').toBeGreaterThanOrEqual(4);
+  expect(second.cardY-first.cardBottom,'narrow layouts and larger reading text stack complete cards').toBeGreaterThanOrEqual(grid.gap-1);
+  expect(Math.abs(first.cardX-second.cardX),'stacked cards share the same column').toBeLessThanOrEqual(1);
+  expect(Math.abs(first.cardWidth-grid.width),'a stacked choice uses the available grid width').toBeLessThanOrEqual(1);
  }
- expect(Math.abs(measurements[0].imageWidth-measurements[1].imageWidth),'both scenes get equal space').toBeLessThanOrEqual(1);
+ expect(Math.abs(first.cardWidth-second.cardWidth),'both choices receive equal card widths').toBeLessThanOrEqual(1);
+ expect(Math.abs(first.imageWidth-second.imageWidth),'both scenes get equal widths').toBeLessThanOrEqual(1);
+ expect(Math.abs(first.imageHeight-second.imageHeight),'both scenes get equal heights').toBeLessThanOrEqual(1);
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
 async function captureHero(page,role,width,state,testInfo){

@@ -43,35 +43,41 @@
 @media print{.route-trail,.completion-map{display:none}.paired-recap{padding:0;border:0}.paired-recap>.summary-item::before{display:none}}
 
 /* A cohesive learning workspace: clearer hierarchy and shorter action paths. */
-:root{--experience-shadow:var(--ui-shadow-rest);--experience-border:#cedfe1}
-body{background:#f7fafb}
+:root{--experience-shadow:0 12px 32px #183e490a,0 2px 6px #183e4906;--experience-border:#c5d7dc}
+body{background:radial-gradient(ellipse at 0 0,#d8ecea85,transparent 42rem),radial-gradient(ellipse at 100% 8rem,#e1eaf780,transparent 40rem),var(--page,#f4f9f8)}
 main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .header{background:var(--paper,#fff)}
 .header .header-inner{max-inline-size:1280px}
 .header nav a[aria-current=page]{box-shadow:inset 0 -3px var(--deep)}
 .brand-intro.home-intro{max-inline-size:64rem;padding:1rem 0;margin-block-end:1rem}
 .brand-intro #game-title{font-size:clamp(2rem,4.3vw,3.4rem);letter-spacing:-.045em}
-.landing-overview{max-inline-size:64rem;margin-block:0 2rem;background:var(--paper,#fff);border:1px solid var(--experience-border);border-inline-start:3px solid var(--deep);box-shadow:none;border-radius:1rem}
+.landing-overview{max-inline-size:64rem;margin-block:0 2rem;background:var(--paper,#fff);border:1px solid var(--experience-border);border-inline-start:4px solid var(--deep);box-shadow:var(--experience-shadow);border-radius:1.25rem}
 .reference-landing{max-inline-size:64rem;background:transparent!important}
-.reference-landing .landing-instructions{text-align:start;margin-block-end:1.75rem}
+.reference-landing .landing-instructions{text-align:start;margin-block-end:2rem}
+.reference-landing .landing-instructions::before{content:'';display:block;inline-size:4.5rem;block-size:.3rem;margin-block-end:1.25rem;border-radius:1rem;background:linear-gradient(90deg,#175e61 50%,#284f7e 50%)}
 .reference-landing .landing-instructions p{text-align:start}
-.reference-landing .landing-instructions :is(h1,h2){font-size:clamp(1.65rem,3.4vw,2.5rem);line-height:1.2;margin-block-end:.75rem}
-.reference-landing .landing-purpose{font-size:clamp(1rem,1.6vw,1.125rem);margin-block-end:.3rem}
-.reference-landing .perspective-hero{padding:1rem;background:var(--paper,#fff)!important;border-color:var(--experience-border);border-radius:1.25rem!important;border-block-start:3px solid var(--tone-deep,var(--deep));box-shadow:var(--experience-shadow)}
+.reference-landing .landing-instructions :is(h1,h2){max-inline-size:24ch;font-size:clamp(2rem,4.7vw,3.375rem);line-height:1.12;letter-spacing:-.04em;margin-block-end:1rem;color:var(--ink)}
+.reference-landing .landing-purpose{font-size:clamp(1.0625rem,1.8vw,1.25rem);line-height:1.6;margin-block-end:.4rem;color:var(--deep)}
+.reference-landing .landing-instructions .small-note{max-inline-size:60ch;margin-block-start:0;font-size:1rem;line-height:1.7}
+.reference-landing .perspective-hero{padding:1rem;background:linear-gradient(160deg,var(--tone-pale,var(--pale)),var(--paper,#fff) 80%)!important;border-color:var(--tone-line,var(--experience-border));border-radius:1.5rem!important;border-block-start:5px solid var(--tone-deep,var(--deep));box-shadow:var(--experience-shadow)}
 .reference-landing .perspective-hero:focus-within{border-color:var(--tone-deep,var(--deep))}
-.reference-landing .overlapping-heroes .perspective-hero-button{inline-size:100%;max-inline-size:100%;border-radius:.75rem;box-shadow:none}
+.reference-landing .overlapping-heroes .perspective-hero-button{inline-size:100%;max-inline-size:100%;border:1px solid transparent;border-radius:.75rem;background:transparent;color:var(--tone-deep,var(--deep));box-shadow:none;text-decoration:none}
+.reference-landing .overlapping-heroes .perspective-hero-button:hover{background:var(--paper,#fff);color:var(--tone-deep,var(--deep));border-color:var(--tone-line,var(--line));box-shadow:none;text-decoration:none}
+.reference-landing .perspective-hero-button>:is(.perspective-button-action,.perspective-button-action-short){inline-size:auto;max-inline-size:100%;padding:.4rem .9rem;border:1px solid var(--tone-deep,var(--deep));border-radius:999px;background:var(--tone-deep,var(--deep));color:#fff;font-weight:700;text-decoration:none;transition:inherit}
+.reference-landing .perspective-hero-button:hover>:is(.perspective-button-action,.perspective-button-action-short){background:var(--tone-hover,var(--hover));border-color:var(--tone-hover,var(--hover));text-decoration:none}
+.reference-landing .overlapping-heroes .perspective-hero-button:focus-visible{outline:3px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 3px var(--paper,#fff)}
 .reference-landing .perspective-casts p{padding:.2rem .5rem;color:var(--ink)}
 .topic-explorer{max-inline-size:64rem;margin:3.5rem auto}
 .topic-explorer .section-heading{display:block;margin-block-end:1.25rem}
 .topic-explorer .section-heading h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin-block-end:.5rem}
 .topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-.topic-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.75rem;align-content:start;min-inline-size:0;min-block-size:10rem;padding:1.25rem;border:1px solid var(--experience-border);border-radius:1rem;background:var(--paper,#fff);color:var(--ink);text-decoration:none;box-shadow:0 3px 12px #183e4905;overflow-wrap:anywhere}
+.topic-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.875rem;align-content:start;min-inline-size:0;min-block-size:10rem;padding:1.25rem;border:1px solid var(--experience-border);border-radius:1.25rem;background:var(--paper,#fff);color:var(--ink);text-decoration:none;box-shadow:var(--experience-shadow);overflow-wrap:anywhere}
 .topic-card .learning-icon{grid-column:1;inline-size:2.5rem;block-size:2.5rem;padding:.4rem;background:var(--pale);border-radius:.65rem}
 .topic-card strong{grid-column:1/-1;font-size:1rem;line-height:1.4}
-.topic-card-count{grid-column:2;grid-row:1;align-self:center;font-size:.8125rem;font-weight:700;color:var(--slate);font-variant-numeric:tabular-nums}
+.topic-card-count{grid-column:2;grid-row:1;align-self:center;padding:.2rem .5rem;border:1px solid var(--line);border-radius:999px;background:var(--paper,#fff);font-size:.8125rem;font-weight:700;color:var(--slate);font-variant-numeric:tabular-nums}
 .topic-preview{grid-column:1/-1;font-size:.8125rem;color:var(--slate);line-height:1.5}
 .topic-card:hover,.topic-card:focus-visible{border-color:var(--deep);background:var(--pale)}
-.how-to-play{max-inline-size:64rem;background:var(--paper,#fff);border:1px solid var(--experience-border);border-radius:1.25rem;padding:clamp(1.25rem,3vw,2rem)}
+.how-to-play{max-inline-size:64rem;background:var(--paper,#fff);border:1px solid var(--experience-border);border-radius:1.25rem;box-shadow:var(--experience-shadow);padding:clamp(1.25rem,3vw,2rem)}
 .how-to-play .how-step-number{background:var(--pale);color:var(--deep);border:1px solid var(--line)}
 .how-to-play .how-step-copy{padding-inline-start:0}
 .simple-setup>h1,.progress-page>h1,.content-page>h1{font-size:clamp(2rem,4.2vw,3.3rem);line-height:1.15;max-inline-size:22ch}
@@ -85,7 +91,7 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .scenario-library{background:var(--paper,#fff);border-radius:1.25rem!important}
 .scenario-library>summary{font-size:1.1rem;padding-block:1rem!important}
 .paired-catalog{gap:1rem}
-.encounter-card{box-shadow:none;border:1px solid var(--experience-border);border-radius:1rem;position:relative;overflow:hidden}
+.encounter-card{box-shadow:var(--experience-shadow);border:1px solid var(--experience-border);border-block-start:4px solid var(--deep);border-radius:1.25rem;position:relative;overflow:hidden}
 .catalogue-visual{display:grid;place-items:center;inline-size:3.5rem;block-size:3.5rem;background:var(--pale);border-radius:1rem;margin-block-end:1.2rem}
 .catalogue-visual .learning-icon{inline-size:2rem;block-size:2rem}
 .encounter-card h2{font-size:1.3rem;line-height:1.3;letter-spacing:-.02em}
@@ -110,10 +116,10 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .decision-guide li{display:flex;gap:.65rem;align-items:center;margin:0;padding:.75rem 1rem;border:1px solid var(--line);border-radius:.75rem;background:var(--paper,#fff);color:var(--slate);font-size:.875rem;line-height:1.45;min-inline-size:0;overflow-wrap:anywhere}
 .decision-guide .learning-icon{inline-size:1.5rem;block-size:1.5rem}
 .decision-guide [aria-current=step]{border-color:var(--deep);color:var(--deep);background:var(--pale);font-weight:700;box-shadow:inset 0 -2px var(--deep)}
-.decision-context{background:var(--paper,#fff);padding:clamp(1.25rem,3vw,2rem);border-radius:1rem;box-shadow:var(--experience-shadow)}
+.decision-context{background:var(--paper,#fff);padding:clamp(1.25rem,3vw,2rem);border:1px solid var(--experience-border);border-radius:1.25rem;box-shadow:var(--experience-shadow)}
 .decision-context .story-text{max-inline-size:78ch;line-height:1.8}
 .paired-game{gap:1.5rem}
-.decision-choices{padding:clamp(1rem,2vw,1.5rem);border:1px solid var(--experience-border);border-radius:1rem;background:var(--paper,#fff);min-inline-size:0}
+.decision-choices{padding:clamp(1rem,2vw,1.5rem);border:1px solid var(--experience-border);border-radius:1.25rem;background:var(--paper,#fff);box-shadow:var(--experience-shadow);min-inline-size:0}
 .paired-game .prompt h2{font-size:clamp(1.2rem,2.3vw,1.5rem);line-height:1.4}
 .paired-game .choice{border-radius:.85rem;align-items:flex-start;min-block-size:72px;padding:1rem;gap:.75rem;box-shadow:none}
 .paired-game .choice-letter{margin-block-start:.1rem;background:var(--pale);border-color:var(--line);flex-shrink:0}
@@ -133,14 +139,14 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .progress-situations .info-block{border:1px solid var(--experience-border);border-radius:1rem;background:var(--paper,#fff)}
 .progress-result{gap:.5rem;padding-block:.85rem}
 .progress-result .text-button{padding:.5rem .75rem;background:var(--pale);border-radius:.5rem;min-block-size:44px}
-.content-page .info-block{border-radius:1rem;border-color:var(--experience-border)}
+.content-page .info-block{border-radius:1.25rem;border-color:var(--experience-border);box-shadow:var(--experience-shadow)}
 .source-topic-nav{padding:1rem;background:var(--paper,#fff);border:1px solid var(--line);border-radius:1rem}
 .source-card{border-radius:.85rem;background:var(--paper,#fff);border-inline-start:3px solid var(--deep);padding:1.2rem 1.4rem}
 .source-card strong{line-height:1.55}
 .source-card span{line-height:1.65;margin-block-start:.4rem}
 .learning-goals{gap:1rem}
 .learning-goal{box-shadow:var(--experience-shadow);border-radius:1rem}
-.learning-panel{border-radius:.85rem}
+.learning-panel{border-radius:1.25rem;box-shadow:var(--experience-shadow)}
 .recap-takeaways{background:var(--paper,#fff);border-inline-start:4px solid var(--deep);box-shadow:var(--experience-shadow)}
 .recap-takeaways ul{padding-inline-start:1.25rem}
 .recap-takeaways li{line-height:1.8;padding-inline-start:.3rem}
@@ -156,9 +162,9 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
  .brand-intro #game-title{font-size:clamp(1.55rem,7vw,2.1rem)}
  .landing-overview{padding:1.25rem;margin-block-end:1.75rem}
  .landing-overview p:first-child{font-size:1.05rem}
- .reference-landing .overlapping-heroes{gap:.6rem}
- .reference-landing .perspective-hero{padding:.5rem;border-radius:.75rem!important}
- .reference-landing .overlapping-heroes .perspective-hero-button{font-size:.8125rem;padding:.6rem .4rem}
+ .reference-landing .landing-instructions{margin-block-end:1.25rem}
+ .reference-landing .landing-instructions::before{margin-block-end:.875rem}
+ .reference-landing .perspective-hero{border-radius:1.125rem!important}
  .topic-explorer{margin-block:2rem}
  .topic-card{padding:1rem;min-block-size:0}
  .topic-grid>.topic-card:last-child{grid-column:1/-1}
@@ -176,11 +182,17 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .route-dot{transition:background-color var(--ui-control-time) var(--ui-ease),box-shadow var(--ui-control-time) var(--ui-ease)}
 @media(hover:hover) and (pointer:fine){.topic-card:hover{box-shadow:var(--ui-shadow-hover)}}
 .contrast-high body,.contrast-high .landing-overview,.contrast-high .decision-context,.contrast-high .decision-choices,.contrast-high .topic-card,.contrast-high .feedback.revisit{background:var(--paper);color:var(--ink)}
-.contrast-high .topic-card,.contrast-high .decision-choices,.contrast-high .start-panel{border-color:var(--control)}
-.contrast-high .reference-landing .perspective-hero{border-color:var(--tone-line,var(--control));border-block-start-color:var(--tone-deep,var(--deep))}
+.contrast-high .topic-card,.contrast-high .decision-context,.contrast-high .decision-choices,.contrast-high .start-panel,.contrast-high .content-page .info-block{border-color:var(--control)}
+.contrast-high .reference-landing .perspective-hero{background:var(--paper)!important;border-color:var(--tone-line,var(--control));border-block-start-color:var(--tone-deep,var(--deep))}
 .contrast-high .landing-overview{border-color:var(--control);border-inline-start-color:var(--deep)}
 @media(forced-colors:active){
- .topic-card,.decision-guide li,.decision-context,.decision-choices,.route-navigation .route-dot,.simple-setup .start-panel,.source-card{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
+ body{background:Canvas}
+ .reference-landing .landing-instructions::before{background:Highlight}
+ .reference-landing .perspective-hero{background:Canvas!important;color:CanvasText;border-color:CanvasText;box-shadow:none}
+ .reference-landing .overlapping-heroes .perspective-hero-button,.reference-landing .overlapping-heroes .perspective-hero-button:hover{background:ButtonFace;color:ButtonText;border-color:ButtonText;box-shadow:none}
+ .reference-landing .perspective-hero-button>:is(.perspective-button-action,.perspective-button-action-short),.reference-landing .perspective-hero-button:hover>:is(.perspective-button-action,.perspective-button-action-short){background:Highlight;color:HighlightText;border-color:Highlight}
+ .reference-landing .overlapping-heroes .perspective-hero-button:focus-visible{outline-color:Highlight;box-shadow:none}
+ .topic-card,.topic-card-count,.how-to-play,.encounter-card,.learning-panel,.content-page .info-block,.decision-guide li,.decision-context,.decision-choices,.route-navigation .route-dot,.simple-setup .start-panel,.source-card{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
  .decision-guide [aria-current=step],.route-navigation .is-current{outline:2px solid Highlight;outline-offset:-3px}
  .header nav a[aria-current=page]{outline:2px solid Highlight;box-shadow:none}
 }

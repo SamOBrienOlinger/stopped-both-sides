@@ -8,7 +8,7 @@ export function createMotion({main,getLegacyState=()=>null}){
  const root=document.documentElement;
  const reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)');
  const forced=globalThis.matchMedia?.('(forced-colors: active)');
- const active=new Map(),frames=new Map(),seen=new Set();
+ const active=new Map(),frames=new Map(),seen=new Set(),pendingReveals=new Map();
  let previous=null,observer=null;
  const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce');
  const all=selector=>Array.from(main.querySelectorAll(selector));
@@ -21,11 +21,13 @@ export function createMotion({main,getLegacyState=()=>null}){
   }
   clearTimeout(active.get(element));active.delete(element);
   element.removeAttribute('data-motion');
+  element.removeAttribute('data-reveal-pending');pendingReveals.delete(element);
  }
  function clear(){
   for(const frame of frames.keys())cancelAnimationFrame(frame);
   frames.clear();
   for(const element of active.keys())remove(element);
+  for(const element of pendingReveals.keys())remove(element);
  }
  const isEntrance=kind=>kind==='reveal'||kind==='recap';
  function afterFocus(element,kind,callback){
@@ -74,6 +76,10 @@ export function createMotion({main,getLegacyState=()=>null}){
  // cue, and a group and its descendants never animate independently.
  function observeReveals(next,suppress,disclosure=null){
   observer?.disconnect();observer=null;
+  // Refresh the offscreen queue in one task. A pending entrance that has
+  // already been reached is settled, while unseen offscreen groups are primed
+  // again before the next paint. No visible group goes from bright to dim.
+  for(const element of pendingReveals.keys())remove(element);
   const selectors=next.complete?['.summary-list > .summary-item']:
    next.mode==='content'?['.content-page > .info-block','.source-card','.evidence-record',
     '.progress-page > .role-results > .info-block','.progress-situations > .info-block',
@@ -107,6 +113,9 @@ export function createMotion({main,getLegacyState=()=>null}){
    return true;
   });
   if(!candidates.length||typeof globalThis.IntersectionObserver!=='function')return;
+  for(const {element,key} of candidates){
+   element.setAttribute('data-reveal-pending','');pendingReveals.set(element,key);
+  }
   const keys=new Map(candidates.map(item=>[item.element,item.key]));
   observer=new IntersectionObserver(entries=>{
    for(const entry of entries){
@@ -169,6 +178,11 @@ export function createMotion({main,getLegacyState=()=>null}){
  // Cancelling the attribute as well as the animation makes focus cancellation
  // permanent; moving focus away cannot restart an entrance from its first frame.
  main.addEventListener('focusin',event=>{
+  // Keyboard focus can reach a group before scrolling does. Make its text and
+  // controls fully opaque immediately, and never replay that entrance later.
+  for(const [element,key] of pendingReveals){
+   if(element.contains(event.target)){seen.add(key);observer?.unobserve(element);remove(element);}
+  }
   for(const element of [...active.keys()]){
    if(isEntrance(element.getAttribute('data-motion'))&&element.contains(event.target))remove(element);
   }
