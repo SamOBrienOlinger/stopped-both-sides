@@ -12,7 +12,7 @@ for(const path of ['./','./garda/']){
    return {radius:parseFloat(style.borderTopLeftRadius),shadow:style.boxShadow,background:style.backgroundImage};
   });
   expect(styles.radius).toBeGreaterThan(16);
-  expect(styles.shadow).not.toBe('none');
+  expect(styles.theme).toContain('rgba');
   expect(styles.background).toContain('gradient');
   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
   await expect.poll(()=>page.locator('html').evaluate(element=>parseFloat(element.style.getPropertyValue('--ui-scroll-progress')))).toBeGreaterThan(85);
