@@ -3,7 +3,7 @@ import {scenarioIcon} from '../encounters/visuals.mjs?v=context-icons-1';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=uimproved-explore-1';
+import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=lego-dublin-2';
 import {createMotion} from '../accessibility/motion.mjs?v=visible-motion-5';
 import {createEncounterMode} from '../encounters/ui.mjs?v=lego-dublin-1';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs';

@@ -190,6 +190,10 @@ export function translateText(text,lang='en'){
  if(lang==='ga')return translateIrishText(text,lang);
  if(lang==='en'||!packs.has(lang))return text;
  const original=String(text),s=original.trim(),pack=packs.get(lang);
+ // The compact perspective CTA is translated directly without changing the
+ // stable, indexed educational-content packs or their interpolation contracts.
+ const exploreLabels={pt:'Explorar',ar:'استكشف',pl:'Poznaj',ro:'Explorează',fr:'Explorer',es:'Explorar','zh-Hans':'探索'};
+ if(s==='Explore'&&exploreLabels[lang])return exploreLabels[lang];
  const id=sourceIds.get(s)||lowercaseIds.get(s.toLowerCase());
  if(id)return pack[id];
  if(messageAliases[s])return translateText(messageAliases[s],lang);
