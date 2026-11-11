@@ -5,6 +5,8 @@ for(const path of ['./','./garda/']){
  test(`${path} loads the refreshed visual layer without changing the role choices`,async({page})=>{
   await page.goto(path+'#play');
   await expect(page.locator('.reference-landing .perspective-hero')).toHaveCount(2);
+  await expect(page.locator('.reference-landing .perspective-button-action')).toHaveText(['Explore','Explore']);
+  await expect(page.locator('.reference-landing .perspective-button-action-short')).toHaveText(['Explore','Explore']);
   await expect(page.locator('link[href*="uimproved.css"]')).toHaveCount(1);
   await expect(page.locator('script[src*="uimproved.mjs"]')).toHaveCount(1);
   const styles=await page.locator('.reference-landing').evaluate(element=>{
