@@ -509,3 +509,37 @@ html[data-perspective="garda"] .reference-landing::after{
   background:#fff!important;color:#000!important;box-shadow:none!important
  }
 }
+
+
+/* LEGO-style Dublin image set. Layer a light wash over illustrative scenery so
+   important text remains legible. Nothing here changes game content or controls. */
+.reference-landing.paired-entry::after{
+ inset:0;
+ inline-size:auto;
+ block-size:auto;
+ aspect-ratio:auto;
+ border-radius:inherit;
+ opacity:1;
+ animation:none;
+ background:
+  linear-gradient(180deg,rgba(249,253,255,.76) 0%,rgba(249,253,255,.80) 35%,rgba(249,253,255,.94) 100%),
+  url('../dublin-lego/city-liffey-bridge.webp?v=lego-dublin-1') center 35% / cover no-repeat;
+}
+html[data-perspective="garda"] .reference-landing.paired-entry::after{
+ background:
+  linear-gradient(180deg,rgba(249,252,255,.74) 0%,rgba(249,252,255,.82) 42%,rgba(249,252,255,.95) 100%),
+  url('../dublin-lego/city-gpo-spire.webp?v=lego-dublin-1') center 35% / cover no-repeat;
+}
+/* The original LEGO character artwork stays over the new outdoor backdrops. */
+.scene-location>.scene-backdrop{object-fit:cover}
+@media(max-width:41.25rem){
+ .reference-landing.paired-entry::after{
+  background-position:center,center top;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .reference-landing.paired-entry::after{animation:none!important}
+}
+@media(forced-colors:active),print{
+ .reference-landing.paired-entry::after{display:none!important}
+}

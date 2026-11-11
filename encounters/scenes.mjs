@@ -98,7 +98,21 @@ export const sceneDirections={
 };
 
 export const sceneAssets=['street','bus-stop','station','advice-room','meeting-room','square'];
-const asset=name=>new URL(`../assets/scenes/${name}.webp?v=irish-streetlights-1`,import.meta.url).href;
+// Dublin LEGO artwork changes the scenery only; scene names, characters and
+// written encounter facts remain the same. Interior settings retain original art.
+const outdoorArt={
+ 'street':'../assets/dublin-lego/suburb-red-brick-street.webp?v=lego-dublin-1',
+ 'bus-stop':'../assets/dublin-lego/suburb-bus-stop.webp?v=lego-dublin-1',
+ 'square':'../assets/dublin-lego/city-riverside-people.webp?v=lego-dublin-1'
+};
+const asset=(name,state)=>{
+ const choice=name==='street'&&state?.id==='garda-colleague'
+  ?'../assets/dublin-lego/suburb-dublin-mountains.webp?v=lego-dublin-1'
+  :name==='street'&&state?.id==='garda-new-evidence'
+   ?'../assets/dublin-lego/suburb-dublin-mountains.webp?v=lego-dublin-1'
+   :outdoorArt[name]||`../assets/scenes/${name}.webp?v=irish-streetlights-1`;
+ return new URL(choice,import.meta.url).href;
+};
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community'};
 
@@ -121,7 +135,7 @@ export function renderScene(state,options={}){
   const art=sceneCharacterArtwork(c);
   return `<div class="scene-actor scene-actor--${role}" data-scene-character="${c.id}" data-scene-role="${role}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" ${compact?'loading="lazy"':''} style="${art.style}"></div></div>`;
  };
- const location=(place,members,side='')=>`<div class="scene-location ${members.length===1?'scene-location--solo':''} ${side}" data-scene-place="${place}" aria-hidden="true"><img class="scene-backdrop" src="${asset(place)}" alt="" width="680" height="380" decoding="async" ${compact?'loading="lazy"':''}>${members.map(actor).join('')}</div>`;
+ const location=(place,members,side='')=>`<div class="scene-location ${members.length===1?'scene-location--solo':''} ${side}" data-scene-place="${place}" aria-hidden="true"><img class="scene-backdrop" src="${asset(place,state)}" alt="" width="680" height="380" decoding="async" ${compact?'loading="lazy"':''}>${members.map(actor).join('')}</div>`;
  const panels=m.separate?location(m.place,['public'],'scene-location--public')+location(m.otherPlace,['garda'],'scene-location--garda'):location(m.place,roles);
  const names=roles.map(role=>`<span data-role-tone="${role}"><strong><span data-no-translate>${esc(characterFor(role,state.cast[role]).name)}</span></strong><span>${roleLabels[role]}</span></span>`).join('');
  return `<figure class="encounter-scene ${compact?'encounter-scene--compact':''}" data-scene-id="${esc(state.id+'/'+m.nodeId)}" data-scene-phase="${m.phase}" data-scene-mode="${m.mode}">${m.label?`<div class="scene-setting">${esc(m.label)}</div>`:''}<div class="scene-stage ${m.separate?'scene-stage--separate':''}" aria-hidden="true">${panels}</div><figcaption><div class="scene-cast-names">${names}</div></figcaption></figure>`;

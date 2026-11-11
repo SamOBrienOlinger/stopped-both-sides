@@ -7,6 +7,8 @@ for(const path of ['./','./garda/']){
   await expect(page.locator('.reference-landing .perspective-hero')).toHaveCount(2);
   await expect(page.locator('.reference-landing .perspective-button-action')).toHaveText(['Explore','Explore']);
   await expect(page.locator('.reference-landing .perspective-button-action-short')).toHaveText(['Explore','Explore']);
+  const imageBackdrop=await page.locator('.reference-landing').evaluate(element=>getComputedStyle(element,'::after').backgroundImage);
+  expect(imageBackdrop).toContain('dublin-lego');
   await expect(page.locator('link[href*="uimproved.css"]')).toHaveCount(1);
   await expect(page.locator('script[src*="uimproved.mjs"]')).toHaveCount(1);
   const styles=await page.locator('.reference-landing').evaluate(element=>{
