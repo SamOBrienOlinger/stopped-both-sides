@@ -357,6 +357,14 @@ main{padding-block-start:clamp(1.5rem,3.5vw,3rem)}
  background:linear-gradient(90deg,#158580,#40b3ad 55%,#547ec2);
 }
 .progress-page progress::-moz-progress-bar{background:linear-gradient(90deg,#158580,#40b3ad 55%,#547ec2)}
+html[data-perspective="garda"] .progress>span,
+html[data-perspective="garda"] .progress-page progress::-webkit-progress-value,
+html[data-perspective="garda"] .progress-page progress::-moz-progress-bar{
+ background:linear-gradient(90deg,#284f7e,#4a78b7 55%,#7398d5);
+}
+[dir="rtl"] .paired-game .choice.selected,[dir="rtl"] .choice.selected{
+ box-shadow:inset -4px 0 0 var(--deep),0 5px 16px rgba(22,76,93,.08);
+}
 .source-card{border-inline-start:4px solid var(--deep)}
 .support-section .support-heading::after{
  content:"";
