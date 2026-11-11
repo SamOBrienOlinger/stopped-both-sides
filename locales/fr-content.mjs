@@ -2229,5 +2229,21 @@ export default {
   "m2227": "Notice Consensus",
   "m2228": "Source originale",
   "m2229": "Cette revue complète la bibliothèque de sources des scénarios et le registre distinct de révision du contenu.",
-  "m2230": "Lire la méthodologie pédagogique complète dans le README"
+  "m2230": "Lire la méthodologie pédagogique complète dans le README",
+  "m2231": "Conseils et soutien",
+  "m2232": "Conseils, plaintes et contrôle de l’activité policière",
+  "m2233": "Différents services peuvent vous aider pour les questions juridiques, les plaintes concernant le comportement des membres de la Garda et le contrôle plus général de l’activité policière. Choisissez le service qui correspond à vos besoins.",
+  "m2234": "Plaintes concernant le comportement des membres de la Garda",
+  "m2235": "Fiosrú reçoit les plaintes du public concernant le comportement des membres de la Garda. Cet organisme a remplacé GSOC le 2 avril 2025. Il évalue s’il peut traiter une plainte et quelle suite lui donner. Cela peut impliquer une enquête ou un renvoi à An Garda Síochána en vue d’une résolution.",
+  "m2236": "Comment déposer une plainte",
+  "m2237": "Contrôle indépendant de l’activité policière",
+  "m2238": "La Policing and Community Safety Authority (PCSA) a remplacé la Policing Authority et le Garda Síochána Inspectorate le 2 avril 2025. Elle supervise et évalue les services de police de la Garda, notamment leurs performances, et effectue des inspections. Pour les plaintes concernant des membres individuels de la Garda, utilisez le service de plaintes de Fiosrú.",
+  "m2239": "Découvrez le contrôle de l’activité policière",
+  "m2240": "Informations et conseils juridiques",
+  "m2241": "FLAC propose des informations juridiques et des orientations vers d’autres services, gratuitement et en toute confidentialité. Un nombre limité de rendez-vous de conseil par téléphone peut être proposé par l’intermédiaire de Citizens Information aux personnes qui n’ont pas les moyens de payer des conseils juridiques. Ces rendez-vous offrent des conseils de base ponctuels, sous réserve que la demande s’y prête et que des bénévoles soient disponibles.",
+  "m2242": "Trouver des informations et des conseils juridiques",
+  "m2243": "Liens vers les services officiels vérifiés le 11 novembre 2026. Ouvrir un lien ne dépose pas de plainte et n’envoie pas de demande de conseil.",
+  "m2244": "Après un contact réel avec la police, avez-vous besoin d’informations ou de soutien ?",
+  "m2245": "Trouvez des informations juridiques, des indications sur les plaintes concernant la Garda et des ressources sur le contrôle indépendant de l’activité policière.",
+  "m2246": "Conseils, plaintes et contrôle"
 };

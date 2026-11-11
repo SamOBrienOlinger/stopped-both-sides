@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs';
 import {createPreferences,defaults} from './preferences.mjs?v=site-languages-1';
 import {createDialogController} from './dialog.mjs';
-import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=scene-review-1';
+import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=support-resources-1';
 import {languages,languageInfo,normaliseLanguage} from '../locales/languages.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 const languageHelp='Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the whole site, including both game modes and reference pages. Irish covers the shared game.';
@@ -122,6 +122,7 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   });
   main.querySelectorAll?.('a[target="_blank"]').forEach(a=>{if(!a.querySelector('.sr-only')){const hint=document.createElement('span');hint.className='sr-only';hint.lang=info.tag;hint.dir=info.dir;hint.textContent=' ('+t('opens in a new tab')+')';a.append(hint);}});
   const anchor=document.querySelector('[data-site-switch]');if(anchor){try{const url=new URL(anchor.href);url.searchParams.set('lang',language);anchor.href=url.href;}catch{}anchor.textContent=t(anchor.textContent);}
+  document.querySelectorAll('[data-support-crosslink]').forEach(link=>{try{const url=new URL(link.href);url.searchParams.set('lang',language);link.href=url.href;}catch{}});
   const heading=main.querySelector?.('h1')?.textContent?.replace(/\s+/g,' ').trim();
   if(!irishReference&&(heading||language!=='en'))document.title=(heading==='Stopped: Both Sides'?'Stopped: Both Sides — '+t(siteRole==='garda'?'Garda perspective':'Public perspective'):(heading||t('Play both sides'))+' | Stopped: Both Sides');
   onRender(hash);

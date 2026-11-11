@@ -2229,5 +2229,21 @@ export default {
   "m2227": "Rekord Consensus",
   "m2228": "Oryginalne źródło",
   "m2229": "Ten przegląd uzupełnia bibliotekę źródeł dla scenariuszy i odrębny rejestr przeglądu treści.",
-  "m2230": "Przeczytaj pełną metodologię edukacyjną w README"
+  "m2230": "Przeczytaj pełną metodologię edukacyjną w README",
+  "m2231": "Porady i wsparcie",
+  "m2232": "Porady, skargi i nadzór nad policją",
+  "m2233": "Różne instytucje mogą pomóc w kwestiach prawnych, skargach dotyczących zachowania funkcjonariuszy Garda oraz sprawach szerszego nadzoru nad policją. Wybierz usługę odpowiadającą Twoim potrzebom.",
+  "m2234": "Skargi dotyczące zachowania funkcjonariuszy Garda",
+  "m2235": "Fiosrú przyjmuje skargi od członków społeczeństwa dotyczące zachowania funkcjonariuszy Garda. Instytucja ta zastąpiła GSOC 2 kwietnia 2025 r. Ocenia, czy może rozpatrzyć skargę i jak należy dalej postąpić. Może to obejmować dochodzenie lub przekazanie sprawy do An Garda Síochána w celu jej rozwiązania.",
+  "m2236": "Jak złożyć skargę",
+  "m2237": "Niezależny nadzór nad policją",
+  "m2238": "Policing and Community Safety Authority (PCSA) zastąpiła Policing Authority i Garda Síochána Inspectorate 2 kwietnia 2025 r. Nadzoruje i ocenia działalność policyjną Garda, w tym jej wyniki, oraz przeprowadza inspekcje. Skargi dotyczące poszczególnych funkcjonariuszy Garda kieruj do Fiosrú.",
+  "m2239": "Poznaj nadzór nad policją",
+  "m2240": "Informacje i porady prawne",
+  "m2241": "FLAC bezpłatnie i poufnie udziela informacji prawnych oraz kieruje do odpowiednich usług. Dla osób, których nie stać na poradę prawną, mogą być dostępne za pośrednictwem Citizens Information konsultacje telefoniczne; liczba terminów jest ograniczona. Są to jednorazowe, podstawowe porady, a możliwość ich uzyskania zależy od tego, czy dana sprawa nadaje się do tej formy pomocy, oraz od dostępności wolontariuszy.",
+  "m2242": "Znajdź informacje i porady prawne",
+  "m2243": "Linki do oficjalnych usług sprawdzono 11 listopada 2026 r. Otwarcie linku nie oznacza złożenia skargi ani prośby o poradę.",
+  "m2244": "Potrzebujesz informacji lub wsparcia po rzeczywistym kontakcie z policją?",
+  "m2245": "Znajdź informacje prawne, wskazówki dotyczące składania skarg na Garda oraz informacje o niezależnym nadzorze nad policją.",
+  "m2246": "Porady, skargi i nadzór"
 };

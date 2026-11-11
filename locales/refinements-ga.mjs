@@ -59,5 +59,9 @@ export const refinementIrish={
  'Garda working with a colleague':'Garda ag obair le comhghleacaí',
  'Supervising sergeant':'Sáirsint mhaoirseachta',
  'Community reviewer (member of the public)':'Athbhreithneoir pobail (duine den phobal)',
- 'Person matching the fuller description':'Duine a mheaitseálann an cur síos níos iomláine'
+ 'Person matching the fuller description':'Duine a mheaitseálann an cur síos níos iomláine',
+ "Advice & support":"Comhairle agus tacaíocht",
+ "Need information or support after a real encounter?":"An bhfuil eolas nó tacaíocht uait tar éis teagmhála sa saol fíor?",
+ "Find legal information, Garda complaint guidance and independent policing oversight.":"Faigh eolas dlíthiúil, treoir faoi ghearáin i leith Gardaí agus acmhainní faoi mhaoirseacht neamhspleách ar phóilíneacht.",
+ "Advice, complaints & oversight":"Comhairle, gearáin agus maoirseacht"
 };

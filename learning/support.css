@@ -1,0 +1,148 @@
+/* Shared support resources inherit the active perspective and reading palette. */
+.support-section{
+ margin-block:var(--section-gap,2rem);
+ scroll-margin-block-start:1.5rem;
+}
+.support-heading{max-inline-size:70ch;margin-block-end:1.25rem}
+.support-heading h2{
+ max-inline-size:38ch;
+ margin:0 0 .75rem;
+ color:var(--ink);
+ font-size:clamp(1.4rem,2.4vw,1.7rem);
+ line-height:1.35;
+}
+.support-heading p{margin:0;color:var(--muted);line-height:1.75}
+.support-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));
+ gap:clamp(1rem,2vw,1.25rem);
+ align-items:stretch;
+}
+.support-card{
+ display:flex;
+ flex-direction:column;
+ min-inline-size:0;
+ padding:var(--ui-panel-space,1.25rem);
+ border:1px solid var(--line);
+ border-block-start:3px solid var(--deep);
+ border-radius:var(--ui-radius-panel,1rem);
+ background:var(--paper,#fff);
+ color:var(--ink);
+ box-shadow:var(--ui-shadow-rest,none);
+}
+.support-card .support-kind{
+ margin:0 0 .75rem;
+ color:var(--deep);
+ font-size:.8125rem;
+ font-weight:700;
+ line-height:1.5;
+ letter-spacing:.035em;
+}
+.support-card h3{
+ margin:0 0 1rem;
+ color:var(--ink);
+ font-size:1.5rem;
+ line-height:1.3;
+ overflow-wrap:anywhere;
+}
+.support-card h3 span{
+ display:block;
+ margin-block-start:.5rem;
+ color:var(--slate);
+ font-size:.875rem;
+ font-weight:600;
+ line-height:1.6;
+ letter-spacing:normal;
+}
+.support-card .support-description{
+ max-inline-size:65ch;
+ margin:0 0 1.25rem;
+ color:var(--slate);
+ font-size:.9375rem;
+ line-height:1.8;
+ overflow-wrap:anywhere;
+}
+.support-link{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:.75rem;
+ min-inline-size:44px;
+ min-block-size:48px;
+ max-inline-size:100%;
+ margin-block-start:auto;
+ padding:.75rem .875rem;
+ border:1px solid var(--control,var(--line));
+ border-radius:var(--ui-radius-control,.75rem);
+ background:var(--pale);
+ color:var(--deep);
+ font-size:.9375rem;
+ font-weight:700;
+ line-height:var(--ui-control-line,1.5);
+ text-align:start;
+ white-space:normal;
+ overflow-wrap:anywhere;
+ text-decoration:underline;
+ text-decoration-thickness:1px;
+ text-underline-offset:.2em;
+}
+.support-link>span:first-child{min-inline-size:0}
+.support-link>[aria-hidden="true"]{flex:none;font-size:1.125rem}
+.support-link:hover{
+ background:var(--soft,var(--pale));
+ border-color:var(--deep);
+ text-decoration-thickness:2px;
+}
+.support-link:focus-visible{
+ outline:3px solid var(--focus);
+ outline-offset:3px;
+ box-shadow:0 0 0 3px var(--paper,#fff);
+}
+.support-section .support-checked{
+ max-inline-size:75ch;
+ margin:1rem 0 0;
+ color:var(--muted);
+ font-size:.875rem;
+ line-height:1.7;
+}
+
+/* The recap keeps its reading measure and lets longer labels wrap naturally. */
+.support-recap{
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:1.25rem;
+ inline-size:100%;
+ max-inline-size:64rem;
+ margin:1.5rem auto;
+ padding:var(--ui-panel-space,1.25rem);
+ border:1px solid var(--line);
+ border-inline-start:4px solid var(--deep);
+ border-radius:var(--ui-radius-panel,1rem);
+ background:var(--pale);
+ color:var(--ink);
+}
+.support-recap>div{flex:1 1 25rem;min-inline-size:0}
+.support-recap h2{margin:0 0 .5rem;font-size:1.25rem;line-height:1.4}
+.support-recap p{max-inline-size:65ch;margin:0;color:var(--slate);line-height:1.75}
+.support-recap>.primary{flex:0 1 18rem;max-inline-size:100%;margin:0}
+.reading-spacious :is(.support-section,.support-recap) p{line-height:1.95}
+
+@media(max-width:41.25rem){
+ .support-grid{grid-template-columns:minmax(0,1fr)}
+ .support-recap>.primary{flex-basis:100%;inline-size:100%}
+}
+@media(forced-colors:active){
+ .support-card,.support-recap{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
+ .support-heading :is(h2,p),.support-card :is(h3,h3 span,.support-kind,.support-description),
+ .support-section .support-checked,.support-recap :is(h2,p){color:CanvasText}
+ .support-link,.support-link:hover{background:Canvas;color:LinkText;border-color:LinkText}
+ .support-link:focus-visible{outline-color:Highlight;box-shadow:none}
+}
+@media print{
+ .support-grid{grid-template-columns:minmax(0,1fr)}
+ .support-card,.support-recap{break-inside:avoid;background:#fff;color:#000;border-color:#777;box-shadow:none}
+ .support-heading :is(h2,p),.support-card :is(h3,h3 span,.support-kind,.support-description),
+ .support-section .support-checked,.support-recap :is(h2,p){color:#000}
+ .support-link,.support-link:hover{background:#fff;color:#000;border-color:#777}
+}

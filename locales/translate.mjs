@@ -1,9 +1,9 @@
-import {messages} from './messages.mjs?v=scene-review-1';
+import {messages} from './messages.mjs?v=support-resources-1';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
 import {encounters} from '../encounters/catalog.mjs?v=scene-review-1';
 import {gaContent} from './ga-content.mjs?v=scene-review-1';
-import {refinementIrish} from './refinements-ga.mjs?v=character-story-1';
+import {refinementIrish} from './refinements-ga.mjs?v=support-resources-1';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -159,13 +159,13 @@ export {gaContent};
 // Each pack is hosted with the game and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=scene-review-1'+retry),
- ar:retry=>import('./ar-content.mjs?v=scene-review-1'+retry),
- pl:retry=>import('./pl-content.mjs?v=scene-review-1'+retry),
- ro:retry=>import('./ro-content.mjs?v=scene-review-1'+retry),
- fr:retry=>import('./fr-content.mjs?v=scene-review-1'+retry),
- es:retry=>import('./es-content.mjs?v=scene-review-1'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=scene-review-1'+retry)
+ pt:retry=>import('./pt-content.mjs?v=support-resources-1'+retry),
+ ar:retry=>import('./ar-content.mjs?v=support-resources-1'+retry),
+ pl:retry=>import('./pl-content.mjs?v=support-resources-1'+retry),
+ ro:retry=>import('./ro-content.mjs?v=support-resources-1'+retry),
+ fr:retry=>import('./fr-content.mjs?v=support-resources-1'+retry),
+ es:retry=>import('./es-content.mjs?v=support-resources-1'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=support-resources-1'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
