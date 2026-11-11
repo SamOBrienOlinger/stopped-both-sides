@@ -2230,5 +2230,21 @@ export const messages=[
   "Consensus record",
   "Original source",
   "This review complements the scenario evidence library and the separate content-review record.",
-  "Read the full educational methodology in the README"
+  "Read the full educational methodology in the README",
+  "Advice & support",
+  "Advice, complaints and policing oversight",
+  "Different services can help with legal questions, complaints about Garda conduct, and the wider oversight of policing. Choose the service that matches what you need.",
+  "Complaints about Garda conduct",
+  "Fiosrú receives public complaints about Garda conduct. It replaced GSOC on 2 April 2025. It assesses whether it can deal with a complaint and how it should proceed. This may involve investigation or referral to An Garda Síochána for resolution.",
+  "How to make a complaint",
+  "Independent policing oversight",
+  "The Policing and Community Safety Authority (PCSA) replaced the Policing Authority and Garda Síochána Inspectorate on 2 April 2025. It oversees and assesses Garda policing services, including performance and inspections. For complaints about individual Garda members, use Fiosrú’s complaints service.",
+  "Explore policing oversight",
+  "Legal information and advice",
+  "FLAC offers free, confidential legal information and referrals. Limited phone advice appointments may be available through Citizens Information for people who cannot afford legal advice. These provide once-off, basic advice and depend on suitability and volunteer availability.",
+  "Find legal information and advice",
+  "Official service links checked on 11 November 2026. Opening a link does not submit a complaint or request advice.",
+  "Need information or support after a real encounter?",
+  "Find legal information, Garda complaint guidance and independent policing oversight.",
+  "Advice, complaints & oversight"
 ];

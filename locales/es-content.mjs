@@ -2229,5 +2229,21 @@ export default {
   "m2227": "Registro de Consensus",
   "m2228": "Fuente original",
   "m2229": "Esta revisión complementa la biblioteca de fuentes de los escenarios y el registro separado de revisión del contenido.",
-  "m2230": "Leer la metodología educativa completa en el README"
+  "m2230": "Leer la metodología educativa completa en el README",
+  "m2231": "Asesoramiento y apoyo",
+  "m2232": "Asesoramiento, quejas y supervisión de la actividad policial",
+  "m2233": "Distintos servicios pueden ayudar con cuestiones jurídicas, quejas sobre la conducta de la Garda y la supervisión más amplia de la actividad policial. Elige el servicio que se ajuste a tus necesidades.",
+  "m2234": "Quejas sobre la conducta de la Garda",
+  "m2235": "Fiosrú recibe quejas del público sobre la conducta de la Garda. Sustituyó a GSOC el 2 de abril de 2025. Evalúa si puede tramitar una queja y cómo debe proceder. Esto puede implicar una investigación o la remisión de la queja a An Garda Síochána para su resolución.",
+  "m2236": "Cómo presentar una queja",
+  "m2237": "Supervisión independiente de la actividad policial",
+  "m2238": "La Policing and Community Safety Authority (PCSA) sustituyó a la Policing Authority y a la Garda Síochána Inspectorate el 2 de abril de 2025. Supervisa y evalúa los servicios policiales de la Garda, incluidos su desempeño y las inspecciones. Para quejas sobre miembros individuales de la Garda, utiliza el servicio de quejas de Fiosrú.",
+  "m2239": "Conoce la supervisión de la actividad policial",
+  "m2240": "Información y asesoramiento jurídicos",
+  "m2241": "FLAC ofrece información jurídica y derivaciones a otros servicios, de forma gratuita y confidencial. Puede haber un número limitado de citas de asesoramiento telefónico a través de Citizens Information para quienes no pueden costear asesoramiento jurídico. Estas citas ofrecen asesoramiento básico por una sola vez y dependen de la idoneidad del caso y de la disponibilidad de voluntarios.",
+  "m2242": "Encuentra información y asesoramiento jurídicos",
+  "m2243": "Enlaces a los servicios oficiales verificados el 11 de noviembre de 2026. Abrir un enlace no presenta una queja ni envía una solicitud de asesoramiento.",
+  "m2244": "¿Necesitas información o apoyo después de un encuentro real con la policía?",
+  "m2245": "Encuentra información jurídica, orientación sobre quejas relativas a la Garda y recursos de supervisión independiente de la actividad policial.",
+  "m2246": "Asesoramiento, quejas y supervisión"
 };

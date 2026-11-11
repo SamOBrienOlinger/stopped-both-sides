@@ -2229,5 +2229,21 @@ export default {
   "m2227": "Registo no Consensus",
   "m2228": "Fonte original",
   "m2229": "Esta revisão complementa a biblioteca de fontes dos cenários e o registo separado de revisão dos conteúdos.",
-  "m2230": "Leia a metodologia pedagógica completa no README"
+  "m2230": "Leia a metodologia pedagógica completa no README",
+  "m2231": "Aconselhamento e apoio",
+  "m2232": "Aconselhamento, queixas e supervisão da atividade policial",
+  "m2233": "Diferentes serviços podem ajudar com questões jurídicas, queixas sobre a conduta de membros da Garda e a supervisão mais ampla da atividade policial. Escolha o serviço que corresponde às suas necessidades.",
+  "m2234": "Queixas sobre a conduta de membros da Garda",
+  "m2235": "A Fiosrú recebe queixas do público sobre a conduta de membros da Garda. Substituiu a GSOC em 2 de abril de 2025. Avalia se pode tratar uma queixa e como deve proceder. Isso pode envolver uma investigação ou o encaminhamento da queixa para An Garda Síochána, para resolução.",
+  "m2236": "Como apresentar uma queixa",
+  "m2237": "Supervisão independente da atividade policial",
+  "m2238": "A Policing and Community Safety Authority (PCSA) substituiu a Policing Authority e a Garda Síochána Inspectorate em 2 de abril de 2025. Supervisiona e avalia os serviços policiais da Garda, incluindo o desempenho e as inspeções. Para queixas sobre membros individuais da Garda, utilize o serviço de queixas da Fiosrú.",
+  "m2239": "Conheça a supervisão da atividade policial",
+  "m2240": "Informação e aconselhamento jurídicos",
+  "m2241": "A FLAC oferece informação jurídica e encaminhamentos gratuitos e confidenciais. Poderá haver um número limitado de consultas de aconselhamento por telefone, através da Citizens Information, para pessoas que não podem pagar aconselhamento jurídico. Estas consultas oferecem aconselhamento básico, pontual, e dependem da adequação do caso e da disponibilidade de voluntários.",
+  "m2242": "Encontre informação e aconselhamento jurídicos",
+  "m2243": "Ligações para os serviços oficiais verificadas em 11 de novembro de 2026. Abrir uma ligação não apresenta uma queixa nem envia um pedido de aconselhamento.",
+  "m2244": "Precisa de informação ou de apoio após um encontro real com a polícia?",
+  "m2245": "Encontre informação jurídica, orientações sobre queixas relativas à Garda e recursos de supervisão independente da atividade policial.",
+  "m2246": "Aconselhamento, queixas e supervisão"
 };

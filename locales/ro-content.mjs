@@ -2229,5 +2229,21 @@ export default {
   "m2227": "Înregistrare Consensus",
   "m2228": "Sursă originală",
   "m2229": "Această analiză completează biblioteca de surse pentru scenarii și evidența separată a revizuirii conținutului.",
-  "m2230": "Citește metodologia educațională completă în README"
+  "m2230": "Citește metodologia educațională completă în README",
+  "m2231": "Consiliere și sprijin",
+  "m2232": "Consiliere, plângeri și supravegherea activității poliției",
+  "m2233": "Diferite servicii vă pot ajuta cu întrebări juridice, plângeri privind conduita membrilor Garda și aspecte mai ample ale supravegherii activității poliției. Alegeți serviciul care corespunde nevoilor dumneavoastră.",
+  "m2234": "Plângeri privind conduita membrilor Garda",
+  "m2235": "Fiosrú primește plângeri din partea publicului privind conduita membrilor Garda. A înlocuit GSOC la 2 aprilie 2025. Evaluează dacă poate analiza o plângere și cum ar trebui să procedeze mai departe. Acest lucru poate implica o investigație sau trimiterea plângerii către An Garda Síochána pentru soluționare.",
+  "m2236": "Cum să depuneți o plângere",
+  "m2237": "Supraveghere independentă a activității poliției",
+  "m2238": "Policing and Community Safety Authority (PCSA) a înlocuit Policing Authority și Garda Síochána Inspectorate la 2 aprilie 2025. Supraveghează și evaluează serviciile de poliție ale Garda, inclusiv performanța acestora, și efectuează inspecții. Pentru plângeri privind conduita unor membri ai Garda, apelați la serviciul de plângeri al Fiosrú.",
+  "m2239": "Aflați mai multe despre supravegherea activității poliției",
+  "m2240": "Informații și consiliere juridică",
+  "m2241": "FLAC oferă gratuit și confidențial informații juridice și îndrumări către alte servicii. Prin Citizens Information ar putea fi disponibile programări pentru consiliere telefonică, în număr limitat, pentru persoanele care nu își permit consiliere juridică. În cadrul acestora se oferă consiliere de bază, o singură dată; accesul depinde de adecvarea cazului și de disponibilitatea voluntarilor.",
+  "m2242": "Găsiți informații și consiliere juridică",
+  "m2243": "Linkurile către serviciile oficiale au fost verificate la 11 noiembrie 2026. Accesarea unui link nu înseamnă depunerea unei plângeri sau trimiterea unei solicitări de consiliere.",
+  "m2244": "Aveți nevoie de informații sau sprijin după o interacțiune reală cu poliția?",
+  "m2245": "Găsiți informații juridice, îndrumări privind plângerile referitoare la Garda și informații despre supravegherea independentă a activității poliției.",
+  "m2246": "Consiliere, plângeri și supraveghere"
 };
