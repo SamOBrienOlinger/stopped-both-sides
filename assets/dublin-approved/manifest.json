@@ -1,0 +1,132 @@
+[
+  {
+    "name": "gpo-city",
+    "approved_source": "a_highly_detailed_bright_sharp_lego_style_mini.png",
+    "source_rgb_sha256": "c2da3737e3a581f2ba061c998339b1723544018ec93f75529922d4ef5281a043",
+    "source_dimensions": [
+      1672,
+      941
+    ],
+    "outputs": [
+      {
+        "file": "gpo-city-480.webp",
+        "bytes": 38492,
+        "sha256": "7af2c619b8cba475a110ed598233df821893856288a5ce358583ab64700e70ae"
+      },
+      {
+        "file": "gpo-city-960.webp",
+        "bytes": 108332,
+        "sha256": "73b959357072b3d16a3a45dcc48bcb3c6f22ca6ee776d3d6c463bb880b650b7e"
+      },
+      {
+        "file": "gpo-city-1600.webp",
+        "bytes": 208154,
+        "sha256": "53839589e96f4e92117ddebf1a781f7e09fb17f8f755894a0b30dbea9c325f8d"
+      }
+    ]
+  },
+  {
+    "name": "liffey-bridge",
+    "approved_source": "a_highly_detailed_lego_style_brick_built_scene.png",
+    "source_rgb_sha256": "e509290f8d303c0f6341c88833f4cca15d9861492fe92595241e6030048124dd",
+    "source_dimensions": [
+      1672,
+      941
+    ],
+    "outputs": [
+      {
+        "file": "liffey-bridge-480.webp",
+        "bytes": 47138,
+        "sha256": "8a4c3687de94c427ee7788647c5cf00e6ec6b160174d51b41573e8e329a9bef3"
+      },
+      {
+        "file": "liffey-bridge-960.webp",
+        "bytes": 130624,
+        "sha256": "8e44e12937314d0b32b82407ba5c471f85b79389654aabe4e1298f8e2307ccac"
+      },
+      {
+        "file": "liffey-bridge-1600.webp",
+        "bytes": 236882,
+        "sha256": "146e4d5b81bf5a8c071c465d55dff2f89bff9c993a522ed99855db0ab19c875c"
+      }
+    ]
+  },
+  {
+    "name": "bus-stop",
+    "approved_source": "a_detailed_polished_lego_style_scene_high_detail.png",
+    "source_rgb_sha256": "ca55c10f5470a900037334fefa70d3546b586fa626a07defce13e584c1e58d2d",
+    "source_dimensions": [
+      1672,
+      941
+    ],
+    "outputs": [
+      {
+        "file": "bus-stop-480.webp",
+        "bytes": 41138,
+        "sha256": "48e408ff9a474f25d14b1f292e886a9800b5ec166c3f351fdedc559946541359"
+      },
+      {
+        "file": "bus-stop-960.webp",
+        "bytes": 105890,
+        "sha256": "7fd73439c201f434f57ae28f3b25cc3449bb3af33a2a2651f75516ff7acdf3bc"
+      },
+      {
+        "file": "bus-stop-1600.webp",
+        "bytes": 196428,
+        "sha256": "d1e2c8d8939fd646561ca58604a91b7dec4c9002244f093ac9746a7ebe0fb85a"
+      }
+    ]
+  },
+  {
+    "name": "suburban-street",
+    "approved_source": "a_crisp_highly_detailed_lego_style_3d_illustratio.png",
+    "source_rgb_sha256": "730000c4239efc6643983eee758f6c5367a70e28255c5350c159a8d9c30aba25",
+    "source_dimensions": [
+      1672,
+      941
+    ],
+    "outputs": [
+      {
+        "file": "suburban-street-480.webp",
+        "bytes": 43796,
+        "sha256": "cc09e96123e45740624ce1761263c1ad6c2e50a6523cbdec59267b9049266a4e"
+      },
+      {
+        "file": "suburban-street-960.webp",
+        "bytes": 120496,
+        "sha256": "c092589782874c41067bc360e143b08816c2eb3e3544789daafe2d01d6e1e4d7"
+      },
+      {
+        "file": "suburban-street-1600.webp",
+        "bytes": 220588,
+        "sha256": "9ad662aaa3a8b7e6ee93ed43cb0b543949fe359239a1986332c85ecc18210ea4"
+      }
+    ]
+  },
+  {
+    "name": "quayside",
+    "approved_source": "a_bright_detailed_lego_style_plastic_brick_mini.png",
+    "source_rgb_sha256": "c06e769c70982ba88bcc7aade1329a816078a067a477d423e5b043650909155f",
+    "source_dimensions": [
+      1672,
+      941
+    ],
+    "outputs": [
+      {
+        "file": "quayside-480.webp",
+        "bytes": 45934,
+        "sha256": "5622e74a470ea403af46fd09e2d3d7470606e1c48113f6fed16b236f5d96e5a4"
+      },
+      {
+        "file": "quayside-960.webp",
+        "bytes": 124592,
+        "sha256": "656203d4a273fb8f4f0cfa1bbf718132f17fea27c2b6816d9c7f57d442a00dd8"
+      },
+      {
+        "file": "quayside-1600.webp",
+        "bytes": 232520,
+        "sha256": "87f36f58d86113d35f66056a753e7ebb72d766232b8982576e9bdce291cde347"
+      }
+    ]
+  }
+]

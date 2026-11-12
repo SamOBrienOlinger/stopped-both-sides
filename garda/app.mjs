@@ -5,7 +5,7 @@ import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=lego-dublin-2';
 import {createMotion} from '../accessibility/motion.mjs?v=visible-motion-5';
-import {createEncounterMode} from '../encounters/ui.mjs?v=lego-dublin-1';
+import {createEncounterMode} from '../encounters/ui.mjs?v=approved-dublin-2';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');

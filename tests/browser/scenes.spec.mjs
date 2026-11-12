@@ -108,14 +108,14 @@ async function characterGeometry(scene){
  }
  const actors=await scene.locator('.scene-actor').evaluateAll(nodes=>nodes.map(actor=>{
   const pane=actor.closest('.scene-location'),bounds=pane.getBoundingClientRect(),box=actor.getBoundingClientRect();
-  return {character:actor.dataset.sceneCharacter,overflow:Math.max(bounds.left-box.left,box.right-bounds.right,bounds.top-box.top,box.bottom-bounds.bottom),floorGap:(bounds.bottom-box.bottom)/bounds.height,height:box.height/bounds.height};
+  return {outdoor:!!pane.dataset.approvedArt,character:actor.dataset.sceneCharacter,overflow:Math.max(bounds.left-box.left,box.right-bounds.right,bounds.top-box.top,box.bottom-bounds.bottom),floorGap:(bounds.bottom-box.bottom)/bounds.height,height:box.height/bounds.height};
  }));
  for(const actor of actors){
   expect(actor.overflow,`${actor.character} stays inside its background`).toBeLessThanOrEqual(.05);
   expect(actor.floorGap,'feet remain near the foreground floor').toBeGreaterThan(.04);
   expect(actor.floorGap,'figures are not suspended above the foreground').toBeLessThan(.08);
-  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(.5);
-  expect(actor.height,'the figure does not dominate the setting').toBeLessThan(.6);
+  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(actor.outdoor ? .23 : .5);
+  expect(actor.height,'the figure does not dominate the setting').toBeLessThan(actor.outdoor ? .30 : .6);
  }
  await expect(scene).not.toContainText('Separate reflections');
 }

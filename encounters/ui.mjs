@@ -1,10 +1,11 @@
+import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningIcon,scenarioIcon,routeTrail,completionMap,decisionGuide,topicExplorer} from './visuals.mjs?v=context-icons-1';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=scene-review-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=scene-review-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=scene-art-2';
-import {renderScene} from './scenes.mjs?v=lego-dublin-1';
+import {renderScene} from './scenes.mjs?v=approved-dublin-2';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=site-languages-1';
 import {variationFor,remainingDecisions,learningStatus,topicGroups} from './presentation.mjs';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -74,9 +75,8 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  function perspectiveChoice({primary=false}={}){
   const heading=primary?'h1':'h2';
   const heroes=roles.map(role=>{
-   const image=new URL(`../assets/heroes/${role}-960.webp?v=irish-streetlights-1`,import.meta.url).href;
-   const srcset=[480,960,1600].map(width=>`${new URL(`../assets/heroes/${role}-${width}.webp?v=irish-streetlights-1`,import.meta.url).href} ${width}w`).join(', ');
-   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-label">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-short">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
+   const {src:image,srcset}=backgroundImage(role);
+   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-label">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-short">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
   }).join('');
   return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title"><div class="landing-instructions"><${heading} id="paired-title">Which side will you try first?</${heading}><p class="landing-purpose">Know your rights. Understand fair decisions.</p><p class="small-note">Read a situation, choose a response, then find out why it matters.</p></div><div class="perspective-heroes overlapping-heroes">${heroes}</div></section>`;
  }
