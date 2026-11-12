@@ -1,0 +1,89 @@
+name: Full scene and character sweep (isolated draft)
+on:
+  push:
+    branches: ['qa/scene-caption-sweep-20261112']
+permissions:
+  contents: read
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: node qa/apply-draft.mjs
+      - name: Check exact candidate and save source snapshot
+        run: |
+          mkdir -p qa-results
+          tar --exclude=.git --exclude=qa-results -czf qa-results/candidate-source.tar.gz .
+          npm run check 2>&1 | tee qa-results/code-check.log
+          npm test 2>&1 | tee qa-results/unit-tests.log
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: caption-sweep-source-and-code
+          path: qa-results/
+          retention-days: 7
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        group: [core, stress]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: node qa/apply-draft.mjs
+      - name: Sweep all actual nodes and 81 character pairs
+        run: node qa/run-sweep.mjs ${{ matrix.browser }} ${{ matrix.group }}
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: caption-sweep-${{ matrix.browser }}-${{ matrix.group }}
+          path: qa-results/
+          retention-days: 7
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: node qa/apply-draft.mjs
+      - name: Run unchanged full-site browser regression tests against the draft
+        run: npm run test:browser -- --project=${{ matrix.browser }}
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: caption-regression-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
