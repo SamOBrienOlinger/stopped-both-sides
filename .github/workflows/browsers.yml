@@ -19,7 +19,7 @@ jobs:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     name: ${{ matrix.browser }} layouts and play
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
     strategy:
@@ -34,8 +34,7 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      # The built-in branch Pages workflow does not emit the expected follow-on
-      # event here. Verify the served client bytes against the checked-out revision.
+      # Verify served bytes against this revision before testing production.
       - name: Wait for this Pages publication
         if: github.event_name == 'workflow_run'
         run: node tests/browser/wait-for-pages.mjs

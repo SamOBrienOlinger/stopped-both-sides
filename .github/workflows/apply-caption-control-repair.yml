@@ -39,11 +39,10 @@ jobs:
            p=Path(name);s=p.read_text().replace('caption-anchors-1','caption-controls-2')
            if name.endswith('index.html'):s=s.replace('uimproved.css?v=lego-dublin-1','uimproved.css?v=caption-controls-2')
            p.write_text(s)
-          p=Path('.github/workflows/browsers.yml');p.write_text(p.read_text().replace('timeout-minutes: 15','timeout-minutes: 30'))
           PY
           npm run check
           npm test
-      - name: Commit only the repair branch, never main or the backup
+      - name: Commit application files only to the repair branch
         id: save
         shell: bash
         run: |
@@ -51,8 +50,7 @@ jobs:
           test "$GITHUB_REF" = refs/heads/fix/captions-firefox-20261112
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git rm .github/workflows/diagnose-caption-button.yml .github/workflows/apply-caption-control-repair.yml
-          git add encounters/scene-layout.mjs encounters/scene-labels.css encounters/scene-labels.mjs encounters/scenes.mjs encounters/ui.mjs app.mjs garda/app.mjs index.html garda/index.html assets/brand/uimproved.css .github/workflows/browsers.yml
+          git add encounters/scene-layout.mjs encounters/scene-labels.css encounters/scene-labels.mjs encounters/scenes.mjs encounters/ui.mjs app.mjs garda/app.mjs index.html garda/index.html assets/brand/uimproved.css
           git commit -m 'Integrate scene-anchored captions and fix Firefox button overflow'
           git push origin HEAD:refs/heads/fix/captions-firefox-20261112
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
