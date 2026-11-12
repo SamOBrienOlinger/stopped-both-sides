@@ -1,0 +1,90 @@
+name: Integrate and verify caption and button repairs
+on:
+  push:
+    branches: [fix/captions-firefox-20261112]
+    paths: [.github/workflows/apply-caption-control-repair.yml]
+permissions:
+  contents: read
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.save.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Apply reviewed draft and bounded button highlight
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/fix/captions-firefox-20261112
+          git fetch --depth=1 origin d5a7341bb33d31670e8ffd31e0cadf41006506b6
+          git show d5a7341bb33d31670e8ffd31e0cadf41006506b6:qa/apply-caption-draft.mjs > /tmp/apply-caption-draft.mjs
+          node /tmp/apply-caption-draft.mjs
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('assets/brand/uimproved.css');s=p.read_text()
+          old=' inset:-30% auto -30% -45%;\n inline-size:36%;\n transform:translateX(-160%) skewX(-18deg);\n background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);\n pointer-events:none;\n transition:transform .8s var(--ui-polish-ease);'
+          new=' /* Keep decoration within the control: the old oversized shine inflated Firefox scrollHeight. */\n inset:0;\n inline-size:auto;\n transform:none;\n opacity:0;\n background:linear-gradient(120deg,rgba(255,255,255,.18),transparent 65%);\n pointer-events:none;\n transition:opacity .45s var(--ui-polish-ease);'
+          assert s.count(old)==1
+          s=s.replace(old,new).replace('.primary:not(:disabled):hover::after{transform:translateX(650%) skewX(-18deg)}','.primary:not(:disabled):hover::after{opacity:1}')
+          p.write_text(s)
+          for name in ['encounters/scenes.mjs','encounters/ui.mjs','app.mjs','garda/app.mjs','index.html','garda/index.html']:
+           p=Path(name);s=p.read_text().replace('caption-anchors-1','caption-controls-2')
+           if name.endswith('index.html'):s=s.replace('uimproved.css?v=lego-dublin-1','uimproved.css?v=caption-controls-2')
+           p.write_text(s)
+          p=Path('.github/workflows/browsers.yml');p.write_text(p.read_text().replace('timeout-minutes: 15','timeout-minutes: 30'))
+          PY
+          npm run check
+          npm test
+      - name: Commit only the repair branch, never main or the backup
+        id: save
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/fix/captions-firefox-20261112
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/diagnose-caption-button.yml .github/workflows/apply-caption-control-repair.yml
+          git add encounters/scene-layout.mjs encounters/scene-labels.css encounters/scene-labels.mjs encounters/scenes.mjs encounters/ui.mjs app.mjs garda/app.mjs index.html garda/index.html assets/brand/uimproved.css .github/workflows/browsers.yml
+          git commit -m 'Integrate scene-anchored captions and fix Firefox button overflow'
+          git push origin HEAD:refs/heads/fix/captions-firefox-20261112
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  browsers:
+    needs: apply
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.apply.outputs.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Full regression and exhaustive caption matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run test:browser -- --project=${{ matrix.browser }} | tee browser-tests.log
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: repaired-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+            browser-tests.log
+          retention-days: 7
