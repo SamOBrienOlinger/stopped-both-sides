@@ -4,8 +4,24 @@ on:
     branches: [uimproved]
     paths:
       - .github/workflows/verify-approved-backgrounds.yml
+      - assets/dublin-approved/**
+      - assets/brand/approved-backgrounds.css
+      - encounters/backgrounds.mjs
+      - encounters/scenes.mjs
+      - encounters/ui.mjs
+      - index.html
+      - garda/index.html
+      - tests/browser/approved-backgrounds.spec.mjs
+      - tests/browser/approved-shell.spec.mjs
+      - tests/browser/uimproved.spec.mjs
 permissions:
   contents: read
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: approved-backgrounds-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   code:
     runs-on: ubuntu-latest
@@ -38,7 +54,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: npm run test:browser -- approved-backgrounds.spec.mjs approved-shell.spec.mjs scenes.spec.mjs characters.spec.mjs --project=${{ matrix.browser }} | tee browser-tests.log
+      - run: npm run test:browser -- approved-backgrounds.spec.mjs approved-shell.spec.mjs scenes.spec.mjs characters.spec.mjs uimproved.spec.mjs --project=${{ matrix.browser }} | tee browser-tests.log
       - uses: actions/upload-artifact@v5
         if: always()
         with:
