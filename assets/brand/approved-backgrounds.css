@@ -5,15 +5,13 @@
 }
 .scene-location[data-approved-art],.scene-stage--outdoor-split>.scene-location{aspect-ratio:16/9}
 .scene-location[data-approved-art]>.scene-backdrop{object-fit:contain;object-position:center;transform:none}
-.scene-location[data-approved-art]>.scene-actor{bottom:6%;width:16%;left:auto;right:auto}
-.scene-location[data-approved-art="suburban-street"]>.scene-actor--public{left:27%}
-.scene-location[data-approved-art="suburban-street"]>.scene-actor--garda{left:46%}
-.scene-location[data-approved-art="bus-stop"]>.scene-actor{width:15%}
-.scene-location[data-approved-art="bus-stop"]>.scene-actor--public{left:16%}
-.scene-location[data-approved-art="bus-stop"]>.scene-actor--garda{left:33%}
-.scene-location[data-approved-art="quayside"]>.scene-actor{width:14%}
-.scene-location[data-approved-art="quayside"]>.scene-actor--public{left:30%}
-.scene-location[data-approved-art="quayside"]>.scene-actor--garda{left:47%}
+.scene-location[data-approved-art]>.scene-actor{bottom:6%;width:28%;left:auto;right:auto}
+.scene-location[data-approved-art="suburban-street"]>.scene-actor--public{left:20%}
+.scene-location[data-approved-art="suburban-street"]>.scene-actor--garda{left:36%}
+.scene-location[data-approved-art="bus-stop"]>.scene-actor--public{left:10%}
+.scene-location[data-approved-art="bus-stop"]>.scene-actor--garda{left:28%}
+.scene-location[data-approved-art="quayside"]>.scene-actor--public{left:24%}
+.scene-location[data-approved-art="quayside"]>.scene-actor--garda{left:42%}
 /* Mixed reflections retain both locations without portrait crops. */
 .scene-stage--outdoor-split>.scene-location:not([data-approved-art])>.scene-actor{width:32%;left:34%;right:auto;bottom:6%}
 .scene-stage--outdoor-split>.scene-location[data-approved-art]>.scene-actor{bottom:6%}

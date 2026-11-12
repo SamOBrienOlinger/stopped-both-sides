@@ -13,7 +13,7 @@ for(const role of ['public','garda'])test(`${role}: approved landing images load
   await page.locator('.reference-landing').screenshot({path:info.outputPath(`landing-${role}-${width}.png`)});
  }
 });
-for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.27,.62],['public-search','bus-stop',.16,.48],['public-fair-treatment','quayside',.30,.61]])test(`${art}: chosen characters stay within pavement anchors`,async({page},info)=>{
+for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.20,.64],['public-search','bus-stop',.10,.56],['public-fair-treatment','quayside',.24,.70]])test(`${art}: chosen characters stay within pavement anchors`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
  for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:900});await page.goto('./'+stateHash(startEncounter(id,'public',{cast})));
@@ -24,7 +24,7 @@ for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.27,.
    const r=p.getBoundingClientRect();return [...p.querySelectorAll('.scene-actor')].map(a=>{const b=a.getBoundingClientRect();return {left:(b.left-r.left)/r.width,right:(b.right-r.left)/r.width,foot:(r.bottom-b.bottom)/r.height,height:b.height/r.height}});
   });
   expect(bounds).toHaveLength(2);
-  for(const a of bounds){expect(a.left).toBeGreaterThanOrEqual(leftMin-.002);expect(a.right).toBeLessThanOrEqual(rightMax+.002);expect(a.foot).toBeCloseTo(.06,2);expect(a.height).toBeGreaterThan(.23);expect(a.height).toBeLessThan(.30)}
+  for(const a of bounds){expect(a.left).toBeGreaterThanOrEqual(leftMin-.002);expect(a.right).toBeLessThanOrEqual(rightMax+.002);expect(a.foot).toBeCloseTo(.06,2);expect(a.height).toBeGreaterThan(.46);expect(a.height).toBeLessThan(.51)}
   await page.locator('.story>.encounter-scene').screenshot({path:info.outputPath(`${art}-${width}.png`)});
   await page.locator('[data-action="paired-switch"]').click();await expect(page.locator('.story [data-scene-character="public-6"]')).toHaveCount(1);await expect(page.locator('.story [data-scene-character="garda-9"]')).toHaveCount(1);
  }

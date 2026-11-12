@@ -114,8 +114,8 @@ async function characterGeometry(scene){
   expect(actor.overflow,`${actor.character} stays inside its background`).toBeLessThanOrEqual(.05);
   expect(actor.floorGap,'feet remain near the foreground floor').toBeGreaterThan(.04);
   expect(actor.floorGap,'figures are not suspended above the foreground').toBeLessThan(.08);
-  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(actor.outdoor ? .23 : .5);
-  expect(actor.height,'the figure does not dominate the setting').toBeLessThan(actor.outdoor ? .30 : .6);
+  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(actor.outdoor ? .46 : .5);
+  expect(actor.height,'the figure does not dominate the setting').toBeLessThan(actor.outdoor ? .51 : .6);
  }
  await expect(scene).not.toContainText('Separate reflections');
 }
