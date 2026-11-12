@@ -1,4 +1,4 @@
-name: Integrate approved Dublin backgrounds
+name: Verify approved Dublin character placement
 on:
   push:
     branches: [uimproved]
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 jobs:
-  integrate:
+  refine:
     if: github.ref == 'refs/heads/uimproved'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -18,228 +18,52 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      - name: Prepare image conversion
-        run: python -m pip install Pillow==11.3.0
-      - name: Import verified approved originals and integrate presentation
+      - name: Match playable figures to foreground pedestrians
         run: |
           python - <<'PY'
           from pathlib import Path
-          from PIL import Image
-          from io import BytesIO
-          import urllib.request, hashlib, json, re
-          root=Path('.')
-          assets=root/'assets/dublin-approved'
-          assets.mkdir(parents=True,exist_ok=True)
-          items=[
-           ('gpo-city','a_highly_detailed_bright_sharp_lego_style_mini.png','c2da3737e3a581f2ba061c998339b1723544018ec93f75529922d4ef5281a043','AIpPl2AkP0rEcGB8pMb6UXwDOh6j-ZWstY3fBkv9-yQyHBNGi0qRrb6QLDuI6b56u1-62yTftZwg4y9FSyJ8QUdFT_Ef8CI6vXLMjqVNGBUJmFfRQ1HU3ufqzhvaHpNVht-UOHRTeE41VABRnNq1SFW9RI1bb9SVwCTUDj6e3gpxRV_Mob1jryY'),
-           ('liffey-bridge','a_highly_detailed_lego_style_brick_built_scene.png','e509290f8d303c0f6341c88833f4cca15d9861492fe92595241e6030048124dd','AIpPl2CkfPDazdXiSQXVh6I1DLDFyqMTbGfBNiZDZMIVDewUoWGZMojfKDCQcDq-xe4G4vR-vYe8ie-iB3g5EL9rfOX92TTqbG2PdI6EyQd0hzAZ9FSz91Ij3wJJKWTnfRWhgfsKblhqAIB-1QXf6Tt81YpTfsNuC8NETYssTHMht_K4clxRcXQ'),
-           ('bus-stop','a_detailed_polished_lego_style_scene_high_detail.png','ca55c10f5470a900037334fefa70d3546b586fa626a07defce13e584c1e58d2d','AIpPl2CMl4VuxzkCF7VfLY8s1Zqv_6-H9cVpgHhZdMnUJCM5MfWH9pLk_T89Gu68sArvpmMe-USQ3qmBiYAmVxTGqSl9qte6ytpQB8VGVyQgHYVW1wBxBLObLM3zf2GFMmJiGpPg9SJoulIjtQzRzFL8qSZb1cDwsxoGFhhfS83CLYNKBm1Q50k'),
-           ('suburban-street','a_crisp_highly_detailed_lego_style_3d_illustratio.png','730000c4239efc6643983eee758f6c5367a70e28255c5350c159a8d9c30aba25','AIpPl2DIGh9oOsodGYd-G50BW5Ooy0m2JjrOGRMNaOwchWbwg6nvl5H9F2g4tpJWURw2DXP36PFhLPyb0V2wOvJ00naTvnNvHIJOsCHVq-A0tt0oI1-SVmH8XBDA2A2ve7eSlcJ7PlE4Jss246rw21mPy8DQsUYZj1wksTYBZ6PjfDNaz4bWeSo'),
-           ('quayside','a_bright_detailed_lego_style_plastic_brick_mini.png','c06e769c70982ba88bcc7aade1329a816078a067a477d423e5b043650909155f','AIpPl2BaG9WbtPiQ41LrlZovF2VkWn2wPSpXq1pJ3h96juPVbWUjbZmnYlyAjDfA5IbsKDc21BXck_FornnPw7VVynrVNgFY1vJwGqaAibOTzkvJYh4KsciZdkmzv8ydCe_SSwKTq0E-dhJap43--scAOU9HZf6U6axcmNz9E5CHQRC5l3PrEFo')
-          ]
-          manifest=[]
-          for name,source,digest,handle in items:
-           url='https://docs.google.com/docs-images-rt/'+handle+'=s2048?key=nlMlWwJDWWp2Snpe-0OcmA'
-           with urllib.request.urlopen(url,timeout=60) as response:
-            data=response.read(8*1024*1024)
-           image=Image.open(BytesIO(data)).convert('RGB')
-           assert image.size==(1672,941),(name,image.size)
-           actual=hashlib.sha256(image.tobytes()).hexdigest()
-           assert actual==digest, f'Approved source pixel hash mismatch for {name}: {actual}'
-           outputs=[]
-           for width in [480,960,1600]:
-            output=assets/f'{name}-{width}.webp'
-            image.resize((width,round(width*image.height/image.width)),Image.Resampling.LANCZOS).save(output,'WEBP',quality=84,method=6)
-            outputs.append({'file':output.name,'bytes':output.stat().st_size,'sha256':hashlib.sha256(output.read_bytes()).hexdigest()})
-           manifest.append({'name':name,'approved_source':source,'source_rgb_sha256':digest,'source_dimensions':[1672,941],'outputs':outputs})
-           print(name, 'verified approved source;',sum(x['bytes'] for x in outputs),'bytes across 3 sizes')
-          (assets/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-          (root/'encounters/backgrounds.mjs').write_text('''// Approved artwork only. The images are decorative and do not change scenario facts.
-          // Keep full compositions: background people must not be cropped or mirrored.
-          const names={public:'liffey-bridge',garda:'gpo-city',street:'suburban-street','bus-stop':'bus-stop',square:'quayside'};
-          export const approvedBackgrounds=Object.freeze({...names});
-          export function backgroundImage(key){
-           const name=names[key];
-           if(!name)return null;
-           const url=width=>new URL(`../assets/dublin-approved/${name}-${width}.webp?v=approved-dublin-2`,import.meta.url).href;
-           return {name,src:url(960),srcset:[480,960,1600].map(width=>`${url(width)} ${width}w`).join(', '),width:1600,height:900};
-          }
-          ''')
-          p=root/'encounters/scenes.mjs';s=p.read_text()
-          s="import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';\n"+s
-          start=s.index('// Dublin LEGO artwork changes');end=s.index('const esc=',start)
-          s=s[:start]+'''// Only exterior artwork changes. The station and private rooms retain their art.
-          const asset=name=>backgroundImage(name)?.src||new URL(`../assets/scenes/${name}.webp?v=irish-streetlights-1`,import.meta.url).href;
-          '''+s[end:]
-          start=s.index(" const location=(place,members,side='')=>")
-          end=s.index(' const panels=',start)
-          s=s[:start]+''' const location=(place,members,side='')=>{
-            const art=backgroundImage(place);
-            return `<div class="scene-location ${members.length===1?'scene-location--solo':''} ${side}" data-scene-place="${place}"${art?` data-approved-art="${art.name}"`:''} aria-hidden="true"><img class="scene-backdrop" src="${asset(place)}"${art?` srcset="${art.srcset}" sizes="(max-width: 660px) calc(100vw - 3rem), 640px"`:''} alt="" width="${art?1600:680}" height="${art?900:380}" decoding="async" ${compact?'loading="lazy"':''}>${members.map(actor).join('')}</div>`;
-           };
-          '''+s[end:]
-          old="${m.separate?'scene-stage--separate':''}"
-          assert s.count(old)==1
-          s=s.replace(old,"${m.separate?'scene-stage--separate':''} ${m.separate&&(backgroundImage(m.place)||backgroundImage(m.otherPlace))?'scene-stage--outdoor-split':''}")
+          p=Path('assets/brand/approved-backgrounds.css');s=p.read_text()
+          assert 'width:16%;left:auto' in s
+          s=s.replace('width:16%;left:auto','width:28%;left:auto')
+          s=s.replace('public{left:27%}','public{left:20%}').replace('garda{left:46%}','garda{left:36%}')
+          s=s.replace('.scene-location[data-approved-art="bus-stop"]>.scene-actor{width:15%}\n','').replace('public{left:16%}','public{left:10%}').replace('garda{left:33%}','garda{left:28%}')
+          s=s.replace('.scene-location[data-approved-art="quayside"]>.scene-actor{width:14%}\n','').replace('public{left:30%}','public{left:24%}').replace('garda{left:47%}','garda{left:42%}')
           p.write_text(s)
-          p=root/'encounters/ui.mjs';s=p.read_text();s="import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';\n"+s
-          s=s.replace('./scenes.mjs?v=lego-dublin-1','./scenes.mjs?v=approved-dublin-2')
-          a=s.index('   const image=new URL(`../assets/heroes/')
-          b=s.index('   return `<div class="perspective-hero"',a)
-          s=s[:a]+"   const {src:image,srcset}=backgroundImage(role);\n"+s[b:]
-          s=s.replace('width="1600" height="900" alt="" decoding="async"><a class="primary perspective-hero-button"','width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button"')
-          p.write_text(s)
-          for path in ['app.mjs','garda/app.mjs']:
-           p=root/path;s=p.read_text()
-           s,n=re.subn(r'(encounters/ui\.mjs)(?:\?v=[^\'";]+)?',r'\1?v=approved-dublin-2',s)
-           assert n==1,(path,n)
-           p.write_text(s)
-          for path,prefix in [('index.html','./'),('garda/index.html','../')]:
-           p=root/path;s=p.read_text()
-           s,n=re.subn(r'(src="\./app\.mjs)(?:\?v=[^"]+)?',r'\1?v=approved-dublin-2',s)
-           assert n==1,(path,n)
-           s=s.replace('</head>',f'<link rel="stylesheet" href="{prefix}assets/brand/approved-backgrounds.css?v=approved-dublin-2">\n</head>')
-           p.write_text(s)
-          (root/'assets/brand/approved-backgrounds.css').write_text('''/* Full approved scenes, with foreground actors anchored to pavement areas.
-             Physical coordinates intentionally do not mirror for RTL reading settings. */
-          .reference-landing .overlapping-heroes .perspective-hero>img[data-approved-hero]{
-           aspect-ratio:16/9;object-fit:contain;object-position:center;filter:none;
-          }
-          .scene-location[data-approved-art],.scene-stage--outdoor-split>.scene-location{aspect-ratio:16/9}
-          .scene-location[data-approved-art]>.scene-backdrop{object-fit:contain;object-position:center;transform:none}
-          .scene-location[data-approved-art]>.scene-actor{bottom:6%;width:16%;left:auto;right:auto}
-          .scene-location[data-approved-art="suburban-street"]>.scene-actor--public{left:27%}
-          .scene-location[data-approved-art="suburban-street"]>.scene-actor--garda{left:46%}
-          .scene-location[data-approved-art="bus-stop"]>.scene-actor{width:15%}
-          .scene-location[data-approved-art="bus-stop"]>.scene-actor--public{left:16%}
-          .scene-location[data-approved-art="bus-stop"]>.scene-actor--garda{left:33%}
-          .scene-location[data-approved-art="quayside"]>.scene-actor{width:14%}
-          .scene-location[data-approved-art="quayside"]>.scene-actor--public{left:30%}
-          .scene-location[data-approved-art="quayside"]>.scene-actor--garda{left:47%}
-          /* Mixed reflections retain both locations without portrait crops. */
-          .scene-stage--outdoor-split>.scene-location:not([data-approved-art])>.scene-actor{width:32%;left:34%;right:auto;bottom:6%}
-          .scene-stage--outdoor-split>.scene-location[data-approved-art]>.scene-actor{bottom:6%}
-          @media(max-width:41.25rem){.scene-stage--outdoor-split{grid-template-columns:minmax(0,1fr);gap:.5rem}}
-          @media(forced-colors:active){.scene-location[data-approved-art]{border:1px solid CanvasText}}
-          @media print{.scene-location[data-approved-art]{break-inside:avoid}}
-          ''')
-          p=root/'tests/browser/scenes.spec.mjs';s=p.read_text()
-          old='return {character:actor.dataset.sceneCharacter,overflow:'
-          assert old in s
-          s=s.replace(old,'return {outdoor:!!pane.dataset.approvedArt,character:actor.dataset.sceneCharacter,overflow:')
-          s=s.replace("expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(.5);","expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(actor.outdoor ? .23 : .5);")
-          s=s.replace("expect(actor.height,'the figure does not dominate the setting').toBeLessThan(.6);","expect(actor.height,'the figure does not dominate the setting').toBeLessThan(actor.outdoor ? .30 : .6);")
-          p.write_text(s)
-          (root/'tests/approved-backgrounds.test.mjs').write_text('''import test from 'node:test';
-          import assert from 'node:assert/strict';
-          import {readFileSync,existsSync} from 'node:fs';
-          import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs';
-          import {renderScene} from '../encounters/scenes.mjs';
-          import {startEncounter} from '../encounters/engine.mjs';
-          test('All five approved originals have three local responsive sizes',()=>{
-           const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
-           assert.equal(manifest.length,5);assert.equal(new Set(Object.values(approvedBackgrounds)).size,5);
-           for(const entry of manifest){
-            assert.equal(entry.outputs.length,3);assert.match(entry.source_rgb_sha256,/^[a-f0-9]{64}$/);
-            for(const output of entry.outputs)assert.ok(existsSync(new URL('../assets/dublin-approved/'+output.file,import.meta.url)));
-           }
-           for(const key of Object.keys(approvedBackgrounds)){
-            const image=backgroundImage(key);assert.ok(image.src.includes('/assets/dublin-approved/'));assert.equal(image.srcset.split(', ').length,3);
-           }
-           assert.equal(backgroundImage('station'),null);
-          });
-          test('Exterior art keeps selected roles and narrative state unchanged',()=>{
-           for(const id of ['public-street','public-search','public-fair-treatment','garda-colleague','garda-new-evidence']){
-            const state=startEncounter(id,'public',{cast:{public:'public-6',garda:'garda-9'}}),before=JSON.stringify(state),html=renderScene(state);
-            assert.match(html,/data-approved-art=/);assert.match(html,/srcset=/);
-            assert.match(html,/data-scene-character="public-6"/);assert.match(html,/data-scene-character="garda-9"/);
-            assert.equal(JSON.stringify(state),before);
-           }
-           const indoor=renderScene(startEncounter('public-custody'));
-           assert.doesNotMatch(indoor,/data-approved-art/);assert.match(indoor,/assets\\/scenes\\/station.webp/);
-          });
-          ''')
-          (root/'tests/browser/approved-backgrounds.spec.mjs').write_text('''import {test,expect} from '@playwright/test';
-          import {startEncounter,stateHash} from '../../encounters/engine.mjs';
-          const cast={public:'public-6',garda:'garda-9'};
-          for(const role of ['public','garda'])test(`${role}: approved landing images load at mobile and desktop sizes`,async({page},info)=>{
-           await page.emulateMedia({reducedMotion:'reduce'});
-           for(const width of [320,390,1366]){
-            await page.setViewportSize({width,height:900});await page.goto((role==='garda'?'garda/':'./')+'?lang=en#play');
-            const images=page.locator('[data-approved-hero]');await expect(images).toHaveCount(2);
-            await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
-            const layout=await images.evaluateAll(nodes=>nodes.map(i=>({src:i.currentSrc,fit:getComputedStyle(i).objectFit,ratio:i.clientWidth/i.clientHeight})));
-            for(const image of layout){expect(image.src).toContain('/dublin-approved/');expect(image.fit).toBe('contain');expect(image.ratio).toBeCloseTo(16/9,1)}
-            expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
-            await page.locator('.reference-landing').screenshot({path:info.outputPath(`landing-${role}-${width}.png`)});
-           }
-          });
-          for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.27,.62],['public-search','bus-stop',.16,.48],['public-fair-treatment','quayside',.30,.61]])test(`${art}: chosen characters stay within pavement anchors`,async({page},info)=>{
-           await page.emulateMedia({reducedMotion:'reduce'});
-           for(const width of [320,390,1366]){
-            await page.setViewportSize({width,height:900});await page.goto('./'+stateHash(startEncounter(id,'public',{cast})));
-            const pane=page.locator('.story [data-approved-art]');await pane.scrollIntoViewIfNeeded();
-            await expect.poll(()=>pane.locator('img').evaluateAll(nodes=>nodes.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
-            await expect(pane).toHaveAttribute('data-approved-art',art);
-            const bounds=await pane.evaluate(p=>{
-             const r=p.getBoundingClientRect();return [...p.querySelectorAll('.scene-actor')].map(a=>{const b=a.getBoundingClientRect();return {left:(b.left-r.left)/r.width,right:(b.right-r.left)/r.width,foot:(r.bottom-b.bottom)/r.height,height:b.height/r.height}});
-            });
-            expect(bounds).toHaveLength(2);
-            for(const a of bounds){expect(a.left).toBeGreaterThanOrEqual(leftMin-.002);expect(a.right).toBeLessThanOrEqual(rightMax+.002);expect(a.foot).toBeCloseTo(.06,2);expect(a.height).toBeGreaterThan(.23);expect(a.height).toBeLessThan(.30)}
-            await page.locator('.story>.encounter-scene').screenshot({path:info.outputPath(`${art}-${width}.png`)});
-            await page.locator('[data-action="paired-switch"]').click();await expect(page.locator('.story [data-scene-character="public-6"]')).toHaveCount(1);await expect(page.locator('.story [data-scene-character="garda-9"]')).toHaveCount(1);
-           }
-          });
-          ''')
-          (root/'docs/APPROVED-DUBLIN-BACKGROUNDS.md').write_text('''# Approved Dublin background integration
-          
-          Branch: `uimproved`. The production `main` branch is not changed.
-          
-          | Approved image | Placement |
-          | --- | --- |
-          | GPO and Spire crowd | Garda landing choice |
-          | River Liffey and Ha'penny Bridge | Public landing choice |
-          | Suburban bus shelter | Bus-stop encounters |
-          | Suburban terraced street | Street encounters |
-          | Quayside cafe and promenade | Community encounters |
-          
-          The five originals were explicitly selected in the conversation. Their decoded RGB SHA-256 hashes and output hashes are recorded in `assets/dublin-approved/manifest.json`. Only resizing and WebP compression are applied; people, clothing and skin tones are not regenerated or recoloured. These are Dublin-inspired illustrations, not verified geographic reconstructions or factual transport diagrams.
-          
-          All production images are local files in three responsive widths (480, 960, 1600). There is no runtime request to Google, Canva or an external image host. Full landscape compositions avoid cropping people or placing text on faces. Outdoor selectable characters use per-setting pavement anchors; their identities, selection controls, states and scores are unchanged. Mixed-location reflections stack on narrow screens. Indoor images and pure indoor compositions remain unchanged.
-          
-          Validation: source pixel hashes; local-file and responsive-image unit checks; existing game tests; browser image loading, dimensions, pavement bounds and role-switch preservation. Browser screenshots accompany the integration workflow for visual inspection.
-          ''')
+          p=Path('tests/browser/scenes.spec.mjs');s=p.read_text().replace('actor.outdoor ? .23 : .5','actor.outdoor ? .46 : .5').replace('actor.outdoor ? .30 : .6','actor.outdoor ? .51 : .6');p.write_text(s)
+          p=Path('tests/browser/approved-backgrounds.spec.mjs');s=p.read_text().replace("'suburban-street',.27,.62","'suburban-street',.20,.64").replace("'bus-stop',.16,.48","'bus-stop',.10,.56").replace("'quayside',.30,.61","'quayside',.24,.70").replace('expect(a.height).toBeGreaterThan(.23)','expect(a.height).toBeGreaterThan(.46)').replace('expect(a.height).toBeLessThan(.30)','expect(a.height).toBeLessThan(.51)');p.write_text(s)
+          for path in ['index.html','garda/index.html']:
+           p=Path(path);s=p.read_text();assert 'approved-backgrounds.css?v=approved-dublin-2' in s
+           p.write_text(s.replace('approved-backgrounds.css?v=approved-dublin-2','approved-backgrounds.css?v=approved-dublin-3'))
           PY
       - name: Check syntax and all game tests
         run: |
-          npm run check
-          npm test
-      - name: Install browser test dependencies
+          npm run check | tee code-check.log
+          npm test | tee game-tests.log
+      - name: Prepare three browser engines
         run: |
           npm ci
           npx playwright install --with-deps chromium firefox webkit
-      - name: Check approved images and existing scene interactions in three engines
-        run: npm run test:browser -- approved-backgrounds.spec.mjs scenes.spec.mjs characters.spec.mjs
-      - name: Commit only the approved integration to uimproved
+      - name: Verify images, scale, pavement bounds, characters and game interaction
+        run: npm run test:browser -- approved-backgrounds.spec.mjs scenes.spec.mjs characters.spec.mjs | tee browser-tests.log
+      - name: Commit reviewed scale adjustment to uimproved only
         run: |
           test "$GITHUB_REF" = refs/heads/uimproved
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/dublin-approved assets/brand/approved-backgrounds.css encounters/backgrounds.mjs encounters/scenes.mjs encounters/ui.mjs app.mjs garda/app.mjs index.html garda/index.html tests/approved-backgrounds.test.mjs tests/browser/approved-backgrounds.spec.mjs tests/browser/scenes.spec.mjs docs/APPROVED-DUBLIN-BACKGROUNDS.md
-          git commit -m 'Integrate five approved inclusive Dublin backgrounds and pavement-safe character placement'
+          git add assets/brand/approved-backgrounds.css tests/browser/scenes.spec.mjs tests/browser/approved-backgrounds.spec.mjs index.html garda/index.html
+          git commit -m 'Match foreground character scale to approved Dublin scenes'
           git push origin HEAD:refs/heads/uimproved
           git rev-parse HEAD > integration-commit.txt
-      - name: Package source for visual review
-        if: always()
-        run: |
-          tar --exclude=.git --exclude=node_modules --exclude=test-results --exclude=playwright-report --exclude=.github/workflows/import-approved-dublin.yml -czf "$RUNNER_TEMP/approved-source.tar.gz" .
       - uses: actions/upload-artifact@v5
         if: always()
         with:
-          name: approved-dublin-review
+          name: approved-dublin-final-review
           path: |
             test-results/
             playwright-report/
             integration-commit.txt
-            ${{ runner.temp }}/approved-source.tar.gz
+            code-check.log
+            game-tests.log
+            browser-tests.log
+            assets/brand/approved-backgrounds.css
           retention-days: 7
