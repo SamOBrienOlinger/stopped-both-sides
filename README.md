@@ -102,8 +102,10 @@ The original single-role practice also remains available: six public situations 
 **18 fictional LEGO-style characters. Nine for each side.** You choose a character, not a personal identity profile. The cast includes men, women and characters with an ambiguous gender presentation.
 
 <p align="center">
-  <img src="assets/characters/cast.webp" width="680" alt="The 18 selectable LEGO-style characters. In each row, the first three figures are public characters and the remaining three are Garda characters.">
+  <img src="assets/characters/garda-uniforms-2026.webp" width="680" alt="The nine Garda characters in photo-referenced uniforms: Ciara, Rory and Jamie; Lee, Aisling and Kai; Conor, Orla and Charlie.">
 </p>
+
+**Updated Garda uniforms, November 2026.** The nine officers wear light blue shirts, fluorescent yellow reflective vests, or navy and yellow jackets based on a supplied Garda reference photograph. The matching introductory illustrations use Ciara's updated vest. [Artwork and implementation record](docs/garda-uniforms-2026.md).
 
 **[Choose a public character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Choose a Garda character](https://samobrienolinger.github.io/stopped-both-sides/garda/#encounters/garda)**
 

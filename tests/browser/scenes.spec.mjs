@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import {gardaAtlas} from '../../encounters/garda-atlas.mjs';
 import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=scene-review-1';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
@@ -97,11 +98,11 @@ function reachStage(id,nodeId,cast){
  throw Error('Unreachable visual-review stage: '+id+'/'+nodeId);
 }
 async function characterGeometry(scene){
- const result=await scene.locator('.scene-sprite').evaluateAll(frames=>frames.map(frame=>{
+ const result=await scene.locator('.scene-sprite').evaluateAll((frames,gardaScale)=>frames.map(frame=>{
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
-  const columns=1774/320;
+  const columns=image.src.includes('garda-uniforms-2026.webp')?gardaScale:1774/320;
   return {scale:art.width/bounds.width,columns,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
- }));
+ }),gardaAtlas.width/gardaAtlas.frame);
  for(const portrait of result){
   expect(portrait.scale,'the sprite sheet retains the calibrated scale inside the crop').toBeCloseTo(portrait.columns,1);
   expect(portrait.distortion,'portraits retain their source proportions').toBeLessThan(.01);

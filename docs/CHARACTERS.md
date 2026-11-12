@@ -32,6 +32,8 @@ Node coverage includes all random-selection intervals, character edits without s
 
 ## Artwork record
 
+- **November 2026 uniform revision:** all nine Garda characters now use the transparent [photo-referenced uniform atlas](../assets/characters/garda-uniforms-2026.webp) for selection and in-scene rendering. The three clothing styles and measured crop coordinates are documented in the [uniform artwork record](garda-uniforms-2026.md). Aisling's light cream skin and navy hijab are retained. The earlier atlas descriptions below record the previous revisions.
+
 - Aisling (`garda-5`) now has light cream skin and a navy hijab. Her selection portrait and three scene poses use the dedicated 1254 × 1254 transparent [atlas](../assets/characters/aisling-hijab.webp), routed through `characterArtwork()`. Ciara and the other characters retain their original artwork. Saved cast IDs and progress remain compatible. The [generation record](aisling-art-prompt.md) describes this revision.
 - Faces, heads, necks and hands use a natural skin-tone spectrum from cream through tan to dark brown across both roles. Each character's exposed skin matches, and the two hero viewpoints use the same tones for Alex and Ciara. Appearance has no effect on scenario facts or scoring.
 - The September 2026 colour revision uses the built-in image-generation tool to edit the original artwork, retaining the cast layout, clothing, assistive devices and role colours. All responsive hero sizes derive from the same revised image for their viewpoint.

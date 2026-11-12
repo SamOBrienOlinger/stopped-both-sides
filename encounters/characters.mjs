@@ -1,3 +1,5 @@
+import {gardaArtwork} from './garda-artwork.mjs?v=garda-uniforms-20261112';
+
 // Appearance is independent of scenario facts, choices and scoring.
 const make=(role,names)=>names.map((name,index)=>({
  id:role+'-'+(index+1),name,column:index%3+(role==='garda'?3:0),row:Math.floor(index/3)
@@ -7,15 +9,14 @@ export const characters={
  garda:make('garda',['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'])
 };
 export const characterFor=(role,id)=>characters[role]?.find(character=>character.id===id)||null;
-// Aisling has a dedicated four-pose atlas; existing saved character IDs stay valid.
-const aislingCells={portrait:[0,0],listening:[1,0],speaking:[0,1],reflecting:[1,1]};
 export function characterArtwork(character,pose='portrait'){
- const separate=character.id==='garda-5';
- const [column,row]=separate?aislingCells[pose]:[character.column,character.row];
- const path=separate?'characters/aisling-hijab-clean.webp':pose==='portrait'?'characters/cast.webp':`scenes/${pose}-clean.webp`;
+ const garda=gardaArtwork(character);
+ if(garda)return garda;
+ const {column,row}=character;
+ const path=pose==='portrait'?'characters/cast.webp':`scenes/${pose}-clean.webp`;
  return {src:new URL('../assets/'+path,import.meta.url).href,
-  width:separate?1254:1774,height:separate?1254:887,
-  style:`left:-${column*100}%;top:-${row*100}%;width:${separate?200:600}%;height:${separate?200:300}%`};
+  width:1774,height:887,
+  style:`left:-${column*100}%;top:-${row*100}%;width:600%;height:300%`};
 }
 export const defaultCast=()=>({public:characters.public[0].id,garda:characters.garda[0].id});
 export const validCast=cast=>!!cast&&['public','garda'].every(role=>!!characterFor(role,cast[role]));

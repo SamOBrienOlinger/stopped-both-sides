@@ -1,6 +1,6 @@
 import {encounters,roles,roleLabels} from './catalog.mjs?v=scene-review-1';
-import {characterFor} from './characters.mjs?v=scene-art-2';
-import {sceneCharacterArtwork} from './scene-artwork.mjs?v=context-scenes-1';
+import {characterFor} from './characters.mjs?v=garda-uniforms-20261112';
+import {sceneCharacterArtwork} from './scene-artwork.mjs?v=garda-uniforms-20261112';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
