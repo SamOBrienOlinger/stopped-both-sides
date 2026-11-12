@@ -1,0 +1,39 @@
+/* Load AFTER approved-backgrounds.css. Image and caption share panel width. */
+.encounter-scene[data-caption-anchors] .scene-panel {
+  display: block; min-width: 0; margin: 0; padding: 0; border: 0;
+  background: var(--paper, #fff);
+}
+.encounter-scene[data-caption-anchors]
+.scene-stage--outdoor-split > .scene-panel > .scene-location { aspect-ratio: 16 / 9; }
+.encounter-scene[data-caption-anchors]
+.scene-location > .scene-actor[data-scene-role] {
+  left: var(--scene-x); right: auto; bottom: var(--scene-bottom);
+  width: var(--scene-width); transform: translateX(-50%);
+}
+.encounter-scene[data-caption-anchors] .scene-stage,
+.encounter-scene[data-caption-anchors] .scene-location { direction: ltr; }
+.encounter-scene[data-caption-anchors]
+.scene-panel > figcaption.scene-cast-names {
+  display: grid; grid-template-columns: minmax(0, 1fr); align-items: start;
+  position: relative; box-sizing: border-box; width: 100%; margin: 0;
+  padding: .65rem 0 .8rem; gap: 0; direction: ltr;
+}
+.encounter-scene[data-caption-anchors]
+.scene-cast-names > .scene-character-label {
+  grid-column: 1; grid-row: auto; justify-self: start; align-self: start;
+  position: relative; left: var(--scene-x); transform: translateX(-50%);
+  display: flex; flex-direction: column; box-sizing: border-box;
+  width: max-content; max-width: min(13rem, calc(var(--scene-label-space) - 1rem));
+  min-width: 0; padding: .15rem .35rem; margin: 0; gap: .15rem;
+  text-align: center; white-space: normal; overflow-wrap: anywhere;
+  color: var(--tone-deep, var(--deep)); animation: none; transition: none;
+}
+.encounter-scene[data-caption-anchors]
+.scene-cast-names[data-label-layout="inline"] > .scene-character-label { grid-row: 1; }
+.encounter-scene[data-caption-anchors]
+.scene-cast-names[data-label-layout="stacked"] > .scene-character-label + .scene-character-label { margin-block-start: .25rem; }
+[dir="rtl"] .encounter-scene[data-caption-anchors] .scene-character-label { direction: rtl; }
+@media (forced-colors: active) {
+  .encounter-scene[data-caption-anchors] .scene-panel,
+  .encounter-scene[data-caption-anchors] .scene-character-label { background: Canvas; color: CanvasText; }
+}
