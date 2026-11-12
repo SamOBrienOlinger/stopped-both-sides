@@ -1,0 +1,66 @@
+name: Verify complete approved background integration
+on:
+  push:
+    branches: [uimproved]
+    paths:
+      - .github/workflows/verify-approved-backgrounds.yml
+      - assets/dublin-approved/**
+      - assets/brand/approved-backgrounds.css
+      - encounters/backgrounds.mjs
+      - encounters/scenes.mjs
+      - encounters/ui.mjs
+      - index.html
+      - garda/index.html
+      - tests/browser/approved-backgrounds.spec.mjs
+      - tests/browser/approved-shell.spec.mjs
+      - tests/browser/uimproved.spec.mjs
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: approved-backgrounds-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm run check
+      - run: npm test | tee game-tests.log
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: approved-final-code
+          path: game-tests.log
+          retention-days: 7
+  browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npm run test:browser -- approved-backgrounds.spec.mjs approved-shell.spec.mjs scenes.spec.mjs characters.spec.mjs uimproved.spec.mjs --project=${{ matrix.browser }} | tee browser-tests.log
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: approved-final-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+            browser-tests.log
+          retention-days: 7
