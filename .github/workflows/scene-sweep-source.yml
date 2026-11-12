@@ -1,0 +1,28 @@
+name: Prepare isolated scene sweep
+on:
+  push:
+    branches: ['qa/scene-sweep-20261112']
+    paths: ['.github/workflows/scene-sweep-source.yml']
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: |
+          mkdir -p sweep-export
+          git rev-parse HEAD > sweep-export/source-commit.txt
+          tar --exclude=.git --exclude=sweep-export --exclude=test-results --exclude=playwright-report -czf sweep-export/source-and-dependencies.tar.gz .
+      - uses: actions/upload-artifact@v5
+        with:
+          name: scene-sweep-source
+          path: sweep-export/
+          retention-days: 7
