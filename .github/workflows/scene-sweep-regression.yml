@@ -1,0 +1,45 @@
+name: Caption candidate application regression
+on:
+  push:
+    branches: ['qa/scene-sweep-20261112']
+    paths: ['.github/workflows/scene-sweep-regression.yml']
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Apply identical candidate, isolate Node-only test tooling
+        run: |
+          node qa/apply-caption-draft.mjs
+          mv qa "$RUNNER_TEMP/scene-sweep-tools"
+      - run: npm run check | tee sweep-results/syntax.log
+      - run: npm test | tee sweep-results/game-tests.log
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Complete existing browser regression tests
+        run: npm run test:browser -- --project=${{ matrix.browser }} | tee sweep-results/regression.log
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: candidate-regression-${{ matrix.browser }}
+          path: |
+            sweep-results/
+            test-results/
+            playwright-report/
+          retention-days: 7
