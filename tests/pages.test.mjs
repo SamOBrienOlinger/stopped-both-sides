@@ -14,12 +14,17 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const subtitle='An interactive learning game for the public and Gardaí.';
  const shared=readFileSync(new URL('../encounters/ui.mjs',import.meta.url),'utf8');
  assert.ok(shared.includes(subtitle));
+  assert.ok(shared.includes("Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
+  assert.ok(shared.includes('Browse all situations'));
+  assert.ok(shared.includes("Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
+  assert.ok(shared.includes("It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication."));
+  assert.ok(shared.includes("Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."));
  assert.match(shared,/<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides<\/h1>/);
  for(const path of ['','garda/']){
   const html=readFileSync(new URL('../'+path+'index.html',import.meta.url),'utf8');
   const app=readFileSync(new URL('../'+path+'app.mjs',import.meta.url),'utf8');
   assert.match(html,/<title>Stopped: Both Sides \| (Public|Garda) perspective<\/title>/);
-  assert.ok(html.includes(subtitle));assert.ok(app.includes('paired.introduction('));
+  assert.ok(html.includes(subtitle));assert.ok(app.includes('paired.aboutIntroduction()'));
   assert.doesNotMatch(html+app,/Why are you stopping me\?|Why am I stopping you\?/);
  }
  assert.notEqual(translateText(subtitle,'ga'),subtitle);
