@@ -12,9 +12,24 @@ for(const role of ['public','garda'])test(`${role}: facts, identity and variatio
  await expect(page.locator('.cast-character[data-cast-role="public"]')).toContainText('24 years old');
  for(const width of [320,390,768,1366]){
   await page.setViewportSize({width,height:844});
-  const context=await page.locator('.decision-context').boundingBox(),choices=await page.locator('.decision-choices').boundingBox();
-  expect(context.y+context.height).toBeLessThanOrEqual(choices.y);
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+  // Caption controls adjust their min-height via ResizeObserver after a
+  // breakpoint change. Measure both boxes in the same animation frame:
+  // two sequential locator.boundingBox() calls can combine the old scene
+  // height with the new choices position and report a false overlap.
+  await page.evaluate(()=>new Promise(resolve=>
+   requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))));
+  await expect.poll(()=>page.evaluate(()=>{
+   const context=document.querySelector('.decision-context');
+   const choices=document.querySelector('.decision-choices');
+   if(!context||!choices)return {present:false,order:false,fullWidth:false};
+   const a=context.getBoundingClientRect(),b=choices.getBoundingClientRect();
+   return {
+    present:true,
+    order:a.bottom<=b.top,
+    fullWidth:document.documentElement.scrollWidth<=innerWidth+1
+   };
+  }),{message:`${role} ${width}px: scene context must end before decisions after caption layout`})
+   .toEqual({present:true,order:true,fullWidth:true});
   if(width===390||width===1366){await page.locator('#scene-title').focus();await page.screenshot({path:testInfo.outputPath(`${role}-decision-${width}.png`),fullPage:true});}
  }
  await page.locator('[data-action="paired-answer"]').first().click();const before=current(page);

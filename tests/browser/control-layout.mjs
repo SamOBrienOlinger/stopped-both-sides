@@ -66,6 +66,12 @@ export async function expectControlsFit(page,label){
    return box.width<43.5||box.height<43.5?[{...describe(element),width:box.width,height:box.height}]:[];
   });
   const overlaps=[];
+  // A sticky header is a higher stacking layer: content scrolled underneath
+  // it is not painted or hit-testable in the covered region. Retain geometry
+  // checks for uncovered controls and every other control-to-control overlap.
+  const stickyHeader=scope===document?document.querySelector('.header'):null;
+  const headerIsOverlay=stickyHeader&&visible(stickyHeader)&&
+   /^(sticky|fixed)$/.test(getComputedStyle(stickyHeader).position);
   // A compact menu can scroll independently. Its off-screen link boxes still
   // exist, but overflow clipping prevents them covering adjacent controls.
   const paintedBounds=element=>{
@@ -79,6 +85,11 @@ export async function expectControlsFit(page,label){
     if(/^(hidden|clip|auto|scroll)$/.test(style.overflowY)){
      box.top=Math.max(box.top,clip.top);box.bottom=Math.min(box.bottom,clip.bottom);
     }
+   }
+   if(headerIsOverlay&&!stickyHeader.contains(element)){
+    const headerBounds=stickyHeader.getBoundingClientRect();
+    if(box.right>headerBounds.left&&box.left<headerBounds.right)
+     box.top=Math.max(box.top,headerBounds.bottom);
    }
    return box;
   };

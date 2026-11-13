@@ -90,8 +90,11 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const title=secondary?'<h2 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h2>':'<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h1>';
   return `<section class="home-intro clear-intro brand-intro" aria-labelledby="game-title"><img class="brand-profiles" src="${logo}" width="512" height="512" alt=""><div>${title}<p>An interactive learning game for the public and Gardaí.</p></div></section>`;
  }
- function aboutIntroduction(){
-  return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}<div class="info-block landing-overview about-overview" lang="en-IE"><p>Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
+ function aboutIntroduction({eyebrow='',taglineLines=[]}={}){
+  const heading=eyebrow&&taglineLines.length
+   ?'<div class="about-heading-block"><p class="eyebrow">'+esc(eyebrow)+'</p><h2 class="about-tagline">'+taglineLines.map(esc).join('<br>')+'</h2></div>'
+   :'';
+  return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}${heading}<div class="info-block landing-overview about-overview" lang="en-IE"><p>Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
  }
  function perspectiveChoice({primary=false}={}){
   const heading=primary?'h1':'h2';

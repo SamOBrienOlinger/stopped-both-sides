@@ -21,7 +21,7 @@ for(const path of ['./','garda/']){
   await expect(opening.locator('h1#game-title')).toHaveText('Stopped: Both Sides');
   await expect(opening.getByText('An interactive learning game for the public and Gardaí.',{exact:true})).toHaveCount(1);
   await expect(opening.locator('.about-overview p')).toHaveText(overview);
-  await expect(page.locator('.content-page>.about-tagline')).toBeVisible();
+  await expect(page.locator('.content-page>.about-opening>.about-heading-block>.about-tagline')).toBeVisible();
   await expect(page.locator('.learning-section')).toBeVisible();
  });
  test(path+' home and About copy remain responsive in RTL and enlarged text',async({page})=>{
