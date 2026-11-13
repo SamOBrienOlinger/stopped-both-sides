@@ -81,3 +81,16 @@ body{background:#fff}
 .header nav{gap:4px 8px}
 @media(min-width:75rem){.header-inner{flex-wrap:nowrap;gap:1rem;padding-top:.75rem;padding-bottom:.75rem;min-height:80px}.header nav{order:0;flex:1;width:auto;border-top:0;padding-top:0;justify-content:center;gap:4px}.header nav a{padding:8px 10px}.header-actions{width:auto;margin-left:0;flex:none}.header nav .utility-settings{margin-left:0;font-size:.8rem;padding:8px}.wordmark{flex:none}}
 @media(max-width:40rem){.header-inner{gap:.65rem}.header-actions{width:auto;margin-left:auto;max-width:55%}.header nav{padding-top:.55rem;gap:2px 4px}.header nav a{font-size:.875rem;padding:7px 9px}.header nav .utility-settings{font-size:.8rem;padding:7px 9px}.brand-intro.home-intro{margin-bottom:1.15rem}.landing-cast{gap:.4rem}.session-return.info-block{align-items:flex-start}.landing-character-name{font-size:.8rem}}
+
+/* Responsive landing invitation and moved About overview. */
+.reference-landing .landing-instructions p.landing-deck{display:block;margin:0 auto clamp(.8rem,2vw,1.25rem);max-inline-size:66ch;font-size:clamp(1.05rem,2.25vw,1.4rem);font-weight:650;line-height:1.5;color:var(--ink);text-align:center;text-wrap:pretty;overflow-wrap:anywhere}
+.reference-landing .landing-instructions #paired-title{margin-inline:auto;margin-block-end:clamp(.7rem,1.6vw,1rem);max-inline-size:27ch;text-wrap:balance}
+.content-page .about-opening{margin-block:0 clamp(1.65rem,3vw,2.5rem)}
+.about-opening .brand-intro.home-intro{margin:0 auto clamp(1rem,2.5vw,1.5rem);justify-content:center;max-inline-size:100%}
+.about-opening .brand-intro #game-title{max-inline-size:18ch;font-size:clamp(1.9rem,4.1vw,3.25rem)}
+.content-page .about-opening .about-overview{max-inline-size:none;margin:0}
+.about-opening .about-overview p{font-size:clamp(1rem,1.5vw,1.125rem);line-height:1.75;max-inline-size:75ch;margin:0}
+.about-opening .about-overview p+p{margin-block-start:1rem}
+.content-page>.about-tagline{font-size:clamp(1.65rem,3.5vw,2.75rem);line-height:1.2;margin-block:0 1.25rem;max-inline-size:24ch}
+@media(max-width:25rem){.about-opening .brand-intro.home-intro{justify-content:flex-start;align-items:center}.about-opening .brand-intro #game-title{font-size:clamp(1.45rem,6vw,1.9rem)}.reference-landing .landing-instructions p.landing-deck{font-size:1rem;line-height:1.5}}
+@media(forced-colors:active){.reference-landing .landing-instructions p.landing-deck{color:CanvasText}}

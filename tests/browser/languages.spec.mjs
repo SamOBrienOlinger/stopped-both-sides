@@ -168,9 +168,17 @@ for(const role of ['public','garda'])test(`${role}: original mode and completed 
 
 for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${language}: layout, text spacing and targets at ${width}px`,async({page},testInfo)=>{
  await page.setViewportSize({width,height:width===320?568:900});
- await page.goto('./');await expect(page.locator('.brand-intro')).toBeVisible();
+ await page.goto('./');
+ await expect(page.locator('.landing-deck')).toBeVisible();
+ await expect(page.locator('.brand-intro')).toHaveCount(0);
  await applyLanguage(page,language,{large:true});
  await fits(page,'home');
+ // The project introduction now lives at the beginning of About, in every language.
+ await page.goto('./#about');
+ await expect(page.locator('.about-opening .brand-intro')).toBeVisible();
+ await expect(page.locator('.about-opening .about-overview p')).toHaveCount(3);
+ await fits(page,'about');
+ await page.goto('./');
  await page.locator('.single-mode summary').click();await fits(page,'original cards');
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.paired-picker')).toBeVisible();

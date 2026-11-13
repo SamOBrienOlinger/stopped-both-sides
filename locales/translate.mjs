@@ -170,6 +170,29 @@ const loaders={
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
+// Localize revised interface copy without renumbering full-content packs.
+const revisedSiteCopy={
+ "Browse all situations": {
+  "ga": "Brabhsáil gach cás",
+  "pt": "Explorar todas as situações",
+  "ar": "تصفح جميع المواقف",
+  "pl": "Przeglądaj wszystkie sytuacje",
+  "ro": "Explorează toate situațiile",
+  "fr": "Parcourir toutes les situations",
+  "es": "Explorar todas las situaciones",
+  "zh-Hans": "浏览所有情境"
+ },
+ "Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.": {
+  "ga": "Fiosraigh do chearta agus cumhachtaí an Gharda Síochána trí theagmhálacha laethúla a bhaineann le ceistiú, cuardaigh, gabháil, daoine óga agus ciníochas.",
+  "pt": "Explore os seus direitos e os poderes da polícia através de situações quotidianas que envolvem perguntas, buscas, detenções, jovens e racismo.",
+  "ar": "استكشف حقوقك وصلاحيات الشرطة من خلال مواقف يومية تتعلق بالاستجواب والتفتيش والاعتقال والشباب والعنصرية.",
+  "pl": "Poznaj swoje prawa i uprawnienia policji na przykładzie codziennych sytuacji związanych z pytaniami, przeszukaniami, zatrzymaniami, młodymi ludźmi i rasizmem.",
+  "ro": "Explorează-ți drepturile și atribuțiile poliției prin situații cotidiene care implică întrebări, percheziții, arestări, tineri și rasism.",
+  "fr": "Découvrez vos droits et les pouvoirs de la police à travers des situations quotidiennes impliquant des questions, des fouilles, des arrestations, des jeunes et le racisme.",
+  "es": "Explora tus derechos y las facultades de la policía mediante encuentros cotidianos relacionados con preguntas, registros, detenciones, jóvenes y racismo.",
+  "zh-Hans": "通过涉及问询、搜查、逮捕、青少年和种族主义的日常情境，了解你的权利和警方的法定权力。"
+ }
+};
 const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána','Your Rights':'Public rights resources','Garda Guidance':'Garda resources'};
 export function languageLoaded(language){return ['en','ga'].includes(language)||packs.has(language);}
 export function loadLanguage(value){
@@ -187,6 +210,8 @@ export function loadLanguage(value){
  pending.set(language,request);return request;
 }
 export function translateText(text,lang='en'){
+ const revised=revisedSiteCopy[String(text).trim()]?.[lang];
+ if(revised)return revised;
  if(lang==='ga')return translateIrishText(text,lang);
  if(lang==='en'||!packs.has(lang))return text;
  const original=String(text),s=original.trim(),pack=packs.get(lang);
