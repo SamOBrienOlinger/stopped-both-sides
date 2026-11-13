@@ -31,3 +31,14 @@ test('scene layout preserves shared/solo anchors and rejects mismatched artwork'
  assert.throws(()=>sceneActorLayout('street','unknown'));
  assert.throws(()=>checkSceneArtwork('street','bus-stop'));
 });
+
+
+test('captions expose character-specific accessible profile buttons',()=>{
+ const html=renderScene(startEncounter('public-street','public',{cast:{public:'public-8',garda:'garda-9'}}));
+ assert.match(html,/<button type="button" class="scene-character-label"/);
+ assert.match(html,/data-scene-character-id="public-8"/);
+ assert.match(html,/data-scene-character-id="garda-9"/);
+ assert.match(html,/aria-haspopup="dialog" aria-controls="scene-character-dialog"/);
+ assert.match(html,/aria-label="About Sam, Member of the public"/);
+ assert.match(html,/aria-label="About Charlie, Garda"/);
+});

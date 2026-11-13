@@ -60,7 +60,7 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
   await page.goto(path+'?lang=en'+stateHash({...cases[0],role:path==='garda/'?'garda':'public'}));
   await expect(page.locator('.story>.encounter-scene[data-caption-anchors]')).toBeVisible();
   const sceneWidth=await page.locator('.story>.encounter-scene').evaluate(e=>e.getBoundingClientRect().width);
-  await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=caption-controls-2');},basePath);
+  await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=character-details-1');},basePath);
   let rendered=0,maxError=0;
   for(const item of cases){
    const state={...item,role:path==='garda/'?'garda':'public'};
@@ -165,4 +165,41 @@ test('button shine stays inside its control during hover, focus and reduced moti
    }
   }
  }
+});
+
+
+// A representative Sam/Charlie encounter: button positions are independently
+// checked by aligned() at every width; activation must not change game state.
+for(const path of ['./','garda/'])test(path+' character buttons open profiles and return keyboard focus',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ const role=path==='garda/'?'garda':'public';
+ const state=startEncounter('public-street',role,{cast:{public:'public-8',garda:'garda-9'}});
+ await page.goto(path+'?lang=ar'+stateHash(state));
+ const scene=page.locator('.story>.encounter-scene[data-caption-anchors]');
+ await expect(scene).toBeVisible();
+ const originalUrl=page.url();
+ for(const width of [320,390,768,1366]){
+  await page.setViewportSize({width,height:900});
+  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
+  await aligned(page);
+  for(const [role,name] of [['public','Sam'],['garda','Charlie']]){
+   const button=scene.locator('button[data-scene-label-role="'+role+'"]');
+   await expect(button).toHaveAttribute('aria-haspopup','dialog');
+   await expect(button).toHaveAttribute('aria-controls','scene-character-dialog');
+   await button.click();
+   const dialog=page.locator('#scene-character-dialog');
+   await expect(dialog).toBeVisible();
+   await expect(dialog).toHaveAttribute('data-role-tone',role);
+   await expect(dialog.getByRole('heading',{name,exact:true})).toBeVisible();
+   await expect(dialog.locator('.scene-profile-role')).toHaveText(role==='public'?'Member of the public':'Garda');
+   await expect(dialog.locator('.scene-profile-body')).toContainText('fictional encounter');
+   await expect(dialog.locator('.scene-profile-portrait img')).toHaveJSProperty('complete',true);
+   if(role==='public')await page.keyboard.press('Escape');
+   else await dialog.getByRole('button',{name:'Close character details'}).click();
+   await expect(dialog).toBeHidden();
+   await expect(button).toBeFocused();
+  }
+ }
+ expect(page.url()).toBe(originalUrl);
+ await expect(scene.locator('button.scene-character-label')).toHaveCount(2);
 });
