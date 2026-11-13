@@ -1,11 +1,11 @@
 import {createLayout} from '../accessibility/layout.mjs?v=visible-motion-5';
-import {scenarioIcon} from '../encounters/visuals.mjs?v=context-icons-1';
+import {scenarioIcon} from '../encounters/visuals.mjs?v=landing-about-copy-1';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=lego-dublin-2';
 import {createMotion} from '../accessibility/motion.mjs?v=visible-motion-5';
-import {createEncounterMode} from '../encounters/ui.mjs?v=turn-character-headshot-1';
+import {createEncounterMode} from '../encounters/ui.mjs?v=landing-about-copy-1';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');
@@ -19,7 +19,7 @@ const sourceLinks=ids=>`<details class="source-details"><summary>Evidence behind
 const returnToSession=()=>session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Return to your recap':'Return to your situation'} →</a></p>`:'';
 const focusMain=()=>{const heading=main.querySelector?.('h1');(heading||main).focus({preventScroll:true});main.scrollIntoView?.({block:'start',behavior:'instant'});};
 function home(){
- return `${paired.introduction()}${paired.landing()}<p class="focus-note">Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.</p>
+ return `${paired.landing()}<p class="focus-note">Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.</p>
  <details class="single-mode"><summary>Individual practice · single-role scenarios</summary><p>Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.</p><div class="scenarios" data-english-practice>${scenarios.map((s,i)=>`<article class="scenario"><div class="card-top"><span class="scene-icon">${scenarioIcon('garda-'+s.id)}</span><span class="scene-number">SITUATION ${String(i+1).padStart(2,'0')}</span></div><h2>${esc(s.title)}</h2><p class="person">${esc(s.person)}</p><p class="description">${esc(s.description)}</p><p class="small-note">${esc(s.minutes)}</p><button class="primary secondary scenario-action" data-action="start" data-id="${s.id}" aria-label="Explore this situation: ${esc(s.title)}">Explore this situation <span aria-hidden="true">→</span></button></article>`).join('')}</div></details>`;
 }
 function game(){
@@ -48,7 +48,7 @@ function evidence(open=''){
  <section class="info-block"><h2>Keep the reading open</h2><p>This collection is a starting point for review and development. Important next steps include specialist case-law review, further non-English European literature, community-led additions and evaluation with Garda learners.</p><p>Source authors and organisations have not approved this interpretation or endorsed the game.</p></section></div>`;
 }
 function about(){
- return `<div class="content-page"><p class="eyebrow">ABOUT THE GARDA PERSPECTIVE</p><h1>Examine the decision.<br>Keep the person in view.</h1><p class="page-lead">Stopped: Both Sides helps Garda learners recognise assumptions, examine their evidence and reflect on fair treatment during stop-and-search decisions.</p>${paired.resumeLink()}${returnToSession()}
+ return `<div class="content-page">${paired.aboutIntroduction()}<p class="eyebrow">ABOUT THE GARDA PERSPECTIVE</p><h2 class="about-tagline">Examine the decision.<br>Keep the person in view.</h2><p class="page-lead">Stopped: Both Sides helps Garda learners recognise assumptions, examine their evidence and reflect on fair treatment during stop-and-search decisions.</p>${paired.resumeLink()}${returnToSession()}
  <section class="info-block"><h2>How it works</h2><p>Explore 14 shared situations from the Garda or public perspective. Your chosen avatar stays with the encounter. Choose a response, read the explanation and follow the next scene. Some choices lead to an additional opportunity to reconsider. You can revisit earlier decisions, replay a route or open the research at any point.</p><p>The aim is to improve the quality of reasoning. There are no points for searches, arrests or avoiding every intervention, and no personal bias score. A scenario can have more than one reasonable next step.</p></section>
 ${learningAbout()} <section class="info-block important"><h2>A learning companion</h2><p>This independent prototype is for reflection between encounters. It cannot assess live incidents, provide operational authorisation or certify that a Garda’s decisions are free from bias.</p><p>The Irish examples include section 23 of the Misuse of Drugs Act and the distinction between voluntary enquiries and specific legal demands. Other powers, case law, urgent threats, custody and search procedures need their own current professional guidance.</p><p>It is not official Garda training. Legal, operational and community review remain outstanding.</p></section>
  <section class="info-block"><h2>Use it in a short learning discussion</h2><ol class="discussion-steps"><li><strong>Play one situation.</strong> Say which facts matter before looking at the feedback.</li><li><strong>Compare the reasoning.</strong> Discuss the grounds, alternative explanations, identity cues and the person’s experience.</li><li><strong>Return later.</strong> Revisit the situation and consider one practical question for briefing or supervision.</li></ol><p>Facilitators should use fictional or appropriately anonymised examples and make room for disagreement supported by law and evidence. The activity should not be used as a staff appraisal.</p>${sourceLinks(['miller','wouters','merla'])}</section>
