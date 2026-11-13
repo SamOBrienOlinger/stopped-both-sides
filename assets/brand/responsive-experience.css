@@ -62,7 +62,7 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.375rem .625rem;
  inline-size:auto;max-inline-size:100%;min-inline-size:0;
 }
-.garda-perspective-icon{display:block;flex:none;inline-size:min(100%,clamp(2.5rem,5vw,3.5rem));block-size:auto;border-radius:.5rem}
+.perspective-button-icon{display:block;flex:none;inline-size:min(100%,clamp(2.5rem,5vw,3.5rem));block-size:auto;border-radius:.5rem}
 .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){inline-size:auto;max-inline-size:100%;font-size:1.25rem;font-weight:800;line-height:1.35;text-wrap:balance}
 html:lang(ar) .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){line-height:1.75}
 .reference-landing .perspective-hero :is(.perspective-button-action,.perspective-button-action-short){font-size:.875rem;line-height:1.4;margin-block-start:0}

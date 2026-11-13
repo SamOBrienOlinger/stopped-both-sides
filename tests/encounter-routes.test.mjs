@@ -25,8 +25,8 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
- assert.match(main.innerHTML,/href="#encounters\/public"><span class="perspective-button-title"><span class="perspective-button-label">member of the public<\/span>/);
- assert.match(main.innerHTML,/href="#encounters\/garda"><span class="perspective-button-title"><img class="garda-perspective-icon" src="[^"]*\/garda-perspective\.webp" [^>]*alt=""[^>]*><span class="perspective-button-label">Garda member<\/span>/);
+ assert.match(main.innerHTML,/href="#encounters\/public"><span class="perspective-button-title"><img class="perspective-button-icon" src="[^"]*\/public-perspective\.webp" [^>]*alt=""[^>]*><span class="perspective-button-label">member of the public<\/span>/);
+ assert.match(main.innerHTML,/href="#encounters\/garda"><span class="perspective-button-title"><img class="perspective-button-icon" src="[^"]*\/garda-perspective\.webp" [^>]*alt=""[^>]*><span class="perspective-button-label">Garda member<\/span>/);
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
   for(const e of Object.values(encounters)){
    action('paired-start',{id:e.id,role});assert.equal(state().role,role);assert.equal(state().nodeId,e.start);
