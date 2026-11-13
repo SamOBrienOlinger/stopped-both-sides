@@ -78,29 +78,56 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
 }
 
 // Actual full app routes: every stage, enlarged/translated/RTL text and all breakpoints.
-for(const path of ['./','garda/'])test(`${path} all stages respond to rotation, 200% text, RTL, recaps and long labels`,async({page},info)=>{
- test.setTimeout(300000);await page.emulateMedia({reducedMotion:'reduce'});
- for(let i=0;i<cases.length;i++){
-  const state={...cases[i],role:path==='garda/'?'garda':'public',cast:pairs[(i*17)%pairs.length]};
-  await page.goto(path+'?lang='+(i%3===0?'ar':i%3===1?'ga':'en')+stateHash(state));
-  await expect(page.locator('.story>.encounter-scene[data-caption-anchors]')).toBeVisible();
-  for(const [width,height] of [[320,900],[568,320],[768,1024],[1366,768]]){
-   await page.setViewportSize({width,height});
-   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
-   await aligned(page);
-  }
- }
- for(const lang of ['en','ga','pt','ar','pl','ro','fr','es','zh-Hans']){
-  await page.goto(path+'?lang='+lang+stateHash({...cases[0],cast:{public:'public-3',garda:'garda-9'}}));
-  await expect(page.locator('.story>.encounter-scene')).toBeVisible();
-  await page.evaluate(()=>{
-   document.documentElement.style.setProperty('--reading-size','200%');
-   document.documentElement.classList.add('contrast-high','reading-spacious');
-   document.querySelectorAll('.scene-character-label [data-no-translate]').forEach(e=>e.textContent='Alexandria O’Brien-McDonnell-Smythe');
+// A completed DOM and explicitly loaded scene images are the meaningful readiness
+// criteria here. WebKit can leave the window 'load' event pending on a long sequence
+// of image-heavy navigations even when the playable scene is ready.
+async function openCaptionScene(page,url){
+ await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
+ const scene=page.locator('.story>.encounter-scene[data-caption-anchors]');
+ await expect(scene).toBeVisible();
+ await expect.poll(()=>scene.locator('img').evaluateAll(images=>
+  images.length>0&&images.every(image=>image.complete&&image.naturalWidth>0)
+ ),{message:'Active scene and character images must load'}).toBe(true);
+}
+
+// Keep every one of the 59 reachable stages, every original language/cast and
+// every viewport. Divide the long WebKit sequence into independently reported
+// tests so a stalled navigation cannot exhaust the time budget for all stages.
+const stageBatchSize=12;
+for(const path of ['./','garda/']){
+ for(let start=0;start<cases.length;start+=stageBatchSize){
+  const end=Math.min(start+stageBatchSize,cases.length);
+  test(`${path} stages ${start+1}-${end}: rotation, 200% text, RTL and recaps`,async({page})=>{
+   test.setTimeout(180000);
+   await page.emulateMedia({reducedMotion:'reduce'});
+   for(let i=start;i<end;i++){
+    const state={...cases[i],role:path==='garda/'?'garda':'public',cast:pairs[(i*17)%pairs.length]};
+    await openCaptionScene(page,path+'?lang='+(i%3===0?'ar':i%3===1?'ga':'en')+stateHash(state));
+    for(const [width,height] of [[320,900],[568,320],[768,1024],[1366,768]]){
+     await page.setViewportSize({width,height});
+     await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
+     await aligned(page);
+    }
+   }
   });
-  for(const width of [320,375,390,430,660,768,1024,1366,1920]){await page.setViewportSize({width,height:900});await aligned(page);}
  }
-});
+ test(`${path} nine languages and long labels across all breakpoints`,async({page})=>{
+  test.setTimeout(180000);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  for(const lang of ['en','ga','pt','ar','pl','ro','fr','es','zh-Hans']){
+   await openCaptionScene(page,path+'?lang='+lang+stateHash({...cases[0],cast:{public:'public-3',garda:'garda-9'}}));
+   await page.evaluate(()=>{
+    document.documentElement.style.setProperty('--reading-size','200%');
+    document.documentElement.classList.add('contrast-high','reading-spacious');
+    document.querySelectorAll('.scene-character-label [data-no-translate]').forEach(e=>e.textContent='Alexandria O’Brien-McDonnell-Smythe');
+   });
+   for(const width of [320,375,390,430,660,768,1024,1366,1920]){
+    await page.setViewportSize({width,height:900});
+    await aligned(page);
+   }
+  }
+ });
+}
 
 for(const path of ['./','garda/'])test(`${path} original Robin/Charlie report and separate panels have aligned captions`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
