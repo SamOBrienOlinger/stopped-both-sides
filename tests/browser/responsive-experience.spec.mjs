@@ -185,7 +185,8 @@ for(const path of ['./','garda/']){
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.goto(path);
   await expect(page.locator('.reference-landing')).toBeVisible();await page.evaluate(()=>document.fonts.ready);await frames(page);
-  await expect.poll(()=>page.locator('.perspective-hero img').evaluateAll(images=>images.length===2&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+  await expect.poll(()=>page.locator('.perspective-hero>img[data-approved-hero]').evaluateAll(images=>images.length===2&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+  await expect.poll(()=>page.locator('.perspective-hero .perspective-icon').evaluateAll(images=>images.length===2&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   if(path==='./')await page.screenshot({path:testInfo.outputPath('mobile-landing-390.png')});
   await page.goto(path+'#about');await expect(page.locator('.learning-panel').first()).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);await frames(page);

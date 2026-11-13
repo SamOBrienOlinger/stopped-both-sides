@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
+import {decodeState,otherRole} from '../../encounters/engine.mjs?v=scene-review-1';
 
 const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{
@@ -22,8 +22,18 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  expect(state(page).id).toBe(role+'-street');
  expect(state(page).role).toBe(role);
  await expect(page.locator('.role-scores')).not.toBeVisible();
- await expect(page.locator('[data-action="paired-switch"]')).toHaveCount(1);
  const before=state(page);
+ const currentIcon=page.locator('.perspective-status>.perspective-icon');
+ const switchButton=page.locator('[data-action="paired-switch"]');
+ const switchIcon=switchButton.locator('.perspective-icon');
+ for(const currentRole of [role,otherRole(role)]){
+  await expect(currentIcon).toHaveAttribute('src',new RegExp(`/${currentRole}-perspective\\.webp$`));
+  await expect(switchIcon).toHaveAttribute('src',new RegExp(`/${otherRole(currentRole)}-perspective\\.webp$`));
+  await expect.poll(()=>currentIcon.evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
+  await expect.poll(()=>switchIcon.evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
+  await switchButton.click();
+ }
+ expect(state(page)).toEqual(before);
  await page.locator('[data-action="paired-answer"]').first().click();
  await expect(page.locator('#feedback')).toBeFocused();
  await expect(page.locator('[data-action="paired-next"]')).toBeVisible();

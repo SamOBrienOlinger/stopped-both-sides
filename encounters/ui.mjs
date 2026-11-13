@@ -13,6 +13,11 @@ const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No c
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate>${ids.map(id=>{const s=references[id];return `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)} ↗</a></li>`;}).join('')}</ul></details>`;
 const scoreExplanation='<p class="score-explanation">1 point for a choice that supports an appropriate resolution on these facts; 0 when the reasoning needs review. This measures learning, not personal bias or responsibility for someone else’s conduct.</p>';
 
+function perspectiveIcon(role){
+ const src=new URL(`../assets/brand/${role}-perspective.webp`,import.meta.url).href;
+ return `<img class="perspective-icon" src="${src}" width="256" height="256" alt="" decoding="async">`;
+}
+
 export function createEncounterMode({siteRole,main,rerender,getOriginalSession,resetOriginalSession,announce=()=>{}}){
  let browserStorage;try{browserStorage=globalThis.localStorage;}catch{}
  const store=createProgressStore(browserStorage,siteRole);
@@ -51,10 +56,23 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   return fromOriginal(original,siteRole,targetRole,legacyCasts.get(key));
  }
  function roleBar(s){
+  const targetRole=otherRole(s.role);
+  const perspective=s.role==='garda'?'Garda perspective':'Public perspective';
+  const switchLabel=targetRole==='garda'?'Switch to the Garda perspective':'Switch to the public perspective';
   const remaining=s.complete?null:remainingDecisions(s);
   const position=s.complete?'Learning recap':`Stage ${s.history.length+1}`;
   const range=remaining?(remaining.min===remaining.max?`${remaining.min}`:`${remaining.min}–${remaining.max}`):'';
-  return `<section class="perspective-bar play-toolbar" aria-label="Current perspective"><div><span class="eyebrow">${s.role==='garda'?'Garda perspective':'Public perspective'}</span><span>${position}</span>${remaining?`<span class="route-remaining">${range} decisions remaining, including this one</span>`:''}</div><div class="character-actions"><button class="text-button" data-action="paired-characters" aria-expanded="${characterPickerOpen}" aria-controls="character-picker">Change character</button><button class="primary secondary perspective-toggle" data-action="paired-switch">Switch to ${s.role==='garda'?'the public':'the Garda'} perspective <span aria-hidden="true">⇄</span></button></div></section>${characterPickerOpen?characterPicker(s.role,s.cast[s.role],true):'<div id="character-picker" hidden></div>'}${castDisplay(s)}${routeTrail(s)}`;
+  return `<section class="perspective-bar play-toolbar" aria-label="Current perspective">
+   <div class="perspective-status">
+    <div class="perspective-status-copy"><span class="eyebrow">${perspective}</span><span>${position}</span></div>
+    ${perspectiveIcon(s.role)}
+    ${remaining?`<span class="route-remaining">${range} decisions remaining, including this one</span>`:''}
+   </div>
+   <div class="character-actions">
+    <button class="text-button" data-action="paired-characters" aria-expanded="${characterPickerOpen}" aria-controls="character-picker">Change character</button>
+    <button class="primary secondary perspective-toggle" data-action="paired-switch">${perspectiveIcon(targetRole)}<span>${switchLabel}</span><span aria-hidden="true">⇄</span></button>
+   </div>
+  </section>${characterPickerOpen?characterPicker(s.role,s.cast[s.role],true):'<div id="character-picker" hidden></div>'}${castDisplay(s)}${routeTrail(s)}`;
  }
  function selection(role=siteRole){
   const first=encounters[role+'-street'],selected=characterPreferences.value[role],returning=!!store.value.last;
@@ -76,7 +94,9 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const heading=primary?'h1':'h2';
   const heroes=roles.map(role=>{
    const {src:image,srcset}=backgroundImage(role);
-   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-label">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-short">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
+   const label=role==='public'?'member of the public':'Garda member';
+   const icon=perspectiveIcon(role);
+   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-title">${icon}<span class="perspective-button-label">${label}</span><span class="perspective-button-short">${label}</span></span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
   }).join('');
   return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title"><div class="landing-instructions"><${heading} id="paired-title">Which side will you try first?</${heading}><p class="landing-purpose">Know your rights. Understand fair decisions.</p><p class="small-note">Read a situation, choose a response, then find out why it matters.</p></div><div class="perspective-heroes overlapping-heroes">${heroes}</div></section>`;
  }

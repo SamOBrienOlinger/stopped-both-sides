@@ -58,11 +58,17 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
 @supports(grid-template-rows:subgrid){
  .reference-landing .overlapping-heroes .perspective-hero{grid-template-rows:subgrid;grid-row:span 3;row-gap:0}
 }
+.reference-landing .perspective-button-title{
+ display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.375rem .625rem;
+ inline-size:auto;max-inline-size:100%;min-inline-size:0;
+}
+.perspective-icon{display:block;flex:none;inline-size:min(100%,clamp(2.5rem,5vw,3.5rem));block-size:auto;border-radius:.5rem}
 .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){inline-size:auto;max-inline-size:100%;font-size:1.25rem;font-weight:800;line-height:1.35;text-wrap:balance}
+html:lang(ar) .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){line-height:1.75}
 .reference-landing .perspective-hero :is(.perspective-button-action,.perspective-button-action-short){font-size:.875rem;line-height:1.4;margin-block-start:0}
 @media(min-width:54rem){
  .reference-landing .overlapping-heroes .perspective-hero-button{flex-direction:row;flex-wrap:wrap;justify-content:space-between;gap:.75rem;text-align:start}
- .reference-landing .perspective-hero :is(.perspective-button-label,.perspective-button-short){flex:1 1 11rem}
+ .reference-landing .perspective-button-title{flex:1 1 11rem;justify-content:flex-start}
  .reference-landing .perspective-hero :is(.perspective-button-action,.perspective-button-action-short){flex:0 1 auto;text-align:center}
 }
 .brand-intro.home-intro{justify-content:flex-start;gap:clamp(.75rem,2vw,1.5rem)}
@@ -77,6 +83,15 @@ main :is(img,video):not(.character-image>img,.scene-sprite>img){max-inline-size:
 .how-to-play ol.how-steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
 .decision-guide{grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr))}
 .decision-guide li{flex-direction:row;align-items:center;font-size:.875rem;padding:.75rem;gap:.65rem}
+.play-toolbar.perspective-bar>.perspective-status{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,40%);
+ align-content:center;align-items:center;overflow-wrap:anywhere;
+}
+.perspective-status-copy{display:grid;gap:.375rem}
+.play-toolbar .perspective-status-copy>span{line-height:var(--ui-control-line)}
+.perspective-status>.perspective-icon{justify-self:center;inline-size:min(100%,clamp(2.5rem,12vw,4rem))}
+.perspective-status>.route-remaining{grid-column:1/-1;justify-self:start}
+.perspective-toggle>.perspective-icon{inline-size:clamp(1.375rem,6vw,2rem);border-radius:.25rem}
 
 /* Progressive enhancement: all links remain exposed if JavaScript fails. */
 .header{border-block-start:4px solid var(--deep);box-shadow:0 3px 18px #183e4908}
