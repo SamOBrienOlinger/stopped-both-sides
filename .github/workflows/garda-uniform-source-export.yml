@@ -1,0 +1,19 @@
+name: Export reference atlas for current-base integration
+on:
+  push:
+    branches: [feat/garda-uniforms-current-baseball-20261113]
+    paths:
+      - .github/workflows/garda-uniform-source-export.yml
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/upload-artifact@v5
+        with:
+          name: garda-uniform-reference-atlas
+          path: assets/characters/garda-uniforms-2026-reference.webp
+          if-no-files-found: error
+          retention-days: 2
