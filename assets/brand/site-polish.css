@@ -1,0 +1,150 @@
+/* Navigation, landing invitation, About heading and footer polish.
+   Loaded after the shared role palettes so both entrypoints behave alike. */
+
+/* Keep navigation available without disturbing compact-menu positioning. */
+.header,
+.header.navigation-ready {
+  position:sticky;
+  position:-webkit-sticky;
+  inset-block-start:0;
+  top:0;
+  z-index:80;
+}
+html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
+#main :is(h1,h2,[tabindex="-1"]) {scroll-margin-block-start:clamp(7rem,12vw,10rem)}
+
+/* Clear hierarchy: orientation, choice of perspective, and next action. */
+.reference-landing .landing-instructions {
+  position:relative;
+  isolation:isolate;
+  box-sizing:border-box;
+  min-inline-size:0;
+  max-inline-size:100%;
+  margin:0 auto clamp(1.35rem,2.5vw,2.1rem);
+  padding:clamp(1rem,3vw,2rem);
+  text-align:start;
+  border:1px solid var(--line);
+  border-radius:clamp(1rem,2.5vw,1.5rem);
+  background:linear-gradient(140deg,rgba(255,255,255,.98),var(--pale));
+  box-shadow:0 10px 34px rgba(19,58,75,.085);
+}
+.reference-landing .landing-instructions::before {
+  content:"";
+  display:block;
+  inline-size:clamp(3.5rem,11vw,5.5rem);
+  block-size:.3rem;
+  margin:0 0 clamp(.85rem,2vw,1.25rem);
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--deep),var(--teal));
+  box-shadow:0 3px 10px rgba(19,58,75,.08);
+}
+.reference-landing .landing-instructions p.landing-deck {
+  max-inline-size:62ch;
+  margin:0 0 clamp(.85rem,2vw,1.2rem);
+  color:var(--ink);
+  font-size:clamp(1rem,1.95vw,1.3rem);
+  font-weight:620;
+  line-height:1.55;
+  text-align:start;
+  text-wrap:pretty;
+  overflow-wrap:anywhere;
+}
+.reference-landing .landing-instructions #paired-title {
+  max-inline-size:26ch;
+  margin:0 0 clamp(.85rem,1.8vw,1.15rem);
+  color:var(--ink);
+  font-size:clamp(1.75rem,3.6vw,3rem);
+  line-height:1.12;
+  letter-spacing:-.035em;
+  text-align:start;
+  text-wrap:balance;
+  overflow-wrap:anywhere;
+}
+.reference-landing .landing-instructions p.landing-purpose {
+  max-inline-size:65ch;
+  margin:0;
+  padding-inline-start:.8rem;
+  border-inline-start:3px solid var(--deep);
+  color:var(--deep);
+  font-size:clamp(1rem,1.65vw,1.12rem);
+  font-weight:750;
+  line-height:1.55;
+  text-align:start;
+  overflow-wrap:anywhere;
+}
+.reference-landing .landing-instructions p.small-note {
+  max-inline-size:70ch;
+  margin:.5rem 0 0;
+  padding-inline-start:calc(.8rem + 3px);
+  color:var(--slate);
+  font-size:clamp(.9375rem,1.45vw,1.02rem);
+  line-height:1.65;
+  text-align:start;
+  overflow-wrap:anywhere;
+}
+
+/* Place the About-specific heading directly below the existing logo/title. */
+.about-opening>.about-heading-block {
+  box-sizing:border-box;
+  max-inline-size:min(100%,54rem);
+  margin:0 auto clamp(1.35rem,2.8vw,1.9rem);
+  padding:.15rem 0 .2rem clamp(.9rem,2vw,1.35rem);
+  border-inline-start:4px solid var(--deep);
+  text-align:start;
+}
+.about-opening .about-heading-block .eyebrow {
+  margin:0 0 .6rem;
+  color:var(--deep);
+  font-size:.82rem;
+  font-weight:800;
+  letter-spacing:.09em;
+}
+.about-opening .about-heading-block .about-tagline {
+  max-inline-size:27ch;
+  margin:0;
+  color:var(--ink);
+  font-size:clamp(1.6rem,3.35vw,2.55rem);
+  font-weight:800;
+  line-height:1.18;
+  letter-spacing:-.03em;
+  text-wrap:balance;
+}
+
+/* The owner link and copyright form one legible, two-line identity block. */
+.footer .footer-identity {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-inline-size:0;
+  gap:.2rem;
+}
+.footer .footer-identity .footer-creator {font-weight:800;text-underline-offset:.3em}
+.footer .footer-identity .footer-copyright {
+  margin:0;
+  max-inline-size:100%;
+  color:#d7e7ed;
+  font-size:.82rem;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+@media(max-width:40rem){
+  .reference-landing .landing-instructions {padding:clamp(.9rem,4vw,1.25rem)}
+  .reference-landing .landing-instructions #paired-title {font-size:clamp(1.5rem,6vw,2rem)}
+  .about-opening>.about-heading-block {padding-inline-start:.9rem}
+}
+@media(forced-colors:active){
+  .reference-landing .landing-instructions {
+    background:Canvas;
+    color:CanvasText;
+    border-color:CanvasText;
+    box-shadow:none;
+  }
+  .reference-landing .landing-instructions::before {background:CanvasText;box-shadow:none}
+  .reference-landing .landing-instructions :is(p.landing-deck,#paired-title,p.landing-purpose,p.small-note) {
+    color:CanvasText;
+  }
+  .reference-landing .landing-instructions p.landing-purpose,
+  .about-opening>.about-heading-block {border-color:CanvasText}
+  .footer .footer-identity .footer-copyright {color:CanvasText}
+}
+@media print {.header{position:static}}
