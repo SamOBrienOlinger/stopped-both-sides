@@ -1,0 +1,68 @@
+/* The current playable LEGO portrait belongs inside the decision badge.
+   It deliberately reuses characterArtwork() so neither character choice nor
+   role switching needs a separate image or an independent source of state. */
+.paired-game .prompt>.eyebrow.turn-banner{
+ display:inline-flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:clamp(.45rem,1.5vw,.85rem);
+ box-sizing:border-box;
+ max-inline-size:100%;
+ min-block-size:3.5rem;
+ padding:.16rem .16rem .16rem clamp(.7rem,2vw,1rem);
+ margin-block-end:.85rem;
+ border-inline-start:.3rem solid var(--tone-deep,var(--deep));
+ border-radius:.3rem 999px 999px .3rem;
+ background:var(--tone-pale,var(--pale));
+ color:var(--tone-deep,var(--deep));
+ line-height:1.2;
+ box-shadow:inset 0 0 0 1px var(--tone-line,var(--line));
+ vertical-align:top;
+}
+.paired-game .prompt .turn-banner-title{
+ font-weight:800;
+ font-size:clamp(.8125rem,1.55vw,1rem);
+ letter-spacing:.045em;
+ white-space:normal;
+ /* Permit the label to wrap below its min-content width at 200% text scale.
+    Otherwise the fixed-size LEGO portrait is pushed outside the badge. */
+ min-inline-size:0;
+ overflow-wrap:anywhere;
+}
+.paired-game .prompt .turn-avatar{
+ position:relative;
+ display:block;
+ flex:0 0 auto;
+ inline-size:clamp(2.8rem,7vw,3.6rem);
+ block-size:clamp(2.8rem,7vw,3.6rem);
+ border:2px solid var(--tone-line,var(--line));
+ border-radius:50%;
+ background:#fff;
+ box-shadow:0 0 0 2px #fff;
+ overflow:hidden;
+}
+.paired-game .prompt .turn-avatar>.character-image{
+ position:absolute;
+ inset-block-start:1%;
+ left:50%;
+ inline-size:156%;
+ max-inline-size:none;
+ margin:0;
+ border-radius:0;
+ transform:translateX(-50%);
+}
+/* Original atlas offsets (including Aisling's separate atlas) remain intact. */
+.paired-game .prompt .turn-avatar .character-image>img{max-inline-size:none}
+@media(max-width:22rem){
+ .paired-game .prompt>.eyebrow.turn-banner{gap:.35rem;padding-inline-start:.55rem}
+ .paired-game .prompt .turn-avatar{inline-size:2.65rem;block-size:2.65rem}
+}
+@media(forced-colors:active){
+ .paired-game .prompt>.eyebrow.turn-banner,
+ .paired-game .prompt .turn-avatar{
+  background:Canvas;
+  color:CanvasText;
+  border-color:CanvasText;
+  box-shadow:none;
+ }
+}
