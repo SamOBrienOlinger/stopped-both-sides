@@ -17,7 +17,7 @@ for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.20,.
  await page.emulateMedia({reducedMotion:'reduce'});
  for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:900});await page.goto('./'+stateHash(startEncounter(id,'public',{cast})));
-  const pane=page.locator('.story [data-approved-art]');await pane.scrollIntoViewIfNeeded();
+  const pane=page.locator('.paired-scene-lead [data-approved-art]');await pane.scrollIntoViewIfNeeded();
   await expect.poll(()=>pane.locator('img').evaluateAll(nodes=>nodes.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
   await expect(pane).toHaveAttribute('data-approved-art',art);
   const bounds=await pane.evaluate(p=>{
@@ -25,7 +25,7 @@ for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.20,.
   });
   expect(bounds).toHaveLength(2);
   for(const a of bounds){expect(a.left).toBeGreaterThanOrEqual(leftMin-.002);expect(a.right).toBeLessThanOrEqual(rightMax+.002);expect(a.foot).toBeCloseTo(.06,2);expect(a.height).toBeGreaterThan(.46);expect(a.height).toBeLessThan(.51)}
-  await page.locator('.story>.encounter-scene').screenshot({path:info.outputPath(`${art}-${width}.png`)});
-  await page.locator('[data-action="paired-switch"]').click();await expect(page.locator('.story [data-scene-character="public-6"]')).toHaveCount(1);await expect(page.locator('.story [data-scene-character="garda-9"]')).toHaveCount(1);
+  await page.locator('.paired-scene-lead>.encounter-scene').screenshot({path:info.outputPath(`${art}-${width}.png`)});
+  await page.locator('[data-action="paired-switch"]').click();await expect(page.locator('.paired-scene-lead [data-scene-character="public-6"]')).toHaveCount(1);await expect(page.locator('.paired-scene-lead [data-scene-character="garda-9"]')).toHaveCount(1);
  }
 });
