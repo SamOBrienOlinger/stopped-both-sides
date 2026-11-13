@@ -74,9 +74,12 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  }
  function perspectiveChoice({primary=false}={}){
   const heading=primary?'h1':'h2';
+  const gardaIcon=new URL('../assets/brand/garda-perspective.webp',import.meta.url).href;
   const heroes=roles.map(role=>{
    const {src:image,srcset}=backgroundImage(role);
-   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-label">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-short">${role==='public'?'member of the public':'Garda member'}</span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
+   const label=role==='public'?'member of the public':'Garda member';
+   const icon=role==='garda'?`<img class="garda-perspective-icon" src="${gardaIcon}" width="256" height="256" alt="" decoding="async">`:'';
+   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-title">${icon}<span class="perspective-button-label">${label}</span><span class="perspective-button-short">${label}</span></span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
   }).join('');
   return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title"><div class="landing-instructions"><${heading} id="paired-title">Which side will you try first?</${heading}><p class="landing-purpose">Know your rights. Understand fair decisions.</p><p class="small-note">Read a situation, choose a response, then find out why it matters.</p></div><div class="perspective-heroes overlapping-heroes">${heroes}</div></section>`;
  }
