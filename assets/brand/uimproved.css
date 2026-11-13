@@ -401,16 +401,18 @@ html[data-perspective="garda"] .progress-page progress::-moz-progress-bar{
 .primary:not(:disabled)::after{
  content:"";
  position:absolute;
- inset:-30% auto -30% -45%;
- inline-size:36%;
- transform:translateX(-160%) skewX(-18deg);
- background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+ /* Keep decoration within the control: the old oversized shine inflated Firefox scrollHeight. */
+ inset:0;
+ inline-size:auto;
+ transform:none;
+ opacity:0;
+ background:linear-gradient(120deg,rgba(255,255,255,.18),transparent 65%);
  pointer-events:none;
- transition:transform .8s var(--ui-polish-ease);
+ transition:opacity .45s var(--ui-polish-ease);
 }
 @media(hover:hover) and (pointer:fine){
  .primary:not(:disabled):hover{box-shadow:0 9px 24px rgba(20,73,91,.2)}
- .primary:not(:disabled):hover::after{transform:translateX(650%) skewX(-18deg)}
+ .primary:not(:disabled):hover::after{opacity:1}
 }
 .primary:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
 

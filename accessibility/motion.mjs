@@ -1,5 +1,6 @@
 import {decodeState} from '../encounters/engine.mjs';
-import {createDisclosures} from './disclosures.mjs';
+import {createDisclosures} from './disclosures.mjs?v=render-paced-1';
+import {paceAnimations} from './animation-clock.mjs?v=render-paced-1';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.
@@ -19,7 +20,9 @@ export function createMotion({main,getLegacyState=()=>null}){
   for(const [frame,pending] of frames)if(pending.element===element){
    cancelAnimationFrame(frame);frames.delete(frame);
   }
-  clearTimeout(active.get(element));active.delete(element);
+  const cleanup=active.get(element);
+  if(typeof cleanup==='function')cleanup();else clearTimeout(cleanup);
+  active.delete(element);
   element.removeAttribute('data-motion');
   element.removeAttribute('data-reveal-pending');pendingReveals.delete(element);
  }
@@ -41,14 +44,20 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(isEntrance(kind)&&element.contains(document.activeElement)){finished();return;}
    remove(element);
    element.setAttribute('data-motion',kind);
-   // Follow the rendered duration so cues finish naturally.
-   // The timeout still cleans up if animation events are cancelled or missing.
-   const ends=(element.getAnimations?.({subtree:true})||[])
-    .map(animation=>animation.effect?.getComputedTiming().endTime).filter(Number.isFinite);
-   const duration=(globalThis.getComputedStyle?.(root).getPropertyValue('--ui-reveal-time')||'1600ms').trim();
-   const fallback=parseFloat(duration)*(duration.endsWith('ms')?1:1000)||1600;
-   const end=ends.length?Math.max(...ends):fallback;
-   active.set(element,setTimeout(()=>{remove(element);finished();},end+100));
+   // Only pace the finite presentation cues owned by this controller. Ambient
+   // loops and unrelated hover transitions retain their own native timelines.
+   const animations=(element.getAnimations?.({subtree:true})||[]).filter(animation=>
+    String(animation.animationName||'').startsWith('ui-')&&
+    Number.isFinite(animation.effect?.getComputedTiming().endTime));
+   const complete=()=>{remove(element);finished();};
+   if(animations.length){
+    active.set(element,paceAnimations(animations,complete));
+   }else{
+    // Older animation APIs still get bounded cleanup without blocking input.
+    const duration=(globalThis.getComputedStyle?.(root).getPropertyValue('--ui-reveal-time')||'1600ms').trim();
+    const fallback=parseFloat(duration)*(duration.endsWith('ms')?1:1000)||1600;
+    active.set(element,setTimeout(complete,fallback+100));
+   }
   });
  }
  function snapshot(hash){

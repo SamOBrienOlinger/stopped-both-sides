@@ -17,15 +17,30 @@ permissions:
 jobs:
   browser:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
-    name: ${{ matrix.browser }} layouts and play
+    name: ${{ matrix.browser }} layouts and play (${{ matrix.shard }})
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        include:
+          - browser: chromium
+            shard: 1/1
+            artifact: chromium
+          - browser: firefox
+            shard: 1/1
+            artifact: firefox
+          - browser: webkit
+            shard: 1/3
+            artifact: webkit-1
+          - browser: webkit
+            shard: 2/3
+            artifact: webkit-2
+          - browser: webkit
+            shard: 3/3
+            artifact: webkit-3
     steps:
       - uses: actions/checkout@v6
         with:
@@ -34,8 +49,7 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      # The built-in branch Pages workflow does not emit the expected follow-on
-      # event here. Verify the served client bytes against the checked-out revision.
+      # Verify served bytes against this revision before testing production.
       - name: Wait for this Pages publication
         if: github.event_name == 'workflow_run'
         run: node tests/browser/wait-for-pages.mjs
@@ -43,11 +57,13 @@ jobs:
           PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: npm run test:browser -- --project=${{ matrix.browser }}
+      # WebKit's full suite is partitioned, not shortened. A failure in one
+      # engine/shard must not cancel the remaining verification or its evidence.
+      - run: npm run test:browser -- --project=${{ matrix.browser }} --shard=${{ matrix.shard }}
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
-          name: browser-report-${{ matrix.browser }}
+          name: browser-report-${{ matrix.artifact }}
           path: |
             playwright-report/
             test-results/

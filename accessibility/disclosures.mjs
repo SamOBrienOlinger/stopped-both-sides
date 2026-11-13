@@ -1,3 +1,5 @@
+import {paceAnimations} from './animation-clock.mjs?v=render-paced-1';
+
 // Animate measured pixels rather than the experimental details-content pseudo
 // element, so opening and closing behave the same in all supported browsers.
 export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}}){
@@ -21,7 +23,7 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
  }
  function finish(state,open=state.open){
   if(active.get(state.details)!==state)return;
-  active.delete(state.details);
+  active.delete(state.details);state.stopClock?.();
   state.animation.onfinish=null;state.animation.oncancel=null;
   state.details.open=open;
   state.animation.cancel();
@@ -32,6 +34,13 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   state.details.removeAttribute('data-disclosure-state');
   onFinish(state.details);
  }
+ function play(state){
+  const animation=state.animation;
+  state.stopClock=paceAnimations([animation],()=>{
+   if(state.animation===animation)finish(state);
+  });
+  animation.onfinish=()=>finish(state);animation.oncancel=()=>finish(state);
+ }
  function settle(){for(const state of [...active.values()])finish(state);}
  function retarget(state,open){
   // Read the visible size before changing intent. Reversing a pending WAAPI
@@ -39,6 +48,7 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   // the pressed panel exactly where it was when the user changed direction.
   const from=state.details.getBoundingClientRect().height,to=open?state.openHeight:state.closedHeight;
   state.details.style.setProperty('height',from+'px');
+  state.stopClock?.();
   state.animation.onfinish=null;state.animation.oncancel=null;state.animation.cancel();
   intent(state,open);
   if(!allowed()||Math.abs(to-from)<1){finish(state);return;}
@@ -47,7 +57,7 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
    state.animation=state.details.animate([{height:from+'px'},{height:to+'px'}],{
     duration:Math.max(120,Math.min(800,800*remaining)),easing:'cubic-bezier(.4,0,.2,1)',fill:'both'
    });
-   state.animation.onfinish=()=>finish(state);state.animation.oncancel=()=>finish(state);
+   play(state);
   }catch{finish(state);}
  }
  main.addEventListener('click',event=>{
@@ -96,9 +106,9 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
    expanded:summary.getAttribute('aria-expanded'),
    contents:Array.from(details.children).filter(element=>element!==summary).map(element=>[element,element.inert])};
   active.set(details,state);intent(state,open);
-  animation.onfinish=()=>finish(state);
-  animation.oncancel=()=>finish(state);
   onStart(details);
+  // Start after measurements and observer registration, not before that work.
+  play(state);
  },true);
  // Scripted restoration or navigation is not a new user interaction. A close
  // from elsewhere also cancels an unfinished animation instead of reopening it.
