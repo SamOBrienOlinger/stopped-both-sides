@@ -24,7 +24,10 @@
  font-size:clamp(.8125rem,1.55vw,1rem);
  letter-spacing:.045em;
  white-space:normal;
- overflow-wrap:normal;
+ /* Permit the label to wrap below its min-content width at 200% text scale.
+    Otherwise the fixed-size LEGO portrait is pushed outside the badge. */
+ min-inline-size:0;
+ overflow-wrap:anywhere;
 }
 .paired-game .prompt .turn-avatar{
  position:relative;
