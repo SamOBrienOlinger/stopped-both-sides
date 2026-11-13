@@ -28,13 +28,26 @@ async function expectFitting(page){
   const a=portrait.getBoundingClientRect(),b=badge.getBoundingClientRect();
   const prompt=document.querySelector('.paired-game .prompt');
   const p=prompt.getBoundingClientRect();
-  return a.width>=40 && a.height>=40 &&
-   a.left>=b.left-1 && a.right<=b.right+1 &&
-   a.top>=b.top-1 && a.bottom<=b.bottom+1 &&
-   b.left>=p.left-1 && b.right<=p.right+1 &&
-   badge.scrollWidth<=badge.clientWidth+2 &&
-   document.documentElement.scrollWidth<=document.documentElement.clientWidth+2;
- })).toBe(true);
+  return {
+   minAvatarSize:a.width>=40 && a.height>=40,
+   avatarWithinBadge:a.left>=b.left-1 && a.right<=b.right+1 && a.top>=b.top-1 && a.bottom<=b.bottom+1,
+   badgeWithinPrompt:b.left>=p.left-1 && b.right<=p.right+1,
+   badgeNoScroll:badge.scrollWidth<=badge.clientWidth+2,
+   pageNoOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth+2,
+   diagnostics:{
+    viewport:document.documentElement.clientWidth,
+    scrollWidth:document.documentElement.scrollWidth,
+    badge:{x:Math.round(b.left),width:Math.round(b.width),scrollWidth:badge.scrollWidth,clientWidth:badge.clientWidth},
+    portrait:{x:Math.round(a.left),width:Math.round(a.width),height:Math.round(a.height)},
+    prompt:{x:Math.round(p.left),width:Math.round(p.width)},
+    fontSize:getComputedStyle(document.documentElement).fontSize,
+    direction:getComputedStyle(badge).direction,
+    language:document.documentElement.lang
+   }
+  };
+ })).toMatchObject({
+  minAvatarSize:true,avatarWithinBadge:true,badgeWithinPrompt:true,badgeNoScroll:true,pageNoOverflow:true
+ });
 }
 
 for(const path of paths){
