@@ -11,6 +11,12 @@ for(const {path,role} of cases){
   await expect(page.locator('.footer-copyright')).toHaveText('Copyright © 2026. All rights reserved');
   await expect(page.locator('.footer-note')).toContainText('General information, not legal advice.');
   await expect(page.locator('.footer-tools a')).toHaveCount(3);
+  await page.evaluate(()=>document.documentElement.classList.add('contrast-high'));
+  const colours=await page.locator('.footer').evaluate(footer=>({
+   copyright:getComputedStyle(footer.querySelector('.footer-copyright')).color,
+   foreground:getComputedStyle(footer).color
+  }));
+  expect(colours.copyright).toBe(colours.foreground);
  });
 
  test(path+' top navigation stays visible after scrolling with compact menu usable',async({page})=>{

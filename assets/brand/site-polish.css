@@ -127,6 +127,10 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   line-height:1.5;
   overflow-wrap:anywhere;
 }
+
+.contrast-high .footer .footer-identity .footer-copyright {
+  color:var(--ink);
+}
 @media(max-width:40rem){
   .reference-landing .landing-instructions {padding:clamp(.9rem,4vw,1.25rem)}
   .reference-landing .landing-instructions #paired-title {font-size:clamp(1.5rem,6vw,2rem)}
