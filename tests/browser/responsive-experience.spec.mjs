@@ -102,7 +102,7 @@ for(const path of ['./','garda/']){
      const element=record.target;
      const kind=element.getAttribute?.('data-motion');
      if(!['reveal','recap','disclosure'].includes(kind))continue;
-     window.surfaceCues.push({kind,heading:element.querySelector('h2')?.textContent||'',
+     window.surfaceCues.push({kind,heading:element.querySelector('h1,h2,p')?.textContent||'',
       transform:getComputedStyle(element).transform,
       nested:!!element.parentElement?.closest('[data-motion="reveal"],[data-motion="recap"],[data-motion="disclosure"]')});
     }
@@ -137,11 +137,13 @@ for(const path of ['./','garda/']){
   // A hash-only goto stays in this document. Let the route's page cue settle
   // and register later-scroll targets before deliberately reaching one.
   await frames(page);await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');await frames(page);
-  const initialGroup=page.locator('.content-page > .info-block').first();
-  const initialHeading=await initialGroup.locator('h2').textContent();
+  const initialGroup=page.locator('.about-opening .about-overview');
+  await expect(initialGroup).toBeVisible();
+  const initialHeading=await initialGroup.locator('p').first().textContent();
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   expect(await page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),initialHeading),
-   'initially visible information does not dim after it has already appeared').toBe(false);
+   'the initially visible About introduction must not dim after appearing').toBe(false);
+  await expect(initialGroup).not.toHaveAttribute('data-motion','reveal');
   const laterGroup=page.locator('.content-page > .info-block').last();
   const laterHeading=await laterGroup.locator('h2').textContent();
   await laterGroup.scrollIntoViewIfNeeded();
