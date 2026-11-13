@@ -58,8 +58,8 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
   test.setTimeout(300000);
   await page.emulateMedia({reducedMotion:'reduce'});await page.setViewportSize({width,height:900});
   await page.goto(path+'?lang=en'+stateHash({...cases[0],role:path==='garda/'?'garda':'public'}));
-  await expect(page.locator('.story>.encounter-scene[data-caption-anchors]')).toBeVisible();
-  const sceneWidth=await page.locator('.story>.encounter-scene').evaluate(e=>e.getBoundingClientRect().width);
+  await expect(page.locator('.paired-scene-lead>.encounter-scene[data-caption-anchors]')).toBeVisible();
+  const sceneWidth=await page.locator('.paired-scene-lead>.encounter-scene').evaluate(e=>e.getBoundingClientRect().width);
   await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=character-details-1');},basePath);
   let rendered=0,maxError=0;
   for(const item of cases){
@@ -83,7 +83,7 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
 // of image-heavy navigations even when the playable scene is ready.
 async function openCaptionScene(page,url){
  await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
- const scene=page.locator('.story>.encounter-scene[data-caption-anchors]');
+ const scene=page.locator('.paired-scene-lead>.encounter-scene[data-caption-anchors]');
  await expect(scene).toBeVisible();
  await expect.poll(()=>scene.locator('img').evaluateAll(images=>
   images.length>0&&images.every(image=>image.complete&&image.naturalWidth>0)
@@ -135,7 +135,7 @@ for(const path of ['./','garda/'])test(`${path} original Robin/Charlie report an
   const state={...cases.find(s=>s.id===id&&s.nodeId===node),cast:{public:'public-3',garda:'garda-9'}};
   for(const width of [390,1366]){
    await page.setViewportSize({width,height:900});await page.goto(path+'?lang=en'+stateHash(state));
-   const scene=page.locator('.story>.encounter-scene');await scene.scrollIntoViewIfNeeded();
+   const scene=page.locator('.paired-scene-lead>.encounter-scene');await scene.scrollIntoViewIfNeeded();
    await expect.poll(()=>scene.locator('img').evaluateAll(imgs=>imgs.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
    await aligned(page);await scene.screenshot({path:info.outputPath(node+'-'+width+'.png')});
   }
@@ -146,7 +146,7 @@ test('caption fallback remains readable without the enhancement script',async({p
  await page.route('**/encounters/scene-labels.mjs*',route=>route.abort());
  await page.emulateMedia({reducedMotion:'reduce'});await page.setViewportSize({width:320,height:900});
  await page.goto('./?lang=ar'+stateHash({...cases[0],cast:{public:'public-3',garda:'garda-9'}}));
- await expect(page.locator('.story>.encounter-scene')).toBeVisible();
+ await expect(page.locator('.paired-scene-lead>.encounter-scene')).toBeVisible();
  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
  await aligned(page);
 });
@@ -175,7 +175,7 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
  const role=path==='garda/'?'garda':'public';
  const state=startEncounter('public-street',role,{cast:{public:'public-8',garda:'garda-9'}});
  await page.goto(path+'?lang=ar'+stateHash(state));
- const scene=page.locator('.story>.encounter-scene[data-caption-anchors]');
+ const scene=page.locator('.paired-scene-lead>.encounter-scene[data-caption-anchors]');
  await expect(scene).toBeVisible();
  const originalUrl=page.url();
  for(const width of [320,390,768,1366]){

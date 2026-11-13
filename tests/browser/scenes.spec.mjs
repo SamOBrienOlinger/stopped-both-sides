@@ -11,7 +11,7 @@ for(const role of ['public','garda'])test(`${role}: illustrated decisions remain
  await page.goto((role==='garda'?'garda/':'./')+stateHash(startEncounter('public-search',role,{cast})));
  for(const width of [320,390,768,1366,1920]){
   await page.setViewportSize({width,height:900});
-  const scene=page.locator('.story>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);
+  const scene=page.locator('.paired-scene-lead>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);
   await expect(scene.locator('.scene-prop')).toHaveCount(0);
   await expect(scene.locator('[data-scene-character="public-6"]')).toHaveCount(1);
   await expect(scene.locator('[data-scene-character="garda-9"]')).toHaveCount(1);
@@ -36,16 +36,16 @@ for(const role of ['public','garda'])test(`${role}: illustrated decisions remain
   if(width===390||width===1366)await scene.screenshot({path:testInfo.outputPath(`${role}-scene-${width}.png`)});
  }
  await page.setViewportSize({width:390,height:844});
- const before=await page.locator('.story .scene-sprite img').evaluateAll(nodes=>nodes.map(n=>({src:n.src,style:n.getAttribute('style')})));
+ const before=await page.locator('.paired-scene-lead .scene-sprite img').evaluateAll(nodes=>nodes.map(n=>({src:n.src,style:n.getAttribute('style')})));
  await page.locator('[data-action="paired-answer"]').first().click();
  await expect(page.locator('#feedback')).toBeFocused();
  await expect(page.locator('#feedback .encounter-scene')).toHaveCount(0);
- expect(await page.locator('.story .scene-sprite img').evaluateAll(nodes=>nodes.map(n=>({src:n.src,style:n.getAttribute('style')})))).toEqual(before);
+ expect(await page.locator('.paired-scene-lead .scene-sprite img').evaluateAll(nodes=>nodes.map(n=>({src:n.src,style:n.getAttribute('style')})))).toEqual(before);
  await page.locator('#feedback').screenshot({path:testInfo.outputPath(`${role}-feedback-phone.png`)});
  await page.locator('[data-action="paired-switch"]').click();expect(current(page).cast).toEqual(cast);
  if(current(page).answers[current(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();
  await page.locator('[data-action="paired-next"]').click();
- await expect(page.locator('.story>.encounter-scene')).toBeVisible();expect(current(page).cast).toEqual(cast);
+ await expect(page.locator('.paired-scene-lead>.encounter-scene')).toBeVisible();expect(current(page).cast).toEqual(cast);
  await page.reload();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).cast).toEqual(cast);
  for(let i=0;i<8&&!current(page).complete;i++){
   await page.locator('[data-action="paired-answer"]').first().click();await page.locator('[data-action="paired-next"]').click();
@@ -63,7 +63,7 @@ test('Private legal advice illustrates separate locations, with both selected ch
  for(let i=0;i<8&&state.nodeId!=='arrest-silence'&&!state.complete;i++)state=continueEncounter(answer(state,0));
  expect(state.nodeId).toBe('arrest-silence');
  await page.goto('./'+stateHash(state));
- const scene=page.locator('.story>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);
+ const scene=page.locator('.paired-scene-lead>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);
  await expect(scene).toHaveAttribute('data-scene-mode','private');
  await expect(scene.locator('.scene-location--public')).toBeVisible();
  await expect(scene.locator('.scene-location--garda')).toBeVisible();
@@ -126,7 +126,7 @@ test('Visual review: all characters, locations and separate perspectives',async(
  for(let i=0;i<reviewCases.length;i++){
   const [id,nodeId]=reviewCases[i],cast={public:'public-'+(i+1),garda:'garda-'+((i+1)%9+1)};
   await page.goto('./'+stateHash(reachStage(id,nodeId,cast)));
-  const scene=page.locator('.story>.encounter-scene');
+  const scene=page.locator('.paired-scene-lead>.encounter-scene');
   await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);
   await expect(scene.locator('.scene-sprite img')).toHaveCount(2);
   await scene.screenshot({path:testInfo.outputPath(`review-${String(i+1).padStart(2,'0')}-${nodeId}.png`)});
@@ -136,7 +136,7 @@ test('Visual review: all characters, locations and separate perspectives',async(
   await page.setViewportSize({width:1366,height:900});
  }
 });
-for(const path of ['./','garda/'])test(`${path} medication scene keeps the decision before artwork on phones`,async({page},testInfo)=>{
+for(const path of ['./','garda/'])test(`${path} medication scene places artwork between guide and text on phones`,async({page},testInfo)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
  const state=reachStage('public-custody','custody-health',{public:'public-3',garda:'garda-4'});
  for(const width of [320,430]){
@@ -144,11 +144,13 @@ for(const path of ['./','garda/'])test(`${path} medication scene keeps the decis
   await page.goto(path+stateHash(state));
   await expect(page.locator('.story-text')).toHaveText('Robin is due prescribed medication and is beginning to feel unwell. Robin has not yet told custody staff.');
   await expect(page.locator('#main')).not.toContainText('The learner knows this');
-  const choices=await page.locator('.decision-choices').boundingBox(),art=await page.locator('.story--illustrated').boundingBox();
-  expect(choices.y+choices.height,'the complete decision precedes decorative artwork').toBeLessThanOrEqual(art.y);
+  const guide=await page.locator('.decision-guide').boundingBox(),art=await page.locator('.paired-scene-lead').boundingBox(),context=await page.locator('.decision-context').boundingBox(),choices=await page.locator('.decision-choices').boundingBox();
+  expect(guide.y+guide.height,'the illustrated encounter follows the step guide').toBeLessThanOrEqual(art.y+1);
+  expect(art.y+art.height,'the situation text follows the illustrated encounter').toBeLessThanOrEqual(context.y+1);
+  expect(context.y+context.height,'the choices follow the situation text').toBeLessThanOrEqual(choices.y+1);
   await page.locator('.decision-context').scrollIntoViewIfNeeded();
   await page.screenshot({path:testInfo.outputPath(`medication-decision-${width}.png`)});
-  const scene=page.locator('.story>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);
+  const scene=page.locator('.paired-scene-lead>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);
   await scene.screenshot({path:testInfo.outputPath(`medication-portraits-${width}.png`)});
  }
  await page.locator('[data-action="paired-answer"]').first().click();
