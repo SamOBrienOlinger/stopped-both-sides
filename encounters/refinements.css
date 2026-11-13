@@ -1,4 +1,4 @@
-/* One reading sequence, from the facts to the decision, on either site. */
+/* Reading sequence on both entry pages: guide, illustrated scene, facts, decision. */
 main{padding-top:1.75rem}
 .brand-intro.home-intro{justify-content:flex-start;max-width:62rem;margin:0 auto 1.25rem}
 .brand-intro .brand-profiles{width:clamp(4rem,9vw,6.5rem)}
@@ -42,10 +42,10 @@ main{padding-top:1.75rem}
 .decision-facts{margin-top:.85rem}
 .decision-facts summary,.lesson summary,.recap-detail summary,.recap-scores>summary,.score-mechanics>summary,.facilitator-note>summary{padding:.65rem 0;min-height:44px;cursor:pointer;font-weight:700;color:var(--deep)}
 .decision-facts ul{padding-left:1.3rem}
-.paired-game{align-items:start;margin-top:0;gap:1.5rem}
-.paired-game>.story.story--illustrated{position:static;padding:0;background:transparent;border:0;border-radius:1rem}
-.paired-game .story>.encounter-scene{margin:0}
-.paired-game .scene-stage{aspect-ratio:auto}
+.paired-scene-lead{box-sizing:border-box;inline-size:100%;max-inline-size:68rem;min-inline-size:0;margin:0 auto clamp(1rem,2.5vw,1.5rem)}
+.paired-scene-lead>.encounter-scene{box-sizing:border-box;display:block;inline-size:100%;max-inline-size:100%;margin:0}
+.paired-game{align-items:start;margin-top:0;gap:1.5rem;grid-template-columns:minmax(0,1fr)}
+.paired-game>.decision-choices{min-inline-size:0;inline-size:100%}
 .paired-game .prompt .eyebrow{font-size:.8125rem;margin-bottom:.6rem}
 .paired-game .prompt h2{font-size:clamp(1.25rem,2.3vw,1.6rem)}
 .paired-game .choice{min-height:64px;padding:1rem;line-height:1.5}
@@ -91,7 +91,7 @@ main{padding-top:1.75rem}
 .legacy-perspective{padding:.75rem 1rem}
 .legacy-perspective .text-button{min-height:44px}
 @media(min-width:42rem){.character-options{grid-template-columns:repeat(5,minmax(0,1fr))}.recap-overview{grid-template-columns:minmax(12rem,.7fr) minmax(0,1.4fr)}.recap-overview .encounter-scene{max-width:none}.setup-character>.character-image{width:4rem}}
-@media(min-width:56.25rem){.paired-game{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)}.paired-game>.story.story--illustrated{position:sticky;top:1rem}}
+@media(min-width:56.25rem){.paired-game{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:41.25rem){main{padding-top:1.25rem}.header nav{gap:.2rem}.header nav a,.header nav .utility-settings{padding:.4rem .55rem}.perspective-casts p{font-size:.875rem}.play-toolbar~.encounter-cast .character-image{width:2.5rem}.play-toolbar~.encounter-cast .cast-character{padding:0;gap:.4rem}.play-toolbar~.encounter-cast .cast-character strong{font-size:.875rem}.play-toolbar.perspective-bar{padding:.6rem 0}.play-toolbar .character-actions{width:100%;align-items:center}.play-toolbar .character-actions .primary{flex:1}.play-toolbar .character-actions .text-button{flex:0 1 7rem}.paired-recap .summary-item{padding:1rem}.recap-next{display:grid;grid-template-columns:minmax(0,1fr)}.scene-cast-names strong{font-size:.8125rem}.scene-cast-names>span>span{font-size:.75rem}}
 @media(forced-colors:active){.variation-notice,.decision-context,.recap-scores,.score-mechanics,.topic-filter{background:Canvas;color:CanvasText;border-color:CanvasText}.topic-filter[aria-pressed=true]{outline:2px solid Highlight;outline-offset:-4px;background:Canvas;color:CanvasText}}
-@media print{.paired-game>.story.story--illustrated{position:static}.paired-recap{max-width:none}.recap-detail:not([open])>*{display:block}.recap-detail>summary{display:none}}
+@media print{.paired-recap{max-width:none}.recap-detail:not([open])>*{display:block}.recap-detail>summary{display:none}}
