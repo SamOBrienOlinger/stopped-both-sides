@@ -9,9 +9,15 @@
   inset-block-start:0;
   top:0;
   z-index:80;
+  background:var(--paper,#fff);
 }
 html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
 #main :is(h1,h2,[tabindex="-1"]) {scroll-margin-block-start:clamp(7rem,12vw,10rem)}
+/* Scroll-to-element and keyboard navigation must reveal controls below the
+   sticky header, including compact navigation and enlarged text. */
+#main :is(a,button,summary,input,select,[role="button"],[tabindex]) {
+  scroll-margin-block-start:clamp(7rem,12vw,10rem);
+}
 
 /* Clear hierarchy: orientation, choice of perspective, and next action. */
 .reference-landing .landing-instructions {

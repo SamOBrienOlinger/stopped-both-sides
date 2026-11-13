@@ -47,6 +47,24 @@ for(const {path,role} of cases){
   }
  });
 
+ test(path+' in-page focus targets clear the sticky header when scrolled into view',async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(path+'#encounters');
+  const button=page.locator('[data-action="paired-setup-characters"]');
+  await expect(button).toBeVisible();
+  await button.evaluate(element=>element.scrollIntoView({block:'start'}));
+  const bounds=await button.evaluate(element=>({
+   buttonTop:element.getBoundingClientRect().top,
+   headerBottom:document.querySelector('.header').getBoundingClientRect().bottom
+  }));
+  expect(bounds.buttonTop,'the focused character control remains below sticky navigation')
+   .toBeGreaterThanOrEqual(bounds.headerBottom-2);
+  await button.focus();
+  await expect(button).toBeFocused();
+  await button.click();
+  await expect(page.locator('#character-picker')).toBeVisible();
+ });
+
  test(path+' landing invitation has accessible order and fits enlarged text and RTL',async({page})=>{
   test.setTimeout(150000);
   await page.emulateMedia({reducedMotion:'reduce'});
