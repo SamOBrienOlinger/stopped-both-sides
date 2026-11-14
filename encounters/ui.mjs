@@ -102,7 +102,14 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
    const {src:image,srcset}=backgroundImage(role);
    const label=role==='public'?'member of the public':'Garda member';
    const icon=perspectiveIcon(role);
-   return `<div class="perspective-hero" data-role-tone="${role}"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><a class="primary perspective-hero-button" href="#encounters/${role}"><span class="perspective-button-title">${icon}<span class="perspective-button-label">${label}</span><span class="perspective-button-short">${label}</span></span><span class="perspective-button-action">Explore</span><span class="perspective-button-action-short">Explore</span></a><p class="perspective-caption">${role==='public'?'You are stopped. Learn what you can ask and what you may need to do.':'You make the stop. Check your reasons, assumptions and responsibilities.'}</p></div>`;
+   // One real link wraps the complete card, rather than making only "Explore" clickable.
+   // Resolve against the public entrypoint so both / and /garda/ cards reach the
+   // requested canonical /#encounters/{role} URL on Pages and local previews.
+   const href=new URL('#encounters/'+role,sites.public).href;
+   const description=role==='public'
+    ?'You are stopped. Learn what you can ask and what you may need to do.'
+    :'You make the stop. Check your reasons, assumptions and responsibilities.';
+   return `<a class="perspective-hero perspective-card-link" data-role-tone="${role}" href="${href}" aria-labelledby="perspective-${role}-label perspective-${role}-action" aria-describedby="perspective-${role}-description"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><span class="primary perspective-hero-button"><span class="perspective-button-title">${icon}<span class="perspective-button-label" id="perspective-${role}-label">${label}</span><span class="perspective-button-short">${label}</span></span><span class="perspective-button-action" id="perspective-${role}-action">Explore</span><span class="perspective-button-action-short">Explore</span></span><p class="perspective-caption" id="perspective-${role}-description">${description}</p></a>`;
   }).join('');
   return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title"><div class="landing-instructions"><p class="landing-deck">Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><${heading} id="paired-title">Which side will you try first?</${heading}><p class="landing-purpose">Know your rights. Understand fair decisions.</p><p class="small-note">Read a situation, choose a response, then find out why it matters.</p></div><div class="perspective-heroes overlapping-heroes">${heroes}</div></section>`;
  }
