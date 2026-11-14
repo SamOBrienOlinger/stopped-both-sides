@@ -25,7 +25,7 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
-  const titles={public:'member of the public',garda:'Garda member'};
+  const titles={public:'Member of the public',garda:'Garda member'};
   const descriptions={
    public:'You are stopped. Learn what you can ask and what you may need to do.',
    garda:'You make the stop. Check your reasons, assumptions and responsibilities.'

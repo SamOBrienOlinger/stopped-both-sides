@@ -5,7 +5,7 @@ import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from './compatibility.mjs';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=lego-dublin-2';
 import {createMotion} from './accessibility/motion.mjs?v=visible-motion-5';
-import {createEncounterMode} from './encounters/ui.mjs?v=full-card-links-20261114';
+import {createEncounterMode} from './encounters/ui.mjs?v=landing-steps-20261114';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs';
 const main=document.querySelector('#main');
@@ -18,8 +18,7 @@ const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources</summary><ul lang="en-IE" data-no-translate>${[...new Set(ids)].map(id=>`<li><a href="${esc(sources[id].url)}" target="_blank" rel="noopener noreferrer">${esc(sources[id].title)} ↗</a></li>`).join('')}</ul></details>`;
 const focusMain=()=>{const heading=main.querySelector?.('h1');(heading||main).focus({preventScroll:true});main.scrollIntoView?.({block:'start',behavior:'instant'});};
 function home(){
- return `${paired.perspectiveChoice({primary:true})}${paired.landing({includeChoices:false})}<p class="focus-note">Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.</p>
- <details class="single-mode"><summary>Individual practice · single-role scenarios</summary><p>Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.</p><div class="scenarios" data-english-practice>${scenarios.map((s,i)=>`<article class="scenario"><div class="card-top"><span class="scene-icon">${scenarioIcon('public-'+s.id)}</span><span class="scene-number">SITUATION ${String(i+1).padStart(2,'0')}</span></div><h2>${esc(s.title)}</h2><p class="person">${esc(s.person)}</p><p class="description">${esc(s.description)}</p><p class="small-note">${esc(s.minutes)}</p><button class="primary secondary scenario-action" data-action="start" data-id="${s.id}" aria-label="Explore this situation: ${esc(s.title)}">Explore this situation <span aria-hidden="true">→</span></button></article>`).join('')}</div></details>`;
+ return `${paired.perspectiveChoice({primary:true})}${paired.landing({includeChoices:false})}<details class="single-mode"><summary>Individual practice · single-role scenarios</summary><p>Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.</p><div class="scenarios" data-english-practice>${scenarios.map((s,i)=>`<article class="scenario"><div class="card-top"><span class="scene-icon">${scenarioIcon('public-'+s.id)}</span><span class="scene-number">SITUATION ${String(i+1).padStart(2,'0')}</span></div><h2>${esc(s.title)}</h2><p class="person">${esc(s.person)}</p><p class="description">${esc(s.description)}</p><p class="small-note">${esc(s.minutes)}</p><button class="primary secondary scenario-action" data-action="start" data-id="${s.id}" aria-label="Explore this situation: ${esc(s.title)}">Explore this situation <span aria-hidden="true">→</span></button></article>`).join('')}</div></details>`;
 }
 function game(){
  if(session.complete)return summary();

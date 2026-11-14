@@ -5,7 +5,7 @@ const descriptions={
  public:'You are stopped. Learn what you can ask and what you may need to do.',
  garda:'You make the stop. Check your reasons, assumptions and responsibilities.'
 };
-const titles={public:'member of the public',garda:'Garda member'};
+const titles={public:'Member of the public',garda:'Garda member'};
 const cards=role=>`a.perspective-hero.perspective-card-link[data-role-tone="${role}"]`;
 
 for(const path of entrypoints){
