@@ -473,7 +473,7 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
 }
 .topic-explorer details.topic-disclosure > summary.topic-disclosure-trigger{
   list-style:none;
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  display:block;
   min-block-size:3.75rem;
   padding:clamp(.95rem,2.2vw,1.25rem) clamp(1rem,2.5vw,1.5rem);
   border-radius:1.25rem;
@@ -483,7 +483,8 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
 .topic-explorer .topic-disclosure-trigger::-webkit-details-marker{display:none}
 .topic-explorer .topic-disclosure-trigger::marker{content:""}
 .topic-explorer details.topic-disclosure > summary.topic-disclosure-trigger h2{
-  margin:0;color:var(--ink);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  min-inline-size:0;margin:0;color:var(--ink);
   font-size:clamp(1.35rem,2.65vw,1.95rem);
   font-weight:800;line-height:1.35;letter-spacing:-.025em;
   overflow-wrap:anywhere;
@@ -508,6 +509,7 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
 @media(hover:hover) and (pointer:fine){
   .topic-explorer details.topic-disclosure > summary.topic-disclosure-trigger:hover{background:var(--pale,#edf6f5)}
 }
+.topic-explorer details.topic-disclosure:not([open]) > .topic-grid{display:none}
 .topic-explorer .topic-disclosure .topic-grid{
   display:grid;grid-template-columns:minmax(0,1fr);gap:.625rem;
   margin:0;padding:clamp(.7rem,1.4vw,1rem);
