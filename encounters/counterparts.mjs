@@ -306,7 +306,7 @@ export const counterparts={
     choice('Describe an empty search result even though no search took place.','A cancelled search and a completed search with no find are different events.',true)],['public:fiosru'])
  },
  'garda-supervision':{
-  'supervision-start':pair('A fictional review uses synthetic data: Group A has 60 searches and 12 finds; Group B has 15 searches and 3 finds. Both rates are 20%. Exposure, deployment, individual grounds and treatment are unknown. The roles are a supervising sergeant and a member of the public acting as a community reviewer.',
+  'supervision-start':pair('At a local community meeting, several residents said they felt singled out when Gardaí stopped and searched them.\n\nThe group asked one of its members to bring their concerns to the supervising Garda sergeant. At a follow-up meeting, the sergeant shares a summary of recent searches so they can decide together what to look into.\n\nIn this review, Gardaí found something in 12 of 60 searches in Group A and 3 of 15 in Group B. That’s one in five searches in both groups.\n\nThe reviewers want to know who Gardaí encountered, why they searched people and how those people were treated.',
    'As the community reviewer, what can you conclude from this table?',
    'Equal find rates do not establish fairness, and different counts do not settle the cause of every decision. Identify missing information before making a stronger claim.',[
     choice('Ask about selection, individual grounds, deployment and treatment.','These questions identify what the table leaves unresolved.'),

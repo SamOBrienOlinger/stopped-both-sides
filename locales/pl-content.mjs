@@ -968,7 +968,7 @@ export default {
   "m0966": "Czego liczby nie pokazują",
   "m0967": "Równe wskaźniki skuteczności przeszukań wyglądają uspokajająco. Zbadaj wybór osób, wzorce patroli i to, co wynik szkolenia może naprawdę wykazać.",
   "m0968": "Pozornie uspokajający panel danych",
-  "m0969": "Fikcyjna ocena używa danych syntetycznych: grupa A ma 60 przeszukań i 12 znalezisk; grupa B ma 15 przeszukań i 3 znaleziska. Oba wskaźniki to 20%. Narażenie na kontakt, rozmieszczenie patroli, indywidualne podstawy i traktowanie są nieznane. Role to nadzorujący sierżant i osoba z publiczności pełniąca rolę recenzenta społecznego.",
+  "m0969": "Na lokalnym spotkaniu kilku mieszkańców powiedziało, że czuli się wzięci na cel, gdy funkcjonariusze Garda ich zatrzymali i przeszukali.\n\nGrupa poprosiła jedną osobę ze swojego grona, by przekazała te obawy sierżantowi Garda odpowiedzialnemu za nadzór. Na kolejnym spotkaniu sierżant przedstawia podsumowanie ostatnich przeszukań, by mogli wspólnie ustalić, czemu przyjrzeć się bliżej.\n\nW tym przeglądzie funkcjonariusze znaleźli coś podczas 12 z 60 przeszukań w grupie A i 3 z 15 w grupie B. W obu grupach było to jedno na pięć przeszukań.\n\nOsoby prowadzące przegląd chcą ustalić, kogo napotkali funkcjonariusze Garda, dlaczego przeszukali te osoby i jak je potraktowali.",
   "m0970": "Co możesz wywnioskować o uczciwości?",
   "m0971": "Same równe wskaźniki znalezisk nie dowodzą uczciwego wyboru osób lub traktowania. Różnice wymagają starannego zbadania; tabela nie może też diagnozować każdej osoby z policji jako stronniczej.",
   "m0972": "Równe wskaźniki dowodzą, że decyzje o przeszukaniu były równie uczciwe.",

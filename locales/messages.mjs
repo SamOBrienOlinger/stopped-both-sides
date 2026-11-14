@@ -969,7 +969,7 @@ export const messages=[
   "What the numbers leave out",
   "Equal search success rates look reassuring. Examine selection, patrol patterns and what a training result can really show.",
   "An apparently reassuring dashboard",
-  "A fictional review uses synthetic data: Group A has 60 searches and 12 finds; Group B has 15 searches and 3 finds. Both rates are 20%. Exposure, deployment, individual grounds and treatment are unknown. The roles are a supervising sergeant and a member of the public acting as a community reviewer.",
+  "At a local community meeting, several residents said they felt singled out when Gardaí stopped and searched them.\n\nThe group asked one of its members to bring their concerns to the supervising Garda sergeant. At a follow-up meeting, the sergeant shares a summary of recent searches so they can decide together what to look into.\n\nIn this review, Gardaí found something in 12 of 60 searches in Group A and 3 of 15 in Group B. That’s one in five searches in both groups.\n\nThe reviewers want to know who Gardaí encountered, why they searched people and how those people were treated.",
   "What can you conclude about fairness?",
   "Equal find rates alone cannot establish that selection or treatment was fair. Disparities require careful inquiry; the table also cannot diagnose every officer as biased.",
   "The equal rates prove that the search decisions were equally fair.",
