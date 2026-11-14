@@ -9,7 +9,7 @@ const invitation=[
 ];
 
 for(const path of paths){
- test(path+' landing invitation matches the portfolio staggered reveal and honours reduced motion',async({page})=>{
+ test(path+' landing invitation matches the portfolio staggered reveal and honours reduced motion',async({page},testInfo)=>{
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.goto(path+'?lang=en#play');
   const group=page.locator('.reference-landing .landing-instructions');
@@ -26,6 +26,21 @@ for(const path of paths){
   expect(animation.map(item=>item.duration)).toEqual(Array(4).fill('1s'));
   expect(animation.map(item=>item.delay)).toEqual(['0s','0.1s','0.2s','0.3s']);
   expect(animation.every(item=>item.align==='center')).toBe(true);
+  await group.evaluate(async element=>{
+   await document.fonts.ready;
+   await Promise.all([...element.children].flatMap(child=>child.getAnimations())
+    .map(animation=>animation.finished.catch(()=>{})));
+  });
+  await expect.poll(()=>group.evaluate(element=>[...element.children]
+   .map(child=>getComputedStyle(child).opacity))).toEqual(Array(4).fill('1'));
+  const label=path==='garda/'?'garda':'public';
+  await group.screenshot({path:testInfo.outputPath(label+'-landing-typography-desktop.png')});
+  await page.setViewportSize({width:390,height:844});
+  await group.evaluate(async element=>{
+   await Promise.all([...element.children].flatMap(child=>child.getAnimations())
+    .map(animation=>animation.finished.catch(()=>{})));
+  });
+  await group.screenshot({path:testInfo.outputPath(label+'-landing-typography-phone.png')});
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect.poll(()=>group.evaluate(element=>[...element.children].map(child=>getComputedStyle(child).animationName))).toEqual(Array(4).fill('none'));
   await page.setViewportSize({width:320,height:568});
