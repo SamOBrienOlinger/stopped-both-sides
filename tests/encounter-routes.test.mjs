@@ -21,6 +21,7 @@ await import(new URL('app.mjs',siteBase));
 const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The game could not load/);
 function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}
+function openCharacterPicker(role){callbacks['scene-character-change']({target:{dataset:{sceneLabelRole:role},closest(){return null;}}});assertLoaded();}
 const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
@@ -79,11 +80,11 @@ test('Chosen characters remain editable without replacing the opposing character
  action('paired-character-select',{role:'public',character:'public-6'});
  action('paired-start',{id:'public-search',role:'public'});assert.equal(state().cast.public,'public-6');
  action('paired-answer',{index:'0'});const before=state();
- action('paired-characters');assert.match(main.innerHTML,/Change your character/);
+ openCharacterPicker('public');assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);
  action('paired-character-choose',{character:'public-9'});assert.equal(state().cast.public,'public-9');assert.equal(state().cast.garda,before.cast.garda);
  assert.deepEqual(state().answers,before.answers);assert.deepEqual(state().history,before.history);
  assert.match(main.innerHTML,/data-character-id="public-9"/);action('paired-character-close');
- action('paired-switch');action('paired-characters');action('paired-character-choose',{character:'garda-8'});
+ openCharacterPicker('garda');action('paired-character-choose',{character:'garda-8'});assert.equal(state().role,'public');
  assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});assert.deepEqual(state().answers,before.answers);
  const link=new URL(siteLink.href),carried=decodeState(unpackProgress(link.hash.split('~')[1]).last);route((siteRole==='garda'?'#evidence':'#rights')+'~'+link.hash.split('~')[1]);route(stateHash(carried));assert.deepEqual(state().cast,{public:'public-9',garda:'garda-8'});
 });
@@ -109,9 +110,9 @@ test('Original mode transfers a live selection into the same stage and records i
 });
 test('Original practice can change character while carrying its stage and answer into shared play',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
- assert.match(main.innerHTML,/data-action="paired-character-transfer"/);
- action('paired-character-transfer');assert.equal(state().role,siteRole);assert.equal(state().answers[siteRole],1);
- assert.match(main.innerHTML,/Change your character/);action('paired-character-choose',{character:siteRole+'-7'});
+ assert.match(main.innerHTML,/data-scene-label-role=/);
+ openCharacterPicker(siteRole);assert.equal(state().role,siteRole);assert.equal(state().answers[siteRole],1);
+ assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);action('paired-character-choose',{character:siteRole+'-7'});
  assert.equal(state().cast[siteRole],siteRole+'-7');assert.equal(state().answers[siteRole],1);
 });
 test('Unknown routes and corrupted progress show a recovery view while saved records remain available',()=>{

@@ -1,5 +1,6 @@
-import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
+import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=support-resources-1';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
@@ -10,6 +11,7 @@ const added=languages.filter(language=>!['en','ga'].includes(language.id));
 await Promise.all(added.map(language=>loadLanguage(language.id)));
 const paths={public:'./',garda:'garda/'};
 const cast={public:'public-2',garda:'garda-5'};
+const gardaName=characterFor('garda',cast.garda).name;
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const saved=(page,role)=>page.evaluate(key=>localStorage.getItem(key),progressStorageKey(role));
 async function openSettings(page,footer=false){
@@ -88,7 +90,7 @@ for(const role of ['public','garda'])for(const language of added){
   expect(current(page)).toEqual(before);expect(await saved(page,role)).toEqual(record);
   await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor');
   await expect(page.locator('[data-cast-role="public"] strong')).toHaveText('Noor');
-  await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText('Aisling');
+  await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText(gardaName);
   if(language.id==='ar'){
    const ratio=page.locator('.role-score strong bdi').first();
    await expect(ratio).toHaveCSS('direction','ltr');
@@ -104,8 +106,8 @@ for(const role of ['public','garda'])for(const language of added){
   await expect(page.locator('#reading-dialog')).not.toBeVisible();
   await expectSettingsFocusReturn(page);
   expect(current(page)).toEqual(before);
-  await page.locator('[data-action="paired-characters"]').click();
-  await expect(page.locator('[data-character="garda-5"]')).toHaveAttribute('aria-label',translateText('Choose character: Aisling',language.id));
+  await openCharacterPicker(page);
+  await expect(page.locator('[data-character="garda-5"]')).toHaveAttribute('aria-label',translateText('Choose character: '+gardaName,language.id));
   await page.locator('[data-action="paired-character-close"]').click();
   for(const target of ['about','accessibility',role==='public'?'rights':'evidence','progress']){
    await page.evaluate(hash=>{location.hash=hash;},target);

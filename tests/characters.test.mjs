@@ -7,6 +7,10 @@ import {translateText} from '../locales/translate.mjs';
 
 test('All 18 characters are distinct; random casting can select every opposing character',()=>{
  const all=Object.values(characters).flat();assert.equal(new Set(all.map(c=>c.id)).size,18);
+ assert.ok(characters.garda.every(character=>/^Garda (?:Sergeant )?\S+$/.test(character.name)));
+ assert.ok(characters.garda.some(character=>character.name.startsWith('Garda Sergeant ')));
+ assert.ok(characters.garda.some(character=>!character.name.startsWith('Garda Sergeant ')));
+ assert.ok(characters.public.every(character=>!character.name.startsWith('Garda ')));
  assert.equal(new Set(all.map(c=>[c.column,c.row].join(','))).size,18);
  for(const role of ['public','garda']){
   const other=role==='public'?'garda':'public',id=characters[role][5].id;

@@ -1,3 +1,4 @@
+import {openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {encounters,roleLabels} from '../../encounters/catalog.mjs';
 import {characters} from '../../encounters/characters.mjs';
@@ -69,7 +70,7 @@ for(const path of paths){
   await expectPortrait(page,'garda','garda-2');
   await page.locator('[data-action="paired-switch"]').click();
   await expectPortrait(page,'public','public-6');
-  await page.locator('[data-action="paired-characters"]').click();
+  await openCharacterPicker(page);
   await page.locator('[data-character="public-9"]').click();
   await expectPortrait(page,'public','public-9');
   await page.locator('[data-action="paired-character-close"]').click();
@@ -77,7 +78,7 @@ for(const path of paths){
   await expectPortrait(page,'public','public-9');
   await page.locator('[data-action="paired-switch"]').click();
   await expectPortrait(page,'garda','garda-2');
-  await page.locator('[data-action="paired-characters"]').click();
+  await openCharacterPicker(page);
   await page.locator('[data-character="garda-5"]').click();
   await expectPortrait(page,'garda','garda-5');
   await page.reload();

@@ -74,25 +74,28 @@
 }
 .scene-profile-portrait img{position:absolute;display:block;max-inline-size:none;max-width:none}
 .scene-profile-info{flex:1;min-inline-size:0}
-.scene-profile-kicker{margin:0 0 .35rem;color:var(--tone-deep,#175e61);font-size:.8rem;font-weight:750;text-transform:uppercase;letter-spacing:.035em}
 .scene-character-dialog h2{margin:0 0 .3rem;font-size:clamp(1.4rem,3.7vw,2rem);line-height:1.2;color:var(--tone-deep,#175e61);overflow-wrap:anywhere}
 .scene-profile-role{margin:.2rem 0;font-size:1rem;font-weight:750;color:var(--tone-deep,#175e61)}
 .scene-profile-body{margin:1.2rem 0 1rem;line-height:1.65}
 .scene-profile-setting{margin:0;padding:.7rem .9rem;border-radius:.75rem;background:var(--tone-pale,#edf6f5);color:var(--tone-deep,#175e61);line-height:1.5}
-.scene-profile-close{
- display:block;margin:1.3rem 0 0 auto;min-block-size:48px;
- padding:.7rem 1.3rem;border:1px solid var(--tone-deep,#175e61);border-radius:.75rem;
- background:var(--tone-deep,#175e61);color:#fff;
- font-family:inherit;font-size:1rem;font-weight:700;line-height:1.4;cursor:pointer;
+.scene-profile-actions{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-block-start:1.3rem;
 }
-.scene-profile-close:hover{filter:brightness(1.12)}
-.scene-profile-close:focus-visible{outline:3px solid var(--tone-deep,#175e61);outline-offset:3px}
+.scene-profile-actions button{
+ min-inline-size:0;min-block-size:48px;
+ padding:.65rem .7rem;border:1px solid var(--tone-deep,#175e61);border-radius:.75rem;
+ font:inherit;font-weight:700;line-height:1.4;overflow-wrap:anywhere;cursor:pointer;
+}
+.scene-profile-change{background:var(--paper,#fff);color:var(--tone-deep,#175e61)}
+.scene-profile-close{background:var(--tone-deep,#175e61);color:#fff}
+.scene-profile-actions button:hover{filter:brightness(1.12)}
+.scene-profile-actions button:focus-visible{outline:3px solid var(--tone-deep,#175e61);outline-offset:3px}
 @media(max-width:390px){.scene-profile-top{align-items:flex-start;gap:.65rem}.scene-profile-portrait{inline-size:4.7rem}}
 @media(forced-colors:active){
  .encounter-scene[data-caption-anchors] .scene-panel,
  .encounter-scene[data-caption-anchors] .scene-character-label,
  .scene-character-dialog,.scene-profile-setting{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
- .scene-profile-close{background:ButtonFace;color:ButtonText;border-color:ButtonText}
+ .scene-profile-actions button{background:ButtonFace;color:ButtonText;border-color:ButtonText}
  .scene-character-dialog::backdrop{background:Canvas}
 }
 @media(prefers-reduced-motion:reduce){

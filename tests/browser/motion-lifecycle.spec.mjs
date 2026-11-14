@@ -1,4 +1,4 @@
-import {openNavigation} from './navigation.mjs';
+import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 
@@ -84,14 +84,15 @@ function completedRoute(role){
 }
 
 for(const role of ['public','garda']){
- for(const action of ['paired-transfer','paired-character-transfer'])test(`${role}: ${action} retains the same scene and answer during a shared-mode transfer`,async({page})=>{
+ for(const action of ['paired-transfer','change-character'])test(`${role}: ${action} retains the same scene and answer during a shared-mode transfer`,async({page})=>{
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
   await page.locator('.single-mode [data-action="start"]').first().click();
   await page.locator('[data-action="choose"]').first().click();
   await expect(page.locator('#feedback')).toBeVisible();
   await reset(page);
-  await page.locator('[data-action="'+action+'"]').click();
+  if(action==='change-character')await openCharacterPicker(page,role);
+  else await page.locator('[data-action="paired-transfer"]').click();
   await expect(page.locator('.paired-game')).toBeVisible();
   await expect.poll(async()=>kinds(page)).toContain(action==='paired-transfer'?'perspective':'picker');
   await frames(page);
@@ -100,7 +101,7 @@ for(const role of ['public','garda']){
   expect(current(page).answers[role]).toBe(0);
   expect(current(page).history).toHaveLength(0);
   expect(current(page).role).toBe(action==='paired-transfer'?(role==='public'?'garda':'public'):role);
-  if(action==='paired-character-transfer')await expect(page.locator('#character-picker-title')).toBeFocused();
+  if(action==='change-character')await expect(page.locator('#character-picker-title')).toBeFocused();
  });
 
  test(`${role}: topic filters do not animate a redraw and reference groups reveal once per visit`,async({page})=>{
@@ -207,7 +208,7 @@ for(const role of ['public','garda']){
   const heading=await card.locator('h2').textContent();
   await expect.poll(async()=>(await events(page)).some(event=>event.kind==='recap'&&event.heading===heading)).toBe(true);
   await reset(page);
-  await page.locator('[data-action="paired-characters"]').click();
+  await openCharacterPicker(page);
   await page.locator('[data-action="paired-character-close"]').click();
   await page.locator('.paired-recap > .summary-item').last().scrollIntoViewIfNeeded();
   await frames(page);

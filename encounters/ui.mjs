@@ -4,8 +4,8 @@ import {learningIcon,scenarioIcon,routeTrail,completionMap,decisionGuide,topicEx
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=scene-review-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=scene-review-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
-import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=garda-baseball-20261114';
-import {renderScene} from './scenes.mjs?v=garda-baseball-20261114';
+import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=character-details-actions-20261114';
+import {renderScene} from './scenes.mjs?v=character-details-actions-20261114';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=site-languages-1';
 import {variationFor,remainingDecisions,learningStatus,topicGroups} from './presentation.mjs';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -22,7 +22,7 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  let browserStorage;try{browserStorage=globalThis.localStorage;}catch{}
  const store=createProgressStore(browserStorage,siteRole);
  const characterPreferences=createCharacterPreferences(browserStorage),legacyCasts=new Map();
- let state=null,clearPending=false,characterPickerOpen=false,setupCharacterOpen=false,topicFilter='all',catalogueOpen=false,lastSelectionRoute='';
+ let state=null,clearPending=false,characterPickerTarget=null,setupCharacterOpen=false,topicFilter='all',catalogueOpen=false,lastSelectionRoute='';
  const handles=hash=>hash==='encounters'||hash.startsWith('encounters/')||hash.startsWith('encounter/')||hash==='progress'||hash.startsWith('progress~')||hash.startsWith('encounters~');
  function saveState(next){state=next;store.save(recordProgress(store.value,state));}
  function navigate(next,replace=false,focus=true){
@@ -44,9 +44,27 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   return `<div class="encounter-cast" aria-label="Characters in this situation">${[s.role,otherRole(s.role)].map(role=>`<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${s.cast[role]}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,s.cast[role])}<div><span class="cast-label">${role===s.role?'Your character':'Other character'}</span><strong data-no-translate>${esc(characterFor(role,s.cast[role]).name)}</strong><span class="scenario-person">${esc(characterContext(e,stage,role))}</span></div></div>`).join('')}</div>`;
  }
  function characterPicker(role,selected,inGame=false){
-  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change your character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div><div class="character-options" role="group" aria-label="Available characters">${characters[role].map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div><p class="character-help">${inGame?'Switch sides to play as the other character. You can change that character too.':'The other character is chosen at random when you start. Both characters stay with the situation until you change them.'}</p></section>`;
+  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div><div class="character-options" role="group" aria-label="Available characters">${characters[role].map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div><p class="character-help">${inGame?'Switch sides to play as the other character. You can change that character too.':'The other character is chosen at random when you start. Both characters stay with the situation until you change them.'}</p></section>`;
  }
  function focusCharacterPicker(){document.querySelector('#character-picker-title')?.focus({preventScroll:true});document.querySelector('#character-picker')?.scrollIntoView({block:'nearest',behavior:'instant'});}
+ function openCharacterPicker(event){
+  const button=event.target,role=button.dataset?.sceneLabelRole,route=location.hash.slice(1);
+  const original=route.startsWith('scenario/')?getOriginalSession():null;
+  if(!roles.includes(role)||(!original&&(!route.startsWith('encounter/')||!state)))return;
+  characterPickerTarget={role,sceneId:button.closest('.encounter-scene')?.dataset.sceneId};
+  if(original)navigate(legacyState(original),true,false);
+  else rerender(false);
+  focusCharacterPicker();
+ }
+ function closeCharacterPicker(){
+  if(!characterPickerTarget)return;
+  const {role,sceneId}=characterPickerTarget;
+  characterPickerTarget=null;rerender(false);
+  const captions=[...document.querySelectorAll('[data-scene-label-role="'+role+'"]')];
+  const trigger=captions.find(button=>button.closest('.encounter-scene')?.dataset.sceneId===sceneId)||captions[0];
+  trigger?.focus({preventScroll:true});trigger?.scrollIntoView({block:'nearest',behavior:'instant'});
+ }
+ main.addEventListener('scene-character-change',openCharacterPicker);
  function legacyState(original,targetRole=siteRole){
   const key=siteRole+'-'+original.scenarioId;
   if(!legacyCasts.has(key)){
@@ -69,10 +87,9 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
     ${remaining?`<span class="route-remaining">${range} decisions remaining, including this one</span>`:''}
    </div>
    <div class="character-actions">
-    <button class="text-button" data-action="paired-characters" aria-expanded="${characterPickerOpen}" aria-controls="character-picker">Change character</button>
     <button class="primary secondary perspective-toggle" data-action="paired-switch">${perspectiveIcon(targetRole)}<span>${switchLabel}</span><span aria-hidden="true">⇄</span></button>
    </div>
-  </section>${characterPickerOpen?characterPicker(s.role,s.cast[s.role],true):'<div id="character-picker" hidden></div>'}${castDisplay(s)}${routeTrail(s)}`;
+  </section>${characterPickerTarget?characterPicker(characterPickerTarget.role,s.cast[characterPickerTarget.role],true):''}${castDisplay(s)}${routeTrail(s)}`;
  }
  function selection(role=siteRole){
   const first=encounters[role+'-street'],selected=characterPreferences.value[role],returning=!!store.value.last;
@@ -156,7 +173,7 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  function missing(message='This page was not found.'){return `<div class="content-page"><h1>Unable to open this situation</h1><p>${esc(message)}</p><div class="action-group"><a class="primary" href="#encounters">Choose a situation</a><a class="primary secondary" href="#progress">Saved progress</a></div></div>`;}
  function legacyBar(original){
   const s=legacyState(original);store.save(recordProgress(store.value,s));
-  return `<section class="legacy-perspective"><div><strong>Individual practice</strong><span>Open the shared version to compare both perspectives.</span></div><button class="primary secondary" data-action="paired-transfer">Switch to ${siteRole==='public'?'the Garda':'the public'} perspective ⇄</button><button class="text-button" data-action="paired-character-transfer">Change character</button></section>${castDisplay(s)}`;
+  return `<section class="legacy-perspective"><div><strong>Individual practice</strong><span>Open the shared version to compare both perspectives.</span></div><button class="primary secondary" data-action="paired-transfer">Switch to ${siteRole==='public'?'the Garda':'the public'} perspective ⇄</button></section>${castDisplay(s)}`;
  }
  function personalize(html,hash){
   const route=hash.split('~')[0];
@@ -181,9 +198,8 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const action=button.dataset.action,role=button.dataset.role||siteRole;
   if(action==='paired-topic'){topicFilter=['all',...topicGroups.map(t=>t.id)].includes(button.dataset.topic)?button.dataset.topic:'all';catalogueOpen=true;rerender(false);document.querySelector('[data-topic="'+topicFilter+'"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-landing-character'){characterPreferences.choose(role,button.dataset.character);setupCharacterOpen=false;navigate('encounters/'+role);return true;}
-  if(action==='paired-start'||action==='paired-quick-start'){characterPickerOpen=false;setupCharacterOpen=false;navigate(startEncounter(button.dataset.id,role,{characterId:characterPreferences.value[role]}));return true;}
-  if(action==='paired-transfer'){characterPickerOpen=false;navigate(legacyState(getOriginalSession(),otherRole(siteRole)));return true;}
-  if(action==='paired-character-transfer'){characterPickerOpen=true;navigate(legacyState(getOriginalSession()),true,false);focusCharacterPicker();return true;}
+  if(action==='paired-start'||action==='paired-quick-start'){characterPickerTarget=null;setupCharacterOpen=false;navigate(startEncounter(button.dataset.id,role,{characterId:characterPreferences.value[role]}));return true;}
+  if(action==='paired-transfer'){characterPickerTarget=null;navigate(legacyState(getOriginalSession(),otherRole(siteRole)));return true;}
   if(action==='paired-setup-characters'){setupCharacterOpen=!setupCharacterOpen;rerender(false);if(setupCharacterOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-setup-done'){setupCharacterOpen=false;rerender(false);document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-character-select'){characterPreferences.choose(role,button.dataset.character);rerender(false);document.querySelector('[data-character="'+characterPreferences.value[role]+'"]')?.focus({preventScroll:true});announce('Character selected.');return true;}
@@ -191,19 +207,25 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   if(action==='paired-clear-cancel'){clearPending=false;rerender(false);document.querySelector('[data-action="paired-clear"]')?.focus();return true;}
   if(action==='paired-clear-confirm'){store.clear();state=null;resetOriginalSession?.();clearPending=false;rerender(false);document.querySelector('[data-action="paired-clear"]')?.focus();announce('Your saved progress on this site has been cleared.');return true;}
   if(!state)return true;
-  if(action==='paired-characters'){characterPickerOpen=!characterPickerOpen;rerender(false);if(characterPickerOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-characters"]')?.focus({preventScroll:true});return true;}
-  if(action==='paired-character-close'){characterPickerOpen=false;rerender(false);document.querySelector('[data-action="paired-characters"]')?.focus({preventScroll:true});return true;}
-  if(action==='paired-character-choose'){const next=changeCharacter(state,button.dataset.character);if(next!==state){characterPreferences.choose(state.role,button.dataset.character);navigate(next,true,false);}document.querySelector('[data-character="'+state.cast[state.role]+'"]')?.focus({preventScroll:true});announce('Character changed. Your progress is unchanged.');return true;}
-  if(action==='paired-switch'||action==='paired-compare'){characterPickerOpen=false;navigate(switchRole(state),true,false);const target=document.querySelector(state.complete?'h1':'#choice-title');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',behavior:'instant'});announce(state.role==='garda'?'Garda perspective':'Public perspective');}
+  if(action==='paired-character-close'){closeCharacterPicker();return true;}
+  if(action==='paired-character-choose'){
+   const target=characterPickerTarget?.role;
+   if(!target)return true;
+   const next=changeCharacter(state,button.dataset.character,target);
+   if(next!==state){characterPreferences.choose(target,button.dataset.character);navigate(next,true,false);}
+   document.querySelector('[data-character="'+state.cast[target]+'"]')?.focus({preventScroll:true});
+   announce('Character changed. Your progress is unchanged.');return true;
+  }
+  if(action==='paired-switch'||action==='paired-compare'){characterPickerTarget=null;navigate(switchRole(state),true,false);const target=document.querySelector(state.complete?'h1':'#choice-title');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest',behavior:'instant'});announce(state.role==='garda'?'Garda perspective':'Public perspective');}
   else if(action==='paired-answer'){
    const next=answer(state,Number(button.dataset.index));if(next===state)return true;navigate(next,true,false);
    const feedback=document.querySelector('#feedback');feedback?.focus({preventScroll:true});feedback?.scrollIntoView({block:'nearest',behavior:'instant'});
   }
-  else if(action==='paired-next'){const next=continueEncounter(state);if(next!==state){characterPickerOpen=false;navigate(next);}}
+  else if(action==='paired-next'){const next=continueEncounter(state);if(next!==state){characterPickerTarget=null;navigate(next);}}
   else if(action==='paired-back')navigate(revisit(state));
   else if(action==='paired-revisit')navigate(revisit(state,Number(button.dataset.index)));
   else if(action==='paired-change'){navigate(changeAnswer(state),true,false);document.querySelector('#choice-title')?.focus();}
-  else if(action==='paired-replay-role'){characterPickerOpen=false;navigate(startEncounter(state.id,role,{cast:state.cast}));}
+  else if(action==='paired-replay-role'){characterPickerTarget=null;navigate(startEncounter(state.id,role,{cast:state.cast}));}
   return true;
  }
  return {handles,view,personalize,introduction,aboutIntroduction,perspectiveChoice,landing,resumeLink,referenceRoute,legacyBar,legacyScene:(original,index)=>{const s=legacyState(original);return renderScene(s,{step:s.history[index],compact:true});},updateSiteLink,handleClick,transferOriginal:(original,focus=true)=>navigate(legacyState(original),true,focus)};

@@ -183,7 +183,7 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
   await page.setViewportSize({width,height:900});
   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
   await aligned(page);
-  for(const [role,name] of [['public','Sam'],['garda','Charlie']]){
+  for(const [role,name] of [['public','Sam'],['garda',characters.garda.find(c=>c.id===state.cast.garda).name]]){
    const button=scene.locator('button[data-scene-label-role="'+role+'"]');
    await expect(button).toHaveAttribute('aria-haspopup','dialog');
    await expect(button).toHaveAttribute('aria-controls','scene-character-dialog');
@@ -191,6 +191,14 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
    const dialog=page.locator('#scene-character-dialog');
    await expect(dialog).toBeVisible();
    await expect(dialog).toHaveAttribute('data-role-tone',role);
+   await expect(dialog).not.toContainText(/fictional learning character/i);
+   const actions=dialog.locator('.scene-profile-actions');
+   await expect(actions.getByRole('button')).toHaveCount(2);
+   const change=await actions.locator('.scene-profile-change').boundingBox();
+   const close=await actions.locator('.scene-profile-close').boundingBox();
+   expect(change).not.toBeNull();expect(close).not.toBeNull();
+   expect(Math.abs(change.y-close.y)).toBeLessThan(2);
+   expect(change.x+change.width<=close.x+1||close.x+close.width<=change.x+1).toBe(true);
    await expect(dialog.getByRole('heading',{name,exact:true})).toBeVisible();
    await expect(dialog.locator('.scene-profile-role')).toHaveText(role==='public'?'Member of the public':'Garda');
    await expect(dialog.locator('.scene-profile-body')).toContainText('in this encounter');

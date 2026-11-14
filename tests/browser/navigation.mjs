@@ -18,3 +18,11 @@ export async function expectSettingsFocusReturn(page,footer=false){
  }
  await expect(page.locator('#main')).not.toHaveAttribute('inert');
 }
+
+export async function openCharacterPicker(page,role){
+ const targetRole=role||await page.locator('.cast-character.is-you').getAttribute('data-cast-role');
+ const caption=page.locator('button[data-scene-label-role="'+targetRole+'"]').first();
+ await caption.click();
+ await page.locator('#scene-character-dialog .scene-profile-change').click();
+ return caption;
+}

@@ -6,7 +6,7 @@ const make=(role,names)=>names.map((name,index)=>({
 }));
 export const characters={
  public:make('public',['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Sam','Pat']),
- garda:make('garda',['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'])
+ garda:make('garda',['Garda Sergeant Ciara','Garda Rory','Garda Jamie','Garda Lee','Garda Aisling','Garda Sergeant Kai','Garda Conor','Garda Orla','Garda Sergeant Charlie'])
 };
 export const characterFor=(role,id)=>characters[role]?.find(character=>character.id===id)||null;
 // Character IDs, preferences and the public-character poses stay unchanged.
@@ -27,9 +27,9 @@ export function createCast(role,id,random=Math.random){
  const index=Number.isFinite(sample)&&sample>=0&&sample<1?Math.floor(sample*characters[other].length):0;
  return {[role]:characterFor(role,id)?.id||characters[role][0].id,[other]:characters[other][index].id};
 }
-export function changeCharacter(state,id){
- if(!state||!characterFor(state.role,id)||state.cast[state.role]===id)return state;
- return {...state,cast:{...state.cast,[state.role]:id}};
+export function changeCharacter(state,id,role=state?.role){
+ if(!state||!characterFor(role,id)||state.cast[role]===id)return state;
+ return {...state,cast:{...state.cast,[role]:id}};
 }
 export const CHARACTER_STORAGE_KEY='stopped-both-sides:characters:v1';
 export function createCharacterPreferences(storage){

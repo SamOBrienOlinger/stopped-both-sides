@@ -1,5 +1,7 @@
-import {characterArtwork,characterFor} from './characters.mjs?v=garda-baseball-20261114';
+import {characterArtwork,characterFor} from './characters.mjs?v=character-details-actions-20261114';
 import {roleLabels} from './catalog.mjs?v=scene-review-1';
+import {normaliseLanguage} from '../locales/languages.mjs';
+import {translateText} from '../locales/translate.mjs?v=support-resources-1';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',
@@ -65,8 +67,13 @@ export function installSceneCaptionLayout(root){
   dialog.setAttribute('aria-labelledby','scene-character-dialog-name');
   dialog.setAttribute('aria-describedby','scene-character-dialog-summary');
   dialog.setAttribute('lang','en-IE');
-  dialog.innerHTML='<div class="scene-profile-shell"><div class="scene-profile-top"><div class="scene-profile-portrait" aria-hidden="true"><img alt=""></div><div class="scene-profile-info"><p class="scene-profile-kicker">Fictional learning character</p><h2 id="scene-character-dialog-name" data-no-translate></h2><p class="scene-profile-role"></p></div></div><p class="scene-profile-body" id="scene-character-dialog-summary"></p><p class="scene-profile-setting"></p><button type="button" class="scene-profile-close" autofocus>Close character details</button></div>';
+  dialog.innerHTML='<div class="scene-profile-shell"><div class="scene-profile-top"><div class="scene-profile-portrait" aria-hidden="true"><img alt=""></div><div class="scene-profile-info"><h2 id="scene-character-dialog-name" data-no-translate></h2><p class="scene-profile-role"></p></div></div><p class="scene-profile-body" id="scene-character-dialog-summary"></p><p class="scene-profile-setting"></p><div class="scene-profile-actions"><button type="button" class="scene-profile-change">Change character</button><button type="button" class="scene-profile-close" autofocus>Close character details</button></div></div>';
   doc.body.append(dialog);
+  dialog.querySelector('.scene-profile-change').addEventListener('click',()=>{
+   const trigger=returnFocus;returnFocus=null;
+   dialog.close();
+   if(trigger?.isConnected)trigger.dispatchEvent(new win.Event('scene-character-change',{bubbles:true}));
+  });
   dialog.querySelector('.scene-profile-close').addEventListener('click',()=>dialog.close());
   dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
   dialog.addEventListener('close',()=>{
@@ -85,6 +92,9 @@ export function installSceneCaptionLayout(root){
   modal.setAttribute('data-role-tone',role);
   modal.querySelector('#scene-character-dialog-name').textContent=character.name;
   modal.querySelector('.scene-profile-role').textContent=roleLabels[role];
+  const change=modal.querySelector('.scene-profile-change');
+  change.lang=doc.documentElement.lang||'en-IE';
+  change.textContent=translateText('Change character',normaliseLanguage(change.lang));
   modal.querySelector('.scene-profile-body').textContent=roleDescriptions[role];
   const place=button.closest('.scene-panel')?.querySelector('[data-scene-place]')?.dataset.scenePlace;
   modal.querySelector('.scene-profile-setting').textContent='Scene: '+(placeNames[place]||'A shared encounter');

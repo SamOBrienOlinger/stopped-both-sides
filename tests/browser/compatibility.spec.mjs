@@ -1,4 +1,4 @@
-import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {expectControlsFit} from './control-layout.mjs';
@@ -158,12 +158,12 @@ for(const role of ['public','garda']){
    await expect(page.locator('html')).toHaveAttribute('lang','ga');
    await fits(page,'large Irish feedback');
    await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.character-actions'],['feedback-actions','.paired-feedback-actions'],['footer','.footer']]);
-   await page.locator('[data-action="paired-characters"]').click();
+   const caption=await openCharacterPicker(page);
    await expect(page.locator('#character-picker-title')).toBeFocused();
    await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'large Irish character picker');
    await captureControls(page,role,width,'large-irish',testInfo,[['character-picker','.character-picker']]);
    await page.locator('[data-action="paired-character-close"]').click();
-   await expect(page.locator('[data-action="paired-characters"]')).toBeFocused();
+   await expect(caption).toBeFocused();
    await page.locator('.perspective-bar [data-action="paired-switch"]').click();
    await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
    await fits(page,'other perspective');

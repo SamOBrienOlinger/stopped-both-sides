@@ -1,4 +1,4 @@
-import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
+import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
@@ -199,7 +199,7 @@ for(const role of ['public','garda']){
   expect(await cues(page),'restoring an open disclosure is not a new interaction').not.toContain('disclosure');
 
   await resetCues(page);
-  await page.locator('[data-action="paired-characters"]').click();
+  const caption=await openCharacterPicker(page);
   await expect(page.locator('#character-picker-title')).toBeFocused();
   await hasCues(page,'picker');
   await noStageReplay(page);
@@ -214,7 +214,7 @@ for(const role of ['public','garda']){
   expect(current(page).history).toEqual(initial.history);
   expect(current(page).nodeId).toBe(initial.nodeId);
   await page.locator('[data-action="paired-character-close"]').click();
-  await expect(page.locator('[data-action="paired-characters"]')).toBeFocused();
+  await expect(caption).toBeFocused();
   await noStageReplay(page);
   await readableLayout(page);
  });
@@ -241,7 +241,7 @@ for(const role of ['public','garda']){
   await expect(page.locator('#choice-title')).toBeFocused();
   expect(current(page).answers).toEqual(answered.answers);
   await readableLayout(page);await motionSuppressed(page);
-  await page.locator('[data-action="paired-characters"]').click();
+  await openCharacterPicker(page);
   await expect(page.locator('#character-picker-title')).toBeFocused();
   await readableLayout(page);await motionSuppressed(page);
   await page.locator('[data-action="paired-character-close"]').click();

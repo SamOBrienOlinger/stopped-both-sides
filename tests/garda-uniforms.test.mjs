@@ -18,7 +18,7 @@ test('Final atlas is a real WebP and supplies nine preserved cast identities',()
  const bytes=readFileSync(asset);
  assert.equal(bytes.subarray(0,4).toString(),'RIFF');
  assert.equal(bytes.subarray(8,12).toString(),'WEBP');
- assert.deepEqual(characters.garda.map(c=>c.name),names);
+ assert.deepEqual(characters.garda.map(c=>c.name.replace(/^Garda (?:Sergeant )?/,'')),names);
  assert.equal(gardaAtlas.cells.length,9);
  assert.equal(gardaAtlas.width,1254);assert.equal(gardaAtlas.height,1254);
  assert.ok(Math.abs(gardaAtlas.foot/gardaAtlas.frame-.975)<1e-9);

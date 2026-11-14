@@ -1,4 +1,4 @@
-import {openNavigation} from './navigation.mjs';
+import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
@@ -23,20 +23,23 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',selectedId);
  await page.locator('[data-action="paired-answer"]').first().click();await expect(page.locator('#feedback')).toBeVisible();
  const answered=current(page);
- await page.locator('[data-action="paired-characters"]').click();await expect(page.locator('#character-picker-title')).toBeFocused();
+ const caption=await openCharacterPicker(page,role);await expect(page.locator('#character-picker-title')).toBeFocused();
  await page.locator(`[data-character="${role}-9"]`).click();
  expect(current(page).answers).toEqual(answered.answers);expect(current(page).nodeId).toBe(answered.nodeId);
  expect(current(page).cast).toEqual({...initial.cast,[role]:role+'-9'});
- await page.locator('[data-action="paired-character-close"]').click();await expect(page.locator('[data-action="paired-characters"]')).toBeFocused();
- await page.locator('.perspective-bar [data-action="paired-switch"]').click();
- await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',initial.cast[other]);
- await page.locator('[data-action="paired-characters"]').click();await page.locator(`[data-character="${other}-4"]`).click();
+ await page.locator('[data-action="paired-character-close"]').click();await expect(caption).toBeFocused();
+ await openCharacterPicker(page,other);await page.locator(`[data-character="${other}-4"]`).click();
  const cast={[role]:role+'-9',[other]:other+'-4'};expect(current(page).cast).toEqual(cast);
+ expect(current(page).role).toBe(role);expect(current(page).answers).toEqual(answered.answers);
  await page.locator('[data-action="paired-character-close"]').click();
+ await page.locator('.perspective-bar [data-action="paired-switch"]').click();
+ await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',cast[other]);
  const saved=current(page);await page.reload();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page)).toEqual(saved);
  await openNavigation(page);await page.locator('[data-site-switch]').click();await expect(page.locator('.content-page h1')).toContainText('sources');await page.locator('.session-return a').click();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).cast).toEqual(cast);expect(current(page).answers).toEqual(saved.answers);
  await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
- await expect(page.getByRole('button',{name:'Athraigh carachtar',exact:true})).toBeVisible();expect(current(page).cast).toEqual(cast);
+ await page.locator(`button[data-scene-label-role="${current(page).role}"]`).first().click();
+ await expect(page.locator('#scene-character-dialog').getByRole('button',{name:'Athraigh carachtar',exact:true})).toBeVisible();
+ await page.keyboard.press('Escape');expect(current(page).cast).toEqual(cast);
  for(let i=0;i<10&&!current(page).complete;i++){
   if(current(page).answers[current(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();
   await page.locator('[data-action="paired-next"]').click();
@@ -44,7 +47,7 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
   expect(current(page).cast).toEqual(cast);
  }
  expect(current(page).complete).toBe(true);await expect(page.locator('.paired-recap')).toBeVisible();
- await page.getByRole('button',{name:'Athraigh carachtar',exact:true}).click();
+ await openCharacterPicker(page);
  await page.locator(`[data-character="${current(page).role}-2"]`).click();
  expect(current(page).complete).toBe(true);expect(current(page).cast[current(page).role]).toBe(current(page).role+'-2');
  await page.locator('[data-action="paired-character-close"]').click();
