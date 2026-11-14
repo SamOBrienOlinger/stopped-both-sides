@@ -220,7 +220,7 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
 }
 .reference-landing .landing-instructions p.landing-purpose{
   max-inline-size:37ch;
-  color:var(--teal,var(--deep));
+  color:#165e67; /* Accessible deep-teal accent: >=7:1 on white. */
   font-size:clamp(1.35rem,3vw,2.35rem);
   font-weight:770;
   line-height:1.2;
@@ -235,6 +235,16 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   line-height:1.36;
   letter-spacing:-.025em;
   text-align:center;
+}
+
+/* Avoid tight tracking or clipped glyphs in scripts requiring more space. */
+html:lang(ar) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+  letter-spacing:normal;
+  line-height:1.55;
+}
+html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+  letter-spacing:normal;
+  line-height:1.45;
 }
 
 /* Portfolio's one-second rise/fade and 100ms sequential delay. The default
