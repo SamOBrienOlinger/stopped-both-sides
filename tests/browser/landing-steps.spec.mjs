@@ -91,14 +91,22 @@ for(const path of paths){
   await page.goto(path+'?lang=en#play');
   await page.emulateMedia({reducedMotion:'reduce'});
   const role=path==='garda/'?'garda':'public';
+  const dropdown=page.locator('.how-to-play details.how-to-disclosure');
   for(const width of [390,1366]){
    await page.setViewportSize({width,height:900});
-   await page.locator('.how-to-play summary').click();
-   await expect(page.locator('.how-to-play details')).toHaveAttribute('open','');
+   await expect(dropdown).not.toHaveAttribute('open','');
+   await dropdown.locator('summary').screenshot({
+    path:info.outputPath(role+'-how-it-works-closed-'+width+'.png'),
+    animations:'disabled'
+   });
+   await dropdown.locator('summary').click();
+   await expect(dropdown).toHaveAttribute('open','');
    await page.locator('.how-to-play').screenshot({
     path:info.outputPath(role+'-how-it-works-'+width+'.png'),
     animations:'disabled'
    });
+   await dropdown.locator('summary').click();
+   await expect(dropdown).not.toHaveAttribute('open','');
   }
  });
 }
