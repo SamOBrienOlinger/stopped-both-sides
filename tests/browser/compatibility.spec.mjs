@@ -245,7 +245,7 @@ for(const role of ['public','garda']){
   try{
    await page.goto(paths[role]);await ready(page);
    await checkHeroControls(page);
-   await page.locator(`.paired-entry a[href="#encounters/${role}"]`).tap();
+   await page.locator(`.paired-entry a.perspective-card-link[data-role-tone="${role}"]`).tap();
    await expect(page.locator('.encounter-card')).toHaveCount(14);
    await page.locator('[data-action="paired-quick-start"]').tap();
    await expect(page.locator('.paired-game')).toBeVisible();
