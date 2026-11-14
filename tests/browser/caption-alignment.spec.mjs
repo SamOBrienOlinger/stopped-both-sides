@@ -192,7 +192,8 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
    await expect(dialog).toHaveAttribute('data-role-tone',role);
    await expect(dialog.getByRole('heading',{name,exact:true})).toBeVisible();
    await expect(dialog.locator('.scene-profile-role')).toHaveText(role==='public'?'Member of the public':'Garda');
-   await expect(dialog.locator('.scene-profile-body')).toContainText('fictional encounter');
+   await expect(dialog.locator('.scene-profile-body')).toContainText('in this encounter');
+    await expect(dialog.locator('.scene-profile-body')).not.toContainText('in the fictional encounter');
    await expect(dialog.locator('.scene-profile-portrait img')).toHaveJSProperty('complete',true);
    if(role==='public')await page.keyboard.press('Escape');
    else await dialog.getByRole('button',{name:'Close character details'}).click();

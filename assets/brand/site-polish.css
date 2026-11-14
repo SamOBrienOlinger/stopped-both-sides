@@ -168,3 +168,103 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   .footer .footer-identity .footer-copyright {color:CanvasText}
 }
 @media print {.header{position:static}}
+
+
+/* Portfolio-inspired invitation: four staggered display lines mirror the
+   Curiosity / Creativity / Purpose hero without replacing meaningful text. */
+.reference-landing .landing-instructions{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(.75rem,1.9vw,1.25rem);
+  width:min(100%,68rem);
+  max-inline-size:100%;
+  margin:0 auto clamp(1.35rem,3vw,2.4rem);
+  padding:clamp(1.2rem,3vw,2.5rem) clamp(.3rem,2.5vw,1.5rem);
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  text-align:center;
+}
+.reference-landing .landing-instructions::before{display:none}
+.reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+  box-sizing:border-box;
+  width:100%;
+  min-inline-size:0;
+  max-inline-size:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  text-align:center;
+  text-wrap:balance;
+  overflow-wrap:anywhere;
+}
+.reference-landing .landing-instructions p.landing-deck{
+  max-inline-size:53ch;
+  color:var(--ink);
+  font-size:clamp(1.15rem,2.5vw,1.95rem);
+  font-weight:760;
+  line-height:1.25;
+  letter-spacing:-.035em;
+  text-align:center;
+}
+.reference-landing .landing-instructions #paired-title{
+  max-inline-size:28ch;
+  color:var(--deep);
+  font-size:clamp(2rem,5vw,4rem);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-.055em;
+  text-align:center;
+}
+.reference-landing .landing-instructions p.landing-purpose{
+  max-inline-size:37ch;
+  color:#165e67; /* Accessible deep-teal accent: >=7:1 on white. */
+  font-size:clamp(1.35rem,3vw,2.35rem);
+  font-weight:770;
+  line-height:1.2;
+  letter-spacing:-.037em;
+  text-align:center;
+}
+.reference-landing .landing-instructions p.small-note{
+  max-inline-size:54ch;
+  color:var(--slate,var(--ink));
+  font-size:clamp(1.05rem,2.1vw,1.65rem);
+  font-weight:650;
+  line-height:1.36;
+  letter-spacing:-.025em;
+  text-align:center;
+}
+
+/* Avoid tight tracking or clipped glyphs in scripts requiring more space. */
+html:lang(ar) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+  letter-spacing:normal;
+  line-height:1.55;
+}
+html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+  letter-spacing:normal;
+  line-height:1.45;
+}
+
+/* Portfolio's one-second rise/fade and 100ms sequential delay. The default
+   state remains visible: reduced-motion and no-JS readers see plain text. */
+@media(prefers-reduced-motion:no-preference){
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+    animation:landing-portfolio-line-reveal 1s ease-out var(--landing-reveal-delay,0s) both;
+  }
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :nth-child(2){--landing-reveal-delay:.1s}
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :nth-child(3){--landing-reveal-delay:.2s}
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :nth-child(4){--landing-reveal-delay:.3s}
+}
+@keyframes landing-portfolio-line-reveal{
+  from{opacity:0;transform:translateY(37.5%)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(forced-colors:active){
+  .reference-landing .landing-instructions{background:Canvas;color:CanvasText}
+  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){color:CanvasText}
+}
+@media print{
+  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){animation:none!important;opacity:1;transform:none}
+}
