@@ -65,9 +65,13 @@ for(const {path,role} of pages){
       headingFits:trigger.scrollWidth<=trigger.clientWidth+2,
       allVisible:positions.length===5&&positions.every(p=>p.width>0&&p.height>0),
       ordered:positions.every((p,i)=>!i||positions[i-1].bottom<=p.top+2),
-      textFits:links.every(item=>item.scrollWidth<=item.clientWidth+2)
+      textFits:links.every(item=>item.scrollWidth<=item.clientWidth+2),
+      lastTitleReadable:(()=>{
+       const card=links[links.length-1],title=card.querySelector('strong');
+       return !!title&&title.getBoundingClientRect().width>=card.getBoundingClientRect().width*.5;
+      })()
      };
-    })).toEqual({noOverflow:true,fits:true,headingFits:true,allVisible:true,ordered:true,textFits:true});
+    })).toEqual({noOverflow:true,fits:true,headingFits:true,allVisible:true,ordered:true,textFits:true,lastTitleReadable:true});
    }
   }
   await page.goto(path+'?lang=en#play');

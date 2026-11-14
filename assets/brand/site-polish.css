@@ -544,7 +544,8 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
 }
 @media(max-width:28rem){
   .topic-explorer .topic-disclosure .topic-grid{padding:.625rem}
-  .topic-explorer .topic-disclosure .topic-grid > .topic-card{
+  .topic-explorer .topic-disclosure .topic-grid > .topic-card,
+  .topic-explorer .topic-disclosure .topic-grid > .topic-card:last-child{
     grid-template-columns:minmax(0,1fr) auto;padding:.7rem .8rem;
   }
   .topic-explorer .topic-disclosure .topic-card .learning-icon{display:none}
