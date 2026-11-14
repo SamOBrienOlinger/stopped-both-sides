@@ -1,6 +1,8 @@
 // Presentation enhancements run after translation. Original wording, inline
 // citations, game state and language-pack lookup keys stay intact.
 export function paragraphChunks(text,language='en'){
+ const authored=text.split(/\r?\n[ \t]*\r?\n/).map(paragraph=>paragraph.trim()).filter(Boolean);
+ if(authored.length>1)return authored;
  if(text.length<260||typeof Intl?.Segmenter!=='function')return [text];
  let sentences;
  try{sentences=Array.from(new Intl.Segmenter(language,{granularity:'sentence'}).segment(text),item=>item.segment.trim()).filter(Boolean);}

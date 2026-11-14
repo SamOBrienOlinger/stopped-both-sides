@@ -24,3 +24,14 @@ test('A long unsplittable sentence and browsers without sentence segmentation pr
  try{Intl.Segmenter=undefined;assert.deepEqual(paragraphChunks(text),[text]);}
  finally{Intl.Segmenter=segmenter;}
 });
+
+test('Authored paragraph breaks take priority over automatic sentence grouping',()=>{
+ const paragraphs=[
+  'The local meeting brought together several people who had questions about recent decisions in the area.',
+  'A representative brings the questions to the next meeting. The two participants discuss which records might help answer them.',
+  'The available summary gives a few totals. They agree to consider the context of the decisions when reviewing the results.',
+  'The next step is to agree what to check.'
+ ];
+ assert.deepEqual(paragraphChunks(paragraphs.join('\n\n')),paragraphs);
+ assert.deepEqual(paragraphChunks(paragraphs.join('\r\n  \r\n')),paragraphs);
+});
