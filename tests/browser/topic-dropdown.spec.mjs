@@ -39,7 +39,9 @@ for(const {path,role} of pages){
   await expect(disclosure).toHaveAttribute('open','');
   await disclosure.locator('a.topic-card[href="#encounters/'+role+'/search"]').click();
   await expect(page).toHaveURL(new RegExp('#encounters/'+role+'/search$'));
-  await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
+  await expect(page.locator('.simple-setup.topic-selected')).toBeVisible();
+  await expect(page.locator('.scenario-library')).toHaveAttribute('open','');
+  await expect(page.locator('.scenario-library [data-action="paired-start"]')).toHaveCount(3);
  });
  test(path+' opened dropdown fits phone, desktop, 200 percent text and Arabic RTL',async({page},testInfo)=>{
   test.setTimeout(140000);
