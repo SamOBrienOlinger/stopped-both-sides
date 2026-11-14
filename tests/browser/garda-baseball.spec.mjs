@@ -108,6 +108,7 @@ test('Phone, desktop, 200% text and Arabic RTL preserve crop, captions and usabl
   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
   for(const [w,h] of [[320,900],[390,844],[568,320],[768,1024],[1366,900]]){
    await page.setViewportSize({width:w,height:h});
+   if(h<=448&&w>h)await expect(page.locator('.header')).toHaveCSS('position','static');
    await visibleActor(page,id);
    const label=page.locator(stage+' [data-scene-label-role="garda"]');
    await expect(label).toBeVisible();
