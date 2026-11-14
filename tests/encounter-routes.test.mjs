@@ -25,8 +25,24 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
- assert.match(main.innerHTML,/href="#encounters\/public"><span class="perspective-button-title"><img class="perspective-icon" src="[^"]*\/public-perspective\.webp" [^>]*alt=""[^>]*><span class="perspective-button-label">member of the public<\/span>/);
- assert.match(main.innerHTML,/href="#encounters\/garda"><span class="perspective-button-title"><img class="perspective-icon" src="[^"]*\/garda-perspective\.webp" [^>]*alt=""[^>]*><span class="perspective-button-label">Garda member<\/span>/);
+  const titles={public:'Member of the public',garda:'Garda member'};
+  const descriptions={
+   public:'You are stopped. Learn what you can ask and what you may need to do.',
+   garda:'You make the stop. Check your reasons, assumptions and responsibilities.'
+  };
+  for(const role of roles){
+   const href=new URL('#encounters/'+role,sites.public).href;
+   const anchor='<a class="perspective-hero perspective-card-link" data-role-tone="'+role+'" href="'+href+'"';
+   const start=main.innerHTML.indexOf(anchor);
+   assert.ok(start>=0,'the '+role+' full-card anchor uses the public-root encounter URL');
+   const end=main.innerHTML.indexOf('</a>',start);
+   assert.ok(end>start,'each complete card has one closing link');
+   const card=main.innerHTML.slice(start,end);
+   assert.ok(card.includes('/'+role+'-perspective.webp'),'the role icon is preserved');
+   assert.ok(card.includes('class="perspective-button-label" id="perspective-'+role+'-label">'+titles[role]+'</span>'),'the role label is included');
+   assert.ok(card.includes('class="perspective-caption" id="perspective-'+role+'-description">'+descriptions[role]+'</p>'),'the description is inside the link');
+   assert.doesNotMatch(card.slice(anchor.length),/<a[\s>]/,'there must be no nested anchor inside a perspective card');
+  }
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
   for(const e of Object.values(encounters)){
    action('paired-start',{id:e.id,role});assert.equal(state().role,role);assert.equal(state().nodeId,e.start);

@@ -109,9 +109,9 @@ for(const path of ['./','garda/']){
    }).observe(document,{subtree:true,attributes:true,attributeFilter:['data-motion']});
   });
   await page.goto(path);await page.evaluate(()=>document.fonts.ready);
-  const card=page.locator('.perspective-hero').first(),button=card.locator('a');
+  const card=page.locator('.perspective-hero').first(),button=card.locator('.perspective-hero-button');
   await card.scrollIntoViewIfNeeded();
-  const geometry=()=>card.evaluate(element=>[element,element.querySelector('a')].map(target=>{
+  const geometry=()=>card.evaluate(element=>[element,element.querySelector('.perspective-hero-button')].map(target=>{
    const bounds=target.getBoundingClientRect();
    return {x:bounds.x+scrollX,y:bounds.y+scrollY,width:bounds.width,height:bounds.height};
   }));
@@ -120,7 +120,7 @@ for(const path of ['./','garda/']){
    const values=[];
    for(let frame=0;frame<12;frame++){
     await new Promise(requestAnimationFrame);
-    values.push([element,element.querySelector('a')].map(target=>{
+    values.push([element,element.querySelector('.perspective-hero-button')].map(target=>{
      const bounds=target.getBoundingClientRect();
      return {x:bounds.x+scrollX,y:bounds.y+scrollY,width:bounds.width,height:bounds.height};
     }));
