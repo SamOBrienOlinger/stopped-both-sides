@@ -141,7 +141,7 @@ for(const role of ['public','garda']){
    'returning to a reference group does not replay its reveal').toBe(false);
  });
 
- test(`${role}: focusing a newly revealed card cancels its group entrance permanently`,async({page})=>{
+ test(`${role}: focusing a newly revealed dropdown cancels its group entrance permanently`,async({page})=>{
   await page.setViewportSize({width:390,height:568});
   await page.goto(paths[role]);
   // The hero can be classified as initially visible while the first layout
@@ -156,7 +156,7 @@ for(const role of ['public','garda']){
   expect((await events(page)).filter(event=>event.kind==='reveal'&&event.heading===heading)).toHaveLength(0);
   await group.scrollIntoViewIfNeeded();
   await expect(group).toHaveAttribute('data-motion','reveal');
-  await group.locator('.topic-card').first().focus();
+  await group.locator('summary.topic-disclosure-trigger').focus();
   await expect(group).not.toHaveAttribute('data-motion','reveal');
   await page.locator('.wordmark').evaluate(element=>element.focus({preventScroll:true}));
   await frames(page);
@@ -177,8 +177,8 @@ for(const role of ['public','garda']){
   expect(await page.locator('.reference-landing').evaluate(element=>Number(getComputedStyle(element).opacity)),
    'the first viewport remains fully readable').toBe(1);
   const focus=await group.evaluate(element=>{
-   const link=element.querySelector('.topic-card');link.focus({preventScroll:true});
-   return {focused:document.activeElement===link,opacity:Number(getComputedStyle(element).opacity),
+   const trigger=element.querySelector('summary.topic-disclosure-trigger');trigger.focus({preventScroll:true});
+   return {focused:document.activeElement===trigger,opacity:Number(getComputedStyle(element).opacity),
     pending:element.hasAttribute('data-reveal-pending'),cue:element.getAttribute('data-motion')};
   });
   expect(focus,'focus settles a pending entrance synchronously before the control is used')
