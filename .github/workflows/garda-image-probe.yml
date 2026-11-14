@@ -1,0 +1,25 @@
+name: Check full-resolution generated atlas retrieval
+on:
+  push:
+    branches: [feat/garda-baseball-production-integration-20261114]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    permissions: {contents: read}
+    steps:
+      - name: Test asset CDN signature and resolution (temporary)
+        shell: bash
+        env:
+          CANVA_ORIGINAL: 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Fd189dfb5-d26e-47c7-a3f8-3ea35a81c238/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAEmeqA-rcJxXeggnIrL3viVavIaraiimr5mZmMZduO3L&exp=1794672552&osig=AAAAAAAAAAAAAAAAAAAAAHV82zkj2SJZ1862NZ-6BIRfbxpMCX5QkPXbYCCmwNOX&signer=media-rpc&token=AAIAAU0AJGQxODlkZmI1LWQyNmUtNDdjNy1hM2Y4LTNlYTM1YTgxYzIzOAAAAAABodrR6ECn73QOF3AG7nX_Bu1DOu4XgwxACicyplPwNtKJxnHTfg&x-canva-quality=thumbnail'
+          CANVA_RESIZED: 'https://media.canva.com/v2/image-resize/format:PNG/height:1254/quality:100/uri:ifs%3A%2F%2FM%2Fd189dfb5-d26e-47c7-a3f8-3ea35a81c238/watermark:F/width:1254?csig=AAAAAAAAAAAAAAAAAAAAAEmeqA-rcJxXeggnIrL3viVavIaraiimr5mZmMZduO3L&exp=1794672552&osig=AAAAAAAAAAAAAAAAAAAAAHV82zkj2SJZ1862NZ-6BIRfbxpMCX5QkPXbYCCmwNOX&signer=media-rpc&token=AAIAAU0AJGQxODlkZmI1LWQyNmUtNDdjNy1hM2Y4LTNlYTM1YTgxYzIzOAAAAAABodrR6ECn73QOF3AG7nX_Bu1DOu4XgwxACicyplPwNtKJxnHTfg&x-canva-quality=thumbnail'
+        run: |
+          for version in ORIGINAL RESIZED; do
+            key="CANVA_${version}"
+            curl --max-time 20 -L -sS -o "/tmp/${version}.png" -w "${version}_HTTP=%{http_code} bytes=%{size_download}\n" "${!key}" || true
+            file "/tmp/${version}.png" || true
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: garda-asset-cdn-probe
+          path: /tmp/RESIZED.png
+          retention-days: 1
