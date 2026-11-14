@@ -16,7 +16,7 @@ async function expectPortrait(page,role,id){
  await expect(portrait).toHaveAttribute('role','img');
  await expect(portrait).toHaveAttribute('aria-label',character.name+', your current '+roleLabels[role]+' character');
  const img=portrait.locator('.character-image img');
- await expect(img).toHaveAttribute('src',id==='garda-5'?/characters\/aisling-hijab-clean\.webp/:/characters\/cast\.webp/);
+ await expect(img).toHaveAttribute('src',role==='garda'?/characters\/garda-baseball-2026\.webp/:/characters\/cast\.webp/);
  await expect.poll(()=>img.evaluate(el=>el.complete&&el.naturalWidth>0)).toBe(true);
 }
 

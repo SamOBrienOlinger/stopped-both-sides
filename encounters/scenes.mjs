@@ -1,8 +1,8 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=caption-controls-2';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=scene-review-1';
-import {characterFor} from './characters.mjs?v=scene-art-2';
-import {sceneCharacterArtwork} from './scene-artwork.mjs?v=context-scenes-1';
+import {characterFor} from './characters.mjs?v=garda-baseball-20261114';
+import {sceneCharacterArtwork} from './scene-artwork.mjs?v=garda-baseball-20261114';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.

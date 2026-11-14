@@ -142,6 +142,16 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   .reference-landing .landing-instructions #paired-title {font-size:clamp(1.5rem,6vw,2rem)}
   .about-opening>.about-heading-block {padding-inline-start:.9rem}
 }
+/* On very short landscape viewports, especially with 200% text, the
+   otherwise-sticky header can occupy nearly the whole screen and cover scene
+   character buttons. Make it part of the document flow so it scrolls away. */
+@media (max-height:28rem) and (orientation:landscape){
+  .header.navigation-ready {position:static;inset-block-start:auto;top:auto}
+  html {scroll-padding-block-start:.75rem}
+  #main :is(h1,h2,a,button,summary,input,select,[role="button"],[tabindex]) {
+    scroll-margin-block-start:1rem;
+  }
+}
 @media(forced-colors:active){
   .reference-landing .landing-instructions {
     background:Canvas;
