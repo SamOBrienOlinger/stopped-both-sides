@@ -57,9 +57,17 @@ for(const path of paths){
       copyFits:cards.every(card=>{
        const copy=card.querySelector('.how-step-copy');
        return copy&&copy.scrollWidth<=copy.clientWidth+2;
+      }),
+      badgesClear:cards.every(card=>{
+       const number=card.querySelector('.how-step-number')?.getBoundingClientRect();
+       const icon=card.querySelector('.learning-icon')?.getBoundingClientRect();
+       if(!number||!icon)return false;
+       const horizontal=Math.min(number.right,icon.right)-Math.max(number.left,icon.left);
+       const vertical=Math.min(number.bottom,icon.bottom)-Math.max(number.top,icon.top);
+       return horizontal<=0||vertical<=0;
       })
      };
-    })).toEqual({noPageOverflow:true,sectionFits:true,cardGrid:true,cardsFit:true,copyFits:true});
+    })).toEqual({noPageOverflow:true,sectionFits:true,cardGrid:true,cardsFit:true,copyFits:true,badgesClear:true});
    }
   }
   await page.goto(path+'?lang=en#play');

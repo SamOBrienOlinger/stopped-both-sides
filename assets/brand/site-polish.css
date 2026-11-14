@@ -419,8 +419,19 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
   overflow-wrap:anywhere;
 }
 @media(max-width:40rem){
-  .how-to-play{padding:clamp(.85rem,3vw,1.15rem)}
+  .how-to-play{padding:clamp(.75rem,3vw,1.15rem)}
   .how-to-play ol.how-steps{grid-template-columns:minmax(0,1fr)}
+  /* Icon and number must never overlap at 200% text on 320px phones. */
+  .how-to-play li.how-step{column-gap:12px}
+  .how-to-play .how-step-number{
+    inline-size:min(2.7rem,44px);
+    block-size:min(2.7rem,44px);
+  }
+  .how-to-play li.how-step>.learning-icon{
+    inline-size:min(2.9rem,48px);
+    block-size:min(2.9rem,48px);
+    padding:min(.4rem,8px);
+  }
 }
 .contrast-high .how-to-play li.how-step{
   background:var(--paper,#fff);
