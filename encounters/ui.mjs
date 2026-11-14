@@ -1,6 +1,6 @@
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,decisionGuide,topicExplorer} from './visuals.mjs?v=landing-steps-20261114';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,decisionGuide,topicExplorer} from './visuals.mjs?v=topic-dropdown-20261114';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=scene-review-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=scene-review-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
