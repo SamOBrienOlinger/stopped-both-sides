@@ -41,7 +41,7 @@ test('Both roles can start every situation; the shared facts and role controls r
    assert.ok(card.includes('/'+role+'-perspective.webp'),'the role icon is preserved');
    assert.ok(card.includes('class="perspective-button-label" id="perspective-'+role+'-label">'+titles[role]+'</span>'),'the role label is included');
    assert.ok(card.includes('class="perspective-caption" id="perspective-'+role+'-description">'+descriptions[role]+'</p>'),'the description is inside the link');
-   assert.doesNotMatch(card,/<a[\s>]/,'there must be no nested anchor inside a perspective card');
+   assert.doesNotMatch(card.slice(anchor.length),/<a[\s>]/,'there must be no nested anchor inside a perspective card');
   }
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
   for(const e of Object.values(encounters)){
