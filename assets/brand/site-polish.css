@@ -571,3 +571,80 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
  .topic-explorer .topic-disclosure .topic-card :is(strong,.topic-preview){color:CanvasText!important}
  .topic-explorer details.topic-disclosure > summary.topic-disclosure-trigger:focus-visible{outline-color:Highlight}
 }
+
+
+/* Match the native Browse all situations disclosure without changing the
+   existing three-step visual cards or their reading order. */
+.how-to-play{padding:0}
+.how-to-play details.how-to-disclosure{min-inline-size:0;border-radius:inherit}
+.how-to-play details.how-to-disclosure > summary.how-to-disclosure-trigger{
+  display:block;
+  list-style:none;
+  min-block-size:3.75rem;
+  padding:clamp(.95rem,2.2vw,1.25rem) clamp(1rem,2.5vw,1.5rem);
+  border-radius:inherit;
+  cursor:pointer;
+  color:var(--ink);
+}
+.how-to-play .how-to-disclosure-trigger::-webkit-details-marker{display:none}
+.how-to-play .how-to-disclosure-trigger::marker{content:""}
+.how-to-play .how-to-disclosure-trigger h2{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  min-inline-size:0;
+  margin:0;
+  color:var(--ink);
+  font-size:clamp(1.35rem,2.65vw,1.95rem);
+  font-weight:800;
+  line-height:1.35;
+  letter-spacing:-.025em;
+  text-align:start;
+  overflow-wrap:anywhere;
+}
+.how-to-play .how-to-disclosure-trigger h2::after{display:none}
+.how-to-play .how-to-disclosure-caret{
+  display:block;
+  box-sizing:border-box;
+  flex:none;
+  inline-size:1rem;
+  block-size:1rem;
+  margin-inline:.35rem .55rem;
+  border-inline-end:3px solid currentColor;
+  border-block-end:3px solid currentColor;
+  border-radius:1px;
+  transform:rotate(45deg);
+  transition:transform .22s ease;
+}
+.how-to-play details.how-to-disclosure[open] .how-to-disclosure-caret{transform:rotate(225deg)}
+.how-to-play details.how-to-disclosure[open] > summary.how-to-disclosure-trigger{
+  border-end-start-radius:0;
+  border-end-end-radius:0;
+}
+.how-to-play details.how-to-disclosure > summary.how-to-disclosure-trigger:focus-visible{
+  outline:3px solid var(--focus,#8d2c49);
+  outline-offset:3px;
+}
+@media(hover:hover) and (pointer:fine){
+  .how-to-play details.how-to-disclosure > summary.how-to-disclosure-trigger:hover{
+    background:var(--pale,#edf6f5);
+  }
+}
+.how-to-play details.how-to-disclosure:not([open]) > ol.how-steps{display:none}
+.how-to-play details.how-to-disclosure > ol.how-steps{
+  padding:clamp(.85rem,2.5vw,1.6rem);
+  border-block-start:1px solid var(--line);
+}
+@media(prefers-reduced-motion:reduce){.how-to-play .how-to-disclosure-caret{transition:none}}
+.motion-reduce .how-to-play .how-to-disclosure-caret{transition:none}
+@media(forced-colors:active){
+ .how-to-play details.how-to-disclosure > summary.how-to-disclosure-trigger{
+  background:Canvas!important;color:CanvasText!important;
+ }
+ .how-to-play .how-to-disclosure-trigger h2{color:CanvasText!important}
+ .how-to-play details.how-to-disclosure > ol.how-steps{border-color:CanvasText}
+ .how-to-play details.how-to-disclosure > summary.how-to-disclosure-trigger:focus-visible{
+  outline-color:Highlight;
+ }
+}
