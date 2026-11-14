@@ -159,7 +159,8 @@ test('button shine stays inside its control during hover, focus and reduced moti
   for(const reduce of ['no-preference','reduce']){
    await page.emulateMedia({reducedMotion:reduce});
    for(const button of await buttons.all()){
-    await button.hover();await button.focus();
+    const card=button.locator('xpath=..');
+    await card.hover();await card.focus();await expect(card).toBeFocused();
     const overflow=await button.evaluate(e=>({x:e.scrollWidth-e.clientWidth,y:e.scrollHeight-e.clientHeight}));
     expect(overflow.x).toBeLessThanOrEqual(1);expect(overflow.y).toBeLessThanOrEqual(1);
    }

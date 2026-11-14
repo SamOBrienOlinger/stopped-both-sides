@@ -41,13 +41,13 @@ async function checkHeroControls(page){
  });
  const measurements=await page.locator('.perspective-hero').evaluateAll(cards=>cards.map(card=>{
   const img=card.querySelector('img'),image=img.getBoundingClientRect();
-  const link=card.querySelector('a'),button=link.getBoundingClientRect();
+  const control=card.querySelector('.perspective-hero-button'),button=control.getBoundingClientRect();
   const bounds=card.getBoundingClientRect(),style=getComputedStyle(card);
   return {centre:Math.abs(button.x+button.width/2-image.x-image.width/2),
    inside:button.x>=image.x&&button.right<=image.right,
    above:button.bottom<=image.y+1,
    buttonX:button.x,buttonRight:button.right,height:button.height,width:button.width,
-   clipped:link.scrollWidth>link.clientWidth+1||link.scrollHeight>link.clientHeight+1,
+   clipped:control.scrollWidth>control.clientWidth+1||control.scrollHeight>control.clientHeight+1,
    cardX:bounds.x,cardY:bounds.y,cardRight:bounds.right,cardBottom:bounds.bottom,cardWidth:bounds.width,
    contentWidth:card.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),
    x:image.x,y:image.y,imageRight:image.right,imageHeight:image.height,
