@@ -27,7 +27,7 @@ export function createLayout({main}){
  const forced=matchMedia('(forced-colors: active)');
  const root=document.documentElement;
  const labels={en:'Menu',ga:'Roghchlár',pt:'Menu',ar:'القائمة',pl:'Menu',ro:'Meniu',fr:'Menu',es:'Menú',zh:'菜单'};
- let open=false,lastRoute='',panelAnimation=null;
+ let open=false,lastRoute='',panelAnimation=null,landingObserver=null,observedLanding=null;
  const background=new Map();
  header.classList.add('navigation-ready');
  const motionAllowed=()=>!reduced.matches&&!forced.matches&&!root.classList.contains('motion-reduce');
@@ -74,7 +74,8 @@ export function createLayout({main}){
   toggle.querySelector('[data-menu-label]').textContent=labels[root.lang.split('-')[0]]||labels.en;
   const active=nav.querySelector('[aria-current="page"]');
   const current=toggle.querySelector('[data-menu-current]');
-  current.textContent=active?.dataset.nav==='play'?'':active?.textContent||'';
+  // "Play" remains an accessible navigation link, not an extra line on the Menu button.
+  current.textContent=['play','encounters'].includes(active?.dataset.nav)?'':active?.textContent||'';
   current.hidden=!current.textContent;
  }
  function close(restore=false,animate=true){open=false;sync(animate);if(restore)toggle.focus({preventScroll:true});}
@@ -106,6 +107,23 @@ export function createLayout({main}){
  const settlePanel=()=>sync();
  reduced.addEventListener('change',settlePanel);
  forced.addEventListener('change',settlePanel);
+ function syncLandingReveal(){
+  // Mirror the portfolio hero's staggered, viewport-triggered word reveal.
+  // The four text blocks remain fully readable if JS or the observer is missing.
+  const next=main.querySelector('.reference-landing .landing-instructions');
+  if(next===observedLanding)return;
+  landingObserver?.disconnect();
+  landingObserver=null;
+  observedLanding=next;
+  if(!next||typeof globalThis.IntersectionObserver!=='function')return;
+  landingObserver=new IntersectionObserver(entries=>{
+   for(const entry of entries){
+    entry.target.classList.toggle('is-revealing',entry.isIntersecting);
+   }
+  },{rootMargin:'0px 0px -15% 0px',threshold:0});
+  landingObserver.observe(next);
+ }
+
  function update(hash){
   const route=String(hash).split('~')[0];
   if(lastRoute!==route&&!document.activeElement?.matches('[data-reading-open]'))open=false;
@@ -124,6 +142,7 @@ export function createLayout({main}){
    });
    paragraph.replaceWith(fragment);
   });
+  syncLandingReveal();
  }
  sync();
  return {update};

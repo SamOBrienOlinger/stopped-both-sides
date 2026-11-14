@@ -2,8 +2,8 @@ import {characterArtwork,characterFor} from './characters.mjs?v=garda-baseball-2
 import {roleLabels} from './catalog.mjs?v=scene-review-1';
 
 const roleDescriptions={
- public:'This is the member of the public in the fictional encounter. Explore what they can ask, the choices available and the rights that apply.',
- garda:'This is the Garda member in the fictional encounter. Explore how legal powers, evidence, communication and fairness should inform decisions.'
+ public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',
+ garda:'This is the Garda member in this encounter. Explore how legal powers, evidence, communication and fairness should inform decisions.'
 };
 const placeNames={
  street:'On the street','bus-stop':'At the bus stop',square:'In the community',
