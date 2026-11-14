@@ -1,4 +1,4 @@
-import {characterArtwork,characterFor} from './characters.mjs?v=scene-art-2';
+import {characterArtwork,characterFor} from './characters.mjs?v=garda-baseball-20261114';
 import {roleLabels} from './catalog.mjs?v=scene-review-1';
 
 const roleDescriptions={

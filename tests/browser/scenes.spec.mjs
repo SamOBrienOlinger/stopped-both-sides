@@ -99,8 +99,9 @@ function reachStage(id,nodeId,cast){
 async function characterGeometry(scene){
  const result=await scene.locator('.scene-sprite').evaluateAll(frames=>frames.map(frame=>{
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
-  const columns=1774/320;
-  return {scale:art.width/bounds.width,columns,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
+  const isGarda=image.src.includes('garda-baseball-2026.webp');
+  const columns=isGarda?1254/426:1774/320;
+  return {scale:art.width/bounds.width,columns,isGarda,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
  }));
  for(const portrait of result){
   expect(portrait.scale,'the sprite sheet retains the calibrated scale inside the crop').toBeCloseTo(portrait.columns,1);
