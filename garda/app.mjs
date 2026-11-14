@@ -1,4 +1,4 @@
-import {createLayout} from '../accessibility/layout.mjs?v=portfolio-reveal-20261114';
+import {createLayout} from '../accessibility/layout.mjs?v=review-paragraphs-20261114';
 import {scenarioIcon} from '../encounters/visuals.mjs?v=landing-about-copy-1';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
