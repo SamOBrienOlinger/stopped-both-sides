@@ -20,14 +20,28 @@ for(const path of paths){
   await expect(page.locator('.perspective-card-link[data-role-tone="garda"] .perspective-button-label')).toHaveText('Garda member');
   for(const sentence of unwanted)await expect(page.locator('#main')).not.toContainText(sentence);
   const guide=page.locator('.how-to-play');
-  await expect(guide.getByRole('heading',{name:'How it works'})).toBeVisible();
+  const dropdown=guide.locator('details.how-to-disclosure');
+  const toggle=dropdown.locator('summary.how-to-disclosure-trigger');
+  await expect(toggle.getByRole('heading',{name:'How it works'})).toBeVisible();
+  await expect(dropdown).not.toHaveAttribute('open','');
   await expect(guide.locator('ol.how-steps')).toHaveAttribute('role','list');
   const cards=guide.locator('li.how-step');
+  await expect(cards.first()).toBeHidden();
+  await toggle.click();
+  await expect(dropdown).toHaveAttribute('open','');
+  await expect(cards.first()).toBeVisible();
   await expect(cards).toHaveCount(3);
   await expect(cards.locator('.how-step-number')).toHaveText(['1','2','3']);
   await expect(cards.locator('.how-step-copy strong')).toHaveText(headings);
   await expect(cards.locator('.how-step-copy>span')).toHaveText(details);
   await expect(cards.locator('svg.learning-icon')).toHaveCount(3);
+  await toggle.focus();
+  await page.keyboard.press('Space');
+  await expect(dropdown).not.toHaveAttribute('open','');
+  await expect(cards.first()).toBeHidden();
+  await page.keyboard.press('Enter');
+  await expect(dropdown).toHaveAttribute('open','');
+  await expect(cards.first()).toBeVisible();
   await page.goto(path+'?lang=en#encounters/public');
   await expect(page.locator('.scenario-library')).toBeVisible();
   await expect(page.locator('.scenario-library')).not.toContainText(unwanted[2]);
@@ -39,7 +53,11 @@ for(const path of paths){
   for(const lang of ['en','ar']){
    await page.goto(path+'?lang='+lang+'#play');
    const guide=page.locator('.how-to-play');
+   const dropdown=guide.locator('details.how-to-disclosure');
+   await expect(dropdown).not.toHaveAttribute('open','');
    await expect(guide.locator('li.how-step')).toHaveCount(3);
+   await dropdown.locator('summary').click();
+   await expect(dropdown).toHaveAttribute('open','');
    await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    for(const width of [320,390,768,1366]){
     await page.setViewportSize({width,height:width<700?844:900});
@@ -75,6 +93,8 @@ for(const path of paths){
   const role=path==='garda/'?'garda':'public';
   for(const width of [390,1366]){
    await page.setViewportSize({width,height:900});
+   await page.locator('.how-to-play summary').click();
+   await expect(page.locator('.how-to-play details')).toHaveAttribute('open','');
    await page.locator('.how-to-play').screenshot({
     path:info.outputPath(role+'-how-it-works-'+width+'.png'),
     animations:'disabled'
