@@ -2,6 +2,8 @@ name: Check full-resolution generated atlas retrieval
 on:
   push:
     branches: [feat/garda-baseball-production-integration-20261114]
+  pull_request:
+    branches: [main]
 jobs:
   probe:
     runs-on: ubuntu-latest
