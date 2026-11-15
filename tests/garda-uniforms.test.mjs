@@ -97,7 +97,8 @@ test('Scene anchors, approved backgrounds and name dialogs are retained',()=>{
  assert.match(source,/scene-character-label/);
  assert.match(source,/data-caption-anchors/);
  assert.doesNotMatch(css,/scene-actor:is\(\[data-scene-character="garda-/);
- assert.match(caption,/modal\.showModal\(/);
+ assert.match(caption,/createDialogController\(dialog,/);
+ assert.match(caption,/modalController\.open\(/);
  assert.match(caption,/trigger\.focus/);
  assert.match(caption,/characterArtwork\(character\)/);
 });
