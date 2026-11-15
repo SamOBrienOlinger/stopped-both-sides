@@ -20,7 +20,7 @@ export const encounters=Object.fromEntries(roles.flatMap(origin=>{
    const people=id==='garda-description'&&nodeId==='description-power'?{public:'Person matching the fuller description'}:undefined;
    return [nodeId,{id:nodeId,title:node.title,scene:p.scene,people,views:{[origin]:original,[opposite]:counterpart}}];
   }));
-  return [id,{id,origin,originalId:s.id,title:s.title,description:s.description,start:s.start,nodes,people:{public:origin==='public'?s.person:names[s.id],garda:origin==='garda'?s.person:s.id==='custody'?'Garda in the custody team':'Garda involved in the encounter'},minutes:s.minutes}];
+  return [id,{id,origin,originalId:s.id,title:s.title,description:s.description,start:s.start,nodes,people:{public:origin==='public'?s.person:names[s.id],garda:origin==='garda'?s.person:s.id==='custody'?'Garda in the custody team':''},minutes:s.minutes}];
  });
 }));
 export const stageCount=Object.values(encounters).reduce((n,e)=>n+Object.keys(e.nodes).length,0);

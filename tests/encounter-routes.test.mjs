@@ -150,6 +150,7 @@ test('Every stage and every choice render the selected cast and preserve the nex
    for(const role of roles)for(const [index,choice] of node.views[role].choices.entries()){
     const active=switchRole(base,role);route(stateHash(active));action('paired-character-close');
     assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
+    assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
     const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
     if(identity&&node.scene.includes(identity.name)){assert.ok(story.includes('Noor'));assert.ok(!story.includes(identity.name));}
     action('paired-answer',{index:String(index)});choices++;
@@ -175,6 +176,7 @@ test('Original practice uses its pictured character in every named scene and com
   let count=0;
   while(main.innerHTML.includes('class="story-text"')){
    assert.ok(++count<12);
+   assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
    const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
    if(identity&&selected!==identity.name)assert.ok(!story.includes(identity.name));
    action('choose',{index:'0'});action('next');

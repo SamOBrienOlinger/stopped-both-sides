@@ -5,7 +5,7 @@ import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from './compatibility.mjs';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=practice-dropdown-20261115';
 import {createMotion} from './accessibility/motion.mjs?v=visible-motion-5';
-import {createEncounterMode} from './encounters/ui.mjs?v=practice-dropdown-20261115';
+import {createEncounterMode} from './encounters/ui.mjs?v=garda-caption-20261115';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs?v=scenario-descriptions-20261115';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=scenario-descriptions-20261115';
 const main=document.querySelector('#main');
