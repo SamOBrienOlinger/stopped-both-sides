@@ -1,0 +1,186 @@
+/* Home and play share the same action hierarchy as the game. */
+.reference-landing .landing-instructions {
+ margin-block-end:1rem;
+ padding:clamp(.85rem,2.4vw,1.5rem);
+}
+.reference-landing .landing-instructions .landing-deck {
+ font-size:clamp(1rem,1.9vw,1.2rem);
+ line-height:1.5;
+}
+.reference-landing .landing-instructions #paired-title {
+ font-size:clamp(1.65rem,4vw,3rem);
+}
+.reference-landing .landing-instructions .landing-purpose {
+ margin-block-end:.35rem;
+ font-size:clamp(1.05rem,2.1vw,1.35rem);
+}
+.reference-landing .landing-instructions .small-note {
+ font-size:1rem;
+}
+.home-play {
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ justify-content:center;
+ gap:.65rem 1rem;
+ margin:0 auto 1.1rem;
+ max-inline-size:47rem;
+}
+.home-start {
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ justify-content:center;
+ gap:.5rem .75rem;
+}
+.home-start .primary {gap:.3em}
+.home-start-role {font-size:.875rem;color:var(--muted)}
+.home-play .flow-save {flex:1 1 23rem;margin:0}
+
+.flow-save {
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ justify-content:space-between;
+ gap:.5rem 1rem;
+ min-inline-size:0;
+ padding:clamp(.85rem,2.2vw,1.25rem);
+}
+.flow-save-copy {display:grid;gap:.15rem;flex:1 1 14rem;min-inline-size:0}
+.flow-save-copy>span {color:var(--muted);font-size:.875rem}
+.saved-situations {margin-block:1.5rem}
+.saved-situations .flow-save {margin-block:.5rem}
+.saved-recap {max-inline-size:68rem;margin-inline:auto}
+
+.play-modes {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));
+ gap:.75rem;
+ margin-block:1rem;
+}
+.play-modes a {
+ display:grid;
+ gap:.2rem;
+ min-inline-size:0;
+ padding:.85rem 1rem;
+ color:var(--ink);
+ text-decoration:none;
+ border:1px solid var(--line);
+ border-radius:.85rem;
+ background:var(--paper,#fff);
+}
+.play-modes a strong {color:var(--deep);font-size:1.05rem}
+.play-modes a span {color:var(--slate);font-size:.9375rem}
+.play-modes a[aria-current="page"] {
+ border-color:var(--deep);
+ box-shadow:inset 0 -3px var(--deep);
+ background:var(--pale);
+}
+.play-modes a:hover {border-color:var(--deep)}
+.play-modes a:focus-visible {outline:3px solid var(--focus);outline-offset:3px}
+.scenario-library .practice-content {padding:0}
+.scenario-library .scenarios {gap:1rem}
+.scenario-library .scenario .small-note {margin-block:auto .5rem}
+.scenario-library .scenario .scene-icon {margin-block-end:.65rem}
+.practice-shortcut .practice-content {padding:1rem}
+
+.flow-topline {
+ flex-wrap:wrap;
+ gap:.25rem 1rem;
+ margin-block-end:.75rem;
+}
+.flow-topline>a.text-button {flex:0 1 auto;max-inline-size:100%}
+.game-grid.paired-game.flow-game {
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ gap:1rem;
+ margin:0;
+ align-items:start;
+}
+.flow-game .decision-context {
+ inline-size:auto;
+ max-inline-size:none;
+ margin:0;
+ padding:clamp(.9rem,2.5vw,1.75rem);
+}
+.flow-game .decision-context h1 {
+ margin-block-end:.65rem;
+ font-size:clamp(1.5rem,3.2vw,2.7rem);
+}
+.flow-game .decision-context .eyebrow {margin-block-end:.55rem}
+.flow-game .decision-context .story-text {margin-block-end:0;line-height:1.6}
+.flow-game .decision-choices {margin:0;min-inline-size:0;max-inline-size:none}
+.flow-role-bar {
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ justify-content:space-between;
+ gap:.25rem .75rem;
+ margin:0 0 .7rem;
+ padding:.5rem .65rem;
+ border:1px solid var(--line);
+ border-radius:.8rem;
+ background:var(--pale);
+}
+.flow-role-bar .perspective-status {
+ display:flex;
+ flex:1 1 12rem;
+ align-items:center;
+ gap:min(.55rem,2vw);
+ min-inline-size:0;
+}
+.flow-role-bar .perspective-status>div {
+ display:grid;
+ flex:1;
+ gap:.05rem;
+ min-inline-size:0;
+ overflow-wrap:anywhere;
+}
+.flow-role-bar .perspective-status strong {color:var(--deep);font-size:.9375rem;line-height:1.45}
+.flow-role-bar .perspective-status span {font-size:.8125rem;color:var(--muted)}
+.flow-role-bar .perspective-status>.perspective-icon {inline-size:clamp(28px,7vw,42px);border-radius:.3rem}
+.flow-role-bar .perspective-toggle {min-block-size:44px;padding:.3rem .45rem;font-size:.875rem}
+.flow-role-bar .perspective-toggle>.perspective-icon {inline-size:1.5rem}
+.flow-game .prompt h2 {margin-block:.4rem}
+.flow-game .prompt {margin-block-end:.65rem}
+.scene-explorer {
+ margin-block:1.2rem;
+ padding:0 clamp(.65rem,2.2vw,1.25rem) .65rem;
+ border:1px solid var(--line);
+ border-radius:1rem;
+ background:var(--paper,#fff);
+}
+.scene-explorer>summary {
+ min-block-size:48px;
+ padding-block:.65rem;
+ font-weight:700;
+ color:var(--deep);
+ cursor:pointer;
+}
+.scene-explorer .encounter-cast {
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));
+ margin-block:.65rem;
+}
+.scene-explorer .cast-character {min-inline-size:0;flex-wrap:wrap}
+.scene-explorer .cast-character>div {flex:1 1 9rem;min-inline-size:0;overflow-wrap:anywhere}
+.scene-explorer .paired-scene-lead {margin-block:.65rem 0}
+.flow-feedback-actions {display:grid;gap:.3rem;margin-block:.75rem}
+.flow-feedback-actions .primary {margin:0}
+.flow-feedback-actions .text-button {justify-self:start}
+.flow-secondary-actions {display:flex;flex-wrap:wrap;gap:0 1rem}
+.flow-recap-actions {display:flex;justify-content:center;margin-block:1rem}
+@media(min-width:56rem) {
+ .game-grid.paired-game.flow-game {grid-template-columns:minmax(0,4fr) minmax(0,5fr);gap:1.25rem}
+}
+@media(max-width:34rem) {
+ .home-play,.home-start {align-items:stretch;flex-direction:column;text-align:center}
+ .home-start .primary {flex-wrap:wrap}
+ .home-play .flow-save {flex:auto}
+ .flow-save a {inline-size:100%}
+ .flow-game .decision-context {padding:.75rem}
+ .flow-role-bar {padding:.35rem .55rem}
+}
+@media(forced-colors:active) {
+ .play-modes a,.flow-role-bar,.scene-explorer {background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none}
+ .play-modes a[aria-current="page"] {outline:2px solid Highlight;outline-offset:-4px}
+}

@@ -268,8 +268,9 @@ for(const role of ['public','garda']){
  test(`${role}: original practice also cues feedback and the next scene`,async({page})=>{
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
+  await page.locator('.single-mode .practice-content a').click();
   await resetCues(page);
-  await page.locator('.single-mode [data-action="start"]').first().click();
+  await page.locator('.scenario-library [data-action="start"]').first().click();
   await expect(page.locator('#scene-title')).toBeVisible();
   await hasCues(page,'stage','scene');
   const title=await page.locator('#scene-title').textContent();

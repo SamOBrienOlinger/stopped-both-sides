@@ -20,11 +20,9 @@ for(const path of paths){
   const dropdown=page.locator('details.single-mode');
   const toggle=dropdown.locator('summary');
   const content=dropdown.locator('.practice-content');
-  const scenarios=content.locator('button[data-action="start"]');
+  const browse=content.getByRole('link',{name:'Browse situations',exact:true});
   await expect(toggle.getByRole('heading',{name:'Practise one role at a time'})).toBeVisible();
-  await expect(content.locator(':scope > p')).toHaveText(path==='garda/'
-   ?'Choose a situation to play as a Garda.'
-   :'Choose a situation to play as a member of the public.');
+  await expect(content.locator(':scope > p')).toHaveText('Make choices in one role and review what you learned.');
   await expect(dropdown).not.toHaveAttribute('open','');
   await expect(content).toBeHidden();
   for(const width of [390,1366]){
@@ -40,10 +38,14 @@ for(const path of paths){
   }
   await toggle.press('Enter');
   await expect(dropdown).toHaveAttribute('open','');
-  await expect(scenarios.first()).toBeVisible();
+  await expect(browse).toBeVisible();
   await toggle.press('Space');
   await expect(content).toBeHidden();
   await toggle.click();
+  await browse.click();
+  await expect(page.locator('.play-modes a[aria-current="page"]')).toContainText('Practise one role');
+  const scenarios=page.locator('.scenario-library [data-action="start"]');
+  await expect(scenarios).toHaveCount(path==='garda/'?8:6);
   await scenarios.first().click();
   await expect(page).toHaveURL(/#scenario\//);
   await expect(page.locator('#scene-title')).toBeVisible();

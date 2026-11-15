@@ -1,16 +1,15 @@
 import {createLayout} from '../accessibility/layout.mjs?v=play-menu-20261115';
-import {practiceExplorer} from '../encounters/visuals.mjs?v=practice-dropdown-20261115';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=interaction-step-20261115';
-import {createMotion} from '../accessibility/motion.mjs?v=visible-motion-5';
-import {createEncounterMode} from '../encounters/ui.mjs?v=interaction-step-20261115';
+import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=phlow-1';
+import {createMotion} from '../accessibility/motion.mjs?v=phlow-1';
+import {createEncounterMode} from '../encounters/ui.mjs?v=phlow-1';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs?v=scenario-descriptions-20261115';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=scenario-descriptions-20261115';
 const main=document.querySelector('#main');
 let session=null;
-const paired=createEncounterMode({siteRole:'garda',main,rerender:(focus=true)=>render(focus),getOriginalSession:()=>session,resetOriginalSession:()=>{session=null;},announce:message=>reading.announce(message)});
+const paired=createEncounterMode({siteRole:'garda',main,practiceScenarios:scenarios,getLanguage:()=>reading.language,rerender:(focus=true)=>render(focus),getOriginalSession:()=>session,resetOriginalSession:()=>{session=null;},announce:message=>reading.announce(message)});
 const layout=createLayout({main});
 const motion=createMotion({main,getLegacyState:()=>session});
 const reading=createReadingTools({main,siteRole:'garda',rerender:(focus=true)=>render(focus),transformContent:(html,hash)=>paired.personalize(html,hash),onRender:hash=>{layout.update(hash);motion.update(hash);},onDialogOpen:dialog=>motion.openDialog(dialog)});
@@ -18,21 +17,21 @@ const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 const sourceLinks=ids=>`<details class="source-details"><summary>Evidence behind this explanation</summary><ul>${[...new Set(ids)].map(id=>`<li><a href="#evidence/${id}">${esc(sources[id].short)}</a><span class="citation-context">${esc(sources[id].kind)} · ${esc(sources[id].place)}</span></li>`).join('')}</ul></details>`;
 const returnToSession=()=>session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Return to your recap':'Return to your situation'} →</a></p>`:'';
 const focusMain=()=>{const heading=main.querySelector?.('h1');(heading||main).focus({preventScroll:true});main.scrollIntoView?.({block:'start',behavior:'instant'});};
-function home(){
- return `${paired.landing()}${practiceExplorer(scenarios,'garda')}`;
-}
 function game(){
  if(session.complete)return summary();
  const s=scenarioById[session.scenarioId],node=currentNode(session),selected=session.selected,choice=selected===null?null:node.choices[selected],remaining=remainingSteps(session),total=session.history.length+remaining.max;
- return `${paired.legacyBar(session)}<div class="topline"><a href="#play" class="text-button">← All situations</a><span>${esc(s.title)} · Decision ${session.history.length+1}</span></div><div class="progress" role="progressbar" aria-label="Decisions completed on this path" aria-valuenow="${session.history.length}" aria-valuemin="0" aria-valuemax="${total}" aria-valuetext="${session.history.length} completed; ${remaining.min===remaining.max?remaining.min:`${remaining.min} to ${remaining.max}`} remaining"><span style="width:${session.history.length/total*100}%"></span></div>
+ return `<div class="topline flow-topline">${paired.returnLink(null,'practice',session)}<span>Individual practice</span></div><div class="progress" role="progressbar" aria-label="Decisions completed on this path" aria-valuenow="${session.history.length}" aria-valuemin="0" aria-valuemax="${total}" aria-valuetext="${session.history.length} completed; ${remaining.min===remaining.max?remaining.min:`${remaining.min} to ${remaining.max}`} remaining"><span style="width:${session.history.length/total*100}%"></span></div>
  <div class="game-grid"><section class="story" aria-labelledby="scene-title"><p class="eyebrow">${esc(s.context)}</p><h1 id="scene-title">${esc(node.title)}</h1><p class="story-text">${esc(node.story)}</p>${node.facts.length?`<div class="facts"><h2>Keep these facts in view</h2><ul>${node.facts.map(f=>`<li>${esc(f)}</li>`).join('')}</ul></div>`:''}</section>
- <section aria-labelledby="choice-title"><div class="prompt"><h2 id="choice-title">${esc(node.prompt)}</h2><p>${choice?'Read the reasoning, then continue.':'Choose a response to examine its reasoning.'}</p></div><div class="choices">${node.choices.map((c,i)=>`<button class="choice ${i===selected?'selected':''}" data-action="choose" data-index="${i}" ${choice?'disabled':''} aria-pressed="${i===selected}"><span class="choice-letter" aria-hidden="true">${String.fromCharCode(65+i)}</span><span>${esc(c.text)}${i===selected?'<span class="choice-selected">Selected</span>':''}</span></button>`).join('')}</div>
- ${choice?`<section class="feedback ${choice.review?'revisit':''}" id="feedback" tabindex="-1" aria-labelledby="feedback-title"><p class="eyebrow">${esc(node.concept)}</p><h2 id="feedback-title">${choice.review?'Pause and examine the basis.':'A considered approach on these facts.'}</h2><p>${esc(choice.feedback)}</p><div class="lesson"><strong>The learning point</strong><p>${esc(node.lesson)}</p></div><div class="phrase"><span>A QUESTION TO CARRY FORWARD</span>${esc(node.phrase)}</div>${sourceLinks(node.sources)}<button class="primary" data-action="next">${choice.next==='end'?'See your reflection recap':'Continue the situation'} <span aria-hidden="true">→</span></button></section>`:''}</section></div><div class="legacy-illustration">${paired.legacyScene(session)}</div>
+ <section aria-labelledby="choice-title">${paired.legacyBar(session)}<div class="prompt"><h2 id="choice-title">${esc(node.prompt)}</h2><p>${choice?'Read the reasoning, then continue.':'Choose a response to examine its reasoning.'}</p></div><div class="choices">${node.choices.map((c,i)=>`<button class="choice ${i===selected?'selected':''}" data-action="choose" data-index="${i}" ${choice?'disabled':''} aria-pressed="${i===selected}"><span class="choice-letter" aria-hidden="true">${String.fromCharCode(65+i)}</span><span>${esc(c.text)}${i===selected?'<span class="choice-selected">Selected</span>':''}</span></button>`).join('')}</div>
+ ${choice?`<section class="feedback ${choice.review?'revisit':''}" id="feedback" tabindex="-1" aria-labelledby="feedback-title"><p class="eyebrow">${esc(node.concept)}</p><h2 id="feedback-title">${choice.review?'Pause and examine the basis.':'A considered approach on these facts.'}</h2><p>${esc(choice.feedback)}</p><div class="flow-feedback-actions">
+     <button class="primary" data-action="next">${choice.next==='end'?'View recap':'Next decision'}</button>
+     <button class="text-button" data-action="change">Try another answer</button>
+    </div><div class="lesson"><strong>The learning point</strong><p>${esc(node.lesson)}</p></div><div class="phrase"><span>A QUESTION TO CARRY FORWARD</span>${esc(node.phrase)}</div>${sourceLinks(node.sources)}</section>`:''}</section></div>${paired.legacyPanel(session)}
  <div class="topline game-note">${session.history.length?'<button class="text-button" data-action="back">← Revisit the previous decision</button>':'<span>No timer. Take time to examine the facts.</span>'}<a href="#evidence">Evidence & sources</a></div><p class="game-note">The explanations concern the facts stated in this exercise. They do not determine a real incident’s lawfulness or diagnose a learner’s attitudes.</p>`;
 }
 function summary(){
  const s=scenarioById[session.scenarioId],items=recap(session);
- return `${paired.legacyBar(session)}<div class="topline"><a href="#play" class="text-button">← All situations</a><span>${esc(s.title)}</span></div><div class="summary-heading"><p class="eyebrow">YOUR REFLECTION RECAP</p><h1>What shaped<br>your decision?</h1><p>You explored ${items.length} decisions in the role of ${esc(s.person.toLowerCase())}. Review the reasoning and choose a question to bring to your next learning discussion.</p><p class="small-note">This recap records choices in a fictional exercise. It is not a qualification, a performance appraisal or a measure of personal bias.</p></div>${supportRecap('garda')}<div class="summary-grid"><ol class="summary-list">${items.map(({node,choice},i)=>`<li class="summary-item">${paired.legacyScene(session,i)}${choice.review?'<span class="badge">Reasoning to revisit</span>':''}<h2>${i+1}. ${esc(node.title)}</h2><p class="chosen">You chose: ${esc(choice.text)}</p><p>${esc(choice.feedback)}</p><p><strong>${esc(node.concept)}:</strong> ${esc(node.lesson)}</p><p class="recap-question">${esc(node.phrase)}</p>${sourceLinks(node.sources)}</li>`).join('')}</ol><aside class="summary-aside"><h2>Try another perspective</h2><p>Replay with a different choice. Notice what changes in the next scene and what remains part of the legal and evidential standard.</p><button class="primary" data-action="start" data-id="${s.id}">Replay this situation</button><a href="#play" class="primary secondary">Choose another situation</a><a href="#about" class="primary secondary">Use in a learning discussion</a><a href="${PUBLIC_COMPANION}" class="text-button companion-link" target="_blank" rel="noopener noreferrer">Explore the public’s perspective ↗</a></aside></div>`;
+ return `<div class="topline flow-topline">${paired.returnLink(null,'practice',session)}<span>${esc(s.title)}</span></div><div class="summary-heading"><p class="eyebrow">YOUR REFLECTION RECAP</p><h1>What shaped<br>your decision?</h1><p>You explored ${items.length} decisions in the role of ${esc(s.person.toLowerCase())}. Review the reasoning and choose a question to bring to your next learning discussion.</p><p class="small-note">This recap records choices in a fictional exercise. It is not a qualification, a performance appraisal or a measure of personal bias.</p></div><div class="flow-recap-actions">${paired.returnLink('Choose another situation','practice',session)}</div>${paired.legacyBar(session)}${supportRecap('garda')}<div class="summary-grid"><ol class="summary-list">${items.map(({node,choice},i)=>`<li class="summary-item">${paired.legacyScene(session,i)}${choice.review?'<span class="badge">Reasoning to revisit</span>':''}<h2>${i+1}. ${esc(node.title)}</h2><p class="chosen">You chose: ${esc(choice.text)}</p><p>${esc(choice.feedback)}</p><p><strong>${esc(node.concept)}:</strong> ${esc(node.lesson)}</p><p class="recap-question">${esc(node.phrase)}</p>${sourceLinks(node.sources)}</li>`).join('')}</ol><aside class="summary-aside"><h2>Try another perspective</h2><p>Replay with a different choice. Notice what changes in the next scene and what remains part of the legal and evidential standard.</p><button class="primary secondary" data-action="start" data-id="${s.id}">Replay this situation</button><a href="#about" class="primary secondary">Use in a learning discussion</a><a href="${PUBLIC_COMPANION}" class="text-button companion-link" target="_blank" rel="noopener noreferrer">Explore the public’s perspective ↗</a></aside></div>`;
 }
 function sourceCard(id,s,open){
  return `<details class="evidence-record" id="source-${id}" tabindex="-1" ${open===id?'open':''}><summary><span class="evidence-kind">${esc(s.kind)} · ${esc(s.year)}</span><span class="evidence-title" lang="en-IE" data-no-translate>${esc(s.title)}</span><span class="evidence-authors" lang="en-IE" data-no-translate>${esc(s.authors)}</span></summary><div class="evidence-body"><p class="source-meta"><bdi>${esc(s.publication)}</bdi> · ${esc(s.place)}</p><div class="evidence-explanation"><h3>What it contributes</h3><p>${esc(s.note)}</p></div><div class="evidence-explanation"><h3>Limits to interpretation</h3><p>${esc(s.limit)}</p></div><div class="evidence-explanation"><h3>How this informed the design</h3><p>${esc(s.use)}</p></div><p class="access-note">Review access: ${esc(s.access)}.</p><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Read the original source ↗</a></div></details>`;
@@ -59,18 +58,25 @@ ${learningAbout()} <section class="info-block important"><h2>A learning companio
 function notFound(){return '<div class="content-page"><h1>This page was not found.</h1><p>Choose a situation or explore the evidence library.</p><a class="primary" href="#play">All situations</a></div>';}
 function render(focus=true){
  try{
-  const hash=paired.referenceRoute(location.hash.slice(1)||'play');
+  let hash=paired.referenceRoute(location.hash.slice(1)||'play');
  if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash);if(focus)focusMain();return;}
  if(paired.handles(hash)){
   main.innerHTML=paired.view(hash);
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===(hash.startsWith('progress')?'progress':'encounters'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  document.title='Play both sides | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(focus)focusMain();return;
+  document.title='Play | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(focus&&!paired.focusReturnedList())focusMain();return;
  }
  let view='play',target='';
-  if(hash.startsWith('scenario/')){const id=hash.slice(9);if(!hasOwn(scenarioById,id)){main.innerHTML=notFound();view='missing';}else{if(!session||session.scenarioId!==id)session=startSession(id);if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}view='encounters';main.innerHTML=game();}}
-  else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
+  if(hash.startsWith('scenario/')){
+   session=paired.practiceSession(hash,session,startSession);
+   if(!session){main.innerHTML=notFound();view='missing';}
+   else{
+    hash='scenario/'+session.scenarioId;
+    if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}
+    view='encounters';main.innerHTML=game();
+   }
+  }else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
   else if(hash==='about'){view='about';main.innerHTML=about();}
-  else if(hash==='play'||hash==='main'){main.innerHTML=home();}
+  else if(hash==='play'||hash==='main'){main.innerHTML=paired.landing();}
   else{view='missing';main.innerHTML=notFound();}
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   document.title=`${view==='evidence'?'Evidence & sources':view==='about'?'About the Garda perspective':view==='missing'?'Page not found':hash.startsWith('scenario/')&&session?scenarioById[session.scenarioId].title:'Stopped: Both Sides'} | Stopped: Both Sides — Garda perspective`;
@@ -81,9 +87,12 @@ function render(focus=true){
 main.addEventListener('click',event=>{if(paired.handleClick(event))return;
  const button=event.target.closest('button[data-action]');if(!button)return;
  switch(button.dataset.action){
-  case 'start':session=startSession(button.dataset.id);if(location.hash===`#scenario/${session.scenarioId}`)render();else location.hash=`scenario/${session.scenarioId}`;break;
+  case 'start':paired.beginPractice(button.dataset.id);session=startSession(button.dataset.id);if(location.hash===`#scenario/${session.scenarioId}`)render();else location.hash=`scenario/${session.scenarioId}`;break;
   case 'choose':{const next=choose(session,Number(button.dataset.index));if(next===session)return;session=next;render(false);const feedback=document.querySelector('#feedback');feedback?.focus({preventScroll:true});feedback?.scrollIntoView({behavior:'instant',block:'nearest'});break;}
-  case 'next':{const next=advance(session);if(next===session)return;session=next;render();break;}
+  case 'change':{
+   if(!session||session.complete||session.selected===null)return;
+   session={...session,selected:null};render(false);document.querySelector('#choice-title')?.focus();break;
+  }case 'next':{const next=advance(session);if(next===session)return;session=next;render();break;}
   case 'back':session=previous(session);render();break;
  }
 });

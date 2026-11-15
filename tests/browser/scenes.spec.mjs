@@ -137,7 +137,7 @@ test('Visual review: all characters, locations and separate perspectives',async(
   await page.setViewportSize({width:1366,height:900});
  }
 });
-for(const path of ['./','garda/'])test(`${path} medication scene places artwork between guide and text on phones`,async({page},testInfo)=>{
+for(const path of ['./','garda/'])test(`${path} medication scene shows the story and choices before the artwork on phones`,async({page},testInfo)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
  const state=reachStage('public-custody','custody-health',{public:'public-3',garda:'garda-4'});
  for(const width of [320,430]){
@@ -145,10 +145,9 @@ for(const path of ['./','garda/'])test(`${path} medication scene places artwork 
   await page.goto(path+stateHash(state));
   await expect(page.locator('.story-text')).toHaveText('Robin is due prescribed medication and is beginning to feel unwell. Robin has not yet told custody staff.');
   await expect(page.locator('#main')).not.toContainText('The learner knows this');
-  const guide=await page.locator('.decision-guide').boundingBox(),art=await page.locator('.paired-scene-lead').boundingBox(),context=await page.locator('.decision-context').boundingBox(),choices=await page.locator('.decision-choices').boundingBox();
-  expect(guide.y+guide.height,'the illustrated encounter follows the step guide').toBeLessThanOrEqual(art.y+1);
-  expect(art.y+art.height,'the situation text follows the illustrated encounter').toBeLessThanOrEqual(context.y+1);
+  const art=await page.locator('.paired-scene-lead').boundingBox(),context=await page.locator('.decision-context').boundingBox(),choices=await page.locator('.decision-choices').boundingBox();
   expect(context.y+context.height,'the choices follow the situation text').toBeLessThanOrEqual(choices.y+1);
+  expect(choices.y+choices.height,'the illustration follows the responses').toBeLessThanOrEqual(art.y+1);
   await page.locator('.decision-context').scrollIntoViewIfNeeded();
   await page.screenshot({path:testInfo.outputPath(`medication-decision-${width}.png`)});
   const scene=page.locator('.paired-scene-lead>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);

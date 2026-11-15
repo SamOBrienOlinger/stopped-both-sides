@@ -144,7 +144,8 @@ for(const {path,role} of cases){
 test('Garda individual practice omits the redundant patrol role and fictional situation strip',async({page})=>{
  await page.goto('garda/#play');
  await page.locator('.single-mode summary').click();
- await page.locator('.single-mode [data-action="start"]').first().click();
+ await page.locator('.single-mode .practice-content a').click();
+ await page.locator('.scenario-library [data-action="start"]').first().click();
  await expect(page.locator('.story')).toBeVisible();
  await expect(page.locator('.story .character')).toHaveCount(0);
  await expect(page.locator('.story')).not.toContainText('Your role:');

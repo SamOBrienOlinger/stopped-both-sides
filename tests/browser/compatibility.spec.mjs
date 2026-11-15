@@ -140,8 +140,8 @@ for(const role of ['public','garda']){
    await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
    await captureHero(page,role,width,'standard',testInfo);
    await captureControls(page,role,width,'standard',testInfo,[['navbar','.header'],['how-it-works','.how-to-play'],['footer','.footer']]);
-   await page.locator('.single-mode summary').click();await fits(page,'original situations');
-   await page.locator('.single-mode [data-action="start"]').first().click();
+   await page.locator('.single-mode summary').click();await page.locator('.single-mode .practice-content a').click();await fits(page,'original situations');
+   await page.locator('.scenario-library [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
    await page.locator('[data-action="choose"]').first().click();
    await expect(page.locator('#feedback')).toBeVisible();await fits(page,'original practice feedback');
@@ -157,14 +157,14 @@ for(const role of ['public','garda']){
    await page.locator('#reading-form [type="submit"]').click();
    await expect(page.locator('html')).toHaveAttribute('lang','ga');
    await fits(page,'large Irish feedback');
-   await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.character-actions'],['feedback-actions','.paired-feedback-actions'],['footer','.footer']]);
+   await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.flow-role-bar'],['feedback-actions','.flow-feedback-actions'],['footer','.footer']]);
    const caption=await openCharacterPicker(page);
    await expect(page.locator('#character-picker-title')).toBeFocused();
    await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'large Irish character picker');
    await captureControls(page,role,width,'large-irish',testInfo,[['character-picker','.character-picker']]);
    await page.locator('[data-action="paired-character-close"]').click();
    await expect(caption).toBeFocused();
-   await page.locator('.perspective-bar [data-action="paired-switch"]').click();
+   await page.locator('.flow-role-bar [data-action="paired-switch"]').click();
    await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
    await fits(page,'other perspective');
    await checkDialog(page);
@@ -253,7 +253,7 @@ for(const role of ['public','garda']){
    await expect(page.locator('#feedback')).toBeVisible();
    const before=readState(page);await page.setViewportSize({width:844,height:390});
    await fits(page,'touch landscape');expect(readState(page)).toEqual(before);
-   await page.locator('.perspective-bar [data-action="paired-switch"]').tap();
+   await page.locator('.flow-role-bar [data-action="paired-switch"]').tap();
    await expect(page.locator('html')).toHaveAttribute('data-perspective',role==='public'?'garda':'public');
    expect(readState(page).answers).toEqual(before.answers);
    await page.setViewportSize({width:390,height:844});await fits(page,'touch portrait');

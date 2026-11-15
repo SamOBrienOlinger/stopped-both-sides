@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs';
 import {createPreferences,defaults} from './preferences.mjs?v=site-languages-1';
 import {createDialogController} from './dialog.mjs?v=scenario-descriptions-20261115';
-import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=interaction-step-20261115';
+import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=phlow-1';
 import {languages,languageInfo,normaliseLanguage} from '../locales/languages.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 const languageHelp='Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the whole site, including both game modes and reference pages. Irish covers the shared game.';
@@ -16,9 +16,7 @@ const withTapIcons=html=>html.replace(/(<[^>]*>)|[←→↗]/g,(_match,tag)=>tag
 export function perspectiveForRoute(hash,siteRole='public'){
  const route=hash.replace(/^#/, '').split('~')[0];
  if(route.startsWith('encounter/'))return decodeState(route.slice(10))?.role||siteRole;
- if(route==='encounters/public')return 'public';
- if(route==='encounters/garda')return 'garda';
- return siteRole;
+ return route.match(/^(?:encounters|practice)\/(public|garda)(?:\/|$)/)?.[1]||siteRole;
 }
 export function createReadingTools({main,rerender,siteRole='public',transformContent=html=>html,onRender=()=>{},onDialogOpen=()=>{}}){
  let storage;try{storage=globalThis.localStorage;}catch{}

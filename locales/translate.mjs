@@ -172,6 +172,206 @@ const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padSt
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
 // Localize revised interface copy without renumbering full-content packs.
 const revisedSiteCopy={
+ "Start:": {
+  "ga": "Tosaigh:",
+  "pt": "Começar:",
+  "ar": "ابدأ:",
+  "pl": "Zacznij:",
+  "ro": "Începe:",
+  "fr": "Commencer :",
+  "es": "Empezar:",
+  "zh-Hans": "开始："
+ },
+ "Browse situations": {
+  "ga": "Brabhsáil cásanna",
+  "pt": "Ver situações",
+  "ar": "تصفح المواقف",
+  "pl": "Przeglądaj sytuacje",
+  "ro": "Răsfoiește situațiile",
+  "fr": "Parcourir les situations",
+  "es": "Explorar situaciones",
+  "zh-Hans": "浏览情境"
+ },
+ "Ways to play": {
+  "ga": "Bealaí le himirt",
+  "pt": "Formas de jogar",
+  "ar": "طرق اللعب",
+  "pl": "Sposoby gry",
+  "ro": "Moduri de joc",
+  "fr": "Modes de jeu",
+  "es": "Formas de jugar",
+  "zh-Hans": "玩法"
+ },
+ "Practise one role": {
+  "ga": "Cleachtaigh ról amháin",
+  "pt": "Pratique um papel",
+  "ar": "تدرّب على دور واحد",
+  "pl": "Ćwicz jedną rolę",
+  "ro": "Exersează un rol",
+  "fr": "S’exercer dans un rôle",
+  "es": "Practicar un solo papel",
+  "zh-Hans": "练习单一角色"
+ },
+ "Switch roles to explore the same moment from both sides.": {
+  "ga": "Athraigh ról chun an nóiméad céanna a scrúdú ón dá thaobh.",
+  "pt": "Alterne os papéis para explorar o mesmo momento dos dois lados.",
+  "ar": "بدّل الأدوار لاستكشاف اللحظة نفسها من الجانبين.",
+  "pl": "Zmień rolę, by zobaczyć ten sam moment z obu stron.",
+  "ro": "Schimbă rolul ca să explorezi același moment din ambele perspective.",
+  "fr": "Changez de rôle pour explorer le même moment des deux points de vue.",
+  "es": "Cambia de papel para explorar el mismo momento desde ambos lados.",
+  "zh-Hans": "切换角色，从双方视角体验同一个时刻。"
+ },
+ "Make choices in one role and review what you learned.": {
+  "ga": "Déan roghanna i ról amháin agus féach siar ar a bhfuil foghlamtha agat.",
+  "pt": "Tome decisões num só papel e reveja o que aprendeu.",
+  "ar": "اتخذ قرارات في دور واحد وراجع ما تعلمته.",
+  "pl": "Podejmuj decyzje w jednej roli i przejrzyj to, czego się uczysz.",
+  "ro": "Ia decizii într-un singur rol și recapitulează ce ai învățat.",
+  "fr": "Faites des choix dans un seul rôle et revoyez ce que vous avez appris.",
+  "es": "Toma decisiones en un solo papel y repasa lo que has aprendido.",
+  "zh-Hans": "以一个角色作出选择，并回顾所学内容。"
+ },
+ "Playing as a Garda": {
+  "ga": "Ag imirt mar Gharda",
+  "pt": "A jogar como agente da Garda",
+  "ar": "تلعب دور ضابط من شرطة غاردا",
+  "pl": "Grasz jako funkcjonariusz irlandzkiej policji",
+  "ro": "Joci ca polițist din Garda",
+  "fr": "Vous jouez un membre de la Garda",
+  "es": "Juegas como agente de la Garda",
+  "zh-Hans": "你正在扮演爱尔兰警员"
+ },
+ "Playing as a member of the public": {
+  "ga": "Ag imirt mar dhuine den phobal",
+  "pt": "A jogar como membro do público",
+  "ar": "تلعب دور أحد أفراد الجمهور",
+  "pl": "Grasz jako członek społeczeństwa",
+  "ro": "Joci ca membru al publicului",
+  "fr": "Vous jouez un membre du public",
+  "es": "Juegas como miembro del público",
+  "zh-Hans": "你正在扮演公众成员"
+ },
+ "Decision": {
+  "ga": "Cinneadh",
+  "pt": "Decisão",
+  "ar": "القرار",
+  "pl": "Decyzja",
+  "ro": "Decizia",
+  "fr": "Décision",
+  "es": "Decisión",
+  "zh-Hans": "决定"
+ },
+ "Learning recap": {
+  "ga": "Achoimre foghlama",
+  "pt": "Resumo da aprendizagem",
+  "ar": "ملخص التعلم",
+  "pl": "Podsumowanie nauki",
+  "ro": "Recapitulare",
+  "fr": "Bilan d’apprentissage",
+  "es": "Resumen de aprendizaje",
+  "zh-Hans": "学习回顾"
+ },
+ "Scene and characters": {
+  "ga": "An radharc agus na carachtair",
+  "pt": "Cena e personagens",
+  "ar": "المشهد والشخصيات",
+  "pl": "Scena i postacie",
+  "ro": "Scena și personajele",
+  "fr": "Scène et personnages",
+  "es": "Escena y personajes",
+  "zh-Hans": "场景和角色"
+ },
+ "Back to practice": {
+  "ga": "Ar ais chuig an gcleachtadh",
+  "pt": "Voltar à prática",
+  "ar": "العودة إلى التدريب",
+  "pl": "Wróć do ćwiczeń",
+  "ro": "Înapoi la exerciții",
+  "fr": "Retour aux exercices",
+  "es": "Volver a la práctica",
+  "zh-Hans": "返回练习"
+ },
+ "Back to situations": {
+  "ga": "Ar ais chuig na cásanna",
+  "pt": "Voltar às situações",
+  "ar": "العودة إلى المواقف",
+  "pl": "Wróć do sytuacji",
+  "ro": "Înapoi la situații",
+  "fr": "Retour aux situations",
+  "es": "Volver a las situaciones",
+  "zh-Hans": "返回情境列表"
+ },
+ "Next decision": {
+  "ga": "An chéad chinneadh eile",
+  "pt": "Próxima decisão",
+  "ar": "القرار التالي",
+  "pl": "Następna decyzja",
+  "ro": "Următoarea decizie",
+  "fr": "Décision suivante",
+  "es": "Siguiente decisión",
+  "zh-Hans": "下一个决定"
+ },
+ "View recap": {
+  "ga": "Féach ar an achoimre",
+  "pt": "Ver resumo",
+  "ar": "عرض الملخص",
+  "pl": "Zobacz podsumowanie",
+  "ro": "Vezi recapitularea",
+  "fr": "Voir le bilan",
+  "es": "Ver resumen",
+  "zh-Hans": "查看回顾"
+ },
+ "Compare the other side": {
+  "ga": "Déan comparáid leis an taobh eile",
+  "pt": "Compare com o outro lado",
+  "ar": "قارن مع الجانب الآخر",
+  "pl": "Porównaj z drugą stroną",
+  "ro": "Compară cu cealaltă perspectivă",
+  "fr": "Comparer avec l’autre point de vue",
+  "es": "Comparar con el otro lado",
+  "zh-Hans": "比较另一方的视角"
+ },
+ "Open the two-role version": {
+  "ga": "Oscail an leagan dhá ról",
+  "pt": "Abrir a versão com dois papéis",
+  "ar": "افتح النسخة ذات الدورين",
+  "pl": "Otwórz wersję z dwiema rolami",
+  "ro": "Deschide versiunea cu două roluri",
+  "fr": "Ouvrir la version à deux rôles",
+  "es": "Abrir la versión de dos papeles",
+  "zh-Hans": "打开双角色版本"
+ },
+ "Unfinished situations": {
+  "ga": "Cásanna neamhchríochnaithe",
+  "pt": "Situações por terminar",
+  "ar": "المواقف غير المكتملة",
+  "pl": "Niedokończone sytuacje",
+  "ro": "Situații neterminate",
+  "fr": "Situations en cours",
+  "es": "Situaciones sin terminar",
+  "zh-Hans": "未完成的情境"
+ },
+ "Completed recaps": {
+  "ga": "Achoimrí ar chásanna críochnaithe",
+  "pt": "Resumos de situações concluídas",
+  "ar": "ملخصات المواقف المكتملة",
+  "pl": "Podsumowania ukończonych sytuacji",
+  "ro": "Recapitulări finalizate",
+  "fr": "Bilans des situations terminées",
+  "es": "Resúmenes de situaciones completadas",
+  "zh-Hans": "已完成的情境回顾"
+ },
+ "No practice situations for this topic.": {
+  "ga": "Níl aon chás cleachtaidh faoin ábhar seo.",
+  "pt": "Não há situações de prática para este tema.",
+  "ar": "لا توجد مواقف تدريبية لهذا الموضوع.",
+  "pl": "Brak ćwiczeń w tym temacie.",
+  "ro": "Nu există situații de exersat pe această temă.",
+  "fr": "Aucun exercice pour ce thème.",
+  "es": "No hay situaciones de práctica para este tema.",
+  "zh-Hans": "这个主题没有单角色练习。"
+ },
  "Practise one role at a time": {
   "ga": "Cleachtaigh ról amháin ag an am",
   "pt": "Pratique um papel de cada vez",

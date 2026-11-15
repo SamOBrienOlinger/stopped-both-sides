@@ -2,7 +2,7 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=interaction-step-20261115';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=phlow-1';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {progressStorageKey} from '../../encounters/progress.mjs';
 import {expectControlsFit} from './control-layout.mjs';
@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=interaction-step-20261115',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlow-1',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -181,7 +181,7 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await expect(page.locator('.about-opening .about-overview p')).toHaveCount(3);
  await fits(page,'about');
  await page.goto('./');
- await page.locator('.single-mode summary').click();await fits(page,'original cards');
+ await page.locator('.single-mode summary').click();await page.locator('.single-mode .practice-content a').click();await fits(page,'original cards');
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.paired-picker')).toBeVisible();
  await page.locator('.scenario-library summary').click();await fits(page,'catalogue');
@@ -190,10 +190,11 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await first.click();await expect(page.locator('.paired-game')).toBeVisible();
  await page.locator('[data-action="paired-answer"]').first().click();await fits(page,'game');
  if(width===320){
-  const actions=page.locator('.play-toolbar .character-actions');
-  const available=(await actions.boundingBox()).width;
-  for(const button of await actions.locator(':scope > button').all())expect((await button.boundingBox()).width).toBeGreaterThanOrEqual(available-2);
-  const castGroup=page.locator('.play-toolbar~.encounter-cast'),castWidth=(await castGroup.boundingBox()).width;
+  const actions=page.locator('.flow-role-bar');
+  const bar=await actions.boundingBox(),switcher=await actions.locator('.perspective-toggle').boundingBox();
+  expect(switcher.x).toBeGreaterThanOrEqual(bar.x);
+  expect(switcher.x+switcher.width).toBeLessThanOrEqual(bar.x+bar.width);
+  const castGroup=page.locator('.scene-explorer .encounter-cast'),castWidth=(await castGroup.boundingBox()).width;
   const names=await castGroup.locator('.cast-character').evaluateAll(cards=>cards.map(card=>{
    const name=card.querySelector('strong'),box=card.getBoundingClientRect(),text=name.getBoundingClientRect();
    return {width:box.width,contained:text.left>=box.left-1&&text.right<=box.right+1&&name.scrollWidth<=name.clientWidth+1};
@@ -359,7 +360,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=interaction-step-20261115',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlow-1',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);

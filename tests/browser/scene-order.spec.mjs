@@ -8,30 +8,30 @@ const sceneSelector='.paired-scene-lead>.encounter-scene';
 async function expectReadingOrder(page){
  await expect.poll(()=>page.evaluate(()=>{
   const main=document.querySelector('#main');
-  const guide=main?.querySelector(':scope>.decision-guide');
-  const lead=main?.querySelector(':scope>.paired-scene-lead');
-  const context=main?.querySelector(':scope>.decision-context');
+  const lead=main?.querySelector('.scene-explorer .paired-scene-lead');
+  const context=main?.querySelector(':scope>.paired-game .decision-context');
   const choices=main?.querySelector(':scope>.paired-game .decision-choices');
-  if(!guide||!lead||!context||!choices)return {present:false,order:false,contained:false,oneScene:false,fullWidth:false};
+  if(!lead||!context||!choices)return {present:false,order:false,contained:false,oneScene:false,fullWidth:false};
   const rect=node=>node.getBoundingClientRect();
-  const a=rect(guide),b=rect(lead),c=rect(context),d=rect(choices),root=rect(main);
+  const art=rect(lead),story=rect(context),responses=rect(choices),root=rect(main);
   const oneScene=lead.querySelectorAll(':scope>.encounter-scene').length===1&&
     main.querySelectorAll(':scope>.paired-game .encounter-scene').length===0;
   return {
    present:true,
-   order:a.bottom<=b.top+1&&b.bottom<=c.top+1&&c.bottom<=d.top+1,
-   contained:b.left>=root.left-2&&b.right<=root.right+2,
+   order:Boolean(context.compareDocumentPosition(choices)&Node.DOCUMENT_POSITION_FOLLOWING)&&
+    story.top<=responses.top+1&&Math.max(story.bottom,responses.bottom)<=art.top+1,
+   contained:art.left>=root.left-2&&art.right<=root.right+2,
    oneScene,
    fullWidth:document.documentElement.scrollWidth<=document.documentElement.clientWidth+2
   };
- }),{message:'guide → illustrated encounter → situation → choices, with no horizontal overflow'}).toEqual({
+ }),{message:'story and responses appear before the illustration, with no horizontal overflow'}).toEqual({
   present:true,order:true,contained:true,oneScene:true,fullWidth:true
  });
 }
 
 for(const path of ['./','garda/']){
  const role=path==='garda/'?'garda':'public';
- test(path+' all 14 scenarios show the scene before the situation and choices',async({page})=>{
+ test(path+' all 14 scenarios show the situation and choices before the illustration',async({page})=>{
   test.setTimeout(240000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const id of Object.keys(encounters)){

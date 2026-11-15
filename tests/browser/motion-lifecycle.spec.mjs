@@ -87,7 +87,8 @@ for(const role of ['public','garda']){
  for(const action of ['paired-transfer','change-character'])test(`${role}: ${action} retains the same scene and answer during a shared-mode transfer`,async({page})=>{
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
-  await page.locator('.single-mode [data-action="start"]').first().click();
+  await page.locator('.single-mode .practice-content a').click();
+  await page.locator('.scenario-library [data-action="start"]').first().click();
   await page.locator('[data-action="choose"]').first().click();
   await expect(page.locator('#feedback')).toBeVisible();
   await reset(page);

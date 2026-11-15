@@ -18,7 +18,7 @@ function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMat
 function action(name,extra={}){callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(name==='start')callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
 
 test('All main routes and every source/group deep link render their intended content',()=>{
- route('#play');assert.equal((main.innerHTML.match(/data-action="start"/g)||[]).length,scenarios.length);
+ route('#practice/garda/all');assert.equal((main.innerHTML.match(/data-action="start"/g)||[]).length,scenarios.length);
  route('#about');assert.match(main.innerHTML,/independent prototype/i);
  for(const [id,s] of Object.entries(sources)){route(`#evidence/${id}`);assert.ok(main.innerHTML.includes(`id="source-${id}" tabindex="-1" open`),id);assert.ok(main.innerHTML.includes(s.url),id);assert.equal(focused.at(-1),`source-${id}`);}
  for(const id of Object.keys(groups)){route(`#evidence/group-${id}`);assert.equal(focused.at(-1),`group-${id}`);}
