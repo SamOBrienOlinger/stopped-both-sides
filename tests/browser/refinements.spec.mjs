@@ -9,7 +9,7 @@ for(const role of ['public','garda'])test(`${role}: facts, identity and variatio
  await page.goto((role==='garda'?'garda/':'./')+stateHash(state));
  await expect(page.locator('.variation-notice strong')).toHaveText('New variation');
  await expect(page.locator('.cast-character[data-cast-role="public"]')).toContainText('Noor');
- await expect(page.locator('.cast-character[data-cast-role="public"]')).toContainText('24 years old');
+ await expect(page.locator('.cast-character[data-cast-role="public"] .scenario-person')).toHaveCount(0);
  for(const width of [320,390,768,1366]){
   await page.setViewportSize({width,height:844});
   // Caption controls adjust their min-height via ResizeObserver after a

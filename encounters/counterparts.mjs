@@ -5,7 +5,7 @@ const pair=(scene,prompt,lesson,choices,refs=[])=>({scene,prompt,lesson,choices,
 // Private thoughts are given to the learner, never presented as information Gardaí possess.
 export const counterparts={
  'public-street':{
-  'street-start':pair('Alex, 24, is walking home after a late shift. A Garda stops beside Alex and asks where Alex is going. No suspected offence or requirement to remain has been explained.',
+  'street-start':pair('Alex is walking home after a late shift. A Garda stops beside Alex and asks where Alex is going. No suspected offence or requirement to remain has been explained.',
    'As the Garda, how would you make the status of the enquiry clear?',
    'Explain the purpose and whether the person is free to leave. General enquiries do not create a detention power, and willingness to talk should not be confused with guilt or innocence.',[
     choice('Clarify that this is a voluntary enquiry and explain its purpose.','This helps Alex decide whether to speak without implying an obligation that has not been established.',false,'street-status'),
@@ -32,7 +32,7 @@ export const counterparts={
     choice('Say that release rules out a complaint.','A concern about treatment can remain after someone is free to leave.',true)],['garda:ethics'])
  },
  'public-search':{
-  'search-start':pair('Niamh, 29, is waiting for a bus. A Garda says they want to search Niamh’s bag. No reason or legal power has yet been explained.',
+  'search-start':pair('Niamh is waiting for a bus. A Garda says they want to search Niamh’s bag. No reason or legal power has yet been explained.',
    'As the Garda, what should come before proceeding?',
    'Identify and assess the actual basis for the proposed search, then explain it. A request for consent and a statutory search are not interchangeable.',[
     choice('Check the grounds and legal power, and explain them to Niamh.','The explanation should describe a basis that exists, not create one after the decision.'),
@@ -54,7 +54,7 @@ export const counterparts={
     choice('Add stronger grounds afterwards because nothing was found.','Retrofitting grounds misrepresents what was known at the time.',true)],['garda:ethics','garda:model'])
  },
  'public-arrest':{
-  'arrest-start':pair('Daniel, 32, is told by a Garda that Daniel is under arrest in connection with a shop incident. Daniel believes there has been a mistaken identification. The exercise does not stipulate that the allegation is correct.',
+  'arrest-start':pair('Daniel is told by a Garda that Daniel is under arrest in connection with a shop incident. Daniel believes there has been a mistaken identification. The exercise does not stipulate that the allegation is correct.',
    'What should guide your explanation and reassessment?',
    'Explain the reason for arrest, facilitate legal assistance and assess information that may undermine the identification. Arrest does not establish guilt.',[
     choice('Explain the reason, address the request for advice and check relevant identification information.','You keep the allegation open to examination rather than treating the arrest as proof.'),
@@ -81,7 +81,7 @@ export const counterparts={
     choice('Use one remembered time limit for every detention.','Different powers and circumstances require their own checks.',true)],['garda:model'])
  },
  'public-custody':{
-  'custody-start':pair('Maya, 34, understands everyday English but is struggling with a legal explanation at the station. Maya is worried about agreeing to something without understanding it.',
+  'custody-start':pair('Maya understands everyday English but is struggling with a legal explanation at the station. Maya is worried about agreeing to something without understanding it.',
    'What should you check before treating apparent agreement as understanding?',
    'Everyday conversational English does not establish understanding of legal language. Identify the required interpretation and communication support.',[
     choice('Check understanding and arrange the interpretation support needed.','Support should come before consequential decisions based on apparent agreement.'),
@@ -147,7 +147,7 @@ export const counterparts={
     choice('Say that waiting several months automatically removes the ability to complain.','That does not reflect the stated normal limit or the possibility of accepted reasons for delay.',true)],['garda:ethics'])
  },
  'garda-street':{
-  'street-start':pair('Alex, 24, stands beside a closed shop looking at a phone and looks away as a patrol Garda approaches. A briefing mentioned thefts but supplied no relevant description. There is no immediate threat or specific link to an offence.',
+  'street-start':pair('Alex stands beside a closed shop looking at a phone and looks away as a patrol Garda approaches. A briefing mentioned thefts but supplied no relevant description. There is no immediate threat or specific link to an offence.',
    'As Alex, what could help you understand the contact?',
    'You can ask the purpose of the enquiry and whether you are free to leave. Looking away or being near a closed shop does not itself establish a legal obligation to stay.',[
     choice('Ask why the Garda is approaching and whether you have to stay.','This seeks clarity about the purpose and status of the encounter.',false,'street-reset'),
@@ -196,7 +196,7 @@ export const counterparts={
     choice('Assume a stronger description removes every right to ask questions.','Rights and safeguards remain relevant when an intervention has grounds.',true)],['public:questioning','public:arrest'])
  },
  'garda-search':{
-  'search-start':pair('A briefing mentions drug activity near a bus stop. Niamh, 29, waits there with a bag and appears restless. There is no specific information about Niamh, a drug or an exchange. A Garda considers section 23.',
+  'search-start':pair('A briefing mentions drug activity near a bus stop. Niamh waits there with a bag and appears restless. There is no specific information about Niamh, a drug or an exchange. A Garda considers section 23.',
    'As Niamh, what would help you understand a proposed search?',
    'Ask for the reason and power. Presence in an area and apparent restlessness do not replace the need for the statutory conditions to be met.',[
     choice('Ask what specific grounds and legal power apply to you.','This asks for the individual basis of the action.'),
@@ -223,7 +223,7 @@ export const counterparts={
     choice('Use the empty result alone as a complete legal judgment.','The result does not replace examination of the original basis and conduct.',true)],['public:drugs','public:fiosru'])
  },
  'garda-communication':{
-  'communication-start':pair('A Garda asks Maya, 34, a general question about a local report. Maya looks down, takes time to answer and asks for repetition. No specific evidence links Maya to an offence. A colleague calls the behaviour evasive.',
+  'communication-start':pair('A Garda asks Maya a general question about a local report. Maya looks down, takes time to answer and asks for repetition. No specific evidence links Maya to an offence. A colleague calls the behaviour evasive.',
    'As Maya, what can help you take part on clearer terms?',
    'You can ask for a question to be repeated or explained and for your status to be clarified. Communication style is not an admission of wrongdoing.',[
     choice('Ask for one clear question at a time and whether you need to stay.','This identifies the support and status you need.',false,'communication-clarify'),
@@ -262,7 +262,7 @@ export const counterparts={
     choice('Different duties to prove innocence depending on identity.','Identity alone does not create that duty.',true)],['public:inarReport'])
  },
  'garda-colleague':{
-  'colleague-start':pair('Patrick, 35, an Irish Traveller, unloads tools for a scheduled repair. A Garda colleague recognises the surname and mentions past trouble with the family. No information connects Patrick or these tools to an offence.',
+  'colleague-start':pair('Patrick, an Irish Traveller, unloads tools for a scheduled repair. A Garda colleague recognises the surname and mentions past trouble with the family. No information connects Patrick or these tools to an offence.',
    'As Patrick, what would help clarify the proposed intervention?',
    'Ask about the individual reason and legal basis. You do not bear responsibility for proving the conduct of an entire family or community.',[
     choice('Ask what current information relates to you and whether the proposed search is compulsory.','This focuses on the individual situation.',false,'colleague-specific'),
@@ -284,7 +284,7 @@ export const counterparts={
     choice('Assume any educational purpose allows publication of your family’s details.','Training purposes do not erase privacy or the need for appropriate handling of information.',true)],['public:fiosru','public:inarReport'])
  },
  'garda-new-evidence':{
-  'update-start':pair('For this exercise, the original search basis concerning Daniel, 32, was lawful. Before the search begins, its source corrects a key identification error and that basis falls away. No separate ground or urgent threat arises.',
+  'update-start':pair('For this exercise, the original search basis concerning Daniel was lawful. Before the search begins, its source corrects a key identification error and that basis falls away. No separate ground or urgent threat arises.',
    'As Daniel, what could you ask about the correction?',
    'A proposed action should be reassessed when material information changes. Announcing a search does not itself supply a continuing legal basis.',[
     choice('Ask whether the corrected information means the search will stop and you are free to leave.','This asks for the practical effect of the reassessment.',false,'update-explain'),

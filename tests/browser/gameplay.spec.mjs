@@ -47,8 +47,8 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
 for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mismatch stays fixed after renaming, Irish, resume and recap`,async({page},testInfo)=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto((entry==='garda'?'garda/':'./')+stateHash(startEncounter('garda-street','garda',{cast})));
- await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor, 24, stands beside a closed shop');
- await expect(page.locator('[data-cast-role="public"]')).toContainText('24 years old');
+ await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor stands beside a closed shop');
+ await expect(page.locator('[data-cast-role="public"] .scenario-person')).toHaveCount(0);
  await expect.poll(()=>page.locator('.paired-scene-lead img').evaluateAll(images=>images.length>0&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  // Full-page captures can precede async decoding of off-screen artwork. Also
  // inspect the actual scene in the viewport, as a player sees it after scrolling.
@@ -63,10 +63,10 @@ for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mism
  await page.locator('[data-character="public-3"]').click();
  await page.locator('[data-action="paired-character-close"]').click();
  expect(current(page).answers).toEqual(saved.answers);expect(current(page).history).toEqual(saved.history);
- await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin, 24');await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).not.toContain('Noor');
+ await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin stands beside a closed shop');await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).not.toContain('Noor');
  await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
  await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin');await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).not.toContain('Alex');
- await expect(page.locator('[data-cast-role="public"]')).toContainText('24 bliain d’aois');
+ await expect(page.locator('[data-cast-role="public"] .scenario-person')).toHaveCount(0);
  await openNavigation(page);await page.locator('[data-site-switch]').click();await page.locator('.session-return a').click();
  await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Robin');expect(current(page).answers).toEqual(saved.answers);
  while(!current(page).complete){

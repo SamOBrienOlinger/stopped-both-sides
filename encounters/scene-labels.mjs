@@ -1,7 +1,8 @@
 import {characterArtwork,characterFor} from './characters.mjs?v=character-details-actions-20261114';
 import {roleLabels} from './catalog.mjs?v=scene-review-1';
+import {createDialogController} from '../accessibility/dialog.mjs?v=scenario-descriptions-20261115';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=support-resources-1';
+import {translateText} from '../locales/translate.mjs?v=scenario-descriptions-20261115';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',
@@ -15,7 +16,7 @@ const placeNames={
 export function installSceneCaptionLayout(root){
  if(!root||typeof root.querySelectorAll!=='function')return()=>{};
  const doc=root.ownerDocument,win=doc.defaultView,watched=new Set();
- let frame=0,disposed=false,dialog=null,returnFocus=null;
+ let frame=0,disposed=false,dialog=null,modalController=null,returnFocus=null;
  const schedule=()=>{if(!disposed&&!frame)frame=win.requestAnimationFrame(update);};
  const resize=typeof win.ResizeObserver==='function'?new win.ResizeObserver(schedule):null;
 
@@ -69,17 +70,17 @@ export function installSceneCaptionLayout(root){
   dialog.setAttribute('lang','en-IE');
   dialog.innerHTML='<div class="scene-profile-shell"><div class="scene-profile-top"><div class="scene-profile-portrait" aria-hidden="true"><img alt=""></div><div class="scene-profile-info"><h2 id="scene-character-dialog-name" data-no-translate></h2><p class="scene-profile-role"></p></div></div><p class="scene-profile-body" id="scene-character-dialog-summary"></p><p class="scene-profile-setting"></p><div class="scene-profile-actions"><button type="button" class="scene-profile-change">Change character</button><button type="button" class="scene-profile-close" autofocus>Close character details</button></div></div>';
   doc.body.append(dialog);
-  dialog.querySelector('.scene-profile-change').addEventListener('click',()=>{
-   const trigger=returnFocus;returnFocus=null;
-   dialog.close();
-   if(trigger?.isConnected)trigger.dispatchEvent(new win.Event('scene-character-change',{bubbles:true}));
-  });
-  dialog.querySelector('.scene-profile-close').addEventListener('click',()=>dialog.close());
-  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
-  dialog.addEventListener('close',()=>{
+  modalController=createDialogController(dialog,()=>{
    const trigger=returnFocus;returnFocus=null;
    if(trigger?.isConnected)trigger.focus({preventScroll:true});
+  },'.scene-profile-close');
+  dialog.querySelector('.scene-profile-change').addEventListener('click',()=>{
+   const trigger=returnFocus;returnFocus=null;
+   modalController.close();
+   if(trigger?.isConnected)trigger.dispatchEvent(new win.Event('scene-character-change',{bubbles:true}));
   });
+  dialog.querySelector('.scene-profile-close').addEventListener('click',()=>modalController.close());
+  dialog.addEventListener('click',event=>{if(event.target===dialog)modalController.close();});
   return dialog;
  }
 
@@ -100,10 +101,9 @@ export function installSceneCaptionLayout(root){
   modal.querySelector('.scene-profile-setting').textContent='Scene: '+(placeNames[place]||'A shared encounter');
   image.src=art.src;image.width=art.width;image.height=art.height;image.style.cssText=art.style;
   returnFocus=button;
-  if(!modal.open)modal.showModal();
-  modal.querySelector('.scene-profile-close').focus({preventScroll:true});
+  modalController.open();
  }
- function onRouteChange(){if(dialog?.open)dialog.close();}
+ function onRouteChange(){modalController?.close();}
  root.addEventListener('click',onCaptionClick);
  const content=new win.MutationObserver(schedule);
  content.observe(root,{childList:true,subtree:true,characterData:true});
@@ -128,7 +128,7 @@ export function installSceneCaptionLayout(root){
   win.removeEventListener('hashchange',onRouteChange);
   root.removeEventListener('click',onCaptionClick);
   doc.fonts?.removeEventListener?.('loadingdone',schedule);
-  if(dialog){if(dialog.open)dialog.close();dialog.remove();}
+  modalController?.close();dialog?.remove();
  };
 }
 if(typeof document!=='undefined'){

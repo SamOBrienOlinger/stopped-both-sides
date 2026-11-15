@@ -3,7 +3,7 @@
 const n=(title,scene,publicView,gardaView)=>({title,scene,public:publicView,garda:gardaView});
 export const gaContent={
  'public-street':{title:'Stoptha ar an tsráid',description:'Fiafraíonn Garda cá bhfuil tú ag dul. An comhrá deonach é, nó an gá duit fanacht?',nodes:{
-  'street-start':n('“An bhféadfainn labhairt leat?”','Tá Alex, 24, ag siúl abhaile tar éis seal déanach oibre. Stopann Garda in aice le Alex agus fiafraíonn cá bhfuil Alex ag dul. Níor míníodh aon chion a bhfuil amhras faoi ná aon cheanglas fanacht.',[
+  'street-start':n('“An bhféadfainn labhairt leat?”','Tá Alex ag siúl abhaile tar éis seal déanach oibre. Stopann Garda in aice le Alex agus fiafraíonn cá bhfuil Alex ag dul. Níor míníodh aon chion a bhfuil amhras faoi ná aon cheanglas fanacht.',[
    'Cad a déarfá ar dtús?','Féadfaidh Garda fiosrúcháin a dhéanamh. Ní chruthaíonn iarratas chun cainte dualgas dlíthiúil go huathoibríoch fanacht nó freagra a thabhairt; féadfaidh cumhacht shonrach an scéal a athrú.',
    'Mínigh d’oíche ar fad láithreach.','Is féidir leat labhairt más mian leat, ach cuidíonn sé fios a bheith agat ar dtús an comhrá deonach atá ann.',
    'Fiafraigh cén fáth a bhfuil tú á stopadh agus an bhfuil cead agat imeacht.','Lorgaíonn sé seo cuspóir agus stádas na teagmhála gan glacadh leis go bhfuil gach iarratas éigeantach.',
@@ -55,7 +55,7 @@ export const gaContent={
   ])
  }},
  'public-search':{title:'Iarrtar ort do mhála a oscailt',description:'Deirtear leat go ndéanfar cuardach ar do mhála. Fiosraigh an difríocht idir toiliú agus cumhacht dhlíthiúil.',nodes:{
-  'search-start':n('“Oscail do mhála, le do thoil.”','Tá Niamh, 29, ag fanacht ar bhus. Deir Garda gur mian leo mála Niamh a chuardach. Níor míníodh cúis ná cumhacht dhlíthiúil fós.',[
+  'search-start':n('“Oscail do mhála, le do thoil.”','Tá Niamh ag fanacht ar bhus. Deir Garda gur mian leo mála Niamh a chuardach. Níor míníodh cúis ná cumhacht dhlíthiúil fós.',[
    'Cad a chuideodh leat an t-iarratas a thuiscint?','Fiafraigh cén fáth a bhfuil an cuardach beartaithe agus cén chumhacht atá á húsáid. Ná glac leis go mbíonn do thoiliú nó barántas riachtanach do gach cuardach.',
    'Fiafraigh faoi na forais agus faoin gcumhacht dhlíthiúil.','Soiléiríonn sé seo an gníomh beartaithe agus an difríocht idir iarratas ar thoiliú agus cuardach reachtúil.',
    'Abair go bhfuil gach cuardach gan bharántas páipéir neamhdhleathach.','Ceadaíonn reachtaíocht áirithe cuardach gan bharántas má chomhlíontar a coinníollacha.',
@@ -99,7 +99,7 @@ export const gaContent={
 };
 Object.assign(gaContent,{
  'public-arrest':{title:'Deirtear leat go bhfuil tú faoi ghabháil',description:'Líomhain, gabháil agus ceisteanna sa stáisiún. Cleachtaigh conas agus cathain comhairle dlí a iarraidh.',nodes:{
-  'arrest-start':n('Tá tú faoi ghabháil','Deir Garda le Daniel, 32, go bhfuil sé faoi ghabháil faoi eachtra i siopa. Measann Daniel gur aithníodh an duine mícheart. Ní ghlactar leis sa chleachtadh go bhfuil an líomhain fíor.',[
+  'arrest-start':n('Tá tú faoi ghabháil','Deir Garda le Daniel go bhfuil sé faoi ghabháil faoi eachtra i siopa. Measann Daniel gur aithníodh an duine mícheart. Ní ghlactar leis sa chleachtadh go bhfuil an líomhain fíor.',[
    'Cad a d’iarrfá?','Tá tú i dteideal an chúis leis an ngabháil a fháil. Ní ciontú í gabháil. Iarr aturnae agus mínigh do chuid imní.',
    'Glacadh leis go bhfuilim ciontach cheana toisc gur gabhadh mé.','Is céimeanna éagsúla iad gabháil agus cinneadh ciontachta.',
    'An chúis a iarraidh agus aturnae a iarraidh, gan cur in aghaidh go fisiciúil.','Is féidir an líomhain a dhíospóid agus an ghabháil a cheistiú trí chúnamh dlí.',
@@ -151,7 +151,7 @@ Object.assign(gaContent,{
   ])
  }},
  'public-custody':{title:'An stáisiún a thuiscint',description:'Ateangaire, comhairle dlí, cógais agus duine a chur ar an eolas: cleachtaigh cabhair a iarraidh.',nodes:{
-  'custody-start':n('Tá na focail neamhchoitianta','Labhraíonn Maya, 34, Béarla laethúil ach tá deacracht aici an míniú dlíthiúil a thuiscint. Tá imní uirthi go n-aontódh sí gan tuiscint.',[
+  'custody-start':n('Tá na focail neamhchoitianta','Labhraíonn Maya Béarla laethúil ach tá deacracht aici an míniú dlíthiúil a thuiscint. Tá imní uirthi go n-aontódh sí gan tuiscint.',[
    'Cad is féidir leat a iarraidh?','Tá ateangaireacht agus aistriúchán saor in aisce ar fáil nuair is gá faoi choimeád. Abair cén tacaíocht atá ag teastáil.',
    'Mo cheann a chlaonadh ionas nach mbeidh mé deacair.','Ní cruthúnas tuisceana é ceann a chlaonadh. Mínigh do riachtanas.',
    'Ateangaire a iarraidh agus a rá nach dtuigim.','Lorg tacaíocht sula ndéanann tú cinntí faoi agallamh nó doiciméid.',
@@ -281,7 +281,7 @@ Object.assign(gaContent,{
 });
 Object.assign(gaContent,{
  'garda-street':{title:'Amhras ar an tsráid',description:'Féachann duine ar shiúl agus patról ag teacht. Scar an méid a chonaic tú ó na toimhdí a rinne tú.',nodes:{
-  'street-start':n('Cad a tharraing d’aird?','Tá Alex, 24, in aice le siopa dúnta ag féachaint ar ghuthán. Féachann Alex ar shiúl agus Garda patróil ag teacht. Luadh gadaíochtaí i bhfaisnéisiú, ach níor tugadh cur síos ábhartha. Níl bagairt láithreach ná nasc sonrach le cion ann.',[
+  'street-start':n('Cad a tharraing d’aird?','Tá Alex in aice le siopa dúnta ag féachaint ar ghuthán. Féachann Alex ar shiúl agus Garda patróil ag teacht. Luadh gadaíochtaí i bhfaisnéisiú, ach níor tugadh cur síos ábhartha. Níl bagairt láithreach ná nasc sonrach le cion ann.',[
    'Mar Alex, cad a chabhródh leat an teagmháil a thuiscint?','Is féidir cuspóir na ceiste agus an bhfuil tú saor le himeacht a iarraidh. Ní chruthaíonn féachaint ar shiúl ná bheith in aice le siopa dúnta dualgas dlíthiúil fanacht ann féin.',
    'Fiafraí cén fáth a bhfuil an Garda ag teacht chugam agus an gá dom fanacht.','Lorgaíonn sé soiléireacht faoi chuspóir agus stádas na teagmhála.',
    'Glacadh leis go gcaithfidh mé cuntas a thabhairt ar an oíche ar fad gach uair a thagann Garda chugam.','Tá roinnt ceisteanna deonach; d’fhéadfadh cumhacht dhlíthiúil ar leith é sin a athrú. Soiléirigh an staid.'
@@ -377,7 +377,7 @@ Object.assign(gaContent,{
 });
 Object.assign(gaContent,{
  'garda-search':{title:'Forais le cuardach drugaí',description:'Ó imní doiléir go cás ar leith le forais shonracha. Scar údarás dlíthiúil, cumarsáid agus toradh.',nodes:{
-  'search-start':n('“Tá gníomhaíocht drugaí anseo”','Luann faisnéisiú gníomhaíocht drugaí in aice le stad bus. Tá Niamh, 29, ag fanacht le mála agus cuma mhíshocair uirthi. Níl eolas sonrach faoi Niamh, druga ná malartú ann. Measann Garda alt 23.',[
+  'search-start':n('“Tá gníomhaíocht drugaí anseo”','Luann faisnéisiú gníomhaíocht drugaí in aice le stad bus. Tá Niamh ag fanacht le mála agus cuma mhíshocair uirthi. Níl eolas sonrach faoi Niamh, druga ná malartú ann. Measann Garda alt 23.',[
    'Mar Niamh, cad a chabhródh leat cuardach beartaithe a thuiscint?','Iarr an chúis agus an chumhacht. Ní ghlacann bheith in áit ná cuma mhíshocair áit na gcoinníollacha reachtúla.',
    'Na forais shonracha agus an chumhacht dhlíthiúil a bhaineann liom a iarraidh.','Lorgaíonn sé bunús aonair an ghnímh.',
    'Glacadh leis gur féidir gach duine ag an stad bus seo a chuardach go huathoibríoch.','Ní chruthaíonn cur síos ginearálta ar áit cumhacht chuardaigh gan teorainn.'
@@ -429,7 +429,7 @@ Object.assign(gaContent,{
   ])
  }},
  'garda-communication':{title:'Nuair a mhíléitear iompar',description:'Is féidir le freagraí malla agus beagán teagmhála súl toimhdí a spreagadh. Scrúdaigh cumarsáid, cumhacht agus cóireáil chóir.',nodes:{
-  'communication-start':n('“Tá cuma sheachantach orthu”','Cuireann Garda ceist ghinearálta ar Maya, 34, faoi thuairisc áitiúil. Féachann Maya síos, tógann sí am le freagairt agus iarrann sí athrá. Níl fianaise shonrach a nascann í le cion. Glaonn comhghleacaí iompar seachantach air.',[
+  'communication-start':n('“Tá cuma sheachantach orthu”','Cuireann Garda ceist ghinearálta ar Maya faoi thuairisc áitiúil. Féachann Maya síos, tógann sí am le freagairt agus iarrann sí athrá. Níl fianaise shonrach a nascann í le cion. Glaonn comhghleacaí iompar seachantach air.',[
    'Mar Maya, cad a chabhródh leat páirt a ghlacadh le soiléireacht?','Is féidir athrá nó míniú agus soiléiriú ar do stádas a iarraidh. Ní admháil éagóra é stíl chumarsáide.',
    'Ceist shoiléir amháin ag an am a iarraidh agus fiafraí an gá dom fanacht.','Aithníonn sé an tacaíocht agus an stádas atá ag teastáil.',
    'Glacadh leis go gcaithfidh mé freagairt ar aon luas chun mo chearta a choinneáil.','Ní bhaineann gá le ham nó soiléiriú do chearta díot.'
@@ -505,7 +505,7 @@ Object.assign(gaContent,{
   ])
  }},
  'garda-colleague':{title:'“Tá aithne againn ar an teaghlach sin”',description:'Is féidir le heolas áitiúil agus muinín foirne toimhdí gan tástáil a iompar. Cleachtaigh ceistiú cuiditheach.',nodes:{
-  'colleague-start':n('Sloinne aithnidiúil','Tá Patrick, 35, Taistealaí Éireannach, ag díluchtú uirlisí le haghaidh deisiúcháin sceidealaithe. Aithníonn comhghleacaí an sloinne agus luann trioblóid leis an teaghlach roimhe. Níl eolas a nascann Patrick ná na huirlisí le cion.',[
+  'colleague-start':n('Sloinne aithnidiúil','Tá Patrick, Taistealaí Éireannach, ag díluchtú uirlisí le haghaidh deisiúcháin sceidealaithe. Aithníonn comhghleacaí an sloinne agus luann trioblóid leis an teaghlach roimhe. Níl eolas a nascann Patrick ná na huirlisí le cion.',[
    'Mar Patrick, cad a shoiléireodh an idirghabháil bheartaithe?','Iarr an chúis aonair agus an bunús dlíthiúil. Níl freagracht ort iompar teaghlach nó pobal iomlán a chruthú.',
    'Fiafraí cén t-eolas reatha a bhaineann liom agus an bhfuil an cuardach éigeantach.','Díríonn sé ar an gcás aonair.',
    'Glacadh leis gur cumhacht chuardaigh uathoibríoch é clú teaghlaigh.','Ní bhunaíonn ceangal le grúpa forais aonair.'
@@ -547,7 +547,7 @@ Object.assign(gaContent,{
   ])
  }},
  'garda-new-evidence':{title:'Nuair a athraíonn na fíricí',description:'Tá idirghabháil fógartha agat. Lagaíonn eolas nua an bunús. Cinn cad atá le hathrú agus le taifeadadh.',nodes:{
-  'update-start':n('D’fhógair tú cuardach cheana','Don chleachtadh seo, bhí bunús dleathach leis an gcuardach bunaidh ar Daniel, 32. Sula dtosaíonn sé, ceartaíonn an fhoinse earráid thábhachtach aitheantais agus imíonn an bunús. Níl foras eile ná bagairt phráinneach ann.',[
+  'update-start':n('D’fhógair tú cuardach cheana','Don chleachtadh seo, bhí bunús dleathach leis an gcuardach bunaidh ar Daniel. Sula dtosaíonn sé, ceartaíonn an fhoinse earráid thábhachtach aitheantais agus imíonn an bunús. Níl foras eile ná bagairt phráinneach ann.',[
    'Mar Daniel, cad is féidir a iarraidh faoin gceartú?','Ba chóir gníomh beartaithe a athmheas nuair a athraíonn eolas tábhachtach. Ní sholáthraíonn fógairt cuardaigh bunús dlíthiúil leanúnach inti féin.',
    'Fiafraí an stopfaidh an cuardach de bharr an cheartaithe agus an bhfuil mé saor le himeacht.','Lorgaíonn sé éifeacht phraiticiúil an athmheasa.',
    'Glacadh leis go gcaithfear an cuardach a chríochnú díreach mar gur fógraíodh é.','Tá an bunús reatha tábhachtach, lena n-áirítear an ceartú roimh an gcuardach.'

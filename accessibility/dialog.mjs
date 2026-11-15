@@ -1,11 +1,11 @@
 // Prefer native modal behaviour; retain keyboard access on older browsers.
-export function createDialogController(dialog,onClose){
+export function createDialogController(dialog,onClose,focusSelector='#reading-title'){
  if(!dialog)return {open(){},close(){}};
  const native=typeof dialog?.showModal==='function'&&typeof dialog?.close==='function';
  let backdrop=null,hidden=[];
  const focusable=()=>[...dialog.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),[tabindex="0"]')]
   .filter(element=>element.getClientRects().length);
- const initialFocus=()=>dialog.querySelector('#reading-title')?.focus();
+ const initialFocus=()=>dialog.querySelector(focusSelector)?.focus();
  const markOpen=value=>document.documentElement?.classList.toggle('dialog-open',value);
  function finish(){
   markOpen(false);

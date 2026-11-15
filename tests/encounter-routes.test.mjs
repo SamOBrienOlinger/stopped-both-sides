@@ -106,6 +106,7 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
 test('Original mode transfers a live selection into the same stage and records its score',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
  assert.match(main.innerHTML,/data-action="paired-transfer"/);assert.match(main.innerHTML,/Individual practice/);
+ assert.doesNotMatch(main.innerHTML,/Fictional situation · Republic of Ireland/);
  action('paired-transfer');assert.equal(state().id,siteRole+'-'+e.id);assert.equal(state().nodeId,e.start);assert.equal(state().answers[siteRole],1);assert.notEqual(state().role,siteRole);
 });
 test('Original practice can change character while carrying its stage and answer into shared play',()=>{

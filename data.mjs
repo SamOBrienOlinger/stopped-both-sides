@@ -25,7 +25,7 @@ export const sources = {
 const c=(text,feedback,next,review=false)=>({text,feedback,next,review});
 const n=(title,story,prompt,lesson,phrase,refs,choices,quote='')=>({title,story,prompt,lesson,phrase,sources:refs,choices,quote});
 export const scenarios = [
- {id:'street',title:'Stopped on the street',person:'Alex, 24',context:'Walking home after a late shift',description:'A Garda asks where you are going. Is this a conversation, or do you have to stay?',icon:'message',minutes:'4–5 minutes',start:'street-start',nodes:{
+ {id:'street',title:'Stopped on the street',person:'Alex',context:'Walking home after a late shift',description:'A Garda asks where you are going. Is this a conversation, or do you have to stay?',icon:'message',minutes:'4–5 minutes',start:'street-start',nodes:{
  'street-start':n('“Can I have a word?”','You are Alex. You are walking home when a Garda stops beside you and asks where you are going. You have not been told you are suspected of an offence.','What would you say first?','A Garda can make enquiries. A request to talk is not automatically a legal obligation to stay or answer; particular powers can change this.','Am I free to leave, or am I being detained?',['questioning','iccl'],[
  c('Explain your whole evening straight away.','You can choose to talk, but first understanding whether the conversation is voluntary helps you make an informed choice.','street-voluntary'),
  c('Ask why you are being stopped and whether you are free to leave.','This asks for the status and purpose of the encounter without assuming that every request is compulsory.','street-status'),
@@ -51,7 +51,7 @@ export const scenarios = [
  c('Assume that being allowed to leave rules out any complaint.','An encounter can end without arrest and still raise concerns about treatment.','end',true),
  c('Assume that making a complaint automatically proves the stop was unlawful.','A complaint raises concerns for assessment; it does not itself determine lawfulness.','end',true)
  ])}},
- {id:'search',title:'Asked to open your bag',person:'Niamh, 29',context:'Waiting for a bus in town',description:'You are told your bag will be searched. Explore the difference between consent and a legal power.',icon:'bag',minutes:'4–5 minutes',start:'search-start',nodes:{
+ {id:'search',title:'Asked to open your bag',person:'Niamh',context:'Waiting for a bus in town',description:'You are told your bag will be searched. Explore the difference between consent and a legal power.',icon:'bag',minutes:'4–5 minutes',start:'search-start',nodes:{
  'search-start':n('“Open your bag, please.”','You are Niamh. While waiting for a bus, a Garda tells you they want to search your bag. You have not heard a reason or been told what power they are using.','What would help you understand the request?','Ask why the search is proposed and what legal power is being used. Do not assume a search always requires either your consent or a warrant.','What is the reason for the search, and what power are you using?',['eu','drugs'],[
  c('Ask for the grounds and legal power.','This identifies what is being proposed and helps distinguish a request for consent from a statutory search.','search-power'),
  c('Say that every search without a paper warrant is unlawful.','Some legislation allows searches without a warrant if its conditions are satisfied.','search-power',true),
@@ -72,7 +72,7 @@ export const scenarios = [
  c('Every search that finds nothing is automatically unlawful.','The result alone does not answer whether the original grounds met the legal test.','end',true),
  c('A search can never be challenged if a Garda names an Act.','Naming legislation does not prove that its conditions were satisfied.','end',true)
  ])}},
- {id:'arrest',title:'Told you are under arrest',person:'Daniel, 32',context:'Outside a shop after an incident',description:'An allegation, an arrest and questions at the station. Explore when and how to ask for legal advice.',icon:'key',minutes:'5–6 minutes',start:'arrest-start',nodes:{
+ {id:'arrest',title:'Told you are under arrest',person:'Daniel',context:'Outside a shop after an incident',description:'An allegation, an arrest and questions at the station. Explore when and how to ask for legal advice.',icon:'key',minutes:'5–6 minutes',start:'arrest-start',nodes:{
  'arrest-start':n('“You are under arrest.”','You are Daniel. A Garda tells you that you are being arrested in connection with an incident at a shop. You think they have mistaken you for someone else.','What would you ask?','You are entitled to be told the reason for your arrest. An arrest is not a conviction. Ask for a solicitor and explain concerns about the arrest to them.','What am I being arrested for? I want to speak to a solicitor.',['arrest','dpp'],[
  c('Assume that arrest means you have already been found guilty.','An arrest and a finding of guilt are different stages.','arrest-lawyer',true),
  c('Ask for the reason and request a solicitor without physically resisting.','You can dispute the allegation and use legal assistance to challenge what has happened.','arrest-lawyer'),
@@ -98,7 +98,7 @@ export const scenarios = [
  c('Assume that one time limit applies to every offence and situation.','Different detention powers have different limits and safeguards.','end',true),
  c('Assume that Gardaí can keep you indefinitely without legal limits.','Detention is subject to legal limits and can be challenged.','end',true)
  ])}},
- {id:'custody',title:'Understanding the station',person:'Maya, 34',context:'In custody and needing language support',description:'You need an interpreter, legal advice and medication. Learn how to ask for support.',icon:'message',minutes:'4–5 minutes',start:'custody-start',nodes:{
+ {id:'custody',title:'Understanding the station',person:'Maya',context:'In custody and needing language support',description:'You need an interpreter, legal advice and medication. Learn how to ask for support.',icon:'message',minutes:'4–5 minutes',start:'custody-start',nodes:{
  'custody-start':n('The words are unfamiliar','You are Maya. You understand everyday English but are struggling with the legal explanation at the station. You are worried about agreeing to something you do not understand.','What would you ask for?','If needed in Garda custody, interpretation and translation assistance are free. Say what language or communication support you need.','I need an interpreter to understand this and speak with my solicitor.',['dpp'],[
  c('Nod along so that nobody thinks you are being difficult.','Nodding does not solve the lack of understanding. Make your need clear.','custody-lawyer',true),
  c('Ask for an interpreter and explain what you do not understand.','This requests support before you make decisions about the interview or documents.','custody-lawyer'),
@@ -140,7 +140,7 @@ export const scenarios = [
  c('Sign because it guarantees you will go home immediately.','No such guarantee follows from signing. Get the meaning and your options explained.','end',true),
  c('Point out the sentence and ask for clarification, corrections and advice.','You have raised the accuracy problem before endorsing the account.','end')
  ])}},
- {id:'fair-treatment',title:'“Why was I singled out?”',person:'Amina, 27',context:'Reflecting on a street encounter',description:'You are concerned that racism affected your treatment. Explore evidence, support and complaints.',icon:'notes',minutes:'4–5 minutes',start:'fair-start',nodes:{
+ {id:'fair-treatment',title:'“Why was I singled out?”',person:'Amina',context:'Reflecting on a street encounter',description:'You are concerned that racism affected your treatment. Explore evidence, support and complaints.',icon:'notes',minutes:'4–5 minutes',start:'fair-start',nodes:{
  'fair-start':n('An encounter that stays with you','You are Amina, a Black Irish woman. A Garda has questioned you while other people nearby were not approached. You are told you can leave. The experience has made you feel singled out.','What is a useful starting point?','Concerns about racial profiling deserve to be heard. The INAR/ICCL report documents community experiences; this fictional encounter cannot determine whether discrimination or an unlawful act occurred.','My experience matters. I can record what happened and seek support.',['inarReport'],[
  c('Assume that a calm response guarantees fair treatment.','Your behaviour does not control another person’s conduct, and it does not excuse mistreatment.','fair-record',true),
  c('Take your concern seriously while recording facts and seeking support.','This makes space for your experience without claiming the game can decide the legal issue.','fair-record'),

@@ -1,11 +1,11 @@
-import publicData from './original-public.mjs';
-import gardaData from './original-garda.mjs';
-import {counterparts} from './counterparts.mjs?v=scene-review-1';
+import publicData from './original-public.mjs?v=scenario-descriptions-20261115';
+import gardaData from './original-garda.mjs?v=scenario-descriptions-20261115';
+import {counterparts} from './counterparts.mjs?v=scenario-descriptions-20261115';
 export const roles=['public','garda'];
 export const roleLabels={public:'Member of the public',garda:'Garda'};
 export {sites} from '../site.mjs';
 export const references=Object.fromEntries(roles.flatMap(role=>Object.entries((role==='public'?publicData:gardaData).sources).map(([id,s])=>[role+':'+id,s])));
-const names={street:'Alex, 24',description:'Amina, 27',search:'Niamh, 29',communication:'Maya, 34','young-person':'Jamie, 16',colleague:'Patrick, 35','new-evidence':'Daniel, 32',supervision:'Community reviewer (member of the public)'};
+const names={street:'Alex',description:'Amina',search:'Niamh',communication:'Maya','young-person':'Jamie, 16',colleague:'Patrick','new-evidence':'Daniel',supervision:'Community reviewer (member of the public)'};
 export const encounters=Object.fromEntries(roles.flatMap(origin=>{
  const data=origin==='public'?publicData:gardaData, opposite=origin==='public'?'garda':'public';
  return data.scenarios.map(s=>{

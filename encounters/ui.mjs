@@ -1,12 +1,12 @@
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningIcon,scenarioIcon,routeTrail,completionMap,decisionGuide,topicExplorer} from './visuals.mjs?v=topic-dropdown-20261114';
-import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=scene-review-1';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=scene-review-1';
+import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=scenario-descriptions-20261115';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=scenario-descriptions-20261115';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress} from './progress.mjs';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=character-details-actions-20261114';
 import {renderScene} from './scenes.mjs?v=character-details-actions-20261114';
-import {characterContext,personalizeHTML} from './narrative.mjs?v=site-languages-1';
+import {characterContext,personalizeHTML} from './narrative.mjs?v=scenario-descriptions-20261115';
 import {variationFor,remainingDecisions,learningStatus,topicGroups} from './presentation.mjs';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
@@ -41,7 +41,11 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
  }
  function castDisplay(s){
   const e=encounters[s.id],stage=s.complete?e.nodes[s.history.at(-1).nodeId]:currentStage(s);
-  return `<div class="encounter-cast" aria-label="Characters in this situation">${[s.role,otherRole(s.role)].map(role=>`<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${s.cast[role]}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,s.cast[role])}<div><span class="cast-label">${role===s.role?'Your character':'Other character'}</span><strong data-no-translate>${esc(characterFor(role,s.cast[role]).name)}</strong><span class="scenario-person">${esc(characterContext(e,stage,role))}</span></div></div>`).join('')}</div>`;
+  const cards=[s.role,otherRole(s.role)].map(role=>{
+   const context=characterContext(e,stage,role);
+   return `<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${s.cast[role]}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,s.cast[role])}<div><span class="cast-label">${role===s.role?'Your character':'Other character'}</span><strong data-no-translate>${esc(characterFor(role,s.cast[role]).name)}</strong>${context?`<span class="scenario-person">${esc(context)}</span>`:''}</div></div>`;
+  });
+  return `<div class="encounter-cast" aria-label="Characters in this situation">${cards.join('')}</div>`;
  }
  function characterPicker(role,selected,inGame=false){
   return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div><div class="character-options" role="group" aria-label="Available characters">${characters[role].map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div><p class="character-help">${inGame?'Switch sides to play as the other character. You can change that character too.':'The other character is chosen at random when you start. Both characters stay with the situation until you change them.'}</p></section>`;

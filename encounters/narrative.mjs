@@ -3,13 +3,14 @@ import {characterFor} from './characters.mjs';
 // The catalogue keeps stable teaching text and translation keys. Resolve its
 // story identity against the saved cast only when displaying a running game.
 export function storyIdentity(encounter){
- const match=encounter.people.public.match(/^([^,]+),\s*(\d+)$/);
- return match?{name:match[1],age:Number(match[2])}:null;
+ const match=encounter.people.public.match(/^([\p{L}'’-]+)(?:,\s*(\d+))?$/u);
+ return match?{name:match[1],age:match[2]?Number(match[2]):null}:null;
 }
 export function characterContext(encounter,stage,role){
  if(stage.people?.[role])return stage.people[role];
- const identity=role==='public'&&storyIdentity(encounter);
- return identity?`${identity.age} years old`:encounter.people[role];
+ const identity=role==='public'?storyIdentity(encounter):null;
+ if(!identity)return encounter.people[role];
+ return identity.age===null?'':`${identity.age} years old`;
 }
 export function personalizeText(text,encounter,cast){
  const identity=storyIdentity(encounter),selected=characterFor('public',cast.public);

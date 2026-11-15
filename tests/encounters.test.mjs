@@ -6,8 +6,8 @@ import {startEncounter,currentStage,switchRole,answer,continueEncounter,revisit,
 import {emptyProgress,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,createProgressStore,STORAGE_KEY} from '../encounters/progress.mjs';
 import publicData from '../encounters/original-public.mjs';
 import gardaData from '../encounters/original-garda.mjs';
-import * as localData from '../data.mjs';
-import * as localGardaData from '../garda/data.mjs';
+import * as localData from '../data.mjs?v=scenario-descriptions-20261115';
+import * as localGardaData from '../garda/data.mjs?v=scenario-descriptions-20261115';
 
 for(const e of Object.values(encounters)){
  test(`${e.id}: all role/choice routes finish; switching keeps the scene and answers`,()=>{

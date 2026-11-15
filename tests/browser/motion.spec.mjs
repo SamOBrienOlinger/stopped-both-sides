@@ -243,6 +243,7 @@ for(const role of ['public','garda']){
   await readableLayout(page);await motionSuppressed(page);
   await openCharacterPicker(page);
   await expect(page.locator('#character-picker-title')).toBeFocused();
+  if(preference==='site')await expect(page.locator('#scene-character-dialog')).toHaveAttribute('data-dialog-fallback','');
   await readableLayout(page);await motionSuppressed(page);
   await page.locator('[data-action="paired-character-close"]').click();
   await openNavigation(page);await page.locator('#language-settings-trigger').click();

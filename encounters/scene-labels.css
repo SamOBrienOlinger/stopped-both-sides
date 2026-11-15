@@ -65,6 +65,8 @@
  background:var(--paper,#fff);color:var(--ink,#183c3c);
  box-shadow:0 25px 85px rgba(12,36,51,.38);
 }
+.scene-character-dialog:not([open]){display:none}
+.scene-character-dialog[data-dialog-fallback][open]{display:block;position:fixed;inset:0;z-index:1001;max-block-size:min(85vh,42rem)}
 .scene-character-dialog::backdrop{background:rgba(10,28,43,.68);backdrop-filter:blur(3px)}
 .scene-profile-shell{padding:clamp(1rem,3vw,1.65rem)}
 .scene-profile-top{display:flex;align-items:center;gap:1rem}

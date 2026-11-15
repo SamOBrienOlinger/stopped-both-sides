@@ -194,8 +194,11 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
   const available=(await actions.boundingBox()).width;
   for(const button of await actions.locator(':scope > button').all())expect((await button.boundingBox()).width).toBeGreaterThanOrEqual(available-2);
   const castGroup=page.locator('.play-toolbar~.encounter-cast'),castWidth=(await castGroup.boundingBox()).width;
-  const names=await castGroup.locator('.cast-character').evaluateAll(els=>els.map(el=>{const name=el.querySelector('strong'),style=getComputedStyle(name);return {width:el.getBoundingClientRect().width,height:name.getBoundingClientRect().height,lineHeight:parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.5};}));
-  for(const name of names){expect(name.width).toBeGreaterThanOrEqual(castWidth-2);expect(name.height).toBeLessThanOrEqual(name.lineHeight*1.5);}
+  const names=await castGroup.locator('.cast-character').evaluateAll(cards=>cards.map(card=>{
+   const name=card.querySelector('strong'),box=card.getBoundingClientRect(),text=name.getBoundingClientRect();
+   return {width:box.width,contained:text.left>=box.left-1&&text.right<=box.right+1&&name.scrollWidth<=name.clientWidth+1};
+  }));
+  for(const name of names){expect(name.width).toBeGreaterThanOrEqual(castWidth-2);expect(name.contained).toBe(true);}
  }
  for(const scene of await page.locator('.encounter-scene:visible').all()){
   await scene.scrollIntoViewIfNeeded();

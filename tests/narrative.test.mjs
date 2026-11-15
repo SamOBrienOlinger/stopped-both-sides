@@ -7,10 +7,18 @@ import {translateText,translateHTML} from '../locales/translate.mjs';
 
 test('Noor and Aisling have one identity in the reported street situation',()=>{
  const e=encounters['garda-street'],cast={public:'public-2',garda:'garda-5'};
- assert.match(personalizeText(e.nodes[e.start].scene,e,cast),/^Noor, 24, stands beside a closed shop/);
+ assert.match(personalizeText(e.nodes[e.start].scene,e,cast),/^Noor stands beside a closed shop/);
  assert.equal(personalizeText(e.nodes[e.start].views.public.prompt,e,cast),'As Noor, what could help you understand the contact?');
- assert.equal(characterContext(e,e.nodes[e.start],'public'),'24 years old');
+ assert.equal(characterContext(e,e.nodes[e.start],'public'),'');
  assert.equal(characterContext(e,e.nodes[e.start],'garda'),'Patrol Garda');
+});
+
+test('Both youth situations display the age that matters to the decision',()=>{
+ for(const id of ['public-young-person','garda-young-person']){
+  const encounter=encounters[id];
+  assert.equal(characterContext(encounter,encounter.nodes[encounter.start],'public'),'16 years old');
+  assert.equal(storyIdentity(encounter).age,16);
+ }
 });
 
 test('Every named scene, prompt, choice, explanation and lesson uses each selected identity in both languages',()=>{
