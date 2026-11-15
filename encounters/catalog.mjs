@@ -1,6 +1,6 @@
 import publicData from './original-public.mjs?v=scenario-descriptions-20261115';
 import gardaData from './original-garda.mjs?v=scenario-descriptions-20261115';
-import {counterparts} from './counterparts.mjs?v=scenario-descriptions-20261115';
+import {counterparts} from './counterparts.mjs?v=shop-theft-20261115';
 export const roles=['public','garda'];
 export const roleLabels={public:'Member of the public',garda:'Garda'};
 export {sites} from '../site.mjs';

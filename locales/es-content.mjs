@@ -164,7 +164,7 @@ export default {
   "m0162": "Te dicen que estás bajo detención",
   "m0163": "Una alegación, una detención y preguntas en comisaría. Explora cuándo y cómo pedir asesoramiento jurídico.",
   "m0164": "«Estás bajo detención.»",
-  "m0165": "Un Garda informa a Daniel de que queda bajo detención en relación con un incidente en una tienda. Daniel cree que ha habido un error de identificación. El ejercicio no establece que la alegación sea correcta.",
+  "m0165": "Un Garda informa a Daniel de que queda bajo detención en relación con un hurto en una tienda cercana. Daniel cree que ha habido un error de identificación. El ejercicio no establece que la alegación sea correcta.",
   "m0166": "¿Qué preguntarías?",
   "m0167": "Tienes derecho a que te expliquen el motivo de tu detención. Una detención no es una condena. Pide un abogado y explícale tus inquietudes sobre la detención.",
   "m0168": "Suponer que la detención significa que ya te han declarado culpable.",

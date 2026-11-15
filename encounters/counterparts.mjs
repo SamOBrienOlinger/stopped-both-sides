@@ -54,7 +54,7 @@ export const counterparts={
     choice('Add stronger grounds afterwards because nothing was found.','Retrofitting grounds misrepresents what was known at the time.',true)],['garda:ethics','garda:model'])
  },
  'public-arrest':{
-  'arrest-start':pair('Daniel is told by a Garda that Daniel is under arrest in connection with a shop incident. Daniel believes there has been a mistaken identification. The exercise does not stipulate that the allegation is correct.',
+  'arrest-start':pair('Daniel is told by a Garda that Daniel is under arrest in connection with a theft from a shop nearby. Daniel believes there has been a mistaken identification. The exercise does not stipulate that the allegation is correct.',
    'What should guide your explanation and reassessment?',
    'Explain the reason for arrest, facilitate legal assistance and assess information that may undermine the identification. Arrest does not establish guilt.',[
     choice('Explain the reason, address the request for advice and check relevant identification information.','You keep the allegation open to examination rather than treating the arrest as proof.'),

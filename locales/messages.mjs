@@ -165,7 +165,7 @@ export const messages=[
   "Told you are under arrest",
   "An allegation, an arrest and questions at the station. Explore when and how to ask for legal advice.",
   "“You are under arrest.”",
-  "Daniel is told by a Garda that Daniel is under arrest in connection with a shop incident. Daniel believes there has been a mistaken identification. The exercise does not stipulate that the allegation is correct.",
+  "Daniel is told by a Garda that Daniel is under arrest in connection with a theft from a shop nearby. Daniel believes there has been a mistaken identification. The exercise does not stipulate that the allegation is correct.",
   "What would you ask?",
   "You are entitled to be told the reason for your arrest. An arrest is not a conviction. Ask for a solicitor and explain concerns about the arrest to them.",
   "Assume that arrest means you have already been found guilty.",

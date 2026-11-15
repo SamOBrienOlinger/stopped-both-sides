@@ -164,7 +164,7 @@ export default {
   "m0162": "Ți se spune că ești arestat",
   "m0163": "O acuzație, o arestare și întrebări la secție. Explorează când și cum să ceri sfatul unui avocat.",
   "m0164": "„Ești arestat.”",
-  "m0165": "Lui Daniel un membru Garda îi spune că este arestat în legătură cu un incident dintr-un magazin. Daniel crede că a fost identificat greșit. Exercițiul nu presupune că acuzația este corectă.",
+  "m0165": "Lui Daniel un membru Garda îi spune că este arestat în legătură cu un furt dintr-un magazin din apropiere. Daniel crede că a fost identificat greșit. Exercițiul nu presupune că acuzația este corectă.",
   "m0166": "Ce ai întreba?",
   "m0167": "Ai dreptul să afli motivul arestării. Arestarea nu este o condamnare. Cere un avocat și explică-i îngrijorările tale privind arestarea.",
   "m0168": "Presupui că arestarea înseamnă că ai fost deja găsit vinovat.",

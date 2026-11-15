@@ -164,7 +164,7 @@ export default {
   "m0162": "On vous annonce votre arrestation",
   "m0163": "Une allégation, une arrestation et des questions au poste. Explorez quand et comment demander des conseils juridiques.",
   "m0164": "« Vous êtes en état d'arrestation. »",
-  "m0165": "Daniel apprend d'un Garda que son arrestation est liée à un incident dans un magasin. Daniel pense qu'il y a eu une erreur d'identification. L'exercice ne pose pas comme acquis que l'allégation est exacte.",
+  "m0165": "Daniel apprend d'un Garda que son arrestation est liée à un vol dans un magasin à proximité. Daniel pense qu'il y a eu une erreur d'identification. L'exercice ne pose pas comme acquis que l'allégation est exacte.",
   "m0166": "Que demanderiez-vous ?",
   "m0167": "Vous avez le droit de connaître le motif de votre arrestation. Une arrestation n'est pas une condamnation. Demandez un avocat et faites-lui part de vos préoccupations concernant l'arrestation.",
   "m0168": "Supposer qu'une arrestation signifie que vous avez déjà été reconnu coupable.",

@@ -1,8 +1,8 @@
-import {messages} from './messages.mjs?v=scenario-descriptions-20261115';
+import {messages} from './messages.mjs?v=shop-theft-20261115';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=scenario-descriptions-20261115';
-import {gaContent} from './ga-content.mjs?v=scenario-descriptions-20261115';
+import {encounters} from '../encounters/catalog.mjs?v=shop-theft-20261115';
+import {gaContent} from './ga-content.mjs?v=shop-theft-20261115';
 import {refinementIrish} from './refinements-ga.mjs?v=support-resources-1';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
@@ -159,13 +159,13 @@ export {gaContent};
 // Each pack is hosted with the game and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=scenario-descriptions-20261115'+retry),
- ar:retry=>import('./ar-content.mjs?v=scenario-descriptions-20261115'+retry),
- pl:retry=>import('./pl-content.mjs?v=scenario-descriptions-20261115'+retry),
- ro:retry=>import('./ro-content.mjs?v=scenario-descriptions-20261115'+retry),
- fr:retry=>import('./fr-content.mjs?v=scenario-descriptions-20261115'+retry),
- es:retry=>import('./es-content.mjs?v=scenario-descriptions-20261115'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=scenario-descriptions-20261115'+retry)
+ pt:retry=>import('./pt-content.mjs?v=shop-theft-20261115'+retry),
+ ar:retry=>import('./ar-content.mjs?v=shop-theft-20261115'+retry),
+ pl:retry=>import('./pl-content.mjs?v=shop-theft-20261115'+retry),
+ ro:retry=>import('./ro-content.mjs?v=shop-theft-20261115'+retry),
+ fr:retry=>import('./fr-content.mjs?v=shop-theft-20261115'+retry),
+ es:retry=>import('./es-content.mjs?v=shop-theft-20261115'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=shop-theft-20261115'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));

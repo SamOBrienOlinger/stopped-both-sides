@@ -164,7 +164,7 @@ export default {
   "m0162": "Dizem-lhe que está sob detenção",
   "m0163": "Uma alegação, uma detenção e perguntas na esquadra. Explore quando e como pedir aconselhamento jurídico.",
   "m0164": "«Está sob detenção.»",
-  "m0165": "Daniel é informado por um Garda de que está sob detenção por um incidente numa loja. Daniel considera que houve um erro de identificação. O exercício não estabelece que a alegação é correta.",
+  "m0165": "Daniel é informado por um Garda de que está sob detenção em relação a um furto numa loja próxima. Daniel considera que houve um erro de identificação. O exercício não estabelece que a alegação é correta.",
   "m0166": "O que perguntaria?",
   "m0167": "Tem o direito de ser informado do motivo da sua detenção. Uma detenção não é uma condenação. Peça um advogado e explique-lhe as suas preocupações sobre a detenção.",
   "m0168": "Presumir que a detenção significa que já foi considerado culpado.",

@@ -164,7 +164,7 @@ export default {
   "m0162": "Informacja o formalnym zatrzymaniu",
   "m0163": "Zarzut, formalne zatrzymanie i pytania na posterunku. Dowiedz się, kiedy i jak prosić o poradę prawną.",
   "m0164": "„Jesteś zatrzymany”.",
-  "m0165": "Daniel słyszy od osoby z Garda, że zostaje zatrzymany w związku ze zdarzeniem w sklepie. Daniel uważa, że doszło do pomyłki w identyfikacji. Ćwiczenie nie zakłada, że zarzut jest prawdziwy.",
+  "m0165": "Daniel słyszy od osoby z Garda, że zostaje zatrzymany w związku z kradzieżą w pobliskim sklepie. Daniel uważa, że doszło do pomyłki w identyfikacji. Ćwiczenie nie zakłada, że zarzut jest prawdziwy.",
   "m0166": "O co zapytasz?",
   "m0167": "Masz prawo poznać powód zatrzymania. Zatrzymanie nie jest skazaniem. Poproś o prawnika i przedstaw mu swoje zastrzeżenia dotyczące zatrzymania.",
   "m0168": "Załóż, że zatrzymanie oznacza, iż już uznano Cię za winnego.",

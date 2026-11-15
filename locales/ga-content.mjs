@@ -99,7 +99,7 @@ export const gaContent={
 };
 Object.assign(gaContent,{
  'public-arrest':{title:'Deirtear leat go bhfuil tú faoi ghabháil',description:'Líomhain, gabháil agus ceisteanna sa stáisiún. Cleachtaigh conas agus cathain comhairle dlí a iarraidh.',nodes:{
-  'arrest-start':n('Tá tú faoi ghabháil','Deir Garda le Daniel go bhfuil sé faoi ghabháil faoi eachtra i siopa. Measann Daniel gur aithníodh an duine mícheart. Ní ghlactar leis sa chleachtadh go bhfuil an líomhain fíor.',[
+  'arrest-start':n('Tá tú faoi ghabháil','Deir Garda le Daniel go bhfuil sé faoi ghabháil i dtaca le goid ó shiopa in aice láimhe. Measann Daniel gur aithníodh an duine mícheart. Ní ghlactar leis sa chleachtadh go bhfuil an líomhain fíor.',[
    'Cad a d’iarrfá?','Tá tú i dteideal an chúis leis an ngabháil a fháil. Ní ciontú í gabháil. Iarr aturnae agus mínigh do chuid imní.',
    'Glacadh leis go bhfuilim ciontach cheana toisc gur gabhadh mé.','Is céimeanna éagsúla iad gabháil agus cinneadh ciontachta.',
    'An chúis a iarraidh agus aturnae a iarraidh, gan cur in aghaidh go fisiciúil.','Is féidir an líomhain a dhíospóid agus an ghabháil a cheistiú trí chúnamh dlí.',
