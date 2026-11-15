@@ -8,7 +8,7 @@ const unwanted=[
 ];
 const headings=['Understand the situation you are in','Choose a response','Learn why it matters'];
 const details=[
- 'A short, fictional encounter with Gardaí.',
+ 'Interact with a member of the public and/or with a Garda',
  'Try what you would say or do.',
  'Get an explanation, then try the other side.'
 ];

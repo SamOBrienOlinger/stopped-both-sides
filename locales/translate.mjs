@@ -202,6 +202,16 @@ const revisedSiteCopy={
   "es": "Elige una situación para jugar como agente de la Garda Síochána.",
   "zh-Hans": "选择一个情境，以爱尔兰警员的身份参与。"
  },
+ "Interact with a member of the public and/or with a Garda": {
+  "ga": "Idirghníomhaigh le duine den phobal agus/nó le Garda",
+  "pt": "Interaja com um membro do público e/ou com um agente da Garda Síochána",
+  "ar": "تفاعل مع أحد أفراد الجمهور و/أو مع ضابط من شرطة غاردا",
+  "pl": "Wejdź w interakcję z członkiem społeczeństwa i/lub funkcjonariuszem irlandzkiej policji",
+  "ro": "Interacționează cu un membru al publicului și/sau cu un polițist din Garda Síochána",
+  "fr": "Interagissez avec un membre du public et/ou avec un membre de la Garda Síochána",
+  "es": "Interactúa con un miembro del público y/o con un agente de la Garda Síochána",
+  "zh-Hans": "与一名公众成员和/或一名爱尔兰警员互动"
+ },
  "Understand the situation you are in": {
   "ga": "Tuig an cás ina bhfuil tú",
   "pt": "Compreenda a situação em que se encontra",
