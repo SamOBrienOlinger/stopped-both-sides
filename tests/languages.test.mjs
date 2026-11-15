@@ -132,6 +132,8 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
    const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast);
    assert.ok(main.innerHTML.includes(escapeHTML(translated)),`${language.id}/${e.id}/${node.id}`);
    assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
+   assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"/);
+   assert.doesNotMatch(main.innerHTML,/[←→]/);
    for(const role of roles)for(let index=0;index<node.views[role].choices.length;index++)queue.push(continueEncounter(answer(switchRole(base,role),index)));
   }
  }

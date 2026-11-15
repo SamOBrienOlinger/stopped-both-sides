@@ -7,6 +7,12 @@ const translateNotice='Working translation: independent Irish-language and legal
 const languageHelp='Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the whole site, including both game modes and reference pages. Irish covers the shared game.';
 const reviewNotice='Translations support learning and have not been independently reviewed. Original source publications keep their own language. You can return to English at any time.';
 const loadError='The language could not be loaded. Your current language and progress are unchanged. Check your connection and try again.';
+const tapIconUrl=new URL('../assets/brand/stopped-both-sides-burgundy-tap.svg',import.meta.url).href;
+const tapIcon=`<img class="tap-icon" src="${esc(tapIconUrl)}" width="26" height="37" alt="" aria-hidden="true">`;
+
+// Swap visible glyphs after translation so link attributes and translation keys are preserved.
+const withTapIcons=html=>html.replace(/(<[^>]*>)|[←→]/g,(_match,tag)=>tag||tapIcon);
+
 export function perspectiveForRoute(hash,siteRole='public'){
  const route=hash.replace(/^#/, '').split('~')[0];
  if(route.startsWith('encounter/'))return decodeState(route.slice(10))?.role||siteRole;
@@ -111,7 +117,7 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
    if(reference)main.innerHTML=`<div class="translation-note" lang="ga"><p>Tá an rannóg thagartha seo i mBéarla. Tá na cásanna roinnte ar fáil i nGaeilge. <a href="#encounters">Roghnaigh cás</a></p></div>`+main.innerHTML;
    else main.innerHTML=`<div class="translation-note"><p>${esc(t(translateNotice))} <button class="plain-link" id="language-settings-irish-note" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+translateHTML(main.innerHTML,language);
   }else if(language!=='en')main.innerHTML=translateHTML(main.innerHTML,language);
-  main.innerHTML=transformContent(main.innerHTML,hash);
+  main.innerHTML=withTapIcons(transformContent(main.innerHTML,hash));
   main.querySelectorAll?.('h1,h2[id]').forEach(h=>h.setAttribute('tabindex','-1'));
   const referenceRoute=hash.split('~')[0];
   const evidenceGroup=referenceRoute.startsWith('evidence/')?document.getElementById?.('source-'+referenceRoute.slice(9))?.closest?.('.evidence-group')?.id:null;

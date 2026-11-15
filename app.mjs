@@ -3,7 +3,7 @@ import {practiceExplorer} from './encounters/visuals.mjs?v=practice-dropdown-202
 import {supportSection,supportRecap} from './learning/support.mjs?v=support-resources-1';
 import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from './compatibility.mjs';
-import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=shop-theft-20261115';
+import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=burgundy-tap-20261115';
 import {createMotion} from './accessibility/motion.mjs?v=visible-motion-5';
 import {createEncounterMode} from './encounters/ui.mjs?v=shop-theft-20261115';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs?v=scenario-descriptions-20261115';

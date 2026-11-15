@@ -18,6 +18,19 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
 #main :is(a,button,summary,input,select,[role="button"],[tabindex]) {
   scroll-margin-block-start:clamp(7rem,12vw,10rem);
 }
+.tap-icon {
+  display:inline-block;
+  box-sizing:content-box;
+  flex:none;
+  inline-size:1.055em;
+  block-size:1.5em;
+  padding:.12em .26em;
+  border-radius:.3em;
+  background:#f4f8fc;
+  object-fit:contain;
+  vertical-align:middle;
+  forced-color-adjust:none;
+}
 
 /* Clear hierarchy: orientation, choice of perspective, and next action. */
 .reference-landing .landing-instructions {

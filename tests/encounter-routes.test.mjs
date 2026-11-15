@@ -62,6 +62,8 @@ test('The resume card describes the public role in the youth situation',()=>{
  action('paired-start',{id:'public-young-person',role:'public'});const saved=state();
  route('#encounters/garda');
  assert.match(main.innerHTML,/You are a member of the public, age 16/);
+ assert.match(main.innerHTML,/Resume play <img class="tap-icon"[^>]+alt="" aria-hidden="true"/);
+ assert.doesNotMatch(main.innerHTML,/[←→]/);
  assert.ok(main.innerHTML.includes(stateHash(saved)));
 });
 test('The recommended start keeps the chosen role and avatar without requiring customisation',()=>{
@@ -151,6 +153,8 @@ test('Every stage and every choice render the selected cast and preserve the nex
     const active=switchRole(base,role);route(stateHash(active));action('paired-character-close');
     assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
     assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
+    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> All shared situations/);
+    assert.doesNotMatch(main.innerHTML,/[←→]/);
     const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
     if(identity&&node.scene.includes(identity.name)){assert.ok(story.includes('Noor'));assert.ok(!story.includes(identity.name));}
     action('paired-answer',{index:String(index)});choices++;
@@ -171,6 +175,8 @@ test('Every stage and every choice render the selected cast and preserve the nex
 test('Original practice uses its pictured character in every named scene and completed recap',()=>{
  for(const original of scenarios){
   route('#play');action('start',{id:original.id});
+  assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> All situations/);
+  assert.doesNotMatch(main.innerHTML,/[←→]/);
   const encounter=encounters[siteRole+'-'+original.id],identity=storyIdentity(encounter);
   const selected=main.innerHTML.match(/data-cast-role="public"[\s\S]*?<strong data-no-translate>([^<]+)<\/strong>/)[1];
   let count=0;
