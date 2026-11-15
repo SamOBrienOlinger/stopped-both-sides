@@ -172,6 +172,36 @@ const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padSt
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
 // Localize revised interface copy without renumbering full-content packs.
 const revisedSiteCopy={
+ "Practise one role at a time": {
+  "ga": "Cleachtaigh ról amháin ag an am",
+  "pt": "Pratique um papel de cada vez",
+  "ar": "تدرّب على دور واحد في كل مرة",
+  "pl": "Ćwicz jedną rolę naraz",
+  "ro": "Exersează câte un rol",
+  "fr": "Exercez-vous dans un rôle à la fois",
+  "es": "Practica un rol a la vez",
+  "zh-Hans": "每次练习一个角色"
+ },
+ "Choose a situation to play as a member of the public.": {
+  "ga": "Roghnaigh cás le himirt mar dhuine den phobal.",
+  "pt": "Escolha uma situação para jogar como membro do público.",
+  "ar": "اختر موقفًا لتؤدي فيه دور فرد من الجمهور.",
+  "pl": "Wybierz sytuację, w której zagrasz jako członek społeczeństwa.",
+  "ro": "Alege o situație în care să joci ca membru al publicului.",
+  "fr": "Choisissez une situation à jouer en tant que membre du public.",
+  "es": "Elige una situación para jugar como miembro del público.",
+  "zh-Hans": "选择一个情境，以公众成员的身份参与。"
+ },
+ "Choose a situation to play as a Garda.": {
+  "ga": "Roghnaigh cás le himirt mar Gharda.",
+  "pt": "Escolha uma situação para jogar como agente da Garda Síochána.",
+  "ar": "اختر موقفًا لتؤدي فيه دور ضابط من شرطة غاردا.",
+  "pl": "Wybierz sytuację, w której zagrasz jako funkcjonariusz irlandzkiej policji.",
+  "ro": "Alege o situație în care să joci în rolul unui polițist din Garda Síochána.",
+  "fr": "Choisissez une situation à jouer en tant que membre de la Garda Síochána.",
+  "es": "Elige una situación para jugar como agente de la Garda Síochána.",
+  "zh-Hans": "选择一个情境，以爱尔兰警员的身份参与。"
+ },
  "Understand the situation you are in": {
   "ga": "Tuig an cás ina bhfuil tú",
   "pt": "Compreenda a situação em que se encontra",

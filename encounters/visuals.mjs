@@ -40,7 +40,37 @@ export function decisionGuide(answered){
  return `<ol class="decision-guide" aria-label="How it works"><li>${learningIcon('read')}<span>Understand the situation you are in</span></li><li ${!answered?'aria-current="step"':''}>${learningIcon('choose')}<span>Choose a response</span></li><li ${answered?'aria-current="step"':''}>${learningIcon('reflect')}<span>Learn why it matters</span></li></ol>`;
 }
 export function topicExplorer(groups,role){
- return `<section class="topic-explorer" aria-labelledby="topic-explorer-title"><details class="topic-disclosure"><summary class="topic-disclosure-trigger"><h2 id="topic-explorer-title">Browse all situations<span class="topic-disclosure-caret" aria-hidden="true"></span></h2></summary><div class="topic-grid">${groups.map(t=>`<a class="topic-card" href="#encounters/${role}/${t.id}">${learningIcon(t.id)}<strong>${t.title}</strong><span class="topic-card-count" aria-hidden="true">→</span><span class="topic-preview">${esc(encounters[t.encounters[0]].title)}</span></a>`).join('')}</div></details></section>`;
+ const links=groups.map(topic=>`<a class="topic-card" href="#encounters/${role}/${topic.id}">
+  ${learningIcon(topic.id)}<strong>${topic.title}</strong>
+  <span class="topic-preview">${esc(encounters[topic.encounters[0]].title)}</span>
+ </a>`).join('');
+ return `<section class="topic-explorer" aria-labelledby="topic-explorer-title">
+  <details class="topic-disclosure">
+   <summary class="topic-disclosure-trigger landing-disclosure-trigger"><h2 id="topic-explorer-title">Browse all situations<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
+   <div class="topic-grid">${links}</div>
+  </details>
+ </section>`;
+}
+
+export function practiceExplorer(scenarios,role){
+ const intro=role==='garda'
+  ?'Choose a situation to play as a Garda.'
+  :'Choose a situation to play as a member of the public.';
+ const cards=scenarios.map((scenario,index)=>`<article class="scenario">
+  <div class="card-top"><span class="scene-icon">${scenarioIcon(role+'-'+scenario.id)}</span><span class="scene-number">SITUATION ${String(index+1).padStart(2,'0')}</span></div>
+  <h2>${esc(scenario.title)}</h2>
+  <p class="person">${esc(scenario.person)}</p>
+  <p class="description">${esc(scenario.description)}</p>
+  <p class="small-note">${esc(scenario.minutes)}</p>
+  <button class="primary secondary scenario-action" data-action="start" data-id="${scenario.id}" aria-label="Explore this situation: ${esc(scenario.title)}">Explore this situation <span aria-hidden="true">→</span></button>
+ </article>`).join('');
+ return `<details class="single-mode">
+  <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
+  <div class="practice-content">
+   <p>${intro}</p>
+   <div class="scenarios" data-english-practice>${cards}</div>
+  </div>
+ </details>`;
 }
 export function completionMap(completed,total){
  return `<div class="completion-map" aria-hidden="true">${Array.from({length:total},(_,i)=>`<span class="completion-cell ${i<completed?'is-complete':''}">${i<completed?'✓':'○'}</span>`).join('')}</div>`;

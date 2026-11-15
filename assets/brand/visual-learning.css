@@ -74,7 +74,6 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
 .topic-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.875rem;align-content:start;min-inline-size:0;min-block-size:10rem;padding:1.25rem;border:1px solid var(--experience-border);border-radius:1.25rem;background:var(--paper,#fff);color:var(--ink);text-decoration:none;box-shadow:var(--experience-shadow);overflow-wrap:anywhere}
 .topic-card .learning-icon{grid-column:1;inline-size:2.5rem;block-size:2.5rem;padding:.4rem;background:var(--pale);border-radius:.65rem}
 .topic-card strong{grid-column:1/-1;font-size:1rem;line-height:1.4}
-.topic-card-count{grid-column:2;grid-row:1;align-self:center;padding:.2rem .5rem;border:1px solid var(--line);border-radius:999px;background:var(--paper,#fff);font-size:.8125rem;font-weight:700;color:var(--slate);font-variant-numeric:tabular-nums}
 .topic-preview{grid-column:1/-1;font-size:.8125rem;color:var(--slate);line-height:1.5}
 .topic-card:hover,.topic-card:focus-visible{border-color:var(--deep);background:var(--pale)}
 .how-to-play{max-inline-size:64rem;background:var(--paper,#fff);border:1px solid var(--experience-border);border-radius:1.25rem;box-shadow:var(--experience-shadow);padding:clamp(1.25rem,3vw,2rem)}
@@ -192,7 +191,7 @@ main{max-inline-size:1240px;padding-block:2.5rem 4rem}
  .reference-landing .overlapping-heroes .perspective-hero-button,.reference-landing .overlapping-heroes .perspective-hero-button:hover{background:ButtonFace;color:ButtonText;border-color:ButtonText;box-shadow:none}
  .reference-landing .perspective-hero-button>:is(.perspective-button-action,.perspective-button-action-short),.reference-landing .perspective-hero-button:hover>:is(.perspective-button-action,.perspective-button-action-short){background:Highlight;color:HighlightText;border-color:Highlight}
  .reference-landing .overlapping-heroes .perspective-hero-button:focus-visible{outline-color:Highlight;box-shadow:none}
- .topic-card,.topic-card-count,.how-to-play,.encounter-card,.learning-panel,.content-page .info-block,.decision-guide li,.decision-context,.decision-choices,.route-navigation .route-dot,.simple-setup .start-panel,.source-card{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
+ .topic-card,.how-to-play,.encounter-card,.learning-panel,.content-page .info-block,.decision-guide li,.decision-context,.decision-choices,.route-navigation .route-dot,.simple-setup .start-panel,.source-card{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
  .decision-guide [aria-current=step],.route-navigation .is-current{outline:2px solid Highlight;outline-offset:-3px}
  .header nav a[aria-current=page]{outline:2px solid Highlight;box-shadow:none}
 }

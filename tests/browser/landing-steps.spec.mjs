@@ -14,6 +14,41 @@ const details=[
 ];
 
 for(const path of paths){
+ test(path+' practice matches the landing dropdowns and opens its single-role situations',async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.goto(path+'?lang=en#play');
+  const dropdown=page.locator('details.single-mode');
+  const toggle=dropdown.locator('summary');
+  const content=dropdown.locator('.practice-content');
+  const scenarios=content.locator('button[data-action="start"]');
+  await expect(toggle.getByRole('heading',{name:'Practise one role at a time'})).toBeVisible();
+  await expect(content.locator(':scope > p')).toHaveText(path==='garda/'
+   ?'Choose a situation to play as a Garda.'
+   :'Choose a situation to play as a member of the public.');
+  await expect(dropdown).not.toHaveAttribute('open','');
+  await expect(content).toBeHidden();
+  for(const width of [390,1366]){
+   await page.setViewportSize({width,height:900});
+   await expect.poll(()=>page.locator('summary.landing-disclosure-trigger').evaluateAll(triggers=>{
+    if(triggers.length!==3)return false;
+    const first=triggers[0].getBoundingClientRect();
+    return triggers.every(trigger=>{
+     const bounds=trigger.getBoundingClientRect();
+     return Math.abs(bounds.left-first.left)<=1&&Math.abs(bounds.right-first.right)<=1;
+    });
+   })).toBe(true);
+  }
+  await toggle.press('Enter');
+  await expect(dropdown).toHaveAttribute('open','');
+  await expect(scenarios.first()).toBeVisible();
+  await toggle.press('Space');
+  await expect(content).toBeHidden();
+  await toggle.click();
+  await scenarios.first().click();
+  await expect(page).toHaveURL(/#scenario\//);
+  await expect(page.locator('#scene-title')).toBeVisible();
+ });
+
  test(path+' landing removes redundant text while retaining the three learning steps',async({page})=>{
   await page.goto(path+'?lang=en#play');
   await expect(page.locator('.perspective-card-link[data-role-tone="public"] .perspective-button-label')).toHaveText('Member of the public');

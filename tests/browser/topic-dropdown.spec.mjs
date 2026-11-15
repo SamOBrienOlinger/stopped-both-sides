@@ -24,6 +24,7 @@ for(const {path,role} of pages){
   await trigger.click();
   await expect(disclosure).toHaveAttribute('open','');
   await expect(links.first()).toBeVisible();
+  await expect(links.filter({hasText:'→'})).toHaveCount(0);
   await expect(links.locator('strong')).toHaveText(categories.map(x=>x[1]));
   await expect(links.locator('.topic-preview')).toHaveText(categories.map(x=>x[2]));
   for(const [id,title,example] of categories){
