@@ -172,6 +172,16 @@ const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padSt
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
 // Localize revised interface copy without renumbering full-content packs.
 const revisedSiteCopy={
+ "Understand the situation you are in": {
+  "ga": "Tuig an cás ina bhfuil tú",
+  "pt": "Compreenda a situação em que se encontra",
+  "ar": "افهم الموقف الذي أنت فيه",
+  "pl": "Zrozum sytuację, w której się znajdujesz",
+  "ro": "Înțelege situația în care te afli",
+  "fr": "Comprenez la situation dans laquelle vous vous trouvez",
+  "es": "Comprende la situación en la que estás",
+  "zh-Hans": "了解你所处的情境"
+ },
  "You are a member of the public, age 16": {
   "ga": "Is duine den phobal thú agus tá tú 16 bliana d’aois.",
   "pt": "É membro do público e tem 16 anos.",

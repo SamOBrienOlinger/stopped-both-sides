@@ -6,7 +6,7 @@ const unwanted=[
  'Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.',
  'Choose any situation. Each one can be played from both sides.'
 ];
-const headings=['Read a situation','Choose a response','Learn why it matters'];
+const headings=['Understand the situation you are in','Choose a response','Learn why it matters'];
 const details=[
  'A short, fictional encounter with Gardaí.',
  'Try what you would say or do.',
