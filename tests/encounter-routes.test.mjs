@@ -45,12 +45,24 @@ test('Both roles can start every situation; the shared facts and role controls r
    assert.doesNotMatch(card.slice(anchor.length),/<a[\s>]/,'there must be no nested anchor inside a perspective card');
   }
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+  const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];
+  for(const choice of roles){
+   const link=rolePicker.match(new RegExp('href="#encounters/'+choice+'"[^>]*>([\\s\\S]*?)</a>'))[1];
+   assert.match(link,new RegExp('/'+choice+'-perspective\\.webp"'));
+   assert.match(link,/alt=""/);
+  }
   for(const e of Object.values(encounters)){
    action('paired-start',{id:e.id,role});assert.equal(state().role,role);assert.equal(state().nodeId,e.start);
    assert.equal((main.innerHTML.match(/data-action="paired-switch"/g)||[]).length,1);
    const before=state();action('paired-switch');assert.equal(state().nodeId,before.nodeId);assert.deepEqual(state().history,before.history);
   }
  }
+});
+test('The resume card describes the public role in the youth situation',()=>{
+ action('paired-start',{id:'public-young-person',role:'public'});const saved=state();
+ route('#encounters/garda');
+ assert.match(main.innerHTML,/You are a member of the public, age 16/);
+ assert.ok(main.innerHTML.includes(stateHash(saved)));
 });
 test('The recommended start keeps the chosen role and avatar without requiring customisation',()=>{
  for(const role of roles){
@@ -81,6 +93,7 @@ test('Chosen characters remain editable without replacing the opposing character
  action('paired-start',{id:'public-search',role:'public'});assert.equal(state().cast.public,'public-6');
  action('paired-answer',{index:'0'});const before=state();
  openCharacterPicker('public');assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);
+ assert.doesNotMatch(main.innerHTML,/Switch sides to play as the other character/);
  action('paired-character-choose',{character:'public-9'});assert.equal(state().cast.public,'public-9');assert.equal(state().cast.garda,before.cast.garda);
  assert.deepEqual(state().answers,before.answers);assert.deepEqual(state().history,before.history);
  assert.match(main.innerHTML,/data-character-id="public-9"/);action('paired-character-close');

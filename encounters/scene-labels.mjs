@@ -2,7 +2,7 @@ import {characterArtwork,characterFor} from './characters.mjs?v=character-detail
 import {roleLabels} from './catalog.mjs?v=scene-review-1';
 import {createDialogController} from '../accessibility/dialog.mjs?v=scenario-descriptions-20261115';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=scenario-descriptions-20261115';
+import {translateText} from '../locales/translate.mjs?v=role-picker-copy-20261115';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',

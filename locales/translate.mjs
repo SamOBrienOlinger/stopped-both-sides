@@ -172,6 +172,16 @@ const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padSt
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
 // Localize revised interface copy without renumbering full-content packs.
 const revisedSiteCopy={
+ "You are a member of the public, age 16": {
+  "ga": "Is duine den phobal thú agus tá tú 16 bliana d’aois.",
+  "pt": "É membro do público e tem 16 anos.",
+  "ar": "أنت فرد من الجمهور وعمرك 16 عامًا.",
+  "pl": "Jesteś członkiem społeczeństwa i masz 16 lat.",
+  "ro": "Faci parte din public și ai 16 ani.",
+  "fr": "Vous êtes membre du public et vous avez 16 ans.",
+  "es": "Eres un miembro del público y tienes 16 años.",
+  "zh-Hans": "你是一名公众成员，16 岁。"
+ },
  "Browse all situations": {
   "ga": "Brabhsáil gach cás",
   "pt": "Explorar todas as situações",
