@@ -415,24 +415,6 @@ html[data-perspective="garda"] .progress-page progress::-moz-progress-bar{
 }
 .primary:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
 
-/* The footer anchors the experience with a distinctly contemporary finish. */
-.footer{
- border-block-start:0;
- background:linear-gradient(115deg,#122d3c 0%,#173c4d 52%,#1d3c60 100%);
- color:#e7f2f6;
- box-shadow:inset 0 4px 0 rgba(95,182,189,.7);
- padding-block:1.15rem max(1.15rem,env(safe-area-inset-bottom));
-}
-.footer .footer-tagline,.footer .footer-note{color:#d7e7ed}
-.footer .footer-creator,.footer .footer-tools>a,.footer .footer-tools>.utility-settings{
- color:#f3fbff;
- text-decoration-color:rgba(226,246,255,.55);
-}
-.footer :is(a,button):hover{
- color:#fff;
- text-decoration-color:#fff;
-}
-
 /* The two role palettes retain their own visual identity. */
 html[data-perspective="garda"] .reference-landing{
  background:linear-gradient(142deg,#fff,rgba(241,245,253,.98) 58%,rgba(236,243,252,.97))!important;
@@ -453,7 +435,6 @@ html[data-perspective="garda"] .reference-landing::after{
  .reference-landing .perspective-hero>img{border-radius:.75rem}
  .reference-landing .perspective-hero::after{inline-size:10rem;inset-inline-end:-4rem;inset-block-end:-4rem}
  .topic-card{border-radius:1.05rem}
- .footer{padding-block:1rem max(1rem,env(safe-area-inset-bottom))}
 }
 @media(max-width:24rem){
  .reference-landing .landing-instructions :is(h1,h2){font-size:1.8rem}
@@ -471,15 +452,12 @@ html[data-perspective="garda"] .reference-landing::after{
 .contrast-high .reference-landing .perspective-hero,
 .contrast-high .landing-overview,.contrast-high .topic-card,
 .contrast-high .support-card,.contrast-high .source-card,
-.contrast-high .simple-setup .start-panel,.contrast-high .content-page .info-block,
-.contrast-high .footer{
+.contrast-high .simple-setup .start-panel,.contrast-high .content-page .info-block{
  background:var(--paper,#fff)!important;
  color:var(--ink);
  border-color:var(--control);
  box-shadow:none;
 }
-.contrast-high .footer :is(a,button),.contrast-high .footer .footer-creator,
-.contrast-high .footer .footer-tagline,.contrast-high .footer .footer-note{color:var(--ink)}
 .contrast-high .reference-landing::after,.contrast-high .perspective-hero::after,
 .contrast-high .topic-card::before,.contrast-high .header::before{display:none}
 .motion-reduce *, .motion-reduce *::before,.motion-reduce *::after{
@@ -494,19 +472,18 @@ html[data-perspective="garda"] .reference-landing::after{
  *,*::before,*::after{animation:none!important;transition:none!important}
  body,.header,.reference-landing,.reference-landing .perspective-hero,
  .topic-card,.how-to-play li.how-step,.scenario,.info-block,.start-panel,
- .support-card,.source-card,.footer,.settings-dialog{
+ .support-card,.source-card,.settings-dialog{
   background:Canvas!important;color:CanvasText!important;border-color:CanvasText!important;box-shadow:none!important;
  }
  body::after,.header::before,.reference-landing::after,.reference-landing .perspective-hero::before,
  .reference-landing .perspective-hero::after,.topic-card::before,.primary::after{display:none!important}
- .footer :is(a,button),.footer .footer-creator,.footer .footer-tagline,.footer .footer-note{color:CanvasText!important}
  .header nav>a[aria-current="page"]{outline:2px solid Highlight;outline-offset:-3px}
 }
 @media print{
  body{background:#fff!important}
  body::after,.header::before,.reference-landing::after,.reference-landing .perspective-hero::after,
  .primary::after{display:none!important}
- .reference-landing,.reference-landing .perspective-hero,.topic-card,.support-card,.footer{
+ .reference-landing,.reference-landing .perspective-hero,.topic-card,.support-card{
   background:#fff!important;color:#000!important;box-shadow:none!important
  }
 }

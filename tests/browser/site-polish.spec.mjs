@@ -19,6 +19,42 @@ for(const {path,role} of cases){
   expect(colours.copyright).toBe(colours.foreground);
  });
 
+ test(path+' footer links fit phones, desktop and enlarged right-to-left text',async({page})=>{
+  const footer=page.locator('.footer');
+  const settings=footer.locator('#language-settings-footer');
+  for(const lang of ['en','ar']){
+   await page.goto(path+'?lang='+lang+'#play');
+   if(lang==='ar'){
+    await expect(page.locator('html')).toHaveAttribute('dir','rtl');
+    await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
+   }
+   for(const width of [320,390,768,1366]){
+    await page.setViewportSize({width,height:844});
+    await expect.poll(()=>footer.evaluate(element=>{
+     const bounds=element.getBoundingClientRect();
+     const inner=element.querySelector('.footer-inner');
+     const padding=getComputedStyle(inner);
+     const contentWidth=inner.clientWidth-parseFloat(padding.paddingLeft)-parseFloat(padding.paddingRight);
+     const links=[...element.querySelectorAll('.footer-tools > :is(a,button)')];
+     const note=element.querySelector('.footer-note').getBoundingClientRect();
+     return links.length===4 && Math.abs(note.width-contentWidth)<=1 &&
+      element.scrollWidth<=element.clientWidth+1 &&
+      links.every(link=>{
+       const box=link.getBoundingClientRect();
+       return box.height>=44 && box.left>=bounds.left && box.right<=bounds.right &&
+        box.bottom<=note.top && link.scrollWidth<=link.clientWidth+1;
+      });
+    })).toBe(true);
+   }
+  }
+  await settings.focus();
+  await expect(settings).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#reading-dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(settings).toBeFocused();
+ });
+
  test(path+' top navigation stays visible after scrolling with compact menu usable',async({page})=>{
   test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'reduce'});
