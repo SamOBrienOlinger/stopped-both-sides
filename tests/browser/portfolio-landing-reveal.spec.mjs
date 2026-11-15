@@ -51,18 +51,33 @@ for(const path of paths){
   })).toBe(true);
  });
 
- test(path+' compact Menu omits Play subtitle but keeps the Play navigation link',async({page})=>{
+ test(path+' compact Menu shows Play across the situation picker and both game modes',async({page})=>{
   await page.setViewportSize({width:390,height:844});
-  await page.goto(path+'#encounters');
+  await page.goto(path+'?lang=en#encounters');
   const toggle=page.locator('[data-nav-toggle]');
+  const current=toggle.locator('[data-menu-current]');
+  const play=page.locator('#main-navigation [data-nav="encounters"]');
   await expect(toggle).toBeVisible();
   await expect(toggle.locator('[data-menu-label]')).toHaveText('Menu');
-  await expect(toggle.locator('[data-menu-current]')).toBeHidden();
-  await expect(toggle).not.toContainText('Play');
+  await expect(current).toBeVisible();
+  await expect(current).toHaveText('Play');
   await toggle.click();
-  await expect(page.locator('#main-navigation [data-nav="encounters"]')).toHaveText('Play');
+  await expect(play).toHaveText('Play');
+  await expect(play).toHaveAttribute('aria-current','page');
   await page.locator('#main-navigation [data-nav="about"]').click();
-  await expect(toggle.locator('[data-menu-current]')).toHaveText('About');
+  await expect(current).toHaveText('About');
+  await toggle.click();
+  await play.click();
+  await page.locator('[data-action="paired-quick-start"]').click();
+  await expect(page.locator('.paired-game')).toBeVisible();
+  await expect(current).toHaveText('Play');
+  await page.locator('.footer a[href="#accessibility"]').click();
+  await expect(current).toBeHidden();
+  await page.goto(path+'?lang=en#scenario/street');
+  await expect(page.locator('#scene-title')).toBeVisible();
+  await expect(current).toHaveText('Play');
+  await page.goto(path+'?lang=en#play');
+  await expect(current).toBeHidden();
  });
 
  test(path+' profile dialogs describe this encounter without the old wording',async({page})=>{

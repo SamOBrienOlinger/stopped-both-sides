@@ -1,4 +1,4 @@
-import {createLayout} from '../accessibility/layout.mjs?v=review-paragraphs-20261114';
+import {createLayout} from '../accessibility/layout.mjs?v=play-menu-20261115';
 import {practiceExplorer} from '../encounters/visuals.mjs?v=practice-dropdown-20261115';
 import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
 import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
@@ -60,14 +60,14 @@ function notFound(){return '<div class="content-page"><h1>This page was not foun
 function render(focus=true){
  try{
   const hash=paired.referenceRoute(location.hash.slice(1)||'play');
- if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));if(focus)focusMain();return;}
+ if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash);if(focus)focusMain();return;}
  if(paired.handles(hash)){
   main.innerHTML=paired.view(hash);
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===(hash.startsWith('progress')?'progress':'encounters'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   document.title='Play both sides | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(focus)focusMain();return;
  }
  let view='play',target='';
-  if(hash.startsWith('scenario/')){const id=hash.slice(9);if(!hasOwn(scenarioById,id)){main.innerHTML=notFound();view='missing';}else{if(!session||session.scenarioId!==id)session=startSession(id);if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}main.innerHTML=game();}}
+  if(hash.startsWith('scenario/')){const id=hash.slice(9);if(!hasOwn(scenarioById,id)){main.innerHTML=notFound();view='missing';}else{if(!session||session.scenarioId!==id)session=startSession(id);if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}view='encounters';main.innerHTML=game();}}
   else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
   else if(hash==='about'){view='about';main.innerHTML=about();}
   else if(hash==='play'||hash==='main'){main.innerHTML=home();}

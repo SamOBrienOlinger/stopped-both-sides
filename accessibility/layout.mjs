@@ -76,8 +76,7 @@ export function createLayout({main}){
   toggle.querySelector('[data-menu-label]').textContent=labels[root.lang.split('-')[0]]||labels.en;
   const active=nav.querySelector('[aria-current="page"]');
   const current=toggle.querySelector('[data-menu-current]');
-  // "Play" remains an accessible navigation link, not an extra line on the Menu button.
-  current.textContent=['play','encounters'].includes(active?.dataset.nav)?'':active?.textContent||'';
+  current.textContent=active?.dataset.nav==='play'?'':active?.textContent.trim()||'';
   current.hidden=!current.textContent;
  }
  function close(restore=false,animate=true){open=false;sync(animate);if(restore)toggle.focus({preventScroll:true});}
