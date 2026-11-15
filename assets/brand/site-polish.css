@@ -119,6 +119,7 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
 /* A shared footer with room for navigation and the project note. */
 .footer {
   --footer-font-scale:.75;
+  --footer-block-padding:clamp(1rem,2vw,1.5rem);
   --footer-text:#f4faff;
   --footer-muted:#c9dfe9;
   --footer-rule:#527386;
@@ -130,7 +131,7 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   --footer-accent-text:#143747;
   --footer-focus:#ffe2a5;
   padding-inline:0;
-  padding-block:clamp(1.35rem,3vw,2.35rem) calc(clamp(1.1rem,2.5vw,1.65rem) + env(safe-area-inset-bottom,0px));
+  padding-block:var(--footer-block-padding) calc(var(--footer-block-padding) + env(safe-area-inset-bottom,0px));
   border-block-start:2px solid #83b9c4;
   background:#173445;
   background:linear-gradient(115deg,#102c3a,#173849 62%,#1a3550);
