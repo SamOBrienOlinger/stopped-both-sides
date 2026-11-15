@@ -62,7 +62,7 @@ test('The resume card describes the public role in the youth situation',()=>{
  action('paired-start',{id:'public-young-person',role:'public'});const saved=state();
  route('#encounters/garda');
  assert.match(main.innerHTML,/You are a member of the public, age 16/);
- assert.match(main.innerHTML,/Resume play <img class="tap-icon"[^>]+alt="" aria-hidden="true"/);
+ assert.match(main.innerHTML,/>Resume play<\/a>/);
  assert.doesNotMatch(main.innerHTML,/[←→]/);
  assert.ok(main.innerHTML.includes(stateHash(saved)));
 });
@@ -159,6 +159,8 @@ test('Every stage and every choice render the selected cast and preserve the nex
     if(identity&&node.scene.includes(identity.name)){assert.ok(story.includes('Noor'));assert.ok(!story.includes(identity.name));}
     action('paired-answer',{index:String(index)});choices++;
     assert.equal(state().answers[role],index);assert.match(main.innerHTML,/id="feedback"/);
+    assert.match(main.innerHTML,/target="_blank" rel="noopener noreferrer">[^<]+ <img class="tap-icon"/);
+    assert.doesNotMatch(main.innerHTML,/[←→↗]/);
     const before=state();action('paired-switch');assert.deepEqual(state().answers,before.answers);action('paired-switch');assert.deepEqual(state(),before);
     action('paired-next');assert.equal(state().nodeId,choice.next);assert.equal(state().complete,choice.next==='end');assert.deepEqual(state().cast,base.cast);
     assert.equal(state().history.at(-1).continuedAs,role);assert.equal(state().history.at(-1).answers[role],index);

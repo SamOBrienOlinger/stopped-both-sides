@@ -108,7 +108,7 @@ export function createEncounterMode({siteRole,main,rerender,getOriginalSession,r
   const description=saved.id==='public-young-person'&&saved.role==='public'
    ? 'You are a member of the public, age 16'
    : `${encounters[saved.id].title} · ${roleLabels[saved.role]}`;
-  return `<div class="info-block session-return"><span><strong>${saved.complete?'Last recap':'Continue your situation'}:</strong> ${esc(description)}</span><a class="text-button" href="${stateHash(saved)}">${saved.complete?'Open recap':'Resume play'} →</a></div>`;
+  return `<div class="info-block session-return"><span><strong>${saved.complete?'Last recap':'Continue your situation'}:</strong> ${esc(description)}</span><a class="text-button" href="${stateHash(saved)}">${saved.complete?'Open recap →':'Resume play'}</a></div>`;
  }
  function introduction({secondary=false}={}){
   const logo=new URL('../assets/brand/profiles-hexagon.webp',import.meta.url).href;

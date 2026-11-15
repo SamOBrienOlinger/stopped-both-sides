@@ -11,7 +11,7 @@ const tapIconUrl=new URL('../assets/brand/stopped-both-sides-burgundy-tap.svg',i
 const tapIcon=`<img class="tap-icon" src="${esc(tapIconUrl)}" width="26" height="37" alt="" aria-hidden="true">`;
 
 // Swap visible glyphs after translation so link attributes and translation keys are preserved.
-const withTapIcons=html=>html.replace(/(<[^>]*>)|[←→]/g,(_match,tag)=>tag||tapIcon);
+const withTapIcons=html=>html.replace(/(<[^>]*>)|[←→↗]/g,(_match,tag)=>tag||tapIcon);
 
 export function perspectiveForRoute(hash,siteRole='public'){
  const route=hash.replace(/^#/, '').split('~')[0];
