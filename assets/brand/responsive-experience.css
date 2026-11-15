@@ -109,10 +109,18 @@ html:lang(ar) .reference-landing .perspective-hero :is(.perspective-button-label
  .header.navigation-ready{position:relative;z-index:20}
  .header.navigation-ready .header-inner{position:relative}
  .header .header-inner{padding-block:.75rem;gap:.65rem 1rem}
- .header.navigation-ready .nav-toggle{display:flex;flex:0 1 auto;align-items:center;gap:.65rem;margin-inline-start:auto;max-inline-size:100%;min-inline-size:44px;min-block-size:48px;padding:.6rem .8rem;background:var(--pale);color:var(--deep);border:1px solid var(--line);border-radius:.75rem;font:inherit;font-size:.875rem;line-height:1.4;text-align:start}
- .menu-copy{display:flex;flex-direction:column;min-inline-size:0;gap:.15rem;overflow-wrap:anywhere}
+ .header.navigation-ready .nav-toggle{
+  display:flex;flex:0 1 auto;align-items:center;gap:.65rem;
+  margin-inline-start:auto;max-inline-size:100%;min-inline-size:44px;
+  /* Fit two short labels at the same height and let longer labels wrap. */
+  min-block-size:max(48px,3rem);padding:.2rem .8rem;
+  background:var(--pale);color:var(--deep);border:1px solid var(--line);border-radius:.75rem;
+  font:inherit;font-size:.875rem;line-height:1.4;text-align:start;
+ }
+ html:lang(ar) .header.navigation-ready .nav-toggle{min-block-size:max(48px,3.625rem);line-height:1.75}
+ .menu-copy{display:flex;flex-direction:column;min-inline-size:0;gap:.1rem;overflow-wrap:anywhere}
  [data-menu-label]{font-weight:700}
- [data-menu-current]{font-size:.75rem;color:var(--muted)}
+ [data-menu-current]{font-size:.8125rem;font-weight:600;color:var(--muted)}
  .menu-icon{display:grid;gap:4px;inline-size:1.2rem;flex:none}
  .menu-icon span{display:block;inline-size:100%;block-size:2px;background:currentColor;border-radius:2px;transform-origin:center}
  .navigation-open .menu-icon span:nth-child(1){transform:translateY(6px) rotate(45deg)}
@@ -154,7 +162,7 @@ html:lang(ar) .reference-landing .perspective-hero :is(.perspective-button-label
 @media(max-width:22rem){
  .header .wordmark{font-size:.72rem;gap:.5rem}
  .header .nav-profiles{inline-size:2.25rem;block-size:2.25rem}
- .header.navigation-ready .nav-toggle{padding:.5rem .65rem;max-inline-size:100%}
+ .header.navigation-ready .nav-toggle{padding-inline:.65rem}
  .play-toolbar~.encounter-cast{grid-template-columns:minmax(0,1fr)}
  .play-toolbar~.encounter-cast .cast-character{flex-wrap:nowrap}
 }

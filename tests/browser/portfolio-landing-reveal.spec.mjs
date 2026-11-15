@@ -1,6 +1,8 @@
 import {test,expect} from '@playwright/test';
+import {startEncounter,stateHash} from '../../encounters/engine.mjs';
 
 const paths=['./','garda/'];
+const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));
 const invitation=[
  'Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.',
  'Which side will you try first?',
@@ -53,14 +55,25 @@ for(const path of paths){
 
  test(path+' compact Menu shows Play across the situation picker and both game modes',async({page})=>{
   await page.setViewportSize({width:390,height:844});
-  await page.goto(path+'?lang=en#encounters');
+  await page.goto(path+'?lang=en#play');
+  await expect(page.locator('.reference-landing')).toBeVisible();
+  await page.evaluate(()=>document.fonts.ready);
   const toggle=page.locator('[data-nav-toggle]');
   const current=toggle.locator('[data-menu-current]');
   const play=page.locator('#main-navigation [data-nav="encounters"]');
+  const sizes=()=>toggle.evaluate(button=>({
+   button:button.getBoundingClientRect().height,
+   header:button.closest('.header').getBoundingClientRect().height
+  }));
   await expect(toggle).toBeVisible();
   await expect(toggle.locator('[data-menu-label]')).toHaveText('Menu');
+  await expect(current).toBeHidden();
+  const homeSizes=await sizes();
+  await toggle.click();
+  await play.click();
   await expect(current).toBeVisible();
   await expect(current).toHaveText('Play');
+  await expect.poll(sizes,'adding Play keeps the Menu and sticky header the same height').toEqual(homeSizes);
   await toggle.click();
   await expect(play).toHaveText('Play');
   await expect(play).toHaveAttribute('aria-current','page');
@@ -71,6 +84,14 @@ for(const path of paths){
   await page.locator('[data-action="paired-quick-start"]').click();
   await expect(page.locator('.paired-game')).toBeVisible();
   await expect(current).toHaveText('Play');
+  await page.goto(path+'?lang=en'+arrest);
+  await expect(page.locator('html')).toHaveAttribute('data-perspective','garda');
+  await expect(current).toHaveText('Play');
+  await expect.poll(sizes).toEqual(homeSizes);
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded','true');
+  await expect.poll(sizes).toEqual(homeSizes);
+  await page.keyboard.press('Escape');
   await page.locator('.footer a[href="#accessibility"]').click();
   await expect(current).toBeHidden();
   await page.goto(path+'?lang=en#scenario/street');
