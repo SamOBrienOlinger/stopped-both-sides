@@ -47,7 +47,7 @@ for(const [path,role] of entrypoints){
   }
  });
 
- test(`${path}: all 14 shared encounters preserve Garda imagery and the approved layouts`,async({page})=>{
+ test(`${path}: all shared encounters preserve Garda imagery and the approved layouts`,async({page})=>{
   test.setTimeout(180000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const [i,encounter] of Object.values(encounters).entries()){

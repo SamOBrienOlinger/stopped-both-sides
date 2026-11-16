@@ -117,7 +117,7 @@ async function checkDialog(page){
 }
 async function chooseFirst(page,role,testInfo){
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
- await expect(page.locator('.encounter-card')).toHaveCount(14);
+ await expect(page.locator('.encounter-card')).toHaveCount(24);
  await page.locator('.setup-role summary').click();
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
  await expect(page.locator('.character-option')).toHaveCount(0);
@@ -246,7 +246,7 @@ for(const role of ['public','garda']){
    await page.goto(paths[role]);await ready(page);
    await checkHeroControls(page);
    await page.locator(`.paired-entry a.perspective-card-link[data-role-tone="${role}"]`).tap();
-   await expect(page.locator('.encounter-card')).toHaveCount(14);
+   await expect(page.locator('.encounter-card')).toHaveCount(24);
    await page.locator('[data-action="paired-quick-start"]').tap();
    await expect(page.locator('.paired-game')).toBeVisible();
    await page.locator('[data-action="paired-answer"]').first().tap();

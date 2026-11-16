@@ -31,7 +31,7 @@ async function expectReadingOrder(page){
 
 for(const path of ['./','garda/']){
  const role=path==='garda/'?'garda':'public';
- test(path+' all 14 scenarios show the situation and choices before the illustration',async({page})=>{
+ test(path+' all shared situations show the situation and choices before the illustration',async({page})=>{
   test.setTimeout(240000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const id of Object.keys(encounters)){

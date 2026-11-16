@@ -1,8 +1,9 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=caption-controls-2';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=scene-review-1';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=discrimination-1';
 import {characterFor} from './characters.mjs?v=character-details-actions-20261114';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=garda-baseball-20261114';
+import {discriminationEncounters} from './discrimination.mjs?v=discrimination-1';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
@@ -96,7 +97,10 @@ export const sceneDirections={
   'supervision-deployment':scene('meeting-room','garda'),
   'supervision-training':scene('meeting-room','public'),
   'supervision-plan':scene('meeting-room','garda')
- }
+ },
+ ...Object.fromEntries(Object.values(discriminationEncounters).map(({id,place,nodes})=>[
+  id,Object.fromEntries(Object.keys(nodes).map(node=>[node,scene(place,null)]))
+ ]))
 };
 
 export const sceneAssets=['street','bus-stop','station','advice-room','meeting-room','square'];

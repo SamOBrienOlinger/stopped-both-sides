@@ -1,14 +1,15 @@
-import {learningCopy} from './play-copy.mjs';
+import {learningCopy} from './play-copy.mjs?v=discrimination-1';
 import {messages} from './messages.mjs?v=shop-theft-20261115';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=shop-theft-20261115';
+import {encounters} from '../encounters/catalog.mjs?v=discrimination-1';
 import {gaContent} from './ga-content.mjs?v=shop-theft-20261115';
 import {refinementIrish} from './refinements-ga.mjs?v=support-resources-1';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
 for(const e of Object.values(encounters)){
+ if(e.language)continue;
  const ga=gaContent[e.id];dictionary.set(e.title,ga.title);dictionary.set(e.description,ga.description);
  for(const node of Object.values(e.nodes)){
   const translated=ga.nodes[node.id];dictionary.set(node.title,translated.title);dictionary.set(node.scene,translated.scene);

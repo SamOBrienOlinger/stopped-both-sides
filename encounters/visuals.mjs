@@ -1,5 +1,5 @@
-import {encounters} from './catalog.mjs?v=phlowing-1';
-import {practiceGoal} from '../learning/play.mjs?v=phlowing-1';
+import {encounters} from './catalog.mjs?v=discrimination-1';
+import {practiceGoal} from '../learning/play.mjs?v=discrimination-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){
@@ -20,7 +20,7 @@ export function learningIcon(kind){
   "evidence": "<path d=\"M18 29H5V3h15l7 7v7M20 3v7h7M9 10h6M9 15h8M9 20h5\"/><circle cx=\"23\" cy=\"23\" r=\"5\"/><path d=\"m27 27 4 4\"/>",
   "supervision": "<path d=\"M3 3v26h26M8 22v-6M14 22V9M20 13V5\"/><circle cx=\"23\" cy=\"19\" r=\"5\"/><path d=\"m27 23 4 4\"/>"
 };
- return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind]||paths.reflect}</svg>`;
+ return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind==='discrimination'?'fairness':kind]||paths.reflect}</svg>`;
 }
 
 const scenarioSymbols={
@@ -30,7 +30,7 @@ const scenarioSymbols={
  'garda-communication':'street','garda-young-person':'young','garda-colleague':'colleagues',
  'garda-new-evidence':'evidence','garda-supervision':'supervision'
 };
-export const scenarioIcon=id=>learningIcon(scenarioSymbols[id]||'read');
+export const scenarioIcon=id=>learningIcon(scenarioSymbols[id]||(encounters[id]?.ground?'discrimination':'read'));
 
 export function routeTrail(state){
  if(state.complete)return '';
@@ -40,7 +40,7 @@ export function routeTrail(state){
 export function topicExplorer(groups,role){
  const links=groups.map(topic=>`<a class="topic-card" href="#encounters/${role}/${topic.id}">
   ${learningIcon(topic.id)}<strong>${topic.title}</strong>
-  <span class="topic-preview">${esc(encounters[topic.encounters[0]].title)}</span>
+  <span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>
  </a>`).join('');
  return `<section class="topic-explorer" aria-labelledby="topic-explorer-title">
   <details class="topic-disclosure">

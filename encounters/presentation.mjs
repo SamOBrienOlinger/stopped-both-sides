@@ -1,4 +1,5 @@
-import {encounters,roles} from './catalog.mjs?v=phlowing-1';
+import {encounters,roles} from './catalog.mjs?v=discrimination-1';
+import {discriminationEncounters} from './discrimination.mjs?v=discrimination-1';
 
 // Explicit teaching transitions: these are variations, not consequences of a choice.
 export const variations={
@@ -32,5 +33,6 @@ export const topicGroups=[
  {id:'search',title:'Searches',encounters:['public-search','garda-search','garda-new-evidence']},
  {id:'custody',title:'Arrest and custody',encounters:['public-arrest','public-custody']},
  {id:'young',title:'Young people',encounters:['public-young-person','garda-young-person']},
- {id:'fairness',title:'Fair treatment',encounters:['public-fair-treatment','garda-communication','garda-colleague','garda-supervision']}
+ {id:'fairness',title:'Fair treatment',encounters:['public-fair-treatment','garda-communication','garda-colleague','garda-supervision']},
+ {id:'discrimination',title:'Discrimination',preview:'10 protected grounds',encounters:Object.keys(discriminationEncounters)}
 ];

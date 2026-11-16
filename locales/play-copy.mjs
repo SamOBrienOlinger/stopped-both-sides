@@ -2,6 +2,67 @@
 const languages = ['ga','pt','ar','pl','ro','fr','es','zh-Hans'];
 
 const labels = [
+ ['Discrimination', ['Idirdhealú','Discriminação','التمييز','Dyskryminacja','Discriminare','Discrimination','Discriminación','歧视']],
+ ['10 protected grounds', ['10 bhforas faoi chosaint','10 motivos protegidos','10 أسباب يحميها القانون','10 przesłanek objętych ochroną','10 criterii protejate','10 motifs protégés','10 motivos protegidos','10 项受保护事由']],
+ ['Gender', ['Inscne','Género','النوع الاجتماعي','Płeć','Gen','Genre','Género','性别']],
+ ['Civil status', ['Stádas sibhialta','Estado civil','الحالة المدنية','Stan cywilny','Stare civilă','État civil','Estado civil','婚姻及民事伴侣状况']],
+ ['Family status', ['Stádas teaghlaigh','Situação familiar','الوضع العائلي','Sytuacja rodzinna','Statut familial','Situation familiale','Situación familiar','家庭状况']],
+ ['Sexual orientation', ['Claonadh gnéasach','Orientação sexual','التوجه الجنسي','Orientacja seksualna','Orientare sexuală','Orientation sexuelle','Orientación sexual','性取向']],
+ ['Age', ['Aois','Idade','العمر','Wiek','Vârstă','Âge','Edad','年龄']],
+ ['Religious belief', ['Creideamh reiligiúnach','Crença religiosa','المعتقد الديني','Przekonania religijne','Credință religioasă','Croyance religieuse','Creencias religiosas','宗教信仰']],
+ ['Traveller community', ['Pobal an Lucht Siúil','Comunidade Traveller irlandesa','مجتمع الرحّل الأيرلنديين','Irlandzka społeczność Travellers','Comunitatea irlandeză Traveller','Communauté des Travellers irlandais','Comunidad irlandesa Traveller','爱尔兰游民社群']],
+ ['Race', ['Cine','Raça','العرق','Rasa','Rasă','Race','Raza','种族']],
+ ['Disability', ['Míchumas','Deficiência','الإعاقة','Niepełnosprawność','Dizabilitate','Handicap','Discapacidad','残障']],
+ ['Housing assistance', ['Cúnamh tithíochta','Apoio à habitação','إعانة السكن','Pomoc mieszkaniowa','Ajutor pentru locuință','Aide au logement','Ayuda para la vivienda','住房援助']],
+ ['The Discrimination scenarios are in English.', [
+  'Tá na cásanna faoin idirdhealú i mBéarla.','Os casos de discriminação estão em inglês.','سيناريوهات التمييز باللغة الإنجليزية.','Scenariusze dotyczące dyskryminacji są w języku angielskim.',
+  'Scenariile despre discriminare sunt în limba engleză.','Les situations sur la discrimination sont en anglais.','Las situaciones de discriminación están en inglés.','歧视主题情境的内容为英语。'
+ ]],
+ ['Housing assistance applies to accommodation. The rules for other grounds depend on the setting.', [
+  'Baineann an foras maidir le cúnamh tithíochta le cóiríocht. Braitheann na rialacha maidir le forais eile ar an gcomhthéacs.',
+  'O motivo relativo ao apoio à habitação aplica-se ao alojamento. As regras para os outros motivos dependem do contexto.',
+  'ينطبق سبب إعانة السكن على توفير السكن. وتعتمد قواعد الأسباب الأخرى على السياق.',
+  'Przesłanka pomocy mieszkaniowej dotyczy zakwaterowania. Zasady dotyczące pozostałych przesłanek zależą od sytuacji.',
+  'Criteriul ajutorului pentru locuință se aplică furnizării de cazare. Regulile pentru celelalte criterii depind de context.',
+  'Le motif de l’aide au logement s’applique à la fourniture d’un logement. Les règles pour les autres motifs dépendent du contexte.',
+  'El motivo de la ayuda para la vivienda se aplica al alojamiento. Las reglas sobre los demás motivos dependen del contexto.',
+  '住房援助这一事由适用于住宿提供。其他事由适用的规则取决于具体情境。'
+ ]],
+ ['Read IHREC’s protected grounds', [
+  'Léigh na forais faoi chosaint a leagann IHREC amach','Consulte os motivos protegidos da IHREC','اقرأ عن الأسباب المحمية لدى IHREC','Przeczytaj listę przesłanek chronionych według IHREC',
+  'Citește lista criteriilor protejate publicată de IHREC','Consultez les motifs protégés présentés par l’IHREC','Consulta los motivos protegidos que recoge la IHREC','查看 IHREC 列出的受保护事由'
+ ]],
+ ['3–4 minutes', ['3–4 nóiméad','3–4 minutos','٣–٤ دقائق','3–4 minuty','3–4 minute','3–4 minutes','3–4 minutos','3–4 分钟']],
+ ['Explore the same situations from the public and Garda perspectives. Choose a response, read the explanation and follow the situation to a recap. You can revisit earlier decisions and replay a route.', [
+  'Fiosraigh na cásanna céanna ó dhearcadh an phobail agus an Gharda. Roghnaigh freagra, léigh an míniú agus lean an cás go dtí an t-achoimre. Is féidir filleadh ar chinntí roimhe seo agus an bealach a imirt arís.',
+  'Explore as mesmas situações das perspetivas do público e da Garda. Escolha uma resposta, leia a explicação e avance até ao resumo. Pode voltar às decisões anteriores e repetir um percurso.',
+  'استكشف المواقف نفسها من منظور الجمهور ومنظور الشرطة. اختر إجابة واقرأ شرحها وتابع الموقف حتى الملخص. يمكنك الرجوع إلى القرارات السابقة وإعادة المسار.',
+  'Poznaj te same sytuacje z perspektywy obywatela i funkcjonariusza Garda. Wybierz reakcję, przeczytaj wyjaśnienie i przejdź do podsumowania. Możesz wrócić do wcześniejszych decyzji i ponownie przejść daną ścieżkę.',
+  'Explorează aceleași situații din perspectiva publicului și a unui membru al Garda. Alege un răspuns, citește explicația și continuă până la recapitulare. Poți reveni la deciziile anterioare și relua un traseu.',
+  'Explorez les mêmes situations du point de vue du public et de la Garda. Choisissez une réponse, lisez l’explication et poursuivez jusqu’au récapitulatif. Vous pouvez revenir sur vos décisions et rejouer un parcours.',
+  'Explora las mismas situaciones desde la perspectiva del público y de la Garda. Elige una respuesta, lee la explicación y continúa hasta el resumen. Puedes volver a decisiones anteriores y repetir un recorrido.',
+  '从公众和爱尔兰警察的视角了解相同的情境。选择回应、阅读解释并继续到回顾环节。你可以返回先前的决定并重新体验。'
+ ]],
+ ['Irish covers the original shared game. Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese also cover individual practice and reference pages.', [
+  'Tá an bunleagan den chluiche roinnte ar fáil i nGaeilge. Tá cleachtadh aonair agus na leathanaigh thagartha ar fáil freisin i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe.',
+  'O irlandês está disponível no jogo partilhado original. O português, o árabe, o polaco, o romeno, o francês, o espanhol e o chinês simplificado também abrangem a prática individual e as páginas de referência.',
+  'تتوفر الأيرلندية في اللعبة الأصلية المشتركة. وتشمل البرتغالية والعربية والبولندية والرومانية والفرنسية والإسبانية والصينية المبسطة التدريب الفردي وصفحات المراجع أيضًا.',
+  'Język irlandzki jest dostępny w pierwotnych sytuacjach wspólnych. Portugalski, arabski, polski, rumuński, francuski, hiszpański i chiński uproszczony obejmują również ćwiczenia indywidualne i materiały źródłowe.',
+  'Irlandeza acoperă jocul comun original. Portugheza, araba, polona, româna, franceza, spaniola și chineza simplificată acoperă și exercițiile individuale și paginile de referință.',
+  'L’irlandais est disponible dans le jeu partagé d’origine. Le portugais, l’arabe, le polonais, le roumain, le français, l’espagnol et le chinois simplifié couvrent aussi les exercices individuels et les pages de référence.',
+  'El irlandés está disponible en el juego compartido original. El portugués, el árabe, el polaco, el rumano, el francés, el español y el chino simplificado también abarcan las prácticas individuales y las páginas de referencia.',
+  '爱尔兰语适用于原有的双视角情境。葡萄牙语、阿拉伯语、波兰语、罗马尼亚语、法语、西班牙语和简体中文还适用于单角色练习及参考页面。'
+ ]],
+ ['Choosing Irish during individual practice opens the matching shared situation. Published source titles and authors retain their original form.', [
+  'Má roghnaíonn tú Gaeilge le linn cleachtadh aonair, osclófar an cás roinnte comhfhreagrach. Coinnítear teidil agus údair na bhfoinsí foilsithe ina mbunfhoirm.',
+  'Escolher irlandês durante a prática individual abre a situação partilhada correspondente. Os títulos e autores das fontes publicadas são apresentados na forma original.',
+  'يؤدي اختيار الأيرلندية في التدريب الفردي إلى فتح الموقف المشترك المقابل. تُعرض عناوين المصادر المنشورة وأسماء مؤلفيها بصيغتها الأصلية.',
+  'Wybór języka irlandzkiego podczas ćwiczenia indywidualnego otwiera odpowiednią sytuację wspólną. Tytuły i autorzy opublikowanych źródeł zachowują oryginalną formę.',
+  'Alegerea limbii irlandeze în timpul unui exercițiu individual deschide situația comună corespunzătoare. Titlurile și autorii surselor publicate își păstrează forma originală.',
+  'Choisir l’irlandais pendant un exercice individuel ouvre la situation partagée correspondante. Les titres et les noms des auteurs des sources publiées gardent leur forme d’origine.',
+  'Elegir el irlandés durante una práctica individual abre la situación compartida correspondiente. Los títulos y los nombres de los autores de las fuentes publicadas conservan su forma original.',
+  '在单角色练习中选择爱尔兰语会打开相应的双视角情境。已发表资料的标题和作者姓名保留原样。'
+ ]],
  ['Explore both perspectives', [
   'Fiosraigh an dá dhearcadh','Explore as duas perspetivas','استكشف وجهتي النظر','Poznaj obie perspektywy',
   'Explorează ambele perspective','Explorez les deux points de vue','Explora ambas perspectivas','探索双方视角'

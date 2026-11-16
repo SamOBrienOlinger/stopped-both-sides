@@ -1,7 +1,7 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=phlowing-1';
-import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=phlowing-1';
-import {decodeState} from '../encounters/engine.mjs?v=phlowing-1';
-import {topicGroups} from '../encounters/presentation.mjs?v=phlowing-1';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=discrimination-1';
+import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=discrimination-1';
+import {decodeState} from '../encounters/engine.mjs?v=discrimination-1';
+import {topicGroups} from '../encounters/presentation.mjs?v=discrimination-1';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,
  reviewExamples, reviewQuestions, reviewScene, searchFigures, termFor
@@ -10,12 +10,18 @@ import {
 const topicFor = id => topicGroups.find(topic=>topic.encounters.includes(id));
 const reviewOpening = (id,nodeId) => id==='garda-supervision'&&nodeId==='supervision-start';
 
+export function scenarioCopy(id,value){
+ const language=encounters[id]?.language;
+ const copy=esc(value);
+ return language?`<span lang="${language}" dir="ltr" data-no-translate>${copy}</span>`:copy;
+}
+
 export function practiceGoal(id){
- return esc(practiceGoals[id]||'');
+ return scenarioCopy(id,encounters[id]?.goal||practiceGoals[id]||'');
 }
 
 export function situationStory(id,nodeId,story){
- if(!reviewOpening(id,nodeId))return '<p class="story-text">'+esc(story)+'</p>';
+ if(!reviewOpening(id,nodeId))return '<p class="story-text">'+scenarioCopy(id,story)+'</p>';
  const rows=searchFigures.map(({group,searches,finds})=>
   '<tr><th scope="row">'+esc(group)+'</th><td>'+searches+'</td><td>'+finds+'</td><td>'+(finds/searches*100)+'%</td></tr>'
  ).join('');
@@ -91,15 +97,15 @@ export function decisionComparison(state,stage,open=false){
   const context=opening?.[role]||view.context;
   return '<section data-role-tone="'+role+'" class="decision-comparison-role">'+
     '<h3>'+esc(roleLabels[role])+'</h3>'+
-    (context&&context!==stage.scene?'<p class="comparison-role-context">'+esc(context)+'</p>':'')+
-    '<p><strong>This role’s question</strong><br>'+esc(view.prompt)+'</p>'+
+    (context&&context!==stage.scene?'<p class="comparison-role-context">'+scenarioCopy(state.id,context)+'</p>':'')+
+    '<p><strong>This role’s question</strong><br>'+scenarioCopy(state.id,view.prompt)+'</p>'+
     '<p><strong>Your answer</strong><br>'+
-    (index===null?'No answer yet':esc(view.choices[index].text))+'</p>'+
+    (index===null?'No answer yet':scenarioCopy(state.id,view.choices[index].text))+'</p>'+
    '</section>';
  }).join('');
  return '<details class="case-disclosure decision-comparison" data-decision="'+state.id+'/'+stage.id+'"'+(open?' open':'')+'>'+
   '<summary>Compare this decision</summary>'+
-  (opening?'':'<p class="comparison-context">'+esc(stage.scene)+'</p>')+
+  (opening?'':'<p class="comparison-context">'+scenarioCopy(state.id,stage.scene)+'</p>')+
   '<div class="comparison-roles">'+columns+'</div></details>';
 }
 
@@ -112,7 +118,7 @@ export function recapPractice(id,role,answer,mode='shared'){
   : 'data-action="paired-start" data-id="'+next.id+'" data-role="'+role+'"';
  return '<section class="info-block recap-practice" aria-labelledby="apply-learning-title">'+
   '<h2 id="apply-learning-title">Try what you learned</h2>'+
-  '<p><strong>Your answer</strong><br>'+esc(answer)+'</p>'+
+  '<p><strong>Your answer</strong><br>'+scenarioCopy(id,answer)+'</p>'+
   '<p>What new fact would change your response?</p>'+
   '<button class="primary secondary" '+start+'><span>Try a related situation</span><span>'+esc(next.title)+'</span></button>'+
  '</section>';
@@ -130,7 +136,7 @@ export function discussionGuide(encounter,role){
   '<h1>Play and discuss this situation</h1>'+
   '<h2>'+esc(encounter.title)+'</h2>'+
   '<p class="small-note">Allow about 15 minutes.</p>'+
-  '<p>'+esc(encounter.description)+'</p>'+
+  '<p>'+scenarioCopy(encounter.id,encounter.description)+'</p>'+
   '<ol><li>Choose a player. Other people can follow along as observers.</li>'+
   '<li>Pause after a decision and compare what each person had to consider.</li>'+
   '<li>Discuss these two questions together.<ul>'+questions.map(question=>'<li>'+esc(question)+'</li>').join('')+'</ul></li></ol>'+

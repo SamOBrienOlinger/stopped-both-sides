@@ -52,7 +52,7 @@ async function expectFitting(page){
 }
 
 for(const path of paths){
- test(path+' displays the playable character headshot in all 14 encounters from both roles',async({page})=>{
+ test(path+' displays the playable character headshot in all encounters from both roles',async({page})=>{
   test.setTimeout(240000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const role of ['public','garda']){

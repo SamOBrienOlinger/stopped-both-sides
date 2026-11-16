@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <strong>14 shared situations</strong> &nbsp; · &nbsp; <strong>59 stages</strong> &nbsp; · &nbsp; <strong>18 characters</strong><br>
+  <strong>24 shared situations</strong> &nbsp; · &nbsp; <strong>79 stages</strong> &nbsp; · &nbsp; <strong>18 characters</strong><br>
   Play in your browser · No sign-up · No timer
 </p>
 
@@ -53,11 +53,13 @@ Explore a fictional encounter with An Garda Síochána, choose a response and re
 **Read a situation → choose a response → learn why it matters.**
 
 1. **Choose your perspective.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or the [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/).
-2. **Start a situation.** Select **Start this situation** for the suggested street encounter, or **Browse all 14 situations**. A character is ready for you; **Choose a different character** is optional.
+2. **Start a situation.** Select **Start this situation** for the suggested street encounter, or **Browse all situations**. A character is ready for you; **Choose a different character** is optional.
 3. **Read and choose.** Consider the fictional scene, then choose what to say or do.
 4. **Learn from the feedback.** Read the explanation, **Why this matters** and the linked sources.
 5. **Continue the encounter.** Select **Next step** or **Explore the next variation** when offered, and repeat the read–choose–learn loop. Your active role's answer determines the next branch.
 6. **Review and replay.** At the end, select **See what you learned** for the recap. Revisit a decision, explore the other perspective or try another situation.
+
+Choose **Discrimination** under **Browse all situations** to explore the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). Each situation has two decisions, with responses and feedback from the public and Garda perspectives. The housing assistance situation concerns access to rented accommodation.
 
 > [!TIP]
 > **You can pause and reconsider.** **Try another answer** replaces your answer for the active role. **See the other side** switches perspective at the same moment and keeps both roles' answers. You can reach the recap while playing one perspective; exploring both is optional.
@@ -128,7 +130,7 @@ Saved encounters and transfer links retain the pair. Older saved formats remain 
 | **Reading** | Larger text, high contrast, increased spacing and reduced motion. |
 | **Navigation** | Keyboard controls, visible focus, status announcements and written role labels alongside perspective colours. |
 
-Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover both game modes and the information pages. Arabic uses right-to-left text. **Gaeilge covers shared play; its reference pages remain labelled English.** Selecting Irish during original practice opens the matching shared situation.
+Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the original shared situations, individual practice and the information pages. Arabic uses right-to-left text. Gaeilge covers the original shared situations. Selecting Irish during individual practice opens the matching shared situation. The Discrimination stories, choices and feedback are in English, with translated topic and ground labels.
 
 Changing language keeps your stage, characters, answers, role and scores. Translations are learning aids awaiting independent language and legal review. The implementation targets **WCAG 2.2 AA**; automated checks are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary.
 
@@ -251,7 +253,7 @@ The approach draws on research into educational games, explanatory feedback, per
 | **Practice and revision** | Revisit an idea, explore another response and explain what changed. | Replay, saved progress and paired recaps support returning to earlier decisions. |
 | **Source-based inquiry** | Check the basis of a claim and recognise its limits. | Explanations link to legal, professional, academic and community sources. |
 
-The **59 stages are spread across 14 shared situations**, with a playthrough following one authored route. The active role's selected answer determines the next branch; the other role's answer remains available for comparison. Branches illustrate teaching decisions and opportunities to reconsider. They do not predict what will happen in an actual encounter.
+The **79 stages are spread across 24 shared situations**, with a playthrough following one authored route. The active role's selected answer determines the next branch; the other role's answer remains available for comparison. Branches illustrate teaching decisions and opportunities to reconsider. They do not predict what will happen in an actual encounter.
 
 > [!IMPORTANT]
 > **Understanding both perspectives preserves the distinction between individual rights and state authority.** It does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person's misconduct, and rights never depend on a game score.
@@ -545,13 +547,13 @@ npm test
 | `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and 11,150 mixed-role routes, plus every one of the 295 role-specific choices at 59 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and mixed-role routes, plus all 375 role-specific choices at 79 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
 The clearer-first-play implementation at commit [`5d8a9dd`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d) passed **88 Node checks locally** and [all 78 browser checks before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442): **26 each in Chromium, Firefox and WebKit**. These include recommended starts, keyboard catalogue access, character changes, retained counterparts, responsive layouts and enlarged Irish text. The [interface review](docs/UX-REVIEW.md) includes before/after captures and the limits of this verification.
 
 On `main`, the browser workflow waits for that commit's GitHub Pages publication and repeats the suite against the live site. [See browser runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) for deployment-specific results.
 
-The browser suite also completes all 14 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
+The browser suite also completes all 24 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 

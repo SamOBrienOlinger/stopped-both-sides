@@ -1,12 +1,12 @@
 import {focusControl} from '../accessibility/focus.mjs';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=phlowing-1';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=discrimination-1';
 import {createLayout} from '../accessibility/layout.mjs?v=phlowing-1';
 import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
 import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=phlowing-1';
-import {createMotion} from '../accessibility/motion.mjs?v=phlow-1';
-import {createEncounterMode} from '../encounters/ui.mjs?v=visual-refresh-1';
+import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=discrimination-1';
+import {createMotion} from '../accessibility/motion.mjs?v=discrimination-1';
+import {createEncounterMode} from '../encounters/ui.mjs?v=discrimination-1';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs?v=phlowing-1';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=phlowing-1';
 const main=document.querySelector('#main');
@@ -49,7 +49,7 @@ function evidence(open=''){
 }
 function about(){
  return `<div class="content-page">${paired.aboutIntroduction({eyebrow:'ABOUT THE GARDA PERSPECTIVE',taglineLines:['Examine the decision.','Keep the person in view.']})}<p class="page-lead">Stopped: Both Sides helps Garda learners recognise assumptions, examine their evidence and reflect on fair treatment during stop-and-search decisions.</p>${paired.resumeLink()}${returnToSession()}
- <section class="info-block"><h2>How it works</h2><p>Explore 14 shared situations from the Garda or public perspective. Your chosen avatar stays with the encounter. Choose a response, read the explanation and follow the next scene. Some choices lead to an additional opportunity to reconsider. You can revisit earlier decisions, replay a route or open the research at any point.</p><p>The aim is to improve the quality of reasoning. There are no points for searches, arrests or avoiding every intervention, and no personal bias score. A scenario can have more than one reasonable next step.</p></section>
+ <section class="info-block"><h2>How it works</h2><p>Explore the same situations from the public and Garda perspectives. Choose a response, read the explanation and follow the situation to a recap. You can revisit earlier decisions and replay a route.</p><p>The aim is to improve the quality of reasoning. There are no points for searches, arrests or avoiding every intervention, and no personal bias score. A scenario can have more than one reasonable next step.</p></section>
 ${learningAbout()} <section class="info-block important"><h2>A learning companion</h2><p>This independent prototype is for reflection between encounters. It cannot assess live incidents, provide operational authorisation or certify that a Garda’s decisions are free from bias.</p><p>The Irish examples include section 23 of the Misuse of Drugs Act and the distinction between voluntary enquiries and specific legal demands. Other powers, case law, urgent threats, custody and search procedures need their own current professional guidance.</p><p>It is not official Garda training. Legal, operational and community review remain outstanding.</p></section>
  <section class="info-block"><h2>Use it in a short learning discussion</h2><ol class="discussion-steps"><li><strong>Play one situation.</strong> Say which facts matter before looking at the feedback.</li><li><strong>Compare the reasoning.</strong> Discuss the grounds, alternative explanations, identity cues and the person’s experience.</li><li><strong>Return later.</strong> Revisit the situation and consider one practical question for briefing or supervision.</li></ol><p>Facilitators should use fictional or appropriately anonymised examples and make room for disagreement supported by law and evidence. The activity should not be used as a staff appraisal.</p>${sourceLinks(['miller','wouters','merla'])}</section>
  <section class="info-block"><h2>Connected to the Garda Decision Making Model</h2><p>The learning prompts support gathering and checking information, assessing risk, considering the operational environment and legal powers, comparing options, and reviewing action. Human rights and ethics run through the decision.</p><p>This is an educational interpretation of the public framework. Members should use the current official model, policy and training in their work.</p>${sourceLinks(['model','ethics'])}</section>

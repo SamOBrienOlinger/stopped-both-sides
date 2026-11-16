@@ -90,7 +90,7 @@ test('Broken storage, invalid links and malformed transferred records recover sa
 });
 test('Both shared perspectives read the original content directly and all imports exist',()=>{
  assert.equal(publicData.scenarios,localData.scenarios);assert.equal(publicData.sources,localData.sources);
- assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,59);
+ assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,79);
  const base=new URL('../encounters/',import.meta.url);
  for(const file of readdirSync(base).filter(f=>f.endsWith('.mjs'))){const content=readFileSync(new URL(file,base),'utf8');for(const m of content.matchAll(/from ['"](\.\/[^'"]+)['"]/g))assert.doesNotThrow(()=>readFileSync(new URL(m[1],base)));}
 });

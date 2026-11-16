@@ -152,6 +152,9 @@ html .reference-landing.paired-entry {
 .simple-setup .setup-character {border-radius:.75rem}
 .scenario-library[open]>summary {border-block-end:1px solid var(--line)}
 .scenario-library .topic-filters {margin-block:1rem 1.3rem}
+.discrimination-intro p {max-inline-size:65ch;margin-block-end:.35rem}
+.discrimination-intro .small-note {margin-block-start:.55rem}
+.discrimination-intro .text-button {display:inline-flex;align-items:center;gap:.35rem;max-inline-size:100%}
 .topic-filter {font-weight:650}
 .topic-filter[aria-pressed="false"]:hover {background:var(--pale);border-color:var(--deep)}
 .scenario-library .practice-content {padding:0}
