@@ -132,13 +132,12 @@ for(const path of ['./','garda/']){
     'hover and entrance effects keep each card and its button in place').toBeLessThan(.5);
   }
   await page.goto(path+'#about');
-  await expect(page.locator('[data-reading-chunk]').first()).toBeVisible();
+  const initialGroup=page.locator('.about-opening .about-overview');
+  await expect(initialGroup).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);
   // A hash-only goto stays in this document. Let the route's page cue settle
   // and register later-scroll targets before deliberately reaching one.
   await frames(page);await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');await frames(page);
-  const initialGroup=page.locator('.about-opening .about-overview');
-  await expect(initialGroup).toBeVisible();
   const initialHeading=await initialGroup.locator('p').first().textContent();
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   expect(await page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),initialHeading),
