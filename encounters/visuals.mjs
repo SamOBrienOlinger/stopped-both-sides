@@ -1,4 +1,5 @@
-import {encounters} from './catalog.mjs?v=scene-review-1';
+import {encounters} from './catalog.mjs?v=phlowing-1';
+import {practiceGoal} from '../learning/play.mjs?v=phlowing-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){
@@ -58,6 +59,7 @@ export function practiceCards(scenarios,role){
   <h2>${esc(scenario.title)}</h2>
   <p class="person">${esc(scenario.person)}</p>
   <p class="description">${esc(scenario.description)}</p>
+  <p class="scenario-goal">${practiceGoal(role+'-'+scenario.id)}</p>
   <p class="small-note">${esc(scenario.minutes)}</p>
   <button class="primary secondary scenario-action" data-action="start" data-id="${scenario.id}" aria-label="Play this situation: ${esc(scenario.title)}">Play this situation</button>
  </article>`).join('');

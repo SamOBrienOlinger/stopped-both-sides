@@ -1,19 +1,28 @@
 import {hasOwn} from '../compatibility.mjs';
+import {focusControl} from '../accessibility/focus.mjs';
+import {
+ checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
+ practiceGoal, progressSkills, recapPractice, reviewExploration, situationStory, termsInDecision
+} from '../learning/play.mjs?v=phlowing-1';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
-import {supportRecap} from '../learning/support.mjs?v=support-resources-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=phlow-1';
-import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=shop-theft-20261115';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=shop-theft-20261115';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=phlow-1';
+import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=phlowing-1';
+import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=phlowing-1';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=phlowing-1';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=phlowing-1';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=character-details-actions-20261114';
 import {renderScene} from './scenes.mjs?v=character-details-actions-20261114';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=scenario-descriptions-20261115';
-import {variationFor,learningStatus,topicGroups} from './presentation.mjs';
-import {playHash,playLocation,playTopics,topicForSituation} from './play-navigation.mjs';
+import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=phlowing-1';
+import {playHash,playLocation,playTopics,topicForSituation} from './play-navigation.mjs?v=phlowing-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate>${ids.map(id=>{const s=references[id];return `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)} ↗</a></li>`;}).join('')}</ul></details>`;
 const decisionNumber=number=>`<span class="decision-number"><span>Decision</span> ${number}</span>`;
+function decisionPosition(number,{min,max}){
+ const range=min===max?min:`${min}–${max}`;
+ return `${decisionNumber(number)} <span>· <bdi>${range}</bdi> <span>${max===1?'decision left':'decisions left'}</span></span>`;
+}
 const scoreExplanation='<p class="score-explanation">1 point for a choice that supports an appropriate resolution on these facts; 0 when the reasoning needs review. This measures learning, not personal bias or responsibility for someone else’s conduct.</p>';
 
 function perspectiveIcon(role){
@@ -26,8 +35,8 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  const store=createProgressStore(browserStorage,siteRole);
  const characterPreferences=createCharacterPreferences(browserStorage),legacyCasts=new Map();
  let state=null,clearPending=false,characterPickerTarget=null,setupCharacterOpen=false;
- let sharedReturn='',practiceReturn='',reopenedPractice=false,returnFocus=false;
- const handles=hash=>/^(encounters|encounter|practice|progress)(?:$|[~/])/.test(hash);
+ let sharedReturn='',practiceReturn='',reopenedPractice=false,returnFocus=null;
+ const handles=hash=>/^(encounters|encounter|practice|progress|discussion)(?:$|[~/])/.test(hash);
  const defaultList=(mode,id,role)=>playHash(mode,role,topicForSituation(id));
  function siteHref(role,hash){
   if(role===siteRole)return hash;
@@ -50,22 +59,22 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   if(replace){history.replaceState(null,'',hash);rerender(focus);}
   else if(location.hash===hash)rerender();else location.hash=hash;
  }
- function returnLink(label,mode='shared',original=getOriginalSession()){
+ function returnLink(label,mode='shared',original=getOriginalSession(),secondary=false){
   const role=mode==='shared'?state.role:siteRole;
   const id=mode==='shared'?state.id:siteRole+'-'+original.scenarioId;
   const href=(mode==='shared'?sharedReturn:practiceReturn)||defaultList(mode,id,role);
   const list=playLocation(href,role);
   const target=list?listHref(list.mode,list.role,list.topic):href;
-  return `<a class="${label?'primary':'text-button'}" data-return-to-play href="${esc(target)}">${label||`← ${list?.mode==='practice'?'Back to practice':'Back to situations'}`}</a>`;
+  const cardId=list?.mode==='practice'?encounters[id].originalId:id;
+  return `<a class="${label?`primary${secondary?' secondary':''}`:'text-button'}" data-return-to-play="${esc(cardId)}" href="${esc(target)}">${label||`← ${list?.mode==='practice'?'Back to practice':'Back to situations'}`}</a>`;
  }
  function focusReturnedList(){
-  if(!returnFocus)return false;
-  returnFocus=false;
-  const target=main.querySelector?.('#situations-title');
-  if(!target)return false;
-  target.focus({preventScroll:true});
-  target.scrollIntoView({block:'start',behavior:'instant'});
-  return true;
+  const returned=returnFocus;
+  returnFocus=null;
+  if(!returned)return false;
+  const card=[...(main.querySelectorAll?.('.scenario-library button[data-id]')||[])]
+   .find(button=>button.dataset.id===returned);
+  return focusControl(card||main.querySelector?.('#situations-title'));
  }
  function scoreStrip(s,compact=false){
   const scores=runScores(s);
@@ -86,7 +95,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  function characterPicker(role,selected,inGame=false){
   return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div><div class="character-options" role="group" aria-label="Available characters">${characters[role].map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
  }
- function focusCharacterPicker(){document.querySelector('#character-picker-title')?.focus({preventScroll:true});document.querySelector('#character-picker')?.scrollIntoView({block:'nearest',behavior:'instant'});}
+ function focusCharacterPicker(){focusControl(document.querySelector('#character-picker-title'));}
  function openCharacterPicker(event){
   const button=event.target,role=button.dataset?.sceneLabelRole,route=location.hash.slice(1);
   const original=route.startsWith('scenario/')?getOriginalSession():null;
@@ -102,9 +111,10 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   characterPickerTarget=null;rerender(false);
   const captions=[...document.querySelectorAll('[data-scene-label-role="'+role+'"]')];
   const trigger=captions.find(button=>button.closest('.encounter-scene')?.dataset.sceneId===sceneId)||captions[0];
-  trigger?.focus({preventScroll:true});trigger?.scrollIntoView({block:'nearest',behavior:'instant'});
+  focusControl(trigger);
  }
  main.addEventListener('scene-character-change',openCharacterPicker);
+ main.addEventListener('change',checkEvidenceResponse);
  function legacyState(original,targetRole=siteRole){
   const key=siteRole+'-'+original.scenarioId;
   if(!legacyCasts.has(key)){
@@ -123,7 +133,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<div class="flow-role-bar">
    <div class="perspective-status">
     ${perspectiveIcon(s.role)}
-    <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionNumber(s.history.length+1)}</span></div>
+    <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionPosition(s.history.length+1,remainingDecisions(s))}</span></div>
     ${portrait}
    </div>
    <button class="text-button perspective-toggle" data-action="paired-switch">${perspectiveIcon(targetRole)}<span>${switchLabel}</span></button>
@@ -140,7 +150,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  function modeOptions(mode,role,topic){
   const modes=[
-   ['shared','Play both sides','Switch roles to explore the same moment from both sides.'],
+   ['shared','Explore both perspectives','Switch roles to explore the same moment from both sides.'],
    ['practice','Practise one role','Make choices in one role and review what you learned.']
   ];
   return `<nav class="play-modes" aria-label="Ways to play">${modes.map(([id,title,description])=>
@@ -149,7 +159,11 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  function selection({mode,role,topic,browse}){
   const first=encounters[role+'-street'],selected=characterPreferences.value[role];
-  const returning=store.value.saved.some(entry=>!entry.complete);
+  const saved=store.value.saved.filter(entry=>{
+   const startingRole=playLocation(entry.returnTo,entry.role)?.role||entry.role;
+   return entry.mode===mode&&startingRole===role&&(topic==='all'||topicForSituation(entry.id)===topic);
+  });
+  const returning=saved.some(entry=>!entry.complete);
   const goal=role==='public'?'Practise asking why you have been stopped and whether you are free to leave.':'Practise separating what you observed from what you assumed.';
   const selectedTopic=topicGroups.find(group=>group.id===topic);
   const catalogue=Object.values(encounters).filter(e=>!selectedTopic||selectedTopic.encounters.includes(e.id));
@@ -159,13 +173,13 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
    <h1>${heading}</h1>
-   ${resumeLink()}
    ${modeOptions(mode,role,topic)}
    <div class="setup-role"><strong>${role==='public'?'Public perspective':'Garda perspective'}</strong>
     <details><summary>Change starting role</summary><div class="role-picker" role="group" aria-label="Starting role">
      ${roles.map(r=>`<a class="primary ${role===r?'':'secondary'}" href="${esc(listHref(mode,r,topic,browse))}" data-role-tone="${r}" ${role===r?'aria-current="true"':''}>${perspectiveIcon(r)}<span>${r==='public'?'Member of the public':'Member of An Garda Síochána'}</span><span class="role-status">${role===r?'Selected':'Choose'}</span></a>`).join('')}
     </div></details>
    </div>
+   ${resumeLink(saved)}
    ${!practice&&!browse?`<div class="start-panel">
     <section class="recommended-situation" aria-labelledby="first-situation-title"><h2 id="first-situation-title">${esc(first.title)}</h2><p>${goal}</p>
      <button class="primary" data-action="paired-quick-start" data-id="${first.id}" data-role="${role}">Start this situation</button>
@@ -178,10 +192,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <details class="scenario-library" ${practice||browse?'open':''}>
      <summary id="situations-title">Browse all situations</summary>
      <div class="topic-filters" role="group" aria-label="Situation topics">${playTopics.map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
-     ${practice?(practiceList.length?practiceCards(practiceList,role):`<p>No practice situations for this topic.</p><a class="text-button" href="${listHref('shared',role,topic)}">Play both sides</a>`):`
+     ${practice?(practiceList.length?practiceCards(practiceList,role):`<p>No practice situations for this topic.</p><a class="text-button" href="${listHref('shared',role,topic)}">Explore both perspectives</a>`):`
       <div class="paired-catalog">${catalogue.map(e=>`<article class="scenario encounter-card">
        <div class="catalogue-visual" aria-hidden="true">${scenarioIcon(e.id)}</div>
-       <h2>${esc(e.title)}</h2><p>${esc(e.description)}</p><p class="small-note">${esc(e.minutes)}</p>
+       <h2>${esc(e.title)}</h2><p>${esc(e.description)}</p>
+       <p class="scenario-goal">${practiceGoal(e.id)}</p>
+       <p class="small-note"><span>${esc(e.minutes)}</span> · <span>${roleLabels[role]}</span></p>
        <p class="catalogue-status">${roles.map(r=>`<span><span>${r==='public'?'Public':'Garda'}</span>: <span>${learningStatus(store.value,e.id,r)}</span></span>`).join('')}</p>
        <button class="primary secondary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Play this situation: ${esc(e.title)} — ${roleLabels[role]}">Play this situation</button>
       </article>`).join('')}</div>`}
@@ -200,12 +216,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <strong>${esc(description)}</strong>
     <span><span>${roleLabels[entry.role]}</span> · <span>${entry.mode==='practice'?'Individual practice':'Play both sides'}</span>${entry.complete?'':` · ${decisionNumber(game.history.length+1)}`}</span>
    </div>
-   <a class="${primary?'text-button':'primary secondary'}" href="${esc(href)}">${entry.complete?'Open recap':'Resume play'}</a>
+   <a class="${primary?'text-button':'primary secondary'} saved-session-link" href="${esc(href)}">${entry.complete?'Open recap':'Resume play'}</a>
   </div>`;
  }
- function resumeLink(){
-  const unfinished=store.value.saved.find(entry=>!entry.complete);
-  const completed=store.value.saved.find(entry=>entry.complete);
+ function resumeLink(entries=store.value.saved){
+  const unfinished=entries.find(entry=>!entry.complete);
+  const completed=entries.find(entry=>entry.complete);
   return (unfinished?savedCard(unfinished):'')+(completed?savedCard(completed,!unfinished):'');
  }
  function homeActions(){
@@ -214,7 +230,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<div class="home-play">
    ${unfinished?savedCard(unfinished):`<div class="home-start">
     <button class="primary" data-action="paired-quick-start" data-id="${first.id}" data-role="${siteRole}" aria-describedby="home-start-role"><span>Start:</span><span>${esc(first.title)}</span></button>
-    <span class="home-start-role" id="home-start-role">${siteRole==='garda'?'Garda perspective':'Public perspective'}</span>
+    <span class="home-start-role" id="home-start-role"><span>${siteRole==='garda'?'Garda perspective':'Public perspective'}</span> · <span>${esc(first.minutes)}</span></span>
    </div>`}
    <a class="primary secondary" href="${listHref('shared',siteRole)}">Browse situations</a>
   </div>`;
@@ -249,7 +265,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);
-  return `${perspectiveChoice({primary:true})}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole)}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol></details></section>
+  return `${perspectiveChoice({primary:true})}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole)}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
     <div class="practice-content"><p>Make choices in one role and review what you learned.</p><a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>
@@ -263,12 +279,15 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const encounter=encounters[state.id],stage=currentStage(state),view=stage.views[state.role];
   const selected=state.answers[state.role],choice=selected===null?null:view.choices[selected];
   const variation=variationFor(encounter.id,stage.id);
+  const previousComparison=main.querySelector?.('.decision-comparison');
+  const comparisonOpen=previousComparison?.dataset.decision===encounter.id+'/'+stage.id&&previousComparison.open;
   return `<div class="topline flow-topline">${returnLink()}<a href="#progress" class="text-button">My progress</a></div>
    <div class="game-grid paired-game flow-game">
     <section class="decision-context" aria-labelledby="scene-title">
      <p class="eyebrow">${esc(encounter.title)} · SHARED SCENE</p>
      ${variation?`<div class="variation-notice"><strong>${variation.label}</strong><p>${variation.detail}</p></div>`:''}
-     <h1 id="scene-title">${esc(stage.title)}</h1><p class="story-text">${esc(stage.scene)}</p>
+     <h1 id="scene-title">${esc(stage.title)}</h1>
+     ${situationStory(encounter.id,stage.id,stage.scene)}
     </section>
     <section class="decision-choices" aria-labelledby="choice-title">
      ${roleBar(state)}
@@ -276,31 +295,37 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
       <h2 id="choice-title" tabindex="-1">${esc(view.prompt)}</h2>
       ${choice?'<p>Your answer is recorded for this role.</p>':''}
      </div>
+     ${evidenceCheck(encounter.id,stage.id)}
      <div class="choices">${view.choices.map((option,i)=>`<button class="choice ${selected===i?'selected':''}" data-action="paired-answer" data-index="${i}" aria-pressed="${selected===i}" ${choice?'disabled':''}><span class="choice-letter" aria-hidden="true">${String.fromCharCode(65+i)}</span><span>${esc(option.text)}${selected===i?'<span class="choice-selected">Selected</span>':''}</span></button>`).join('')}</div>
      ${choice?`<section class="feedback ${choice.review?'revisit':''}" id="feedback" tabindex="-1" aria-labelledby="feedback-title">
       <p class="eyebrow">YOUR LEARNING POINT</p>
-      <h2 id="feedback-title">${choice.review?'Consider this before continuing.':'This supports an appropriate response.'}</h2>
-      <p class="feedback-takeaway">${esc(choice.feedback)}</p>
+      <h2 id="feedback-title" class="feedback-takeaway">${esc(choice.feedback)}</h2>
       <div class="flow-feedback-actions">
        <button class="primary" data-action="paired-next">${choice.next==='end'?'View recap':'Next decision'}</button>
        <div class="flow-secondary-actions"><button class="text-button" data-action="paired-compare">Compare the other side</button><button class="text-button" data-action="paired-change">Try another answer</button></div>
        <p class="small-note">Your answer is kept when you switch perspectives.</p>
       </div>
+      ${view.phrase?`<div class="phrase"><span>${state.role==='garda'?'A QUESTION TO CARRY FORWARD':encounter.originalId==='fair-treatment'?'SOMETHING TO REMEMBER':'WORDS YOU COULD USE'}</span>${esc(view.phrase)}</div>`:''}
       <details class="lesson"><summary>Why this matters</summary><p>${esc(view.lesson)}</p></details>
       ${sourceLinks(view.refs)}
      </section>`:''}
+     ${choice?reviewExploration(encounter.id,stage.id):''}
+     ${termsInDecision(encounter.id)}
     </section>
    </div>
+   ${decisionComparison(state,stage,comparisonOpen)}
    ${state.history.length?`<div class="paired-stage-footer">${routeTrail(state)}<button class="text-button" data-action="paired-back">← Revisit the previous stage</button></div>`:''}
    ${scenePanel(state)}
    ${playHelp()}`;
  }
  function recap(){
   const e=encounters[state.id],scores=runScores(state),other=otherRole(state.role);
+  const last=state.history.at(-1);
+  const lastAnswer=e.nodes[last.nodeId].views[last.continuedAs].choices[last.answers[last.continuedAs]].text;
   const highlights=[...new Set([0,Math.floor((state.history.length-1)/2),state.history.length-1])].map(i=>e.nodes[state.history[i].nodeId].views[state.role].lesson);
-  return `<div class="topline flow-topline">${returnLink()}<a href="#progress" class="text-button">Saved progress</a></div>${roleBar(state)}${characterPickerTarget?characterPicker(characterPickerTarget.role,state.cast[characterPickerTarget.role],true):''}<div class="summary-heading"><p class="eyebrow">YOUR LEARNING RECAP</p><h1>One situation.<br>What did each side reveal?</h1><p>${esc(e.title)} · ${state.history.length} stages on this route.</p><div class="flow-recap-actions">${returnLink('Choose another situation')}</div></div><details class="scene-explorer recap-characters"><summary>Characters in this situation</summary>${castDisplay(state)}</details><section class="recap-takeaways info-block"><h2>What to take with you</h2><ul>${highlights.map(lesson=>`<li>${esc(lesson)}</li>`).join('')}</ul><div class="recap-next"><button class="primary" data-action="paired-replay-role" data-role="${other}">${other==='garda'?'Try the Garda perspective':'Try the public perspective'}</button><a class="primary secondary" href="#encounters/${state.role}">Choose another situation</a></div></section>${supportRecap(siteRole)}<details class="recap-scores"><summary>Scores and role completion</summary>${scoreStrip(state)}<div class="role-results">${roles.map(role=>{const saved=store.value.records[state.id+'/'+role];return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2><p>${scores[role].complete?'Route completed in this role.':`${scores[role].answered} of ${state.history.length} stages answered in this role. Answer each stage to complete this role’s route.`}</p><p><strong>Best completed route:</strong> ${resultText(saved?.best)}</p><button class="text-button" data-action="paired-replay-role" data-role="${role}">Replay as ${role==='garda'?'the Garda':'the member of the public'}</button></section>`;}).join('')}</div>${scoreExplanation}</details><h2 class="recap-review-title">Review each decision</h2><ol class="summary-list paired-recap">${state.history.map((step,i)=>{
+  return `<div class="topline flow-topline">${returnLink()}<a href="#progress" class="text-button">Saved progress</a></div>${roleBar(state)}${characterPickerTarget?characterPicker(characterPickerTarget.role,state.cast[characterPickerTarget.role],true):''}<div class="summary-heading"><p class="eyebrow">YOUR LEARNING RECAP</p><h1>One situation.<br>What did each side reveal?</h1><p>${esc(e.title)} · ${state.history.length} stages on this route.</p><div class="flow-recap-actions">${returnLink('Choose another situation')}</div></div><details class="scene-explorer recap-characters"><summary>Characters in this situation</summary>${castDisplay(state)}</details><section class="recap-takeaways info-block"><h2>What to take with you</h2><ul>${highlights.map(lesson=>`<li>${esc(lesson)}</li>`).join('')}</ul><div class="recap-next"><button class="primary" data-action="paired-replay-role" data-role="${other}">${other==='garda'?'Try the Garda perspective':'Try the public perspective'}</button>${returnLink('Choose another situation','shared',null,true)}</div></section>${recapPractice(e.id,state.role,lastAnswer)}${supportRecap(siteRole)}<details class="recap-scores"><summary>Scores and role completion</summary>${scoreStrip(state)}<div class="role-results">${roles.map(role=>{const saved=store.value.records[state.id+'/'+role];return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2><p>${scores[role].complete?'Route completed in this role.':`${scores[role].answered} of ${state.history.length} stages answered in this role. Answer each stage to complete this role’s route.`}</p><p><strong>Best completed route:</strong> ${resultText(saved?.best)}</p><button class="text-button" data-action="paired-replay-role" data-role="${role}">Replay as ${role==='garda'?'the Garda':'the member of the public'}</button></section>`;}).join('')}</div>${scoreExplanation}</details><h2 class="recap-review-title">Review each decision</h2><ol class="summary-list paired-recap">${state.history.map((step,i)=>{
    const stage=e.nodes[step.nodeId],variation=variationFor(e.id,stage.id);return `<li class="summary-item"><div class="recap-overview">${renderScene(state,{step,compact:true})}<div>${variation?`<p class="eyebrow">${variation.label}</p>`:''}<h2>${i+1}. ${esc(stage.title)}</h2><p>${esc(stage.views[state.role].lesson)}</p></div></div><details class="recap-detail"><summary>Compare answers and sources</summary><p>${esc(stage.scene)}</p><div class="recap-comparison">${roles.map(role=>{const index=step.answers[role],v=stage.views[role],c=index===null?null:v.choices[index];return `<section class="recap-role ${state.role===role?'active':''}" data-role-tone="${role}"><h3>${roleLabels[role]}${step.continuedAs===role?' · continued this stage':''}</h3>${c?`<p class="chosen">${esc(c.text)}</p><p>${esc(c.feedback)}</p>`:'<p>You did not answer this stage in this role.</p>'}<p>${esc(v.lesson)}</p>${sourceLinks(v.refs)}</section>`;}).join('')}</div></details><button class="text-button" data-action="paired-revisit" data-index="${i}">Replay from this stage as ${state.role==='garda'?'the Garda':'the member of the public'}</button></li>`;
-  }).join('')}</ol><details class="facilitator-note"><summary>Discuss this situation together</summary><p>Say which facts mattered. Compare the reasoning from both sides. Choose one question to carry into a later discussion.</p></details><div class="paired-stage-footer"><a class="primary secondary" href="#progress">View all progress</a></div>${storageNote()}`;
+  }).join('')}</ol><details class="facilitator-note"><summary>Discuss this situation together</summary>${discussionLink(e.id,state.role)}</details><div class="paired-stage-footer"><a class="primary secondary" href="#progress">View all progress</a></div>${storageNote()}`;
  }
  function storageNote(){return `<p class="storage-note">${store.available?'Saved in this browser. Other devices do not sync automatically.':'Browser saving is unavailable. Your progress is kept for this visit.'}</p>`;}
  function savedList(complete){
@@ -311,13 +336,18 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  function progress(){
   const list=Object.values(encounters),groups=['In progress','Completed','Not started'];
   const status=e=>roles.every(r=>learningStatus(store.value,e.id,r)==='Completed')?'Completed':roles.some(r=>learningStatus(store.value,e.id,r)!=='Not started')?'In progress':'Not started';
-  return `<div class="content-page progress-page"><p class="eyebrow">YOUR LEARNING RECORD</p><h1>Scores & progress</h1>${storageNote()}${savedList(false)}${savedList(true)}<div class="role-results">${roles.map(role=>{const t=progressTotals(store.value,role);return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2>${completionMap(t.completed,list.length)}<p class="progress-number">${t.completed} <span>/ 14 situations completed</span></p><progress max="14" value="${t.completed}" aria-label="${roleLabels[role]} situations completed">${t.completed}/14</progress><p>${t.answered} stages explored · ${t.points} learning points</p><a class="primary secondary" href="#encounters/${role}">Play as ${role==='garda'?'a Garda':'a member of the public'}</a></section>`;}).join('')}</div><details class="score-mechanics"><summary>How your score works</summary><p>Each stage awards 1 point for a response that supports an appropriate resolution according to its explanation and sources, or 0 for a response that needs review. More than one choice can earn a point. There are no deductions for taking time or switching roles.</p><p>The current route shows points out of the decisions you answered. A completed role score requires an answer in that role at every stage on the route. Best completed results use percentages because different routes can have different lengths.</p><p>Your saved learning points count your best result at each unique stage, so repeating a stage cannot inflate the total. Improving an answer from 0 to 1 updates your progress.</p><p>A score is not a measure of a person’s bias, a professional qualification or a prediction of a real encounter. Rights remain the same regardless of a score.</p></details>${groups.map(group=>{const items=list.filter(e=>status(e)===group);return items.length?`<section class="progress-group"><h2>${group}</h2>${group==='Completed'?'<p>Both perspectives completed.</p>':''}<div class="progress-situations">${items.map(e=>`<section class="info-block"><h3>${esc(e.title)}</h3>${roles.map(role=>{const r=store.value.records[e.id+'/'+role];return `<div class="progress-result" data-role-tone="${role}"><strong>${roleLabels[role]}</strong><span>${learningStatus(store.value,e.id,role)}</span>${r?.best?`<details><summary>View scores</summary><p>Latest completed: ${resultText(r.last)}</p><p>Best completed: ${resultText(r.best)}</p></details>`:''}<button class="text-button" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Play this role: ${esc(e.title)} — ${roleLabels[role]}">Play this role</button></div>`;}).join('')}</section>`).join('')}</div></section>`:'';}).join('')}<section class="info-block"><h2>Manage your progress</h2>${storageNote()}<p>Only fictional game choices and scores are saved locally. There is no account or upload. When you use the resource-site link, the game carries this progress in the link’s fragment and merges it with progress already saved on the other site. Copying that link can share the included learning record. Separate browsers and devices do not automatically sync.</p>${clearPending?'<p>Clear the scores and resume point saved on this site in this browser? The companion site and previously copied links may still hold their own copy.</p><div class="action-group"><button class="primary" data-action="paired-clear-confirm">Clear this site’s saved progress</button><button class="primary secondary" data-action="paired-clear-cancel">Keep progress</button></div>':'<button class="text-button" data-action="paired-clear">Clear this site’s saved progress</button>'}</section></div>`;
+  return `<div class="content-page progress-page"><p class="eyebrow">YOUR LEARNING RECORD</p><h1>Scores & progress</h1>${storageNote()}${savedList(false)}${savedList(true)}${progressSkills(store.value)}<div class="role-results">${roles.map(role=>{const t=progressTotals(store.value,role);return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2>${completionMap(t.completed,list.length)}<p class="progress-number">${t.completed} <span>/ 14 situations completed</span></p><progress max="14" value="${t.completed}" aria-label="${roleLabels[role]} situations completed">${t.completed}/14</progress><details class="points-detail"><summary>View scores</summary><p>${t.answered} stages explored · ${t.points} learning points</p></details><a class="primary secondary" href="#encounters/${role}">Play as ${role==='garda'?'a Garda':'a member of the public'}</a></section>`;}).join('')}</div><details class="score-mechanics"><summary>How your score works</summary><p>Each stage awards 1 point for a response that supports an appropriate resolution according to its explanation and sources, or 0 for a response that needs review. More than one choice can earn a point. There are no deductions for taking time or switching roles.</p><p>The current route shows points out of the decisions you answered. A completed role score requires an answer in that role at every stage on the route. Best completed results use percentages because different routes can have different lengths.</p><p>Your saved learning points count your best result at each unique stage, so repeating a stage cannot inflate the total. Improving an answer from 0 to 1 updates your progress.</p><p>A score is not a measure of a person’s bias, a professional qualification or a prediction of a real encounter. Rights remain the same regardless of a score.</p></details>${groups.map(group=>{const items=list.filter(e=>status(e)===group);return items.length?`<section class="progress-group"><h2>${group}</h2>${group==='Completed'?'<p>Both perspectives completed.</p>':''}<div class="progress-situations">${items.map(e=>`<section class="info-block"><h3>${esc(e.title)}</h3>${roles.map(role=>{const r=store.value.records[e.id+'/'+role];return `<div class="progress-result" data-role-tone="${role}"><strong>${roleLabels[role]}</strong><span>${learningStatus(store.value,e.id,role)}</span>${r?.best?`<details><summary>View scores</summary><p>Latest completed: ${resultText(r.last)}</p><p>Best completed: ${resultText(r.best)}</p></details>`:''}<button class="text-button" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Play this role: ${esc(e.title)} — ${roleLabels[role]}">Play this role</button></div>`;}).join('')}</section>`).join('')}</div></section>`:'';}).join('')}<section class="info-block"><h2>Manage your progress</h2>${storageNote()}<p>Only fictional game choices and scores are saved locally. There is no account or upload. When you use the resource-site link, the game carries this progress in the link’s fragment and merges it with progress already saved on the other site. Copying that link can share the included learning record. Separate browsers and devices do not automatically sync.</p>${clearPending?'<p>Clear the scores and resume point saved on this site in this browser? The companion site and previously copied links may still hold their own copy.</p><div class="action-group"><button class="primary" data-action="paired-clear-confirm">Clear this site’s saved progress</button><button class="primary secondary" data-action="paired-clear-cancel">Keep progress</button></div>':'<button class="text-button" data-action="paired-clear">Clear this site’s saved progress</button>'}</section></div>`;
  }
  function view(hash){
   const [route,carried,...extra]=hash.split('~');
   if(extra.length)return missing();
   if(carried){const imported=unpackProgress(carried);if(!imported)return missing('The progress in this link could not be read.');store.save(mergeProgress(store.value,imported));history.replaceState(null,'','#'+route);}
   if(route==='progress')return progress();
+  if(route.startsWith('discussion/')){
+   const [,role,id,...extraParts]=route.split('/');
+   return !extraParts.length&&roles.includes(role)&&hasOwn(encounters,id)
+    ?discussionGuide(encounters[id],role):missing();
+  }
   const list=playLocation(route,siteRole);
   if(list)return selection(list);
   if(!route.startsWith('encounter/'))return missing();
@@ -328,12 +358,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   saveState(decoded,true);return game();
  }
  function missing(message='This page was not found.'){return `<div class="content-page"><h1>Unable to open this situation</h1><p>${esc(message)}</p><div class="action-group"><a class="primary" href="#encounters">Choose a situation</a><a class="primary secondary" href="#progress">Saved progress</a></div></div>`;}
- function legacyBar(original){
+ function legacyBar(original,remaining){
   const s=legacyState(original);
   if(!original.complete)reopenedPractice=false;
   store.save(recordProgress(store.value,s,{mode:'practice',returnTo:practiceReturn,opened:reopenedPractice}));
   return `<div class="flow-role-bar legacy-perspective">
-   <div class="perspective-status">${perspectiveIcon(siteRole)}<div><strong>${siteRole==='garda'?'Playing as a Garda':'Playing as a member of the public'}</strong><span>${original.complete?'Learning recap':decisionNumber(original.history.length+1)}</span></div></div>
+   <div class="perspective-status">${perspectiveIcon(siteRole)}<div><strong>${siteRole==='garda'?'Playing as a Garda':'Playing as a member of the public'}</strong><span>${original.complete?'Learning recap':decisionPosition(original.history.length+1,remaining)}</span></div></div>
    <button class="text-button perspective-toggle" data-action="paired-transfer">Open the two-role version</button>
   </div>`;
  }
@@ -391,7 +421,8 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return route;
  }
  function handleClick(event){
-  if(event.target.closest('a[data-return-to-play]')?.dataset?.returnToPlay!==undefined)returnFocus=true;
+  const back=event.target.closest('a[data-return-to-play]');
+  if(back&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey)returnFocus=back.dataset.returnToPlay;
   const button=event.target.closest('button[data-action]');if(!button||!button.dataset.action.startsWith('paired-'))return false;
   const action=button.dataset.action,role=button.dataset.role||siteRole;
   if(action==='paired-topic'){
@@ -429,15 +460,19 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    document.querySelector('[data-character="'+state.cast[target]+'"]')?.focus({preventScroll:true});
    announce('Character changed. Your progress is unchanged.');return true;
   }
-  if(action==='paired-switch'||action==='paired-compare'){characterPickerTarget=null;navigate(switchRole(state),true,false);const target=document.querySelector(state.complete?'h1':'#choice-title');target?.focus({preventScroll:true});target?.closest?.('.decision-choices')?.querySelector('.flow-role-bar')?.scrollIntoView({block:'nearest',behavior:'instant'});announce(state.role==='garda'?'Garda perspective':'Public perspective');}
+  if(action==='paired-switch'||action==='paired-compare'){
+   characterPickerTarget=null;navigate(switchRole(state),true,false);
+   focusControl(document.querySelector(state.complete?'main h1':'#choice-title'));
+   announce(state.role==='garda'?'Garda perspective':'Public perspective');
+  }
   else if(action==='paired-answer'){
    const next=answer(state,Number(button.dataset.index));if(next===state)return true;navigate(next,true,false);
-   const feedback=document.querySelector('#feedback');feedback?.focus({preventScroll:true});feedback?.scrollIntoView({block:'nearest',behavior:'instant'});
+   focusControl(document.querySelector('#feedback'));
   }
   else if(action==='paired-next'){const next=continueEncounter(state);if(next!==state){characterPickerTarget=null;navigate(next);}}
   else if(action==='paired-back')navigate(revisit(state));
   else if(action==='paired-revisit')navigate(revisit(state,Number(button.dataset.index)));
-  else if(action==='paired-change'){navigate(changeAnswer(state),true,false);document.querySelector('#choice-title')?.focus();}
+  else if(action==='paired-change'){navigate(changeAnswer(state),true,false);focusControl(document.querySelector('#choice-title'));}
   else if(action==='paired-replay-role'){characterPickerTarget=null;navigate(startEncounter(state.id,role,{cast:state.cast}));}
   return true;
  }

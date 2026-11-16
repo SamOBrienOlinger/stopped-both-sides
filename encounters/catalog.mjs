@@ -1,6 +1,6 @@
 import publicData from './original-public.mjs?v=scenario-descriptions-20261115';
-import gardaData from './original-garda.mjs?v=scenario-descriptions-20261115';
-import {counterparts} from './counterparts.mjs?v=shop-theft-20261115';
+import gardaData from './original-garda.mjs?v=phlowing-1';
+import {counterparts} from './counterparts.mjs?v=phlowing-1';
 export const roles=['public','garda'];
 export const roleLabels={public:'Member of the public',garda:'Garda'};
 export {sites} from '../site.mjs';
@@ -15,7 +15,7 @@ export const encounters=Object.fromEntries(roles.flatMap(origin=>{
    const p=paired[nodeId];if(!p)throw Error('Missing matched stage: '+id+'/'+nodeId);
    const fallback=node.choices.find(c=>!c.review).next;
    const refs=[...new Set([...node.sources.map(ref=>origin+':'+ref),...p.refs])];
-   const original={prompt:node.prompt,lesson:node.lesson,choices:node.choices.map(c=>({...c,points:c.review?0:1})),refs};
+   const original={context:node.story,phrase:node.phrase,prompt:node.prompt,lesson:node.lesson,choices:node.choices.map(c=>({...c,points:c.review?0:1})),refs};
    const counterpart={prompt:p.prompt,lesson:p.lesson,choices:p.choices.map(c=>({...c,next:c.next||fallback,points:c.review?0:1})),refs};
    const people=id==='garda-description'&&nodeId==='description-power'?{public:'Person matching the fuller description'}:undefined;
    return [nodeId,{id:nodeId,title:node.title,scene:p.scene,people,views:{[origin]:original,[opposite]:counterpart}}];

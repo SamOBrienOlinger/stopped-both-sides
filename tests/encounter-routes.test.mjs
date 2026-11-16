@@ -61,6 +61,8 @@ test('Both roles can start every situation; the shared facts and role controls r
 test('The resume card describes the public role in the youth situation',()=>{
  action('paired-start',{id:'public-young-person',role:'public'});const saved=state();
  route('#encounters/garda');
+ assert.ok(!main.innerHTML.includes(stateHash(saved)));
+ route('#encounters/public/young');
  assert.match(main.innerHTML,/You are a member of the public, age 16/);
  assert.match(main.innerHTML,/>Resume play<\/a>/);
  assert.doesNotMatch(main.innerHTML,/[←→]/);

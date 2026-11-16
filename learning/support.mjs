@@ -31,5 +31,5 @@ export function supportSection(){
 
 export function supportRecap(siteRole='public'){
  const href=siteRole==='garda'?'../#rights/support':'#rights/support';
- return `<aside class="support-recap" aria-labelledby="support-recap-heading"><div><h2 id="support-recap-heading">Need information or support after a real encounter?</h2><p>Find legal information, Garda complaint guidance and independent policing oversight.</p></div><a class="primary secondary"${siteRole==='garda'?' data-support-crosslink':''} href="${href}">Advice, complaints &amp; oversight</a></aside>`;
+ return `<aside class="support-recap" aria-labelledby="support-recap-heading"><div><h2 id="support-recap-heading">Need information or support after a real encounter?</h2><p>Find legal information, Garda complaint guidance and independent policing oversight.</p></div><a class="primary secondary"${siteRole==='garda'?' data-support-crosslink':''} href="${href}">Find advice or support</a></aside>`;
 }

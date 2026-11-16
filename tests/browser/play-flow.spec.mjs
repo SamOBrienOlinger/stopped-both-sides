@@ -49,7 +49,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await page.locator('[data-return-to-play]').click();
   await expect(page).toHaveURL(/#encounters\/garda\/search$/);
   await expect(currentTopic(page)).toHaveText('Searches');
-  await expect(page.locator('#situations-title')).toBeFocused();
+  await expect(page.locator('.scenario-library [data-action="paired-start"][data-id="public-search"]')).toBeFocused();
  });
 }
 
@@ -81,8 +81,10 @@ test('a practice recap and an unfinished shared situation stay independently acc
  await another.click();
  await expect(page).toHaveURL(/#practice\/public\/street$/);
  await expect(currentTopic(page)).toHaveText('Street stops');
- await expect(page.getByRole('link',{name:'Resume play',exact:true})).toHaveAttribute('href',interrupted);
+ await expect(page.getByRole('link',{name:'Resume play',exact:true})).toHaveCount(0);
  await expect(page.getByRole('link',{name:'Open recap',exact:true})).toBeVisible();
+ await page.goto('./?lang=en#progress');
+ await expect(page.getByRole('link',{name:'Resume play',exact:true})).toHaveAttribute('href',interrupted);
  await page.getByRole('link',{name:'Open recap',exact:true}).click();
  await page.reload();
  await expect(another).toBeVisible();

@@ -48,6 +48,13 @@
 }
 .flow-save-copy {display:grid;gap:.15rem;flex:1 1 14rem;min-inline-size:0}
 .flow-save-copy>span {color:var(--muted);font-size:.875rem}
+.flow-save.session-return .saved-session-link,
+.flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {
+ background:var(--deep);
+ color:#fff;
+}
+.flow-save.session-return .saved-session-link:hover {text-decoration:underline}
+.flow-save.session-return .saved-session-link:active {box-shadow:inset 0 0 0 2px currentColor}
 .saved-situations {margin-block:1.5rem}
 .saved-situations .flow-save {margin-block:.5rem}
 .saved-recap {max-inline-size:68rem;margin-inline:auto}
@@ -82,7 +89,9 @@
 .scenario-library .scenarios {gap:1rem}
 .scenario-library .scenario .small-note {margin-block:auto .5rem}
 .scenario-library .scenario .scene-icon {margin-block-end:.65rem}
+.scenario .scenario-goal {color:var(--deep);font-weight:700}
 .practice-shortcut .practice-content {padding:1rem}
+.workshop-entry {padding:.5rem 1rem 1rem}
 
 .flow-topline {
  flex-wrap:wrap;
@@ -141,6 +150,9 @@
 .flow-role-bar .perspective-status>.perspective-icon {inline-size:clamp(28px,7vw,42px);border-radius:.3rem}
 .flow-role-bar .perspective-toggle {min-block-size:44px;padding:.3rem .45rem;font-size:.875rem}
 .flow-role-bar .perspective-toggle>.perspective-icon {inline-size:1.5rem}
+.flow-role-bar.legacy-perspective {flex-direction:row;align-items:center;padding:.5rem .65rem}
+.flow-role-bar.legacy-perspective .perspective-status {flex:1 1 12rem;flex-direction:row;justify-content:start}
+.flow-role-bar.legacy-perspective>.perspective-toggle {flex:0 1 auto;inline-size:auto}
 .flow-game .prompt h2 {margin-block:.4rem}
 .flow-game .prompt {margin-block-end:.65rem}
 .scene-explorer {
@@ -165,12 +177,97 @@
 .scene-explorer .cast-character>div {flex:1 1 9rem;min-inline-size:0;overflow-wrap:anywhere}
 .scene-explorer .paired-scene-lead {margin-block:.65rem 0}
 .flow-feedback-actions {display:grid;gap:.3rem;margin-block:.75rem}
+.feedback h2.feedback-takeaway {
+ color:inherit;
+ font-size:clamp(1rem,1.5vw,1.25rem);
+ line-height:1.55;
+}
 .flow-feedback-actions .primary {margin:0}
 .flow-feedback-actions .text-button {justify-self:start}
 .flow-secondary-actions {display:flex;flex-wrap:wrap;gap:0 1rem}
 .flow-recap-actions {display:flex;justify-content:center;margin-block:1rem}
+.case-disclosure {
+ margin-block:.75rem;
+ padding:0 .7rem;
+ border:1px solid var(--line);
+ border-radius:.65rem;
+ overflow-wrap:anywhere;
+}
+.case-disclosure>summary {
+ padding-block:.55rem;
+ min-block-size:44px;
+ font-weight:700;
+ cursor:pointer;
+}
+.case-disclosure>p,.case-disclosure dl {margin-block:.25rem .75rem}
+.case-disclosure dt {font-weight:700}
+.case-disclosure dd {margin-inline-start:0}
+.evidence-check-row {
+ display:grid;
+ gap:.3rem;
+ margin-block:.7rem;
+}
+.evidence-check-row label {font-weight:600}
+.evidence-check-row select {
+ inline-size:min(100%,19rem);
+ min-block-size:44px;
+ padding:.35rem .5rem;
+ border:1px solid var(--line);
+ border-radius:.4rem;
+ background:var(--paper,#fff);
+ color:var(--ink);
+ font:inherit;
+}
+.comparison-roles {
+ display:grid;
+ gap:.65rem;
+ margin-block:.65rem;
+}
+.decision-comparison-role {
+ min-inline-size:0;
+ padding:.65rem .75rem;
+ border-inline-start:3px solid var(--deep);
+ background:var(--pale);
+ border-radius:.4rem;
+}
+.decision-comparison-role p:last-child {margin-block-end:0}
+.search-figures {
+ inline-size:100%;
+ margin-block:.7rem;
+ border-collapse:collapse;
+ table-layout:fixed;
+ background:var(--paper,#fff);
+ color:var(--ink);
+ overflow-wrap:anywhere;
+}
+.search-figures caption {
+ padding:.4rem .3rem;
+ background:var(--paper,#fff);
+ color:var(--ink);
+ font-weight:700;
+ text-align:start;
+}
+.search-figures :is(th,td) {
+ padding:.35rem .25rem;
+ border:1px solid var(--line);
+ vertical-align:top;
+ text-align:start;
+}
+.story .case-disclosure {border-color:currentColor}
+.recap-practice,.progress-skills {margin-block:1rem}
+.recap-practice button {flex-wrap:wrap}
+.points-detail {margin-block:.6rem}
+.points-detail>summary {padding-block:.4rem;min-block-size:44px;cursor:pointer}
+.discussion-guide ol {padding-inline-start:1.5em}
+.discussion-guide li {margin-block:.45rem}
+#main :is(.case-disclosure>summary,.evidence-check select,.scenario-library summary,.points-detail>summary):focus-visible {
+ outline:3px solid var(--focus);
+ outline-offset:3px;
+}
+.story .case-disclosure>summary:focus-visible {outline-color:currentColor}
 @media(min-width:56rem) {
  .game-grid.paired-game.flow-game {grid-template-columns:minmax(0,4fr) minmax(0,5fr);gap:1.25rem}
+ .comparison-roles {grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:34rem) {
  .home-play,.home-start {align-items:stretch;flex-direction:column;text-align:center}
@@ -183,4 +280,8 @@
 @media(forced-colors:active) {
  .play-modes a,.flow-role-bar,.scene-explorer {background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none}
  .play-modes a[aria-current="page"] {outline:2px solid Highlight;outline-offset:-4px}
+ .flow-save.session-return .saved-session-link,
+ .flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {
+  background:ButtonFace;color:ButtonText;border:1px solid ButtonText;
+ }
 }

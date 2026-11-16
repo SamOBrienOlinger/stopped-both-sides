@@ -131,7 +131,7 @@ export function createLayout({main}){
   lastRoute=route;sync();
   // Split only plain prose, leaving quotes, controls, source metadata and
   // paragraphs containing links or emphasis exactly as authored.
-  main.querySelectorAll('.landing-overview p,.content-page p,.decision-context .story-text,.story .story-text,.feedback>p,.learning-panel-body p,.summary-item>p').forEach(paragraph=>{
+  main.querySelectorAll('.landing-overview p,.content-page p,.decision-context .story-text,.comparison-context,.comparison-role-context,.story .story-text,.feedback>p,.learning-panel-body p,.summary-item>p').forEach(paragraph=>{
    if(paragraph.childElementCount||paragraph.dataset.readingChunk||paragraph.closest('[data-no-translate],blockquote')||paragraph.matches('.eyebrow,.learning-citations,.source-meta,.chosen,.learning-scene'))return;
    const chunks=paragraphChunks(paragraph.textContent,paragraph.lang||main.lang||root.lang);
    if(chunks.length<2)return;

@@ -48,11 +48,12 @@ test('Topics, source navigation and returning-player actions are usable with enl
  await page.locator('.scenario-library summary').click();await page.getByRole('button',{name:'Young people',exact:true}).click();
  await expect(page.locator('.encounter-card')).toHaveCount(2);
  await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(14);
- await page.locator('[data-action="paired-quick-start"]').click();await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
+ await page.locator('.scenario-library [data-action="paired-start"][data-id="public-street"]').click();
+ await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
  await openNavigation(page);await page.locator('.header [data-nav="rights"]').click();await page.getByRole('link',{name:'Under 18s',exact:true}).click();
  await expect(page.locator('#rights-young')).toBeFocused();await page.locator('.session-return a').click();expect(current(page)).toEqual(saved);
  await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-size').selectOption('150');await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
- await expect(page.locator('[data-action="paired-compare"]')).toHaveText('Féach ar an taobh eile');expect(current(page)).toEqual(saved);
+ await expect(page.locator('[data-action="paired-compare"]')).toHaveText('Déan comparáid leis an taobh eile');expect(current(page)).toEqual(saved);
  for(const width of [320,390,844]){await page.setViewportSize({width,height:width===844?390:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);}
  await page.setViewportSize({width:390,height:844});await page.screenshot({path:testInfo.outputPath('irish-large-text.png'),fullPage:true});
  await openNavigation(page);await page.locator('.header [data-nav="play"]').click();await expect(page.locator('.session-return a')).toBeVisible();

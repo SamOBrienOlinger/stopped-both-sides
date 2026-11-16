@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {supportSection,supportRecap} from '../learning/support.mjs';
+import {learningCopy} from '../locales/play-copy.mjs';
 import {messages} from '../locales/messages.mjs';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=support-resources-1';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=phlowing-1';
 
 const links=html=>[...html.matchAll(/href="([^"]+)"/g)].map(match=>match[1]);
 const textNodes=html=>[...new Set(html.replace(/<h3\b[^>]*data-no-translate[^>]*>[\s\S]*?<\/h3>/g,'').split(/<[^>]*>/).map(text=>text.trim().replaceAll('&amp;','&')).filter(text=>/\p{L}/u.test(text)))];
@@ -16,7 +17,7 @@ test('Support descriptions and controls translate without changing official dest
   'https://www.flac.ie/help/'
  ];
  assert.deepEqual(links(section),destinations);
- for(const text of strings)assert.ok(messages.includes(text),`Unregistered support text: ${text}`);
+ for(const text of strings)assert.ok(messages.includes(text)||learningCopy(text,'ga'),`Unregistered support text: ${text}`);
  for(const {id} of languages.filter(language=>!['en','ga'].includes(language.id))){
   await loadLanguage(id);
   for(const text of strings)assert.notEqual(translateText(text,id),text,`${id}: untranslated support text: ${text}`);

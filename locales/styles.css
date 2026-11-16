@@ -16,9 +16,12 @@ html:lang(ar) :is(p,li,button,summary,select){line-height:1.75}
 #reading-status:not(:empty){margin-block-start:1rem;padding:1rem;border-inline-start:4px solid var(--deep);background:var(--pale)}
 .settings-heading h2{min-inline-size:0}
 .settings-heading .dialog-close{flex:none}
+html:lang(ar) .settings-heading .dialog-close{font-family:system-ui,sans-serif;line-height:1}
+html:lang(ar) .settings-content .settings-reset{padding-block:.5em}
 .header nav{flex-wrap:wrap}
 .header nav a,.header [data-reading-open]{max-inline-size:100%;overflow-wrap:anywhere}
 .wordmark{direction:ltr;unicode-bidi:isolate}
+.wordmark>span[lang]{font-family:"Open Sans",system-ui,sans-serif}
 [dir="rtl"] :is(.scenario,.choice,.summary-heading,.progress-result .text-button,.setup-character .text-button,.paired-recap .text-button){text-align:start}
 [dir="rtl"] .header nav{margin-left:0;margin-inline-start:0}
 [dir="rtl"] .header-actions{margin-left:0;margin-inline-start:auto}

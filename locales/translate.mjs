@@ -1,3 +1,4 @@
+import {learningCopy} from './play-copy.mjs';
 import {messages} from './messages.mjs?v=shop-theft-20261115';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
@@ -470,7 +471,8 @@ export function loadLanguage(value){
  pending.set(language,request);return request;
 }
 export function translateText(text,lang='en'){
- const revised=revisedSiteCopy[String(text).trim()]?.[lang];
+ const source=String(text).trim();
+ const revised=learningCopy(source,lang)||revisedSiteCopy[source]?.[lang];
  if(revised)return revised;
  if(lang==='ga')return translateIrishText(text,lang);
  if(lang==='en'||!packs.has(lang))return text;

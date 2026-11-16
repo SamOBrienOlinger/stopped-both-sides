@@ -48,9 +48,8 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  expect(state(page).answers[role]).toBeNull();
  expect(state(page).cast).toEqual(before.cast);
  await page.locator('.topline a').first().click();
- await page.locator('.scenario-library summary').focus();
- await page.keyboard.press('Enter');
  await expect(page.locator('.scenario-library')).toHaveAttribute('open','');
+ await expect(page.locator(`.scenario-library [data-action="paired-start"][data-id="${role}-street"]`)).toBeFocused();
  await expect(page.locator('[data-action="paired-start"]:visible')).toHaveCount(14);
  await page.locator('[data-action="paired-start"][data-id="public-search"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();

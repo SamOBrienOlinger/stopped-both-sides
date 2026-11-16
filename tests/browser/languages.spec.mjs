@@ -2,7 +2,7 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=phlow-1';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=phlowing-1';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {progressStorageKey} from '../../encounters/progress.mjs';
 import {expectControlsFit} from './control-layout.mjs';
@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlow-1',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlowing-1',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -209,7 +209,9 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
   const gardaCaption=await scene.locator('.scene-cast-names>[data-role-tone="garda"]').boundingBox();
   const publicActor=await scene.locator('[data-scene-role="public"]').boundingBox();
   const gardaActor=await scene.locator('[data-scene-role="garda"]').boundingBox();
-  expect(publicCaption.x,'Public caption follows the public figure on the left').toBeLessThan(gardaCaption.x);
+  const centre=box=>box.x+box.width/2;
+  expect(Math.abs(centre(publicCaption)-centre(publicActor)),'Public caption stays centred on the public figure').toBeLessThanOrEqual(1);
+  expect(Math.abs(centre(gardaCaption)-centre(gardaActor)),'Garda caption stays centred on the Garda figure').toBeLessThanOrEqual(1);
   expect(publicActor.x,'Artwork keeps its original public/Garda placement').toBeLessThan(gardaActor.x);
  }
  await page.screenshot({path:testInfo.outputPath(`${language}-${width}-feedback.png`),fullPage:true});
@@ -360,7 +362,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlow-1',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlowing-1',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);
