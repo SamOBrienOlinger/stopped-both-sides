@@ -38,6 +38,17 @@ for(const {language,width,large} of [
  }
  if(language==='ar')await expect(section.locator('h3').first()).toHaveCSS('direction','ltr');
  if(language==='ga')await expect(page.locator('#main')).toHaveAttribute('lang','en-IE');
+ const logos=section.locator('.support-organisation img');
+ await expect.poll(()=>logos.evaluateAll(images=>images.map(image=>{
+  const {width,height}=image.getBoundingClientRect();
+  return {
+   file:new URL(image.src).pathname.split('/').at(-1),
+   local:new URL(image.src).origin===location.origin,
+   fits:image.complete&&width>0&&height>0&&width<=image.parentElement.clientWidth+1&&
+    Math.abs(width-height*image.naturalWidth/image.naturalHeight)<1,
+   alt:image.getAttribute('alt')
+  };
+ }))).toEqual(['fiosru.png','pcsa.png','flac.png'].map(file=>({file,local:true,fits:true,alt:''})));
  const layout=await section.evaluate(section=>({
   width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,
   clipped:[...section.querySelectorAll('p,h2,h3,a')].filter(element=>element.scrollWidth>element.clientWidth+2).map(element=>element.textContent),
