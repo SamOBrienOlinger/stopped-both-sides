@@ -105,9 +105,21 @@ export const sceneDirections={
 
 export const sceneAssets=['street','bus-stop','station','advice-room','meeting-room','square'];
 // Only exterior artwork changes. The station and private rooms retain their art.
-const asset=name=>backgroundImage(name)?.src||new URL(`../assets/scenes/${name}.webp?v=irish-streetlights-1`,import.meta.url).href;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community'};
+
+function backdrop(place,art,{className='scene-backdrop',sizes,lazy=false}){
+ const image=art||{src:new URL(`../assets/scenes/${place}.webp?v=irish-streetlights-1`,import.meta.url).href,width:680,height:380};
+ const responsive=image.srcset?` srcset="${image.srcset}" sizes="${sizes}"`:'';
+ return `<img class="${className}" src="${image.src}"${responsive} alt="" width="${image.width}" height="${image.height}" decoding="async"${lazy?' loading="lazy"':''}>`;
+}
+
+export function renderScenePreview(id){
+ const {place}=sceneDirections[id][encounters[id].start];
+ return backdrop(place,backgroundImage(place),{
+  className:'situation-image',sizes:'auto, (max-width: 36rem) 100vw, 36rem',lazy:true
+ });
+}
 
 export function sceneModel(state,{step=null}={}){
  const last=step||(state.complete?state.history.at(-1):null);
@@ -137,7 +149,8 @@ export function renderScene(state,options={}){
    const character=characterFor(role,state.cast[role]);
    return '<button type="button" class="scene-character-label" data-role-tone="'+role+'" data-scene-label-role="'+role+'" data-scene-character-id="'+esc(character.id)+'" style="'+sceneAnchorStyle(anchors[role])+'" aria-haspopup="dialog" aria-controls="scene-character-dialog" aria-label="About '+esc(character.name)+', '+esc(roleLabels[role])+'"><strong><span data-no-translate>'+esc(character.name)+'</span></strong><span class="scene-character-role">'+esc(roleLabels[role])+'</span><span class="scene-character-info" aria-hidden="true">i</span></button>';
   }).join('');
-  return '<figure class="scene-panel"><div class="scene-location '+(members.length===1?'scene-location--solo':'')+' '+side+'" data-scene-place="'+place+'"'+(art?' data-approved-art="'+art.name+'"':'')+' aria-hidden="true"><img class="scene-backdrop" src="'+asset(place)+'"'+(art?' srcset="'+art.srcset+'" sizes="(max-width: 660px) calc(100vw - 3rem), 640px"':'')+' alt="" width="'+(art?1600:680)+'" height="'+(art?900:380)+'" decoding="async" '+(compact?'loading="lazy"':'')+'>'+members.map(role=>actor(role,anchors[role])).join('')+'</div><figcaption class="scene-cast-names" data-scene-label-track data-label-layout="stacked">'+names+'</figcaption></figure>';
+  const image=backdrop(place,art,{sizes:'(max-width: 660px) calc(100vw - 3rem), 640px',lazy:compact});
+  return '<figure class="scene-panel"><div class="scene-location '+(members.length===1?'scene-location--solo':'')+' '+side+'" data-scene-place="'+place+'"'+(art?' data-approved-art="'+art.name+'"':'')+' aria-hidden="true">'+image+members.map(role=>actor(role,anchors[role])).join('')+'</div><figcaption class="scene-cast-names" data-scene-label-track data-label-layout="stacked">'+names+'</figcaption></figure>';
  };
  const panels=m.separate?location(m.place,['public'],'scene-location--public')+location(m.otherPlace,['garda'],'scene-location--garda'):location(m.place,roles);
  return '<figure class="encounter-scene '+(compact?'encounter-scene--compact':'')+'" data-caption-anchors data-scene-id="'+esc(state.id+'/'+m.nodeId)+'" data-scene-phase="'+m.phase+'" data-scene-mode="'+m.mode+'">'+(m.label?'<div class="scene-setting">'+esc(m.label)+'</div>':'')+'<div class="scene-stage '+(m.separate?'scene-stage--separate':'')+' '+(outdoorSplit?'scene-stage--outdoor-split':'')+'">'+panels+'</div></figure>';

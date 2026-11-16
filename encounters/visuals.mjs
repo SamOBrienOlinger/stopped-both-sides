@@ -1,4 +1,5 @@
 import {encounters} from './catalog.mjs?v=discrimination-1';
+import {renderScenePreview} from './scenes.mjs?v=situation-images-1';
 import {practiceGoal} from '../learning/play.mjs?v=discrimination-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
@@ -40,6 +41,7 @@ export function routeTrail(state){
 export function topicExplorer(groups,role){
  const links=groups.map(topic=>`<a class="topic-card" href="#encounters/${role}/${topic.id}">
   ${learningIcon(topic.id)}<strong>${topic.title}</strong>
+  ${renderScenePreview(topic.encounters[0])}
   <span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>
  </a>`).join('');
  return `<section class="topic-explorer" aria-labelledby="topic-explorer-title">
@@ -57,6 +59,7 @@ export function practiceCards(scenarios,role){
  const cards=scenarios.map(scenario=>`<article class="scenario">
   <span class="scene-icon">${scenarioIcon(role+'-'+scenario.id)}</span>
   <h2>${esc(scenario.title)}</h2>
+  ${renderScenePreview(role+'-'+scenario.id)}
   <p class="person">${esc(scenario.person)}</p>
   <p class="description">${esc(scenario.description)}</p>
   <p class="scenario-goal">${practiceGoal(role+'-'+scenario.id)}</p>

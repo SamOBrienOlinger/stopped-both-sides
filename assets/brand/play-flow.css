@@ -169,6 +169,13 @@ html .reference-landing.paired-entry {
 }
 .scenario-library .scenario :is(.scene-icon,.catalogue-visual) {margin-block-end:.75rem;border-radius:.75rem}
 .scenario-library .scenario h2 {line-height:1.25;text-wrap:balance}
+.situation-image {
+ display:block;
+ inline-size:100%;
+ block-size:auto;
+ border-radius:.75rem;
+}
+.scenario-library .scenario>.situation-image {margin-block:.65rem .85rem}
 .scenario-library .scenario .small-note {margin-block:auto .5rem;padding-block-start:.75rem}
 .scenario-library .scenario .scenario-goal {
  padding-inline-start:.65rem;

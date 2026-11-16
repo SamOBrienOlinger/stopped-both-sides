@@ -6,7 +6,7 @@ import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=discrimination-1';
 import {createMotion} from '../accessibility/motion.mjs?v=discrimination-1';
-import {createEncounterMode} from '../encounters/ui.mjs?v=play-layout-2';
+import {createEncounterMode} from '../encounters/ui.mjs?v=situation-images-1';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs?v=phlowing-1';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=phlowing-1';
 const main=document.querySelector('#main');
