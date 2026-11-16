@@ -1,41 +1,103 @@
-/* Home and play share the same action hierarchy as the game. */
-.reference-landing .landing-instructions {
- margin-block-end:1rem;
- padding:clamp(.85rem,2.4vw,1.5rem);
+/* The game pairs a dark story surface with a light surface for decisions. */
+:root {
+ --play-radius:1.125rem;
+ --play-shadow:0 8px 24px #18374412;
 }
-.reference-landing .landing-instructions .landing-deck {
- font-size:clamp(1rem,1.9vw,1.2rem);
- line-height:1.5;
+html .reference-landing.paired-entry {
+ display:block;
+ padding:0;
+ overflow:visible;
+ border:0;
+ background:transparent!important;
+ box-shadow:none;
 }
-.reference-landing .landing-instructions #paired-title {
- font-size:clamp(1.65rem,4vw,3rem);
+.reference-landing.paired-entry::after {display:none}
+.play-invitation {
+ display:grid;
+ align-items:center;
+ gap:clamp(1rem,3vw,2.5rem);
+ padding:clamp(1rem,3.5vw,2.75rem);
+ border:1px solid var(--story);
+ border-radius:clamp(1rem,2vw,1.5rem);
+ background:linear-gradient(135deg,var(--story) 45%,var(--deep));
+ color:var(--story-text);
+ box-shadow:var(--play-shadow);
 }
-.reference-landing .landing-instructions .landing-purpose {
- margin-block-end:.35rem;
- font-size:clamp(1.05rem,2.1vw,1.35rem);
+.invitation-content {min-inline-size:0}
+.reference-landing .play-invitation .landing-instructions {
+ align-items:flex-start;
+ gap:.6rem;
+ margin:0 0 1.25rem;
+ padding:0;
+ background:transparent;
 }
-.reference-landing .landing-instructions .small-note {
- font-size:1rem;
+.reference-landing .play-invitation .landing-instructions>:is(.landing-deck,#paired-title,.landing-purpose,.small-note) {
+ text-align:start;
+ text-wrap:pretty;
+}
+.reference-landing .play-invitation p.landing-deck {
+ max-inline-size:51ch;
+ color:var(--story-text);
+ font-size:clamp(.875rem,1.3vw,1rem);
+ font-weight:500;
+ line-height:1.6;
+ letter-spacing:normal;
+}
+.reference-landing .play-invitation #paired-title {
+ max-inline-size:15ch;
+ color:#fff;
+ font-size:clamp(1.85rem,4.55vw,3.8rem);
+ line-height:1.08;
+ text-wrap:balance;
+}
+.reference-landing .play-invitation p.landing-purpose {
+ color:var(--story-label);
+ font-size:clamp(1rem,1.6vw,1.25rem);
+ line-height:1.45;
+ letter-spacing:normal;
+}
+.reference-landing .play-invitation .landing-instructions .small-note {
+ color:var(--story-text);
+ font-size:.9375rem;
+ font-weight:400;
+ line-height:1.55;
+ letter-spacing:normal;
 }
 .home-play {
  display:flex;
  flex-wrap:wrap;
- align-items:center;
- justify-content:center;
- gap:.65rem 1rem;
- margin:0 auto 1.1rem;
- max-inline-size:47rem;
+ align-items:flex-start;
+ gap:.65rem;
 }
 .home-start {
- display:flex;
- flex-wrap:wrap;
- align-items:center;
- justify-content:center;
- gap:.5rem .75rem;
+ display:grid;
+ justify-items:start;
+ gap:.4rem;
+ min-inline-size:0;
 }
-.home-start .primary {gap:.3em}
-.home-start-role {font-size:.875rem;color:var(--muted)}
-.home-play .flow-save {flex:1 1 23rem;margin:0}
+.home-play .primary {box-shadow:none}
+.home-start .primary {
+ flex-wrap:wrap;
+ gap:.18em .3em;
+ background:var(--story-label);
+ border-color:var(--story-label);
+ color:var(--ink);
+}
+.home-start .primary:hover {background:#fff;border-color:#fff;color:var(--ink)}
+.home-play>.secondary {background:transparent;border-color:var(--story-label);color:#fff}
+.home-play>.secondary:hover {background:var(--story-label);color:var(--ink)}
+.home-play .primary:focus-visible {outline-color:var(--story-label)}
+.home-start-role {font-size:.875rem;color:var(--story-text)}
+.home-play .flow-save {flex:1 1 100%;margin:0;background:var(--paper,#fff);color:var(--ink)}
+.reference-landing .overlapping-heroes {margin-block:1rem 0}
+.reference-landing .overlapping-heroes .perspective-hero {
+ padding:clamp(.65rem,1.6vw,1.2rem);
+ border-radius:var(--play-radius)!important;
+ box-shadow:var(--play-shadow);
+}
+.reference-landing .perspective-hero::after {display:none}
+.reference-landing .overlapping-heroes .perspective-hero-button {margin-block-end:.65rem}
+.reference-landing .perspective-hero>.perspective-caption {padding-block-start:.7rem}
 
 .flow-save {
  display:flex;
@@ -62,34 +124,59 @@
 .play-modes {
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));
- gap:.75rem;
- margin-block:1rem;
+ gap:.7rem;
+ margin-block:1.1rem;
 }
 .play-modes a {
  display:grid;
- gap:.2rem;
+ align-content:start;
+ gap:.28rem;
  min-inline-size:0;
- padding:.85rem 1rem;
+ padding:clamp(.8rem,2vw,1.25rem);
  color:var(--ink);
  text-decoration:none;
  border:1px solid var(--line);
- border-radius:.85rem;
+ border-radius:var(--play-radius);
  background:var(--paper,#fff);
 }
-.play-modes a strong {color:var(--deep);font-size:1.05rem}
+.play-modes a strong {color:var(--deep);font-size:1.125rem;line-height:1.35}
 .play-modes a span {color:var(--slate);font-size:.9375rem}
 .play-modes a[aria-current="page"] {
  border-color:var(--deep);
- box-shadow:inset 0 -3px var(--deep);
+ box-shadow:inset 0 -4px var(--deep);
  background:var(--pale);
 }
 .play-modes a:hover {border-color:var(--deep)}
 .play-modes a:focus-visible {outline:3px solid var(--focus);outline-offset:3px}
+.simple-setup .start-panel {border-block-start:4px solid var(--deep);box-shadow:var(--play-shadow)}
+.simple-setup .setup-character {border-radius:.75rem}
+.scenario-library[open]>summary {border-block-end:1px solid var(--line)}
+.scenario-library .topic-filters {margin-block:1rem 1.3rem}
+.topic-filter {font-weight:650}
+.topic-filter[aria-pressed="false"]:hover {background:var(--pale);border-color:var(--deep)}
 .scenario-library .practice-content {padding:0}
-.scenario-library .scenarios {gap:1rem}
-.scenario-library .scenario .small-note {margin-block:auto .5rem}
-.scenario-library .scenario .scene-icon {margin-block-end:.65rem}
-.scenario .scenario-goal {color:var(--deep);font-weight:700}
+.scenario-library :is(.scenarios,.paired-catalog) {gap:clamp(.75rem,1.6vw,1.25rem)}
+.scenario-library .scenario {
+ min-inline-size:0;
+ padding:clamp(.9rem,2.2vw,1.4rem);
+ border-radius:var(--play-radius);
+ background:var(--paper,#fff);
+ text-align:start;
+ box-shadow:none;
+}
+.scenario-library .scenario :is(.scene-icon,.catalogue-visual) {margin-block-end:.75rem;border-radius:.75rem}
+.scenario-library .scenario h2 {line-height:1.25;text-wrap:balance}
+.scenario-library .scenario .small-note {margin-block:auto .5rem;padding-block-start:.75rem}
+.scenario-library .scenario .scenario-goal {
+ padding-inline-start:.65rem;
+ border-inline-start:3px solid var(--teal);
+ color:var(--deep);
+ font-weight:650;
+}
+.scenario-library .catalogue-status {gap:.4rem;margin-block:.15rem .9rem}
+.catalogue-status>span {padding:.12rem .48rem;border-radius:.35rem;background:var(--pale)}
+.catalogue-status>span>span:first-child {color:var(--deep);font-weight:700}
+.scenario-library .encounter-card>.primary {align-self:stretch}
 .practice-shortcut .practice-content {padding:1rem}
 .workshop-entry {padding:.5rem 1rem 1rem}
 
@@ -110,15 +197,35 @@
  inline-size:auto;
  max-inline-size:none;
  margin:0;
- padding:clamp(.9rem,2.5vw,1.75rem);
+ padding:clamp(1rem,2.7vw,2rem);
+ border:1px solid var(--story);
+ border-radius:var(--play-radius);
+ background:var(--story);
+ color:var(--story-text);
+ box-shadow:var(--play-shadow);
 }
-.flow-game .decision-context h1 {
- margin-block-end:.65rem;
- font-size:clamp(1.5rem,3.2vw,2.7rem);
+:is(.flow-game .decision-context,.game-grid>.story) h1 {
+ margin-block-end:.7rem;
+ color:#fff;
+ font-size:clamp(1.5rem,3.2vw,2.65rem);
+ line-height:1.14;
+ text-wrap:balance;
 }
-.flow-game .decision-context .eyebrow {margin-block-end:.55rem}
-.flow-game .decision-context .story-text {margin-block-end:0;line-height:1.6}
-.flow-game .decision-choices {margin:0;min-inline-size:0;max-inline-size:none}
+.flow-game .decision-context .eyebrow {margin-block-end:.55rem;color:var(--story-label)}
+.flow-game .decision-context .story-text {margin-block-end:0;color:var(--story-text);line-height:1.65}
+.decision-context .case-disclosure {border-color:var(--story-label)}
+.decision-context .case-disclosure summary {color:var(--story-text)}
+.decision-context .case-disclosure .story-text {margin-block-end:.75rem}
+.game-grid>.decision-choices {
+ margin:0;
+ padding:clamp(.8rem,2vw,1.5rem);
+ border:1px solid var(--line);
+ border-radius:var(--play-radius);
+ background:var(--paper,#fff);
+ box-shadow:var(--play-shadow);
+ min-inline-size:0;
+ max-inline-size:none;
+}
 .flow-role-bar {
  display:flex;
  flex-wrap:wrap;
@@ -128,7 +235,8 @@
  margin:0 0 .7rem;
  padding:.5rem .65rem;
  border:1px solid var(--line);
- border-radius:.8rem;
+ border-inline-start:4px solid var(--deep);
+ border-radius:.65rem;
  background:var(--pale);
 }
 .flow-role-bar .perspective-status {
@@ -153,8 +261,35 @@
 .flow-role-bar.legacy-perspective {flex-direction:row;align-items:center;padding:.5rem .65rem}
 .flow-role-bar.legacy-perspective .perspective-status {flex:1 1 12rem;flex-direction:row;justify-content:start}
 .flow-role-bar.legacy-perspective>.perspective-toggle {flex:0 1 auto;inline-size:auto}
-.flow-game .prompt h2 {margin-block:.4rem}
-.flow-game .prompt {margin-block-end:.65rem}
+.game-grid .decision-choices .prompt h2 {
+ margin-block:.65rem .3rem;
+ font-size:clamp(1.25rem,2.45vw,1.65rem);
+ line-height:1.35;
+ text-wrap:pretty;
+}
+.decision-choices .prompt {margin-block-end:.7rem}
+.decision-choices .choices {gap:.55rem}
+.decision-choices .choices .choice {
+ align-items:flex-start;
+ gap:.7rem;
+ min-block-size:3.625rem;
+ padding:.75rem .8rem;
+ border-color:var(--control);
+ border-radius:.7rem;
+ text-align:start;
+ box-shadow:none;
+}
+.decision-choices .choices .choice:not(.selected,:disabled) {background:var(--paper,#fff)}
+.decision-choices .choices .choice:not(:disabled):hover {background:var(--pale);border-color:var(--deep)}
+.decision-choices .choices .choice.selected {
+ border-color:var(--deep);
+ background:var(--pale);
+}
+.decision-choices .choices .choice-letter {
+ align-self:flex-start;
+ margin:0;
+ border-radius:.4rem;
+}
 .scene-explorer {
  margin-block:1.2rem;
  padding:0 clamp(.65rem,2.2vw,1.25rem) .65rem;
@@ -177,6 +312,14 @@
 .scene-explorer .cast-character>div {flex:1 1 9rem;min-inline-size:0;overflow-wrap:anywhere}
 .scene-explorer .paired-scene-lead {margin-block:.65rem 0}
 .flow-feedback-actions {display:grid;gap:.3rem;margin-block:.75rem}
+.decision-choices .feedback {
+ margin-block-start:1rem;
+ padding:clamp(.8rem,2vw,1.3rem);
+ border-radius:var(--play-radius);
+ border-block-start:4px solid var(--deep);
+ background:var(--pale);
+}
+.decision-choices .feedback.revisit {border-block-start-color:var(--rose-dark)}
 .feedback h2.feedback-takeaway {
  color:inherit;
  font-size:clamp(1rem,1.5vw,1.25rem);
@@ -185,7 +328,7 @@
 .flow-feedback-actions .primary {margin:0}
 .flow-feedback-actions .text-button {justify-self:start}
 .flow-secondary-actions {display:flex;flex-wrap:wrap;gap:0 1rem}
-.flow-recap-actions {display:flex;justify-content:center;margin-block:1rem}
+.flow-recap-actions {display:flex;flex-wrap:wrap;justify-content:center;margin-block:1rem}
 .case-disclosure {
  margin-block:.75rem;
  padding:0 .7rem;
@@ -202,17 +345,21 @@
 .case-disclosure>p,.case-disclosure dl {margin-block:.25rem .75rem}
 .case-disclosure dt {font-weight:700}
 .case-disclosure dd {margin-inline-start:0}
+.decision-comparison {background:var(--paper,#fff);padding-inline:clamp(.7rem,2vw,1.25rem)}
 .evidence-check-row {
  display:grid;
- gap:.3rem;
- margin-block:.7rem;
+ gap:.4rem;
+ margin-block:.65rem;
+ padding:clamp(.6rem,1.5vw,.9rem);
+ border-radius:.5rem;
+ background:var(--pale);
 }
 .evidence-check-row label {font-weight:600}
 .evidence-check-row select {
  inline-size:min(100%,19rem);
  min-block-size:44px;
  padding:.35rem .5rem;
- border:1px solid var(--line);
+ border:1px solid var(--control);
  border-radius:.4rem;
  background:var(--paper,#fff);
  color:var(--ink);
@@ -225,63 +372,140 @@
 }
 .decision-comparison-role {
  min-inline-size:0;
- padding:.65rem .75rem;
- border-inline-start:3px solid var(--deep);
+ padding:clamp(.8rem,2vw,1.25rem);
+ border:1px solid var(--tone-line,var(--line));
+ border-block-start:4px solid var(--deep);
  background:var(--pale);
- border-radius:.4rem;
+ border-radius:.75rem;
 }
+.decision-comparison-role h3 {color:var(--deep)}
 .decision-comparison-role p:last-child {margin-block-end:0}
 .search-figures {
  inline-size:100%;
- margin-block:.7rem;
+ margin-block:1rem;
  border-collapse:collapse;
  table-layout:fixed;
  background:var(--paper,#fff);
  color:var(--ink);
+ font-size:.9rem;
+ font-variant-numeric:tabular-nums;
  overflow-wrap:anywhere;
 }
 .search-figures caption {
- padding:.4rem .3rem;
- background:var(--paper,#fff);
- color:var(--ink);
+ padding-block-end:.35rem;
+ color:inherit;
  font-weight:700;
  text-align:start;
 }
+.decision-context .search-figures caption,.story .search-figures caption {color:var(--story-text)}
 .search-figures :is(th,td) {
- padding:.35rem .25rem;
+ padding:.47rem .28rem;
  border:1px solid var(--line);
- vertical-align:top;
+ vertical-align:middle;
  text-align:start;
 }
+.search-figures th {background:var(--pale);line-height:1.35}
+.search-figures td:last-child {background:var(--pale);font-weight:700}
+.search-figures :is(td,th:not(:first-child)) {text-align:center}
 .story .case-disclosure {border-color:currentColor}
+.summary-heading {
+ max-inline-size:64rem;
+ margin-block:1rem;
+ padding:clamp(1rem,3vw,2.25rem);
+ border:1px solid var(--story);
+ border-radius:var(--play-radius);
+ background:var(--story);
+ color:var(--story-text);
+}
+.summary-heading h1 {color:#fff;text-wrap:balance}
+.summary-heading :is(.eyebrow,p.small-note) {color:var(--story-label)}
+.summary-heading p:last-child {margin-block-end:0}
+.summary-heading .summary-icon {margin-inline:0}
+.summary-heading .flow-recap-actions {justify-content:flex-start;margin-block-end:0}
+.summary-heading .flow-recap-actions .primary {background:var(--story-label);border-color:var(--story-label);color:var(--ink)}
+.summary-heading .flow-recap-actions .primary:hover {background:#fff;border-color:#fff}
+.summary-heading .flow-recap-actions .primary:focus-visible {outline-color:var(--story-label)}
+.recap-takeaways.info-block,.recap-practice.info-block,.progress-skills.info-block {
+ padding:clamp(.9rem,2.7vw,1.7rem);
+ border-block-start:4px solid var(--deep);
+ border-radius:var(--play-radius);
+ background:var(--pale);
+}
+#main>.recap-practice {max-inline-size:64rem;margin-inline:auto}
+#main>.recap-characters,#main>.flow-role-bar:not(.legacy-perspective) {max-inline-size:64rem;margin-inline:auto}
+.paired-recap .summary-item {padding:clamp(.8rem,2.3vw,1.4rem);background:var(--paper,#fff)}
 .recap-practice,.progress-skills {margin-block:1rem}
 .recap-practice button {flex-wrap:wrap}
 .points-detail {margin-block:.6rem}
 .points-detail>summary {padding-block:.4rem;min-block-size:44px;cursor:pointer}
-.discussion-guide ol {padding-inline-start:1.5em}
+.discussion-guide>h1 {margin-block:.55rem 1.4rem;text-wrap:balance}
+.discussion-guide>h2 {color:var(--deep)}
+.discussion-guide>ol {
+ margin-block:1.25rem;
+ padding:clamp(.8rem,2vw,1.35rem);
+ padding-inline-start:clamp(2rem,4vw,3rem);
+ border:1px solid var(--line);
+ border-inline-start:4px solid var(--deep);
+ border-radius:var(--play-radius);
+ background:var(--paper,#fff);
+}
 .discussion-guide li {margin-block:.45rem}
+.discussion-guide li::marker {color:var(--deep);font-weight:750}
 #main :is(.case-disclosure>summary,.evidence-check select,.scenario-library summary,.points-detail>summary):focus-visible {
  outline:3px solid var(--focus);
  outline-offset:3px;
 }
-.story .case-disclosure>summary:focus-visible {outline-color:currentColor}
+#main :is(.story,.decision-context) .case-disclosure>summary:focus-visible {outline-color:currentColor}
 @media(min-width:56rem) {
  .game-grid.paired-game.flow-game {grid-template-columns:minmax(0,4fr) minmax(0,5fr);gap:1.25rem}
  .comparison-roles {grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+@media(min-width:60rem) {
+ .play-invitation {grid-template-columns:minmax(0,1.12fr) minmax(0,1fr)}
+ .play-invitation::after {
+  content:"";
+  aspect-ratio:16 / 9;
+  border-radius:.85rem;
+  background:var(--invitation-art) center / contain no-repeat;
+ }
+ .contrast-high .play-invitation {grid-template-columns:minmax(0,1fr);background:var(--story)}
+ .contrast-high .play-invitation::after {display:none}
+}
 @media(max-width:34rem) {
- .home-play,.home-start {align-items:stretch;flex-direction:column;text-align:center}
- .home-start .primary {flex-wrap:wrap}
+ .home-play {align-items:stretch;flex-direction:column}
+ .home-start {justify-items:stretch}
  .home-play .flow-save {flex:auto}
  .flow-save a {inline-size:100%}
- .flow-game .decision-context {padding:.75rem}
+ .reference-landing .overlapping-heroes .perspective-hero-button {justify-content:space-between}
+ .reference-landing .perspective-button-title {display:grid;justify-items:center}
+ .flow-game .decision-context,.game-grid>.decision-choices {padding:.8rem}
  .flow-role-bar {padding:.35rem .55rem}
 }
 @media(forced-colors:active) {
- .play-modes a,.flow-role-bar,.scene-explorer {background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none}
+ .play-invitation {grid-template-columns:minmax(0,1fr)}
+ .play-invitation::after {display:none}
+ .play-invitation,.flow-game .decision-context,.summary-heading,
+ .game-grid>.decision-choices,.decision-choices .feedback,
+ .play-modes a,.flow-role-bar,.scene-explorer {
+  background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none;
+ }
  .play-modes a[aria-current="page"] {outline:2px solid Highlight;outline-offset:-4px}
+ .home-play .primary,.home-play .primary:hover,
+ .summary-heading .flow-recap-actions .primary {background:ButtonFace;color:ButtonText;border-color:ButtonText}
+ .home-play .primary:focus-visible,.summary-heading .flow-recap-actions .primary:focus-visible {outline-color:Highlight}
+ .decision-choices .choices .choice {border-color:ButtonText}
  .flow-save.session-return .saved-session-link,
  .flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {
   background:ButtonFace;color:ButtonText;border:1px solid ButtonText;
  }
+}
+@media print {
+ .play-invitation,.flow-game .decision-context,.summary-heading {
+  background:#fff;color:#000;border-color:#000;box-shadow:none;
+ }
+ .play-invitation {grid-template-columns:minmax(0,1fr)}
+ .play-invitation::after {display:none}
+ .reference-landing .play-invitation .landing-instructions>:is(.landing-deck,#paired-title,.landing-purpose,.small-note),
+ .home-start-role,.flow-game .decision-context :is(h1,.eyebrow,.story-text,.search-figures caption),
+ .summary-heading :is(h1,.eyebrow,p.small-note) {color:#000}
 }

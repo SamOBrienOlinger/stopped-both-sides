@@ -246,8 +246,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    :'';
   return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}${heading}<div class="info-block landing-overview about-overview" lang="en-IE"><p>Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
  }
- function perspectiveChoice({primary=false}={}){
-  const heading=primary?'h1':'h2';
+ function perspectiveChoice(){
   const heroes=roles.map(role=>{
    const {src:image,srcset}=backgroundImage(role);
    const label=role==='public'?'Member of the public':'Garda member';
@@ -261,11 +260,22 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     :'You make the stop. Check your reasons, assumptions and responsibilities.';
    return `<a class="perspective-hero perspective-card-link" data-role-tone="${role}" href="${href}" aria-labelledby="perspective-${role}-label perspective-${role}-action" aria-describedby="perspective-${role}-description"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><span class="primary perspective-hero-button"><span class="perspective-button-title">${icon}<span class="perspective-button-label" id="perspective-${role}-label">${label}</span><span class="perspective-button-short">${label}</span></span><span class="perspective-button-action" id="perspective-${role}-action">Explore</span><span class="perspective-button-action-short">Explore</span></span><p class="perspective-caption" id="perspective-${role}-description">${description}</p></a>`;
   }).join('');
-  return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title"><div class="landing-instructions"><p class="landing-deck">Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><${heading} id="paired-title">Which side will you try first?</${heading}><p class="landing-purpose">Know your rights. Understand fair decisions.</p><p class="small-note">Read a situation, choose a response, then find out why it matters.</p></div>${primary?homeActions():''}<div class="perspective-heroes overlapping-heroes">${heroes}</div></section>`;
+  return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title">
+   <div class="play-invitation"><div class="invitation-content">
+    <div class="landing-instructions">
+     <p class="landing-deck">Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p>
+     <h1 id="paired-title">Which side will you try first?</h1>
+     <p class="landing-purpose">Know your rights. Understand fair decisions.</p>
+     <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
+    </div>
+    ${homeActions()}
+   </div></div>
+   <div class="perspective-heroes overlapping-heroes">${heroes}</div>
+  </section>`;
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);
-  return `${perspectiveChoice({primary:true})}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole)}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
+  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole)}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
     <div class="practice-content"><p>Make choices in one role and review what you learned.</p><a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>

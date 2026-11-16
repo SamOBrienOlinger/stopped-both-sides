@@ -27,7 +27,7 @@ for(const path of paths){
   expect(animation.map(item=>item.name)).toEqual(Array(4).fill('landing-portfolio-line-reveal'));
   expect(animation.map(item=>item.duration)).toEqual(Array(4).fill('1s'));
   expect(animation.map(item=>item.delay)).toEqual(['0s','0.1s','0.2s','0.3s']);
-  expect(animation.every(item=>item.align==='center')).toBe(true);
+  expect(animation.every(item=>item.align==='start'||item.align==='left')).toBe(true);
   await group.evaluate(async element=>{
    await document.fonts.ready;
    await Promise.all([...element.children].flatMap(child=>child.getAnimations())
