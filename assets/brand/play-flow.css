@@ -172,8 +172,9 @@ html .reference-landing.paired-entry {
 .situation-image {
  display:block;
  inline-size:100%;
- block-size:auto;
  border-radius:.75rem;
+ direction:ltr;
+ isolation:isolate;
 }
 .scenario-library .scenario>.situation-image {margin-block:.65rem .85rem}
 .scenario-library .scenario .small-note {margin-block:auto .5rem;padding-block-start:.75rem}

@@ -6,12 +6,12 @@ import {
 } from '../learning/play.mjs?v=discrimination-1';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=situation-images-1';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=situation-images-2';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=discrimination-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=discrimination-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=play-layout-2';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=character-details-actions-20261114';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=situation-images-1';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=situation-images-2';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=scenario-descriptions-20261115';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=discrimination-1';
 import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=play-layout-2';

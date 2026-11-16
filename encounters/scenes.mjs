@@ -1,7 +1,7 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=caption-controls-2';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=discrimination-1';
-import {characterFor} from './characters.mjs?v=character-details-actions-20261114';
+import {characterFor,defaultCast} from './characters.mjs?v=character-details-actions-20261114';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=garda-baseball-20261114';
 import {discriminationEncounters} from './discrimination.mjs?v=discrimination-1';
 
@@ -108,15 +108,28 @@ export const sceneAssets=['street','bus-stop','station','advice-room','meeting-r
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community'};
 
-function backdrop(place,art,{className='scene-backdrop',sizes,lazy=false}){
+function backdrop(place,art,{sizes,lazy}){
  const image=art||{src:new URL(`../assets/scenes/${place}.webp?v=irish-streetlights-1`,import.meta.url).href,width:680,height:380};
  const responsive=image.srcset?` srcset="${image.srcset}" sizes="${sizes}"`:'';
- return `<img class="${className}" src="${image.src}"${responsive} alt="" width="${image.width}" height="${image.height}" decoding="async"${lazy?' loading="lazy"':''}>`;
+ return `<img class="scene-backdrop" src="${image.src}"${responsive} alt="" width="${image.width}" height="${image.height}" decoding="async"${lazy?' loading="lazy"':''}>`;
+}
+
+function sceneActor(role,id,anchor,lazy){
+ const art=sceneCharacterArtwork(characterFor(role,id));
+ return `<div class="scene-actor scene-actor--${role}" data-scene-character="${id}" data-scene-role="${role}" style="${sceneAnchorStyle(anchor)}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async"${lazy?' loading="lazy"':''} style="${art.style}"></div></div>`;
+}
+
+function locationArt(place,art,actors,{className,sizes,lazy}){
+ const approved=art?` data-approved-art="${art.name}"`:'';
+ return `<div class="scene-location ${className}" data-scene-place="${place}"${approved} aria-hidden="true">${backdrop(place,art,{sizes,lazy})}${actors}</div>`;
 }
 
 export function renderScenePreview(id){
  const {place}=sceneDirections[id][encounters[id].start];
- return backdrop(place,backgroundImage(place),{
+ const art=backgroundImage(place),cast=defaultCast();
+ checkSceneArtwork(place,art?.name||null);
+ const actors=roles.map(role=>sceneActor(role,cast[role],sceneActorLayout(place,role),true)).join('');
+ return locationArt(place,art,actors,{
   className:'situation-image',sizes:'auto, (max-width: 36rem) 100vw, 36rem',lazy:true
  });
 }
@@ -136,11 +149,6 @@ export function sceneModel(state,{step=null}={}){
 export function renderScene(state,options={}){
  const m=sceneModel(state,options),compact=!!options.compact;
  const outdoorSplit=m.separate&&!!(backgroundImage(m.place)||backgroundImage(m.otherPlace));
- const actor=(role,anchor)=>{
-  const c=characterFor(role,state.cast[role]);
-  const art=sceneCharacterArtwork(c);
-  return '<div class="scene-actor scene-actor--'+role+'" data-scene-character="'+c.id+'" data-scene-role="'+role+'" style="'+sceneAnchorStyle(anchor)+'" aria-hidden="true"><div class="scene-sprite"><img src="'+art.src+'" width="'+art.width+'" height="'+art.height+'" alt="" decoding="async" '+(compact?'loading="lazy"':'')+' style="'+art.style+'"></div></div>';
- };
  const location=(place,members,side='')=>{
   const art=backgroundImage(place);
   checkSceneArtwork(place,art?.name||null);
@@ -149,8 +157,12 @@ export function renderScene(state,options={}){
    const character=characterFor(role,state.cast[role]);
    return '<button type="button" class="scene-character-label" data-role-tone="'+role+'" data-scene-label-role="'+role+'" data-scene-character-id="'+esc(character.id)+'" style="'+sceneAnchorStyle(anchors[role])+'" aria-haspopup="dialog" aria-controls="scene-character-dialog" aria-label="About '+esc(character.name)+', '+esc(roleLabels[role])+'"><strong><span data-no-translate>'+esc(character.name)+'</span></strong><span class="scene-character-role">'+esc(roleLabels[role])+'</span><span class="scene-character-info" aria-hidden="true">i</span></button>';
   }).join('');
-  const image=backdrop(place,art,{sizes:'(max-width: 660px) calc(100vw - 3rem), 640px',lazy:compact});
-  return '<figure class="scene-panel"><div class="scene-location '+(members.length===1?'scene-location--solo':'')+' '+side+'" data-scene-place="'+place+'"'+(art?' data-approved-art="'+art.name+'"':'')+' aria-hidden="true">'+image+members.map(role=>actor(role,anchors[role])).join('')+'</div><figcaption class="scene-cast-names" data-scene-label-track data-label-layout="stacked">'+names+'</figcaption></figure>';
+  const actors=members.map(role=>sceneActor(role,state.cast[role],anchors[role],compact)).join('');
+  const image=locationArt(place,art,actors,{
+   className:(members.length===1?'scene-location--solo ':'')+side,
+   sizes:'(max-width: 660px) calc(100vw - 3rem), 640px',lazy:compact
+  });
+  return '<figure class="scene-panel">'+image+'<figcaption class="scene-cast-names" data-scene-label-track data-label-layout="stacked">'+names+'</figcaption></figure>';
  };
  const panels=m.separate?location(m.place,['public'],'scene-location--public')+location(m.otherPlace,['garda'],'scene-location--garda'):location(m.place,roles);
  return '<figure class="encounter-scene '+(compact?'encounter-scene--compact':'')+'" data-caption-anchors data-scene-id="'+esc(state.id+'/'+m.nodeId)+'" data-scene-phase="'+m.phase+'" data-scene-mode="'+m.mode+'">'+(m.label?'<div class="scene-setting">'+esc(m.label)+'</div>':'')+'<div class="scene-stage '+(m.separate?'scene-stage--separate':'')+' '+(outdoorSplit?'scene-stage--outdoor-split':'')+'">'+panels+'</div></figure>';

@@ -5,7 +5,8 @@
  display:block;min-width:0;margin:0;padding:0;border:0;background:var(--paper,#fff);
 }
 .encounter-scene[data-caption-anchors] .scene-stage--outdoor-split>.scene-panel>.scene-location{aspect-ratio:16/9}
-.encounter-scene[data-caption-anchors] .scene-location>.scene-actor[data-scene-role]{
+.encounter-scene[data-caption-anchors] .scene-location>.scene-actor[data-scene-role],
+.situation-image>.scene-actor[data-scene-role]{
  left:var(--scene-x);right:auto;bottom:var(--scene-bottom);width:var(--scene-width);transform:translateX(-50%);
 }
 .encounter-scene[data-caption-anchors] .scene-stage,

@@ -1,5 +1,5 @@
 import {encounters} from './catalog.mjs?v=discrimination-1';
-import {renderScenePreview} from './scenes.mjs?v=situation-images-1';
+import {renderScenePreview} from './scenes.mjs?v=situation-images-2';
 import {practiceGoal} from '../learning/play.mjs?v=discrimination-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.

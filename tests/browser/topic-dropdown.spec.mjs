@@ -82,9 +82,11 @@ for(const {path,role} of pages){
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const lang of ['en','ar']){
    await page.goto(path+'?lang='+lang+'#play');
-   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    const disclosure=page.locator('.topic-explorer details.topic-disclosure');
-   await disclosure.locator('summary').click();
+   const trigger=disclosure.locator('summary');
+   await expect(trigger).toBeVisible();
+   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
+   await trigger.click();
    await expect(disclosure).toHaveAttribute('open','');
    for(const width of [320,390,768,1366]){
     await page.setViewportSize({width,height:width<700?844:900});
@@ -94,6 +96,7 @@ for(const {path,role} of pages){
      const box=element.getBoundingClientRect();
      const positions=links.map(item=>item.getBoundingClientRect());
      return {
+      enlarged:getComputedStyle(root).getPropertyValue('--reading-size').trim()==='200%',
       noOverflow:root.scrollWidth<=root.clientWidth+2,
       fits:box.left>=-2&&box.right<=root.clientWidth+2,
       headingFits:trigger.scrollWidth<=trigger.clientWidth+2,
@@ -105,7 +108,7 @@ for(const {path,role} of pages){
        return !!title&&title.getBoundingClientRect().width>=card.getBoundingClientRect().width*.5;
       })()
      };
-    },categories.length)).toEqual({noOverflow:true,fits:true,headingFits:true,allVisible:true,ordered:true,textFits:true,lastTitleReadable:true});
+    },categories.length)).toEqual({enlarged:true,noOverflow:true,fits:true,headingFits:true,allVisible:true,ordered:true,textFits:true,lastTitleReadable:true});
    }
   }
   await page.goto(path+'?lang=en#play');
