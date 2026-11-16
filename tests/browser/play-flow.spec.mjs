@@ -51,6 +51,31 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await expect(currentTopic(page)).toHaveText('Searches');
   await expect(page.locator('.scenario-library [data-action="paired-start"][data-id="public-search"]')).toBeFocused();
  });
+
+ test(`${role} can open desktop practice from Discrimination`,async({page})=>{
+  await page.setViewportSize({width:1366,height:768});
+  const discrimination=entry+'?lang=en#encounters/'+role+'/discrimination';
+  await page.goto(discrimination);
+  await expect(currentTopic(page)).toHaveText('Discrimination');
+  await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(10);
+
+  const modes=page.getByRole('navigation',{name:'Ways to play'});
+  const practice=modes.getByRole('link',{name:/^Practise one role/});
+  const firstPractice=page.locator('.scenario-library [data-action="start"][data-id="street"]');
+  await practice.click();
+  expect(new URL(page.url()).hash).toBe('#practice/'+role+'/all');
+  await expect(practice).toHaveAttribute('aria-current','page');
+  await expect(currentTopic(page)).toHaveText('All topics');
+  await expect(page.locator('.topic-filter[data-topic="discrimination"]')).toHaveCount(0);
+  await expect(firstPractice).toBeVisible();
+
+  await page.goBack();
+  await expect(currentTopic(page)).toHaveText('Discrimination');
+  await page.goto(entry+'?lang=en#practice/'+role+'/discrimination');
+  await expect(currentTopic(page)).toHaveText('All topics');
+  await firstPractice.click();
+  await expect(page.locator('#choice-title')).toBeVisible();
+ });
 }
 
 test('a practice recap and an unfinished shared situation stay independently accessible',async({page})=>{

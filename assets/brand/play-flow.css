@@ -271,7 +271,11 @@ html .reference-landing.paired-entry {
  text-wrap:pretty;
 }
 .decision-choices .prompt {margin-block-end:.7rem}
-.decision-choices .choices {gap:.55rem}
+.decision-choices .choices {
+ display:flex;
+ flex-direction:column;
+ gap:.55rem;
+}
 .decision-choices .choices .choice {
  align-items:flex-start;
  gap:.7rem;

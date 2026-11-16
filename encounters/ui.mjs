@@ -9,12 +9,12 @@ import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
 import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=discrimination-1';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=discrimination-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=discrimination-1';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=discrimination-1';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=play-layout-2';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=character-details-actions-20261114';
 import {renderScene} from './scenes.mjs?v=discrimination-1';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=scenario-descriptions-20261115';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=discrimination-1';
-import {playHash,playLocation,playTopics,topicForSituation} from './play-navigation.mjs?v=discrimination-1';
+import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=play-layout-2';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=discrimination-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
@@ -193,7 +193,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    ${practice&&!localPractice?`<a class="primary" href="${esc(listHref(mode,role,topic))}">Browse situations</a>`:`
     <details class="scenario-library" ${practice||browse?'open':''}>
      <summary id="situations-title">Browse all situations</summary>
-     <div class="topic-filters" role="group" aria-label="Situation topics">${playTopics.map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
+     <div class="topic-filters" role="group" aria-label="Situation topics">${topicsForPlay(mode,role).map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
      ${practice?(practiceList.length?practiceCards(practiceList,role):`<p>No practice situations for this topic.</p><a class="text-button" href="${listHref('shared',role,topic)}">Explore both perspectives</a>`):`
       <div class="paired-catalog">${catalogue.map(e=>`<article class="scenario encounter-card">
        <div class="catalogue-visual" aria-hidden="true">${scenarioIcon(e.id)}</div>
@@ -438,8 +438,9 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const button=event.target.closest('button[data-action]');if(!button||!button.dataset.action.startsWith('paired-'))return false;
   const action=button.dataset.action,role=button.dataset.role||siteRole;
   if(action==='paired-topic'){
-   const list=playLocation(location.hash,siteRole),topic=playTopics.find(item=>item.id===button.dataset.topic);
-   if(list&&topic){
+   const list=playLocation(location.hash,siteRole);
+   const topic=list&&topicsForPlay(list.mode,list.role).find(item=>item.id===button.dataset.topic);
+   if(topic){
     history.replaceState(null,'',playHash(list.mode,list.role,topic.id));
     rerender(false);
     document.querySelector('[data-topic="'+topic.id+'"]')?.focus({preventScroll:true});
