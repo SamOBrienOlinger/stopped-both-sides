@@ -58,7 +58,7 @@ export const refinementIrish={
  'Youth-facing Garda':'Garda a oibríonn le daoine óga',
  'Garda working with a colleague':'Garda ag obair le comhghleacaí',
  'Supervising sergeant':'Sáirsint mhaoirseachta',
- 'Community reviewer (member of the public)':'Athbhreithneoir pobail (duine den phobal)',
+ 'Representative of a local community group (member of the public)':'Ionadaí ó ghrúpa pobail áitiúil (duine den phobal)',
  'Person matching the fuller description':'Duine a mheaitseálann an cur síos níos iomláine',
  "Advice & support":"Comhairle agus tacaíocht",
  "Need information or support after a real encounter?":"An bhfuil eolas nó tacaíocht uait tar éis teagmhála sa saol fíor?",

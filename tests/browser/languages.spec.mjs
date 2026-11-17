@@ -2,7 +2,7 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=phlowing-1';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=community-group-1';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
 import {progressStorageKey} from '../../encounters/progress.mjs';
 import {expectControlsFit} from './control-layout.mjs';
@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlowing-1',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=community-group-1',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -362,7 +362,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=phlowing-1',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=community-group-1',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);

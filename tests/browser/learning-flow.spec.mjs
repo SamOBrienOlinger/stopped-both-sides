@@ -117,7 +117,7 @@ test('the workshop guide can be opened in Arabic with enlarged text',async({page
  await page.goto('./?lang=ar#discussion/garda/garda-supervision');
  await expect(page.getByRole('heading',{name:translateText('Play and discuss this situation','ar'),exact:true})).toBeVisible();
  await expect(page.locator('.discussion-guide')).toContainText(translateText('Allow about 15 minutes.','ar'));
- await expect(page.locator('.discussion-guide')).toContainText(translateText('What should the sergeant and community reviewer look into together?','ar'));
+ await expect(page.locator('.discussion-guide')).toContainText(translateText('What should the sergeant and the representative of a local community group look into together?','ar'));
  await expect(page.locator('html')).toHaveAttribute('dir','rtl');
  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);

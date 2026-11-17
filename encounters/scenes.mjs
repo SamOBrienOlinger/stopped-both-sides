@@ -1,6 +1,6 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=caption-controls-2';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=discrimination-1';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=community-group-1';
 import {characterFor,defaultCast} from './characters.mjs?v=garda-neutral-1';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=garda-neutral-1';
 import {discriminationEncounters} from './discrimination.mjs?v=discrimination-1';

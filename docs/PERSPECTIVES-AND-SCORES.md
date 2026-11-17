@@ -9,7 +9,7 @@ Both sites now offer **Play both sides**, covering all 14 original situations an
 - An answer is held separately for each role. Continuing follows the active role's selected branch; the other answer remains a comparison, not a second action committed to the story.
 - Switch buttons appear before and after the shared stage, within feedback and on the recap. Every original-mode stage also offers a transfer into its exact matched counterpart, preserving the route and selected answer.
 - The persistent header button switches sites. It carries the active encounter and saved learning record, selecting the destination site's default role.
-- Shared scenes explicitly identify separate variations, private thoughts and separate debriefs. Information supplied to a learner must not be mistaken for information available to an actor. The supervisory situation uses a community-reviewer role for a member of the public.
+- Shared scenes explicitly identify separate variations, private thoughts and separate debriefs. Information supplied to a learner must not be mistaken for information available to an actor. The supervisory situation casts the member of the public as a representative of a local community group.
 
 ## Scoring rubric
 

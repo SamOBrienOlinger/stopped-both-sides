@@ -1,7 +1,7 @@
-import {encounters,roles} from './catalog.mjs?v=discrimination-1';
-import {decodeState,encodeState} from './engine.mjs?v=discrimination-1';
+import {encounters,roles} from './catalog.mjs?v=community-group-1';
+import {decodeState,encodeState} from './engine.mjs?v=community-group-1';
 import {hasOwn} from '../compatibility.mjs';
-import {playLocation} from './play-navigation.mjs?v=play-layout-2';
+import {playLocation} from './play-navigation.mjs?v=community-group-1';
 // This validated storage schema contains only JSON values; never requires structuredClone.
 const cloneProgress=progress=>JSON.parse(JSON.stringify(progress));
 export const STORAGE_KEY='garda-encounter-progress-v1';

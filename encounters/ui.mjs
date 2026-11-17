@@ -3,18 +3,18 @@ import {focusControl} from '../accessibility/focus.mjs';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=discrimination-1';
+} from '../learning/play.mjs?v=community-group-1';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=garda-neutral-1';
-import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=discrimination-1';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=discrimination-1';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=play-layout-2';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=community-group-1';
+import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=community-group-1';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=community-group-1';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=community-group-1';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=garda-neutral-1';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=garda-neutral-1';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=community-group-1';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=scenario-descriptions-20261115';
-import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=discrimination-1';
-import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=play-layout-2';
+import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=community-group-1';
+import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=community-group-1';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=discrimination-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';

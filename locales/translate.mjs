@@ -1,10 +1,10 @@
-import {learningCopy} from './play-copy.mjs?v=discrimination-1';
-import {messages} from './messages.mjs?v=shop-theft-20261115';
+import {learningCopy} from './play-copy.mjs?v=community-group-1';
+import {messages} from './messages.mjs?v=community-group-1';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=discrimination-1';
-import {gaContent} from './ga-content.mjs?v=shop-theft-20261115';
-import {refinementIrish} from './refinements-ga.mjs?v=support-resources-1';
+import {encounters} from '../encounters/catalog.mjs?v=community-group-1';
+import {gaContent} from './ga-content.mjs?v=community-group-1';
+import {refinementIrish} from './refinements-ga.mjs?v=community-group-1';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -75,7 +75,7 @@ const ui={
  'Start as a member of the public':'Tosaigh mar dhuine den phobal','Start as a Garda':'Tosaigh mar Gharda','My scores & progress':'Mo scóir agus mo dhul chun cinn','Continue your situation':'Lean le do chás','Last recap':'An t-athbhreithniú deireanach','Open recap':'Oscail an t-athbhreithniú','Resume play':'Lean den imirt',
  'ONE SITUATION · TWO PERSPECTIVES':'CÁS AMHÁIN · DHÁ DHEARCADH','Which role will you start with?':'Cén ról a roghnóidh tú ar dtús?','Choose a role, then a situation. Switch sides at any stage to explore the same moment with different choices and responsibilities.':'Roghnaigh ról, ansin cás. Athraigh taobh ag aon chéim chun an nóiméad céanna a scrúdú le roghanna agus freagrachtaí éagsúla.','Starting role':'Ról tosaigh','Member of the public':'Duine den phobal','Member of An Garda Síochána':'Comhalta den Gharda Síochána','Garda':'Garda',
  'View your saved scores & progress':'Féach ar do scóir agus dul chun cinn sábháilte','RIGHTS & RESPONSIBILITIES':'CEARTA AGUS FREAGRACHTAÍ','BIAS & DECISION-MAKING':'CLAONADH AGUS CINNTEOIREACHT','Rights & responsibilities':'Cearta agus freagrachtaí','Bias & decision-making':'Claonadh agus cinnteoireacht','Play as the member of the public':'Imir mar dhuine den phobal','Play as the Garda':'Imir mar Gharda',
- 'Garda involved in the encounter':'Garda sa teagmháil','Garda in the custody team':'Garda san fhoireann choimeádta','Patrol Garda':'Garda patróil','Responding Garda':'Garda atá ag freagairt','Community Garda':'Garda pobail','Youth-facing Garda':'Garda ag obair le daoine óga','Garda working with a colleague':'Garda ag obair le comhghleacaí','Community reviewer (member of the public)':'Athbhreithneoir pobail (duine den phobal)','Supervising sergeant':'Sáirsint maoirseachta','Person matching the fuller description':'Duine a mheaitseálann an cur síos iomlán',
+ 'Garda involved in the encounter':'Garda sa teagmháil','Garda in the custody team':'Garda san fhoireann choimeádta','Patrol Garda':'Garda patróil','Responding Garda':'Garda atá ag freagairt','Community Garda':'Garda pobail','Youth-facing Garda':'Garda ag obair le daoine óga','Garda working with a colleague':'Garda ag obair le comhghleacaí','Representative of a local community group (member of the public)':'Ionadaí ó ghrúpa pobail áitiúil (duine den phobal)','Supervising sergeant':'Sáirsint maoirseachta','Person matching the fuller description':'Duine a mheaitseálann an cur síos iomlán',
  'Current perspective':'Dearcadh reatha','PLAYING AS A GARDA':'AG IMIRT MAR GHARDA','PLAYING AS A MEMBER OF THE PUBLIC':'AG IMIRT MAR DHUINE DEN PHOBAL','Garda perspective':'Dearcadh an Gharda','Public perspective':'Dearcadh an phobail','MEMBER OF THE PUBLIC PERSPECTIVE':'DEARCADH AN DUINE DEN PHOBAL','GARDA PERSPECTIVE':'DEARCADH AN GHARDA',
  'Switch to the public perspective':'Athraigh go dearcadh an phobail','Switch to the Garda perspective':'Athraigh go dearcadh an Gharda','Switch to the Garda site':'Athraigh go suíomh an Gharda','Switch to the public rights site':'Athraigh go suíomh chearta an phobail',
  'Scores on this route':'Scóir ar an mbealach seo','points':'pointe','No answers yet':'Gan fhreagra fós','← All shared situations':'← Gach cás roinnte','My progress':'Mo dhul chun cinn',
@@ -161,13 +161,13 @@ export {gaContent};
 // Each pack is hosted with the game and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=shop-theft-20261115'+retry),
- ar:retry=>import('./ar-content.mjs?v=shop-theft-20261115'+retry),
- pl:retry=>import('./pl-content.mjs?v=shop-theft-20261115'+retry),
- ro:retry=>import('./ro-content.mjs?v=shop-theft-20261115'+retry),
- fr:retry=>import('./fr-content.mjs?v=shop-theft-20261115'+retry),
- es:retry=>import('./es-content.mjs?v=shop-theft-20261115'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=shop-theft-20261115'+retry)
+ pt:retry=>import('./pt-content.mjs?v=community-group-1'+retry),
+ ar:retry=>import('./ar-content.mjs?v=community-group-1'+retry),
+ pl:retry=>import('./pl-content.mjs?v=community-group-1'+retry),
+ ro:retry=>import('./ro-content.mjs?v=community-group-1'+retry),
+ fr:retry=>import('./fr-content.mjs?v=community-group-1'+retry),
+ es:retry=>import('./es-content.mjs?v=community-group-1'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=community-group-1'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
