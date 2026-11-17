@@ -1,4 +1,4 @@
-import {gardaArtwork} from './garda-artwork.mjs?v=garda-baseball-20261114';
+import {gardaArtwork} from './garda-artwork.mjs?v=garda-neutral-1';
 
 // Measured source-cell boundaries preserve full feet and wheels even where the
 // generated atlas does not follow an exact equal-height grid. Crop the source

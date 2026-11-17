@@ -1,4 +1,4 @@
-import {characterArtwork,characterFor} from './characters.mjs?v=character-details-actions-20261114';
+import {characterArtwork,characterFor} from './characters.mjs?v=garda-neutral-1';
 import {roleLabels} from './catalog.mjs?v=discrimination-1';
 import {createDialogController} from '../accessibility/dialog.mjs?v=scenario-descriptions-20261115';
 import {normaliseLanguage} from '../locales/languages.mjs';
