@@ -50,31 +50,33 @@ Explore a fictional encounter with An Garda Síochána, choose a response and re
 
 ## How to play
 
-**Read a situation → choose a response → learn why it matters.**
+**Read a fictional situation → choose a response → learn why it matters.**
 
-1. **Choose your side.** Select [**Play as a member of the public**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Play as a Garda**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). Start with either side. You can switch while you play.
-2. **Pick a situation.** Select **Start this situation** to try the suggested encounter. Or open **Browse all situations** to choose from 24 shared situations. You can browse by topic, including **Discrimination**. A character is already chosen; select **Choose a different character** if you wish.
-3. **Read, then choose.** Read what is happening in the fictional scene. Choose what you would say or do.
-4. **Learn why it matters.** Read the explanation for your answer. Open **Why this matters** for more detail, or **Read the sources for this decision** to see the supporting information.
-5. **Continue the situation.** When there is more to explore, select **Next decision**. Read, choose and learn again. A **New variation** notice means the facts have changed, so read the new scene carefully. The answer for the side you are playing decides the next step.
-6. **Review what you learned.** After the final answer, select **View recap**. Look back at your choices and the explanations. You can replay a decision, try the other perspective or select **Choose another situation**.
+These steps describe the main **Explore both perspectives** game. Start with either role: a member of the public or a Garda. You can finish a situation using just one role. The guide shows the English button names.
+
+1. **Choose your side.** Select [**Play as a member of the public**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Play as a Garda**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is already chosen. To change them before starting, select **Choose a different character**, choose one, then select **Done**.
+2. **Start a situation.** Select **Start this situation** to try the suggested story. To pick another story, open **Browse all situations**, choose from 24 situations by topic, then select **Play this situation** on its card.
+3. **Read, then choose.** Read the fictional scene. Choose what you would say or do.
+4. **Read the explanation.** After every answer, you see an explanation. Open **Why this matters** for more detail, or **Read the sources for this decision** for the supporting information.
+5. **Continue or finish.** The main button changes as you play. When there is another decision, select **Next decision**, then return to step 3. After your final answer, the button becomes **View recap**: select it to finish the situation and go to step 6. A **New variation** notice means the facts have changed, so read the new scene carefully. When you continue, the answer for the role you are playing decides what happens next.
+6. **Review what you learned.** The recap shows your choices and the explanations. You can replay a decision, try the other role or select **Choose another situation**.
 
 Choose **Discrimination** under **Browse all situations** to explore the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). Each situation has two decisions, with responses and feedback from the public and Garda perspectives. The housing assistance situation concerns access to rented accommodation.
 
 > [!TIP]
-> **Trying both sides is optional.** Select **Try another answer** to change your answer for the side you are playing. Select **Compare the other side** to try the same moment from the other perspective. Your answers from both sides are kept when you switch. You can also use **Switch to the Garda perspective** or **Switch to the public perspective** during play.
+> **Optional, before you move on:** select **Try another answer** to choose a new answer for your current role. Select **Compare the other side** to play the other person at the same point in the story; your first answer is kept. If you have not answered in that role yet, choose a response before continuing. Answers from both roles are kept when you switch. You can also use **Switch to the Garda perspective** or **Switch to the public perspective** during play.
 
 For individual practice, choose **Practise one role** in the play menu or open **Practise one role at a time** on the home page. When a saved situation is available, **Resume play** continues an unfinished situation and **Open recap** revisits a completed one.
 
-Find detailed scores and supporting guidance under **Scores, sources and help**. All gameplay runs in your browser, with no AI service involved during play. Progress can be saved in this browser when storage is available; see [privacy and saving](#privacy).
+Find scores and supporting guidance under **Scores, sources and help**. There is no sign-up or time limit. Your progress is saved in this browser if your browser allows saving; it does not automatically appear on another device. See [privacy and saving](#privacy). All gameplay runs in your browser, with no AI service involved during play.
 
 ### User-flow infographic
 
-A visual guide to the six steps above, with the public and Garda logos, examples of game controls and arrows showing when to move on or try another decision. Optional actions are marked separately. Updated **18 November 2026**. The two perspective buttons in the PDF open the corresponding game setup; the other controls illustrate what to select in the game.
+A guide to the six steps above, with larger text and a single column for reading on a phone. The PDF has three A4 pages: getting started, making choices, and continuing or finishing. Optional actions are marked separately. Updated **18 November 2026**. The two perspective buttons in the PDF open the corresponding game setup; the other controls illustrate what to select in the game.
 
 <p align="center">
   <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="600" alt="Visual guide: 1. Choose the public or Garda perspective. 2. Start the suggested situation or browse 24 situations by topic. 3. Read the scene and choose a response. 4. Read the explanation; optionally try another answer or compare the other side, keeping both sides' answers. 5. Select Next decision when there is more to explore and repeat steps 3 to 5. 6. After the final answer, select View recap to review, replay or choose another situation. No sign-up or timer; progress saves in this browser when storage is available.">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="440" alt="First-time guide to Explore both perspectives. 1. Choose the public or Garda role. A character is ready; optionally select Choose a different character, choose one, then Done. 2. Select Start this situation, or Browse all situations and then Play this situation. 3. Read the fictional scene and choose a response. 4. Read the explanation and optional supporting details. Try another answer changes your current role's answer. Compare the other side switches roles at the same point and keeps your first answer; answer in that role before continuing if needed. 5. The main button is Next decision when another decision follows: return to step 3. After the final answer it becomes View recap: go to step 6. 6. Review choices and explanations, replay, try the other role or choose another situation. No sign-up or time limit. Saving depends on your browser and does not automatically transfer to another device.">
   </a>
 </p>
 

@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
-"""Rebuild the README's matching PDF and PNG guide. See docs/user-guide/README.md."""
+"""Build a phone-readable PNG and a matching three-page A4 player guide."""
 
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import shutil
 import subprocess
 
 from reportlab.lib.colors import HexColor
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import simpleSplit
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-
 ROOT = Path(__file__).resolve().parents[1]
 GUIDE = ROOT / "docs" / "user-guide"
-WIDTH, HEIGHT = 700, 1580
+WIDTH, HEIGHT = 400, 880
 REVIEWED = "18 November 2026"
 GAME = "https://samobrienolinger.github.io/stopped-both-sides/"
 REPOSITORY = "https://github.com/SamOBrienOlinger/stopped-both-sides"
@@ -24,47 +26,43 @@ MINT, ICE = "#deeee6", "#e4ecf6"
 BORDER, ACCENT = "#b7cbc5", "#a44e45"
 
 
-def generate():
-    if shutil.which("pdftoppm") is None:
-        raise SystemExit("Install Poppler (pdftoppm) before generating the guide.")
-    for name, weight in (("OpenSans", 400), ("OpenSansBold", 700)):
-        pdfmetrics.registerFont(TTFont(name, str(ROOT / "assets" / "fonts" / f"open-sans-{weight}.ttf")))
-
-    output = GUIDE / "stopped-both-sides-user-flow"
-    pdf = canvas.Canvas(str(output.with_suffix(".pdf")), pagesize=(WIDTH, HEIGHT), invariant=1)
-    pdf.setTitle("Stopped: Both Sides - How to play")
-    pdf.setAuthor("Sam Tim Solutions")
-    pdf.setSubject(f"Visual guide to shared play; English wording checked {REVIEWED}.")
-
+def draw_page(pdf, page):
+    """One column, the same text and layout in the PNG and print pages."""
     def rect(x, top, width, height, fill, radius=0, stroke=None):
         pdf.setFillColor(HexColor(fill))
         pdf.setStrokeColor(HexColor(stroke or fill))
         pdf.setLineWidth(0.85)
-        pdf.roundRect(x, HEIGHT - top - height, width, height, radius, fill=1, stroke=int(bool(stroke)))
+        pdf.roundRect(x, HEIGHT-top-height, width, height, radius,
+                      fill=1, stroke=int(bool(stroke)))
 
-    def text(x, top, value, size=15, bold=False, color=MUTED, leading=None, width=None, center=False):
+    def text(x, top, value, size=17, bold=False, color=MUTED,
+             leading=None, width=None, center=False):
         font = "OpenSansBold" if bold else "OpenSans"
-        leading = leading or size * 1.4
+        width = width if width is not None else WIDTH-x-30
+        leading = leading or size*1.4
+        lines = []
+        for paragraph in value.split("\n"):
+            lines.extend(simpleSplit(paragraph, font, size, width) or [""])
         pdf.setFillColor(HexColor(color))
         pdf.setFont(font, size)
-        for index, line in enumerate(value.split("\n")):
-            measured = pdfmetrics.stringWidth(line, font, size)
-            if measured > (width if width is not None else WIDTH - x - 30):
+        for i, line in enumerate(lines):
+            if pdfmetrics.stringWidth(line, font, size)>width:
                 raise ValueError(f"Text exceeds its box: {line}")
-            draw = pdf.drawCentredString if center else pdf.drawString
-            draw(x, HEIGHT - top - size - index * leading, line)
+            draw=pdf.drawCentredString if center else pdf.drawString
+            draw(x, HEIGHT-top-size-i*leading, line)
+        return top+size+(len(lines)-1)*leading
 
     def line(x1, top1, x2, top2, color=TEAL, width=1.7):
         pdf.setStrokeColor(HexColor(color))
         pdf.setLineWidth(width)
         pdf.setLineCap(1)
-        pdf.line(x1, HEIGHT - top1, x2, HEIGHT - top2)
+        pdf.line(x1, HEIGHT-top1, x2, HEIGHT-top2)
 
     def polygon(points, fill, stroke=None, width=1.5):
-        p = pdf.beginPath()
-        p.moveTo(points[0][0], HEIGHT - points[0][1])
+        p=pdf.beginPath()
+        p.moveTo(points[0][0], HEIGHT-points[0][1])
         for x, top in points[1:]:
-            p.lineTo(x, HEIGHT - top)
+            p.lineTo(x, HEIGHT-top)
         p.close()
         pdf.setFillColor(HexColor(fill))
         pdf.setStrokeColor(HexColor(stroke or fill))
@@ -72,8 +70,8 @@ def generate():
         pdf.drawPath(p, fill=1, stroke=int(bool(stroke)))
 
     def arrow(x, start, end):
-        line(x, start, x, end - 5)
-        polygon([(x - 3.5, end - 5), (x + 3.5, end - 5), (x, end)], TEAL)
+        line(x, start, x, end-5)
+        polygon([(x-3.5,end-5),(x+3.5,end-5),(x,end)],TEAL)
 
     def icon(name, x, top, size=26, color=TEAL):
         """Draw simple vector symbols; words always carry the instruction."""
@@ -153,137 +151,165 @@ def generate():
             pdf.line(12, 7, 12, 12)
         pdf.restoreState()
 
-    def card(number, title, top, height, symbol=None, heading_size=23):
-        rect(70, top, 570, height, WHITE, radius=17, stroke=BORDER)
-        pdf.setFillColor(HexColor(INK if number == 6 else TEAL))
-        pdf.circle(70, HEIGHT - top - 29, 18, fill=1, stroke=0)
-        text(70, top + 13, str(number), 22, True, WHITE, center=True, width=32)
-        text(100, top + 13, title, heading_size, True, INK)
-        if symbol:
-            rect(589, top + 15, 31, 31, MINT, radius=9)
-            icon(symbol, 595, top + 21, 19)
+    def card(number, title, top, height):
+        rect(16, top, 368, height, WHITE, 15, BORDER)
+        pdf.setFillColor(HexColor(TEAL))
+        pdf.circle(36, HEIGHT-top-26, 13, fill=1, stroke=0)
+        text(36, top+13, str(number), 18, True, WHITE, center=True, width=24)
+        text(58, top+11, title, 21, True, INK, width=310)
 
-    def button(x, top, width, label, fill=TEAL, color=WHITE, size=14, height=34, symbol=None):
-        rect(x, top, width, height, fill, radius=8)
+    def button(top, label, fill=TEAL, color=WHITE, size=17, height=38, symbol=None):
+        rect(32, top, 336, height, fill, 8)
         if symbol:
-            icon(symbol, x + 11, top + (height - 18) / 2, 18, color)
-        text(x + width / 2 + (9 if symbol else 0), top + (height - size) / 2 - 1,
-             label, size, True, color, width=width - (44 if symbol else 20), center=True)
+            icon(symbol, 43, top+(height-20)/2, 20, color)
+        text(200+(10 if symbol else 0), top+(height-size)/2-1,
+             label, size, True, color, width=284 if symbol else 312, center=True)
 
-    def perspective_button(x, label, role, fill, color):
-        top, width, height = 243, 245, 74
-        rect(x, top, width, height, fill, radius=10)
-        bx, bt = x + 7, top + 6
-        rect(bx, bt, 62, 62, WHITE, radius=9)
-        # Lay out the owner's original JPEG unchanged inside the white badge.
+    def perspective_button(top, role, label, fill, color):
+        rect(32, top, 336, 58, fill, 9)
+        bx, bt = 38, top+5
+        rect(bx, bt, 48, 48, WHITE, 8)
+        # Place the original JPEG unchanged, clipping its white side margins.
         pdf.saveState()
-        clip = pdf.beginPath()
-        clip.roundRect(bx, HEIGHT - bt - 62, 62, 62, 9)
-        pdf.clipPath(clip, stroke=0, fill=0)
-        pdf.drawImage(str(GUIDE / f"{role}-perspective-logo.jpeg"), bx - 11,
-                      HEIGHT - bt - 59, width=84, height=56)
+        clip=pdf.beginPath()
+        clip.roundRect(bx,HEIGHT-bt-48,48,48,8)
+        pdf.clipPath(clip,stroke=0,fill=0)
+        pdf.drawImage(str(GUIDE/f"{role}-perspective-logo.jpeg"),bx-9,
+                      HEIGHT-bt-46,width=66,height=44)
         pdf.restoreState()
-        text(x + 80, top + (17 if "\n" in label else 26), label, 13.5, True, color, 19, width=155)
-        pdf.linkURL(GAME + f"#encounters/{role}", (x, HEIGHT - top - height, x + width, HEIGHT - top), relative=0)
+        text(99, top+(5 if "\n" in label else 17), label, 16, True, color,
+             leading=21, width=257)
+        pdf.linkURL(GAME+f"#encounters/{role}",
+                    (32,HEIGHT-top-58,368,HEIGHT-top),relative=1)
 
-    rect(0, 0, WIDTH, HEIGHT, BACKGROUND)
-    rect(38, 28, 5, 105, ACCENT, radius=2)
-    text(60, 27, "STOPPED: BOTH SIDES", 15, True, TEAL)
-    text(58, 54, "How to play", 38, True, INK)
-    text(60, 111, "Read a situation. Make a choice. Learn why it matters.", 16)
+    rect(0,0,WIDTH,HEIGHT,BACKGROUND)
+    if page==0:
+        text(24,18,"STOPPED: BOTH SIDES",15,True,TEAL)
+        text(22,45,"How to play",32,True,INK)
+        text(24,99,"For Explore both perspectives",14.5,True)
+        text(24,121,"Use these controls in the game.",13.5)
 
-    card(1, "Choose your side", 164, 184)
-    text(100, 207, "Start with either side. You can switch while you play.", 14)
-    perspective_button(100, "Play as a member\nof the public", "public", MINT, TEAL)
-    perspective_button(363, "Play as a Garda", "garda", ICE, BLUE)
-    text(100, 326, "Same situations, two perspectives. Playing both sides is optional.", 12)
-    arrow(355, 348, 365)
+        card(1,"Choose your side",142,348)
+        text(32,189,"Choose who you want to play.",17)
+        perspective_button(222,"public","Play as a member\nof the public",MINT,TEAL)
+        perspective_button(292,"garda","Play as a Garda",ICE,BLUE)
+        text(32,364,"Trying both roles is optional.",16)
+        text(32,391,"A character is ready. To change them:",15.5)
+        button(420,"Choose a different character",MINT,TEAL,15,height=30)
+        text(32,459,"Choose one, then select Done.",16.5)
+        arrow(200,490,507)
 
-    card(2, "Pick a situation", 368, 190, "grid")
-    button(100, 417, 237, "Start this situation", symbol="next")
-    button(371, 417, 237, "Browse all situations", MINT, TEAL)
-    text(354, 425, "or", 12, True, MUTED, center=True, width=22)
-    text(100, 457, "Try the suggested situation.", 12.5)
-    text(371, 457, "Choose from 24 situations.", 12.5, width=237)
-    text(100, 488, "Topics include", 11.5, True)
-    for x, w, label in [(191, 101, "Street stops"), (302, 87, "Searches"), (399, 128, "Discrimination")]:
-        rect(x, 482, w, 25, BACKGROUND, radius=12)
-        text(x + w / 2, 487, label, 10.5, color=MUTED, width=w - 16, center=True)
-    icon("person", 101, 525, 18)
-    text(128, 524, "A character is already chosen. You can change them.", 12.7)
-    arrow(355, 558, 575)
+        card(2,"Start a situation",510,294)
+        text(32,558,"For the suggested story, select:",16.5)
+        button(590,"Start this situation",symbol="next")
+        text(32,645,"To pick another story, open:",16.5)
+        button(677,"Browse all situations",MINT,TEAL)
+        text(32,733,"Choose from 24 situations by topic.\nThen select Play this situation.",16,leading=23)
+        text(32,823,"Next: read, choose and learn.",16,True,TEAL)
+    elif page==1:
+        text(24,24,"Read, choose and learn",26,True,INK)
+        text(24,66,"There is no time limit.",17)
 
-    card(3, "Read, then choose", 578, 146)
-    icon("book", 103, 643, 43)
-    text(165, 632, "Read what is happening.\nChoose what you would\nsay or do.", 15, leading=21, width=250)
-    # A schematic of the game's choice buttons, with no invented story or score.
-    for i, letter in enumerate("ABC"):
-        top = 632 + i * 27
-        rect(457, top, 149, 22, MINT if i == 1 else BACKGROUND, radius=5)
-        text(469, top + 3, letter, 10, True, TEAL)
-        line(490, top + 11, 589 - i * 8, top + 11, TEAL if i == 1 else BORDER, 2.3)
-    polygon([(595, 675), (595, 692), (600, 687), (604, 695), (608, 693), (604, 685), (612, 685)], WHITE, TEAL, 1)
-    arrow(355, 724, 741)
+        card(3,"Read, then choose",105,170)
+        icon("book",32,157,29)
+        text(76,156,"Read the fictional scene.",17,width=292)
+        text(32,199,"Choose what you would say or do.",17)
+        rect(32,237,336,22,MINT,6)
+        pdf.setStrokeColor(HexColor(TEAL))
+        pdf.circle(46,HEIGHT-248,4,fill=0,stroke=1)
+        line(61,248,330,248,BORDER,2)
+        polygon([(337,242),(337,258),(342,253),(346,261),(350,259),(346,251),(354,251)],WHITE,TEAL,1)
+        arrow(200,275,292)
 
-    card(4, "Learn why it matters", 744, 276, "bulb")
-    rect(100, 800, 508, 60, MINT, radius=10)
-    icon("bulb", 112, 813, 30)
-    text(155, 809, "YOUR LEARNING POINT", 10, True, TEAL)
-    text(155, 830, "Read the explanation for your answer.", 14.2, width=440)
-    button(100, 872, 161, "Why this matters", BACKGROUND, MUTED, size=11.5, height=26)
-    button(273, 872, 335, "Read the sources for this decision", BACKGROUND, MUTED, size=11.5, height=26)
-    text(100, 909, "OPTIONAL: TRY AGAIN OR SWITCH SIDES", 10, True, ACCENT)
-    button(100, 930, 245, "Try another answer", MINT, TEAL, size=12.5, height=31, symbol="retry")
-    button(363, 930, 245, "Compare the other side", ICE, BLUE, size=12.1, height=31, symbol="switch")
-    text(100, 969, "Change your answer\nfor the side you are playing.", 11.7, leading=16, width=245)
-    text(363, 969, "Try this moment from the other side.\nBoth sides' answers are kept.", 11.7, leading=16, width=245)
-    arrow(355, 1020, 1037)
+        card(4,"Read the explanation",295,253)
+        rect(32,347,336,61,MINT,9)
+        icon("bulb",43,362,27)
+        text(84,354,"You see an explanation\nafter every answer.",16.5,leading=22,width=272)
+        text(32,424,"For more detail, open:",16.5)
+        button(455,"Why this matters",BACKGROUND,MUTED,16,height=33)
+        button(499,"Read the sources for this decision",BACKGROUND,MUTED,13.5,height=33)
 
-    card(5, "Continue the situation", 1040, 138, heading_size=22)
-    button(100, 1094, 185, "Next decision", symbol="next")
-    text(307, 1092, "Use Next decision when\nthere is more to explore.", 14, leading=19, width=280)
-    icon("info", 101, 1146, 16)
-    text(127, 1145, "New variation? Read what has changed.", 12.5)
-    pdf.saveState()
-    pdf.setDash(4, 4)
-    line(640, 1111, 662, 1111)
-    line(662, 1111, 662, 651)
-    line(662, 651, 648, 651)
-    pdf.restoreState()
-    polygon([(648, 647), (648, 655), (641, 651)], TEAL)
-    pdf.saveState()
-    pdf.translate(680, HEIGHT - 987)
-    pdf.rotate(90)
-    pdf.setFillColor(HexColor(TEAL))
-    pdf.setFont("OpenSansBold", 9)
-    pdf.drawString(0, 0, "REPEAT FOR EACH DECISION")
-    pdf.restoreState()
-    arrow(355, 1178, 1203)
-    text(370, 1184, "AT THE FINAL DECISION", 8.5, True, TEAL)
+        rect(16,568,368,280,ICE,15)
+        text(32,580,"OPTIONAL: BEFORE YOU MOVE ON",13,True,BLUE)
+        button(605,"Try another answer",WHITE,TEAL,16,height=34,symbol="retry")
+        text(32,648,"Choose a new answer for this role.",16)
+        button(686,"Compare the other side",WHITE,BLUE,16,height=34,symbol="switch")
+        text(32,733,"Play the other person at this point\nin the story. Your first answer is kept.",16,leading=22)
+        text(32,788,"Choose a response if you have not\nanswered in this role yet.",16,leading=22)
+    else:
+        text(24,24,"Continue, then review",26,True,INK)
+        text(24,66,"Follow the button after your answer.",16.5)
 
-    card(6, "Review what you learned", 1206, 184, "list", heading_size=22)
-    button(100, 1261, 185, "View recap", symbol="list")
-    text(307, 1259, "Look back at your choices\nand the explanations.", 14, leading=19, width=280)
-    for x, symbol, label in [(100, "list", "Review your choices"), (274, "switch", "Try the other side"), (448, "grid", "Choose another situation")]:
-        rect(x, 1320, 160, 54, BACKGROUND, radius=9)
-        icon(symbol, x + 70, 1327, 20)
-        text(x + 80, 1353, label, 10, True, MUTED, width=154, center=True)
+        card(5,"Continue or finish",105,333)
+        text(32,159,"The main button changes as you play.",16.5)
+        rect(32,199,336,95,MINT,9)
+        text(45,207,"WHEN THERE IS ANOTHER DECISION",12.5,True,TEAL,width=310)
+        rect(45,230,310,33,TEAL,7)
+        text(200,235,"Next decision",17,True,WHITE,center=True,width=286)
+        text(45,269,"Return to step 3 for the new scene.",16,width=310)
 
-    rect(70, 1410, 570, 91, MINT, radius=12)
-    for x, symbol, label in [(91, "person", "No sign-up"), (258, "clock", "No timer"), (414, "save", "Saved in this browser")]:
-        icon(symbol, x, 1428, 20)
-        text(x + 29, 1430, label, 11.5, True, TEAL)
-    text(355, 1470, "Progress is saved when browser storage is available.", 10.5, width=540, center=True)
-    line(70, 1520, 640, 1520, BORDER, 0.8)
-    text(70, 1531, f"Checked against the English game - {REVIEWED}", 10)
-    text(70, 1551, "github.com/SamOBrienOlinger/stopped-both-sides", 10)
-    pdf.linkURL(REPOSITORY, (70, HEIGHT - 1567, 520, HEIGHT - 1547), relative=0)
-    pdf.showPage()
+        rect(32,311,336,109,ICE,9)
+        text(45,319,"AFTER YOUR FINAL ANSWER",12.5,True,BLUE,width=310)
+        rect(45,342,310,33,BLUE,7)
+        text(200,347,"View recap",17,True,WHITE,center=True,width=286)
+        text(45,386,"The situation is finished. Go to step 6.",15,width=310)
+        arrow(200,438,455)
+
+        card(6,"Review what you learned",458,217)
+        text(32,510,"Read your choices and the explanations\nin the recap.",16.5,leading=23)
+        text(32,570,"You can replay a decision or try\nthe other role.",16.5,leading=23)
+        button(626,"Choose another situation",symbol="grid",size=15.5,height=34)
+
+        rect(16,695,368,144,MINT,15)
+        text(32,709,"No sign-up. No timer.",18,True,TEAL)
+        text(32,741,"Your progress is saved in this browser\nif your browser allows saving.",16,leading=21)
+        text(32,790,"It does not automatically appear\non another device.",16,leading=21)
+
+    line(24,852,376,852,BORDER,0.7)
+    text(24,860,f"English guide - {REVIEWED}",9.5)
+    text(376,860,f"{page+1} / 3",9.5,True,TEAL,center=True,width=35)
+
+
+def configure(pdf):
+    pdf.setTitle("Stopped: Both Sides - Your first game")
+    pdf.setAuthor("Sam Tim Solutions")
+    pdf.setSubject(f"First-time player guide to shared play; checked {REVIEWED}.")
+
+
+def generate():
+    if shutil.which("pdftoppm") is None:
+        raise SystemExit("Install Poppler (pdftoppm) before generating the guide.")
+    for name,weight in [("OpenSans",400),("OpenSansBold",700)]:
+        pdfmetrics.registerFont(TTFont(name,str(ROOT/"assets/fonts"/f"open-sans-{weight}.ttf")))
+    output=GUIDE/"stopped-both-sides-user-flow"
+    # Three A4 pages keep the print version readable. The same pages form a
+    # narrow scrolling PNG, with text that remains legible at phone width.
+    pdf=canvas.Canvas(str(output.with_suffix(".pdf")),pagesize=A4,invariant=1)
+    configure(pdf)
+    scale=min((A4[0]-36)/WIDTH,(A4[1]-36)/HEIGHT)
+    for page in range(3):
+        pdf.saveState()
+        pdf.translate((A4[0]-WIDTH*scale)/2,(A4[1]-HEIGHT*scale)/2)
+        pdf.scale(scale,scale)
+        draw_page(pdf,page)
+        pdf.restoreState()
+        pdf.showPage()
     pdf.save()
-    subprocess.run(["pdftoppm", "-singlefile", "-scale-to-x", "1400", "-scale-to-y", "-1",
-                    "-png", str(output.with_suffix(".pdf")), str(output)], check=True)
+    with TemporaryDirectory(prefix="stopped-player-guide-") as temporary:
+        poster=Path(temporary)/"poster.pdf"
+        pdf=canvas.Canvas(str(poster),pagesize=(WIDTH,HEIGHT*3),invariant=1)
+        configure(pdf)
+        for page in range(3):
+            pdf.saveState()
+            pdf.translate(0,HEIGHT*(2-page))
+            draw_page(pdf,page)
+            pdf.restoreState()
+        pdf.showPage()
+        pdf.save()
+        subprocess.run(["pdftoppm","-singlefile","-scale-to-x","1400","-scale-to-y","-1",
+                        "-png",str(poster),str(output)],check=True)
     print(f"Generated {output.with_suffix('.pdf')} and {output.with_suffix('.png')}")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     generate()
