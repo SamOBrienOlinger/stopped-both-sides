@@ -175,6 +175,8 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   align-items:flex-start;
   gap:.15rem;
   min-inline-size:0;
+  padding-block-start:clamp(.8rem,2vw,1.1rem);
+  border-block-start:1px solid var(--footer-rule);
 }
 .footer .footer-creator {
   max-inline-size:100%;
@@ -230,11 +232,6 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
 .footer :is(a,button):focus-visible {
   outline:3px solid var(--footer-focus);
   outline-offset:3px;
-}
-.footer .footer-note {
-  max-inline-size:none;
-  padding-block-start:clamp(.8rem,2vw,1.1rem);
-  border-block-start:1px solid var(--footer-rule);
 }
 @media(min-width:57rem) {
   .footer-top {grid-template-columns:minmax(0,1fr) minmax(0,2.9fr)}

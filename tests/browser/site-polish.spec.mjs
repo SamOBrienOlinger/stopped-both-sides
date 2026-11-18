@@ -4,13 +4,14 @@ const cases=[{path:'./',role:'public'},{path:'garda/',role:'garda'}];
 const portfolio='https://samobrienolinger.github.io/SamOBrienOlinger/';
 
 for(const {path,role} of cases){
- test(path+' shared footer retains owner link and copyright wording',async({page})=>{
+ test(path+' shared footer puts the disclaimer above the owner link and copyright',async({page})=>{
   await page.goto(path);
-  await expect(page.locator('.footer-creator')).toHaveText('Sam Tim Solutions');
-  await expect(page.locator('.footer-creator')).toHaveAttribute('href',portfolio);
-  await expect(page.locator('.footer-copyright')).toHaveText('Copyright © 2026. All rights reserved');
-  await expect(page.locator('.footer-note')).toContainText('General information, not legal advice.');
-  await expect(page.locator('.footer-tools a')).toHaveCount(3);
+  const identity=page.locator('.footer-top + .footer-identity');
+  await expect(identity.locator('.footer-creator')).toHaveText('Sam Tim Solutions');
+  await expect(identity.locator('.footer-creator')).toHaveAttribute('href',portfolio);
+  await expect(identity.locator('.footer-copyright')).toHaveText('Copyright © 2026. All rights reserved');
+  await expect(page.locator('.footer-top > .footer-note')).toHaveText('General information, not legal advice. Not endorsed by any organisation or An Garda Síochána.');
+  await expect(page.locator('.footer-top > .footer-note + .footer-tools a')).toHaveCount(3);
   await page.evaluate(()=>document.documentElement.classList.add('contrast-high'));
   const colours=await page.locator('.footer').evaluate(footer=>({
    copyright:getComputedStyle(footer.querySelector('.footer-copyright')).color,
@@ -37,12 +38,13 @@ for(const {path,role} of cases){
      const contentWidth=inner.clientWidth-parseFloat(padding.paddingLeft)-parseFloat(padding.paddingRight);
      const links=[...element.querySelectorAll('.footer-tools > :is(a,button)')];
      const note=element.querySelector('.footer-note').getBoundingClientRect();
-     return links.length===4 && Math.abs(note.width-contentWidth)<=1 &&
+     const identity=element.querySelector('.footer-identity').getBoundingClientRect();
+     return links.length===4 && Math.abs(identity.width-contentWidth)<=1 && note.bottom<=identity.top &&
       element.scrollWidth<=element.clientWidth+1 &&
       links.every(link=>{
        const box=link.getBoundingClientRect();
        return box.height>=44 && box.left>=bounds.left && box.right<=bounds.right &&
-        box.bottom<=note.top && link.scrollWidth<=link.clientWidth+1;
+        box.bottom<=identity.top && link.scrollWidth<=link.clientWidth+1;
       });
     })).toBe(true);
    }
