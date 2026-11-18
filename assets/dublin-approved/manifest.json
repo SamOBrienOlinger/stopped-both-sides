@@ -142,18 +142,18 @@
     "outputs": [
       {
         "file": "quayside-480.webp",
-        "bytes": 46100,
-        "sha256": "4e075df8405a25e002804a02a66b3ce594db2d469cb1474e6705d419f876c3cd"
+        "bytes": 51520,
+        "sha256": "cfeb541955b75382ee270f592e778721e83e2c07906dace306b946dffcf4d2ed"
       },
       {
         "file": "quayside-960.webp",
-        "bytes": 131152,
-        "sha256": "6e1d5e40380529b0034a03e3e487c080d18f31c169f7e46480dfb6ff23e8d83b"
+        "bytes": 149276,
+        "sha256": "73e9c7748cb5d2a9a338c7087488b01434665e100e5a06e0b0b2d293bfca2629"
       },
       {
         "file": "quayside-1600.webp",
-        "bytes": 247038,
-        "sha256": "2217dc39fdff3e1554b3ef5b2ed67603d76171193f4e46228a1365101af83577"
+        "bytes": 285666,
+        "sha256": "7dc0ea1dfe035636143dc3429d30e19b49e81b9d8292cf91aad3118b2c65d24a"
       }
     ],
     "revision": {
@@ -161,7 +161,7 @@
         1672,
         941
       ],
-      "source_rgb_sha256": "3e94fb3116d1fec579b1f39ffa3469701befd1f1b61cd8661b2aa3e6dfa65119"
+      "source_rgb_sha256": "274d7a553fc41ad39590dc008ac0cc02285389407b09fc9c4693ea3a0fa1782f"
     }
   }
 ]
