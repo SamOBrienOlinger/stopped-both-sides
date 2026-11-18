@@ -1,13 +1,13 @@
 import publicData from './original-public.mjs?v=scenario-descriptions-20261115';
-import gardaData from './original-garda.mjs?v=phlowing-1';
-import {counterparts} from './counterparts.mjs?v=phlowing-1';
+import gardaData from './original-garda.mjs?v=community-group-1';
+import {counterparts} from './counterparts.mjs?v=community-group-1';
 import {discriminationEncounters,discriminationReferences} from './discrimination.mjs?v=discrimination-1';
 export const roles=['public','garda'];
 export const roleLabels={public:'Member of the public',garda:'Garda'};
 export {sites} from '../site.mjs';
 const originalReferences=Object.fromEntries(roles.flatMap(role=>Object.entries((role==='public'?publicData:gardaData).sources).map(([id,s])=>[role+':'+id,s])));
 export const references={...originalReferences,...discriminationReferences};
-const names={street:'Alex',description:'Amina',search:'Niamh',communication:'Maya','young-person':'Jamie, 16',colleague:'Patrick','new-evidence':'Daniel',supervision:'Community reviewer (member of the public)'};
+const names={street:'Alex',description:'Amina',search:'Niamh',communication:'Maya','young-person':'Jamie, 16',colleague:'Patrick','new-evidence':'Daniel',supervision:'Representative of a local community group (member of the public)'};
 const originalEncounters=Object.fromEntries(roles.flatMap(origin=>{
  const data=origin==='public'?publicData:gardaData, opposite=origin==='public'?'garda':'public';
  return data.scenarios.map(s=>{

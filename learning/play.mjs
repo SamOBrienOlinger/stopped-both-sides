@@ -1,11 +1,11 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=discrimination-1';
-import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=discrimination-1';
-import {decodeState} from '../encounters/engine.mjs?v=discrimination-1';
-import {topicGroups} from '../encounters/presentation.mjs?v=discrimination-1';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=encounter-hero-1';
+import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=community-group-1';
+import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
+import {topicGroups} from '../encounters/presentation.mjs?v=community-group-1';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,
  reviewExamples, reviewQuestions, reviewScene, searchFigures, termFor
-} from './play-content.mjs';
+} from './play-content.mjs?v=community-group-1';
 
 const topicFor = id => topicGroups.find(topic=>topic.encounters.includes(id));
 const reviewOpening = (id,nodeId) => id==='garda-supervision'&&nodeId==='supervision-start';

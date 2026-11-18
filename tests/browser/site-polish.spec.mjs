@@ -112,7 +112,7 @@ for(const {path,role} of cases){
     await page.setViewportSize({width,height});
     await expect.poll(()=>page.evaluate(()=>{
      const section=document.querySelector('.landing-instructions');
-     const children=['.landing-deck','#paired-title','.landing-purpose','.small-note']
+     const children=['#paired-title','.landing-deck','.landing-role-actions','.small-note']
       .map(selector=>section.querySelector(selector)?.getBoundingClientRect());
      const root=document.documentElement;
      const box=section.getBoundingClientRect();

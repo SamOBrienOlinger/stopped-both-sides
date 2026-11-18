@@ -1,5 +1,5 @@
-import {encounters,roles} from './catalog.mjs?v=discrimination-1';
-import {topicGroups} from './presentation.mjs?v=discrimination-1';
+import {encounters,roles} from './catalog.mjs?v=community-group-1';
+import {topicGroups} from './presentation.mjs?v=community-group-1';
 
 const playTopics=[{id:'all',title:'All topics'},...topicGroups];
 

@@ -110,7 +110,7 @@ export function createLayout({main}){
  forced.addEventListener('change',settlePanel);
  function syncLandingReveal(){
   // Mirror the portfolio hero's staggered, viewport-triggered word reveal.
-  // The four text blocks remain fully readable if JS or the observer is missing.
+  // The text remains fully readable if JS or the observer is missing.
   const next=main.querySelector('.reference-landing .landing-instructions');
   if(next===observedLanding)return;
   landingObserver?.disconnect();

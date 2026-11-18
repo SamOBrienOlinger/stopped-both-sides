@@ -1,7 +1,7 @@
-import {decodeState} from '../encounters/engine.mjs?v=discrimination-1';
+import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
 import {createPreferences,defaults} from './preferences.mjs?v=site-languages-1';
 import {createDialogController} from './dialog.mjs?v=scenario-descriptions-20261115';
-import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=discrimination-1';
+import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=encounter-hero-1';
 import {languages,languageInfo,normaliseLanguage} from '../locales/languages.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 const languageHelp='Irish covers the original shared game. Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese also cover individual practice and reference pages.';

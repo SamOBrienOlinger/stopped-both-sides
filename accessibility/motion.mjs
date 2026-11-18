@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs?v=discrimination-1';
+import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
 import {createDisclosures} from './disclosures.mjs?v=render-paced-1';
 import {paceAnimations} from './animation-clock.mjs?v=render-paced-1';
 

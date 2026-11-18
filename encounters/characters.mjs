@@ -1,4 +1,4 @@
-import {gardaArtwork} from './garda-artwork.mjs?v=garda-baseball-20261114';
+import {gardaArtwork} from './garda-artwork.mjs?v=garda-neutral-1';
 
 // Appearance is independent of scenario facts, choices and scoring.
 const make=(role,names)=>names.map((name,index)=>({
@@ -14,7 +14,7 @@ export function characterArtwork(character,pose='portrait'){
  const updated=gardaArtwork(character);
  if(updated)return updated;
  const {column,row}=character;
- const path=pose==='portrait'?'characters/cast.webp':`scenes/${pose}-clean.webp`;
+ const path=pose==='portrait'?'characters/cast.webp?v=garda-neutral-1':`scenes/${pose}-clean.webp`;
  return {src:new URL('../assets/'+path,import.meta.url).href,
   width:1774,height:887,
   style:`left:-${column*100}%;top:-${row*100}%;width:600%;height:300%`};

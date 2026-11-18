@@ -64,11 +64,11 @@ export const openingPerspectives = {
  },
  'garda-supervision': {
   public:'You brought the residents’ concerns to the sergeant and have been shown the search summary.',
-  garda:'You shared the search summary with the community reviewer. It gives finds and totals for each group.'
+  garda:'You shared the search summary with the representative of a local community group. It gives finds and totals for each group.'
  }
 };
 
-export const reviewScene = 'A community reviewer meets the supervising Garda sergeant after residents say they felt singled out during searches.';
+export const reviewScene = 'A representative of a local community group meets the supervising Garda sergeant after residents say they felt singled out during searches.';
 export const reviewBackground = 'At a local community meeting, several residents said they felt singled out when Gardaí stopped and searched them.\n\nThe group asked one of its members to bring their concerns to the supervising Garda sergeant. At a follow-up meeting, the sergeant shares a summary of recent searches so they can decide together what to look into.\n\nIn this review, Gardaí found something in 12 of 60 searches in Group A and 3 of 15 in Group B. That’s one in five searches in both groups.\n\nThe reviewers want to know who Gardaí encountered, why they searched people and how those people were treated.';
 export const searchFigures = [
  {group:'Group A', searches:60, finds:12},
@@ -86,5 +86,5 @@ export const discussionQuestions = [
 ];
 export const reviewQuestions = [
  'What do the two find rates tell you, and what else would you need to know?',
- 'What should the sergeant and community reviewer look into together?'
+ 'What should the sergeant and the representative of a local community group look into together?'
 ];

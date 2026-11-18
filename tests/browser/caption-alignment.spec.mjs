@@ -151,16 +151,15 @@ test('caption fallback remains readable without the enhancement script',async({p
  await aligned(page);
 });
 
-test('button shine stays inside its control during hover, focus and reduced motion',async({page})=>{
+test('landing role links keep their text inside during hover, focus and reduced motion',async({page})=>{
  for(const path of ['./','garda/'])for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:900});await page.goto(path+'?lang=ga#play');
-  const buttons=page.locator('.perspective-hero-button');await expect(buttons).toHaveCount(2);
+  const buttons=page.locator('.perspective-card-link');await expect(buttons).toHaveCount(2);
   await page.evaluate(()=>{document.documentElement.style.setProperty('--reading-size','200%');return document.fonts.ready;});
   for(const reduce of ['no-preference','reduce']){
    await page.emulateMedia({reducedMotion:reduce});
    for(const button of await buttons.all()){
-    const card=button.locator('xpath=..');
-    await card.hover();await card.focus();await expect(card).toBeFocused();
+    await button.hover();await button.focus();await expect(button).toBeFocused();
     const overflow=await button.evaluate(e=>({x:e.scrollWidth-e.clientWidth,y:e.scrollHeight-e.clientHeight}));
     expect(overflow.x).toBeLessThanOrEqual(1);expect(overflow.y).toBeLessThanOrEqual(1);
    }

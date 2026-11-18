@@ -1,10 +1,10 @@
-import {learningCopy} from './play-copy.mjs?v=discrimination-1';
-import {messages} from './messages.mjs?v=shop-theft-20261115';
+import {learningCopy} from './play-copy.mjs?v=encounter-hero-1';
+import {messages} from './messages.mjs?v=community-group-1';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=discrimination-1';
-import {gaContent} from './ga-content.mjs?v=shop-theft-20261115';
-import {refinementIrish} from './refinements-ga.mjs?v=support-resources-1';
+import {encounters} from '../encounters/catalog.mjs?v=community-group-1';
+import {gaContent} from './ga-content.mjs?v=community-group-1';
+import {refinementIrish} from './refinements-ga.mjs?v=community-group-1';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -75,7 +75,7 @@ const ui={
  'Start as a member of the public':'Tosaigh mar dhuine den phobal','Start as a Garda':'Tosaigh mar Gharda','My scores & progress':'Mo scóir agus mo dhul chun cinn','Continue your situation':'Lean le do chás','Last recap':'An t-athbhreithniú deireanach','Open recap':'Oscail an t-athbhreithniú','Resume play':'Lean den imirt',
  'ONE SITUATION · TWO PERSPECTIVES':'CÁS AMHÁIN · DHÁ DHEARCADH','Which role will you start with?':'Cén ról a roghnóidh tú ar dtús?','Choose a role, then a situation. Switch sides at any stage to explore the same moment with different choices and responsibilities.':'Roghnaigh ról, ansin cás. Athraigh taobh ag aon chéim chun an nóiméad céanna a scrúdú le roghanna agus freagrachtaí éagsúla.','Starting role':'Ról tosaigh','Member of the public':'Duine den phobal','Member of An Garda Síochána':'Comhalta den Gharda Síochána','Garda':'Garda',
  'View your saved scores & progress':'Féach ar do scóir agus dul chun cinn sábháilte','RIGHTS & RESPONSIBILITIES':'CEARTA AGUS FREAGRACHTAÍ','BIAS & DECISION-MAKING':'CLAONADH AGUS CINNTEOIREACHT','Rights & responsibilities':'Cearta agus freagrachtaí','Bias & decision-making':'Claonadh agus cinnteoireacht','Play as the member of the public':'Imir mar dhuine den phobal','Play as the Garda':'Imir mar Gharda',
- 'Garda involved in the encounter':'Garda sa teagmháil','Garda in the custody team':'Garda san fhoireann choimeádta','Patrol Garda':'Garda patróil','Responding Garda':'Garda atá ag freagairt','Community Garda':'Garda pobail','Youth-facing Garda':'Garda ag obair le daoine óga','Garda working with a colleague':'Garda ag obair le comhghleacaí','Community reviewer (member of the public)':'Athbhreithneoir pobail (duine den phobal)','Supervising sergeant':'Sáirsint maoirseachta','Person matching the fuller description':'Duine a mheaitseálann an cur síos iomlán',
+ 'Garda involved in the encounter':'Garda sa teagmháil','Garda in the custody team':'Garda san fhoireann choimeádta','Patrol Garda':'Garda patróil','Responding Garda':'Garda atá ag freagairt','Community Garda':'Garda pobail','Youth-facing Garda':'Garda ag obair le daoine óga','Garda working with a colleague':'Garda ag obair le comhghleacaí','Representative of a local community group (member of the public)':'Ionadaí ó ghrúpa pobail áitiúil (duine den phobal)','Supervising sergeant':'Sáirsint maoirseachta','Person matching the fuller description':'Duine a mheaitseálann an cur síos iomlán',
  'Current perspective':'Dearcadh reatha','PLAYING AS A GARDA':'AG IMIRT MAR GHARDA','PLAYING AS A MEMBER OF THE PUBLIC':'AG IMIRT MAR DHUINE DEN PHOBAL','Garda perspective':'Dearcadh an Gharda','Public perspective':'Dearcadh an phobail','MEMBER OF THE PUBLIC PERSPECTIVE':'DEARCADH AN DUINE DEN PHOBAL','GARDA PERSPECTIVE':'DEARCADH AN GHARDA',
  'Switch to the public perspective':'Athraigh go dearcadh an phobail','Switch to the Garda perspective':'Athraigh go dearcadh an Gharda','Switch to the Garda site':'Athraigh go suíomh an Gharda','Switch to the public rights site':'Athraigh go suíomh chearta an phobail',
  'Scores on this route':'Scóir ar an mbealach seo','points':'pointe','No answers yet':'Gan fhreagra fós','← All shared situations':'← Gach cás roinnte','My progress':'Mo dhul chun cinn',
@@ -161,13 +161,13 @@ export {gaContent};
 // Each pack is hosted with the game and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=shop-theft-20261115'+retry),
- ar:retry=>import('./ar-content.mjs?v=shop-theft-20261115'+retry),
- pl:retry=>import('./pl-content.mjs?v=shop-theft-20261115'+retry),
- ro:retry=>import('./ro-content.mjs?v=shop-theft-20261115'+retry),
- fr:retry=>import('./fr-content.mjs?v=shop-theft-20261115'+retry),
- es:retry=>import('./es-content.mjs?v=shop-theft-20261115'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=shop-theft-20261115'+retry)
+ pt:retry=>import('./pt-content.mjs?v=community-group-1'+retry),
+ ar:retry=>import('./ar-content.mjs?v=community-group-1'+retry),
+ pl:retry=>import('./pl-content.mjs?v=community-group-1'+retry),
+ ro:retry=>import('./ro-content.mjs?v=community-group-1'+retry),
+ fr:retry=>import('./fr-content.mjs?v=community-group-1'+retry),
+ es:retry=>import('./es-content.mjs?v=community-group-1'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=community-group-1'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
@@ -444,15 +444,15 @@ const revisedSiteCopy={
   "es": "Explorar todas las situaciones",
   "zh-Hans": "浏览所有情境"
  },
- "Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.": {
-  "ga": "Fiosraigh do chearta agus cumhachtaí an Gharda Síochána trí theagmhálacha laethúla a bhaineann le ceistiú, cuardaigh, gabháil, daoine óga agus ciníochas.",
-  "pt": "Explore os seus direitos e os poderes da polícia através de situações quotidianas que envolvem perguntas, buscas, detenções, jovens e racismo.",
-  "ar": "استكشف حقوقك وصلاحيات الشرطة من خلال مواقف يومية تتعلق بالاستجواب والتفتيش والاعتقال والشباب والعنصرية.",
-  "pl": "Poznaj swoje prawa i uprawnienia policji na przykładzie codziennych sytuacji związanych z pytaniami, przeszukaniami, zatrzymaniami, młodymi ludźmi i rasizmem.",
-  "ro": "Explorează-ți drepturile și atribuțiile poliției prin situații cotidiene care implică întrebări, percheziții, arestări, tineri și rasism.",
-  "fr": "Découvrez vos droits et les pouvoirs de la police à travers des situations quotidiennes impliquant des questions, des fouilles, des arrestations, des jeunes et le racisme.",
-  "es": "Explora tus derechos y las facultades de la policía mediante encuentros cotidianos relacionados con preguntas, registros, detenciones, jóvenes y racismo.",
-  "zh-Hans": "通过涉及问询、搜查、逮捕、青少年和种族主义的日常情境，了解你的权利和警方的法定权力。"
+ "Explore your rights and police powers through interactions between members of the public and Gardaí.": {
+  "ga": "Fiosraigh do chearta agus cumhachtaí póilíneachta trí theagmhálacha idir daoine den phobal agus na Gardaí.",
+  "pt": "Explore os seus direitos e os poderes da polícia através de interações entre membros do público e agentes da Garda.",
+  "ar": "تعرّف على حقوقك وصلاحيات الشرطة من خلال التفاعل بين أفراد الجمهور وعناصر الغاردا.",
+  "pl": "Poznaj swoje prawa i uprawnienia policji na przykładzie kontaktów między członkami społeczeństwa a funkcjonariuszami Garda.",
+  "ro": "Explorează-ți drepturile și atribuțiile poliției prin interacțiunile dintre membrii publicului și agenții Garda.",
+  "fr": "Découvrez vos droits et les pouvoirs de la police à travers des interactions entre des membres du public et des agents de la Garda.",
+  "es": "Explora tus derechos y las facultades de la policía a través de interacciones entre personas del público y agentes de la Garda.",
+  "zh-Hans": "通过公众与爱尔兰警察（Gardaí）的互动，了解你的权利和警方的法定权力。"
  }
 };
 const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána','Your Rights':'Public rights resources','Garda Guidance':'Garda resources'};

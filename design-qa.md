@@ -1,42 +1,28 @@
-# Homepage overlap design review
+# Option 2 homepage review
 
-Date: 14 September 2026
+18 November 2026
 
-## Visual target and evidence
+## Visual evidence
 
-- User references: `IMG_1256.jpeg` (public, 1125×621) and `IMG_1255.jpeg` (Garda, 1125×653), opened together with the implemented desktop screenshot in the same comparison input.
-- Reused source imagery: [public scene](assets/heroes/public-1600.webp) and [Garda scene](assets/heroes/garda-1600.webp). The user requested horizontal opposition and overlap on every device, with a cloud of small bricks in the established palette.
-- Browser-rendered desktop evidence: [desktop capture](docs/visual/brick-cloud-desktop.jpg), 1363×936 CSS viewport, 1348px content width excluding scrollbar; captured at device scale 1. The screenshot includes the full hero region, and the source scenes were compared as content regions, not as whole-page designs. The source screenshots have surrounding margins and much larger baked-in controls; the implementation uses existing translated live links at the site's established type scale.
-- Browser-rendered mobile evidence: [enlarged Irish phone review](docs/visual/brick-cloud-phone-large.jpg), a 1363×936 browser viewport containing real 320px, 390px and 568px iframe viewports, each 800px high, at device scale 1. Each frame is scrolled to the same hero/control region. Reading settings: Gaeilge, 150% text and increased spacing. These are browser viewport checks, not physical handset tests.
-- State: homepage with an existing fictional saved encounter. Both supplied characters retain matching cream/brown skin tones; no source image pixel edits were made.
+The comparison used the English homepage with default reading settings and no saved game. The selected mockup and the Chromium desktop capture are both 1536 × 1024 pixels. The browser viewport was 1536 × 1024 CSS pixels at device scale 1. The [comparison](../../option-2-qa/desktop-comparison.png) places the mockup on the left and the rendered site on the right at half scale. Both full frames include the entire introduction, so the comparison needed no cropped view.
 
-## Findings and fixes
+- [Selected mockup](../../generated_images/exec-18cadc31-89a0-43ba-96d9-89fbc8ff7a8c.png)
+- [Rendered desktop](../../option-2-qa/chromium-final/approved-shell-public-the--f475d-blin-encounter-illustration-chromium/approved-landing-public-1536.png)
+- [Rendered phone at 390 × 844](../../option-2-qa/chromium-final/approved-shell-public-the--f475d-blin-encounter-illustration-chromium/approved-landing-public-390.png)
 
-1. **P1, fixed:** initial enlarged Irish labels obscured the main characters. Small-screen role links now occupy one shared row above the images, with their full text visible and at least 48px touch height.
-2. **P2, fixed:** independent button rows put the two photos at different heights when one label wrapped. A shared CSS grid keeps both photos on the same row, regardless of control height. Only non-semantic wrappers use `display:contents`; both real anchor elements retain native link semantics.
-3. **P2, fixed:** the initial narrow-screen cloud was too small to read as the overlap. Its proportional width now scales independently on small screens, with visible bricks and clear principal faces.
-4. **P2, fixed:** long labels could touch, and tall pill corners reduced the readable area. Mobile controls now have a capped width, sufficient separation and gentler rounded corners.
+The existing navigation and page width frame the new two-column desktop layout. The heading uses the locally hosted site font and fits on two lines at both captured sizes. The teal and Garda blue controls share the same width and visual weight. The illustration uses the full existing 16:9 scene and responsive WebP sizes. The introduction and instruction remain selectable text. On phones, both role links precede the illustration.
 
-The final phone capture was taken after these four fixes. The first CI run subsequently found a tablet-specific control collision at 768px with enlarged Irish text; the same proportional width cap was extended to desktop/tablet controls to preserve separation. The [768px tablet recheck](docs/visual/brick-cloud-tablet-large.jpg), captured at scale 1 with 150% Irish text and increased spacing, confirms the labels are separated, fully visible and centred above their respective faces. Both scene edges remain aligned. The CI rerun is a separate deployment gate.
+## Findings
 
-## Required fidelity surfaces
+- **P2, resolved.** At 390px the initial heading broke “Two perspectives.” across two lines. The final layout adjusts type size to the available column width. The phone capture and the two-line test confirm the fix.
+- **P2, resolved.** The existing high-contrast rule added a white panel underneath the new flush-left layout. The final hero keeps a transparent background, and high contrast leaves the two role choices visible while hiding the decorative artwork.
 
-- **Typography:** existing locally hosted Open Sans, weight and role labels retained. Labels wrap within their buttons; spacing and 150% Irish text were reviewed at narrow widths.
-- **Layout:** one horizontal scene row at every width, with an actual overlap of one of thirteen grid tracks. Desktop controls sit over the images; small-screen controls share a separate top row. Character galleries reflow independently. Main faces remain visible.
-- **Colour:** existing public teal and Garda blue controls, white surrounding canvas, mint/pale blue/ivory mosaic bricks with limited muted terracotta. Existing role palette and logo colours retained.
-- **Image quality:** original responsive WebP scenes are reused; the cloud is a generated raster with genuine alpha, supplied in 768px and 480px variants. Its background is transparent, with no artificial rectangle, CSS artwork or masks. The cloud is not stretched and cannot intercept clicks.
-- **Content:** role names, learning text, routes and character names remain real HTML. A role heading identifies each character gallery after the scenes are grouped. Existing gameplay content and skin colours are unchanged.
+## Verification
 
-## Interaction and verification
+The mouse and keyboard role links opened the matching setup on both homepages. Touch, portrait and landscape, high contrast, reduced motion, enlarged Irish text and 200% Arabic right-to-left text passed in the selected browser tests. The local browser checks covered both role links and found no application console errors. The two role links and both rendered layouts passed in Chromium, Firefox and WebKit. All 211 unit tests passed.
 
-- Both desktop role links opened the correct setup; keyboard Enter opened the public setup.
-- The cloud is decorative (`alt=""`, `aria-hidden="true"`, `pointer-events:none`).
-- No application console errors were found for the local preview. Unrelated browser-extension metadata messages were excluded.
-- All 88 game tests and the JavaScript syntax checks passed.
-- The existing browser suite now asserts horizontal scene alignment, real overlap, cloud loading/centring, non-overlapping controls, text containment and minimum touch targets across its Chromium/Firefox/WebKit viewport matrix. CI verification is a separate deployment gate.
+The scope covers the homepage and adjacent role selection, browsing, saved sessions, and play. Browser-emulated touch and viewport checks cover the mobile layouts.
 
-## Follow-up limitations
-
-Physical devices, obsolete browser versions and a complete screen-reader session have not been tested in this change. No all-browser or all-device guarantee is claimed.
+The earlier overlap layout review remains in [the previous revision](https://github.com/SamOBrienOlinger/stopped-both-sides/blob/305a69451221ce20f857bf54a3754e9790a70428/design-qa.md).
 
 final result: passed

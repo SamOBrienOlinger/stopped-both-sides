@@ -1,14 +1,14 @@
 import {test,expect} from '@playwright/test';
 import {startEncounter,stateHash} from '../../encounters/engine.mjs';
 const cast={public:'public-6',garda:'garda-9'};
-for(const role of ['public','garda'])test(`${role}: approved landing images load at mobile and desktop sizes`,async({page},info)=>{
+for(const role of ['public','garda'])test(`${role}: the landing image loads without cropping at mobile and desktop sizes`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
  for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:900});await page.goto((role==='garda'?'garda/':'./')+'?lang=en#play');
-  const images=page.locator('[data-approved-hero]');await expect(images).toHaveCount(2);
-  await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
-  const layout=await images.evaluateAll(nodes=>nodes.map(i=>({src:i.currentSrc,fit:getComputedStyle(i).objectFit,ratio:i.clientWidth/i.clientHeight})));
-  for(const image of layout){expect(image.src).toContain('/dublin-approved/');expect(image.fit).toBe('contain');expect(image.ratio).toBeCloseTo(16/9,1)}
+  const image=page.locator('.encounter-hero-art');await expect(image).toHaveCount(1);
+  await expect.poll(()=>image.evaluate(i=>i.complete&&i.naturalWidth>0)).toBe(true);
+  const layout=await image.evaluate(i=>({src:i.currentSrc,fit:getComputedStyle(i).objectFit,ratio:i.clientWidth/i.clientHeight}));
+  expect(layout.src).toContain('/heroes/garda-');expect(layout.fit).toBe('contain');expect(layout.ratio).toBeCloseTo(16/9,1);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
   await page.locator('.reference-landing').screenshot({path:info.outputPath(`landing-${role}-${width}.png`)});
  }

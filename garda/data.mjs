@@ -1,4 +1,4 @@
-import {reviewBackground} from '../learning/play-content.mjs';
+import {reviewBackground} from '../learning/play-content.mjs?v=community-group-1';
 
 export {sources,CHECKED,groups,PUBLIC_COMPANION} from './sources.mjs';
 const c=(text,feedback,next,review=false)=>({text,feedback,next,review});
