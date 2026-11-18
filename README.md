@@ -52,27 +52,29 @@ Explore a fictional encounter with An Garda Síochána, choose a response and re
 
 **Read a situation → choose a response → learn why it matters.**
 
-1. **Choose your perspective.** Open the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or the [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/).
-2. **Start a situation.** Select **Start this situation** for the suggested street encounter, or **Browse all situations**. A character is ready for you; **Choose a different character** is optional.
+1. **Choose your side.** Select [**Play as a member of the public**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Play as a Garda**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). Both perspectives explore the same shared situations.
+2. **Start a situation.** Select **Start this situation** for the suggested street encounter, or **Browse all situations** to explore all 24 shared situations and filter by topic. A character is ready for you; **Choose a different character** is optional.
 3. **Read and choose.** Consider the fictional scene, then choose what to say or do.
 4. **Learn from the feedback.** Read the explanation, **Why this matters** and the linked sources.
-5. **Continue the encounter.** Select **Next step** or **Explore the next variation** when offered, and repeat the read–choose–learn loop. Your active role's answer determines the next branch.
-6. **Review and replay.** At the end, select **See what you learned** for the recap. Revisit a decision, explore the other perspective or try another situation.
+5. **Continue the encounter.** Select **Next decision** and repeat the read–choose–learn loop. Read any **New variation** notice before choosing. Your active role's answer determines the next branch.
+6. **Review and replay.** At the end, select **View recap**. Review each decision, try the other perspective or select **Choose another situation**.
 
 Choose **Discrimination** under **Browse all situations** to explore the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). Each situation has two decisions, with responses and feedback from the public and Garda perspectives. The housing assistance situation concerns access to rented accommodation.
 
 > [!TIP]
-> **You can pause and reconsider.** **Try another answer** replaces your answer for the active role. **See the other side** switches perspective at the same moment and keeps both roles' answers. You can reach the recap while playing one perspective; exploring both is optional.
+> **You can pause and reconsider.** **Try another answer** lets you replace your answer for the active role. **Compare the other side** switches perspective at the same moment and keeps both roles' answers. The **Switch to the Garda perspective** and **Switch to the public perspective** controls are also available during play. You can reach the recap while playing one perspective; exploring both is optional.
+
+For individual practice, choose **Practise one role** in the play menu or open **Practise one role at a time** on the home page. When a saved situation is available, **Resume play** continues an unfinished situation and **Open recap** revisits a completed one.
 
 Find detailed scores and supporting guidance under **Scores, sources and help**. All gameplay runs in your browser, with no AI service involved during play. Progress can be saved in this browser when storage is available; see [privacy and saving](#privacy).
 
 ### User-flow infographic
 
-A visual version of the six steps above, including the optional retry and perspective-switching paths.
+A visual version of the six steps above, including the optional retry and perspective-switching paths. Updated **18 November 2026** with the current button labels, 24 shared situations and the public and Garda perspective logos. The two perspective buttons in the PDF open the corresponding game setup.
 
 <p align="center">
   <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="600" alt="User flow: choose a side, start a situation, read and choose, learn from feedback, continue, then review and replay. Optional paths let you try another answer or see the same moment from the other side.">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="600" alt="Six-step guide with public and Garda perspective logos: choose your side, start or browse 24 shared situations, read and choose, learn from feedback, select Next decision, then View recap. Optional paths let you try another answer or compare the other side while keeping both roles' answers.">
   </a>
 </p>
 
