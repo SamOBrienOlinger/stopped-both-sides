@@ -6,7 +6,7 @@ import {startEncounter,stateHash} from '../../encounters/engine.mjs';
 
 const cast={public:'public-6',garda:'garda-2'}; // Rory is Garda #2
 const paths=['./','garda/'];
-const avatarSelector='.paired-game .prompt .turn-avatar';
+const avatarSelector='.paired-game .flow-role-bar .turn-avatar';
 
 async function expectPortrait(page,role,id){
  const portrait=page.locator(avatarSelector);
@@ -23,11 +23,11 @@ async function expectPortrait(page,role,id){
 
 async function expectFitting(page){
  await expect.poll(()=>page.evaluate(()=>{
-  const badge=document.querySelector('.paired-game .prompt .turn-banner');
+  const badge=document.querySelector('.paired-game .flow-role-bar .perspective-status');
   const portrait=badge?.querySelector('.turn-avatar');
   if(!badge||!portrait)return false;
   const a=portrait.getBoundingClientRect(),b=badge.getBoundingClientRect();
-  const prompt=document.querySelector('.paired-game .prompt');
+  const prompt=document.querySelector('.paired-game .decision-choices');
   const p=prompt.getBoundingClientRect();
   return {
    minAvatarSize:a.width>=40 && a.height>=40,
@@ -52,13 +52,13 @@ async function expectFitting(page){
 }
 
 for(const path of paths){
- test(path+' displays the playable character headshot in all 14 encounters from both roles',async({page})=>{
+ test(path+' displays the playable character headshot in all encounters from both roles',async({page})=>{
   test.setTimeout(240000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const role of ['public','garda']){
    for(const id of Object.keys(encounters)){
     await page.goto(path+stateHash(startEncounter(id,role,{cast})),{waitUntil:'domcontentloaded'});
-    await expect(page.locator('.turn-banner-title')).toHaveText('YOUR TURN');
+    await expect(page.locator('.flow-role-bar .perspective-status strong')).toHaveText(role==='garda'?'Playing as a Garda':'Playing as a member of the public');
     await expectPortrait(page,role,cast[role]);
    }
   }

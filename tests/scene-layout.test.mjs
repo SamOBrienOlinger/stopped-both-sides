@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs';
-import {encounters} from '../encounters/catalog.mjs';
+import {encounters,stageCount} from '../encounters/catalog.mjs';
 import {characters} from '../encounters/characters.mjs';
 import {sceneDirections,renderScene} from '../encounters/scenes.mjs';
 import {startEncounter} from '../encounters/engine.mjs';
@@ -20,7 +20,7 @@ test('every scene and all 81 casts retain matching caption and actor identities'
    assert.ok(!/<div class="scene-stage[^>]*aria-hidden/.test(html));count++;
   }
  }
- assert.equal(count,59*81);
+ assert.equal(count,stageCount*81);
 });
 test('scene layout preserves shared/solo anchors and rejects mismatched artwork',()=>{
  assert.equal(sceneActorLayout('street','garda').x,50);

@@ -1,10 +1,11 @@
-import {encounters,roles} from './catalog.mjs?v=scene-review-1';
-import {decodeState,encodeState} from './engine.mjs?v=scene-review-1';
+import {encounters,roles} from './catalog.mjs?v=community-group-1';
+import {decodeState,encodeState} from './engine.mjs?v=community-group-1';
 import {hasOwn} from '../compatibility.mjs';
+import {playLocation} from './play-navigation.mjs?v=community-group-1';
 // This validated storage schema contains only JSON values; never requires structuredClone.
 const cloneProgress=progress=>JSON.parse(JSON.stringify(progress));
 export const STORAGE_KEY='garda-encounter-progress-v1';
-export const emptyProgress=()=>({records:{},last:null});
+export const emptyProgress=()=>({records:{},last:null,saved:[]});
 const validIndex=(n,max)=>Number.isInteger(n)&&n>=0&&n<max;
 const validResult=r=>Array.isArray(r)&&r.length===2&&Number.isInteger(r[0])&&Number.isInteger(r[1])&&r[1]>0&&r[1]<=20&&r[0]>=0&&r[0]<=r[1];
 const better=(a,b)=>!a?b:!b?a:b[0]/b[1]>a[0]/a[1]?b:a;
@@ -16,7 +17,26 @@ export function runScores(state){
   return [role,{points,answered,stages:steps.length,complete:state.complete&&answered===steps.length}];
  }));
 }
-export function recordProgress(progress,state){
+export function practiceState(token){
+ const state=decodeState(token),encounter=state&&encounters[state.id];
+ if(!encounter||state.role!==encounter.origin)return null;
+ const other=roles.find(role=>role!==state.role);
+ if(state.answers[other]!==null||state.history.some(step=>step.continuedAs!==state.role||step.answers[other]!==null))return null;
+ return state;
+}
+
+function savedEntry(mode,token,returnTo){
+ const state=mode==='practice'?practiceState(token):mode==='shared'?decodeState(token):null;
+ if(!state)return null;
+ const list=typeof returnTo==='string'?playLocation(returnTo,state.role):null;
+ const matchesList=list&&(mode==='shared'||list.mode==='practice'&&list.role===state.role);
+ return {mode,token,id:state.id,role:state.role,complete:state.complete,returnTo:matchesList?returnTo:''};
+}
+
+const sameSituation=(a,b)=>a.mode===b.mode&&a.id===b.id;
+const sameSlot=(a,b)=>sameSituation(a,b)&&a.complete===b.complete;
+
+export function recordProgress(progress,state,{mode='shared',returnTo='',opened=false}={}){
  const next=cloneProgress(progress),encounter=encounters[state.id];
  const steps=[...state.history,...(state.complete?[]:[{nodeId:state.nodeId,answers:state.answers}])];
  const scores=runScores(state);
@@ -32,6 +52,17 @@ export function recordProgress(progress,state){
   if(Object.keys(record.decisions).length)next.records[key]=record;
  }
  next.last=encodeState(state);
+ const entry=savedEntry(mode,next.last,returnTo);
+ if(entry){
+  const existing=next.saved||[];
+  const previous=existing.find(item=>sameSlot(item,entry));
+  entry.returnTo||=previous?.returnTo||'';
+  next.saved=[
+   entry,
+   ...existing.filter(item=>!sameSlot(item,entry)&&
+    (!entry.complete||opened||!sameSituation(item,entry)))
+  ];
+ }
  return next;
 }
 export function progressTotals(progress,role){
@@ -43,7 +74,8 @@ export function packProgress(progress){
   const [id,role]=key.split('/'),ids=Object.keys(encounters[id].nodes);
   return [id,roles.indexOf(role),Object.entries(r.decisions).map(([node,v])=>[ids.indexOf(node),...v]),r.best,r.last];
  });
- return btoa(JSON.stringify({v:1,rows,last:progress.last})).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
+ const saved=(progress.saved||[]).map(entry=>[entry.mode,entry.token,entry.returnTo]);
+ return btoa(JSON.stringify({v:1,rows,last:progress.last,saved})).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
 }
 export function unpackProgress(token){
  try{
@@ -64,6 +96,16 @@ export function unpackProgress(token){
    p.records[key]={decisions,best,last};
   }
   p.last=d.last===null?null:decodeState(d.last)?d.last:null;
+  if(Array.isArray(d.saved)){
+   for(const row of d.saved.slice(0,Object.keys(encounters).length*4)){
+    if(!Array.isArray(row)||row.length!==3)continue;
+    const entry=savedEntry(...row);
+    if(entry&&!p.saved.some(item=>sameSlot(item,entry)))p.saved.push(entry);
+   }
+  }else if(p.last){
+   // Old links saved both modes in the shared format. Preserve the exact route.
+   p.saved.push(savedEntry('shared',p.last,''));
+  }
   return p;
  }catch{return null;}
 }
@@ -75,6 +117,7 @@ export function mergeProgress(a,b){
   existing.best=better(existing.best,r.best);existing.last=r.last||existing.last;p.records[key]=existing;
  }
  p.last=b.last||p.last;
+ p.saved=[...(b.saved||[]),...(p.saved||[]).filter(entry=>!b.saved?.some(item=>sameSlot(item,entry)))];
  return p;
 }
 export const progressStorageKey=(siteRole='')=>STORAGE_KEY+(['public','garda'].includes(siteRole)?':'+siteRole:'');

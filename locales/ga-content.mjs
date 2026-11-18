@@ -590,7 +590,7 @@ Object.assign(gaContent,{
  }},
  'garda-supervision':{title:'Cad a fhágann na huimhreacha ar lár',description:'Tá rátaí aimsithe comhionanna suaimhneach. Scrúdaigh roghnú, patróil agus an méid is féidir le toradh oiliúna a léiriú.',nodes:{
   'supervision-start':n('Painéal a bhfuil cuma shuaimhneach air','Ag cruinniú pobail áitiúil, dúirt roinnt cónaitheoirí gur bhraith siad gur díríodh orthu go speisialta nuair a stop na Gardaí iad agus nuair a rinne siad iad a chuardach.\n\nD’iarr an grúpa ar dhuine dá chomhaltaí ábhar imní na gcónaitheoirí a chur faoi bhráid an tsáirsint mhaoirseachta. Ag cruinniú leantach, roinneann an sáirsint achoimre ar na cuardaigh a rinneadh le déanaí ionas gur féidir leo cinneadh a dhéanamh le chéile faoi na ceisteanna atá le fiosrú.\n\nSan athbhreithniú seo, tháinig na Gardaí ar rud éigin i 12 as 60 cuardach i nGrúpa A agus i 3 as 15 chuardach i nGrúpa B. Sin cuardach amháin as gach cúig cinn sa dá ghrúpa.\n\nBa mhaith leo a fháil amach cé leis ar casadh na Gardaí, cén fáth ar chuardaigh siad daoine agus cén chaoi ar caitheadh leis na daoine sin.',[
-   'Mar athbhreithneoir pobail, cad is féidir a bhaint as an tábla?','Ní bhunaíonn rátaí aimsithe comhionanna cóir, agus ní shocraíonn comhairimh éagsúla cúis gach cinnidh. Aithin an t-eolas atá in easnamh sula ndéanann tú maíomh níos láidre.',
+   'Mar ionadaí ó ghrúpa pobail áitiúil, cad is féidir a bhaint as an tábla?','Ní bhunaíonn rátaí aimsithe comhionanna cóir, agus ní shocraíonn comhairimh éagsúla cúis gach cinnidh. Aithin an t-eolas atá in easnamh sula ndéanann tú maíomh níos láidre.',
    'Fiafraí faoi roghnú, forais aonair, imscaradh agus cóireáil.','Aithníonn na ceisteanna sin an méid nach réitíonn an tábla.',
    'Na céatadáin amháin a mheas mar chruthúnas go raibh gach teagmháil cóir.','Teastaíonn scrúdú ar leith ar an sampla cuardaithe agus ar sheoladh na dteagmhálacha.'
   ],[
@@ -609,7 +609,7 @@ Object.assign(gaContent,{
    'Comparáid le cionmhaireachtaí daonáirimh cónaitheoirí amháin a mheas mar mhíniú iomlán.','Ní fhreagraíonn ainmneoir amháin gach ceist faoi nochtadh sráide, imscaradh agus roghnú dleathach.',
    'Spriocanna cuardaigh a ardú go bhfeabhsaíonn líon na n-aimsithe.','Ní tomhas cáilíochta dlíthiúla ná cóireála cóire é líon amháin, agus d’fhéadfadh sé brú chun gníomhaíocht le forais laga a chruthú.'
   ]),
-  'supervision-training':n('Chríochnaigh gach duine an cluiche','Críochnaíonn foireann an cluiche agus feabhsaíonn a freagraí tráth na gceist. Moltar a fhógairt gur laghdaíodh claonadh i bhfíorchuardaigh Gardaí. Feiceann an sáirsint agus an t-athbhreithneoir pobail an maíomh céanna.',[
+  'supervision-training':n('Chríochnaigh gach duine an cluiche','Críochnaíonn foireann an cluiche agus feabhsaíonn a freagraí tráth na gceist. Moltar a fhógairt gur laghdaíodh claonadh i bhfíorchuardaigh Gardaí. Feiceann an sáirsint agus an t-ionadaí ó ghrúpa pobail áitiúil an maíomh céanna.',[
    'Cad a d’iarrfá sula nglacann tú leis an maíomh?','Tomhaiseann scór feidhmíocht sa chleachtadh. Ní chruthaíonn sé athrú iompair, laghdú idirdhealaithe ná eispéireas poiblí níos fearr.',
    'Cad iad na torthaí sa saol fíor a tomhaiseadh seachas freagraí an tráth na gceist.','Scarann sé toradh foghlama úsáideach ó mhaíomh faoi chleachtas.',
    'Scór níos airde a mheas mar chruthúnas go bhfuil deireadh le claonadh sa saol fíor.','Ní thacaíonn an fhianaise leis an gconclúid sin.'

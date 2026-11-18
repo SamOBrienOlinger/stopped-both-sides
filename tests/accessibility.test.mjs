@@ -7,10 +7,11 @@ import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '.
 import {decodeState} from '../encounters/engine.mjs?v=scene-review-1';
 import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs';
 
-test('Irish content covers every shared stage and both roles without altering choice order or route identifiers',()=>{
+test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
  let stages=0;
- assert.deepEqual(Object.keys(gaContent),Object.keys(encounters));
- for(const e of Object.values(encounters)){
+ const original=Object.values(encounters).filter(encounter=>!encounter.language);
+ assert.deepEqual(Object.keys(gaContent),original.map(encounter=>encounter.id));
+ for(const e of original){
   const ga=gaContent[e.id];assert.ok(ga.title&&ga.description);assert.deepEqual(Object.keys(ga.nodes),Object.keys(e.nodes));
   for(const node of Object.values(e.nodes)){stages++;const translated=ga.nodes[node.id];assert.ok(translated.title&&translated.scene);
    assert.notEqual(translateText(node.scene,'ga'),node.scene);

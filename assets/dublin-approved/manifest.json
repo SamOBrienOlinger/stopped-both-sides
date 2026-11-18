@@ -10,20 +10,27 @@
     "outputs": [
       {
         "file": "gpo-city-480.webp",
-        "bytes": 38492,
-        "sha256": "7af2c619b8cba475a110ed598233df821893856288a5ce358583ab64700e70ae"
+        "bytes": 38792,
+        "sha256": "588ebc87f70f47d2420f64f840cadb11572a284e12af9ff5473f8d63bedaaf0e"
       },
       {
         "file": "gpo-city-960.webp",
-        "bytes": 108332,
-        "sha256": "73b959357072b3d16a3a45dcc48bcb3c6f22ca6ee776d3d6c463bb880b650b7e"
+        "bytes": 117412,
+        "sha256": "4c11d0fba982bdbc6c301c0997aaa6eef0f1d3b02893958281fc4b349e5a31d3"
       },
       {
         "file": "gpo-city-1600.webp",
-        "bytes": 208154,
-        "sha256": "53839589e96f4e92117ddebf1a781f7e09fb17f8f755894a0b30dbea9c325f8d"
+        "bytes": 233274,
+        "sha256": "b6620d43a170b1b698c25b7e9f03791ff31ea4f9515d7a36d8890ac6650629ff"
       }
-    ]
+    ],
+    "revision": {
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "source_rgb_sha256": "522d8c774fb8d4e0c051734b725cd799b77befec3ab5e752ba3e4e29e7c40b67"
+    }
   },
   {
     "name": "liffey-bridge",
@@ -36,20 +43,27 @@
     "outputs": [
       {
         "file": "liffey-bridge-480.webp",
-        "bytes": 47138,
-        "sha256": "8a4c3687de94c427ee7788647c5cf00e6ec6b160174d51b41573e8e329a9bef3"
+        "bytes": 48322,
+        "sha256": "b39b831236978b54e84b36bbe67473edf1d416d9ae8da9dba3e3454e3af3660e"
       },
       {
         "file": "liffey-bridge-960.webp",
-        "bytes": 130624,
-        "sha256": "8e44e12937314d0b32b82407ba5c471f85b79389654aabe4e1298f8e2307ccac"
+        "bytes": 137350,
+        "sha256": "603b90db1095102fa85a93ad93b9b66cb435136c8ed3122d2e200aa180bcc152"
       },
       {
         "file": "liffey-bridge-1600.webp",
-        "bytes": 236882,
-        "sha256": "146e4d5b81bf5a8c071c465d55dff2f89bff9c993a522ed99855db0ab19c875c"
+        "bytes": 252792,
+        "sha256": "20251853c0b51c65916ba3d006a7d9c5988fd125a4e15db17b69adac21f91362"
       }
-    ]
+    ],
+    "revision": {
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "source_rgb_sha256": "b356f1c0db3a8c3093881edc95eb75f9ed0f03b5523e45b9fea347fe13f5ace1"
+    }
   },
   {
     "name": "bus-stop",
@@ -62,20 +76,27 @@
     "outputs": [
       {
         "file": "bus-stop-480.webp",
-        "bytes": 41138,
-        "sha256": "48e408ff9a474f25d14b1f292e886a9800b5ec166c3f351fdedc559946541359"
+        "bytes": 43234,
+        "sha256": "725c37c0521ec02dab760e6194e5dfce917bb69e92f1d43653e1522404a6c7e8"
       },
       {
         "file": "bus-stop-960.webp",
-        "bytes": 105890,
-        "sha256": "7fd73439c201f434f57ae28f3b25cc3449bb3af33a2a2651f75516ff7acdf3bc"
+        "bytes": 120082,
+        "sha256": "aa55a857e12ac24d1ab77ef59ca5f92a73818e879b5eda7d938aa1f3abbf19e9"
       },
       {
         "file": "bus-stop-1600.webp",
-        "bytes": 196428,
-        "sha256": "d1e2c8d8939fd646561ca58604a91b7dec4c9002244f093ac9746a7ebe0fb85a"
+        "bytes": 229606,
+        "sha256": "1b437f9f2ecc77c2a4edc626a39f9a75955842a5ce124899b1d1b6b31252090f"
       }
-    ]
+    ],
+    "revision": {
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "source_rgb_sha256": "10e35ed02e30280bd052983b085bbcfe78ce51446286214971eea970271988c5"
+    }
   },
   {
     "name": "suburban-street",
@@ -88,20 +109,27 @@
     "outputs": [
       {
         "file": "suburban-street-480.webp",
-        "bytes": 43796,
-        "sha256": "cc09e96123e45740624ce1761263c1ad6c2e50a6523cbdec59267b9049266a4e"
+        "bytes": 45362,
+        "sha256": "19dc0a7d680d8aabf1a8cfcb0c06e88d181187f102628fd4bf593578eec348bf"
       },
       {
         "file": "suburban-street-960.webp",
-        "bytes": 120496,
-        "sha256": "c092589782874c41067bc360e143b08816c2eb3e3544789daafe2d01d6e1e4d7"
+        "bytes": 124014,
+        "sha256": "1dd9e8da08c0cd9886946c7a958bb63a54bf458c196dfa0f2d8992dc8cc615e5"
       },
       {
         "file": "suburban-street-1600.webp",
-        "bytes": 220588,
-        "sha256": "9ad662aaa3a8b7e6ee93ed43cb0b543949fe359239a1986332c85ecc18210ea4"
+        "bytes": 223488,
+        "sha256": "3a378dc3793da2884016780a1ab91d7e3854985e09307298acf1d000e5e81c21"
       }
-    ]
+    ],
+    "revision": {
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "source_rgb_sha256": "3ce6832fe99c5478e934f0ca8532206f1f789df72b8b1b3a724712a49e5e6da5"
+    }
   },
   {
     "name": "quayside",
@@ -114,19 +142,26 @@
     "outputs": [
       {
         "file": "quayside-480.webp",
-        "bytes": 45934,
-        "sha256": "5622e74a470ea403af46fd09e2d3d7470606e1c48113f6fed16b236f5d96e5a4"
+        "bytes": 46100,
+        "sha256": "4e075df8405a25e002804a02a66b3ce594db2d469cb1474e6705d419f876c3cd"
       },
       {
         "file": "quayside-960.webp",
-        "bytes": 124592,
-        "sha256": "656203d4a273fb8f4f0cfa1bbf718132f17fea27c2b6816d9c7f57d442a00dd8"
+        "bytes": 131152,
+        "sha256": "6e1d5e40380529b0034a03e3e487c080d18f31c169f7e46480dfb6ff23e8d83b"
       },
       {
         "file": "quayside-1600.webp",
-        "bytes": 232520,
-        "sha256": "87f36f58d86113d35f66056a753e7ebb72d766232b8982576e9bdce291cde347"
+        "bytes": 247038,
+        "sha256": "2217dc39fdff3e1554b3ef5b2ed67603d76171193f4e46228a1365101af83577"
       }
-    ]
+    ],
+    "revision": {
+      "source_dimensions": [
+        1672,
+        941
+      ],
+      "source_rgb_sha256": "3e94fb3116d1fec579b1f39ffa3469701befd1f1b61cd8661b2aa3e6dfa65119"
+    }
   }
 ]

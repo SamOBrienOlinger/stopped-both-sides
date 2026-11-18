@@ -38,6 +38,19 @@
  line-height:1.5;
  letter-spacing:.035em;
 }
+.support-logo{
+ display:flex;
+ align-items:center;
+ min-block-size:3.5rem;
+ margin-block-end:.65rem;
+}
+.support-logo img{
+ display:block;
+ inline-size:auto;
+ block-size:auto;
+ max-inline-size:min(100%,12rem);
+ max-block-size:3.5rem;
+}
 .support-card h3{
  margin:0 0 1rem;
  color:var(--ink);
@@ -134,6 +147,7 @@
 }
 @media(forced-colors:active){
  .support-card,.support-recap{background:Canvas;color:CanvasText;border-color:CanvasText;box-shadow:none}
+ .support-logo img{background:#fff;forced-color-adjust:none}
  .support-heading :is(h2,p),.support-card :is(h3,h3 span,.support-kind,.support-description),
  .support-section .support-checked,.support-recap :is(h2,p){color:CanvasText}
  .support-link,.support-link:hover{background:Canvas;color:LinkText;border-color:LinkText}

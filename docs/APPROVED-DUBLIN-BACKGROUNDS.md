@@ -1,17 +1,21 @@
-# Approved Dublin background integration
+# Dublin background artwork
 
-Branch: `uimproved`. The production `main` branch is not changed.
+`phlowing` uses the Option 2 illustration on both homepages. The outdoor encounter backgrounds also supply the card previews for topics, shared situations and single-role practice.
 
-| Approved image | Placement |
-| --- | --- |
-| GPO and Spire crowd | Garda landing choice |
-| River Liffey and Ha'penny Bridge | Public landing choice |
-| Suburban bus shelter | Bus-stop encounters |
-| Suburban terraced street | Street encounters |
-| Quayside cafe and promenade | Community encounters |
+| Illustration | Placement | Geographic details |
+| --- | --- | --- |
+| Option 2 GPO encounter | Both homepages, `assets/heroes/garda-*.webp` | The GPO has six Ionic columns. The Spire stands on the O’Connell Street centre island across the road, with its base visible. Straight-arm streetlights replace the ornate lamps. [National Inventory of Architectural Heritage](https://www.buildingsofireland.ie/buildings-search/building/50010528/general-post-office-gpo-oconnell-street-lower-princes-street-north-henry-street-dublin-1-dublin-city) · [Visit Dublin](https://www.visitdublin.com/the-spire) · [Dublin City Film Office](https://www.dublincityfilmoffice.ie/filming-location/oconnell-street-sraid-ui-chonaill/) |
+| Suburban bus shelter | Bus-stop encounters, `bus-stop-*.webp` | The left-side doors face the waiting pavement. The bus shows route 14 to Dundrum Luas and the pole shows stop 1047, Beaumont Avenue in Churchtown. The shelter and surrounding houses are illustrative. [Transport for Ireland stop 1047](https://journeyplanner-production.transportforireland.ie/departures?stopId=8250DB001047&wrapper=false) |
+| Quayside café | Community encounters, `quayside-*.webp` | O’Connell Bridge retains its three stone arches, limestone balustrade and triple lamps. The near skyline shows quay buildings. The Custom House sits farther downstream on the north quay, outside the illustrated view. [National Inventory of Architectural Heritage](https://www.buildingsofireland.ie/buildings-search/building/50060552/oconnell-bridge-dublin-1-dublin) · [Dublin City Centre Transport Plan](https://www.dublincity.ie/sites/default/files/2024-04/09-dublin-city-centre-transport-plan-public-realm-technical-note.pdf) |
+| Suburban terraced street | Street encounters, `suburban-street-*.webp` | Traffic approaches to the right of the centre line in this view and recedes to its left, following Irish left-hand traffic. The street is fictional. [Road Safety Authority](https://www.rsa.ie/road-safety/road-users/tourists) |
+| GPO and Spire crowd | Earlier Garda homepage card, `gpo-city-*.webp` | Six Ionic columns and the separate centre-island Spire base. [National Inventory of Architectural Heritage](https://www.buildingsofireland.ie/buildings-search/building/50010528/general-post-office-gpo-oconnell-street-lower-princes-street-north-henry-street-dublin-1-dublin-city) · [Visit Dublin](https://www.visitdublin.com/the-spire) |
+| Ha’penny Bridge | Earlier public homepage card, `liffey-bridge-*.webp` | The white cast-iron footbridge spans the Liffey in a single shallow arch. The eastward skyline shows the receding quays. [Dublin City Film Office](https://dublincityfilmoffice.ie/filming-location/hapenny-bridge/) |
+| Public view of the GPO encounter | Repository README, `assets/heroes/public-*.webp` | The reverse angle looks south along the GPO pavement, with the portico on the right and the Spire behind the camera. [National Inventory of Architectural Heritage](https://www.buildingsofireland.ie/buildings-search/building/50010528/general-post-office-gpo-oconnell-street-lower-princes-street-north-henry-street-dublin-1-dublin-city) · [Visit Dublin](https://www.visitdublin.com/the-spire) |
 
-The five originals were explicitly selected in the conversation. Their decoded RGB SHA-256 hashes and output hashes are recorded in `assets/dublin-approved/manifest.json`. Only resizing and WebP compression are applied; people, clothing and skin tones are not regenerated or recoloured. These are Dublin-inspired illustrations, not verified geographic reconstructions or factual transport diagrams.
+The station reception, advice room and community meeting room are fictional interiors. The original outdoor scene files and the illustrations in `assets/dublin-lego` serve as design references.
 
-All production images are local files in three responsive widths (480, 960, 1600). There is no runtime request to Google, Canva or an external image host. Full landscape compositions avoid cropping people or placing text on faces. Outdoor selectable characters use per-setting pavement anchors; their identities, selection controls, states and scores are unchanged. Mixed-location reflections stack on narrow screens. Indoor images and pure indoor compositions remain unchanged.
+Each illustration uses one 16:9 composition in local WebP files at 480, 960 and 1600 pixels wide. The bus-stop character positions follow the right-side pavement in previews, decision scenes and split reflections. Split scenes stack on narrow screens.
 
-Validation: source pixel hashes; local-file and responsive-image unit checks; existing game tests; browser image loading, dimensions, pavement bounds and role-switch preservation. Browser screenshots accompany the integration workflow for visual inspection.
+Topic, situation and practice cards share the same version of the scene renderer as decision stages. The earlier landing-layout styles also point to the corrected GPO and Ha’penny Bridge art.
+
+`assets/dublin-approved/manifest.json` records the original approved source and the dimensions and RGB hash of each revised source. It also records the byte count and SHA-256 hash of each responsive export. The checks verify those files, browser image loading and dimensions, character positions and perspective switching.

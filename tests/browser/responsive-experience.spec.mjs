@@ -109,18 +109,18 @@ for(const path of ['./','garda/']){
    }).observe(document,{subtree:true,attributes:true,attributeFilter:['data-motion']});
   });
   await page.goto(path);await page.evaluate(()=>document.fonts.ready);
-  const card=page.locator('.perspective-hero').first(),button=card.locator('.perspective-hero-button');
-  await card.scrollIntoViewIfNeeded();
-  const geometry=()=>card.evaluate(element=>[element,element.querySelector('.perspective-hero-button')].map(target=>{
+  const group=page.locator('.landing-role-actions'),button=group.locator('.perspective-card-link').first();
+  await button.scrollIntoViewIfNeeded();
+  const geometry=()=>group.evaluate(element=>[element,element.firstElementChild].map(target=>{
    const bounds=target.getBoundingClientRect();
    return {x:bounds.x+scrollX,y:bounds.y+scrollY,width:bounds.width,height:bounds.height};
   }));
   const before=await geometry();await button.hover();
-  const samples=await card.evaluate(async element=>{
+  const samples=await group.evaluate(async element=>{
    const values=[];
    for(let frame=0;frame<12;frame++){
     await new Promise(requestAnimationFrame);
-    values.push([element,element.querySelector('.perspective-hero-button')].map(target=>{
+    values.push([element,element.firstElementChild].map(target=>{
      const bounds=target.getBoundingClientRect();
      return {x:bounds.x+scrollX,y:bounds.y+scrollY,width:bounds.width,height:bounds.height};
     }));
@@ -129,16 +129,15 @@ for(const path of ['./','garda/']){
   });
   for(const sample of samples)for(let index=0;index<before.length;index++){
    for(const dimension of ['x','y','width','height'])expect(Math.abs(sample[index][dimension]-before[index][dimension]),
-    'hover and entrance effects keep each card and its button in place').toBeLessThan(.5);
+    'hover and entrance effects keep the role links in place').toBeLessThan(.5);
   }
   await page.goto(path+'#about');
-  await expect(page.locator('[data-reading-chunk]').first()).toBeVisible();
+  const initialGroup=page.locator('.about-opening .about-overview');
+  await expect(initialGroup).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);
   // A hash-only goto stays in this document. Let the route's page cue settle
   // and register later-scroll targets before deliberately reaching one.
   await frames(page);await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');await frames(page);
-  const initialGroup=page.locator('.about-opening .about-overview');
-  await expect(initialGroup).toBeVisible();
   const initialHeading=await initialGroup.locator('p').first().textContent();
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   expect(await page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),initialHeading),
@@ -187,8 +186,8 @@ for(const path of ['./','garda/']){
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.goto(path);
   await expect(page.locator('.reference-landing')).toBeVisible();await page.evaluate(()=>document.fonts.ready);await frames(page);
-  await expect.poll(()=>page.locator('.perspective-hero>img[data-approved-hero]').evaluateAll(images=>images.length===2&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
-  await expect.poll(()=>page.locator('.perspective-hero .perspective-icon').evaluateAll(images=>images.length===2&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
+  await expect.poll(()=>page.locator('.encounter-hero-art').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  await expect(page.locator('.landing-role-actions a')).toHaveCount(2);
   if(path==='./')await page.screenshot({path:testInfo.outputPath('mobile-landing-390.png')});
   await page.goto(path+'#about');await expect(page.locator('.learning-panel').first()).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);await frames(page);

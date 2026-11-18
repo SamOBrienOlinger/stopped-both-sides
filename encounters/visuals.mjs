@@ -1,4 +1,6 @@
-import {encounters} from './catalog.mjs?v=scene-review-1';
+import {encounters} from './catalog.mjs?v=community-group-1';
+import {renderScenePreview} from './scenes.mjs?v=dublin-accuracy-1';
+import {practiceGoal} from '../learning/play.mjs?v=encounter-hero-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){
@@ -19,7 +21,7 @@ export function learningIcon(kind){
   "evidence": "<path d=\"M18 29H5V3h15l7 7v7M20 3v7h7M9 10h6M9 15h8M9 20h5\"/><circle cx=\"23\" cy=\"23\" r=\"5\"/><path d=\"m27 27 4 4\"/>",
   "supervision": "<path d=\"M3 3v26h26M8 22v-6M14 22V9M20 13V5\"/><circle cx=\"23\" cy=\"19\" r=\"5\"/><path d=\"m27 23 4 4\"/>"
 };
- return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind]||paths.reflect}</svg>`;
+ return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind==='discrimination'?'fairness':kind]||paths.reflect}</svg>`;
 }
 
 const scenarioSymbols={
@@ -29,20 +31,18 @@ const scenarioSymbols={
  'garda-communication':'street','garda-young-person':'young','garda-colleague':'colleagues',
  'garda-new-evidence':'evidence','garda-supervision':'supervision'
 };
-export const scenarioIcon=id=>learningIcon(scenarioSymbols[id]||'read');
+export const scenarioIcon=id=>learningIcon(scenarioSymbols[id]||(encounters[id]?.ground?'discrimination':'read'));
 
 export function routeTrail(state){
  if(state.complete)return '';
  const e=encounters[state.id];
  return `<nav class="route-navigation" aria-label="Review each decision"><ol class="route-trail">${state.history.map((step,i)=>`<li><button class="route-dot is-visited" data-action="paired-revisit" data-index="${i}" title="${esc(e.nodes[step.nodeId].title)}" aria-label="${esc(e.nodes[step.nodeId].title)}"><span aria-hidden="true">${i+1}</span></button></li>`).join('')}<li><span class="route-dot is-current" aria-current="step"><span class="sr-only">${esc(e.nodes[state.nodeId].title)}</span><span aria-hidden="true">${state.history.length+1}</span></span></li></ol></nav>`;
 }
-export function decisionGuide(answered){
- return `<ol class="decision-guide" aria-label="How it works"><li>${learningIcon('read')}<span>Understand the situation you are in</span></li><li ${!answered?'aria-current="step"':''}>${learningIcon('choose')}<span>Choose a response</span></li><li ${answered?'aria-current="step"':''}>${learningIcon('reflect')}<span>Learn why it matters</span></li></ol>`;
-}
 export function topicExplorer(groups,role){
  const links=groups.map(topic=>`<a class="topic-card" href="#encounters/${role}/${topic.id}">
   ${learningIcon(topic.id)}<strong>${topic.title}</strong>
-  <span class="topic-preview">${esc(encounters[topic.encounters[0]].title)}</span>
+  ${renderScenePreview(topic.encounters[0])}
+  <span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>
  </a>`).join('');
  return `<section class="topic-explorer" aria-labelledby="topic-explorer-title">
   <details class="topic-disclosure">
@@ -52,25 +52,24 @@ export function topicExplorer(groups,role){
  </section>`;
 }
 
-export function practiceExplorer(scenarios,role){
+export function practiceCards(scenarios,role){
  const intro=role==='garda'
   ?'Choose a situation to play as a Garda.'
   :'Choose a situation to play as a member of the public.';
- const cards=scenarios.map((scenario,index)=>`<article class="scenario">
-  <div class="card-top"><span class="scene-icon">${scenarioIcon(role+'-'+scenario.id)}</span><span class="scene-number">SITUATION ${String(index+1).padStart(2,'0')}</span></div>
+ const cards=scenarios.map(scenario=>`<article class="scenario">
+  <span class="scene-icon">${scenarioIcon(role+'-'+scenario.id)}</span>
   <h2>${esc(scenario.title)}</h2>
+  ${renderScenePreview(role+'-'+scenario.id)}
   <p class="person">${esc(scenario.person)}</p>
   <p class="description">${esc(scenario.description)}</p>
+  <p class="scenario-goal">${practiceGoal(role+'-'+scenario.id)}</p>
   <p class="small-note">${esc(scenario.minutes)}</p>
-  <button class="primary secondary scenario-action" data-action="start" data-id="${scenario.id}" aria-label="Explore this situation: ${esc(scenario.title)}">Explore this situation <span aria-hidden="true">→</span></button>
+  <button class="primary secondary scenario-action" data-action="start" data-id="${scenario.id}" aria-label="Play this situation: ${esc(scenario.title)}">Play this situation</button>
  </article>`).join('');
- return `<details class="single-mode">
-  <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
-  <div class="practice-content">
+ return `<div class="practice-content">
    <p>${intro}</p>
    <div class="scenarios" data-english-practice>${cards}</div>
-  </div>
- </details>`;
+ </div>`;
 }
 export function completionMap(completed,total){
  return `<div class="completion-map" aria-hidden="true">${Array.from({length:total},(_,i)=>`<span class="completion-cell ${i<completed?'is-complete':''}">${i<completed?'✓':'○'}</span>`).join('')}</div>`;

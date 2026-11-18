@@ -12,10 +12,7 @@ for(const role of ['public','garda'])test(`${role}: facts, identity and variatio
  await expect(page.locator('.cast-character[data-cast-role="public"] .scenario-person')).toHaveCount(0);
  for(const width of [320,390,768,1366]){
   await page.setViewportSize({width,height:844});
-  // Caption controls adjust their min-height via ResizeObserver after a
-  // breakpoint change. Measure both boxes in the same animation frame:
-  // two sequential locator.boundingBox() calls can combine the old scene
-  // height with the new choices position and report a false overlap.
+  // Read both columns in the same animation frame after the layout changes.
   await page.evaluate(()=>new Promise(resolve=>
    requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))));
   await expect.poll(()=>page.evaluate(()=>{
@@ -25,10 +22,11 @@ for(const role of ['public','garda'])test(`${role}: facts, identity and variatio
    const a=context.getBoundingClientRect(),b=choices.getBoundingClientRect();
    return {
     present:true,
-    order:a.bottom<=b.top,
+    order:Boolean(context.compareDocumentPosition(choices)&Node.DOCUMENT_POSITION_FOLLOWING)&&
+     (a.bottom<=b.top+1||a.right<=b.left+1||b.right<=a.left+1),
     fullWidth:document.documentElement.scrollWidth<=innerWidth+1
    };
-  }),{message:`${role} ${width}px: scene context must end before decisions after caption layout`})
+  }),{message:`${role} ${width}px: story precedes the responses in reading order and does not overlap them`})
    .toEqual({present:true,order:true,fullWidth:true});
   if(width===390||width===1366){await page.locator('#scene-title').focus();await page.screenshot({path:testInfo.outputPath(`${role}-decision-${width}.png`),fullPage:true});}
  }
@@ -49,12 +47,13 @@ test('Topics, source navigation and returning-player actions are usable with enl
  await page.setViewportSize({width:390,height:844});await page.goto('./#encounters/public');
  await page.locator('.scenario-library summary').click();await page.getByRole('button',{name:'Young people',exact:true}).click();
  await expect(page.locator('.encounter-card')).toHaveCount(2);
- await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(14);
- await page.locator('[data-action="paired-quick-start"]').click();await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
+ await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(24);
+ await page.locator('.scenario-library [data-action="paired-start"][data-id="public-street"]').click();
+ await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
  await openNavigation(page);await page.locator('.header [data-nav="rights"]').click();await page.getByRole('link',{name:'Under 18s',exact:true}).click();
  await expect(page.locator('#rights-young')).toBeFocused();await page.locator('.session-return a').click();expect(current(page)).toEqual(saved);
  await openNavigation(page);await page.locator('.header [data-reading-open]').click();await page.locator('#reading-size').selectOption('150');await page.locator('#reading-language').selectOption('ga');await page.locator('#reading-form [type="submit"]').click();
- await expect(page.locator('[data-action="paired-compare"]')).toHaveText('Féach ar an taobh eile');expect(current(page)).toEqual(saved);
+ await expect(page.locator('[data-action="paired-compare"]')).toHaveText('Déan comparáid leis an taobh eile');expect(current(page)).toEqual(saved);
  for(const width of [320,390,844]){await page.setViewportSize({width,height:width===844?390:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);}
  await page.setViewportSize({width:390,height:844});await page.screenshot({path:testInfo.outputPath('irish-large-text.png'),fullPage:true});
  await openNavigation(page);await page.locator('.header [data-nav="play"]').click();await expect(page.locator('.session-return a')).toBeVisible();

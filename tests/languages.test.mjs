@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=interaction-step-20261115';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=encounter-hero-1';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
-import {encounters,roles} from '../encounters/catalog.mjs?v=scene-review-1';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=scene-review-1';
 import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=scene-review-1';
 import {personalizeText,storyIdentity} from '../encounters/narrative.mjs';
 import {progressStorageKey} from '../encounters/progress.mjs';
@@ -25,9 +25,9 @@ for(const {id} of added){
    assert.doesNotMatch(value,/[<>]/,`${id}/${ids[index]} is plain text, not markup`);
   }
  });
- test(`${id}: all 59 shared stages and both roles have translated learning content`,()=>{
+ test(`${id}: all original shared stages and both roles have translated learning content`,()=>{
   let stages=0,choices=0;
-  for(const encounter of Object.values(encounters))for(const node of Object.values(encounter.nodes)){
+  for(const encounter of Object.values(encounters).filter(item=>!item.language))for(const node of Object.values(encounter.nodes)){
    stages++;
    const text=[node.scene,...roles.flatMap(role=>{const view=node.views[role];choices+=view.choices.length;return [view.prompt,view.lesson,...view.choices.flatMap(choice=>[choice.text,choice.feedback])];})];
    for(const source of text){assert.ok(messages.includes(source),source);assert.notEqual(translateText(source,id),source,`${id}: ${source}`);}
@@ -131,13 +131,14 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
    route(stateHash(base));
    const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast);
    assert.ok(main.innerHTML.includes(escapeHTML(translated)),`${language.id}/${e.id}/${node.id}`);
+   if(e.language)assert.ok(main.innerHTML.includes(`<p class="story-text"><span lang="${e.language}" dir="ltr" data-no-translate>${escapeHTML(node.scene)}</span></p>`));
    assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"/);
    assert.doesNotMatch(main.innerHTML,/[←→]/);
    for(const role of roles)for(let index=0;index<node.views[role].choices.length;index++)queue.push(continueEncounter(answer(switchRole(base,role),index)));
   }
  }
- assert.equal(count,59);
+ assert.equal(count,stageCount);
 });
 
 test(`${siteRole}: original practice, references and recaps keep their functionality in every new language`,()=>{

@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs';
+import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
 import {createDisclosures} from './disclosures.mjs?v=render-paced-1';
 import {paceAnimations} from './animation-clock.mjs?v=render-paced-1';
 
@@ -72,7 +72,7 @@ export function createMotion({main,getLegacyState=()=>null}){
   const id=shared?.id||(legacy?`${role}-${legacy.scenarioId}`:'');
   const complete=!!state?.complete;
   const page=state?`${id}/${complete?'recap':'game'}`:
-   /^(rights|evidence)(\/|$)/.test(route)?route.split('/')[0]:route;
+   /^(rights|evidence|encounters|practice)(\/|$)/.test(route)?route.split('/')[0]:route;
   const picker=main.querySelector('.character-picker');
   return {page,mode,role,complete,stage:state?`${id}/${path}/${state.nodeId}`:'',
    answer:shared?shared.answers[role]:legacy?.selected??null,
@@ -152,7 +152,7 @@ export function createMotion({main,getLegacyState=()=>null}){
     cue(main.querySelector('.decision-context,.game-grid > .story'),'stage');
     for(const scene of all('.paired-scene-lead .scene-stage,.story .scene-stage,.legacy-illustration .scene-stage'))cue(scene,'scene');
    }else if(before&&before.role!==next.role){
-    cue(main.querySelector('.play-toolbar,.legacy-perspective,.setup-role'),'perspective');
+    cue(main.querySelector('.flow-role-bar,.setup-role'),'perspective');
     cue(main.querySelector(next.complete?'.recap-takeaways':'.decision-choices,.game-grid > section[aria-labelledby="choice-title"]'),'perspective');
    }else if(next.mode!=='content'&&!next.complete&&next.answer!==null&&before?.answer!==next.answer){
     cue(main.querySelector('#feedback'),'feedback');

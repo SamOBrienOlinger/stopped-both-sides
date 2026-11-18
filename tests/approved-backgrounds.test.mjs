@@ -1,15 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
 import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs';
 import {renderScene} from '../encounters/scenes.mjs';
 import {startEncounter} from '../encounters/engine.mjs';
-test('All five approved originals have three local responsive sizes',()=>{
+test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
  assert.equal(manifest.length,5);assert.equal(new Set(Object.values(approvedBackgrounds)).size,5);
  for(const entry of manifest){
-  assert.equal(entry.outputs.length,3);assert.match(entry.source_rgb_sha256,/^[a-f0-9]{64}$/);
-  for(const output of entry.outputs)assert.ok(existsSync(new URL('../assets/dublin-approved/'+output.file,import.meta.url)));
+  assert.match(entry.source_rgb_sha256,/^[a-f0-9]{64}$/);
+  assert.deepEqual(entry.outputs.map(output=>output.file),[480,960,1600].map(width=>`${entry.name}-${width}.webp`));
+  for(const output of entry.outputs){
+   const bytes=readFileSync(new URL('../assets/dublin-approved/'+output.file,import.meta.url));
+   assert.equal(bytes.length,output.bytes,output.file);
+   assert.equal(createHash('sha256').update(bytes).digest('hex'),output.sha256,output.file);
+  }
  }
  for(const key of Object.keys(approvedBackgrounds)){
   const image=backgroundImage(key);assert.ok(image.src.includes('/assets/dublin-approved/'));assert.equal(image.srcset.split(', ').length,3);

@@ -5,11 +5,11 @@ const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto(role==='public'?'./':'garda/');
- await expect(page.locator('.landing-deck')).toHaveText("Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.");
- await expect(page.locator('#paired-title')).toHaveText('Which side will you try first?');
+ await expect(page.locator('.landing-deck')).toHaveText("Explore your rights and police powers through interactions between members of the public and Gardaí.");
+ await expect(page.locator('#paired-title')).toHaveText('One situation. Two perspectives.');
  await expect(page.locator('.about-opening')).toHaveCount(0);
  await expect(page.locator('.landing-character')).toHaveCount(0);
- await page.locator(`a.perspective-hero[data-role-tone="${role}"]`).click();
+ await page.locator(`a.perspective-card-link[data-role-tone="${role}"]`).click();
  await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
  await expect(page.locator('.character-option')).toHaveCount(0);
  await expect(page.locator('.scenario-library')).not.toHaveAttribute('open','');
@@ -48,10 +48,9 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  expect(state(page).answers[role]).toBeNull();
  expect(state(page).cast).toEqual(before.cast);
  await page.locator('.topline a').first().click();
- await page.locator('.scenario-library summary').focus();
- await page.keyboard.press('Enter');
  await expect(page.locator('.scenario-library')).toHaveAttribute('open','');
- await expect(page.locator('[data-action="paired-start"]:visible')).toHaveCount(14);
+ await expect(page.locator(`.scenario-library [data-action="paired-start"][data-id="${role}-street"]`)).toBeFocused();
+ await expect(page.locator('[data-action="paired-start"]:visible')).toHaveCount(24);
  await page.locator('[data-action="paired-start"][data-id="public-search"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();
  expect(state(page).id).toBe('public-search');

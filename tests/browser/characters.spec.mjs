@@ -32,7 +32,7 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  const cast={[role]:role+'-9',[other]:other+'-4'};expect(current(page).cast).toEqual(cast);
  expect(current(page).role).toBe(role);expect(current(page).answers).toEqual(answered.answers);
  await page.locator('[data-action="paired-character-close"]').click();
- await page.locator('.perspective-bar [data-action="paired-switch"]').click();
+ await page.locator('.flow-role-bar [data-action="paired-switch"]').click();
  await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',cast[other]);
  const saved=current(page);await page.reload();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page)).toEqual(saved);
  await openNavigation(page);await page.locator('[data-site-switch]').click();await expect(page.locator('.content-page h1')).toContainText('sources');await page.locator('.session-return a').click();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).cast).toEqual(cast);expect(current(page).answers).toEqual(saved.answers);

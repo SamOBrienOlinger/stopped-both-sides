@@ -5,6 +5,6 @@ export const approvedBackgrounds=Object.freeze({...names});
 export function backgroundImage(key){
  const name=names[key];
  if(!name)return null;
- const url=width=>new URL(`../assets/dublin-approved/${name}-${width}.webp?v=approved-dublin-2`,import.meta.url).href;
+ const url=width=>new URL(`../assets/dublin-approved/${name}-${width}.webp?v=dublin-accuracy-1`,import.meta.url).href;
  return {name,src:url(960),srcset:[480,960,1600].map(width=>`${url(width)} ${width}w`).join(', '),width:1600,height:900};
 }

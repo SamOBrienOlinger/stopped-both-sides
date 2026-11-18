@@ -1,5 +1,7 @@
 # LEGO-style Dublin backgrounds (uimproved)
 
+This page records the original use of these illustrations on `uimproved`. The current scene placements and geographic checks are documented in [Dublin background artwork](APPROVED-DUBLIN-BACKGROUNDS.md).
+
 These are **AI-generated illustrative Dublin-inspired scenes**, not documentary photographs or exact geospatial reconstructions. They retain the site's LEGO toy-brick aesthetic. Original source illustrations remain on `main` and are not deleted.
 
 | Asset | Presentation placement |

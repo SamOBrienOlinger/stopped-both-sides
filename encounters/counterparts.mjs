@@ -1,3 +1,5 @@
+import {reviewBackground} from '../learning/play-content.mjs?v=community-group-1';
+
 const choice=(text,feedback,review=false,next)=>({text,feedback,review,...(next?{next}:{})});
 const pair=(scene,prompt,lesson,choices,refs=[])=>({scene,prompt,lesson,choices,refs});
 
@@ -306,8 +308,8 @@ export const counterparts={
     choice('Describe an empty search result even though no search took place.','A cancelled search and a completed search with no find are different events.',true)],['public:fiosru'])
  },
  'garda-supervision':{
-  'supervision-start':pair('At a local community meeting, several residents said they felt singled out when Gardaí stopped and searched them.\n\nThe group asked one of its members to bring their concerns to the supervising Garda sergeant. At a follow-up meeting, the sergeant shares a summary of recent searches so they can decide together what to look into.\n\nIn this review, Gardaí found something in 12 of 60 searches in Group A and 3 of 15 in Group B. That’s one in five searches in both groups.\n\nThe reviewers want to know who Gardaí encountered, why they searched people and how those people were treated.',
-   'As the community reviewer, what can you conclude from this table?',
+  'supervision-start':pair(reviewBackground,
+   'As the representative of a local community group, what can you conclude from this table?',
    'Equal find rates do not establish fairness, and different counts do not settle the cause of every decision. Identify missing information before making a stronger claim.',[
     choice('Ask about selection, individual grounds, deployment and treatment.','These questions identify what the table leaves unresolved.'),
     choice('Treat the percentages alone as proof that every encounter was fair.','The searched sample and the conduct of encounters need separate examination.',true)]),
@@ -316,7 +318,7 @@ export const counterparts={
    'Community experience, deployment, selection and treatment can reveal different parts of the picture. No single denominator resolves every question.',[
     choice('How patrol priorities and incentives shape selection, alongside grounds and treatment.','This includes organisational decisions as well as individual encounters.'),
     choice('Only whether increasing the search target increases the number of finds.','Volume does not establish lawful or fair decisions.',true)]),
-  'supervision-training':pair('A team completes the learning game and improves its quiz answers. Someone proposes announcing that bias in actual Garda searches has been reduced. Both the sergeant and community reviewer see this same proposed claim.',
+  'supervision-training':pair('A team completes the learning game and improves its quiz answers. Someone proposes announcing that bias in actual Garda searches has been reduced. Both the sergeant and the representative of a local community group see this same proposed claim.',
    'What should you ask before accepting the claim?',
    'A learning score measures performance in the exercise. It does not establish changed conduct, reduced discrimination or a better public experience.',[
     choice('What real-world outcomes were measured beyond quiz performance.','This distinguishes a useful learning result from a claim about practice.'),

@@ -9,7 +9,8 @@ const indoor = () => Object.freeze({
 });
 export const SCENE_LAYOUTS = Object.freeze({
   street: outdoor('suburban-street', 34, 50),
-  'bus-stop': outdoor('bus-stop', 24, 42),
+  // The bus doors open onto the pavement on the right of the image.
+  'bus-stop': outdoor('bus-stop', 58, 76),
   square: outdoor('quayside', 38, 56),
   station: indoor(), 'advice-room': indoor(), 'meeting-room': indoor()
 });

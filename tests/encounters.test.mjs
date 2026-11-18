@@ -7,7 +7,7 @@ import {emptyProgress,recordProgress,runScores,progressTotals,packProgress,unpac
 import publicData from '../encounters/original-public.mjs';
 import gardaData from '../encounters/original-garda.mjs';
 import * as localData from '../data.mjs?v=scenario-descriptions-20261115';
-import * as localGardaData from '../garda/data.mjs?v=scenario-descriptions-20261115';
+import * as localGardaData from '../garda/data.mjs?v=community-group-1';
 
 for(const e of Object.values(encounters)){
  test(`${e.id}: all role/choice routes finish; switching keeps the scene and answers`,()=>{
@@ -90,7 +90,27 @@ test('Broken storage, invalid links and malformed transferred records recover sa
 });
 test('Both shared perspectives read the original content directly and all imports exist',()=>{
  assert.equal(publicData.scenarios,localData.scenarios);assert.equal(publicData.sources,localData.sources);
- assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,59);
+ assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,79);
  const base=new URL('../encounters/',import.meta.url);
  for(const file of readdirSync(base).filter(f=>f.endsWith('.mjs'))){const content=readFileSync(new URL(file,base),'utf8');for(const m of content.matchAll(/from ['"](\.\/[^'"]+)['"]/g))assert.doesNotThrow(()=>readFileSync(new URL(m[1],base)));}
+});
+test('Saved play keeps unfinished situations and recaps apart across modes and old links',()=>{
+ const shared=answer(startEncounter('public-search','garda'),0);
+ let finished=startEncounter('public-street','public');
+ while(!finished.complete)finished=continueEncounter(answer(finished,0));
+ const list='#encounters/public/search';
+ let progress=recordProgress(emptyProgress(),shared,{returnTo:list});
+ progress=recordProgress(progress,finished,{mode:'practice',returnTo:'#practice/public/street'});
+ progress=recordProgress(progress,startEncounter('public-street','public'),{mode:'practice'});
+ progress=recordProgress(progress,finished,{mode:'practice',opened:true});
+ const restored=unpackProgress(packProgress(progress));
+ assert.deepEqual(restored,progress);
+ assert.deepEqual(restored.saved.map(({mode,id,complete})=>[mode,id,complete]),[
+  ['practice','public-street',true],['practice','public-street',false],['shared','public-search',false]
+ ]);
+ assert.equal(restored.saved[2].returnTo,list);
+ const legacy=btoa(JSON.stringify({v:1,rows:[],last:restored.saved[2].token})).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
+ const oldSaved=unpackProgress(legacy);
+ assert.equal(oldSaved.saved[0].token,restored.saved[2].token);
+ assert.equal(oldSaved.saved[0].mode,'shared');
 });

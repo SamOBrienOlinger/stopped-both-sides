@@ -43,7 +43,7 @@ test('Final atlas is a real WebP and supplies nine preserved cast identities',()
 });
 
 test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',()=>{
- assert.equal(Object.keys(encounters).length,14);
+ assert.equal(Object.keys(encounters).length,24);
  assert.deepEqual(Object.keys(sceneDirections).sort(),Object.keys(encounters).sort());
  let stageCount=0,pairRenderings=0;
  for(const encounter of Object.values(encounters)){
@@ -63,8 +63,8 @@ test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',
    }
   }
  }
- assert.equal(stageCount,59);
- assert.equal(pairRenderings,59*81);
+ assert.equal(stageCount,79);
+ assert.equal(pairRenderings,stageCount*81);
 });
 
 test('Switching, answering, saving and recaps retain updated Garda characters',()=>{

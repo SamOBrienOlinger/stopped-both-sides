@@ -7,6 +7,7 @@ import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/pr
 import {storyIdentity} from '../encounters/narrative.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
 const {scenarios}=await import(new URL('data.mjs',siteBase));
+const situationCount=Object.keys(encounters).length;
 const siteStorageKey=progressStorageKey(siteRole);
 const callbacks={},focused=[],memory=new Map();let currentHash='',assignments=0;
 const main={innerHTML:'',focus(){focused.push('main');},scrollIntoView(){},addEventListener(type,fn){callbacks[type]=fn;}};
@@ -26,25 +27,13 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
-  const titles={public:'Member of the public',garda:'Garda member'};
-  const descriptions={
-   public:'You are stopped. Learn what you can ask and what you may need to do.',
-   garda:'You make the stop. Check your reasons, assumptions and responsibilities.'
-  };
-  for(const role of roles){
-   const href=new URL('#encounters/'+role,sites.public).href;
-   const anchor='<a class="perspective-hero perspective-card-link" data-role-tone="'+role+'" href="'+href+'"';
-   const start=main.innerHTML.indexOf(anchor);
-   assert.ok(start>=0,'the '+role+' full-card anchor uses the public-root encounter URL');
-   const end=main.innerHTML.indexOf('</a>',start);
-   assert.ok(end>start,'each complete card has one closing link');
-   const card=main.innerHTML.slice(start,end);
-   assert.ok(card.includes('/'+role+'-perspective.webp'),'the role icon is preserved');
-   assert.ok(card.includes('class="perspective-button-label" id="perspective-'+role+'-label">'+titles[role]+'</span>'),'the role label is included');
-   assert.ok(card.includes('class="perspective-caption" id="perspective-'+role+'-description">'+descriptions[role]+'</p>'),'the description is inside the link');
-   assert.doesNotMatch(card.slice(anchor.length),/<a[\s>]/,'there must be no nested anchor inside a perspective card');
-  }
- for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+ const titles={public:'Play as a member of the public',garda:'Play as a Garda'};
+ for(const role of roles){
+  const href=new URL('#encounters/'+role,sites.public).href;
+  const link=`<a class="primary perspective-card-link" data-role-tone="${role}" href="${href}">${titles[role]}</a>`;
+  assert.ok(main.innerHTML.includes(link),'the '+role+' role link uses the public-root encounter URL');
+ }
+ for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,situationCount);
   const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];
   for(const choice of roles){
    const link=rolePicker.match(new RegExp('href="#encounters/'+choice+'"[^>]*>([\\s\\S]*?)</a>'))[1];
@@ -61,6 +50,8 @@ test('Both roles can start every situation; the shared facts and role controls r
 test('The resume card describes the public role in the youth situation',()=>{
  action('paired-start',{id:'public-young-person',role:'public'});const saved=state();
  route('#encounters/garda');
+ assert.ok(!main.innerHTML.includes(stateHash(saved)));
+ route('#encounters/public/young');
  assert.match(main.innerHTML,/You are a member of the public, age 16/);
  assert.match(main.innerHTML,/>Resume play<\/a>/);
  assert.doesNotMatch(main.innerHTML,/[←→]/);
@@ -116,7 +107,7 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
   const completed=state();action('paired-replay-role',{role:'public'});assert.deepEqual(state().cast,completed.cast);route(stateHash(completed));
   action('paired-revisit',{index:'0'});assert.equal(state().nodeId,e.start);assert.equal(state().history.length,0);
  }
- route('#progress');assert.match(main.innerHTML,/14 <span>\/ 14 situations completed/);assert.match(main.innerHTML,/Best completed:/);
+ route('#progress');assert.ok(main.innerHTML.includes(`${situationCount} <span>/ ${situationCount} situations completed`));assert.match(main.innerHTML,/Best completed:/);
 });
 test('Original mode transfers a live selection into the same stage and records its score',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
@@ -138,7 +129,7 @@ test('Unknown routes and corrupted progress show a recovery view while saved rec
 });
 test('Clearing requires the in-page confirmation and resets the local record and resume point',()=>{
  route('#progress');assert.ok(memory.has(siteStorageKey));action('paired-clear');assert.match(main.innerHTML,/Clear this site’s saved progress/);assert.ok(memory.has(siteStorageKey));
- action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.match(main.innerHTML,/0 <span>\/ 14 situations completed/);
+ action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.ok(main.innerHTML.includes(`0 <span>/ ${situationCount} situations completed`));
 });
 
 
@@ -153,9 +144,9 @@ test('Every stage and every choice render the selected cast and preserve the nex
     const active=switchRole(base,role);route(stateHash(active));action('paired-character-close');
     assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
     assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
-    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> All shared situations/);
+    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to situations/);
     assert.doesNotMatch(main.innerHTML,/[←→]/);
-    const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
+    const story=main.innerHTML.match(/<p class="story-text">([\s\S]*?)<\/p>/)[1];
     if(identity&&node.scene.includes(identity.name)){assert.ok(story.includes('Noor'));assert.ok(!story.includes(identity.name));}
     action('paired-answer',{index:String(index)});choices++;
     assert.equal(state().answers[role],index);assert.match(main.innerHTML,/id="feedback"/);
@@ -170,14 +161,14 @@ test('Every stage and every choice render the selected cast and preserve the nex
   }
   assert.equal(seen.size,Object.keys(e.nodes).length);
  }
- assert.equal(stages,59);assert.equal(choices,295);
+ assert.equal(stages,79);assert.equal(choices,375);
 });
 
 
 test('Original practice uses its pictured character in every named scene and completed recap',()=>{
  for(const original of scenarios){
   route('#play');action('start',{id:original.id});
-  assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> All situations/);
+  assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to practice/);
   assert.doesNotMatch(main.innerHTML,/[←→]/);
   const encounter=encounters[siteRole+'-'+original.id],identity=storyIdentity(encounter);
   const selected=main.innerHTML.match(/data-cast-role="public"[\s\S]*?<strong data-no-translate>([^<]+)<\/strong>/)[1];
@@ -185,7 +176,7 @@ test('Original practice uses its pictured character in every named scene and com
   while(main.innerHTML.includes('class="story-text"')){
    assert.ok(++count<12);
    assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
-   const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];
+   const story=main.innerHTML.match(/<p class="story-text">([\s\S]*?)<\/p>/)[1];
    if(identity&&selected!==identity.name)assert.ok(!story.includes(identity.name));
    action('choose',{index:'0'});action('next');
   }
@@ -195,7 +186,7 @@ test('Original practice uses its pictured character in every named scene and com
 });
 
 test('Home topic shortcuts open the matching catalogue for each starting role',()=>{
- const topics={street:3,search:3,custody:2,young:2,fairness:4};
+ const topics={street:3,search:3,custody:2,young:2,fairness:4,discrimination:10};
  route('#play');
  for(const topic of Object.keys(topics))assert.ok(main.innerHTML.includes(`#encounters/${siteRole}/${topic}`));
  for(const role of roles)for(const [topic,count] of Object.entries(topics)){
@@ -204,11 +195,11 @@ test('Home topic shortcuts open the matching catalogue for each starting role',(
   assert.match(main.innerHTML,/class="scenario-library" open/);
   assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,count);
   action('paired-topic',{topic:'all'});
-  assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+  assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,situationCount);
  }
  route('#encounters/public/unknown');assert.match(main.innerHTML,/Unable to open/);
  route('#encounters/public/street/extra');assert.match(main.innerHTML,/Unable to open/);
- route('#encounters/public');assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,14);
+ route('#encounters/public');assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,situationCount);
 });
 test('The interactive stage trail revisits the correct scene and retains the cast and role',()=>{
  for(const role of roles){
