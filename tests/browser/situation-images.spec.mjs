@@ -8,10 +8,15 @@ import {renderScene} from '../../encounters/scenes.mjs';
 const situations=Object.values(encounters);
 const cast=defaultCast();
 
+function responsiveAsset(source){
+ const {pathname,search}=new URL(source);
+ return pathname.split('/assets/')[1].replace(/-\d+\.webp$/,'.webp')+search;
+}
+
 function openingImage(id){
  const scene=renderScene(startEncounter(id));
  const src=scene.match(/class="scene-backdrop" src="([^"]+)"/)[1];
- return new URL(src).pathname.split('/assets/')[1];
+ return responsiveAsset(src);
 }
 
 async function checkScenes(cards,heading,ids){
@@ -40,7 +45,7 @@ async function checkScenes(cards,heading,ids){
    };
   });
   return {
-   asset:new URL(img.currentSrc).pathname.split('/assets/')[1].replace(/-\d+\.webp$/,'.webp'),
+   asset:img.currentSrc,
    fits:bounds.width>0&&bounds.height>0&&bounds.left>=card.left&&bounds.right<=card.right&&
     bounds.top>=heading.bottom&&bounds.bottom<=card.bottom&&
     Math.abs(bounds.width/bounds.height-img.naturalWidth/img.naturalHeight)<.02,
@@ -48,14 +53,19 @@ async function checkScenes(cards,heading,ids){
    decorative:scene.getAttribute('aria-hidden')==='true'&&!scene.querySelector('a,button,[tabindex]')
   };
  }));
- expect(scenes).toEqual(ids.map(id=>({
-  asset:openingImage(id).replace(/-\d+\.webp$/,'.webp'),fits:true,decorative:true,
+ expect(scenes.map(scene=>({...scene,asset:responsiveAsset(scene.asset)}))).toEqual(ids.map(id=>({
+  asset:openingImage(id),fits:true,decorative:true,
   actors:Object.entries(cast).map(([role,id])=>({role,id,visible:true}))
  })));
 }
 
 for(const [entry,role] of [['./','public'],['garda/','garda']]){
  test(`${role} cards show their opening scene with a Garda and public character`,async({page})=>{
+  const rendererURLs=new Set();
+  page.on('request',request=>{
+   const url=new URL(request.url());
+   if(url.pathname.endsWith('/encounters/scenes.mjs'))rendererURLs.add(url.href);
+  });
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const viewport of [{width:390,height:844},{width:1366,height:900}]){
    await page.setViewportSize(viewport);
@@ -68,5 +78,6 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
    await checkScenes(page.locator('.scenario-library .practice-content .scenario'),'h2',
     situations.filter(situation=>situation.origin===role).map(situation=>situation.id));
   }
+  expect([...rendererURLs], 'All pages should import the same cached scene renderer URL').toHaveLength(1);
  });
 }

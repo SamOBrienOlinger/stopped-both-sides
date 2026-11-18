@@ -10,9 +10,12 @@
 | Suburban terraced street | Street encounters, `suburban-street-*.webp` | Traffic approaches to the right of the centre line in this view and recedes to its left, following Irish left-hand traffic. The street is fictional. [Road Safety Authority](https://www.rsa.ie/road-safety/road-users/tourists) |
 | GPO and Spire crowd | Earlier Garda homepage card, `gpo-city-*.webp` | Six Ionic columns and the separate centre-island Spire base. [National Inventory of Architectural Heritage](https://www.buildingsofireland.ie/buildings-search/building/50010528/general-post-office-gpo-oconnell-street-lower-princes-street-north-henry-street-dublin-1-dublin-city) · [Visit Dublin](https://www.visitdublin.com/the-spire) |
 | Ha’penny Bridge | Earlier public homepage card, `liffey-bridge-*.webp` | The white cast-iron footbridge spans the Liffey in a single shallow arch. The eastward skyline shows the receding quays. [Dublin City Film Office](https://dublincityfilmoffice.ie/filming-location/hapenny-bridge/) |
+| Public view of the GPO encounter | Repository README, `assets/heroes/public-*.webp` | The reverse angle looks south along the GPO pavement, with the portico on the right and the Spire behind the camera. [National Inventory of Architectural Heritage](https://www.buildingsofireland.ie/buildings-search/building/50010528/general-post-office-gpo-oconnell-street-lower-princes-street-north-henry-street-dublin-1-dublin-city) · [Visit Dublin](https://www.visitdublin.com/the-spire) |
 
-The station reception, advice room and community meeting room are fictional interiors. The ten older outdoor illustrations are design references.
+The station reception, advice room and community meeting room are fictional interiors. The original outdoor scene files and the illustrations in `assets/dublin-lego` serve as design references.
 
 Each illustration uses one 16:9 composition in local WebP files at 480, 960 and 1600 pixels wide. The bus-stop character positions follow the right-side pavement in previews, decision scenes and split reflections. Split scenes stack on narrow screens.
+
+Topic, situation and practice cards share the same version of the scene renderer as decision stages. The earlier landing-layout styles also point to the corrected GPO and Ha’penny Bridge art.
 
 `assets/dublin-approved/manifest.json` records the original approved source and the dimensions and RGB hash of each revised source. It also records the byte count and SHA-256 hash of each responsive export. The checks verify those files, browser image loading and dimensions, character positions and perspective switching.

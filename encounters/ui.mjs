@@ -5,7 +5,7 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=encounter-hero-1';
 import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=encounter-hero-1';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=dublin-accuracy-2';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=community-group-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=community-group-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=community-group-1';
