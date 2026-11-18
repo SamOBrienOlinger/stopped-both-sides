@@ -1,11 +1,11 @@
 import {focusControl} from './accessibility/focus.mjs';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=community-group-1';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=homepage-intro-1';
 import {createLayout} from './accessibility/layout.mjs?v=phlowing-1';
 import {supportSection,supportRecap} from './learning/support.mjs?v=organisation-logos-1';
 import {learningAbout} from './learning/about.mjs?v=pedagogy-2';
-import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=community-group-1';
+import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=homepage-intro-1';
 import {createMotion} from './accessibility/motion.mjs?v=community-group-1';
-import {createEncounterMode} from './encounters/ui.mjs?v=community-group-1';
+import {createEncounterMode} from './encounters/ui.mjs?v=homepage-intro-1';
 import {scenarios,scenarioById,sources,CHECKED} from './data.mjs?v=scenario-descriptions-20261115';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=scenario-descriptions-20261115';
 const main=document.querySelector('#main');

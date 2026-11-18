@@ -4,7 +4,7 @@ import {startEncounter,stateHash} from '../../encounters/engine.mjs';
 const paths=['./','garda/'];
 const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));
 const invitation=[
- 'Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.',
+ 'Explore your rights and police powers through interactions between members of the public and Gardaí.',
  'Which side will you try first?',
  'Know your rights. Understand fair decisions.',
  'Read a situation, choose a response, then find out why it matters.'

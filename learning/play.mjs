@@ -1,4 +1,4 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=community-group-1';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=homepage-intro-1';
 import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=community-group-1';
 import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
 import {topicGroups} from '../encounters/presentation.mjs?v=community-group-1';

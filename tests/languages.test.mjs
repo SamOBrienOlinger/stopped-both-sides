@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=community-group-1';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=homepage-intro-1';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=scene-review-1';
 import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=scene-review-1';

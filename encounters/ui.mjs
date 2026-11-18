@@ -3,10 +3,10 @@ import {focusControl} from '../accessibility/focus.mjs';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=community-group-1';
+} from '../learning/play.mjs?v=homepage-intro-1';
 import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
 import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=community-group-1';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=homepage-intro-1';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=community-group-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=community-group-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=community-group-1';
@@ -267,7 +267,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title">
    <div class="play-invitation"><div class="invitation-content">
     <div class="landing-instructions">
-     <p class="landing-deck">Explore your rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p>
+     <p class="landing-deck">Explore your rights and police powers through interactions between members of the public and Gardaí.</p>
      <h1 id="paired-title">Which side will you try first?</h1>
      <p class="landing-purpose">Know your rights. Understand fair decisions.</p>
      <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
