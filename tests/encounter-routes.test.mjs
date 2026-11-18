@@ -30,8 +30,10 @@ test('Both roles can start every situation; the shared facts and role controls r
  const titles={public:'Play as a member of the public',garda:'Play as a Garda'};
  for(const role of roles){
   const href=new URL('#encounters/'+role,sites.public).href;
-  const link=`<a class="primary perspective-card-link" data-role-tone="${role}" href="${href}">${titles[role]}</a>`;
-  assert.ok(main.innerHTML.includes(link),'the '+role+' role link uses the public-root encounter URL');
+  const opening=`<a class="primary perspective-card-link" data-role-tone="${role}" href="${href}">`;
+  const link=main.innerHTML.split(opening)[1]?.split('</a>')[0];
+  assert.ok(link,'the '+role+' role link uses the public-root encounter URL');
+  assert.ok(link.endsWith(`<span>${titles[role]}</span>`));
  }
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,situationCount);
   const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];

@@ -56,23 +56,17 @@ async function checkHeroControls(page){
   const layout=await hero.evaluate(element=>{
    const copy=element.querySelector('.landing-instructions');
    const art=element.querySelector('.encounter-hero-art');
-   const textRect=copy.getBoundingClientRect(),artRect=art.getBoundingClientRect();
-   const gap=parseFloat(getComputedStyle(element).columnGap);
-   const minimum=parseFloat(getComputedStyle(copy).flexBasis)+parseFloat(getComputedStyle(art).flexBasis);
-   return {gap,minimum,width:element.clientWidth,textRect:textRect.toJSON(),artRect:artRect.toJSON(),
+   return {width:copy.clientWidth,artRect:art.getBoundingClientRect().toJSON(),
+    titleBottom:copy.querySelector('#paired-title').getBoundingClientRect().bottom,
+    deckTop:copy.querySelector('.landing-deck').getBoundingClientRect().top,
     sourceRatio:art.naturalWidth/art.naturalHeight,fit:getComputedStyle(art).objectFit};
   });
-  const {gap,width,minimum,textRect,artRect,sourceRatio,fit}=layout;
+  const {width,artRect,titleBottom,deckTop,sourceRatio,fit}=layout;
   expect(fit,'the full scene is visible').toBe('contain');
   expect(Math.abs(artRect.width/artRect.height-sourceRatio),'the image keeps its source proportions').toBeLessThan(.01);
-  if(width+1>=minimum+gap){
-   const space=Math.max(artRect.left-textRect.right,textRect.left-artRect.right);
-   expect(space,'a gutter separates the copy and illustration').toBeGreaterThanOrEqual(gap-1);
-   expect(Math.abs(textRect.width+artRect.width+gap-width)).toBeLessThanOrEqual(2);
-  }else{
-   expect(artRect.top-textRect.bottom,'the illustration follows the copy in a stacked layout').toBeGreaterThanOrEqual(gap-1);
-   expect(Math.abs(artRect.width-width)).toBeLessThanOrEqual(1);
-  }
+  expect(artRect.top,'the illustration follows the two-line heading').toBeGreaterThan(titleBottom);
+  expect(artRect.bottom,'the introduction follows the illustration').toBeLessThan(deckTop);
+  expect(Math.abs(artRect.width-width)).toBeLessThanOrEqual(1);
  }
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
