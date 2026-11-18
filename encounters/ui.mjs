@@ -10,7 +10,7 @@ import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=comm
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=community-group-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=community-group-1';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=garda-neutral-1';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=community-group-1';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=dublin-accuracy-1';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=scenario-descriptions-20261115';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=community-group-1';
 import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=community-group-1';
@@ -256,7 +256,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    const label=role==='public'?'Play as a member of the public':'Play as a Garda';
    return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${label}</a>`;
   }).join('');
-  const image=width=>new URL(`../assets/heroes/garda-${width}.webp?v=garda-neutral-1`,import.meta.url).href;
+  const image=width=>new URL(`../assets/heroes/garda-${width}.webp?v=dublin-accuracy-1`,import.meta.url).href;
   const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
   return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title">
    <div class="landing-instructions">

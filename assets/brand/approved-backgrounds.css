@@ -8,8 +8,8 @@
 .scene-location[data-approved-art]>.scene-actor{bottom:6%;width:28%;left:auto;right:auto}
 .scene-location[data-approved-art="suburban-street"]>.scene-actor--public{left:20%}
 .scene-location[data-approved-art="suburban-street"]>.scene-actor--garda{left:36%}
-.scene-location[data-approved-art="bus-stop"]>.scene-actor--public{left:10%}
-.scene-location[data-approved-art="bus-stop"]>.scene-actor--garda{left:28%}
+.scene-location[data-approved-art="bus-stop"]>.scene-actor--public{left:44%}
+.scene-location[data-approved-art="bus-stop"]>.scene-actor--garda{left:62%}
 .scene-location[data-approved-art="quayside"]>.scene-actor--public{left:24%}
 .scene-location[data-approved-art="quayside"]>.scene-actor--garda{left:42%}
 /* Mixed reflections retain both locations without portrait crops. */
@@ -19,5 +19,5 @@
 @media(forced-colors:active){.scene-location[data-approved-art]{border:1px solid CanvasText}}
 @media print{.scene-location[data-approved-art]{break-inside:avoid}}
 /* The invitation and perspective cards each show a different approved scene. */
-.play-invitation {--invitation-art:url('../dublin-approved/quayside-960.webp')}
-html[data-perspective="garda"] .play-invitation {--invitation-art:url('../dublin-approved/suburban-street-960.webp')}
+.play-invitation {--invitation-art:url('../dublin-approved/quayside-960.webp?v=dublin-accuracy-1')}
+html[data-perspective="garda"] .play-invitation {--invitation-art:url('../dublin-approved/suburban-street-960.webp?v=dublin-accuracy-1')}

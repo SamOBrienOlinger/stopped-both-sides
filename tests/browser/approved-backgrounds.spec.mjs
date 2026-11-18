@@ -13,7 +13,7 @@ for(const role of ['public','garda'])test(`${role}: the landing image loads with
   await page.locator('.reference-landing').screenshot({path:info.outputPath(`landing-${role}-${width}.png`)});
  }
 });
-for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.20,.64],['public-search','bus-stop',.10,.56],['public-fair-treatment','quayside',.24,.70]])test(`${art}: chosen characters stay within pavement anchors`,async({page},info)=>{
+for(const [id,art,leftMin,rightMax] of [['public-street','suburban-street',.20,.64],['public-search','bus-stop',.44,.90],['public-fair-treatment','quayside',.24,.70]])test(`${art}: chosen characters stay within pavement anchors`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
  for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:900});await page.goto('./'+stateHash(startEncounter(id,'public',{cast})));
