@@ -254,18 +254,18 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    // Both entrypoints use the same encounter setup at the public site root.
    const href=new URL('#encounters/'+role,sites.public).href;
    const label=role==='public'?'Play as a member of the public':'Play as a Garda';
-   return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${label}</a>`;
+   return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${perspectiveIcon(role)}<span>${label}</span></a>`;
   }).join('');
   const image=width=>new URL(`../assets/heroes/garda-${width}.webp?v=dublin-accuracy-1`,import.meta.url).href;
   const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
   return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title">
    <div class="landing-instructions">
     <h1 id="paired-title"><span>One situation.</span> <span>Two perspectives.</span></h1>
+    <img class="encounter-hero-art" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 44rem) 42rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async" fetchpriority="high">
     <p class="landing-deck">Explore your rights and police powers through interactions between members of the public and Gardaí.</p>
     <div class="landing-role-actions">${links}</div>
     <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
    </div>
-   <img class="encounter-hero-art" src="${image(960)}" srcset="${srcset}" sizes="(max-width: 58rem) calc(100vw - 2rem), (max-width: 75rem) 54vw, 42rem" width="1600" height="900" alt="" decoding="async" fetchpriority="high">
   </section>${homeActions()}`;
  }
  function landing(){

@@ -391,9 +391,9 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
   html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
     animation:landing-portfolio-line-reveal 1s ease-out var(--landing-reveal-delay,0s) both;
   }
-  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :nth-child(2){--landing-reveal-delay:.1s}
-  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :nth-child(3){--landing-reveal-delay:.2s}
-  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :nth-child(4){--landing-reveal-delay:.3s}
+  .reference-landing .landing-instructions > .landing-deck{--landing-reveal-delay:.1s}
+  .reference-landing .landing-instructions > .landing-purpose{--landing-reveal-delay:.2s}
+  .reference-landing .landing-instructions > .small-note{--landing-reveal-delay:.3s}
 }
 @keyframes landing-portfolio-line-reveal{
   from{opacity:0;transform:translateY(37.5%)}
