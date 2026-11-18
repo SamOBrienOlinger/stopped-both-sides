@@ -6,7 +6,7 @@ import {learningAbout} from '../learning/about.mjs?v=pedagogy-2';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=encounter-hero-1';
 import {createMotion} from '../accessibility/motion.mjs?v=community-group-1';
-import {createEncounterMode} from '../encounters/ui.mjs?v=landing-art-order-1';
+import {createEncounterMode} from '../encounters/ui.mjs?v=quayside-lamps-1';
 import {scenarios,scenarioById,sources,CHECKED,groups,PUBLIC_COMPANION} from './data.mjs?v=community-group-1';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=community-group-1';
 const main=document.querySelector('#main');

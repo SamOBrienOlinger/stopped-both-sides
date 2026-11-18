@@ -19,5 +19,5 @@
 @media(forced-colors:active){.scene-location[data-approved-art]{border:1px solid CanvasText}}
 @media print{.scene-location[data-approved-art]{break-inside:avoid}}
 /* The invitation and perspective cards each show a different approved scene. */
-.play-invitation {--invitation-art:url('../dublin-approved/quayside-960.webp?v=dublin-accuracy-1')}
+.play-invitation {--invitation-art:url('../dublin-approved/quayside-960.webp?v=quayside-lamps-1')}
 html[data-perspective="garda"] .play-invitation {--invitation-art:url('../dublin-approved/suburban-street-960.webp?v=dublin-accuracy-1')}
