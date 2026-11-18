@@ -2,6 +2,8 @@
 const languages = ['ga','pt','ar','pl','ro','fr','es','zh-Hans'];
 
 const labels = [
+ ['One situation.', ['Cás amháin.','Uma situação.','موقف واحد.','Jedna sytuacja.','O situație.','Une situation.','Una situación.','同一个情境。']],
+ ['Two perspectives.', ['Dhá dhearcadh.','Duas perspetivas.','منظوران.','Dwie perspektywy.','Două perspective.','Deux perspectives.','Dos perspectivas.','两种视角。']],
  ['Discrimination', ['Idirdhealú','Discriminação','التمييز','Dyskryminacja','Discriminare','Discrimination','Discriminación','歧视']],
  ['10 protected grounds', ['10 bhforas faoi chosaint','10 motivos protegidos','10 أسباب يحميها القانون','10 przesłanek objętych ochroną','10 criterii protejate','10 motifs protégés','10 motivos protegidos','10 项受保护事由']],
  ['Gender', ['Inscne','Género','النوع الاجتماعي','Płeć','Gen','Genre','Género','性别']],

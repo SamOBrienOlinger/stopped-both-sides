@@ -4,11 +4,11 @@ import {startEncounter,stateHash} from '../../encounters/engine.mjs';
 const paths=['./','garda/'];
 const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));
 const invitation=[
+ 'One situation. Two perspectives.',
  'Explore your rights and police powers through interactions between members of the public and Gardaí.',
- 'Which side will you try first?',
- 'Know your rights. Understand fair decisions.',
  'Read a situation, choose a response, then find out why it matters.'
 ];
+const invitationText=':scope > :is(#paired-title,.landing-deck,.small-note)';
 
 for(const path of paths){
  test(path+' landing invitation matches the portfolio staggered reveal and honours reduced motion',async({page},testInfo)=>{
@@ -16,25 +16,27 @@ for(const path of paths){
   await page.goto(path+'?lang=en#play');
   const group=page.locator('.reference-landing .landing-instructions');
   await expect(group).toBeVisible();
-  await expect(group.locator(':scope > .landing-deck, :scope > #paired-title, :scope > .landing-purpose, :scope > .small-note')).toHaveText(invitation);
+  const lines=group.locator(invitationText);
+  await expect(lines).toHaveText(invitation);
   await expect.poll(()=>group.evaluate(element=>element.classList.contains('is-revealing'))).toBe(true);
-  const animation=await group.evaluate(element=>[...element.children].map(child=>({
+  const animation=await lines.evaluateAll(children=>children.map(child=>({
    name:getComputedStyle(child).animationName,
    duration:getComputedStyle(child).animationDuration,
    delay:getComputedStyle(child).animationDelay,
    align:getComputedStyle(child).textAlign
   })));
-  expect(animation.map(item=>item.name)).toEqual(Array(4).fill('landing-portfolio-line-reveal'));
-  expect(animation.map(item=>item.duration)).toEqual(Array(4).fill('1s'));
-  expect(animation.map(item=>item.delay)).toEqual(['0s','0.1s','0.2s','0.3s']);
+  expect(animation.map(item=>item.name)).toEqual(Array(3).fill('landing-portfolio-line-reveal'));
+  expect(animation.map(item=>item.duration)).toEqual(Array(3).fill('1s'));
+  expect(animation.map(item=>item.delay)).toEqual(['0s','0.1s','0.3s']);
   expect(animation.every(item=>item.align==='start'||item.align==='left')).toBe(true);
+  await expect(group.locator('.landing-role-actions')).toHaveCSS('animation-name','none');
   await group.evaluate(async element=>{
    await document.fonts.ready;
    await Promise.all([...element.children].flatMap(child=>child.getAnimations())
     .map(animation=>animation.finished.catch(()=>{})));
   });
-  await expect.poll(()=>group.evaluate(element=>[...element.children]
-   .map(child=>getComputedStyle(child).opacity))).toEqual(Array(4).fill('1'));
+  await expect.poll(()=>lines.evaluateAll(children=>children
+   .map(child=>getComputedStyle(child).opacity))).toEqual(Array(3).fill('1'));
   const label=path==='garda/'?'garda':'public';
   await group.screenshot({path:testInfo.outputPath(label+'-landing-typography-desktop.png')});
   await page.setViewportSize({width:390,height:844});
@@ -44,7 +46,7 @@ for(const path of paths){
   });
   await group.screenshot({path:testInfo.outputPath(label+'-landing-typography-phone.png')});
   await page.emulateMedia({reducedMotion:'reduce'});
-  await expect.poll(()=>group.evaluate(element=>[...element.children].map(child=>getComputedStyle(child).animationName))).toEqual(Array(4).fill('none'));
+  await expect.poll(()=>lines.evaluateAll(children=>children.map(child=>getComputedStyle(child).animationName))).toEqual(Array(3).fill('none'));
   await page.setViewportSize({width:320,height:568});
   await expect.poll(()=>page.evaluate(()=>{
    const root=document.documentElement,group=document.querySelector('.landing-instructions');

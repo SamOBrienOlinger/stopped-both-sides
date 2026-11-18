@@ -53,8 +53,8 @@ for(const path of paths){
 
  test(path+' landing removes redundant text while retaining the three learning steps',async({page})=>{
   await page.goto(path+'?lang=en#play');
-  await expect(page.locator('.perspective-card-link[data-role-tone="public"] .perspective-button-label')).toHaveText('Member of the public');
-  await expect(page.locator('.perspective-card-link[data-role-tone="garda"] .perspective-button-label')).toHaveText('Garda member');
+  await expect(page.locator('.perspective-card-link[data-role-tone="public"]')).toHaveText('Play as a member of the public');
+  await expect(page.locator('.perspective-card-link[data-role-tone="garda"]')).toHaveText('Play as a Garda');
   for(const sentence of unwanted)await expect(page.locator('#main')).not.toContainText(sentence);
   const guide=page.locator('.how-to-play');
   const dropdown=guide.locator('details.how-to-disclosure');

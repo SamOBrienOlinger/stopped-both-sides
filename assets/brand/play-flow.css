@@ -3,71 +3,100 @@
  --play-radius:1.125rem;
  --play-shadow:0 8px 24px #18374412;
 }
-html .reference-landing.paired-entry {
- display:block;
+html .reference-landing.encounter-hero {
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:clamp(1.4rem,3vw,2.75rem);
+ max-inline-size:none;
+ margin-block:0 clamp(1.5rem,3vw,2.75rem);
  padding:0;
  overflow:visible;
  border:0;
  background:transparent!important;
  box-shadow:none;
 }
-.reference-landing.paired-entry::after {display:none}
-.play-invitation {
+.reference-landing.encounter-hero::after {display:none}
+.reference-landing.encounter-hero .landing-instructions {
  display:grid;
- align-items:center;
- gap:clamp(1rem,3vw,2.5rem);
- padding:clamp(1rem,3.5vw,2.75rem);
- border:1px solid var(--story);
- border-radius:clamp(1rem,2vw,1.5rem);
- background:linear-gradient(135deg,var(--story) 45%,var(--deep));
- color:var(--story-text);
- box-shadow:var(--play-shadow);
-}
-.invitation-content {min-inline-size:0}
-.reference-landing .play-invitation .landing-instructions {
- align-items:flex-start;
- gap:.6rem;
- margin:0 0 1.25rem;
+ flex:5 1 23rem;
+ min-inline-size:min(100%,23rem);
+ gap:clamp(.9rem,1.7vw,1.5rem);
+ margin:0;
  padding:0;
- background:transparent;
+ width:auto;
+ container-type:inline-size;
 }
-.reference-landing .play-invitation .landing-instructions>:is(.landing-deck,#paired-title,.landing-purpose,.small-note) {
+.reference-landing.encounter-hero .landing-instructions>:is(#paired-title,.landing-deck,.small-note) {
+ max-inline-size:none;
  text-align:start;
- text-wrap:pretty;
-}
-.reference-landing .play-invitation p.landing-deck {
- max-inline-size:51ch;
- color:var(--story-text);
- font-size:clamp(.875rem,1.3vw,1rem);
- font-weight:500;
- line-height:1.6;
  letter-spacing:normal;
 }
-.reference-landing .play-invitation #paired-title {
- max-inline-size:15ch;
- color:#fff;
- font-size:clamp(1.85rem,4.55vw,3.8rem);
- line-height:1.08;
+.reference-landing.encounter-hero .landing-instructions #paired-title {
+ color:var(--ink);
+ font-size:clamp(2rem,4vw,3.625rem);
+ font-size:clamp(2rem,11cqi,3.625rem);
+ font-weight:800;
+ line-height:1.1;
+ letter-spacing:-.045em;
  text-wrap:balance;
 }
-.reference-landing .play-invitation p.landing-purpose {
- color:var(--story-label);
- font-size:clamp(1rem,1.6vw,1.25rem);
- line-height:1.45;
+.encounter-hero #paired-title>span {display:block}
+html:lang(ar) .reference-landing.encounter-hero .landing-instructions #paired-title {
  letter-spacing:normal;
+ line-height:1.35;
 }
-.reference-landing .play-invitation .landing-instructions .small-note {
- color:var(--story-text);
- font-size:.9375rem;
+.reference-landing.encounter-hero .landing-instructions .landing-deck {
+ color:var(--ink);
+ font-size:1.125rem;
+ font-weight:400;
+ line-height:1.6;
+ text-wrap:pretty;
+}
+.reference-landing.encounter-hero .landing-instructions .small-note {
+ color:var(--slate);
+ font-size:1rem;
  font-weight:400;
  line-height:1.55;
- letter-spacing:normal;
+ text-wrap:pretty;
 }
+.landing-role-actions {
+ display:grid;
+ gap:.75rem;
+ min-inline-size:0;
+}
+.encounter-hero .landing-role-actions>.primary {
+ width:100%;
+ min-block-size:3.5rem;
+ padding:.75rem 1rem;
+ border-radius:.8rem;
+ font-size:1.125rem;
+ line-height:1.4;
+ overflow-wrap:anywhere;
+ box-shadow:none;
+}
+.encounter-hero-art {
+ display:block;
+ flex:7 1 32rem;
+ min-inline-size:min(100%,32rem);
+ max-inline-size:100%;
+ width:100%;
+ height:auto;
+ aspect-ratio:16 / 9;
+ object-fit:contain;
+ border-radius:var(--play-radius);
+}
+.contrast-high .encounter-hero-art {display:none}
+.contrast-high .encounter-hero .landing-instructions {max-inline-size:38rem}
+
 .home-play {
  display:flex;
  flex-wrap:wrap;
  align-items:flex-start;
  gap:.65rem;
+ margin-block-end:1.25rem;
+ padding-block-start:1rem;
+ border-block-start:1px solid var(--line);
 }
 .home-start {
  display:grid;
@@ -76,28 +105,9 @@ html .reference-landing.paired-entry {
  min-inline-size:0;
 }
 .home-play .primary {box-shadow:none}
-.home-start .primary {
- flex-wrap:wrap;
- gap:.18em .3em;
- background:var(--story-label);
- border-color:var(--story-label);
- color:var(--ink);
-}
-.home-start .primary:hover {background:#fff;border-color:#fff;color:var(--ink)}
-.home-play>.secondary {background:transparent;border-color:var(--story-label);color:#fff}
-.home-play>.secondary:hover {background:var(--story-label);color:var(--ink)}
-.home-play .primary:focus-visible {outline-color:var(--story-label)}
-.home-start-role {font-size:.875rem;color:var(--story-text)}
+.home-start .primary {flex-wrap:wrap;gap:.18em .3em}
+.home-start-role {font-size:.875rem;color:var(--muted)}
 .home-play .flow-save {flex:1 1 100%;margin:0;background:var(--paper,#fff);color:var(--ink)}
-.reference-landing .overlapping-heroes {margin-block:1rem 0}
-.reference-landing .overlapping-heroes .perspective-hero {
- padding:clamp(.65rem,1.6vw,1.2rem);
- border-radius:var(--play-radius)!important;
- box-shadow:var(--play-shadow);
-}
-.reference-landing .perspective-hero::after {display:none}
-.reference-landing .overlapping-heroes .perspective-hero-button {margin-block-end:.65rem}
-.reference-landing .perspective-hero>.perspective-caption {padding-block-start:.7rem}
 
 .flow-save {
  display:flex;
@@ -475,39 +485,25 @@ html .reference-landing.paired-entry {
  .game-grid.paired-game.flow-game {grid-template-columns:minmax(0,4fr) minmax(0,5fr);gap:1.25rem}
  .comparison-roles {grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(min-width:60rem) {
- .play-invitation {grid-template-columns:minmax(0,1.12fr) minmax(0,1fr)}
- .play-invitation::after {
-  content:"";
-  aspect-ratio:16 / 9;
-  border-radius:.85rem;
-  background:var(--invitation-art) center / contain no-repeat;
- }
- .contrast-high .play-invitation {grid-template-columns:minmax(0,1fr);background:var(--story)}
- .contrast-high .play-invitation::after {display:none}
-}
 @media(max-width:34rem) {
  .home-play {align-items:stretch;flex-direction:column}
  .home-start {justify-items:stretch}
  .home-play .flow-save {flex:auto}
  .flow-save a {inline-size:100%}
- .reference-landing .overlapping-heroes .perspective-hero-button {justify-content:space-between}
- .reference-landing .perspective-button-title {display:grid;justify-items:center}
  .flow-game .decision-context,.game-grid>.decision-choices {padding:.8rem}
  .flow-role-bar {padding:.35rem .55rem}
 }
 @media(forced-colors:active) {
- .play-invitation {grid-template-columns:minmax(0,1fr)}
- .play-invitation::after {display:none}
- .play-invitation,.flow-game .decision-context,.summary-heading,
+ .encounter-hero-art {display:none}
+ .flow-game .decision-context,.summary-heading,
  .game-grid>.decision-choices,.decision-choices .feedback,
  .play-modes a,.flow-role-bar,.scene-explorer {
   background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none;
  }
  .play-modes a[aria-current="page"] {outline:2px solid Highlight;outline-offset:-4px}
- .home-play .primary,.home-play .primary:hover,
+ .encounter-hero .primary,.encounter-hero .primary:hover,.home-play .primary,.home-play .primary:hover,
  .summary-heading .flow-recap-actions .primary {background:ButtonFace;color:ButtonText;border-color:ButtonText}
- .home-play .primary:focus-visible,.summary-heading .flow-recap-actions .primary:focus-visible {outline-color:Highlight}
+ .encounter-hero .primary:focus-visible,.home-play .primary:focus-visible,.summary-heading .flow-recap-actions .primary:focus-visible {outline-color:Highlight}
  .decision-choices .choices .choice {border-color:ButtonText}
  .flow-save.session-return .saved-session-link,
  .flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {
@@ -515,12 +511,11 @@ html .reference-landing.paired-entry {
  }
 }
 @media print {
- .play-invitation,.flow-game .decision-context,.summary-heading {
+ .flow-game .decision-context,.summary-heading {
   background:#fff;color:#000;border-color:#000;box-shadow:none;
  }
- .play-invitation {grid-template-columns:minmax(0,1fr)}
- .play-invitation::after {display:none}
- .reference-landing .play-invitation .landing-instructions>:is(.landing-deck,#paired-title,.landing-purpose,.small-note),
+ .encounter-hero-art {display:none}
+ .reference-landing.encounter-hero .landing-instructions>:is(#paired-title,.landing-deck,.small-note),
  .home-start-role,.flow-game .decision-context :is(h1,.eyebrow,.story-text,.search-figures caption),
  .summary-heading :is(h1,.eyebrow,p.small-note) {color:#000}
 }

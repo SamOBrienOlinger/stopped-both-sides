@@ -1,4 +1,4 @@
-import {learningCopy} from './play-copy.mjs?v=community-group-1';
+import {learningCopy} from './play-copy.mjs?v=encounter-hero-1';
 import {messages} from './messages.mjs?v=community-group-1';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';

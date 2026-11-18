@@ -6,10 +6,10 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  await page.setViewportSize({width:390,height:844});
  await page.goto(role==='public'?'./':'garda/');
  await expect(page.locator('.landing-deck')).toHaveText("Explore your rights and police powers through interactions between members of the public and Gardaí.");
- await expect(page.locator('#paired-title')).toHaveText('Which side will you try first?');
+ await expect(page.locator('#paired-title')).toHaveText('One situation. Two perspectives.');
  await expect(page.locator('.about-opening')).toHaveCount(0);
  await expect(page.locator('.landing-character')).toHaveCount(0);
- await page.locator(`a.perspective-hero[data-role-tone="${role}"]`).click();
+ await page.locator(`a.perspective-card-link[data-role-tone="${role}"]`).click();
  await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
  await expect(page.locator('.character-option')).toHaveCount(0);
  await expect(page.locator('.scenario-library')).not.toHaveAttribute('open','');

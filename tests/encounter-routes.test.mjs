@@ -27,24 +27,12 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
-  const titles={public:'Member of the public',garda:'Garda member'};
-  const descriptions={
-   public:'You are stopped. Learn what you can ask and what you may need to do.',
-   garda:'You make the stop. Check your reasons, assumptions and responsibilities.'
-  };
-  for(const role of roles){
-   const href=new URL('#encounters/'+role,sites.public).href;
-   const anchor='<a class="perspective-hero perspective-card-link" data-role-tone="'+role+'" href="'+href+'"';
-   const start=main.innerHTML.indexOf(anchor);
-   assert.ok(start>=0,'the '+role+' full-card anchor uses the public-root encounter URL');
-   const end=main.innerHTML.indexOf('</a>',start);
-   assert.ok(end>start,'each complete card has one closing link');
-   const card=main.innerHTML.slice(start,end);
-   assert.ok(card.includes('/'+role+'-perspective.webp'),'the role icon is preserved');
-   assert.ok(card.includes('class="perspective-button-label" id="perspective-'+role+'-label">'+titles[role]+'</span>'),'the role label is included');
-   assert.ok(card.includes('class="perspective-caption" id="perspective-'+role+'-description">'+descriptions[role]+'</p>'),'the description is inside the link');
-   assert.doesNotMatch(card.slice(anchor.length),/<a[\s>]/,'there must be no nested anchor inside a perspective card');
-  }
+ const titles={public:'Play as a member of the public',garda:'Play as a Garda'};
+ for(const role of roles){
+  const href=new URL('#encounters/'+role,sites.public).href;
+  const link=`<a class="primary perspective-card-link" data-role-tone="${role}" href="${href}">${titles[role]}</a>`;
+  assert.ok(main.innerHTML.includes(link),'the '+role+' role link uses the public-root encounter URL');
+ }
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,situationCount);
   const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];
   for(const choice of roles){

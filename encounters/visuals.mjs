@@ -1,6 +1,6 @@
 import {encounters} from './catalog.mjs?v=community-group-1';
 import {renderScenePreview} from './scenes.mjs?v=community-group-1';
-import {practiceGoal} from '../learning/play.mjs?v=homepage-intro-1';
+import {practiceGoal} from '../learning/play.mjs?v=encounter-hero-1';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){

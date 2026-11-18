@@ -3,10 +3,9 @@ import {focusControl} from '../accessibility/focus.mjs';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=homepage-intro-1';
-import {backgroundImage} from './backgrounds.mjs?v=approved-dublin-2';
+} from '../learning/play.mjs?v=encounter-hero-1';
 import {supportRecap} from '../learning/support.mjs?v=phlowing-1';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=homepage-intro-1';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=encounter-hero-1';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=community-group-1';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=community-group-1';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=community-group-1';
@@ -251,31 +250,23 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}${heading}<div class="info-block landing-overview about-overview" lang="en-IE"><p>Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
  }
  function perspectiveChoice(){
-  const heroes=roles.map(role=>{
-   const {src:image,srcset}=backgroundImage(role);
-   const label=role==='public'?'Member of the public':'Garda member';
-   const icon=perspectiveIcon(role);
-   // One real link wraps the complete card, rather than making only "Explore" clickable.
-   // Resolve against the public entrypoint so both / and /garda/ cards reach the
-   // requested canonical /#encounters/{role} URL on Pages and local previews.
+  const links=roles.map(role=>{
+   // Both entrypoints use the same encounter setup at the public site root.
    const href=new URL('#encounters/'+role,sites.public).href;
-   const description=role==='public'
-    ?'You are stopped. Learn what you can ask and what you may need to do.'
-    :'You make the stop. Check your reasons, assumptions and responsibilities.';
-   return `<a class="perspective-hero perspective-card-link" data-role-tone="${role}" href="${href}" aria-labelledby="perspective-${role}-label perspective-${role}-action" aria-describedby="perspective-${role}-description"><img src="${image}" srcset="${srcset}" sizes="(max-width: 639px) calc(100vw - 4rem), (max-width: 1100px) 45vw, 480px" width="1600" height="900" alt="" decoding="async" fetchpriority="high" data-approved-hero="${role}"><span class="primary perspective-hero-button"><span class="perspective-button-title">${icon}<span class="perspective-button-label" id="perspective-${role}-label">${label}</span><span class="perspective-button-short">${label}</span></span><span class="perspective-button-action" id="perspective-${role}-action">Explore</span><span class="perspective-button-action-short">Explore</span></span><p class="perspective-caption" id="perspective-${role}-description">${description}</p></a>`;
+   const label=role==='public'?'Play as a member of the public':'Play as a Garda';
+   return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${label}</a>`;
   }).join('');
-  return `<section class="paired-entry paired-entry-visual reference-landing" aria-labelledby="paired-title">
-   <div class="play-invitation"><div class="invitation-content">
-    <div class="landing-instructions">
-     <p class="landing-deck">Explore your rights and police powers through interactions between members of the public and Gardaí.</p>
-     <h1 id="paired-title">Which side will you try first?</h1>
-     <p class="landing-purpose">Know your rights. Understand fair decisions.</p>
-     <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
-    </div>
-    ${homeActions()}
-   </div></div>
-   <div class="perspective-heroes overlapping-heroes">${heroes}</div>
-  </section>`;
+  const image=width=>new URL(`../assets/heroes/garda-${width}.webp?v=garda-neutral-1`,import.meta.url).href;
+  const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
+  return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title">
+   <div class="landing-instructions">
+    <h1 id="paired-title"><span>One situation.</span> <span>Two perspectives.</span></h1>
+    <p class="landing-deck">Explore your rights and police powers through interactions between members of the public and Gardaí.</p>
+    <div class="landing-role-actions">${links}</div>
+    <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
+   </div>
+   <img class="encounter-hero-art" src="${image(960)}" srcset="${srcset}" sizes="(max-width: 58rem) calc(100vw - 2rem), (max-width: 75rem) 54vw, 42rem" width="1600" height="900" alt="" decoding="async" fetchpriority="high">
+  </section>${homeActions()}`;
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);

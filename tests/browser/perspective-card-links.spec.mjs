@@ -1,64 +1,60 @@
 import {test,expect} from '@playwright/test';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=encounter-hero-1';
 
 const entrypoints=['./','garda/'];
-const descriptions={
- public:'You are stopped. Learn what you can ask and what you may need to do.',
- garda:'You make the stop. Check your reasons, assumptions and responsibilities.'
-};
-const titles={public:'Member of the public',garda:'Garda member'};
-const cards=role=>`a.perspective-hero.perspective-card-link[data-role-tone="${role}"]`;
+const titles={public:'Play as a member of the public',garda:'Play as a Garda'};
+const roleLinks=role=>`a.perspective-card-link[data-role-tone="${role}"]`;
 
 for(const path of entrypoints){
- for(const role of ['public','garda']){
-  test(`${path} full ${role} card navigates from title, image and explanation`,async({page},info)=>{
-   test.setTimeout(90000);
+ for(const [role,title] of Object.entries(titles)){
+  test(`${path} ${role} link opens the selected role by mouse and keyboard`,async({page},info)=>{
    const destination=new URL('#encounters/'+role,info.project.use.baseURL).href;
-   for(const area of ['.perspective-hero-button','img[data-approved-hero]','.perspective-caption']){
+   for(const input of ['mouse','keyboard']){
     await page.goto(path+'?lang=en#play');
-    const link=page.locator(cards(role));
+    const link=page.getByRole('link',{name:title,exact:true});
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute('href',destination);
-    await expect(link).toHaveAttribute('aria-labelledby',`perspective-${role}-label perspective-${role}-action`);
-    await expect(link).toHaveAttribute('aria-describedby',`perspective-${role}-description`);
-    await expect(link.locator('.perspective-hero-button a, a')).toHaveCount(0);
-    await expect(link.locator('.perspective-caption')).toHaveText(descriptions[role]);
-    await expect(link.locator('.perspective-button-label')).toHaveText(titles[role]);
-    await link.locator(area).click();
+    await expect(link.locator('a,button,input,[tabindex]')).toHaveCount(0);
+    if(input==='mouse')await link.click();
+    else {
+     await link.focus();
+     await expect(link).toBeFocused();
+     await page.keyboard.press('Enter');
+    }
     await expect(page).toHaveURL(destination);
-    await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
+    const start=page.locator('[data-action="paired-quick-start"]');
+    await expect(start).toBeVisible();
+    await expect(start).toHaveAttribute('data-role',role);
    }
   });
  }
 
- test(`${path} both entire cards stay accessible at mobile, 200% text and Arabic RTL`,async({page},info)=>{
+ test(`${path} both role links stay accessible at mobile, 200% text and Arabic RTL`,async({page},info)=>{
   test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const lang of ['en','ar']){
+   await loadLanguage(lang);
    for(const [width,height] of [[320,650],[390,844],[1366,900]]){
     await page.setViewportSize({width,height});
     await page.goto(path+'?lang='+lang+'#play');
     await expect(page.locator('a.perspective-card-link')).toHaveCount(2);
-    await expect.poll(()=>page.locator('img[data-approved-hero]').evaluateAll(images=>images.length===2&&images.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
+    await expect.poll(()=>page.locator('.encounter-hero-art').evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
     await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
     await expect.poll(()=>page.evaluate(()=>{
      const root=document.documentElement;
-     const boxes=[...document.querySelectorAll('a.perspective-card-link')].map(a=>a.getBoundingClientRect());
-     return root.scrollWidth<=root.clientWidth+2&&boxes.every(box=>box.width>100&&box.left>=-2&&box.right<=root.clientWidth+2);
+     const links=[...document.querySelectorAll('a.perspective-card-link')];
+     return root.scrollWidth<=root.clientWidth+2&&links.every(link=>{
+      const box=link.getBoundingClientRect();
+      return box.width>=44&&box.height>=48&&box.left>=-2&&box.right<=root.clientWidth+2&&
+       link.scrollWidth<=link.clientWidth+1&&link.scrollHeight<=link.clientHeight+1;
+     });
     })).toBe(true);
-    for(const role of ['public','garda']){
-     const link=page.locator(cards(role));
+    for(const [role,title] of Object.entries(titles)){
+     const link=page.locator(roleLinks(role));
      await expect(link).toHaveAttribute('href',new URL('#encounters/'+role,info.project.use.baseURL).href);
-     await expect(link).toHaveAttribute('aria-labelledby',`perspective-${role}-label perspective-${role}-action`);
-     await expect(link).toHaveAttribute('aria-describedby',`perspective-${role}-description`);
+     await expect(link).toHaveAccessibleName(translateText(title,lang));
     }
    }
   }
-  await page.goto(path+'?lang=en#play');
-  const first=page.locator(cards('public'));
-  await first.focus();
-  await expect(first).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(new URL('#encounters/public',info.project.use.baseURL).href);
-  await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
  });
 }
