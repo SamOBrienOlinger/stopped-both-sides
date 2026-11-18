@@ -4,14 +4,14 @@ const cases=[{path:'./',role:'public'},{path:'garda/',role:'garda'}];
 const portfolio='https://samobrienolinger.github.io/SamOBrienOlinger/';
 
 for(const {path,role} of cases){
- test(path+' shared footer puts the disclaimer above the owner link and copyright',async({page})=>{
+ test(path+' shared footer puts the disclaimer below the controls and above the copyright',async({page})=>{
   await page.goto(path);
   const identity=page.locator('.footer-top + .footer-identity');
   await expect(identity.locator('.footer-creator')).toHaveText('Sam Tim Solutions');
   await expect(identity.locator('.footer-creator')).toHaveAttribute('href',portfolio);
   await expect(identity.locator('.footer-copyright')).toHaveText('Copyright © 2026. All rights reserved');
-  await expect(page.locator('.footer-top > .footer-note')).toHaveText('General information, not legal advice. Not endorsed by any organisation or An Garda Síochána.');
-  await expect(page.locator('.footer-top > .footer-note + .footer-tools a')).toHaveCount(3);
+  await expect(page.locator('.footer-top > .footer-tools + .footer-note')).toHaveText('General information, not legal advice. Not endorsed by any organisation or An Garda Síochána.');
+  await expect(page.locator('.footer-top > .footer-tools > :is(a,button)')).toHaveCount(4);
   await page.evaluate(()=>document.documentElement.classList.add('contrast-high'));
   const colours=await page.locator('.footer').evaluate(footer=>({
    copyright:getComputedStyle(footer.querySelector('.footer-copyright')).color,
@@ -29,9 +29,9 @@ for(const {path,role} of cases){
     await expect(page.locator('html')).toHaveAttribute('dir','rtl');
     await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    }
-   for(const width of [320,390,768,1366]){
+   for(const width of [320,390,430,768,1366]){
     await page.setViewportSize({width,height:844});
-    await expect.poll(()=>footer.evaluate(element=>{
+    await expect.poll(()=>footer.evaluate((element,compact)=>{
      const bounds=element.getBoundingClientRect();
      const inner=element.querySelector('.footer-inner');
      const padding=getComputedStyle(inner);
@@ -39,14 +39,15 @@ for(const {path,role} of cases){
      const links=[...element.querySelectorAll('.footer-tools > :is(a,button)')];
      const note=element.querySelector('.footer-note').getBoundingClientRect();
      const identity=element.querySelector('.footer-identity').getBoundingClientRect();
-     return links.length===4 && Math.abs(identity.width-contentWidth)<=1 && note.bottom<=identity.top &&
+     return links.length===4 && Math.abs(note.width-contentWidth)<=1 && note.bottom<=identity.top &&
+      (!compact || bounds.height<=235) &&
       element.scrollWidth<=element.clientWidth+1 &&
       links.every(link=>{
        const box=link.getBoundingClientRect();
-       return box.height>=44 && box.left>=bounds.left && box.right<=bounds.right &&
-        box.bottom<=identity.top && link.scrollWidth<=link.clientWidth+1;
+       return box.height>=44 && box.width>=44 && box.left>=bounds.left && box.right<=bounds.right &&
+        box.bottom<=note.top && link.scrollWidth<=link.clientWidth+1;
       });
-    })).toBe(true);
+    },lang==='en' && width<=430)).toBe(true);
    }
   }
   await settings.focus();
