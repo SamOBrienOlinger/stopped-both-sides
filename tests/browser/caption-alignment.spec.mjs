@@ -168,7 +168,7 @@ test('landing role links keep their text inside during hover, focus and reduced 
 });
 
 
-// A representative Sam/Charlie encounter: button positions are independently
+// A representative Hassan/Charlie encounter: button positions are independently
 // checked by aligned() at every width; activation must not change game state.
 for(const path of ['./','garda/'])test(path+' character buttons open profiles and return keyboard focus',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});
@@ -182,7 +182,7 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
   await page.setViewportSize({width,height:900});
   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
   await aligned(page);
-  for(const [role,name] of [['public','Sam'],['garda',characters.garda.find(c=>c.id===state.cast.garda).name]]){
+  for(const [role,name] of [['public','Hassan'],['garda',characters.garda.find(c=>c.id===state.cast.garda).name]]){
    const button=scene.locator('button[data-scene-label-role="'+role+'"]');
    await expect(button).toHaveAttribute('aria-haspopup','dialog');
    await expect(button).toHaveAttribute('aria-controls','scene-character-dialog');

@@ -5,7 +5,7 @@ const make=(role,names)=>names.map((name,index)=>({
  id:role+'-'+(index+1),name,column:index%3+(role==='garda'?3:0),row:Math.floor(index/3)
 }));
 export const characters={
- public:make('public',['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Sam','Pat']),
+ public:make('public',['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Hassan','Pat']),
  garda:make('garda',['Garda Sergeant Ciara','Garda Rory','Garda Jamie','Garda Lee','Garda Aisling','Garda Sergeant Kai','Garda Conor','Garda Orla','Garda Sergeant Charlie'])
 };
 export const characterFor=(role,id)=>characters[role]?.find(character=>character.id===id)||null;

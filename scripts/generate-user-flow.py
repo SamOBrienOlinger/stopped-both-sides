@@ -5,6 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import shutil
 import subprocess
+import json
 
 from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
@@ -15,7 +16,8 @@ from reportlab.pdfgen import canvas
 
 ROOT = Path(__file__).resolve().parents[1]
 GUIDE = ROOT / "docs" / "user-guide"
-WIDTH, HEIGHT = 400, 880
+WIDTH = 400
+PAGE_HEIGHTS = (1000, 880, 880)
 REVIEWED = "18 November 2026"
 GAME = "https://samobrienolinger.github.io/stopped-both-sides/"
 REPOSITORY = "https://github.com/SamOBrienOlinger/stopped-both-sides"
@@ -26,8 +28,9 @@ MINT, ICE = "#deeee6", "#e4ecf6"
 BORDER, ACCENT = "#b7cbc5", "#a44e45"
 
 
-def draw_page(pdf, page):
+def draw_page(pdf, page, portraits):
     """One column, the same text and layout in the PNG and print pages."""
+    HEIGHT = PAGE_HEIGHTS[page]
     def rect(x, top, width, height, fill, radius=0, stroke=None):
         pdf.setFillColor(HexColor(fill))
         pdf.setStrokeColor(HexColor(stroke or fill))
@@ -182,6 +185,27 @@ def draw_page(pdf, page):
         pdf.linkURL(GAME+f"#encounters/{role}",
                     (32,HEIGHT-top-58,368,HEIGHT-top),relative=1)
 
+    def character_portrait(character, center, top):
+        left, source_top, right, bottom = character["box"]
+        size = 64
+        x = center-size/2
+        scale = size/(right-left)
+        source_height = (bottom-source_top)*scale
+        rect(x,top,size,source_height,WHITE,8)
+        # Use the same production sprite as the site. Clip it inside the PDF;
+        # no source image or character artwork is modified.
+        pdf.saveState()
+        clip=pdf.beginPath()
+        clip.roundRect(x,HEIGHT-top-source_height,size,source_height,8)
+        pdf.clipPath(clip,stroke=0,fill=0)
+        pdf.drawImage(character["src"],x-left*scale,
+                      HEIGHT-top+source_top*scale-character["height"]*scale,
+                      width=character["width"]*scale,
+                      height=character["height"]*scale,mask="auto")
+        pdf.restoreState()
+        text(center,top+source_height+6,character["name"],15.5,True,TEAL,
+             center=True,width=158)
+
     rect(0,0,WIDTH,HEIGHT,BACKGROUND)
     if page==0:
         text(24,18,"STOPPED: BOTH SIDES",15,True,TEAL)
@@ -189,23 +213,26 @@ def draw_page(pdf, page):
         text(24,99,"For Explore both perspectives",14.5,True)
         text(24,121,"Use these controls in the game.",13.5)
 
-        card(1,"Choose your side",142,348)
+        card(1,"Choose your side",142,468)
         text(32,189,"Choose who you want to play.",17)
         perspective_button(222,"public","Play as a member\nof the public",MINT,TEAL)
         perspective_button(292,"garda","Play as a Garda",ICE,BLUE)
         text(32,364,"Trying both roles is optional.",16)
         text(32,391,"A character is ready. To change them:",15.5)
         button(420,"Choose a different character",MINT,TEAL,15,height=30)
-        text(32,459,"Choose one, then select Done.",16.5)
-        arrow(200,490,507)
+        text(32,456,"Examples: one character from each role.",13.5)
+        character_portrait(portraits[0],116,476)
+        character_portrait(portraits[1],284,476)
+        text(32,574,"Choose one, then select Done.",16.5)
+        arrow(200,610,627)
 
-        card(2,"Start a situation",510,294)
-        text(32,558,"For the suggested story, select:",16.5)
-        button(590,"Start this situation",symbol="next")
-        text(32,645,"To pick another story, open:",16.5)
-        button(677,"Browse all situations",MINT,TEAL)
-        text(32,733,"Choose from 24 situations by topic.\nThen select Play this situation.",16,leading=23)
-        text(32,823,"Next: read, choose and learn.",16,True,TEAL)
+        card(2,"Start a situation",630,294)
+        text(32,678,"For the suggested story, select:",16.5)
+        button(710,"Start this situation",symbol="next")
+        text(32,765,"To pick another story, open:",16.5)
+        button(797,"Browse all situations",MINT,TEAL)
+        text(32,853,"Choose from 24 situations by topic.\nThen select Play this situation.",16,leading=23)
+        text(32,943,"Next: read, choose and learn.",16,True,TEAL)
     elif page==1:
         text(24,24,"Read, choose and learn",26,True,INK)
         text(24,66,"There is no time limit.",17)
@@ -265,9 +292,8 @@ def draw_page(pdf, page):
         text(32,741,"Your progress is saved in this browser\nif your browser allows saving.",16,leading=21)
         text(32,790,"It does not automatically appear\non another device.",16,leading=21)
 
-    line(24,852,376,852,BORDER,0.7)
-    text(24,860,f"English guide - {REVIEWED}",9.5)
-    text(376,860,f"{page+1} / 3",9.5,True,TEAL,center=True,width=35)
+    line(24,HEIGHT-28,376,HEIGHT-28,BORDER,0.7)
+    text(376,HEIGHT-20,f"{page+1} / 3",9.5,True,TEAL,center=True,width=35)
 
 
 def configure(pdf):
@@ -281,28 +307,44 @@ def generate():
         raise SystemExit("Install Poppler (pdftoppm) before generating the guide.")
     for name,weight in [("OpenSans",400),("OpenSansBold",700)]:
         pdfmetrics.registerFont(TTFont(name,str(ROOT/"assets/fonts"/f"open-sans-{weight}.ttf")))
+    # Resolve names and artwork from the game's stable character IDs, so the
+    # guide does not retain an obsolete portrait or a duplicated name list.
+    result=subprocess.run(["node","--input-type=module","-e",r'''
+import {fileURLToPath} from 'node:url';
+import {characterFor,characterArtwork} from './encounters/characters.mjs';
+import {gardaAtlas} from './encounters/garda-atlas.mjs';
+const requested=[['garda','garda-5'],['public','public-5']];
+console.log(JSON.stringify(requested.map(([role,id])=>{
+ const c=characterFor(role,id),art=characterArtwork(c);
+ const box=role==='garda'?gardaAtlas.cells[4].slice(0,4):
+  [c.column*art.width/6,c.row*art.height/3,(c.column+1)*art.width/6,(c.row+1)*art.height/3];
+ return {name:c.name,src:fileURLToPath(art.src),width:art.width,height:art.height,box};
+})));
+'''],cwd=ROOT,check=True,capture_output=True,text=True)
+    portraits=json.loads(result.stdout)
     output=GUIDE/"stopped-both-sides-user-flow"
     # Three A4 pages keep the print version readable. The same pages form a
     # narrow scrolling PNG, with text that remains legible at phone width.
     pdf=canvas.Canvas(str(output.with_suffix(".pdf")),pagesize=A4,invariant=1)
     configure(pdf)
-    scale=min((A4[0]-36)/WIDTH,(A4[1]-36)/HEIGHT)
     for page in range(3):
+        height=PAGE_HEIGHTS[page]
+        scale=min((A4[0]-36)/WIDTH,(A4[1]-36)/height)
         pdf.saveState()
-        pdf.translate((A4[0]-WIDTH*scale)/2,(A4[1]-HEIGHT*scale)/2)
+        pdf.translate((A4[0]-WIDTH*scale)/2,(A4[1]-height*scale)/2)
         pdf.scale(scale,scale)
-        draw_page(pdf,page)
+        draw_page(pdf,page,portraits)
         pdf.restoreState()
         pdf.showPage()
     pdf.save()
     with TemporaryDirectory(prefix="stopped-player-guide-") as temporary:
         poster=Path(temporary)/"poster.pdf"
-        pdf=canvas.Canvas(str(poster),pagesize=(WIDTH,HEIGHT*3),invariant=1)
+        pdf=canvas.Canvas(str(poster),pagesize=(WIDTH,sum(PAGE_HEIGHTS)),invariant=1)
         configure(pdf)
         for page in range(3):
             pdf.saveState()
-            pdf.translate(0,HEIGHT*(2-page))
-            draw_page(pdf,page)
+            pdf.translate(0,sum(PAGE_HEIGHTS[page+1:]))
+            draw_page(pdf,page,portraits)
             pdf.restoreState()
         pdf.showPage()
         pdf.save()

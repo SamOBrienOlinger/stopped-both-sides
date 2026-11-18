@@ -6,9 +6,9 @@ The perspective buttons use the public and Garda logos supplied by the project o
 
 The guide uses a narrow, single-column layout with larger text and stacked controls. It explains character selection before starting, both ways to start a situation, how role switching keeps the previous answer, and the two possible labels of the same main button: **Next decision** or **View recap**. Optional actions are marked separately. The choice illustration is a diagram, rather than a screenshot.
 
-The PNG joins three 400-unit-wide sections into a scrolling guide. The PDF lays out those same sections on three A4 pages, keeping the text large enough to print. They share one drawing routine so the wording and order match. Primary instructions use 16-17-unit text; at a displayed width of 375px this is approximately 15-16px. The main README also provides the guide as ordinary text above the image.
+The PNG joins three 400-unit-wide sections into a scrolling guide. The character-choice illustration includes Garda Aisling and Daniel as examples from the two roles, using their production sprites. Names and image locations are resolved from the game rather than copied. The PDF lays out those same sections on three A4 pages, keeping the text large enough to print. They share one drawing routine so the wording and order match. Primary instructions use 16-17-unit text; at a displayed width of 375px this is approximately 15-16px. The main README also provides the guide as ordinary text above the image.
 
-To regenerate both outputs from the repository root, install Python's `reportlab` package and Poppler's `pdftoppm`, then run:
+To regenerate both outputs from the repository root, use Node.js 20 or later and install Python's `reportlab` package and Poppler's `pdftoppm`, then run:
 
 ```sh
 python3 scripts/generate-user-flow.py

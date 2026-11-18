@@ -33,4 +33,4 @@ export function matchMessage(text){
  for(const [pattern,template,parameters] of messagePatterns){const match=text.match(pattern);if(match)return {template,values:Object.fromEntries(parameters.map((name,i)=>[name,match[i+1]]))};}
  return null;
 }
-export const untranslatedNames=Object.freeze(['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Sam','Pat','Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie','Niamh','Amina','Patrick','Fiosrú','English','Gaeilge','Português','العربية','Polski','Română','Français','Español','中文（简体）','Stopped: Both Sides','STOPPED:','BOTH SIDES','Sam Tim Solutions']);
+export const untranslatedNames=Object.freeze(['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Hassan','Pat','Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie','Niamh','Amina','Patrick','Fiosrú','English','Gaeilge','Português','العربية','Polski','Română','Français','Español','中文（简体）','Stopped: Both Sides','STOPPED:','BOTH SIDES','Sam Tim Solutions']);

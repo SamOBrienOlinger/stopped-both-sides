@@ -39,7 +39,7 @@ test('captions expose character-specific accessible profile buttons',()=>{
  assert.match(html,/data-scene-character-id="public-8"/);
  assert.match(html,/data-scene-character-id="garda-9"/);
  assert.match(html,/aria-haspopup="dialog" aria-controls="scene-character-dialog"/);
- assert.match(html,/aria-label="About Sam, Member of the public"/);
+ assert.match(html,/aria-label="About Hassan, Member of the public"/);
  const garda=characters.garda.find(character=>character.id==='garda-9');
  assert.ok(html.includes(`aria-label="About ${garda.name}, Garda"`));
 });
