@@ -14,6 +14,7 @@ export function learningIcon(kind){
   "custody": "<rect x=\"5\" y=\"13\" width=\"22\" height=\"16\" rx=\"3\"/><path d=\"M10 13V8a6 6 0 0 1 12 0v5\"/><circle cx=\"16\" cy=\"20\" r=\"2\"/><path d=\"M16 22v3\"/>",
   "station": "<path d=\"M3 29h26M5 29V10h22v19M3 10l13-8 13 8M13 29V19h6v10M9 14h2M21 14h2\"/>",
   "young": "<circle cx=\"10\" cy=\"7\" r=\"4\"/><path d=\"M3 26v-9a7 7 0 0 1 14 0v5M7 19v10M13 19v10\"/><circle cx=\"24\" cy=\"15\" r=\"3\"/><path d=\"M19 29v-5a5 5 0 0 1 10 0v5M22 26v3M26 26v3M17 21l3 2\"/>",
+  "discrimination": "<circle cx=\"6\" cy=\"10\" r=\"3.5\"/><path d=\"M1 27v-3a5 5 0 0 1 10 0v3H1Z\"/><circle cx=\"26\" cy=\"10\" r=\"3.5\"/><path d=\"M21 27v-3a5 5 0 0 1 10 0v3H21ZM13 16h6M13 21h6M18 12l-4 13\"/>",
   "fairness": "<path d=\"M16 3v25M10 29h12M4 9h24M7 9 2 20h10L7 9ZM25 9l-5 11h10L25 9Z\"/><path d=\"M2 20a5 4 0 0 0 10 0M20 20a5 4 0 0 0 10 0\"/><circle cx=\"16\" cy=\"8\" r=\"2\"/>",
   "observation": "<path d=\"M2 16s5-10 14-10 14 10 14 10-5 10-14 10S2 16 2 16Z\"/><circle cx=\"16\" cy=\"16\" r=\"5\"/>",
   "description": "<rect x=\"2\" y=\"5\" width=\"28\" height=\"22\" rx=\"3\"/><circle cx=\"10\" cy=\"13\" r=\"3\"/><path d=\"M5 22a5 5 0 0 1 10 0M20 11h5M20 16h5M20 21h3\"/>",
@@ -21,7 +22,7 @@ export function learningIcon(kind){
   "evidence": "<path d=\"M18 29H5V3h15l7 7v7M20 3v7h7M9 10h6M9 15h8M9 20h5\"/><circle cx=\"23\" cy=\"23\" r=\"5\"/><path d=\"m27 27 4 4\"/>",
   "supervision": "<path d=\"M3 3v26h26M8 22v-6M14 22V9M20 13V5\"/><circle cx=\"23\" cy=\"19\" r=\"5\"/><path d=\"m27 23 4 4\"/>"
 };
- return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind==='discrimination'?'fairness':kind]||paths.reflect}</svg>`;
+ return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind]||paths.reflect}</svg>`;
 }
 
 const scenarioSymbols={
@@ -74,3 +75,4 @@ export function practiceCards(scenarios,role){
 export function completionMap(completed,total){
  return `<div class="completion-map" aria-hidden="true">${Array.from({length:total},(_,i)=>`<span class="completion-cell ${i<completed?'is-complete':''}">${i<completed?'✓':'○'}</span>`).join('')}</div>`;
 }
+
