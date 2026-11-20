@@ -5,7 +5,7 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=learning-language-20261120';
 import {supportRecap} from '../learning/support.mjs?v=learning-language-20261120';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=learning-language-20261120';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=consistent-situation-icons-1';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=learning-language-20261120';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=learning-language-20261120';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=learning-language-20261120';
@@ -484,3 +484,4 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  return {handles,view,personalize,introduction,aboutIntroduction,perspectiveChoice,landing,resumeLink,referenceRoute,legacyBar,beginPractice,practiceSession,returnLink,focusReturnedList,legacyPanel:original=>scenePanel(legacyState(original),true),legacyScene:(original,index)=>{const s=legacyState(original);return renderScene(s,{step:s.history[index],compact:true});},updateSiteLink,handleClick,transferOriginal};
 }
+

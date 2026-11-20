@@ -1,5 +1,6 @@
 import {encounters} from './catalog.mjs?v=learning-language-20261120';
 import {renderScenePreview} from './scenes.mjs?v=learning-language-20261120';
+import {topicGroups} from './presentation.mjs?v=learning-language-20261120';
 import {practiceGoal} from '../learning/play.mjs?v=learning-language-20261120';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
@@ -25,14 +26,11 @@ export function learningIcon(kind){
  return `<svg class="learning-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[kind]||paths.reflect}</svg>`;
 }
 
-const scenarioSymbols={
- 'public-street':'street','public-search':'bag','public-arrest':'custody','public-custody':'station',
- 'public-young-person':'young','public-fair-treatment':'fairness',
- 'garda-street':'observation','garda-description':'description','garda-search':'search',
- 'garda-communication':'street','garda-young-person':'young','garda-colleague':'colleagues',
- 'garda-new-evidence':'evidence','garda-supervision':'supervision'
-};
-export const scenarioIcon=id=>learningIcon(scenarioSymbols[id]||(encounters[id]?.ground?'discrimination':'read'));
+// One category mapping for topic cards, shared situations and single-role practice.
+const scenarioSymbols=Object.fromEntries(topicGroups.flatMap(topic=>
+ topic.encounters.map(id=>[id,topic.id])
+));
+export const scenarioIcon=id=>learningIcon(scenarioSymbols[id]||'read');
 
 export function routeTrail(state){
  if(state.complete)return '';
@@ -75,4 +73,5 @@ export function practiceCards(scenarios,role){
 export function completionMap(completed,total){
  return `<div class="completion-map" aria-hidden="true">${Array.from({length:total},(_,i)=>`<span class="completion-cell ${i<completed?'is-complete':''}">${i<completed?'✓':'○'}</span>`).join('')}</div>`;
 }
+
 
