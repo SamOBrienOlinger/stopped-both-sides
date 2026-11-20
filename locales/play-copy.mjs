@@ -2,6 +2,7 @@
 const languages = ['ga','pt','ar','pl','ro','fr','es','zh-Hans'];
 
 const labels = [
+ ['Back to the Top', ['Ar ais go barr','Voltar ao topo','العودة إلى الأعلى','Powrót na górę','Înapoi sus','Retour en haut','Volver arriba','返回顶部']],
  ['One situation.', ['Cás amháin.','Uma situação.','موقف واحد.','Jedna sytuacja.','O situație.','Une situation.','Una situación.','同一个情境。']],
  ['Two perspectives.', ['Dhá dhearcadh.','Duas perspetivas.','منظوران.','Dwie perspektywy.','Două perspective.','Deux perspectives.','Dos perspectivas.','两种视角。']],
  ['Discrimination', ['Idirdhealú','Discriminação','التمييز','Dyskryminacja','Discriminare','Discrimination','Discriminación','歧视']],

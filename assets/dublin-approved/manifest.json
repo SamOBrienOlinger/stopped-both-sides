@@ -76,18 +76,18 @@
     "outputs": [
       {
         "file": "bus-stop-480.webp",
-        "bytes": 50070,
-        "sha256": "74220ca561df974f550d7abc662f5e0da134db471b5fbdf2ccfb8c8d477d87e5"
+        "bytes": 50118,
+        "sha256": "a66f26e1291b25bfb0f45e497015147734a90f2574234ebe5bb9166aa60518c7"
       },
       {
         "file": "bus-stop-960.webp",
-        "bytes": 140570,
-        "sha256": "13e7f4f672249f7daf2fdb0797127edb3643e9f9a03df08de03a4025df737971"
+        "bytes": 140666,
+        "sha256": "eb9c04280c05d1c41a485f9dfe0c23420d8ee0474f1629ec3d68b4bed7fb4213"
       },
       {
         "file": "bus-stop-1600.webp",
-        "bytes": 251386,
-        "sha256": "85c727b3b8bf6333177fc087c015b748e3533b1a81d0ec6c78053e0ff3bb6929"
+        "bytes": 251442,
+        "sha256": "8e8de353c6beec896b7d9894be0145a36d2069991939881106562d13c556e4af"
       }
     ],
     "revision": {
@@ -96,7 +96,7 @@
         941
       ],
       "source_rgb_sha256": "10e35ed02e30280bd052983b085bbcfe78ce51446286214971eea970271988c5",
-      "edit": "Removed Luas and Dublin Bus text; centred the front harp; retained original artwork outside edited regions."
+      "edit": "Removed Luas and Dublin Bus text; adjusted the front harp to the midpoint of the bus front; retained original artwork outside edited regions."
     }
   },
   {
