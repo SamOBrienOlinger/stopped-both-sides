@@ -5,7 +5,7 @@ const paths=['./','garda/'];
 const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));
 const invitation=[
  'One situation. Two perspectives.',
- 'Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved.',
+ 'Explore your rights and police powers through interactions between members of the public and Gardaí.',
  'Read a situation, choose a response, then find out why it matters.'
 ];
 const invitationText=':scope > :is(#paired-title,.landing-deck,.small-note)';

@@ -14,7 +14,7 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const subtitle='An interactive learning resource for the public and Gardaí.';
  const shared=readFileSync(new URL('../encounters/ui.mjs',import.meta.url),'utf8');
  assert.ok(shared.includes(subtitle));
-  assert.ok(shared.includes("Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved."));
+  assert.ok(shared.includes("Explore your rights and police powers through interactions between members of the public and Gardaí."));
   assert.ok(shared.includes('Browse all situations'));
   assert.ok(shared.includes("Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
   assert.ok(shared.includes("It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication."));

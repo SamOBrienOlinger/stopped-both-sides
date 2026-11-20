@@ -262,7 +262,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    <div class="landing-instructions">
     <h1 id="paired-title"><span>One situation.</span> <span>Two perspectives.</span></h1>
     <img class="encounter-hero-art" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 44rem) 42rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async" fetchpriority="high">
-    <p class="landing-deck">Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved.</p>
+    <p class="landing-deck">Explore your rights and police powers through interactions between members of the public and Gardaí.</p>
     <div class="landing-role-actions">${links}</div>
     <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
    </div>
