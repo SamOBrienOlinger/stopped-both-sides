@@ -1,8 +1,8 @@
 import {test,expect} from '@playwright/test';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=encounter-hero-1';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
 
 const entrypoints=['./','garda/'];
-const titles={public:'Play as a member of the public',garda:'Play as a Garda'};
+const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};
 const roleLinks=role=>`a.perspective-card-link[data-role-tone="${role}"]`;
 
 for(const path of entrypoints){

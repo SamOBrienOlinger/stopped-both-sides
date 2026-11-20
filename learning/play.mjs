@@ -1,11 +1,11 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=encounter-hero-1';
-import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=community-group-1';
-import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
-import {topicGroups} from '../encounters/presentation.mjs?v=community-group-1';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=learning-language-20261120';
+import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=learning-language-20261120';
+import {decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
+import {topicGroups} from '../encounters/presentation.mjs?v=learning-language-20261120';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,
  reviewExamples, reviewQuestions, reviewScene, searchFigures, termFor
-} from './play-content.mjs?v=community-group-1';
+} from './play-content.mjs?v=learning-language-20261120';
 
 const topicFor = id => topicGroups.find(topic=>topic.encounters.includes(id));
 const reviewOpening = (id,nodeId) => id==='garda-supervision'&&nodeId==='supervision-start';
@@ -125,7 +125,7 @@ export function recapPractice(id,role,answer,mode='shared'){
 }
 
 export function discussionLink(id,role){
- return '<a class="text-button" href="#discussion/'+role+'/'+id+'">Play and discuss this situation</a>';
+ return '<a class="text-button" href="#discussion/'+role+'/'+id+'">Explore and discuss this situation</a>';
 }
 
 export function discussionGuide(encounter,role){
@@ -133,14 +133,14 @@ export function discussionGuide(encounter,role){
  const otherRole=role==='public'?'garda':'public';
  return '<div class="content-page discussion-guide">'+
   '<a class="text-button" href="#encounters/'+role+'/'+topicFor(encounter.id).id+'">Back to situations</a>'+
-  '<h1>Play and discuss this situation</h1>'+
+  '<h1>Explore and discuss this situation</h1>'+
   '<h2>'+esc(encounter.title)+'</h2>'+
   '<p class="small-note">Allow about 15 minutes.</p>'+
   '<p>'+scenarioCopy(encounter.id,encounter.description)+'</p>'+
-  '<ol><li>Choose a player. Other people can follow along as observers.</li>'+
+  '<ol><li>Choose a participant. Other people can follow along as observers.</li>'+
   '<li>Pause after a decision and compare what each person had to consider.</li>'+
   '<li>Discuss these two questions together.<ul>'+questions.map(question=>'<li>'+esc(question)+'</li>').join('')+'</ul></li></ol>'+
-  '<div class="action-group"><button class="primary" data-action="paired-start" data-id="'+encounter.id+'" data-role="'+role+'">Play this situation</button>'+
+  '<div class="action-group"><button class="primary" data-action="paired-start" data-id="'+encounter.id+'" data-role="'+role+'">Explore this situation</button>'+
   '<a class="text-button" href="#discussion/'+otherRole+'/'+encounter.id+'">'+
   (role==='garda'?'Switch to the public perspective':'Switch to the Garda perspective')+'</a></div>'+
   '<p class="small-note"><span>Starting role</span> · <span>'+esc(roleLabels[role])+'</span></p>'+

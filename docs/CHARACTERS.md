@@ -22,7 +22,7 @@ The selected cast supplies the names and pictures shown throughout the running g
 
 Version 2 encounter links carry the cast alongside fictional choices. Version 1 links still open with a deterministic default pair, preserving their previous route. Invalid IDs and IDs belonging to the wrong role are rejected. Decoding a link never rerolls a character.
 
-Saved progress and companion-site links carry the current pair through the existing resume token. Preferred character IDs are saved separately under `stopped-both-sides:characters:v1`; clearing scores does not remove these preferences. Blocked storage still allows character changes for the current visit. No character information is uploaded to an AI service during play.
+Saved progress and companion-site links carry the current pair through the existing resume token. Preferred character IDs are saved separately under `stopped-both-sides:characters:v1`; clearing scores does not remove these preferences. Blocked storage still allows character changes for the current visit. No character information is uploaded to an AI service during a situation.
 
 ## Interface and checks
 

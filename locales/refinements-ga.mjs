@@ -49,7 +49,7 @@ export const refinementIrish={
  'Public rights resources':'Acmhainní faoi chearta an phobail',
  'Individual practice':'Cleachtadh aonair',
  'Open the shared version to compare both perspectives.':'Oscail an leagan roinnte chun an dá dhearcadh a chur i gcomparáid.',
- 'Use individual practice for a focused, single-role discussion in English. Choose the shared game above to compare both perspectives in English or Irish.':'Úsáid cleachtadh aonair le haghaidh plé dírithe ar ról amháin i mBéarla. Roghnaigh an cluiche roinnte thuas chun an dá dhearcadh a chur i gcomparáid i mBéarla nó i nGaeilge.',
+ 'Use individual practice for a focused, single-role discussion in English. Choose the shared learning activity above to compare both perspectives in English or Irish.':'Úsáid cleachtadh aonair le haghaidh plé dírithe ar ról amháin i mBéarla. Roghnaigh an cluiche roinnte thuas chun an dá dhearcadh a chur i gcomparáid i mBéarla nó i nGaeilge.',
  'Garda involved in the encounter':'Garda a bhfuil baint aige leis an teagmháil',
  'Garda in the custody team':'Garda ar an bhfoireann coimeádta',
  'Patrol Garda':'Garda ar patról',

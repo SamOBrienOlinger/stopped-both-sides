@@ -1,4 +1,4 @@
-import {gardaAtlas} from './garda-atlas.mjs?v=garda-baseball-20261114';
+import {gardaAtlas} from './garda-atlas.mjs?v=learning-language-20261120';
 
 // One production image source for all nine Garda characters, in every context.
 // The public-character atlas is untouched. Garda text and crests are never mirrored.

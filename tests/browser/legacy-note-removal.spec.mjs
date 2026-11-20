@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-const retired="The next scene is fictional. No choice guarantees an outcome or excuses mistreatment. This game cannot decide whether a particular stop, search or arrest is lawful.";
+const retired="The next scene is fictional. No choice guarantees an outcome or excuses mistreatment. This resource cannot decide whether a particular stop, search or arrest is lawful.";
 
 test('public original single-role practice omits the retired note but preserves guidance links',async({page})=>{
  await page.goto('./?lang=en#play');

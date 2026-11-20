@@ -57,7 +57,7 @@ for(const {path,role} of pages){
    'Traveller community','Race','Disability','Housing assistance'
   ]);
   await expect(page.locator('.discrimination-intro a')).toHaveAttribute('href','https://www.ihrec.ie/your-rights/protected-grounds');
-  await page.getByRole('button',{name:/^Play this situation: Housing assistance/}).click();
+  await page.getByRole('button',{name:/^Explore this situation: Housing assistance/}).click();
   await expect(page.locator('#scene-title')).toHaveText('Turned away from a viewing');
   const story=await page.locator('.story-text').textContent();
   await page.locator('[data-action="paired-answer"]').first().click();
@@ -66,7 +66,7 @@ for(const {path,role} of pages){
   await page.locator('[data-action="paired-switch"]').click();
   await expect(page.locator('.story-text')).toHaveText(story);
   await page.getByRole('link',{name:'Back to situations'}).click();
-  await expect(page.getByRole('button',{name:/^Play this situation: Housing assistance/})).toBeFocused();
+  await expect(page.getByRole('button',{name:/^Explore this situation: Housing assistance/})).toBeFocused();
   await page.goto(path+'?lang=ar#encounters/'+role+'/discrimination');
   await expect(page.getByRole('heading',{name:'التمييز',exact:true})).toBeVisible();
   await expect(page.locator('.discrimination-intro')).toContainText('سيناريوهات التمييز باللغة الإنجليزية.');

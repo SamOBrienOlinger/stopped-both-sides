@@ -2,8 +2,8 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=encounter-hero-1';
-import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
+import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=learning-language-20261120';
 import {progressStorageKey} from '../../encounters/progress.mjs';
 import {expectControlsFit} from './control-layout.mjs';
 
@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=encounter-hero-1',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=learning-language-20261120',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -186,7 +186,7 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await expect(page.locator('.paired-picker')).toBeVisible();
  await page.locator('.scenario-library summary').click();await fits(page,'catalogue');
  const first=page.locator('[data-action="paired-start"]').first();
- expect(await first.getAttribute('aria-label')).toContain(translateText('Play this situation',language));
+ expect(await first.getAttribute('aria-label')).toContain(translateText('Explore this situation',language));
  await first.click();await expect(page.locator('.paired-game')).toBeVisible();
  await page.locator('[data-action="paired-answer"]').first().click();await fits(page,'game');
  if(width===320){
@@ -362,7 +362,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=encounter-hero-1',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=learning-language-20261120',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);

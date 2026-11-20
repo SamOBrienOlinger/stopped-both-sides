@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=encounter-hero-1';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=learning-language-20261120';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=scene-review-1';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=scene-review-1';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=learning-language-20261120';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
 import {personalizeText,storyIdentity} from '../encounters/narrative.mjs';
 import {progressStorageKey} from '../encounters/progress.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
@@ -35,18 +35,18 @@ for(const {id} of added){
   assert.equal(stages,59);assert.equal(choices,295);
  });
  test(`${id}: text and accessible descriptions translate without changing routes or control semantics`,()=>{
-  const original='<section aria-labelledby="title"><h1 id="title">Scores &amp; progress</h1><button data-action="paired-start" data-id="garda-street" data-role="garda" aria-pressed="false" aria-label="Play this situation: A hunch on the street">Play this situation</button><input id="answer" name="answer" value="a&amp;b" placeholder="Choose a response"><img src="scene.webp" alt="On the street" title="Your character"><div role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" aria-valuetext="2 completed; 3 remaining"></div><a href="https://example.org/?a=1&amp;b=2" target="_blank" lang="en-IE" data-no-translate>Published source</a></section>';
+  const original='<section aria-labelledby="title"><h1 id="title">Scores &amp; progress</h1><button data-action="paired-start" data-id="garda-street" data-role="garda" aria-pressed="false" aria-label="Explore this situation: A hunch on the street">Explore this situation</button><input id="answer" name="answer" value="a&amp;b" placeholder="Choose a response"><img src="scene.webp" alt="On the street" title="Your character"><div role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" aria-valuetext="2 completed; 3 remaining"></div><a href="https://example.org/?a=1&amp;b=2" target="_blank" lang="en-IE" data-no-translate>Published source</a></section>';
   const out=translateHTML(original,id);
   for(const attribute of ['aria-labelledby="title"','data-action="paired-start"','data-id="garda-street"','data-role="garda"','aria-pressed="false"','name="answer"','value="a&amp;b"','src="scene.webp"','role="progressbar"','aria-valuemin="0"','aria-valuemax="5"','aria-valuenow="2"','href="https://example.org/?a=1&amp;b=2"','target="_blank"'])assert.ok(out.includes(attribute),attribute);
   for(const untranslated of ['>Scores &amp; progress<','placeholder="Choose a response"','alt="On the street"','title="Your character"','aria-valuetext="2 completed; 3 remaining"'])assert.ok(!out.includes(untranslated),untranslated);
-  assert.ok(out.includes('aria-label="'+escapeHTML(translateText('Play this situation: A hunch on the street',id))+'"'));
+  assert.ok(out.includes('aria-label="'+escapeHTML(translateText('Explore this situation: A hunch on the street',id))+'"'));
   assert.match(out,/>Published source<\/a>/);
   assert.equal(translateHTML('<p>&lt;script&gt;&amp;"</p>',id),'<p>&lt;script&gt;&amp;&quot;</p>');
   assert.ok(!translateText('You explored 3 decisions with Noor. There are 2 points to revisit below.',id).includes('{'));
   assert.ok(translateText('You explored 3 decisions with Noor. There are 2 points to revisit below.',id).includes('Noor'));
   assert.notEqual(translateText('· European contexts',id),'· European contexts');
   assert.equal(translateText('/ 14 situations completed',id),'/ 14 '+translateText('Completed',id));
-  const review='A selected review of 27 academic publications, alongside Irish law, professional guidance and community research. Each source explains how it informed the game.';
+  const review='A selected review of 27 academic publications, alongside Irish law, professional guidance and community research. Each source explains how it informed the resource.';
   assert.notEqual(translateText(review,id),review);assert.ok(translateText(review,id).includes('27'));
  });
 }

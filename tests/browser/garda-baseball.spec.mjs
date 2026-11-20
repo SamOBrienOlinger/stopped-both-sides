@@ -83,9 +83,9 @@ test('All 81 cast pairings use one new Garda image and one preserved public imag
  test.setTimeout(120000);
  await page.goto('./#play');
  const result=await page.evaluate(async()=>{
-  const {characters}=await import('/stopped-both-sides/encounters/characters.mjs?v=garda-baseball-20261114');
+  const {characters}=await import('/stopped-both-sides/encounters/characters.mjs?v=learning-language-20261120');
   const {startEncounter}=await import('/stopped-both-sides/encounters/engine.mjs');
-  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=garda-baseball-20261114');
+  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=learning-language-20261120');
   let checked=0;
   for(const p of characters.public)for(const g of characters.garda){
    const html=renderScene(startEncounter('garda-search','garda',{cast:{public:p.id,garda:g.id}}));

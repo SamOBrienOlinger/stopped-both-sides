@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {paragraphChunks} from '../accessibility/layout.mjs';
 
 test('Long prose gains shorter paragraphs without losing words or changing meaning',()=>{
- const text='The game has no account form, analytics or complaint collection. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. You can review or clear local records under Scores & progress. Separate browsers do not automatically sync. Hosting providers may keep standard access logs; external sources have their own privacy arrangements.';
+ const text='The resource has no account form, analytics or complaint collection. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. You can review or clear local records under Scores & progress. Separate browsers do not automatically sync. Hosting providers may keep standard access logs; external sources have their own privacy arrangements.';
  const chunks=paragraphChunks(text);
  assert.ok(chunks.length>1);
  assert.equal(chunks.join(' '),text);

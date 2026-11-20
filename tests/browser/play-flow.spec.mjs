@@ -14,7 +14,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await start.press('Enter');
   await expect(page.locator('#scene-title')).toBeFocused();
   expect(sharedState(page).id).toBe(role+'-street');
-  await expect(page.locator('.flow-role-bar')).toContainText(role==='garda'?'Playing as a Garda':'Playing as a member of the public');
+  await expect(page.locator('.flow-role-bar')).toContainText(role==='garda'?'Exploring the Garda perspective':'Exploring the public perspective');
   const first=page.locator('[data-action="paired-answer"]').first();
   await expect(first).toBeInViewport();
   const illustration=page.locator('.scene-explorer');
@@ -44,7 +44,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   const answered=sharedState(page);
   await page.getByRole('button',{name:'Compare the other side',exact:true}).click();
   await expect(page.locator('#choice-title')).toBeFocused();
-  await expect(page.locator('.flow-role-bar')).toContainText('Playing as a member of the public');
+  await expect(page.locator('.flow-role-bar')).toContainText('Exploring the public perspective');
   expect(sharedState(page)).toEqual({...answered,role:'public'});
   await page.locator('[data-return-to-play]').click();
   await expect(page).toHaveURL(/#encounters\/garda\/search$/);
@@ -59,7 +59,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await expect(currentTopic(page)).toHaveText('Discrimination');
   await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(10);
 
-  const modes=page.getByRole('navigation',{name:'Ways to play'});
+  const modes=page.getByRole('navigation',{name:'Ways to explore'});
   const practice=modes.getByRole('link',{name:/^Practise one role/});
   const firstPractice=page.locator('.scenario-library [data-action="start"][data-id="street"]');
   await practice.click();
@@ -106,16 +106,16 @@ test('a practice recap and an unfinished shared situation stay independently acc
  await another.click();
  await expect(page).toHaveURL(/#practice\/public\/street$/);
  await expect(currentTopic(page)).toHaveText('Street stops');
- await expect(page.getByRole('link',{name:'Resume play',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('link',{name:'Resume your situation',exact:true})).toHaveCount(0);
  await expect(page.getByRole('link',{name:'Open recap',exact:true})).toBeVisible();
  await page.goto('./?lang=en#progress');
- await expect(page.getByRole('link',{name:'Resume play',exact:true})).toHaveAttribute('href',interrupted);
+ await expect(page.getByRole('link',{name:'Resume your situation',exact:true})).toHaveAttribute('href',interrupted);
  await page.getByRole('link',{name:'Open recap',exact:true}).click();
  await page.reload();
  await expect(another).toBeVisible();
  await page.goto('./?lang=en#play');
  await expect(page.locator('.home-play .session-return')).toBeInViewport();
- await page.locator('.home-play').getByRole('link',{name:'Resume play',exact:true}).click();
+ await page.locator('.home-play').getByRole('link',{name:'Resume your situation',exact:true}).click();
  await expect(page.locator('#feedback')).toBeVisible();
  expect(new URL(page.url()).hash).toBe(interrupted);
 });

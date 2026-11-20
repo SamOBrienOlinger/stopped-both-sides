@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
 import {siteAddresses} from '../site.mjs';
 const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides/');
-import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=scene-review-1';
+import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
 import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
 import {translateText,translateHTML} from '../locales/translate.mjs';
@@ -11,10 +11,10 @@ import {translateText,translateHTML} from '../locales/translate.mjs';
 test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));
  assert.equal(pkg.name,'stopped-both-sides');
- const subtitle='An interactive learning game for the public and Gardaí.';
+ const subtitle='An interactive learning resource for the public and Gardaí.';
  const shared=readFileSync(new URL('../encounters/ui.mjs',import.meta.url),'utf8');
  assert.ok(shared.includes(subtitle));
-  assert.ok(shared.includes("Explore your rights and police powers through interactions between members of the public and Gardaí."));
+  assert.ok(shared.includes("Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved."));
   assert.ok(shared.includes('Browse all situations'));
   assert.ok(shared.includes("Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
   assert.ok(shared.includes("It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication."));
@@ -115,7 +115,7 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
 
 test('Original public practice removes the retired explanatory paragraph without losing source access',()=>{
  const publicApp=readFileSync(new URL('../app.mjs',import.meta.url),'utf8');
- assert.ok(!publicApp.includes("The next scene is fictional. No choice guarantees an outcome or excuses mistreatment. This game cannot decide whether a particular stop, search or arrest is lawful."));
+ assert.ok(!publicApp.includes("The next scene is fictional. No choice guarantees an outcome or excuses mistreatment. This resource cannot decide whether a particular stop, search or arrest is lawful."));
  assert.match(publicApp,/<div class="topline game-note">/);
  assert.match(publicApp,/<a href="#rights">Rights & sources<\/a>/);
 });

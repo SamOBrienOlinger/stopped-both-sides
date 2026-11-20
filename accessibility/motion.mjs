@@ -1,6 +1,6 @@
-import {decodeState} from '../encounters/engine.mjs?v=community-group-1';
-import {createDisclosures} from './disclosures.mjs?v=render-paced-1';
-import {paceAnimations} from './animation-clock.mjs?v=render-paced-1';
+import {decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
+import {createDisclosures} from './disclosures.mjs?v=learning-language-20261120';
+import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.

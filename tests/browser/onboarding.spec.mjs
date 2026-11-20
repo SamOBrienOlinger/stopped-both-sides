@@ -1,11 +1,11 @@
 import {test,expect} from '@playwright/test';
-import {decodeState,otherRole} from '../../encounters/engine.mjs?v=scene-review-1';
+import {decodeState,otherRole} from '../../encounters/engine.mjs?v=learning-language-20261120';
 
 const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto(role==='public'?'./':'garda/');
- await expect(page.locator('.landing-deck')).toHaveText("Explore your rights and police powers through interactions between members of the public and Gardaí.");
+ await expect(page.locator('.landing-deck')).toHaveText("Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved.");
  await expect(page.locator('#paired-title')).toHaveText('One situation. Two perspectives.');
  await expect(page.locator('.about-opening')).toHaveCount(0);
  await expect(page.locator('.landing-character')).toHaveCount(0);

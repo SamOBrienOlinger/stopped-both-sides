@@ -1,8 +1,8 @@
-import {characterArtwork,characterFor} from './characters.mjs?v=garda-neutral-1';
-import {roleLabels} from './catalog.mjs?v=community-group-1';
-import {createDialogController} from '../accessibility/dialog.mjs?v=scenario-descriptions-20261115';
+import {characterArtwork,characterFor} from './characters.mjs?v=learning-language-20261120';
+import {roleLabels} from './catalog.mjs?v=learning-language-20261120';
+import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=encounter-hero-1';
+import {translateText} from '../locales/translate.mjs?v=learning-language-20261120';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',

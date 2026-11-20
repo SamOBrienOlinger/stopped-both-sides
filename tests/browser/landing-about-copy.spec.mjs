@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-const hero="Explore your rights and police powers through interactions between members of the public and Gardaí.";
+const hero="Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved.";
 const overview=["Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.","It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.","Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."];
 for(const path of ['./','garda/']){
  test(path+' home shows the revised invitation and both Browse labels',async({page})=>{
@@ -19,7 +19,7 @@ for(const path of ['./','garda/']){
   await expect(opening).toBeVisible();
   await expect(page.locator('.content-page>:first-child')).toHaveClass(/about-opening/);
   await expect(opening.locator('h1#game-title')).toHaveText('Stopped: Both Sides');
-  await expect(opening.getByText('An interactive learning game for the public and Gardaí.',{exact:true})).toHaveCount(1);
+  await expect(opening.getByText('An interactive learning resource for the public and Gardaí.',{exact:true})).toHaveCount(1);
   await expect(opening.locator('.about-overview p')).toHaveText(overview);
   await expect(page.locator('.content-page>.about-opening>.about-heading-block>.about-tagline')).toBeVisible();
   await expect(page.locator('.learning-section')).toBeVisible();

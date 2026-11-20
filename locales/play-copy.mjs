@@ -35,7 +35,7 @@ const labels = [
   'Citește lista criteriilor protejate publicată de IHREC','Consultez les motifs protégés présentés par l’IHREC','Consulta los motivos protegidos que recoge la IHREC','查看 IHREC 列出的受保护事由'
  ]],
  ['3–4 minutes', ['3–4 nóiméad','3–4 minutos','٣–٤ دقائق','3–4 minuty','3–4 minute','3–4 minutes','3–4 minutos','3–4 分钟']],
- ['Explore the same situations from the public and Garda perspectives. Choose a response, read the explanation and follow the situation to a recap. You can revisit earlier decisions and replay a route.', [
+ ['Explore the same situations from the public and Garda perspectives. Choose a response, read the explanation and follow the situation to a recap. You can revisit earlier decisions and revisit a route.', [
   'Fiosraigh na cásanna céanna ó dhearcadh an phobail agus an Gharda. Roghnaigh freagra, léigh an míniú agus lean an cás go dtí an t-achoimre. Is féidir filleadh ar chinntí roimhe seo agus an bealach a imirt arís.',
   'Explore as mesmas situações das perspetivas do público e da Garda. Escolha uma resposta, leia a explicação e avance até ao resumo. Pode voltar às decisões anteriores e repetir um percurso.',
   'استكشف المواقف نفسها من منظور الجمهور ومنظور الشرطة. اختر إجابة واقرأ شرحها وتابع الموقف حتى الملخص. يمكنك الرجوع إلى القرارات السابقة وإعادة المسار.',
@@ -45,7 +45,7 @@ const labels = [
   'Explora las mismas situaciones desde la perspectiva del público y de la Garda. Elige una respuesta, lee la explicación y continúa hasta el resumen. Puedes volver a decisiones anteriores y repetir un recorrido.',
   '从公众和爱尔兰警察的视角了解相同的情境。选择回应、阅读解释并继续到回顾环节。你可以返回先前的决定并重新体验。'
  ]],
- ['Irish covers the original shared game. Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese also cover individual practice and reference pages.', [
+ ['Irish covers the original shared learning activity. Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese also cover individual practice and reference pages.', [
   'Tá an bunleagan den chluiche roinnte ar fáil i nGaeilge. Tá cleachtadh aonair agus na leathanaigh thagartha ar fáil freisin i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe.',
   'O irlandês está disponível no jogo partilhado original. O português, o árabe, o polaco, o romeno, o francês, o espanhol e o chinês simplificado também abrangem a prática individual e as páginas de referência.',
   'تتوفر الأيرلندية في اللعبة الأصلية المشتركة. وتشمل البرتغالية والعربية والبولندية والرومانية والفرنسية والإسبانية والصينية المبسطة التدريب الفردي وصفحات المراجع أيضًا.',
@@ -170,7 +170,7 @@ const labels = [
   'Bain triail as cás gaolmhar','Experimente uma situação relacionada','جرّب موقفًا ذا صلة','Wypróbuj podobną sytuację',
   'Încearcă o situație asemănătoare','Essayer une situation similaire','Prueba una situación relacionada','尝试相关情境'
  ]],
- ['Play and discuss this situation', [
+ ['Explore and discuss this situation', [
   'Imir agus pléigh an cás seo','Jogue e discuta esta situação','العب وناقش هذا الموقف','Rozegraj i omów tę sytuację',
   'Joacă și discută această situație','Jouer et discuter de cette situation','Juega y comenta esta situación','体验并讨论这个情境'
  ]],
@@ -178,7 +178,7 @@ const labels = [
   'Cuir thart ar 15 nóiméad ar leataobh.','Reserve cerca de 15 minutos.','خصّص نحو 15 دقيقة.','Zarezerwuj około 15 minut.',
   'Rezervă aproximativ 15 minute.','Prévoyez environ 15 minutes.','Reserva unos 15 minutos.','预留约 15 分钟。'
  ]],
- ['Choose a player. Other people can follow along as observers.', [
+ ['Choose a participant. Other people can follow along as observers.', [
   'Roghnaigh imreoir. Is féidir le daoine eile breathnú ar an imirt.','Escolham quem joga. As outras pessoas podem acompanhar como observadoras.','اختاروا لاعبًا. يمكن للآخرين المتابعة بصفة مراقبين.','Wybierzcie osobę grającą. Pozostali mogą obserwować.',
   'Alegeți o persoană care joacă. Ceilalți pot urmări ca observatori.','Choisissez qui joue. Les autres peuvent suivre en observateurs.','Elijan quién juega. Las demás personas pueden observar.','选一位玩家，其他人可以旁观。'
  ]],
@@ -435,7 +435,30 @@ const content = [
  ]]
 ];
 
-const translations = new Map([...labels,...content]);
+// Keep the primary controls consistent with the resource's learning purpose.
+const terminology = [
+ ['Explore the public perspective', ['Fiosraigh dearcadh an phobail','Explorar a perspetiva do público','استكشف منظور أفراد الجمهور','Poznaj perspektywę członka społeczeństwa','Explorează perspectiva publicului','Explorer le point de vue du public','Explora la perspectiva del público','探索公众视角']],
+ ['Explore the Garda perspective', ['Fiosraigh dearcadh an Gharda','Explorar a perspetiva da Garda','استكشف منظور الغاردا','Poznaj perspektywę funkcjonariusza Garda','Explorează perspectiva Garda','Explorer le point de vue de la Garda','Explora la perspectiva de la Garda','探索爱尔兰警员视角']],
+ ['Exploring the public perspective', ['Ag fiosrú dhearcadh an phobail','A explorar a perspetiva do público','تستكشف منظور أفراد الجمهور','Poznajesz perspektywę członka społeczeństwa','Explorezi perspectiva publicului','Vous explorez le point de vue du public','Estás explorando la perspectiva del público','正在探索公众视角']],
+ ['Exploring the Garda perspective', ['Ag fiosrú dhearcadh an Gharda','A explorar a perspetiva da Garda','تستكشف منظور الغاردا','Poznajesz perspektywę funkcjonariusza Garda','Explorezi perspectiva Garda','Vous explorez le point de vue de la Garda','Estás explorando la perspectiva de la Garda','正在探索爱尔兰警员视角']],
+ ['Explore this situation', ['Fiosraigh an cás seo','Explorar esta situação','استكشف هذا الموقف','Poznaj tę sytuację','Explorează această situație','Explorer cette situation','Explora esta situación','探索这个情境']],
+ ['Explore this perspective', ['Fiosraigh an dearcadh seo','Explorar esta perspetiva','استكشف هذا المنظور','Poznaj tę perspektywę','Explorează această perspectivă','Explorer ce point de vue','Explora esta perspectiva','探索这个视角']],
+ ['Revisit this situation', ['Fill ar an gcás seo','Rever esta situação','عُد إلى هذا الموقف','Wróć do tej sytuacji','Revino la această situație','Revenir sur cette situation','Vuelve a esta situación','重新探索这个情境']],
+ ['Revisit this decision from the public perspective', ['Fill ar an gcinneadh seo ó dhearcadh an phobail','Rever esta decisão da perspetiva do público','عُد إلى هذا القرار من منظور أفراد الجمهور','Wróć do tej decyzji z perspektywy członka społeczeństwa','Revino la această decizie din perspectiva publicului','Revenir sur cette décision du point de vue du public','Revisa esta decisión desde la perspectiva del público','从公众视角重新审视这个决定']],
+ ['Revisit this decision from the Garda perspective', ['Fill ar an gcinneadh seo ó dhearcadh an Gharda','Rever esta decisão da perspetiva da Garda','عُد إلى هذا القرار من منظور الغاردا','Wróć do tej decyzji z perspektywy funkcjonariusza Garda','Revino la această decizie din perspectiva Garda','Revenir sur cette décision du point de vue de la Garda','Revisa esta decisión desde la perspectiva de la Garda','从爱尔兰警员视角重新审视这个决定']],
+ ['Resume your situation', ['Lean le do chás','Continuar a sua situação','تابع موقفك','Kontynuuj swoją sytuację','Continuă situația','Reprendre votre situation','Continúa tu situación','继续当前情境']],
+ ['Ways to explore', ['Bealaí le fiosrú','Formas de explorar','طرق الاستكشاف','Sposoby poznawania sytuacji','Moduri de explorare','Façons d’explorer','Formas de explorar','探索方式']],
+ ['Choose a perspective', ['Roghnaigh dearcadh','Escolha uma perspetiva','اختر منظورًا','Wybierz perspektywę','Alege o perspectivă','Choisissez un point de vue','Elige una perspectiva','选择一个视角']],
+ ['Explore and discuss this situation', ['Fiosraigh agus pléigh an cás seo','Explore e discuta esta situação','استكشف هذا الموقف وناقشه','Poznaj i omów tę sytuację','Explorează și discută această situație','Explorer et discuter de cette situation','Explora y comenta esta situación','探索并讨论这个情境']],
+ ['Choose a participant. Other people can follow along as observers.', ['Roghnaigh rannpháirtí. Is féidir le daoine eile breathnú agus an cás a leanúint.','Escolha um participante. As outras pessoas podem acompanhar como observadoras.','اختر مشاركًا. يمكن للآخرين المتابعة بصفة مراقبين.','Wybierz uczestnika. Pozostałe osoby mogą śledzić sytuację jako obserwatorzy.','Alege un participant. Celelalte persoane pot urmări ca observatori.','Choisissez une personne participante. Les autres peuvent suivre en tant qu’observateurs.','Elige a una persona participante. Las demás pueden seguir la situación como observadoras.','选择一位参与者。其他人可以作为观察者跟随情境。']],
+ ['An interactive learning resource for the public and Gardaí.', ['Áis foghlama idirghníomhach don phobal agus do na Gardaí.','Um recurso de aprendizagem interativo para o público e para a Garda.','مورد تعليمي تفاعلي لأفراد الجمهور وعناصر الغاردا.','Interaktywny materiał edukacyjny dla społeczeństwa i funkcjonariuszy Garda.','O resursă interactivă de învățare pentru public și membrii Garda.','Une ressource pédagogique interactive pour le public et les membres de la Garda.','Un recurso de aprendizaje interactivo para el público y los miembros de la Garda.','面向公众与爱尔兰警员的互动学习资源。']],
+ ['Skip to the learning content', ['Léim chuig an ábhar foghlama','Saltar para o conteúdo de aprendizagem','انتقل إلى المحتوى التعليمي','Przejdź do materiałów edukacyjnych','Sari la conținutul de învățare','Aller au contenu pédagogique','Ir al contenido de aprendizaje','跳至学习内容']],
+ ['START EXPLORING', ['TOSAIGH AG FIOSRÚ','COMEÇAR A EXPLORAR','ابدأ الاستكشاف','ZACZNIJ POZNAWAĆ','ÎNCEPE EXPLORAREA','COMMENCER À EXPLORER','EMPIEZA A EXPLORAR','开始探索']],
+ ['EXPLORE BOTH PERSPECTIVES', ['FIOSRAIGH AN DÁ DHEARCADH','EXPLORE AS DUAS PERSPETIVAS','استكشف المنظورين','POZNAJ OBIE PERSPEKTYWY','EXPLOREAZĂ AMBELE PERSPECTIVE','EXPLOREZ LES DEUX POINTS DE VUE','EXPLORA AMBAS PERSPECTIVAS','探索双方视角']],
+ ['No timer. You can change character or switch sides as you explore.', ['Gan teorainn ama. Is féidir carachtar nó dearcadh a athrú agus tú ag fiosrú.','Sem limite de tempo. Pode mudar de personagem ou de perspetiva enquanto explora.','لا يوجد حد زمني. يمكنك تغيير الشخصية أو المنظور أثناء الاستكشاف.','Bez limitu czasu. Podczas poznawania sytuacji możesz zmienić postać lub perspektywę.','Fără limită de timp. Poți schimba personajul sau perspectiva pe măsură ce explorezi.','Sans limite de temps. Vous pouvez changer de personnage ou de point de vue pendant l’exploration.','Sin límite de tiempo. Puedes cambiar de personaje o de perspectiva mientras exploras.','没有时间限制。探索过程中，你可以更换角色形象或切换视角。']],
+ ['Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the rights, powers and responsibilities involved.', ['Fiosraigh cásanna ficseanúla ina mbíonn daoine den phobal agus Gardaí páirteach. Roghnaigh freagra, ansin déan machnamh ar na cearta, na cumhachtaí agus na freagrachtaí atá i gceist.','Explore situações fictícias que envolvem membros do público e agentes da Garda. Escolha uma resposta e reflita sobre os direitos, poderes e responsabilidades envolvidos.','استكشف مواقف خيالية تضم أفرادًا من الجمهور وعناصر الغاردا. اختر استجابة، ثم تأمل الحقوق والصلاحيات والمسؤوليات ذات الصلة.','Poznaj fikcyjne sytuacje z udziałem członków społeczeństwa i funkcjonariuszy Garda. Wybierz reakcję, a następnie zastanów się nad związanymi z nią prawami, uprawnieniami i obowiązkami.','Explorează situații fictive care implică membri ai publicului și ai Garda. Alege un răspuns, apoi reflectează asupra drepturilor, puterilor și responsabilităților implicate.','Explorez des situations fictives impliquant des membres du public et de la Garda. Choisissez une réponse, puis réfléchissez aux droits, aux pouvoirs et aux responsabilités en jeu.','Explora situaciones ficticias entre miembros del público y de la Garda. Elige una respuesta y reflexiona sobre los derechos, las facultades y las responsabilidades en juego.','探索公众与爱尔兰警员之间的虚构情境。选择一种回应，然后思考其中涉及的权利、权力与责任。']]
+];
+const translations = new Map([...labels,...content,...terminology]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }

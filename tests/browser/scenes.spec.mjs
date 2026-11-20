@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=scene-review-1';
+import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=learning-language-20261120';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const cast={public:'public-6',garda:'garda-9'};
