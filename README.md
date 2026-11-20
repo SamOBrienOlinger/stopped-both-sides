@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/"><strong>▶ Explore the public perspective</strong></a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/"><strong>Explore the public perspective</strong></a>
   &nbsp; · &nbsp;
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/"><strong>▶ Play from the Garda perspective</strong></a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/"><strong>Explore the Garda perspective</strong></a>
 </p>
 
 <p align="center">
@@ -30,7 +30,7 @@
 </p>
 
 <p align="center">
-  <a href="#how-to-play">Play guide</a> ·
+  <a href="#how-it-works">How it works</a> ·
   <a href="#user-flow-infographic">Visual guide</a> ·
   <a href="#characters-and-switching-sides">Characters</a> ·
   <a href="#accessibility-and-language">Language &amp; reading</a> ·
@@ -89,7 +89,7 @@ A guide to the six steps above, with larger text and a single column for reading
 
 ### What you can explore
 
-Both perspectives belong to the same game. Choose either starting point and switch when you want to compare the reasoning.
+Both perspectives belong to the same learning resource. Choose either starting point and switch when you want to compare the reasoning.
 
 | Start with the public perspective | Start with the Garda perspective |
 | --- | --- |
@@ -515,7 +515,7 @@ Studies were identified through Consensus and checked against original papers or
 
 **For developers and contributors.** The site uses **HTML, CSS and JavaScript modules**, served through **GitHub Pages**. There are no application dependencies, build step, API keys or environment variables needed to play or run it locally.
 
-Want to play? Use the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/). To work on the project, expand the setup guide below.
+Ready to explore? Use the [public perspective](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda perspective](https://samobrienolinger.github.io/stopped-both-sides/garda/). To work on the project, expand the setup guide below.
 
 <details>
 <summary><strong>Open local setup, checks, deployment and repository map</strong></summary>
@@ -593,7 +593,7 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 
 The two perspectives share a mobile-first layout and locally hosted fonts. Teal and mint distinguish the public view; muted blue distinguishes the Garda view. Written role labels and selected states supplement colour. The paired scene illustrations stay side by side in the resource, with perspective controls on a separate row on small screens. See the [button design notes](docs/button-design.md) and [hero design review](design-qa.md).
 
-Character controls have translated labels, visible selected states and touch targets of at least 48px. Opening the in-game picker focuses its heading; **Done** returns focus to **Change character**. Headings and controls wrap on narrow screens, including with enlarged text. A character is already selected at setup; opening the picker is optional.
+Character controls have translated labels, visible selected states and touch targets of at least 48px. Opening the character picker focuses its heading; **Done** returns focus to **Change character**. Headings and controls wrap on narrow screens, including with enlarged text. A character is already selected at setup; opening the picker is optional.
 
 Translations are locally hosted and include accessible descriptions; published source names retain their original form. Failed language downloads can be retried without losing progress, and cancelling a pending change prevents it from applying later. Reading settings also work when native dialog support is unavailable.
 
