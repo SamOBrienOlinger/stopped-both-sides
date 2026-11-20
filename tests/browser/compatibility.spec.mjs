@@ -156,8 +156,8 @@ for(const role of ['public','garda']){
    await openNavigation(page);await page.locator('.header [data-nav="play"]').click();await ready(page);await fits(page,'large Irish home');await checkHeroControls(page);
    await captureHero(page,role,width,'large-text',testInfo);
    await captureControls(page,role,width,'large-text',testInfo,[['how-it-works','.how-to-play']]);
-   await expect(page.locator('.perspective-card-link').first()).toHaveText('Imir mar dhuine den phobal');
-   await expect(page.locator('.perspective-card-link').last()).toHaveText('Imir mar Gharda');
+   await expect(page.locator('.perspective-card-link').first()).toHaveText('Fiosraigh dearcadh an phobail');
+   await expect(page.locator('.perspective-card-link').last()).toHaveText('Fiosraigh dearcadh an Gharda');
    for(const target of ['encounters','progress','about',role==='public'?'rights':'evidence']){
     await openNavigation(page);await page.locator(`.header [data-nav="${target}"]`).click();await ready(page);await fits(page,target);
    }
