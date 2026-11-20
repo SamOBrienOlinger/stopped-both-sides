@@ -256,7 +256,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    const label=role==='public'?'Explore the public perspective':'Explore the Garda perspective';
    return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${perspectiveIcon(role)}<span>${label}</span></a>`;
   }).join('');
-  const image=width=>new URL(`../assets/heroes/garda-hi-vis-${width}.jpg?v=ciara-lettering-20261120`,import.meta.url).href;
+  const image=width=>new URL(`../assets/heroes/garda-hi-vis-${width}.jpg?v=ciara-reference-label-20261120`,import.meta.url).href;
   const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
   return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title">
    <div class="landing-instructions">
