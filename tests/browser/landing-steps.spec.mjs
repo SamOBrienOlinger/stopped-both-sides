@@ -3,8 +3,8 @@ import {test,expect} from '@playwright/test';
 const paths=['./','garda/'];
 const unwanted=[
  'No sign-up. No timer. You can try again.',
- 'Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.',
- 'Choose any situation. Each one can be played from both sides.'
+ 'Take your time. You can revisit any choice. Your score reflects learning in the resource; your rights never depend on it.',
+ 'Choose any situation. Each one can be explored from both perspectives.'
 ];
 const headings=['Understand the situation you are in','Choose a response','Learn why it matters'];
 const details=[
@@ -53,8 +53,8 @@ for(const path of paths){
 
  test(path+' landing removes redundant text while retaining the three learning steps',async({page})=>{
   await page.goto(path+'?lang=en#play');
-  await expect(page.locator('.perspective-card-link[data-role-tone="public"]')).toHaveText('Play as a member of the public');
-  await expect(page.locator('.perspective-card-link[data-role-tone="garda"]')).toHaveText('Play as a Garda');
+  await expect(page.locator('.perspective-card-link[data-role-tone="public"]')).toHaveText('Explore the public perspective');
+  await expect(page.locator('.perspective-card-link[data-role-tone="garda"]')).toHaveText('Explore the Garda perspective');
   for(const sentence of unwanted)await expect(page.locator('#main')).not.toContainText(sentence);
   const guide=page.locator('.how-to-play');
   const dropdown=guide.locator('details.how-to-disclosure');

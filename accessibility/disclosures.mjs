@@ -1,4 +1,4 @@
-import {paceAnimations} from './animation-clock.mjs?v=render-paced-1';
+import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 
 // Animate measured pixels rather than the experimental details-content pseudo
 // element, so opening and closing behave the same in all supported browsers.

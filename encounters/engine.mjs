@@ -1,5 +1,5 @@
 import {hasOwn} from '../compatibility.mjs';
-import {encounters, roles} from './catalog.mjs?v=community-group-1';
+import {encounters, roles} from './catalog.mjs?v=learning-language-20261120';
 import {createCast,defaultCast,validCast} from './characters.mjs';
 
 export const otherRole = role => role === 'public' ? 'garda' : 'public';

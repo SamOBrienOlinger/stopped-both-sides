@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {decodeState,otherRole} from '../../encounters/engine.mjs?v=scene-review-1';
+import {decodeState,otherRole} from '../../encounters/engine.mjs?v=learning-language-20261120';
 
 const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{

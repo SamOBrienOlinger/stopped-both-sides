@@ -1,6 +1,6 @@
 import {expect,test} from '@playwright/test';
 import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=phlowing-1';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
 
 const contrast=([foreground,background])=>{
  const linear=channel=>channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4;
@@ -15,7 +15,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.goto(path+'?lang=en'+stateHash(startEncounter('public-search',role)));
   await page.locator('#choice-title').waitFor();
   await page.goto(path+'?lang=en#progress');
-  const link=page.getByRole('link',{name:'Resume play',exact:true});
+  const link=page.getByRole('link',{name:'Resume your situation',exact:true});
   const ratio=async()=>contrast(await link.evaluate(element=>{
    const style=getComputedStyle(element);
    return [style.color,style.backgroundColor];
@@ -115,13 +115,13 @@ test('the workshop guide can be opened in Arabic with enlarged text',async({page
  await loadLanguage('ar');
  await page.setViewportSize({width:320,height:800});
  await page.goto('./?lang=ar#discussion/garda/garda-supervision');
- await expect(page.getByRole('heading',{name:translateText('Play and discuss this situation','ar'),exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:translateText('Explore and discuss this situation','ar'),exact:true})).toBeVisible();
  await expect(page.locator('.discussion-guide')).toContainText(translateText('Allow about 15 minutes.','ar'));
  await expect(page.locator('.discussion-guide')).toContainText(translateText('What should the sergeant and the representative of a local community group look into together?','ar'));
  await expect(page.locator('html')).toHaveAttribute('dir','rtl');
  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
- await page.getByRole('button',{name:translateText('Play this situation','ar'),exact:true}).press('Enter');
+ await page.getByRole('button',{name:translateText('Explore this situation','ar'),exact:true}).press('Enter');
  await expect(page.locator('#scene-title')).toBeFocused();
  await expect(page.locator('.search-figures')).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);

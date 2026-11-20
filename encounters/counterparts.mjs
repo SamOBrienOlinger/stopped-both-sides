@@ -1,4 +1,4 @@
-import {reviewBackground} from '../learning/play-content.mjs?v=community-group-1';
+import {reviewBackground} from '../learning/play-content.mjs?v=learning-language-20261120';
 
 const choice=(text,feedback,review=false,next)=>({text,feedback,review,...(next?{next}:{})});
 const pair=(scene,prompt,lesson,choices,refs=[])=>({scene,prompt,lesson,choices,refs});
@@ -191,7 +191,7 @@ export const counterparts={
    'Information that does not fit the suspicion deserves consideration. You can ask for reassessment without taking responsibility for the Garda’s decision.',[
     choice('Point out the details that do not fit and ask whether you are free to leave.','This identifies information relevant to reassessing the contact.'),
     choice('Assume the original suspicion can never be changed once stated.','Relevant new information can change the basis for an intervention.',true)],['public:questioning']),
-  'description-power':pair('Separate variation: a different person matches the fuller description, direction and timing, and a reliable witness gives further specific information. In this variation you play that person. Their role label changes only at this explicit scene transition.',
+  'description-power':pair('Separate variation: a different person matches the fuller description, direction and timing, and a reliable witness gives further specific information. In this variation you explore that person’s perspective. Their role label changes only at this explicit scene transition.',
    'What remains reasonable to ask when the information is more specific?',
    'A stronger evidential link and a particular legal power remain separate questions. The person still has rights and can seek an explanation and legal advice.',[
     choice('Ask the reason, the power being used and what is required of you.','A more specific report does not remove the need to understand the proposed action.'),
@@ -318,15 +318,15 @@ export const counterparts={
    'Community experience, deployment, selection and treatment can reveal different parts of the picture. No single denominator resolves every question.',[
     choice('How patrol priorities and incentives shape selection, alongside grounds and treatment.','This includes organisational decisions as well as individual encounters.'),
     choice('Only whether increasing the search target increases the number of finds.','Volume does not establish lawful or fair decisions.',true)]),
-  'supervision-training':pair('A team completes the learning game and improves its quiz answers. Someone proposes announcing that bias in actual Garda searches has been reduced. Both the sergeant and the representative of a local community group see this same proposed claim.',
+  'supervision-training':pair('A team completes the learning resource and improves its quiz answers. Someone proposes announcing that bias in actual Garda searches has been reduced. Both the sergeant and the representative of a local community group see this same proposed claim.',
    'What should you ask before accepting the claim?',
    'A learning score measures performance in the exercise. It does not establish changed conduct, reduced discrimination or a better public experience.',[
     choice('What real-world outcomes were measured beyond quiz performance.','This distinguishes a useful learning result from a claim about practice.'),
     choice('Accept a higher quiz score as proof that real-world bias has ended.','The evidence does not support that conclusion.',true)]),
-  'supervision-plan':pair('The group considers follow-up learning, supervisory review and evaluation. The aim is better decisions and public experience. No operational incident data is collected in this game.',
+  'supervision-plan':pair('The group considers follow-up learning, supervisory review and evaluation. The aim is better decisions and public experience. No operational incident data is collected in this resource.',
    'What would give community input a useful role?',
    'Agree what improvement means and how grounds, treatment and experience will be assessed with appropriate safeguards. Completion counts alone are insufficient.',[
     choice('Help define outcomes and participate in appropriately supported, independent evaluation.','This connects community experience with a reviewable plan.'),
-    choice('Publish identifiable incidents inside the game without agreeing how they should be handled.','The prototype is not an operational data collection system.',true)])
+    choice('Publish identifiable incidents inside the resource without agreeing how they should be handled.','The prototype is not an operational data collection system.',true)])
  }
 };

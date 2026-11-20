@@ -1,4 +1,4 @@
-import {gardaArtwork} from './garda-artwork.mjs?v=garda-neutral-1';
+import {gardaArtwork} from './garda-artwork.mjs?v=learning-language-20261120';
 
 // Appearance is independent of scenario facts, choices and scoring.
 const make=(role,names)=>names.map((name,index)=>({

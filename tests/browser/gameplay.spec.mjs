@@ -1,8 +1,8 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
-import {encounters,roles} from '../../encounters/catalog.mjs?v=scene-review-1';
-import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=scene-review-1';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=learning-language-20261120';
+import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=learning-language-20261120';
 import {storyIdentity} from '../../encounters/narrative.mjs';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);

@@ -1,9 +1,9 @@
-import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=dublin-accuracy-1';
-import {backgroundImage} from './backgrounds.mjs?v=quayside-lamps-1';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=community-group-1';
-import {characterFor,defaultCast} from './characters.mjs?v=garda-neutral-1';
-import {sceneCharacterArtwork} from './scene-artwork.mjs?v=garda-neutral-1';
-import {discriminationEncounters} from './discrimination.mjs?v=discrimination-1';
+import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=learning-language-20261120';
+import {backgroundImage} from './backgrounds.mjs?v=learning-language-20261120';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=learning-language-20261120';
+import {characterFor,defaultCast} from './characters.mjs?v=learning-language-20261120';
+import {sceneCharacterArtwork} from './scene-artwork.mjs?v=learning-language-20261120';
+import {discriminationEncounters} from './discrimination.mjs?v=learning-language-20261120';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.

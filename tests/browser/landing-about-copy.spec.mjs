@@ -19,7 +19,7 @@ for(const path of ['./','garda/']){
   await expect(opening).toBeVisible();
   await expect(page.locator('.content-page>:first-child')).toHaveClass(/about-opening/);
   await expect(opening.locator('h1#game-title')).toHaveText('Stopped: Both Sides');
-  await expect(opening.getByText('An interactive learning game for the public and Gardaí.',{exact:true})).toHaveCount(1);
+  await expect(opening.getByText('An interactive learning resource for the public and Gardaí.',{exact:true})).toHaveCount(1);
   await expect(opening.locator('.about-overview p')).toHaveText(overview);
   await expect(page.locator('.content-page>.about-opening>.about-heading-block>.about-tagline')).toBeVisible();
   await expect(page.locator('.learning-section')).toBeVisible();

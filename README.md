@@ -6,31 +6,31 @@
 
 <p align="center">
   <strong>One encounter. Two perspectives. Learn why a choice matters.</strong><br>
-  An interactive learning game about public rights and Garda decisions in the Republic of Ireland.
+  An interactive learning resource about public rights and Garda decisions in the Republic of Ireland.
 </p>
 
 <p align="center">
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/"><strong>▶ Play as a member of the public</strong></a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/"><strong>Explore the public perspective</strong></a>
   &nbsp; · &nbsp;
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/"><strong>▶ Play from the Garda perspective</strong></a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/"><strong>Explore the Garda perspective</strong></a>
 </p>
 
 <p align="center">
   <a href="https://samobrienolinger.github.io/stopped-both-sides/">
-    <img src="assets/heroes/public-960.webp" width="340" alt="Play the public perspective: a fictional character speaks with a Garda on an Irish street">
+    <img src="assets/heroes/public-960.webp" width="340" alt="Explore the public perspective: a fictional character speaks with a Garda on an Irish street">
   </a>
   <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">
-    <img src="assets/heroes/garda-960.webp" width="340" alt="Play the Garda perspective: the same street encounter viewed from the other side">
+    <img src="assets/heroes/garda-960.webp" width="340" alt="Explore the Garda perspective: the same street encounter viewed from the other side">
   </a>
 </p>
 
 <p align="center">
   <strong>24 shared situations</strong> &nbsp; · &nbsp; <strong>79 stages</strong> &nbsp; · &nbsp; <strong>18 characters</strong><br>
-  Play in your browser · No sign-up · No timer
+  Explore in your browser · No sign-up · No timer
 </p>
 
 <p align="center">
-  <a href="#how-to-play">Play guide</a> ·
+  <a href="#how-it-works">How it works</a> ·
   <a href="#user-flow-infographic">Visual guide</a> ·
   <a href="#characters-and-switching-sides">Characters</a> ·
   <a href="#accessibility-and-language">Language &amp; reading</a> ·
@@ -46,37 +46,37 @@
 Explore a fictional encounter with An Garda Síochána, choose a response and read the explanation. Switch perspectives to consider the same moment from the other side, with both sets of answers kept for comparison.
 
 > [!NOTE]
-> **An independent educational prototype.** This game provides general learning about the **Republic of Ireland**, not legal advice or accredited Garda training. Northern Ireland has different laws. Specialist legal, community and language review remain opportunities for further development.
+> **An independent educational prototype.** This resource provides general learning about the **Republic of Ireland**, not legal advice or accredited Garda training. Northern Ireland has different laws. Specialist legal, community and language review remain opportunities for further development.
 
-## How to play
+## How it works
 
 **Read a fictional situation → choose a response → learn why it matters.**
 
-These steps describe the main **Explore both perspectives** game. Start with either role: a member of the public or a Garda. You can finish a situation using just one role. The guide shows the English button names.
+These steps describe the main **Explore both perspectives** learning activity. Start with either role: a member of the public or a Garda. You can finish a situation using just one role. The guide shows the English button names.
 
-1. **Choose your side.** Select [**Play as a member of the public**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Play as a Garda**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is already chosen. To change them before starting, select **Choose a different character**, choose one, then select **Done**.
-2. **Start a situation.** Select **Start this situation** to try the suggested story. To pick another story, open **Browse all situations**, choose from 24 situations by topic, then select **Play this situation** on its card.
-3. **Read, then choose.** Read the fictional scene. Choose what you would say or do.
+1. **Choose a perspective.** Select [**Explore the public perspective**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Explore the Garda perspective**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is already chosen. To change them before starting, select **Choose a different character**, choose one, then select **Done**.
+2. **Start a situation.** Select **Start this situation** to try the suggested story. To pick another story, open **Browse all situations**, choose from 24 situations by topic, then select **Explore this situation** on its card.
+3. **Read, then choose.** Read the fictional scene and question, then select one of the answer buttons.
 4. **Read the explanation.** After every answer, you see an explanation. Open **Why this matters** for more detail, or **Read the sources for this decision** for the supporting information.
-5. **Continue or finish.** The main button changes as you play. When there is another decision, select **Next decision**, then return to step 3. After your final answer, the button becomes **View recap**: select it to finish the situation and go to step 6. A **New variation** notice means the facts have changed, so read the new scene carefully. When you continue, the answer for the role you are playing decides what happens next.
-6. **Review what you learned.** The recap shows your choices and the explanations. You can replay a decision, try the other role or select **Choose another situation**.
+5. **Continue or finish.** The main button changes as you explore. When there is another decision, select **Next decision**, read the next scene and choose again. After your final answer, the button becomes **View recap**: select it to open a summary of your choices. A **New variation** notice means the facts have changed, so read the new scene carefully. When you continue, the answer for your current role decides what happens next.
+6. **Review what you learned.** The recap shows your choices and the explanations. You can revisit a decision, try the other role or select **Choose another situation**.
 
 Choose **Discrimination** under **Browse all situations** to explore the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). Each situation has two decisions, with responses and feedback from the public and Garda perspectives. The housing assistance situation concerns access to rented accommodation.
 
 > [!TIP]
-> **Optional, before you move on:** select **Try another answer** to choose a new answer for your current role. Select **Compare the other side** to play the other person at the same point in the story; your first answer is kept. If you have not answered in that role yet, choose a response before continuing. Answers from both roles are kept when you switch. You can also use **Switch to the Garda perspective** or **Switch to the public perspective** during play.
+> **Optional, before you move on:** select **Try another answer** to choose a new answer for your current role. Select **Compare the other side** to explore the other person’s perspective at the same point in the story; your first answer is kept. If you have not answered in that role yet, choose a response before continuing. Answers from both roles are kept when you switch. You can also use **Switch to the Garda perspective** or **Switch to the public perspective** during a situation.
 
-For individual practice, choose **Practise one role** in the play menu or open **Practise one role at a time** on the home page. When a saved situation is available, **Resume play** continues an unfinished situation and **Open recap** revisits a completed one.
+For individual practice, choose **Practise one role** under **Ways to explore** or open **Practise one role at a time** on the home page. When a saved situation is available, **Resume your situation** continues an unfinished situation and **Open recap** revisits a completed one.
 
-Find scores and supporting guidance under **Scores, sources and help**. There is no sign-up or time limit. Your progress is saved in this browser if your browser allows saving; it does not automatically appear on another device. See [privacy and saving](#privacy). All gameplay runs in your browser, with no AI service involved during play.
+Find scores and supporting guidance under **Scores, sources and help**. There is no sign-up or time limit. Your progress is saved in this browser if your browser allows saving; it does not automatically appear on another device. See [privacy and saving](#privacy). All interactions run in your browser, with no AI service involved during a situation.
 
 ### User-flow infographic
 
-A guide to the six steps above, with larger text and a single column for reading on a phone. The PDF has three A4 pages: getting started, making choices, and continuing or finishing. Optional actions are marked separately. Garda Aisling and Daniel illustrate the character-choice step. Updated **18 November 2026**. The two perspective buttons in the PDF open the corresponding game setup; the other controls illustrate what to select in the game.
+A guide to the six steps above, with larger text and a single column for reading on a phone. The PDF has three A4 pages: getting started, making choices, and continuing or finishing. Optional actions are marked separately. Garda Aisling and Daniel illustrate the character-choice step. The two perspective buttons in the PDF open the corresponding perspective setup; the other controls illustrate what to select in the resource.
 
 <p align="center">
   <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="440" alt="First-time guide to Explore both perspectives. 1. Choose the public or Garda role. A character is ready; optionally select Choose a different character, illustrated with Garda Aisling and Daniel, choose one, then Done. 2. Select Start this situation, or Browse all situations and then Play this situation. 3. Read the fictional scene and choose a response. 4. Read the explanation and optional supporting details. Try another answer changes your current role's answer. Compare the other side switches roles at the same point and keeps your first answer; answer in that role before continuing if needed. 5. The main button is Next decision when another decision follows: return to step 3. After the final answer it becomes View recap: go to step 6. 6. Review choices and explanations, replay, try the other role or choose another situation. No sign-up or time limit. Saving depends on your browser and does not automatically transfer to another device.">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="440" alt="First-time guide to Explore both perspectives. 1. Choose the public or Garda role. A character is ready; optionally select Choose a different character, illustrated with Garda Aisling and Daniel, choose one, then Done. 2. Select Start this situation, or Browse all situations and then Explore this situation. 3. Read the fictional scene and choose a response. 4. Read the explanation and optional supporting details. Try another answer changes your current role's answer. Compare the other side switches roles at the same point and keeps your first answer; answer in that role before continuing if needed. 5. Select Next decision to read another scene, or View recap after your final answer. 6. Review choices and explanations, revisit a decision, try the other role or choose another situation. Your progress is saved in this browser.">
   </a>
 </p>
 
@@ -89,15 +89,15 @@ A guide to the six steps above, with larger text and a single column for reading
 
 ### What you can explore
 
-Both perspectives belong to the same game. Choose either starting point and switch when you want to compare the reasoning.
+Both perspectives belong to the same learning resource. Choose either starting point and switch when you want to compare the reasoning.
 
 | Start with the public perspective | Start with the Garda perspective |
 | --- | --- |
 | Explore rights, responsibilities and access to support. | Explore evidence, professional judgement and fair treatment. |
 | Street questions, a bag search, arrest, the station, a young person and concerns about racism. | Suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision. |
-| **[Play the public perspective →](https://samobrienolinger.github.io/stopped-both-sides/)** | **[Play the Garda perspective →](https://samobrienolinger.github.io/stopped-both-sides/garda/)** |
+| **[Explore the public perspective →](https://samobrienolinger.github.io/stopped-both-sides/)** | **[Explore the Garda perspective →](https://samobrienolinger.github.io/stopped-both-sides/garda/)** |
 
-Each shared situation offers branching choices, immediate explanations and links to supporting sources. Characters and answers stay with the encounter when you switch sides. Saved progress lets you revisit learning points and replay routes.
+Each shared situation offers branching choices, immediate explanations and links to supporting sources. Characters and answers stay with the encounter when you switch sides. Saved progress lets you revisit learning points and revisit routes.
 
 The guiding principles are clear information, evidence-based reasoning, dignity and reflection. **Perspective-taking does not imply equal legal powers or equal responsibility.** A member of the public is never scored as responsible for another person's misconduct, and cooperation is not presented as a guarantee of safety.
 
@@ -113,20 +113,20 @@ The original single-role practice also remains available: six public situations 
 
 **[Choose a public character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Choose a Garda character](https://samobrienolinger.github.io/stopped-both-sides/garda/#encounters/garda)**
 
-| When you… | The game… |
+| When you… | The resource… |
 | --- | --- |
 | **Start a shared situation** | Uses your selected character and randomly chooses the character opposite you. |
 | **Switch perspective** | Puts you in the existing opposite character's place, keeping both roles' answers and scores. |
 | **Change character** | Changes only your active character's name and picture. The stage, other character, answers and scores stay in place. Switch sides first to change the other character. |
 | **Continue, resume or replay** | Keeps the same pair, including in feedback and the recap. Starting a new situation chooses a new random counterpart. |
 
-**Your character** and **Other character** labels show who you are playing. You can change character during a scene, feedback or recap. Names update across supported languages; scenario ages, teaching facts, choices, legal responsibilities and scores remain fixed.
+**Your character** and **Other character** labels show whose perspective you are exploring. You can change character during a scene, feedback or recap. Names update across supported languages; scenario ages, teaching facts, choices, legal responsibilities and scores remain fixed.
 
 Saved encounters and transfer links retain the pair. Older saved formats remain readable. In original practice, **Change character** opens the matching shared stage and preserves the selected answer. The [character guide](docs/CHARACTERS.md) explains persistence, compatibility and artwork.
 
 ## Accessibility and language
 
-**Make the game easier to read:** open **Language & reading** in the header or footer, adjust your preferences, then select **Apply preferences**.
+**Make the resource easier to read:** open **Language & reading** in the header or footer, adjust your preferences, then select **Apply preferences**.
 
 | Setting | Available options |
 | --- | --- |
@@ -151,7 +151,7 @@ Changing language keeps your stage, characters, answers, role and scores. Transl
 | **Saved learning progress** | Keeps the best point earned at each unique stage, up to 59 per role. Repeating a mastered stage does not add points. |
 | **Replay** | Retains latest and best completed results. Revisiting a stage can improve learning progress. |
 
-There are no point penalties for taking time, switching perspective or requesting help. Scores do not measure personal bias, reward avoiding arrest, certify professional competence or establish that the game changes behaviour.
+There are no point penalties for taking time, switching perspective or requesting help. Scores do not measure personal bias, reward avoiding arrest, certify professional competence or establish that the resource changes behaviour.
 
 The approach adapts running points, feedback and saved best results from **AllyIndex**. See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) for the rubric, branching, storage and attribution.
 
@@ -174,7 +174,7 @@ Each saved record belongs to one encounter and one role. It keeps the latest and
 **No accounts, analytics, tracking scripts or forms for real incidents.** Choices, scores, character selections, reading preferences and a resume point are saved in browser storage when it is available.
 
 - **Saving is local.** Separate browsers and devices do not synchronise automatically. If saving is blocked, character selection and changes still work for the current visit.
-- **Switching sites carries progress in the game link.** Each perspective keeps a separate record; the link carries and merges progress. Copying that link can share the learning record it contains.
+- **Switching sites carries progress in the resource link.** Each perspective keeps a separate record; the link carries and merges progress. Copying that link can share the learning record it contains.
 - **Clearing progress has limits.** Clearing one perspective does not clear the other's record or previously copied links. Character preferences are stored separately and are kept when progress is cleared.
 
 Hosting services may retain ordinary access logs. See [Persistence and transfer](docs/PERSPECTIVES-AND-SCORES.md#persistence-and-transfer) for storage limits and recovery behaviour.
@@ -185,7 +185,7 @@ Hosting services may retain ordinary access logs. See [Persistence and transfer]
 
 The learning points draw on Irish legal and rights information, community research and a selected critical review of academic literature on policing decisions and bias. **Each decision links to its supporting sources.**
 
-The documented source review is dated **7 September 2026**. Older publications are dated and are not treated as current authority for every procedure. The research record distinguishes jurisdiction, access limitations and how findings inform the game; it does not claim an exhaustive review or proven training effectiveness.
+The documented source review is dated **7 September 2026**. Older publications are dated and are not treated as current authority for every procedure. The research record distinguishes jurisdiction, access limitations and how findings inform the resource; it does not claim an exhaustive review or proven training effectiveness.
 
 **[Content review record](docs/CONTENT-REVIEW.md)** · **[Research approach](research/README.md)** · **[Bibliography](research/bibliography.md)** · **[Scenario evidence map](research/scenario-evidence-map.md)**
 
@@ -211,16 +211,16 @@ The strongest proposition is the **combination of public-rights education and re
 
 #### A potentially useful educational combination
 
-| What the game brings together | Potential educational contribution |
+| What the resource brings together | Potential educational contribution |
 | --- | --- |
 | A shared situation, persistent characters and retained answers for both roles | Let learners compare perspectives within the same encounter and revisit the reasoning behind each decision. |
 | Public rights and responsibilities alongside Garda powers, evidence and professional judgement | Support discussion of how individual rights and the exercise of state authority interact in a specific Irish setting. |
 | Branching choices, immediate explanations, source links and a paired recap | Turn each decision into an opportunity to examine assumptions, communication, bias and reasons to reconsider, rather than reducing it to a right-or-wrong score. |
-| Browser-based play, replay and reading controls without an account requirement | Offer a low-barrier format for independent exploration and potential facilitated discussion without requiring reports of real incidents. |
+| Browser-based exploration, opportunities to revisit decisions and reading controls without an account requirement | Offer a low-barrier format for independent exploration and potential facilitated discussion without requiring reports of real incidents. |
 
 **Its distinctiveness lies in the paired, Ireland-specific examination of an encounter.** The learner can ask both “What are this person's rights?” and “What evidence and responsibilities should guide this Garda's decision?” within one exercise. The potential contribution is a shared reference point for rights literacy, critical reflection and informed community dialogue.
 
-Perspective-taking does **not** imply equal legal powers, equal responsibility for an encounter or that a member of the public is responsible for Garda misconduct. The learning model preserves those distinctions; it does not score compliance as a guarantee of safety or claim that the game measures personal bias.
+Perspective-taking does **not** imply equal legal powers, equal responsibility for an encounter or that a member of the public is responsible for Garda misconduct. The learning model preserves those distinctions; it does not score compliance as a guarantee of safety or claim that the resource measures personal bias.
 
 #### Similar product: PLUS
 
@@ -230,7 +230,7 @@ Stopped: Both Sides' distinguishing proposition is **a public-facing Republic of
 
 #### Contribution within the wider learning portfolio
 
-Alongside [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/), which explores migration and settlement, and [Saggart & Citywest Together](https://samobrienolinger.github.io/saggart-and-citywest-together/), which connects local knowledge and community supports, this game supplies the **encounter-based rights-and-responsibilities learning layer**. Together they offer a potentially useful combination of migration understanding, local belonging and rights literacy. They remain separate resources; this game addresses public/Garda encounters generally, not migrants as a policing category.
+Alongside [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/), which explores migration and settlement, and [Saggart & Citywest Together](https://samobrienolinger.github.io/saggart-and-citywest-together/), which connects local knowledge and community supports, this resource supplies the **encounter-based rights-and-responsibilities learning layer**. Together they offer a potentially useful combination of migration understanding, local belonging and rights literacy. They remain separate resources; this resource addresses public/Garda encounters generally, not migrants as a policing category.
 
 Specialist legal review, input from communities and Garda educators, accessibility testing and learner evaluation are opportunities to establish accuracy, relevance and educational benefit. Improved conduct, reduced bias or accredited training effectiveness are not claimed as measured outcomes. The comparator description was checked against its official project page on **14 September 2026**; no affiliation, endorsement or exhaustive claim of uniqueness is implied.
 
@@ -248,7 +248,7 @@ The approach draws on research into educational games, explanatory feedback, per
 
 ### Learning approach at a glance
 
-| Approach | What it means for the learner | How the game supports it |
+| Approach | What it means for the learner | How the resource supports it |
 | --- | --- | --- |
 | **Learning through scenarios** | Apply a principle to a concrete situation involving a decision and incomplete information. | Fictional encounters address questions, searches, communication, assumptions and changing evidence. |
 | **Formative learning** | Use feedback to identify what needs further explanation and reconsider a response. | Choices receive explanations, learning points and sources; learners can try another answer. |
@@ -260,11 +260,11 @@ The approach draws on research into educational games, explanatory feedback, per
 The **79 stages are spread across 24 shared situations**, with a playthrough following one authored route. The active role's selected answer determines the next branch; the other role's answer remains available for comparison. Branches illustrate teaching decisions and opportunities to reconsider. They do not predict what will happen in an actual encounter.
 
 > [!IMPORTANT]
-> **Understanding both perspectives preserves the distinction between individual rights and state authority.** It does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person's misconduct, and rights never depend on a game score.
+> **Understanding both perspectives preserves the distinction between individual rights and state authority.** It does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person's misconduct, and rights never depend on a learning score.
 
 ### Research and teaching examples
 
-The situations named below already exist in the game. **The worksheets, learner-written explanations, facilitated discussions and new-case assessments are suggested teaching activities**, not features that the website automatically administers.
+The situations named below already exist in the resource. **The worksheets, learner-written explanations, facilitated discussions and new-case assessments are suggested teaching activities**, not features that the website automatically administers.
 
 <details>
 <summary><strong>Explore six research-supported teaching activities and two educational comparators</strong></summary>
@@ -305,7 +305,7 @@ After feedback, introduce a different fictional case involving a corrected witne
 
 #### C. Compare perspectives while recognising uncertainty
 
-**Research.** Todd and colleagues' five experiments found benefits from explicit perspective-taking exercises on particular measures of interracial evaluation and interaction. These short-term findings do not establish that choosing an avatar or completing a brief game produces lasting reductions in prejudice. [[3]](#pedagogy-reference-3)
+**Research.** Todd and colleagues' five experiments found benefits from explicit perspective-taking exercises on particular measures of interracial evaluation and interaction. These short-term findings do not establish that choosing an avatar or completing a brief learning activity produces lasting reductions in prejudice. [[3]](#pedagogy-reference-3)
 
 Eyal, Steffel and Epley's 25 experiments addressed a different outcome: accuracy in understanding another person's thoughts or feelings. Imagining the other person's perspective did not consistently improve accuracy; obtaining their perspective directly through conversation helped in the final experiment. The two studies concern different outcomes, so a warmer evaluation should not be equated with more accurate understanding. [[4]](#pedagogy-reference-4)
 
@@ -324,7 +324,7 @@ Finish with: **“What would you ask this person to check an assumption you have
 
 #### D. Turn a playthrough into reflective learning
 
-**Research.** Keiser and Arthur's meta-analysis examined 61 studies of after-action reviews, or debriefs. It found benefits across training outcomes, with effectiveness depending on how the review was designed and matched to the task. Reviewing actual performance information was a useful characteristic. These cross-context findings support a rationale for debriefing; they do not establish an effect size for this game or that one facilitation format always works best. [[5]](#pedagogy-reference-5)
+**Research.** Keiser and Arthur's meta-analysis examined 61 studies of after-action reviews, or debriefs. It found benefits across training outcomes, with effectiveness depending on how the review was designed and matched to the task. Reviewing actual performance information was a useful characteristic. These cross-context findings support a rationale for debriefing; they do not establish an effect size for this resource or that one facilitation format always works best. [[5]](#pedagogy-reference-5)
 
 **Existing feature: a paired recap with choices, explanations and sources.**
 
@@ -384,7 +384,7 @@ The site supports the central play-and-feedback stages. The schedule below adds 
 | Stage | Time | Suggested activity | Purpose |
 | --- | --- | --- | --- |
 | **Orient** | 5 minutes | Introduce one learning question and obtain an initial response to a short vignette. | Establish the topic and starting reasoning. |
-| **Explore one perspective** | 8 minutes | Play a selected situation and note the reasons for key choices. | Practise applying ideas in context. |
+| **Explore one perspective** | 8 minutes | Explore a selected situation and note the reasons for key choices. | Practise applying ideas in context. |
 | **Compare perspectives** | 8 minutes | Switch roles at relevant stages and compare what each person knows and needs clarified. | Examine knowledge, authority and responsibility. |
 | **Examine feedback and sources** | 7 minutes | Read explanations and inspect one or two supporting sources. | Connect judgement to evidence and uncertainty. |
 | **Debrief** | 10 minutes | Discuss assumptions, changed decisions and communication using the recap. | Make reasoning explicit and consider alternatives. |
@@ -397,7 +397,7 @@ A later short activity could revisit the same objectives through another situati
 - **Start with a specific learning problem.** Select situations suited to an objective, such as distinguishing evidence from assumption or revising a decision. Completing every situation is not necessary for every objective.
 - **Keep reasons visible.** Ask learners to explain a choice before feedback and a revised choice afterwards. This helps distinguish understanding from familiarity with the options.
 - **Use shared facts carefully.** Identify what both roles know, what only one character knows and what remains unknown. Maintain the distinction between rights and the exercise of authority.
-- **Ground learning in Irish sources and community knowledge.** Build on the [selected critical evidence review](research/README.md), while seeking independent legal review and meaningful community input. The [INAR/ICCL community and rights report](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf) offers a local methodological example combining desk research with participatory workshops and other engagement. That is a reference point for proposed development, not a claim that this game has already been co-designed or approved by those organisations.
+- **Ground learning in Irish sources and community knowledge.** Build on the [selected critical evidence review](research/README.md), while seeking independent legal review and meaningful community input. The [INAR/ICCL community and rights report](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf) offers a local methodological example combining desk research with participatory workshops and other engagement. That is a reference point for proposed development, not a claim that this resource has already been co-designed or approved by those organisations.
 - **Offer different ways to participate.** Learners can discuss, write, observe or work individually. Participation should not depend on disclosing personal encounters. Use the [language and reading controls](#accessibility-and-language) and assess whether they meet participants' needs.
 - **Invite informed challenge.** Learners should be able to question whether a scene supplies enough information, whether a source supports an explanation and what would change a decision.
 
@@ -414,7 +414,7 @@ A later short activity could revisit the same objectives through another situati
 | **Revise a judgement** | Identify new information that matters and explain its effect on the proposed action. | A staged case with an additional fact introduced midway. |
 | **Recognise unsupported generalisations** | Identify when identity, reputation, appearance or colleague confidence substitutes for relevant individual information. | Explain an assumption and formulate a question to check it. |
 | **Communicate clearly and respectfully** | Explain the situation, acknowledge uncertainty and check understanding. | A short dialogue, written response or facilitated roleplay. |
-| **Evaluate learning and fairness claims** | Explain why a game score or a limited set of statistics cannot establish broader effects. | Interpret a fictional results summary and identify the evidence still needed. |
+| **Evaluate learning and fairness claims** | Explain why a learning score or a limited set of statistics cannot establish broader effects. | Interpret a fictional results summary and identify the evidence still needed. |
 
 The existing **“What the numbers leave out”** situation supplies a critical data-literacy example: learners interpret clearly labelled synthetic stop-and-search data and examine whether better quiz answers establish reduced bias. No real incident records are used.
 
@@ -435,7 +435,7 @@ A rubric could examine identification of relevant facts; separation of evidence 
 
 #### Use a meaningful comparison
 
-Where feasible, compare the game with a reading-based version containing the same substantive information and similar learning time. Random allocation, when appropriate and practicable, would strengthen the comparison.
+Where feasible, compare the resource with a reading-based version containing the same substantive information and similar learning time. Random allocation, when appropriate and practicable, would strengthen the comparison.
 
 This would help distinguish the contribution of the interactive method from the benefit of receiving information. A later study could compare otherwise similar versions with and without role-switching if that feature is the specific research question.
 
@@ -515,7 +515,7 @@ Studies were identified through Consensus and checked against original papers or
 
 **For developers and contributors.** The site uses **HTML, CSS and JavaScript modules**, served through **GitHub Pages**. There are no application dependencies, build step, API keys or environment variables needed to play or run it locally.
 
-Want to play? Use the [public game](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda game](https://samobrienolinger.github.io/stopped-both-sides/garda/). To work on the project, expand the setup guide below.
+Ready to explore? Use the [public perspective](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda perspective](https://samobrienolinger.github.io/stopped-both-sides/garda/). To work on the project, expand the setup guide below.
 
 <details>
 <summary><strong>Open local setup, checks, deployment and repository map</strong></summary>
@@ -591,9 +591,9 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 
 ### Interface and language implementation
 
-The two perspectives share a mobile-first layout and locally hosted fonts. Teal and mint distinguish the public view; muted blue distinguishes the Garda view. Written role labels and selected states supplement colour. The paired scene illustrations stay side by side in the game, with perspective controls on a separate row on small screens. See the [button design notes](docs/button-design.md) and [hero design review](design-qa.md).
+The two perspectives share a mobile-first layout and locally hosted fonts. Teal and mint distinguish the public view; muted blue distinguishes the Garda view. Written role labels and selected states supplement colour. The paired scene illustrations stay side by side in the resource, with perspective controls on a separate row on small screens. See the [button design notes](docs/button-design.md) and [hero design review](design-qa.md).
 
-Character controls have translated labels, visible selected states and touch targets of at least 48px. Opening the in-game picker focuses its heading; **Done** returns focus to **Change character**. Headings and controls wrap on narrow screens, including with enlarged text. A character is already selected at setup; opening the picker is optional.
+Character controls have translated labels, visible selected states and touch targets of at least 48px. Opening the character picker focuses its heading; **Done** returns focus to **Change character**. Headings and controls wrap on narrow screens, including with enlarged text. A character is already selected at setup; opening the picker is optional.
 
 Translations are locally hosted and include accessible descriptions; published source names retain their original form. Failed language downloads can be retried without losing progress, and cancelling a pending change prevents it from applying later. Reading settings also work when native dialog support is unavailable.
 
@@ -638,7 +638,7 @@ The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes
 | --- | --- |
 | **Report a bug** | Perspective, situation, steps to reproduce, expected result and browser/device. A screenshot can help with layout issues. |
 | **Correct content** | The affected stage and a supporting source. See the [content review record](docs/CONTENT-REVIEW.md). |
-| **Help evaluate the game** | Opportunities for legal, community, Garda education, accessibility, translation and learning research input. No partnership or endorsement is implied. |
+| **Help evaluate the resource** | Opportunities for legal, community, Garda education, accessibility, translation and learning research input. No partnership or endorsement is implied. |
 
 Keep reports focused on the fictional exercise; real incident details are not needed.
 
@@ -661,7 +661,7 @@ The paired LEGO-style hero illustrations were generated with OpenAI image genera
 
 The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
 
-Design acknowledgements are kept in this README and are not displayed in the game interface. No endorsement by INAR, ICCL or An Garda Síochána is claimed. The creator's own policing research is identified in the bibliography alongside independent sources.
+Design acknowledgements are kept in this README and are not displayed in the resource interface. No endorsement by INAR, ICCL or An Garda Síochána is claimed. The creator's own policing research is identified in the bibliography alongside independent sources.
 
 Open Sans is distributed under the [SIL Open Font License](assets/OFL-Open-Sans.txt). Interface icons include adapted Feather paths; see the [Feather licence notice](assets/LICENSE-Feather.txt). Source publications retain their own rights and are linked, not reproduced wholesale.
 
@@ -679,7 +679,7 @@ For other copying, adaptation, redistribution, rehosting or commercial reuse of 
 
 <p align="center">
   <strong>Explore the same encounter from another perspective.</strong><br>
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/">Play the public perspective</a> ·
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">Play the Garda perspective</a> ·
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/">Explore the public perspective</a> ·
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">Explore the Garda perspective</a> ·
   <a href="#stopped-both-sides">Back to top ↑</a>
 </p>

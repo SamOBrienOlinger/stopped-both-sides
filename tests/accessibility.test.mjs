@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {siteRole,siteBase} from './site-fixture.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=scene-review-1';
+import {encounters} from '../encounters/catalog.mjs?v=learning-language-20261120';
 import {gaContent,translateHTML,translateText} from '../locales/translate.mjs';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs?v=scene-review-1';
+import {decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
 import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs';
 
 test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
@@ -23,8 +23,8 @@ test('Irish content covers every stage of the original shared situations and bot
  assert.equal(stages,59);
 });
 test('Translation preserves routes, semantic attributes, source language and escaped content',()=>{
- const html='<section aria-labelledby="title"><h1 id="title">Scores &amp; progress</h1><button data-action="paired-start" data-id="garda-street" aria-label="Play as the Garda: A hunch on the street">Play as the Garda</button><details><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate><li><a href="https://example.org/?a=1&amp;b=2" target="_blank">A hunch on the street</a></li></ul></details><p>Why this matters</p></section>';
- const out=translateHTML(html,'ga');assert.match(out,/Scóir agus dul chun cinn/);assert.match(out,/data-action="paired-start" data-id="garda-street"/);assert.match(out,/aria-label="Imir mar Gharda: Amhras ar an tsráid"/);assert.match(out,/>A hunch on the street<\/a>/);assert.match(out,/a=1&amp;b=2/);assert.match(out,/>Cén fáth a bhfuil sé seo tábhachtach<\/p>/);assert.equal(translateHTML(html,'en'),html);
+ const html='<section aria-labelledby="title"><h1 id="title">Scores &amp; progress</h1><button data-action="paired-start" data-id="garda-street" aria-label="Explore the Garda perspective: A hunch on the street">Explore the Garda perspective</button><details><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate><li><a href="https://example.org/?a=1&amp;b=2" target="_blank">A hunch on the street</a></li></ul></details><p>Why this matters</p></section>';
+ const out=translateHTML(html,'ga');assert.match(out,/Scóir agus dul chun cinn/);assert.match(out,/data-action="paired-start" data-id="garda-street"/);assert.match(out,/aria-label="Fiosraigh dearcadh an Gharda: Amhras ar an tsráid"/);assert.match(out,/>A hunch on the street<\/a>/);assert.match(out,/a=1&amp;b=2/);assert.match(out,/>Cén fáth a bhfuil sé seo tábhachtach<\/p>/);assert.equal(translateHTML(html,'en'),html);
  assert.equal(translateHTML('<p>&lt;script&gt;&amp;"</p>','ga'),'<p>&lt;script&gt;&amp;&quot;</p>');
 });
 test('Invalid reading settings are normalised, blocked storage remains usable, and reading data never overwrites scores',()=>{
@@ -49,8 +49,8 @@ globalThis.history={replaceState(_state,_title,url){address=new URL(url,address)
 globalThis.document={title:'',documentElement:{lang:'en-IE',attrs:{},setAttribute(k,v){this.attrs[k]=v;},style:{setProperty(){}},classList:{toggle(k,v){if(v)classes.add(k);else classes.delete(k);}}},querySelector(q){if(q==='#main')return main;if(q==='#reading-dialog')return dialog;if(q==='[data-reading-open]')return openButton;if(q==='[data-site-switch]')return siteLink;if(q==='#page-status')return {textContent:''};if(q==='#feedback'||q==='#choice-title'||q==='h1'||q==='[data-action="paired-clear"]'||q==='[data-action="paired-clear-confirm"]')return heading(q);return null;},querySelectorAll(q){return q==='[data-reading-open]'?[openButton]:[];},addEventListener(k,v){callbacks['document-'+k]=v;}};
 globalThis.window={scrollTo(){},addEventListener(k,v){callbacks[k]=v;}};
 await import(new URL('app.mjs',siteBase));
-function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
-function action(name,extra={}){const n=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(n!==assignments)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
+function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
+function action(name,extra={}){const n=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(n!==assignments)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 function settings(language='ga'){
  callbacks['document-click']({target:{closest:()=>openButton}});assert.ok(dialog.open);assert.match(dialog.innerHTML,/id="reading-language"/);
  dialogCallbacks.submit({preventDefault(){},target:{elements:{language:{value:language},size:{value:'150'},contrast:{value:'high'},spacing:{checked:true},motion:{checked:true}}}});

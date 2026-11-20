@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {encounters,roles,sites} from '../encounters/catalog.mjs?v=scene-review-1';
-import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=scene-review-1';
+import {encounters,roles,sites} from '../encounters/catalog.mjs?v=learning-language-20261120';
+import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=learning-language-20261120';
 import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs';
 import {storyIdentity} from '../encounters/narrative.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
@@ -19,7 +19,7 @@ globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='[data-site-switch]')return siteLink;if(q==='.skip')return {addEventListener(type,fn){callbacks.skip=fn;}};if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,fn){callbacks[type]=fn;}};
 await import(new URL('app.mjs',siteBase));
-const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The game could not load/);
+const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The resource could not load/);
 function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}
 function openCharacterPicker(role){callbacks['scene-character-change']({target:{dataset:{sceneLabelRole:role},closest(){return null;}}});assertLoaded();}
@@ -27,7 +27,7 @@ const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
- const titles={public:'Play as a member of the public',garda:'Play as a Garda'};
+ const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};
  for(const role of roles){
   const href=new URL('#encounters/'+role,sites.public).href;
   const opening=`<a class="primary perspective-card-link" data-role-tone="${role}" href="${href}">`;
@@ -55,7 +55,7 @@ test('The resume card describes the public role in the youth situation',()=>{
  assert.ok(!main.innerHTML.includes(stateHash(saved)));
  route('#encounters/public/young');
  assert.match(main.innerHTML,/You are a member of the public, age 16/);
- assert.match(main.innerHTML,/>Resume play<\/a>/);
+ assert.match(main.innerHTML,/>Resume your situation<\/a>/);
  assert.doesNotMatch(main.innerHTML,/[←→]/);
  assert.ok(main.innerHTML.includes(stateHash(saved)));
 });

@@ -58,7 +58,7 @@ for(const path of paths){
   for(const role of ['public','garda']){
    for(const id of Object.keys(encounters)){
     await page.goto(path+stateHash(startEncounter(id,role,{cast})),{waitUntil:'domcontentloaded'});
-    await expect(page.locator('.flow-role-bar .perspective-status strong')).toHaveText(role==='garda'?'Playing as a Garda':'Playing as a member of the public');
+    await expect(page.locator('.flow-role-bar .perspective-status strong')).toHaveText(role==='garda'?'Exploring the Garda perspective':'Exploring the public perspective');
     await expectPortrait(page,role,cast[role]);
    }
   }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {encounters,roles} from '../encounters/catalog.mjs?v=scene-review-1';
+import {encounters,roles} from '../encounters/catalog.mjs?v=learning-language-20261120';
 import {characters} from '../encounters/characters.mjs';
 import {personalizeText,personalizeHTML,storyIdentity,characterContext} from '../encounters/narrative.mjs';
 import {translateText,translateHTML} from '../locales/translate.mjs';

@@ -1,10 +1,10 @@
-import {learningCopy} from './play-copy.mjs?v=encounter-hero-1';
-import {messages} from './messages.mjs?v=community-group-1';
+import {learningCopy} from './play-copy.mjs?v=learning-language-20261120';
+import {messages} from './messages.mjs?v=learning-language-20261120';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=community-group-1';
-import {gaContent} from './ga-content.mjs?v=community-group-1';
-import {refinementIrish} from './refinements-ga.mjs?v=community-group-1';
+import {encounters} from '../encounters/catalog.mjs?v=learning-language-20261120';
+import {gaContent} from './ga-content.mjs?v=learning-language-20261120';
+import {refinementIrish} from './refinements-ga.mjs?v=learning-language-20261120';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -21,7 +21,7 @@ for(const e of Object.values(encounters)){
 }
 const ui={
  'Home':'Baile',
- 'Choose this side':'Roghnaigh an taobh seo',
+ 'Choose this perspective':'Roghnaigh an taobh seo',
  'Public':'An pobal',
  'LEARN THROUGH EVERYDAY SITUATIONS':'FOGHLAIM TRÍ CHÁSANNA LAETHÚLA',
  'Know your rights. Understand fair decisions.':'Bíodh do chearta ar eolas agat. Tuig cinntí córa.',
@@ -33,50 +33,50 @@ const ui={
  'How it works':'Conas a oibríonn sé','Read a situation':'Léigh cás','Choose a response':'Roghnaigh freagra','Learn why it matters':'Foghlaim cén fáth a bhfuil sé tábhachtach',
  'A short, fictional encounter with Gardaí.':'Teagmháil ghearr fhicseanúil le Gardaí.','Try what you would say or do.':'Bain triail as cad a déarfá nó a dhéanfá.','Get an explanation, then try the other side.':'Faigh míniú, ansin bain triail as an taobh eile.',
  'No sign-up. No timer. You can try again.':'Gan chlárú. Gan teorainn ama. Is féidir triail eile a bhaint as.',
- 'START PLAYING':'TOSAIGH AG IMIRT','Try your first situation.':'Bain triail as do chéad chás.',
+ 'START EXPLORING':'TOSAIGH AG IMIRT','Try your first situation.':'Bain triail as do chéad chás.',
  'Read what happens, choose a response, then find out why it matters.':'Léigh cad a tharlaíonn, roghnaigh freagra, ansin faigh amach cén fáth a bhfuil sé tábhachtach.',
  'Your character':'Do charachtar','Choose a different character':'Roghnaigh carachtar eile','START HERE':'TOSAIGH ANSEO','Start this situation':'Tosaigh an cás seo',
  'Practise asking why you have been stopped and whether you are free to leave.':'Cleachtaigh fiafraí cén fáth ar stopadh thú agus an bhfuil cead agat imeacht.',
  'Practise separating what you observed from what you assumed.':'Cleachtaigh an rud a chonaic tú a scaradh ón rud a ghlac tú leis.',
- 'No timer. You can change character or switch sides while you play.':'Gan teorainn ama. Is féidir carachtar nó taobh a athrú agus tú ag imirt.',
- 'Browse all 14 situations':'Brabhsáil na 14 chás','Choose any situation. Each one can be played from both sides.':'Roghnaigh aon chás. Is féidir gach ceann a imirt ón dá thaobh.','Play this situation':'Imir an cás seo',
+ 'No timer. You can change character or switch sides as you explore.':'Gan teorainn ama. Is féidir carachtar nó taobh a athrú agus tú ag imirt.',
+ 'Browse all 14 situations':'Brabhsáil na 14 chás','Choose any situation. Each one can be explored from both perspectives.':'Roghnaigh aon chás. Is féidir gach ceann a imirt ón dá thaobh.','Explore this situation':'Imir an cás seo',
  'YOUR TURN':'DO SHEALSA','Choose what you would say or do. You can try another answer.':'Roghnaigh cad a déarfá nó a dhéanfá. Is féidir freagra eile a thriail.','Next step':'An chéad chéim eile','See what you learned':'Féach ar an méid a d’fhoghlaim tú','Try another answer':'Bain triail as freagra eile',
  'Scores, sources and help':'Scóir, foinsí agus cabhair',
  'One point means the response supports an appropriate resolution. Your rights never depend on your score.':'Ciallaíonn pointe amháin go dtacaíonn an freagra le réiteach cuí. Ní bhraitheann do chearta ar do scór riamh.',
  'Your avatar represents your role. The scene keeps its own names and facts.':'Léiríonn d’abhatár do ról. Coinníonn an scéal a ainmneacha agus a fhíricí féin.',
  'Switch sides to compare the same moment. Your active answer decides what happens at the next step.':'Athraigh taobh chun an nóiméad céanna a chur i gcomparáid. Cinneann do fhreagra gníomhach cad a tharlaíonn ag an gcéad chéim eile.',
  'Read the explanation after each choice. Its source links show where the information comes from.':'Léigh an míniú tar éis gach rogha. Léiríonn na naisc fhoinseacha cá as a dtagann an t-eolas.',
- 'Choose your side and character.':'Roghnaigh do thaobh agus do charachtar.',
+ 'Choose a perspective and character.':'Roghnaigh do thaobh agus do charachtar.',
  'Pick your character, then a situation. You can change character or switch sides at any stage.':'Roghnaigh do charachtar, ansin cás. Is féidir carachtar nó taobh a athrú ag aon chéim.',
  'Choose your character':'Roghnaigh do charachtar','Change your character':'Athraigh do charachtar','Change character':'Athraigh carachtar',
- 'Choose how you appear in the game. Each situation keeps its own names and facts.':'Roghnaigh do chuma sa chluiche. Coinníonn gach cás a ainmneacha agus a fhíricí féin.',
+ 'Choose how you appear in the resource. Each situation keeps its own names and facts.':'Roghnaigh do chuma sa chluiche. Coinníonn gach cás a ainmneacha agus a fhíricí féin.',
  'Your stage, answers and scores stay in place.':'Coinnítear do chéim, do fhreagraí agus do scóir.',
  'The other character is chosen at random when you start. Both characters stay with the situation until you change them.':'Roghnaítear an carachtar eile go randamach nuair a thosaíonn tú. Fanann an dá charachtar leis an gcás go dtí go n-athraíonn tú iad.',
- 'Switch sides to play as the other character. You can change that character too.':'Athraigh taobh chun imirt mar an carachtar eile. Is féidir an carachtar sin a athrú freisin.',
+ 'Switch perspectives to explore the other character’s role. You can change that character too.':'Athraigh taobh chun imirt mar an carachtar eile. Is féidir an carachtar sin a athrú freisin.',
  'Available characters':'Carachtair atá ar fáil','Characters in this situation':'Carachtair sa chás seo','You':'Tusa','Other side':'An taobh eile','Choose':'Roghnaigh','Done':'Críochnaithe',
  'Character selected.':'Carachtar roghnaithe.','Character changed. Your progress is unchanged.':'Carachtar athraithe. Tá do dhul chun cinn mar a bhí.',
- 'Selected':'Roghnaithe','Play':'Imir','Explore':'Fiosraigh','Play both sides':'An dá thaobh','Progress':'Dul chun cinn','Rights & sources':'Cearta agus foinsí','Evidence & sources':'Fianaise agus foinsí','About':'Eolas','Accessibility':'Inrochtaineacht',
- 'Skip to the game':'Léim chuig an ábhar','Main navigation':'Príomhloingseoireacht','Language & reading':'Teanga agus léamh','Close settings':'Dún na socruithe','Language':'Teanga','Text size':'Méid an téacs','Standard (100%)':'Caighdeánach (100%)','Larger (115%)':'Níos mó (115%)','Large (130%)':'Mór (130%)','Extra large (150%)':'An-mhór (150%)','Contrast':'Codarsnacht','Standard':'Caighdeánach','High':'Ard','More reading space':'Níos mó spáis don léamh','Reduce motion':'Laghdaigh gluaiseacht','Apply preferences':'Cuir socruithe i bhfeidhm','Cancel':'Cealaigh','Reset reading preferences':'Athshocraigh socruithe léitheoireachta',
+ 'Selected':'Roghnaithe','Play':'Imir','Explore':'Fiosraigh','Explore both perspectives':'An dá thaobh','Progress':'Dul chun cinn','Rights & sources':'Cearta agus foinsí','Evidence & sources':'Fianaise agus foinsí','About':'Eolas','Accessibility':'Inrochtaineacht',
+ 'Skip to the learning content':'Léim chuig an ábhar','Main navigation':'Príomhloingseoireacht','Language & reading':'Teanga agus léamh','Close settings':'Dún na socruithe','Language':'Teanga','Text size':'Méid an téacs','Standard (100%)':'Caighdeánach (100%)','Larger (115%)':'Níos mó (115%)','Large (130%)':'Mór (130%)','Extra large (150%)':'An-mhór (150%)','Contrast':'Codarsnacht','Standard':'Caighdeánach','High':'Ard','More reading space':'Níos mó spáis don léamh','Reduce motion':'Laghdaigh gluaiseacht','Apply preferences':'Cuir socruithe i bhfeidhm','Cancel':'Cealaigh','Reset reading preferences':'Athshocraigh socruithe léitheoireachta',
  'Your language and reading preferences are saved in this browser. Applying them keeps your answers, role and scores.':'Sábháiltear do theanga agus socruithe léitheoireachta sa bhrabhsálaí seo. Coinnítear do fhreagraí, do ról agus do scóir nuair a chuirtear i bhfeidhm iad.',
  'Irish covers all 14 shared situations, choices, explanations and progress. Source publications and the separate reference sections remain in English.':'Tá na 14 chás roinnte, roghanna, míniúcháin agus dul chun cinn ar fáil i nGaeilge. Fanann foilseacháin fhoinseacha agus na rannóga tagartha ar leith i mBéarla.',
  'Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.':'Aistriúchán oibre: tá athbhreithniú neamhspleách Gaeilge agus dlí fós ag teastáil. Is féidir filleadh ar Bhéarla am ar bith.',
  'Reading preferences applied. Your progress is unchanged.':'Socruithe léitheoireachta curtha i bhfeidhm. Tá do dhul chun cinn mar a bhí.','Reading preferences reset.':'Socruithe léitheoireachta athshocraithe.','Preferences apply for this visit; browser saving is unavailable.':'Baineann na socruithe leis an gcuairt seo; níl sábháil sa bhrabhsálaí ar fáil.',
- 'An interactive learning game for the public and Gardaí.':'Cluiche foghlama idirghníomhach don phobal agus do na Gardaí.',
+ 'An interactive learning resource for the public and Gardaí.':'Cluiche foghlama idirghníomhach don phobal agus do na Gardaí.',
  'Public perspective':'Dearcadh an phobail','Garda perspective':'Dearcadh an Gharda',
  'REPUBLIC OF IRELAND · PUBLIC PERSPECTIVE':'POBLACHT NA hÉIREANN · DEARCADH AN PHOBAIL','REPUBLIC OF IRELAND · GARDA PERSPECTIVE':'POBLACHT NA hÉIREANN · DEARCADH AN GHARDA',
  'REPUBLIC OF IRELAND · LEARN THROUGH CHOICES':'POBLACHT NA hÉIREANN · FOGHLAIM TRÍ ROGHANNA',
  'Practise what you can ask and what you may need to do when Gardaí stop, question, search or arrest you. Explore the same encounter from either side.':'Cleachtaigh cad is féidir leat a iarraidh agus cad a d’fhéadfadh a bheith de dhualgas ort nuair a stopann, ceistíonn, cuardaíonn nó gabhann Gardaí thú. Scrúdaigh an teagmháil chéanna ón dá thaobh.',
  'Practise checking assumptions, evidence and legal grounds when deciding to stop or search someone. See how the same encounter is experienced from either side.':'Cleachtaigh toimhdí, fianaise agus forais dhlíthiúla a sheiceáil nuair a chinneann tú duine a stopadh nó a chuardach. Féach ar an teagmháil chéanna ón dá thaobh.',
  '14 shared situations':'14 chás roinnte','No timer':'Gan teorainn ama','No sign-up':'Gan chlárú',
- 'Take your time. You can revisit any choice. Your score reflects learning in the game; your rights never depend on it.':'Tóg do chuid ama. Is féidir filleadh ar aon rogha. Léiríonn do scór foghlaim sa chluiche; ní bhraitheann do chearta air riamh.',
+ 'Take your time. You can revisit any choice. Your score reflects learning in the resource; your rights never depend on it.':'Tóg do chuid ama. Is féidir filleadh ar aon rogha. Léiríonn do scór foghlaim sa chluiche; ní bhraitheann do chearta air riamh.',
  'Individual practice · original English scenarios':'Cleachtadh aonair · cásanna bunaidh i mBéarla',
  'These original English scenarios focus on one role. The shared situations above include both perspectives and are available in English and Irish.':'Díríonn na cásanna bunaidh Béarla seo ar ról amháin. Tá an dá thaobh sna cásanna roinnte thuas, i mBéarla agus i nGaeilge.',
- 'PLAY BOTH SIDES':'IMIR AN DÁ THAOBH','One encounter. Two perspectives.':'Teagmháil amháin. Dhá dhearcadh.','Start as either character, switch sides at any stage and build your learning score.':'Tosaigh mar cheachtar carachtar, athraigh taobh ag aon chéim agus forbair do scór foghlama.',
- 'Start as a member of the public':'Tosaigh mar dhuine den phobal','Start as a Garda':'Tosaigh mar Gharda','My scores & progress':'Mo scóir agus mo dhul chun cinn','Continue your situation':'Lean le do chás','Last recap':'An t-athbhreithniú deireanach','Open recap':'Oscail an t-athbhreithniú','Resume play':'Lean den imirt',
+ 'EXPLORE BOTH PERSPECTIVES':'IMIR AN DÁ THAOBH','One encounter. Two perspectives.':'Teagmháil amháin. Dhá dhearcadh.','Start as either character, switch sides at any stage and build your learning score.':'Tosaigh mar cheachtar carachtar, athraigh taobh ag aon chéim agus forbair do scór foghlama.',
+ 'Start as a member of the public':'Tosaigh mar dhuine den phobal','Start as a Garda':'Tosaigh mar Gharda','My scores & progress':'Mo scóir agus mo dhul chun cinn','Continue your situation':'Lean le do chás','Last recap':'An t-athbhreithniú deireanach','Open recap':'Oscail an t-athbhreithniú','Resume your situation':'Lean den imirt',
  'ONE SITUATION · TWO PERSPECTIVES':'CÁS AMHÁIN · DHÁ DHEARCADH','Which role will you start with?':'Cén ról a roghnóidh tú ar dtús?','Choose a role, then a situation. Switch sides at any stage to explore the same moment with different choices and responsibilities.':'Roghnaigh ról, ansin cás. Athraigh taobh ag aon chéim chun an nóiméad céanna a scrúdú le roghanna agus freagrachtaí éagsúla.','Starting role':'Ról tosaigh','Member of the public':'Duine den phobal','Member of An Garda Síochána':'Comhalta den Gharda Síochána','Garda':'Garda',
- 'View your saved scores & progress':'Féach ar do scóir agus dul chun cinn sábháilte','RIGHTS & RESPONSIBILITIES':'CEARTA AGUS FREAGRACHTAÍ','BIAS & DECISION-MAKING':'CLAONADH AGUS CINNTEOIREACHT','Rights & responsibilities':'Cearta agus freagrachtaí','Bias & decision-making':'Claonadh agus cinnteoireacht','Play as the member of the public':'Imir mar dhuine den phobal','Play as the Garda':'Imir mar Gharda',
+ 'View your saved scores & progress':'Féach ar do scóir agus dul chun cinn sábháilte','RIGHTS & RESPONSIBILITIES':'CEARTA AGUS FREAGRACHTAÍ','BIAS & DECISION-MAKING':'CLAONADH AGUS CINNTEOIREACHT','Rights & responsibilities':'Cearta agus freagrachtaí','Bias & decision-making':'Claonadh agus cinnteoireacht','Explore the public perspective':'Imir mar dhuine den phobal','Explore the Garda perspective':'Imir mar Gharda',
  'Garda involved in the encounter':'Garda sa teagmháil','Garda in the custody team':'Garda san fhoireann choimeádta','Patrol Garda':'Garda patróil','Responding Garda':'Garda atá ag freagairt','Community Garda':'Garda pobail','Youth-facing Garda':'Garda ag obair le daoine óga','Garda working with a colleague':'Garda ag obair le comhghleacaí','Representative of a local community group (member of the public)':'Ionadaí ó ghrúpa pobail áitiúil (duine den phobal)','Supervising sergeant':'Sáirsint maoirseachta','Person matching the fuller description':'Duine a mheaitseálann an cur síos iomlán',
- 'Current perspective':'Dearcadh reatha','PLAYING AS A GARDA':'AG IMIRT MAR GHARDA','PLAYING AS A MEMBER OF THE PUBLIC':'AG IMIRT MAR DHUINE DEN PHOBAL','Garda perspective':'Dearcadh an Gharda','Public perspective':'Dearcadh an phobail','MEMBER OF THE PUBLIC PERSPECTIVE':'DEARCADH AN DUINE DEN PHOBAL','GARDA PERSPECTIVE':'DEARCADH AN GHARDA',
+ 'Current perspective':'Dearcadh reatha','EXPLORING THE GARDA PERSPECTIVE':'AG IMIRT MAR GHARDA','EXPLORING THE PUBLIC PERSPECTIVE':'AG IMIRT MAR DHUINE DEN PHOBAL','Garda perspective':'Dearcadh an Gharda','Public perspective':'Dearcadh an phobail','MEMBER OF THE PUBLIC PERSPECTIVE':'DEARCADH AN DUINE DEN PHOBAL','GARDA PERSPECTIVE':'DEARCADH AN GHARDA',
  'Switch to the public perspective':'Athraigh go dearcadh an phobail','Switch to the Garda perspective':'Athraigh go dearcadh an Gharda','Switch to the Garda site':'Athraigh go suíomh an Gharda','Switch to the public rights site':'Athraigh go suíomh chearta an phobail',
  'Scores on this route':'Scóir ar an mbealach seo','points':'pointe','No answers yet':'Gan fhreagra fós','← All shared situations':'← Gach cás roinnte','My progress':'Mo dhul chun cinn',
  'These facts stay the same when you switch roles. Private thoughts and separate debriefs are identified in the scene.':'Fanann na fíricí seo mar an gcéanna nuair a athraíonn tú ról. Aithnítear smaointe príobháideacha agus comhráite athbhreithnithe ar leith sa scéal.',
@@ -86,15 +86,15 @@ const ui={
  '1 point for a choice that supports an appropriate resolution on these facts; 0 when the reasoning needs review. This measures learning, not personal bias or responsibility for someone else’s conduct.':'1 phointe do rogha a thacaíonn le réiteach cuí ar na fíricí seo; 0 nuair is gá an réasúnaíocht a athmheas. Tomhaiseann sé foghlaim, ní claonadh pearsanta ná freagracht as iompar duine eile.',
  'Progress is saved in this browser. Use the site-switch button to carry it to the companion site.':'Sábháiltear dul chun cinn sa bhrabhsálaí seo. Úsáid an cnaipe athraithe suímh chun é a thabhairt chuig an suíomh eile.',
  'Browser saving is unavailable. Your progress is kept for this visit; the site-switch button can still carry it across.':'Níl sábháil sa bhrabhsálaí ar fáil. Coinnítear dul chun cinn don chuairt seo; is féidir leis an gcnaipe athraithe suímh é a iompar fós.',
- 'Saved progress':'Dul chun cinn sábháilte','YOUR SCORES & REFLECTION RECAP':'DO SCÓIR AGUS ATHBHREITHNIÚ','One situation.':'Cás amháin.','What did each side reveal?':'Cad a léirigh gach taobh?','Route completed in this role.':'Bealach críochnaithe sa ról seo.','Best completed route:':'An bealach críochnaithe is fearr:','No completed route yet':'Gan bhealach críochnaithe fós','Replay as the Garda':'Imir arís mar Gharda','Replay as the member of the public':'Imir arís mar dhuine den phobal','You did not answer this stage in this role.':'Níor fhreagair tú an chéim seo sa ról seo.','Replay from this stage as the Garda':'Imir arís ón gcéim seo mar Gharda','Replay from this stage as the member of the public':'Imir arís ón gcéim seo mar dhuine den phobal','Switch recap perspective':'Athraigh dearcadh an athbhreithnithe','View all progress':'Féach ar an dul chun cinn ar fad',
+ 'Saved progress':'Dul chun cinn sábháilte','YOUR SCORES & REFLECTION RECAP':'DO SCÓIR AGUS ATHBHREITHNIÚ','One situation.':'Cás amháin.','What did each side reveal?':'Cad a léirigh gach taobh?','Route completed in this role.':'Bealach críochnaithe sa ról seo.','Best completed route:':'An bealach críochnaithe is fearr:','No completed route yet':'Gan bhealach críochnaithe fós','Explore the Garda perspective':'Imir arís mar Gharda','Explore the public perspective':'Imir arís mar dhuine den phobal','You did not answer this stage in this role.':'Níor fhreagair tú an chéim seo sa ról seo.','Revisit this decision from the Garda perspective':'Imir arís ón gcéim seo mar Gharda','Revisit this decision from the public perspective':'Imir arís ón gcéim seo mar dhuine den phobal','Switch recap perspective':'Athraigh dearcadh an athbhreithnithe','View all progress':'Féach ar an dul chun cinn ar fad',
  'YOUR LEARNING RECORD':'DO THAIFEAD FOGHLAMA','Scores & progress':'Scóir agus dul chun cinn','Build progress separately as a member of the public and as a Garda. Revisit a choice to improve your understanding; the same stage can earn only one saved point per role.':'Forbair dul chun cinn ar leith mar dhuine den phobal agus mar Gharda. Fill ar rogha chun do thuiscint a fheabhsú; ní féidir ach pointe sábháilte amháin a fháil ag an gcéim chéanna i ngach ról.',
- 'Play as a Garda':'Imir mar Gharda','Play as a member of the public':'Imir mar dhuine den phobal','How your score works':'Conas a oibríonn do scór',
+ 'Explore the Garda perspective':'Imir mar Gharda','Explore the public perspective':'Imir mar dhuine den phobal','How your score works':'Conas a oibríonn do scór',
  'Each stage awards 1 point for a response that supports an appropriate resolution according to its explanation and sources, or 0 for a response that needs review. More than one choice can earn a point. There are no deductions for taking time or switching roles.':'Tugann gach céim 1 phointe d’fhreagra a thacaíonn le réiteach cuí de réir an mhínithe agus na bhfoinsí, nó 0 d’fhreagra le hathmheas. Is féidir le níos mó ná rogha amháin pointe a fháil. Ní bhaintear pointí as am a ghlacadh ná ról a athrú.',
  'The current route shows points out of the decisions you answered. A completed role score requires an answer in that role at every stage on the route. Best completed results use percentages because different routes can have different lengths.':'Taispeánann an bealach reatha pointí as na cinntí a d’fhreagair tú. Teastaíonn freagra sa ról ag gach céim chun scór róil críochnaithe a fháil. Úsáidtear céatadáin do na torthaí is fearr mar go mbíonn faid éagsúla ag bealaí.',
  'Your saved learning points count your best result at each unique stage, so repeating a stage cannot inflate the total. Improving an answer from 0 to 1 updates your progress.':'Áirítear an toradh is fearr ag gach céim ar leith sna pointí sábháilte; ní ardaíonn athdhéanamh céime an t-iomlán. Nuashonraíonn feabhsú freagra ó 0 go 1 do dhul chun cinn.',
  'A score is not a measure of a person’s bias, a professional qualification or a prediction of a real encounter. Rights remain the same regardless of a score.':'Ní tomhas ar chlaonadh duine, cáilíocht ghairmiúil ná tuar fíortheagmhála é scór. Fanann cearta mar an gcéanna beag beann ar scór.',
- 'Play this role':'Imir an ról seo','Manage your progress':'Bainistigh do dhul chun cinn',
- 'Only fictional game choices and scores are saved locally. There is no account or upload. When you use the site-switch button, the game carries this progress in the link’s fragment and merges it with progress already saved on the other site. Copying that link can share the included learning record. Separate browsers and devices do not automatically sync.':'Ní shábháiltear go háitiúil ach roghanna agus scóir fhicseanúla. Níl cuntas ná uaslódáil ann. Iompraíonn an cnaipe athraithe suímh an dul chun cinn i mblúire an naisc agus cumascann é le dul chun cinn ar an suíomh eile. Is féidir le cóipeáil an naisc an taifead foghlama sin a roinnt. Ní shioncronaíonn brabhsálaithe ná gléasanna ar leith go huathoibríoch.',
+ 'Explore this perspective':'Imir an ról seo','Manage your progress':'Bainistigh do dhul chun cinn',
+ 'Only fictional learning choices and scores are saved locally. There is no account or upload. When you use the site-switch button, the resource carries this progress in the link’s fragment and merges it with progress already saved on the other site. Copying that link can share the included learning record. Separate browsers and devices do not automatically sync.':'Ní shábháiltear go háitiúil ach roghanna agus scóir fhicseanúla. Níl cuntas ná uaslódáil ann. Iompraíonn an cnaipe athraithe suímh an dul chun cinn i mblúire an naisc agus cumascann é le dul chun cinn ar an suíomh eile. Is féidir le cóipeáil an naisc an taifead foghlama sin a roinnt. Ní shioncronaíonn brabhsálaithe ná gléasanna ar leith go huathoibríoch.',
  'Clear the scores and resume point saved on this site in this browser? The companion site and previously copied links may still hold their own copy.':'An nglanfar na scóir agus an pointe atosaithe ar an suíomh seo sa bhrabhsálaí seo? D’fhéadfadh cóip a bheith ar an suíomh eile agus i naisc a cóipeáladh roimhe.',
  'Clear this site’s saved progress':'Glan dul chun cinn sábháilte an tsuímh seo','Keep progress':'Coinnigh dul chun cinn','Your saved progress on this site has been cleared.':'Glanadh do dhul chun cinn sábháilte ar an suíomh seo.',
  'Unable to open this situation':'Ní féidir an cás seo a oscailt','This page was not found.':'Níor aimsíodh an leathanach seo.','The progress in this link could not be read.':'Níorbh fhéidir an dul chun cinn sa nasc seo a léamh.','This situation link is incomplete or from an unsupported version. Your saved scores are still available.':'Tá an nasc neamhiomlán nó ó leagan nach dtacaítear leis. Tá do scóir sábháilte ar fáil fós.','Choose a situation':'Roghnaigh cás',
@@ -137,7 +137,7 @@ function translateIrishText(text,lang='en'){
  if((m=s.match(/^(.*) saved learning points$/)))return translateText(m[1],lang)+' — pointí foghlama sábháilte';
  if((m=s.match(/^(\d+) \/ 1 point$/)))return m[1]+' / 1 phointe';
  if(s.includes(' — '))return s.split(' — ').map(x=>translateText(x,lang)).join(' — ');
- if((m=s.match(/^(Play as the member of the public|Play as the Garda|Play this role|Play this situation): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
+ if((m=s.match(/^(Explore the public perspective|Explore the Garda perspective|Explore this perspective|Explore this situation): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
  if(s.includes(' · '))return s.split(' · ').map(x=>translateText(x,lang)).join(' · ');
  return text;
 }
@@ -158,16 +158,16 @@ function translateIrishHTML(html,lang='en'){
 export {gaContent};
 
 
-// Each pack is hosted with the game and loaded only when selected. Translation
+// Each pack is hosted with the resource and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=community-group-1'+retry),
- ar:retry=>import('./ar-content.mjs?v=community-group-1'+retry),
- pl:retry=>import('./pl-content.mjs?v=community-group-1'+retry),
- ro:retry=>import('./ro-content.mjs?v=community-group-1'+retry),
- fr:retry=>import('./fr-content.mjs?v=community-group-1'+retry),
- es:retry=>import('./es-content.mjs?v=community-group-1'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=community-group-1'+retry)
+ pt:retry=>import('./pt-content.mjs?v=learning-language-20261120'+retry),
+ ar:retry=>import('./ar-content.mjs?v=learning-language-20261120'+retry),
+ pl:retry=>import('./pl-content.mjs?v=learning-language-20261120'+retry),
+ ro:retry=>import('./ro-content.mjs?v=learning-language-20261120'+retry),
+ fr:retry=>import('./fr-content.mjs?v=learning-language-20261120'+retry),
+ es:retry=>import('./es-content.mjs?v=learning-language-20261120'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=learning-language-20261120'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
@@ -194,7 +194,7 @@ const revisedSiteCopy={
   "es": "Explorar situaciones",
   "zh-Hans": "浏览情境"
  },
- "Ways to play": {
+ "Ways to explore": {
   "ga": "Bealaí le himirt",
   "pt": "Formas de jogar",
   "ar": "طرق اللعب",
@@ -234,7 +234,7 @@ const revisedSiteCopy={
   "es": "Toma decisiones en un solo papel y repasa lo que has aprendido.",
   "zh-Hans": "以一个角色作出选择，并回顾所学内容。"
  },
- "Playing as a Garda": {
+ "Exploring the Garda perspective": {
   "ga": "Ag imirt mar Gharda",
   "pt": "A jogar como agente da Garda",
   "ar": "تلعب دور ضابط من شرطة غاردا",
@@ -244,7 +244,7 @@ const revisedSiteCopy={
   "es": "Juegas como agente de la Garda",
   "zh-Hans": "你正在扮演爱尔兰警员"
  },
- "Playing as a member of the public": {
+ "Exploring the public perspective": {
   "ga": "Ag imirt mar dhuine den phobal",
   "pt": "A jogar como membro do público",
   "ar": "تلعب دور أحد أفراد الجمهور",
@@ -500,7 +500,7 @@ export function translateText(text,lang='en'){
  if((m=s.match(/^(.*?)(\s+[⇄→↗])$/)))return translateText(m[1],lang)+m[2];
  if((m=s.match(/^(\d+)\. (.+)$/)))return m[1]+'. '+translateText(m[2],lang);
  if((m=s.match(/^(.*):$/)))return translateText(m[1],lang)+':';
- if((m=s.match(/^(Play as the member of the public|Play as the Garda|Play this role|Play this situation|Latest completed|Best completed|Explore this situation): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
+ if((m=s.match(/^(Explore the public perspective|Explore the Garda perspective|Explore this perspective|Explore this situation|Latest completed|Best completed): (.+)$/)))return translateText(m[1],lang)+': '+translateText(m[2],lang);
  if(s.includes(' — '))return s.split(' — ').map(x=>translateText(x,lang)).join(' — ');
  if(s.includes(' · '))return s.split(' · ').map(x=>translateText(x,lang)).join(' · ');
  return text;
@@ -535,11 +535,11 @@ export function translateHTML(html,lang='en'){
 
 // Existing Irish support gains the shared controls without changing its routes.
 for(const [source,irish] of Object.entries({
- 'Choose a language, then select Apply preferences. Your game will stay at the same point.':'Roghnaigh teanga, ansin roghnaigh Cuir socruithe i bhfeidhm. Fanfaidh do chluiche ag an bpointe céanna.',
- 'Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the whole site, including both game modes and reference pages. Irish covers the shared game.':'Tá an suíomh iomlán ar fáil i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe, an dá mhodh imeartha agus na leathanaigh thagartha san áireamh. Tá an cluiche roinnte ar fáil i nGaeilge.',
+ 'Choose a language, then select Apply preferences. Your situation will stay at the same point.':'Roghnaigh teanga, ansin roghnaigh Cuir socruithe i bhfeidhm. Fanfaidh do chluiche ag an bpointe céanna.',
+ 'Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the whole site, including both learning modes and reference pages. Irish covers the shared learning activity.':'Tá an suíomh iomlán ar fáil i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe, an dá mhodh imeartha agus na leathanaigh thagartha san áireamh. Tá an cluiche roinnte ar fáil i nGaeilge.',
  'Loading the selected language…':'An teanga roghnaithe á lódáil…',
  'The language could not be loaded. Your current language and progress are unchanged. Check your connection and try again.':'Níorbh fhéidir an teanga a lódáil. Níor athraíodh do theanga reatha ná do dhul chun cinn. Seiceáil do nasc agus bain triail eile as.',
  'Language changed. Your progress is unchanged.':'Teanga athraithe. Tá do dhul chun cinn mar a bhí.',
  'Individual practice · single-role scenarios':'Cleachtadh aonair · cásanna le ról amháin',
- 'Use individual practice for a focused, single-role discussion. Choose the shared game above to compare both perspectives.':'Úsáid cleachtadh aonair le haghaidh plé dírithe ar ról amháin. Roghnaigh an cluiche roinnte thuas chun an dá dhearcadh a chur i gcomparáid.'
+ 'Use individual practice for a focused, single-role discussion. Choose the shared learning activity above to compare both perspectives.':'Úsáid cleachtadh aonair le haghaidh plé dírithe ar ról amháin. Roghnaigh an cluiche roinnte thuas chun an dá dhearcadh a chur i gcomparáid.'
 }))dictionary.set(source,irish);

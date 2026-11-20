@@ -1,7 +1,7 @@
 // Full-sentence templates keep dynamic counts and names in the translator's order.
 // Values are plain text; HTML escaping is performed only at the rendering boundary.
 export const messagePatterns=[
- [/^A selected review of (\d+) academic publications, alongside Irish law, professional guidance and community research\. Each source explains how it informed the game\.$/, 'A selected review of {count} academic publications, alongside Irish law, professional guidance and community research. Each source explains how it informed the game.', ['count']],
+ [/^A selected review of (\d+) academic publications, alongside Irish law, professional guidance and community research\. Each source explains how it informed the resource\.$/, 'A selected review of {count} academic publications, alongside Irish law, professional guidance and community research. Each source explains how it informed the resource.', ['count']],
  [/^(\d+) years old$/, '{count} years old', ['count']],
  [/^Stage (\d+)$/, 'Stage {count}', ['count']],
  [/^Decision (\d+)$/, 'Decision {count}', ['count']],

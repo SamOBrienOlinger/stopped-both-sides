@@ -1,7 +1,7 @@
-import publicData from './original-public.mjs?v=scenario-descriptions-20261115';
-import gardaData from './original-garda.mjs?v=community-group-1';
-import {counterparts} from './counterparts.mjs?v=community-group-1';
-import {discriminationEncounters,discriminationReferences} from './discrimination.mjs?v=discrimination-1';
+import publicData from './original-public.mjs?v=learning-language-20261120';
+import gardaData from './original-garda.mjs?v=learning-language-20261120';
+import {counterparts} from './counterparts.mjs?v=learning-language-20261120';
+import {discriminationEncounters,discriminationReferences} from './discrimination.mjs?v=learning-language-20261120';
 export const roles=['public','garda'];
 export const roleLabels={public:'Member of the public',garda:'Garda'};
 export {sites} from '../site.mjs';

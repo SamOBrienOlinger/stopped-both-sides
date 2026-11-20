@@ -14,8 +14,8 @@ globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='.skip')return skip;if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,callback){callbacks[type]=callback;}};
 await import('../garda/app.mjs');
-function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
-function action(name,extra={}){callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(name==='start')callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The game could not load/);}
+function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
+function action(name,extra={}){callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(name==='start')callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 
 test('All main routes and every source/group deep link render their intended content',()=>{
  route('#practice/garda/all');assert.equal((main.innerHTML.match(/data-action="start"/g)||[]).length,scenarios.length);

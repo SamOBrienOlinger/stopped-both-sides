@@ -5,7 +5,7 @@ import {test,expect} from '@playwright/test';
 for(const path of ['./','./garda/']){
  test(`${path} loads the refreshed visual layer without changing the role choices`,async({page})=>{
   await page.goto(path+'?lang=en#play');
-  await expect(page.locator('.reference-landing .perspective-card-link')).toHaveText(['Play as a member of the public','Play as a Garda']);
+  await expect(page.locator('.reference-landing .perspective-card-link')).toHaveText(['Explore the public perspective','Explore the Garda perspective']);
   const art=page.locator('.reference-landing .encounter-hero-art');
   await expect(art).toHaveCount(1);
   await expect.poll(()=>art.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);

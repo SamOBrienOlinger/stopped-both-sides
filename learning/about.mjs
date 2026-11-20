@@ -22,7 +22,7 @@ const examples = [
   title:'Learn through explanations',
   scene:'“When the facts change” introduces a correction before a proposed search begins.',
   activity:'Explain the basis of the initial decision, identify what the new information changes and write a revised decision.',
-  evidence:'In two experiments using written material, explanatory feedback helped learners answer new inference questions. This supports explaining why an answer is appropriate, while leaving this game’s effects to be tested.',
+  evidence:'In two experiments using written material, explanatory feedback helped learners answer new inference questions. This supports explaining why an answer is appropriate, while leaving this resource’s effects to be tested.',
   sources:study(2,'Butler, Godbole & Marsh (2013)','10.1037/a0031026')
  },
  {
@@ -41,23 +41,23 @@ const examples = [
  },
  {
   title:'Recall and apply a principle',
-  scene:'Replay a situation or explore a related one, such as moving from “A hunch on the street” to “Matches the description”.',
+  scene:'Revisit a situation or explore a related one, such as moving from “A hunch on the street” to “Matches the description”.',
   activity:'Before reopening the feedback, explain what information would justify a decision. Apply the principle to an unfamiliar case; return later to see what you remember.',
-  evidence:'Four experiments found better retention and transfer after retrieval practice than repeated study of written material. Repeatedly clicking a familiar answer does not independently show understanding. A return session after a week or two is a proposed pilot choice, not a tested optimum for this game.',
+  evidence:'Four experiments found better retention and transfer after retrieval practice than repeated study of written material. Repeatedly clicking a familiar answer does not independently show understanding. A return session after a week or two is a proposed pilot choice, not a tested optimum for this resource.',
   sources:study(6,'Butler (2010)','10.1037/a0019902')
  },
  {
   title:'Communicate clearly and respectfully',
   scene:'“When behaviour is misread” examines interpretations of slow responses, looking down and requests for repetition.',
   activity:'Draft an explanation that states the purpose of an exchange, gives the person an opportunity to speak and checks understanding. Identify when more information or support is needed.',
-  evidence:'A randomised US study of an intensive five-day procedural-justice programme, including scenarios and roleplay, found improved observed conduct but no significant improvement in residents’ overall assessments of police legitimacy. The whole programme was evaluated; its results cannot be attributed to roleplay alone or to a brief game.',
+  evidence:'A randomised US study of an intensive five-day procedural-justice programme, including scenarios and roleplay, found improved observed conduct but no significant improvement in residents’ overall assessments of police legitimacy. The whole programme was evaluated; its results cannot be attributed to roleplay alone or to a brief learning activity.',
   sources:study(7,'Weisburd et al. (2022)','10.1073/pnas.2118780119')
  }
 ];
 
 const stages = [
  ['5 minutes','Orient','Introduce one learning question and collect an initial response to a short vignette.'],
- ['8 minutes','Explore','Play a selected situation and note the reasons for key choices.'],
+ ['8 minutes','Explore','Explore a selected situation and note the reasons for key choices.'],
  ['8 minutes','Compare','Examine the other role’s information, concerns, powers and responsibilities.'],
  ['7 minutes','Examine','Read the explanations and inspect one or two supporting sources.'],
  ['10 minutes','Reflect','Use the recap to discuss assumptions, revised decisions and communication.'],
@@ -72,7 +72,7 @@ const outcomes = [
  ['Revise a judgement','Identify new information that matters and explain its effect on a proposed action.','Reconsider a staged case after an additional fact is introduced.'],
  ['Recognise unsupported generalisations','Identify when identity, reputation, appearance or colleague confidence replaces relevant individual information.','Explain an assumption and formulate a question to check it.'],
  ['Communicate clearly and respectfully','Explain the situation, acknowledge uncertainty and check understanding.','Offer a short dialogue, written response or facilitated roleplay.'],
- ['Evaluate learning and fairness claims','Explain why a game score or limited statistics cannot establish broader effects.','Interpret fictional results and identify what evidence is still needed.']
+ ['Evaluate learning and fairness claims','Explain why a learning score or limited statistics cannot establish broader effects.','Interpret fictional results and identify what evidence is still needed.']
 ];
 
 const references = [
@@ -94,11 +94,11 @@ export function learningAbout() {
  return `<section class="learning-section" aria-labelledby="learning-heading">
   <div class="learning-intro"><p class="eyebrow">EDUCATIONAL APPROACH</p><h2 id="learning-heading">Learning through choices</h2><p class="learning-lead">Practise decisions. Understand the reasons.</p><p>Explore rights, responsibilities and Garda decision-making through fictional encounters. Make a choice, read the explanation, compare perspectives and reconsider your response.</p><p class="learning-status"><strong>Research-informed educational prototype</strong><span>These are intended learning outcomes. The learning effects of this particular resource remain to be evaluated.</span></p></div>
   <div class="learning-goals">${goals.map(([number,title,description])=>`<div class="learning-goal"><span class="learning-goal-number" aria-hidden="true">${number}</span><h3>${title}</h3><p>${description}</p></div>`).join('')}</div>
-  <div class="learning-cycle"><h3>In the game</h3><p>Read a situation, choose a response, explore the explanation and continue. You can switch perspectives, try another answer and revisit the decisions in your recap.</p></div>
-  <div class="learning-context"><div><h3>Different perspectives, different responsibilities</h3><p>Considering both sides does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person’s misconduct. Rights never depend on a game score.</p></div><div><h3>Using the game for learning</h3><p>The game provides choices, explanations, sources and replay. The workshops, learner-written reflections and assessments below are suggested ways to use it.</p></div></div>
+  <div class="learning-cycle"><h3>In the resource</h3><p>Read a situation, choose a response, explore the explanation and continue. You can switch perspectives, try another answer and revisit the decisions in your recap.</p></div>
+  <div class="learning-context"><div><h3>Different perspectives, different responsibilities</h3><p>Considering both sides does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person’s misconduct. Rights never depend on a learning score.</p></div><div><h3>Using the resource for learning</h3><p>The resource provides choices, explanations, sources and opportunities to revisit decisions. The workshops, learner-written reflections and assessments below are suggested ways to use it.</p></div></div>
   <div class="learning-panels">
-   ${panel('01','Research and teaching examples','Six ways to connect play with learning',`
-    <p>These situations and features already exist in the game. The accompanying exercises are optional activities for independent reflection or facilitated learning.</p>
+   ${panel('01','Research and teaching examples','Six ways to support learning through situations',`
+    <p>These situations and features already exist in the resource. The accompanying exercises are optional activities for independent reflection or facilitated learning.</p>
     <div class="learning-examples">${examples.map(example=>`<article class="learning-example"><h3>${example.title}</h3><p class="learning-scene">${example.scene}</p><h4>Try this</h4><p>${example.activity}</p><div class="learning-evidence"><h4>Research connection</h4><p>${example.evidence}</p><p class="learning-citations">${example.sources}</p></div></article>`).join('')}</div>
     <h3>Related educational projects</h3>
     <p>PLUS, a Bournemouth University and Dorset Police project, uses simulated stop-and-search situations and roleplay. Its official description is a useful design comparator; it does not by itself establish measured effectiveness.</p><p>${external('https://www.bournemouth.ac.uk/research/projects/plus-project-serious-games-police-training','Explore the PLUS project')}</p>
@@ -114,7 +114,7 @@ export function learningAbout() {
      <li>Use fictional or appropriately anonymised examples and make room for disagreement supported by law and evidence. This activity should not be used as a staff appraisal.</li>
     </ul>
     <h3>Ground the learning in Irish sources</h3><p>The published Garda Decision Making Model connects gathering information, considering options, justifying choices and reviewing action with human rights and ethics. This educational interpretation does not imply official approval.</p><p>${external('https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf','Read the Garda Decision Making Model (PDF)')}</p>
-    <p>The INAR/ICCL community and rights report combines desk research with participatory workshops and other engagement. It offers a reference point for proposed community input and independent legal review; it does not establish that this game has been co-designed or endorsed.</p><p>${external('https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf','Read the community and rights report (PDF)')}</p>
+    <p>The INAR/ICCL community and rights report combines desk research with participatory workshops and other engagement. It offers a reference point for proposed community input and independent legal review; it does not establish that this resource has been co-designed or endorsed.</p><p>${external('https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf','Read the community and rights report (PDF)')}</p>
    `)}
    ${panel('03','Intended learning outcomes','Eight objectives and ways to demonstrate them',`
     <p>These are assessment targets for selected situations and associated reflection activities. The website records choices and scores; written explanations, observed communication and independent assessments require an accompanying activity.</p>
@@ -124,7 +124,7 @@ export function learningAbout() {
    ${panel('04','Evaluating the learning','Understanding, transfer and retention',`
     <p>A proposed evaluation would examine whether learners can explain and apply relevant principles in unfamiliar fictional encounters, and whether those improvements last.</p>
     <h3>Assess reasoning over time</h3><p>Use a short baseline task, a different but comparable case immediately afterwards and a delayed follow-up. Ask learners to explain their answers. A rubric could assess relevant facts, assumptions, rights, uncertainty, justification and appropriate revision. Assessors could score responses without knowing whether they came before or after the activity.</p>
-    <h3>Make a meaningful comparison</h3><p>Where feasible, compare the game with reading material containing the same information and similar learning time. Random allocation could strengthen the comparison. A later study could examine role-switching separately. Report public and Garda learners’ results separately where the sample permits.</p>
+    <h3>Make a meaningful comparison</h3><p>Where feasible, compare the resource with reading material containing the same information and similar learning time. Random allocation could strengthen the comparison. A later study could examine role-switching separately. Report public and Garda learners’ results separately where the sample permits.</p>
     <h3>Keep different outcomes distinct</h3><dl class="learning-levels">
      <div><dt>Participation and usability</dt><dd>Completion, clear instructions, navigation and access barriers.</dd></div>
      <div><dt>Learning</dt><dd>Better explanations and decisions on independently assessed cases.</dd></div>
