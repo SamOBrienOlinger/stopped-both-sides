@@ -2,10 +2,12 @@ import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=colleague-witness-20261122';
 
-await Promise.all(['ar','fr'].map(loadLanguage));
+await Promise.all(['ar','fr','zh-Hans'].map(loadLanguage));
 const variants=[
  {language:'en',width:1280,large:false},
  {language:'en',width:320,large:false},
+ {language:'ar',width:320,large:true},
+ {language:'zh-Hans',width:320,large:true},
  {language:'ar',width:390,large:true},
  {language:'fr',width:390,large:true}
 ];
