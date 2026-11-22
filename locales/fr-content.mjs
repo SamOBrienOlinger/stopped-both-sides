@@ -2245,5 +2245,15 @@ export default {
   "m2243": "Ouvrir un lien ne dépose pas de plainte et n’envoie pas de demande de conseil.",
   "m2244": "Après un contact réel avec la police, avez-vous besoin d’informations ou de soutien ?",
   "m2245": "Trouvez des informations juridiques, des indications sur les plaintes concernant la Garda et des ressources sur le contrôle indépendant de l’activité policière.",
-  "m2246": "Conseils, plaintes et contrôle"
+  "m2246": "Conseils, plaintes et contrôle",
+  "m2247": "PABI · recherche auprès des communautés",
+  "m2248": "Rapport de recherche",
+  "m2249": "Résumé, méthodologie et certains résultats examinés",
+  "m2250": "Recherche sur les expériences avec la police, le profilage racial, la confiance, le signalement des infractions et les plaintes parmi les personnes brésiliennes et d’ascendance africaine en Irlande.",
+  "m2251": "L’enquête était de petite taille et les personnes ont choisi d’y participer. Leurs témoignages ne permettent ni d’estimer la prévalence nationale ni de trancher un cas individuel. Cette recherche ne présente pas les pouvoirs légaux actuels et n’évalue pas cette ressource.",
+  "m2252": "Examiner le traitement respectueux, les obstacles à la recherche d’aide et l’évaluation tenant compte des communautés, en parallèle des sources juridiques et statistiques.",
+  "m2253": "Informations sur le projet et résumés du rapport en plusieurs langues.",
+  "m2254": "Le rapport PABI de 2025 apporte des recherches sur les expériences avec la police, la confiance et les obstacles au signalement parmi les personnes brésiliennes et d’ascendance africaine en Irlande. Il invite à tenir compte de l’expérience des communautés ; il n’évalue pas cette ressource.",
+  "m2255": "Lire le rapport PABI (PDF)",
+  "m2256": "Projet PABI et résumés multilingues"
 };

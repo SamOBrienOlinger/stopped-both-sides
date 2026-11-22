@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {learningAbout} from '../learning/about.mjs';
-import {messages} from '../locales/messages.mjs';
+import {learningAbout} from '../learning/about.mjs?v=pabi-privacy-20261122';
+import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=learning-language-20261120';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=pabi-privacy-20261122';
 
 test('About learning content has complete translations while retaining identifiable source metadata',async()=>{
  const html=learningAbout();

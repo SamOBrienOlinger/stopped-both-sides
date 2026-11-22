@@ -2,9 +2,9 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
-import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=learning-language-20261120';
-import {progressStorageKey} from '../../encounters/progress.mjs';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=pabi-privacy-20261122';
+import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {progressStorageKey} from '../../encounters/progress.mjs?v=pabi-privacy-20261122';
 import {expectControlsFit} from './control-layout.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));

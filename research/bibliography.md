@@ -1,12 +1,12 @@
 # Bibliography
 
-Review date: 7 September 2026. 35 sources, including 26 academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.
+36 sources, including 26 academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.
 
 ## Irish law and professional practice
 
-- **Oireachtas / Law Reform Commission (Revised text checked 2026).** [Misuse of Drugs Act 1977, section 23 (revised)](https://revisedacts.lawreform.ie/eli/1977/act/12/section/23/revised/en/html). *Revised Acts*. Law; Republic of Ireland. Review access: Full section reviewed. Source key: `drugs`.
+- **Oireachtas / Law Reform Commission (Revised text).** [Misuse of Drugs Act 1977, section 23 (revised)](https://revisedacts.lawreform.ie/eli/1977/act/12/section/23/revised/en/html). *Revised Acts*. Law; Republic of Ireland. Review access: Full section reviewed. Source key: `drugs`.
 
-- **Oireachtas / Law Reform Commission (Revised text checked 2026).** [Criminal Justice (Public Order) Act 1994, section 24 (revised)](https://revisedacts.lawreform.ie/eli/1994/act/2/section/24/revised/en/html). *Revised Acts*. Law; Republic of Ireland. Review access: Full section reviewed. Source key: `publicOrder`.
+- **Oireachtas / Law Reform Commission (Revised text).** [Criminal Justice (Public Order) Act 1994, section 24 (revised)](https://revisedacts.lawreform.ie/eli/1994/act/2/section/24/revised/en/html). *Revised Acts*. Law; Republic of Ireland. Review access: Full section reviewed. Source key: `publicOrder`.
 
 - **Citizens Information (2026).** [Questioning and surveillance by Gardaí](https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/). *Citizens Information*. Public guidance; Republic of Ireland. Review access: Indexed guidance; direct access restricted. Source key: `questioning`.
 
@@ -19,6 +19,8 @@ Review date: 7 September 2026. 35 sources, including 26 academic publications. T
 ## Irish and European community experience
 
 - **European Union Agency for Fundamental Rights (2024).** [Addressing racism in policing](https://fra.europa.eu/en/publication/2024/addressing-racism-policing). *FRA report*. Institutional research; European Union. Review access: Official overview reviewed. Source key: `fraRacism`.
+
+- **Lucy Michael, Shane O Curry, Rodrigo Souza Silva, Nedson N’goma, Maria Elena Costa Sa, Daniel Reynolds (2025).** [Experiences of Policing amongst Brazilians and People of African Descent in Ireland](https://www.policingauthority.ie/assets/uploads/documents/Policing_of_Africans_and_Brazilians_in_Ireland_Mar25.pdf). *Research report*. Community research; Republic of Ireland. Review access: Executive summary, methodology and selected findings reviewed. Source key: `pabi`.
 
 - **INAR / Irish Council for Civil Liberties (2024).** [Policing and Racial Discrimination in Ireland](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf). *Participatory research report*. Community research; Republic of Ireland. Review access: Methods and relevant findings reviewed. Source key: `inar`.
 

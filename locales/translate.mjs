@@ -1,8 +1,8 @@
-import {learningCopy} from './play-copy.mjs?v=human-civil-rights-20261122';
-import {messages} from './messages.mjs?v=human-civil-rights-20261122';
+import {learningCopy} from './play-copy.mjs?v=pabi-privacy-20261122';
+import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=human-civil-rights-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
 import {gaContent} from './ga-content.mjs?v=human-civil-rights-20261122';
 import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -161,13 +161,13 @@ export {gaContent};
 // Each pack is hosted with the resource and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=human-civil-rights-20261122'+retry),
- ar:retry=>import('./ar-content.mjs?v=human-civil-rights-20261122'+retry),
- pl:retry=>import('./pl-content.mjs?v=human-civil-rights-20261122'+retry),
- ro:retry=>import('./ro-content.mjs?v=human-civil-rights-20261122'+retry),
- fr:retry=>import('./fr-content.mjs?v=human-civil-rights-20261122'+retry),
- es:retry=>import('./es-content.mjs?v=human-civil-rights-20261122'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=human-civil-rights-20261122'+retry)
+ pt:retry=>import('./pt-content.mjs?v=pabi-privacy-20261122'+retry),
+ ar:retry=>import('./ar-content.mjs?v=pabi-privacy-20261122'+retry),
+ pl:retry=>import('./pl-content.mjs?v=pabi-privacy-20261122'+retry),
+ ro:retry=>import('./ro-content.mjs?v=pabi-privacy-20261122'+retry),
+ fr:retry=>import('./fr-content.mjs?v=pabi-privacy-20261122'+retry),
+ es:retry=>import('./es-content.mjs?v=pabi-privacy-20261122'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=pabi-privacy-20261122'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));

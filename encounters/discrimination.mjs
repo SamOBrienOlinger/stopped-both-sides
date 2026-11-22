@@ -286,7 +286,7 @@ export const discriminationReferences=Object.fromEntries([
 
 export const discriminationEncounters=Object.fromEntries(cases.map(({ground,title,description,goal,place,stages})=>{
  const id='discrimination-'+ground;
- const refs=['equality:'+ground,...(ground==='disability'?['equality:accommodation']:[]),'garda:ethics'];
+ const refs=['equality:'+ground,...(ground==='disability'?['equality:accommodation']:[]),'garda:ethics',...(ground==='race'?['garda:pabi']:[])];
  const nodes=Object.fromEntries(stages.map((item,index)=>{
   const nodeId=index===0?'opening':'follow-up';
   const next=index===0?'follow-up':'end';

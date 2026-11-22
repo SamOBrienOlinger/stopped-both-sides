@@ -1,3 +1,5 @@
+import {pabiReport} from './pabi.mjs?v=pabi-privacy-20261122';
+
 // Shared About-page content. The existing reading tools translate complete text
 // nodes; publication metadata deliberately retains its original language.
 const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
@@ -115,6 +117,7 @@ export function learningAbout() {
     </ul>
     <h3>Ground the learning in Irish sources</h3><p>The published Garda Decision Making Model connects gathering information, considering options, justifying choices and reviewing action with human rights and ethics. This educational interpretation does not imply official approval.</p><p>${external('https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf','Read the Garda Decision Making Model (PDF)')}</p>
     <p>The INAR/ICCL community and rights report combines desk research with participatory workshops and other engagement. It offers a reference point for proposed community input and independent legal review; it does not establish that this resource has been co-designed or endorsed.</p><p>${external('https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf','Read the community and rights report (PDF)')}</p>
+    <p>The 2025 PABI report adds research on policing experiences, trust and barriers to reporting among Brazilians and people of African descent in Ireland. It supports attention to community experience; it does not evaluate this resource.</p><p>${external(pabiReport.url,'Read the PABI report (PDF)')} · ${external(pabiReport.projectUrl,'PABI project and multilingual summaries')}</p>
    `)}
    ${panel('03','Intended learning outcomes','Eight objectives and ways to demonstrate them',`
     <p>These are assessment targets for selected situations and associated reflection activities. The website records choices and scores; written explanations, observed communication and independent assessments require an accompanying activity.</p>

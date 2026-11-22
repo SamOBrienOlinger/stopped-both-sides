@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
-import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=learning-language-20261120';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
+import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=pabi-privacy-20261122';
 
 await Promise.all(['ar','fr'].map(loadLanguage));
 const title='Advice, complaints and policing oversight';

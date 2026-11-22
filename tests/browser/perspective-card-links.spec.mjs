@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=pabi-privacy-20261122';
 
 const entrypoints=['./','garda/'];
 const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};

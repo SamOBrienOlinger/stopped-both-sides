@@ -460,7 +460,139 @@ const terminology = [
  ['No timer. You can change character or switch sides as you explore.', ['Gan teorainn ama. Is féidir carachtar nó dearcadh a athrú agus tú ag fiosrú.','Sem limite de tempo. Pode mudar de personagem ou de perspetiva enquanto explora.','لا يوجد حد زمني. يمكنك تغيير الشخصية أو المنظور أثناء الاستكشاف.','Bez limitu czasu. Podczas poznawania sytuacji możesz zmienić postać lub perspektywę.','Fără limită de timp. Poți schimba personajul sau perspectiva pe măsură ce explorezi.','Sans limite de temps. Vous pouvez changer de personnage ou de point de vue pendant l’exploration.','Sin límite de tiempo. Puedes cambiar de personaje o de perspectiva mientras exploras.','没有时间限制。探索过程中，你可以更换角色形象或切换视角。']],
  ["Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the human and civil rights, police powers and responsibilities involved.", ["Fiosraigh cásanna ficseanúla ina mbíonn daoine den phobal agus Gardaí páirteach. Roghnaigh freagra, ansin déan machnamh ar na cearta daonna agus sibhialta, na cumhachtaí agus na freagrachtaí atá i gceist.","Explore situações fictícias que envolvem membros do público e agentes da Garda. Escolha uma resposta e reflita sobre os direitos humanos e civis, poderes e responsabilidades envolvidos.","استكشف مواقف خيالية تضم أفرادًا من الجمهور وعناصر الغاردا. اختر استجابة، ثم تأمل حقوق الإنسان والحقوق المدنية والصلاحيات والمسؤوليات ذات الصلة.","Poznaj fikcyjne sytuacje z udziałem członków społeczeństwa i funkcjonariuszy Garda. Wybierz reakcję, a następnie zastanów się nad związanymi z nią prawami człowieka i prawami obywatelskimi, uprawnieniami i obowiązkami.","Explorează situații fictive care implică membri ai publicului și ai Garda. Alege un răspuns, apoi reflectează asupra drepturilor omului și drepturilor civile, puterilor și responsabilităților implicate.","Explorez des situations fictives impliquant des membres du public et de la Garda. Choisissez une réponse, puis réfléchissez aux droits humains et civils, aux pouvoirs et aux responsabilités en jeu.","Explora situaciones ficticias entre miembros del público y de la Garda. Elige una respuesta y reflexiona sobre los derechos humanos y civiles, las facultades y las responsabilidades en juego.","探索公众与爱尔兰警员之间的虚构情境。选择一种回应，然后思考其中涉及的人权和公民权利、权力与责任。"]]
 ];
-const translations = new Map([...labels,...content,...terminology]);
+const communityResearch = [
+ [
+  "PABI · community research",
+  [
+   "PABI · taighde pobail",
+   "PABI · investigação comunitária",
+   "PABI · بحث مجتمعي",
+   "PABI · badania społeczności",
+   "PABI · cercetare comunitară",
+   "PABI · recherche auprès des communautés",
+   "PABI · investigación comunitaria",
+   "PABI · 社群研究"
+  ]
+ ],
+ [
+  "Research report",
+  [
+   "Tuarascáil taighde",
+   "Relatório de investigação",
+   "تقرير بحثي",
+   "Raport z badań",
+   "Raport de cercetare",
+   "Rapport de recherche",
+   "Informe de investigación",
+   "研究报告"
+  ]
+ ],
+ [
+  "Executive summary, methodology and selected findings reviewed",
+  [
+   "Rinneadh athbhreithniú ar an achoimre feidhmiúcháin, ar an modheolaíocht agus ar thorthaí roghnaithe",
+   "Resumo executivo, metodologia e resultados selecionados consultados",
+   "تمت مراجعة الملخص التنفيذي والمنهجية ونتائج مختارة",
+   "Przeanalizowano streszczenie, metodologię i wybrane wyniki",
+   "Au fost consultate rezumatul executiv, metodologia și anumite rezultate",
+   "Résumé, méthodologie et certains résultats examinés",
+   "Se revisaron el resumen ejecutivo, la metodología y una selección de resultados",
+   "已审阅执行摘要、研究方法和部分研究结果"
+  ]
+ ],
+ [
+  "Research on policing experiences, racial profiling, trust, reporting crime and complaints among Brazilians and people of African descent in Ireland.",
+  [
+   "Taighde ar eispéiris póilíneachta, próifíliú ciníoch, muinín, tuairisciú coireachta agus gearáin i measc Brasaíleach agus daoine de shliocht na hAfraice in Éirinn.",
+   "Investigação sobre experiências com a polícia, perfilamento racial, confiança, denúncia de crimes e queixas entre brasileiros e pessoas de ascendência africana na Irlanda.",
+   "بحث حول تجارب التعامل مع الشرطة والتنميط العنصري والثقة والإبلاغ عن الجرائم والشكاوى لدى البرازيليين والأشخاص المنحدرين من أصول أفريقية في أيرلندا.",
+   "Badania dotyczące kontaktów z policją, profilowania rasowego, zaufania, zgłaszania przestępstw i skarg wśród Brazylijczyków i osób pochodzenia afrykańskiego w Irlandii.",
+   "Cercetare privind experiențele cu poliția, profilarea rasială, încrederea, raportarea infracțiunilor și plângerile în rândul brazilienilor și al persoanelor de origine africană din Irlanda.",
+   "Recherche sur les expériences avec la police, le profilage racial, la confiance, le signalement des infractions et les plaintes parmi les personnes brésiliennes et d’ascendance africaine en Irlande.",
+   "Investigación sobre experiencias con la policía, perfilamiento racial, confianza, denuncia de delitos y quejas entre personas brasileñas y de ascendencia africana en Irlanda.",
+   "研究巴西裔和非洲裔人士在爱尔兰与警方接触的经历、种族定性、信任、报案和投诉。"
+  ]
+ ],
+ [
+  "The survey was small and self-selecting. Participants’ accounts do not estimate national prevalence or decide an individual case. This research does not set out current legal powers or evaluate this resource.",
+  [
+   "Bhí an suirbhé beag agus roghnaigh na rannpháirtithe iad féin le bheith páirteach ann. Ní thugann a gcuntais meastachán ar leitheadúlacht náisiúnta ná breithiúnas ar chás aonair. Ní leagtar amach sa taighde seo na cumhachtaí dlíthiúla reatha ná ní dhéantar measúnú ar an áis seo.",
+   "O inquérito foi pequeno e de participação voluntária. Os relatos dos participantes não permitem estimar a prevalência nacional nem decidir um caso individual. Esta investigação não apresenta os poderes legais atuais nem avalia este recurso.",
+   "كان الاستطلاع صغيرًا واختار المشاركون الانضمام إليه بأنفسهم. لا تقدّر رواياتهم مدى الانتشار على المستوى الوطني ولا تحسم حالة فردية. لا يبيّن هذا البحث الصلاحيات القانونية الحالية ولا يقيّم هذا المورد.",
+   "Ankieta była niewielka, a uczestnicy sami zgłaszali się do udziału. Ich relacje nie pozwalają oszacować skali zjawiska w kraju ani rozstrzygnąć indywidualnej sprawy. Badanie nie przedstawia aktualnych uprawnień prawnych ani nie ocenia tego materiału edukacyjnego.",
+   "Sondajul a fost mic, iar participanții s-au înscris din proprie inițiativă. Relatările lor nu estimează prevalența la nivel național și nu soluționează un caz individual. Cercetarea nu prezintă puterile legale actuale și nu evaluează această resursă.",
+   "L’enquête était de petite taille et les personnes ont choisi d’y participer. Leurs témoignages ne permettent ni d’estimer la prévalence nationale ni de trancher un cas individuel. Cette recherche ne présente pas les pouvoirs légaux actuels et n’évalue pas cette ressource.",
+   "La encuesta fue pequeña y las personas decidieron participar por iniciativa propia. Sus relatos no permiten estimar la prevalencia nacional ni resolver un caso individual. Esta investigación no expone las facultades legales actuales ni evalúa este recurso.",
+   "调查规模较小，参与者自行选择参加。他们的陈述不能用于估计全国发生率，也不能判定个案。本研究没有列明现行法律权力，也没有评估本学习资源。"
+  ]
+ ],
+ [
+  "Examine respectful treatment, barriers to seeking help and community-informed review alongside legal and statistical sources.",
+  [
+   "Scrúdaigh caitheamh measúil, bacainní ar chabhair a lorg agus athbhreithniú a chuireann tuairimí an phobail san áireamh, in éineacht le foinsí dlíthiúla agus staitistiúla.",
+   "Examine o tratamento respeitoso, os obstáculos à procura de ajuda e a revisão com contributos da comunidade, em conjunto com fontes jurídicas e estatísticas.",
+   "ادرس المعاملة باحترام والعوائق أمام طلب المساعدة والمراجعة المستندة إلى آراء المجتمع، إلى جانب المصادر القانونية والإحصائية.",
+   "Analizuj pełne szacunku traktowanie, bariery w szukaniu pomocy i przegląd uwzględniający głos społeczności, korzystając również ze źródeł prawnych i statystycznych.",
+   "Examinează tratamentul respectuos, obstacolele în solicitarea ajutorului și analiza care ține cont de comunitate, alături de surse juridice și statistice.",
+   "Examiner le traitement respectueux, les obstacles à la recherche d’aide et l’évaluation tenant compte des communautés, en parallèle des sources juridiques et statistiques.",
+   "Examina el trato respetuoso, las barreras para pedir ayuda y la revisión que incorpora las aportaciones de la comunidad, junto con fuentes jurídicas y estadísticas.",
+   "结合法律和统计资料，探讨尊重他人的对待方式、求助障碍以及听取社群意见的审查。"
+  ]
+ ],
+ [
+  "Project information and report summaries in several languages.",
+  [
+   "Eolas faoin tionscadal agus achoimrí ar an tuarascáil i roinnt teangacha.",
+   "Informações sobre o projeto e resumos do relatório em várias línguas.",
+   "معلومات عن المشروع وملخصات التقرير بعدة لغات.",
+   "Informacje o projekcie i streszczenia raportu w kilku językach.",
+   "Informații despre proiect și rezumate ale raportului în mai multe limbi.",
+   "Informations sur le projet et résumés du rapport en plusieurs langues.",
+   "Información sobre el proyecto y resúmenes del informe en varios idiomas.",
+   "项目信息和多种语言的报告摘要。"
+  ]
+ ],
+ [
+  "The 2025 PABI report adds research on policing experiences, trust and barriers to reporting among Brazilians and people of African descent in Ireland. It supports attention to community experience; it does not evaluate this resource.",
+  [
+   "Cuireann tuarascáil PABI 2025 taighde ar fáil ar eispéiris póilíneachta, ar mhuinín agus ar bhacainní ar thuairisciú i measc Brasaíleach agus daoine de shliocht na hAfraice in Éirinn. Tacaíonn sé le haird a thabhairt ar eispéiris an phobail; ní dhéanann sé measúnú ar an áis seo.",
+   "O relatório PABI de 2025 acrescenta investigação sobre experiências com a polícia, confiança e obstáculos à denúncia entre brasileiros e pessoas de ascendência africana na Irlanda. Apoia a atenção às experiências da comunidade; não avalia este recurso.",
+   "يضيف تقرير PABI لعام 2025 بحثًا حول تجارب التعامل مع الشرطة والثقة والعوائق أمام الإبلاغ لدى البرازيليين والأشخاص المنحدرين من أصول أفريقية في أيرلندا. وهو يدعم الاهتمام بتجارب المجتمع، لكنه لا يقيّم هذا المورد.",
+   "Raport PABI z 2025 roku uzupełnia badania dotyczące kontaktów z policją, zaufania i barier w zgłaszaniu zdarzeń wśród Brazylijczyków i osób pochodzenia afrykańskiego w Irlandii. Wspiera uwzględnianie doświadczeń społeczności; nie ocenia tego materiału edukacyjnego.",
+   "Raportul PABI din 2025 adaugă cercetare privind experiențele cu poliția, încrederea și obstacolele în raportare în rândul brazilienilor și al persoanelor de origine africană din Irlanda. Susține atenția acordată experiențelor comunității; nu evaluează această resursă.",
+   "Le rapport PABI de 2025 apporte des recherches sur les expériences avec la police, la confiance et les obstacles au signalement parmi les personnes brésiliennes et d’ascendance africaine en Irlande. Il invite à tenir compte de l’expérience des communautés ; il n’évalue pas cette ressource.",
+   "El informe PABI de 2025 aporta investigación sobre experiencias con la policía, confianza y barreras para denunciar entre personas brasileñas y de ascendencia africana en Irlanda. Apoya la atención a las experiencias de la comunidad; no evalúa este recurso.",
+   "2025 年的 PABI 报告补充了关于巴西裔和非洲裔人士在爱尔兰与警方接触的经历、信任及报案障碍的研究。它支持关注社群经历，但没有评估本学习资源。"
+  ]
+ ],
+ [
+  "Read the PABI report (PDF)",
+  [
+   "Léigh tuarascáil PABI (PDF)",
+   "Ler o relatório PABI (PDF)",
+   "اقرأ تقرير PABI ‏(PDF)",
+   "Przeczytaj raport PABI (PDF)",
+   "Citește raportul PABI (PDF)",
+   "Lire le rapport PABI (PDF)",
+   "Lee el informe PABI (PDF)",
+   "阅读 PABI 报告（PDF）"
+  ]
+ ],
+ [
+  "PABI project and multilingual summaries",
+  [
+   "Tionscadal PABI agus achoimrí i roinnt teangacha",
+   "Projeto PABI e resumos multilingues",
+   "مشروع PABI وملخصات متعددة اللغات",
+   "Projekt PABI i wielojęzyczne streszczenia",
+   "Proiectul PABI și rezumate multilingve",
+   "Projet PABI et résumés multilingues",
+   "Proyecto PABI y resúmenes multilingües",
+   "PABI 项目和多语言摘要"
+  ]
+ ]
+];
+const translations = new Map([...labels,...content,...terminology,...communityResearch]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }

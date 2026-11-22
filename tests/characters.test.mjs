@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {characters,createCast,defaultCast,changeCharacter,createCharacterPreferences,CHARACTER_STORAGE_KEY} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,revisit,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=learning-language-20261120';
-import {emptyProgress,recordProgress,packProgress,unpackProgress,runScores} from '../encounters/progress.mjs';
-import {translateText} from '../locales/translate.mjs';
+import {startEncounter,answer,switchRole,continueEncounter,revisit,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {emptyProgress,recordProgress,packProgress,unpackProgress,runScores} from '../encounters/progress.mjs?v=pabi-privacy-20261122';
+import {translateText} from '../locales/translate.mjs?v=pabi-privacy-20261122';
 
 test('All 18 characters are distinct; random casting can select every opposing character',()=>{
  const all=Object.values(characters).flat();assert.equal(new Set(all.map(c=>c.id)).size,18);

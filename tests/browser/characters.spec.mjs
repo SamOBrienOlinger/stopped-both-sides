@@ -1,6 +1,6 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=learning-language-20261120';
+import {decodeState} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} character choice, changes and counterpart survive the full encounter`,async({page})=>{
  const other=role==='public'?'garda':'public',errors=[],selectedId=role==='garda'?'garda-5':'public-6';

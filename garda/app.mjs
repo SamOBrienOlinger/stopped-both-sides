@@ -1,14 +1,14 @@
 import {focusControl} from '../accessibility/focus.mjs';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=human-civil-rights-20261122';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=pabi-privacy-20261122';
 import {createLayout} from '../accessibility/layout.mjs?v=human-civil-rights-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningAbout} from '../learning/about.mjs?v=human-civil-rights-20261122';
+import {learningAbout} from '../learning/about.mjs?v=pabi-privacy-20261122';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=human-civil-rights-20261122';
-import {createMotion} from '../accessibility/motion.mjs?v=human-civil-rights-20261122';
-import {createEncounterMode} from '../encounters/ui.mjs?v=human-civil-rights-20261122';
-import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=human-civil-rights-20261122';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=human-civil-rights-20261122';
+import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=pabi-privacy-20261122';
+import {createMotion} from '../accessibility/motion.mjs?v=pabi-privacy-20261122';
+import {createEncounterMode} from '../encounters/ui.mjs?v=pabi-privacy-20261122';
+import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=pabi-privacy-20261122';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');
 let session=null;
 const paired=createEncounterMode({siteRole:'garda',main,practiceScenarios:scenarios,getLanguage:()=>reading.language,rerender:(focus=true)=>render(focus),getOriginalSession:()=>session,resetOriginalSession:()=>{session=null;},announce:message=>reading.announce(message)});
@@ -54,7 +54,7 @@ ${learningAbout()} <section class="info-block important"><h2>A learning companio
  <section class="info-block"><h2>Use it in a short learning discussion</h2><ol class="discussion-steps"><li><strong>Explore one situation.</strong> Say which facts matter before looking at the feedback.</li><li><strong>Compare the reasoning.</strong> Discuss the grounds, alternative explanations, identity cues and the person’s experience.</li><li><strong>Return later.</strong> Revisit the situation and consider one practical question for briefing or supervision.</li></ol><p>Facilitators should use fictional or appropriately anonymised examples and make room for disagreement supported by law and evidence. The activity should not be used as a staff appraisal.</p>${sourceLinks(['miller','wouters','merla'])}</section>
  <section class="info-block"><h2>Connected to the Garda Decision Making Model</h2><p>The learning prompts support gathering and checking information, assessing risk, considering the operational environment and legal powers, comparing options, and reviewing action. Human rights and ethics run through the decision.</p><p>This is an educational interpretation of the public framework. Members should use the current official model, policy and training in their work.</p>${sourceLinks(['model','ethics'])}</section>
  <section class="info-block"><h2>Help shape a stronger version</h2><p>Garda educators, independent legal specialists, INAR, ICCL, youth organisations, disability advocates, Traveller and Roma organisations, and other affected communities could help refine the situations and challenge missing perspectives.</p><p>Priorities include legal validation, community co-design, accessibility testing, reviewed translations and an independent evaluation of learning and transfer to practice. These are opportunities for collaboration; no partnership or approval is claimed.</p></section>
- <section class="info-block"><h2>Your choices and privacy</h2><p>The resource asks for no account or incident details. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. Review or clear local records under Scores & progress. Separate browsers do not automatically sync. There are no analytics or submissions to a application server. The hosting provider may keep standard access logs; external sources have their own privacy arrangements.</p></section>
+ <details class="info-block privacy-disclosure"><summary>Information and privacy</summary><p>The resource asks for no account or incident details. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. Review or clear local records under Scores & progress. Separate browsers do not automatically sync. There are no analytics or submissions to a application server. The hosting provider may keep standard access logs; external sources have their own privacy arrangements.</p></details>
  <section class="info-block"><h2>Two perspectives on an encounter</h2><p>Created by Sam O’Brien-Olinger / Sam Tim Solutions as a companion to the human and civil rights learning resource. The scenarios are invented and do not reproduce participants’ experiences from any cited study.</p><a class="text-button" href="${PUBLIC_COMPANION}" target="_blank" rel="noopener noreferrer">Visit the public perspective ↗</a></section><a href="#encounters" class="primary">Choose a situation →</a><p class="contribution-link"><a href="https://samobrienolinger.github.io/SamOBrienOlinger/" target="_blank" rel="noopener noreferrer">Contact the project creator or contribute feedback ↗</a></p></div>`;
 }
 function notFound(){return '<div class="content-page"><h1>This page was not found.</h1><p>Choose a situation or explore the evidence library.</p><a class="primary" href="#play">All situations</a></div>';}

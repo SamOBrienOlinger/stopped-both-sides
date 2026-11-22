@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
+import {decodeState} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
 import {createDisclosures} from './disclosures.mjs?v=learning-language-20261120';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 

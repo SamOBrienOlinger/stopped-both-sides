@@ -185,7 +185,7 @@ Hosting services may retain ordinary access logs. See [Persistence and transfer]
 
 The learning points draw on Irish legal and rights information, community research and a selected critical review of academic literature on policing decisions and bias. **Each decision links to its supporting sources.**
 
-The documented source review is dated **7 September 2026**. Older publications are dated and are not treated as current authority for every procedure. The research record distinguishes jurisdiction, access limitations and how findings inform the resource; it does not claim an exhaustive review or proven training effectiveness.
+Older publications are dated and are not treated as current authority for every procedure. The research record distinguishes jurisdiction, access limitations and how findings inform the resource; it does not claim an exhaustive review or proven training effectiveness.
 
 **[Content review record](docs/CONTENT-REVIEW.md)** · **[Research approach](research/README.md)** · **[Bibliography](research/bibliography.md)** · **[Scenario evidence map](research/scenario-evidence-map.md)**
 
@@ -196,6 +196,7 @@ The documented source review is dated **7 September 2026**. Older publications a
 
 - [Citizens Information — Questioning and surveillance](https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/).
 - [INAR — policing resources](https://inar.ie/?s=Police) and the [INAR / ICCL community and rights report on policing and racial discrimination (PDF)](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf).
+- [PABI — Experiences of Policing amongst Brazilians and People of African Descent in Ireland (2025, PDF)](https://www.policingauthority.ie/assets/uploads/documents/Policing_of_Africans_and_Brazilians_in_Ireland_Mar25.pdf) and [INAR’s project page and multilingual summaries](https://inar.ie/pabi-project/). The report supports discussion of community experience, trust and reporting barriers; its self-selecting survey does not estimate national prevalence.
 - [ICCL — Criminal Justice and Garda Powers guide, second edition (2014)](https://www.iccl.ie/resources/know-your-rights-criminal-justice-and-garda-powers-2nd-edition-june-2014/).
 - [DPP — Letters of rights](https://www.dppireland.ie/criminal-justice-system/letters-of-rights/), the [Legal Aid Board — Garda Station Legal Advice Revised Scheme](https://www.legalaidboard.ie/about-the-legal-aid-board/criminal-legal-aid/the-garda-station-legal-advice-revised-scheme/) and [Fiosrú — FAQs](https://www.fiosru.ie/about-us/faqs/).
 

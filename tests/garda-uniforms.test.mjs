@@ -5,9 +5,9 @@ import {characters,characterArtwork,createCast,changeCharacter} from '../encount
 import {gardaAtlas} from '../encounters/garda-atlas.mjs';
 import {gardaArtwork} from '../encounters/garda-artwork.mjs';
 import {sceneCharacterArtwork} from '../encounters/scene-artwork.mjs';
-import {encounters,roles} from '../encounters/catalog.mjs';
-import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs';
+import {encounters,roles} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
+import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=pabi-privacy-20261122';
 
 const asset=new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url);
 const names=['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'];
@@ -89,9 +89,9 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
 });
 
 test('Scene anchors, approved backgrounds and name dialogs are retained',()=>{
- const source=readFileSync(new URL('../encounters/scenes.mjs',import.meta.url),'utf8');
+ const source=readFileSync(new URL('../encounters/scenes.mjs?v=pabi-privacy-20261122',import.meta.url),'utf8');
  const css=readFileSync(new URL('../encounters/scenes.css',import.meta.url),'utf8');
- const caption=readFileSync(new URL('../encounters/scene-labels.mjs',import.meta.url),'utf8');
+ const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=pabi-privacy-20261122',import.meta.url),'utf8');
  assert.match(source,/backgroundImage\(place\)/);
  assert.match(source,/sceneActorLayout\(place,role/);
  assert.match(source,/scene-character-label/);

@@ -1,3 +1,4 @@
+import {pabiReport} from './learning/pabi.mjs?v=pabi-privacy-20261122';
 export const CHECKED = '7 September 2026';
 export const sources = {
  legalAid:{title:'Legal Aid Board · Garda Station Legal Advice Revised Scheme',url:'https://www.legalaidboard.ie/about-the-legal-aid-board/criminal-legal-aid/the-garda-station-legal-advice-revised-scheme/',note:'The current scheme, its coverage and eligibility arrangements.'},
@@ -17,6 +18,8 @@ export const sources = {
  childSolicitor:{title:'Children Act 2001 · Section 60 (revised)',url:'https://revisedacts.lawreform.ie/eli/2001/act/24/section/60/revised/en/html',note:'Requests for a solicitor for a child in Garda custody.'},
  fiosru:{title:'Fiosrú · Complaints and frequently asked questions',url:'https://www.fiosru.ie/about-us/faqs/',note:'The current Office of the Police Ombudsman: who can complain, time limits and what information helps.'},
  fiosruForm:{title:'Fiosrú · Make a complaint',url:'https://www.fiosru.ie/complaints/submit-a-complaint/',note:'The official complaints form. Opening it does not submit a complaint.'},
+ pabi:{title:'PABI · '+pabiReport.title+' (2025)',url:pabiReport.url,note:pabiReport.note},
+ pabiSummaries:{title:'INAR · PABI project and multilingual summaries',url:pabiReport.projectUrl,note:'Project information and report summaries in several languages.'},
  inarReport:{title:'INAR / ICCL · Policing and Racial Discrimination in Ireland',url:'https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf',note:'Community research and recommendations (PDF, 2024). It informs the resource’s approach; it is not an up-to-date statement of every legal power.'},
  inar:{title:'INAR · Racism and policing resources',url:'https://inar.ie/?s=Police',note:'The INAR resource search supplied for this project.'},
  ireport:{title:'INAR · iReport racism reporting system',url:'https://inar.ie/ireport-racism-reporting-system/',note:'Learn about confidential reporting of racism and its purpose. It is separate from a formal Garda-conduct complaint.'},
@@ -141,7 +144,7 @@ export const scenarios = [
  c('Point out the sentence and ask for clarification, corrections and advice.','You have raised the accuracy problem before endorsing the account.','end')
  ])}},
  {id:'fair-treatment',title:'“Why was I singled out?”',person:'Amina',context:'Reflecting on a street encounter',description:'You are concerned that racism affected your treatment. Explore evidence, support and complaints.',icon:'notes',minutes:'4–5 minutes',start:'fair-start',nodes:{
- 'fair-start':n('An encounter that stays with you','You are Amina, a Black Irish woman. A Garda has questioned you while other people nearby were not approached. You are told you can leave. The experience has made you feel singled out.','What is a useful starting point?','Concerns about racial profiling deserve to be heard. The INAR/ICCL report documents community experiences; this fictional encounter cannot determine whether discrimination or an unlawful act occurred.','My experience matters. I can record what happened and seek support.',['inarReport'],[
+ 'fair-start':n('An encounter that stays with you','You are Amina, a Black Irish woman. A Garda has questioned you while other people nearby were not approached. You are told you can leave. The experience has made you feel singled out.','What is a useful starting point?','Concerns about racial profiling deserve to be heard. The INAR/ICCL report documents community experiences; this fictional encounter cannot determine whether discrimination or an unlawful act occurred.','My experience matters. I can record what happened and seek support.',['inarReport','pabi'],[
  c('Assume that a calm response guarantees fair treatment.','Your behaviour does not control another person’s conduct, and it does not excuse mistreatment.','fair-record',true),
  c('Take your concern seriously while recording facts and seeking support.','This makes space for your experience without claiming the resource can decide the legal issue.','fair-record'),
  c('Assume that you lose your rights if you feel upset.','Feeling upset does not remove your rights or justify mistreatment.','fair-record',true)

@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash} from '../../encounters/engine.mjs';
+import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
 const cast={public:'public-6',garda:'garda-9'};
 for(const role of ['public','garda'])test(`${role}: the landing image loads without cropping at mobile and desktop sizes`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});

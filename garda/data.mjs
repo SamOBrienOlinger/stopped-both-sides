@@ -1,6 +1,6 @@
 import {reviewBackground} from '../learning/play-content.mjs?v=learning-language-20261120';
 
-export {sources,CHECKED,groups,PUBLIC_COMPANION} from './sources.mjs';
+export {sources,CHECKED,groups,PUBLIC_COMPANION} from './sources.mjs?v=pabi-privacy-20261122';
 const c=(text,feedback,next,review=false)=>({text,feedback,next,review});
 const n=(title,story,prompt,concept,lesson,phrase,refs,choices,facts=[],quote='')=>({title,story,prompt,concept,lesson,phrase,sources:refs,choices,facts,quote});
 export const scenarios=[
@@ -172,7 +172,7 @@ export const scenarios=[
  c('Report the learning result accurately and plan an evaluation of behaviour and experience.','You preserve the useful result without overstating what it demonstrates.','supervision-plan'),
  c('Abandon all training because some studies found no clear effect on disparities.','Different interventions and outcomes need separate assessment. Evidence of limitations should shape design and evaluation.','supervision-plan',true)
  ]),
-'supervision-plan':n('A stronger next step','You can support follow-up learning, supervisory review and appropriate evaluation. The aim is to improve decisions and people’s experience, not just completion numbers.','Which plan addresses the main evidence gaps?','Reinforcement and independent evaluation','Combine repeated practice and feedback with lawful, proportionate review of behaviour and community experience. Agree measures and safeguards before collecting operational data.','What would count as improvement, and who should help judge it?',['weisburd','merla','wouters','inar','tansill'],[
+'supervision-plan':n('A stronger next step','You can support follow-up learning, supervisory review and appropriate evaluation. The aim is to improve decisions and people’s experience, not just completion numbers.','Which plan addresses the main evidence gaps?','Reinforcement and independent evaluation','Combine repeated practice and feedback with lawful, proportionate review of behaviour and community experience. Agree measures and safeguards before collecting operational data.','What would count as improvement, and who should help judge it?',['weisburd','merla','wouters','inar','pabi','tansill'],[
  c('Repeat the same quiz immediately and use its score as a permanent performance rating.','Repeated answers can reflect familiarity, and a learning score is not a validated appraisal of a Garda.','end',true),
  c('Collect identifiable incident details in the resource so that it feels operational.','This prototype is not designed or approved to hold operational or personal incident data.','end',true),
  c('Use later practice, independent review of grounds and treatment, and community-informed evaluation.','This provides a more credible route to examining transfer and unintended effects. It remains a proposal requiring appropriate governance.','end')

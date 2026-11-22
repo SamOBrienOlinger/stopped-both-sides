@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=learning-language-20261120';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
 import {characters} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
-import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs';
-import {translateText} from '../locales/translate.mjs';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=pabi-privacy-20261122';
+import {translateText} from '../locales/translate.mjs?v=pabi-privacy-20261122';
 
 test('Every stage and all 81 character pairs have a complete illustration',()=>{
  let covered=0;

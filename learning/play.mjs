@@ -1,7 +1,7 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=learning-language-20261120';
-import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=learning-language-20261120';
-import {decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
-import {topicGroups} from '../encounters/presentation.mjs?v=learning-language-20261120';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=pabi-privacy-20261122';
+import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
+import {decodeState} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {topicGroups} from '../encounters/presentation.mjs?v=pabi-privacy-20261122';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,
  reviewExamples, reviewQuestions, reviewScene, searchFigures, termFor

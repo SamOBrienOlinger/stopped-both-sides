@@ -1,4 +1,4 @@
-import {scenarioById} from './data.mjs?v=learning-language-20261120';
+import {scenarioById} from './data.mjs?v=pabi-privacy-20261122';
 export function startSession(id){const s=scenarioById[id];if(!s)throw new Error('Unknown scenario');return {scenarioId:id,nodeId:s.start,history:[],selected:null,complete:false};}
 export function currentNode(state){return state&&!state.complete?scenarioById[state.scenarioId].nodes[state.nodeId]:null;}
 export function choose(state,index){const node=currentNode(state);if(!node||state.selected!==null||!Number.isInteger(index)||!node.choices[index])return state;return {...state,selected:index};}

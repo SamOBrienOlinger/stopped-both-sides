@@ -1,9 +1,9 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=learning-language-20261120';
 import {backgroundImage} from './backgrounds.mjs?v=learning-language-20261120';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=learning-language-20261120';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=pabi-privacy-20261122';
 import {characterFor,defaultCast} from './characters.mjs?v=learning-language-20261120';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=learning-language-20261120';
-import {discriminationEncounters} from './discrimination.mjs?v=learning-language-20261120';
+import {discriminationEncounters} from './discrimination.mjs?v=pabi-privacy-20261122';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.

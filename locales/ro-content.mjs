@@ -2245,5 +2245,15 @@ export default {
   "m2243": "Accesarea unui link nu înseamnă depunerea unei plângeri sau trimiterea unei solicitări de consiliere.",
   "m2244": "Aveți nevoie de informații sau sprijin după o interacțiune reală cu poliția?",
   "m2245": "Găsiți informații juridice, îndrumări privind plângerile referitoare la Garda și informații despre supravegherea independentă a activității poliției.",
-  "m2246": "Consiliere, plângeri și supraveghere"
+  "m2246": "Consiliere, plângeri și supraveghere",
+  "m2247": "PABI · cercetare comunitară",
+  "m2248": "Raport de cercetare",
+  "m2249": "Au fost consultate rezumatul executiv, metodologia și anumite rezultate",
+  "m2250": "Cercetare privind experiențele cu poliția, profilarea rasială, încrederea, raportarea infracțiunilor și plângerile în rândul brazilienilor și al persoanelor de origine africană din Irlanda.",
+  "m2251": "Sondajul a fost mic, iar participanții s-au înscris din proprie inițiativă. Relatările lor nu estimează prevalența la nivel național și nu soluționează un caz individual. Cercetarea nu prezintă puterile legale actuale și nu evaluează această resursă.",
+  "m2252": "Examinează tratamentul respectuos, obstacolele în solicitarea ajutorului și analiza care ține cont de comunitate, alături de surse juridice și statistice.",
+  "m2253": "Informații despre proiect și rezumate ale raportului în mai multe limbi.",
+  "m2254": "Raportul PABI din 2025 adaugă cercetare privind experiențele cu poliția, încrederea și obstacolele în raportare în rândul brazilienilor și al persoanelor de origine africană din Irlanda. Susține atenția acordată experiențelor comunității; nu evaluează această resursă.",
+  "m2255": "Citește raportul PABI (PDF)",
+  "m2256": "Proiectul PABI și rezumate multilingve"
 };

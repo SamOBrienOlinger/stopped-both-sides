@@ -1,9 +1,9 @@
 import {expect,test} from '@playwright/test';
-import {encounters} from '../../encounters/catalog.mjs';
+import {encounters} from '../../encounters/catalog.mjs?v=pabi-privacy-20261122';
 import {defaultCast} from '../../encounters/characters.mjs';
-import {startEncounter} from '../../encounters/engine.mjs';
-import {topicGroups} from '../../encounters/presentation.mjs';
-import {renderScene} from '../../encounters/scenes.mjs';
+import {startEncounter} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {topicGroups} from '../../encounters/presentation.mjs?v=pabi-privacy-20261122';
+import {renderScene} from '../../encounters/scenes.mjs?v=pabi-privacy-20261122';
 
 const situations=Object.values(encounters);
 const cast=defaultCast();

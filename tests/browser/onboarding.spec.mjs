@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {decodeState,otherRole} from '../../encounters/engine.mjs?v=human-civil-rights-20261122';
+import {decodeState,otherRole} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
 
 const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{

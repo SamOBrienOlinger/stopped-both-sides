@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
-import {encounters,roles} from '../../encounters/catalog.mjs';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=pabi-privacy-20261122';
 import {characters} from '../../encounters/characters.mjs';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
 
 // Reach every node through the real engine, rather than fabricating history.
 function reachable(id){

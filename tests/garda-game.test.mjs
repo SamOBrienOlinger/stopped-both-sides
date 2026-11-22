@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {scenarios,sources,groups} from '../garda/data.mjs';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../garda/engine.mjs';
+import {scenarios,sources,groups} from '../garda/data.mjs?v=pabi-privacy-20261122';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../garda/engine.mjs?v=pabi-privacy-20261122';
 let allPaths=0;
 for(const scenario of scenarios){
  test(`${scenario.title}: every possible choice path reaches a sourced recap`,()=>{

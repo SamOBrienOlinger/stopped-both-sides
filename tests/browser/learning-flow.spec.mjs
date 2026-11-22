@@ -1,6 +1,6 @@
 import {expect,test} from '@playwright/test';
-import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=learning-language-20261120';
+import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=pabi-privacy-20261122';
 
 const contrast=([foreground,background])=>{
  const linear=channel=>channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4;

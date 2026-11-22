@@ -1,7 +1,7 @@
-import {encounters} from './catalog.mjs?v=learning-language-20261120';
-import {renderScenePreview} from './scenes.mjs?v=learning-language-20261120';
-import {topicGroups} from './presentation.mjs?v=learning-language-20261120';
-import {practiceGoal} from '../learning/play.mjs?v=learning-language-20261120';
+import {encounters} from './catalog.mjs?v=pabi-privacy-20261122';
+import {renderScenePreview} from './scenes.mjs?v=pabi-privacy-20261122';
+import {topicGroups} from './presentation.mjs?v=pabi-privacy-20261122';
+import {practiceGoal} from '../learning/play.mjs?v=pabi-privacy-20261122';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){

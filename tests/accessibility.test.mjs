@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {siteRole,siteBase} from './site-fixture.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=learning-language-20261120';
-import {gaContent,translateHTML,translateText} from '../locales/translate.mjs';
+import {encounters} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
+import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=pabi-privacy-20261122';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
-import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs';
+import {decodeState} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=pabi-privacy-20261122';
 
 test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
  let stages=0;

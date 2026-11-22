@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {encounters,roles,sites} from '../encounters/catalog.mjs?v=learning-language-20261120';
-import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=learning-language-20261120';
-import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs';
+import {encounters,roles,sites} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
+import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=pabi-privacy-20261122';
 import {storyIdentity} from '../encounters/narrative.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
 const {scenarios}=await import(new URL('data.mjs',siteBase));
@@ -24,6 +24,29 @@ function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}
 function openCharacterPicker(role){callbacks['scene-character-change']({target:{dataset:{sceneLabelRole:role},closest(){return null;}}});assertLoaded();}
 const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
+
+test('About keeps information and privacy in a closed native disclosure, with PABI available separately',()=>{
+ route('#about');
+ const disclosure=main.innerHTML.match(/<details\b([^>]*\bprivacy-disclosure[^>]*)><summary>Information and privacy<\/summary>([\s\S]*?)<\/details>/);
+ assert.ok(disclosure,'The privacy information must remain available through a native disclosure');
+ assert.doesNotMatch(disclosure[1],/\bopen(?:\s|=|$)/);
+ assert.match(disclosure[2],/saved in this browser/);
+ assert.match(disclosure[2],/Hosting providers may keep standard access logs|hosting provider may keep standard access logs/);
+ assert.match(main.innerHTML,/Read the PABI report \(PDF\)/);
+ assert.match(main.innerHTML,/PABI project and multilingual summaries/);
+ assert.match(main.innerHTML,/it does not evaluate this resource/);
+});
+
+test('PABI can be found in each perspective’s reference page alongside the existing INAR report',()=>{
+ route(siteRole==='garda'?'#evidence/pabi':'#rights/complaints');
+ assert.match(main.innerHTML,/Experiences of Policing amongst Brazilians and People of African Descent in Ireland/);
+ assert.match(main.innerHTML,/Policing_of_Africans_and_Brazilians_in_Ireland_Mar25\.pdf/);
+ assert.match(main.innerHTML,/Policing and Racial Discrimination in Ireland/);
+ if(siteRole==='garda'){
+  assert.match(main.innerHTML,/<details[^>]*id="source-pabi"[^>]*open/);
+  assert.match(main.innerHTML,/survey was small and self-selecting/);
+ }else assert.match(main.innerHTML,/https:\/\/inar\.ie\/pabi-project\//);
+});
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');

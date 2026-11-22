@@ -2246,5 +2246,15 @@ export const messages=[
   "Opening a link does not submit a complaint or request advice.",
   "Need information or support after a real encounter?",
   "Find legal information, Garda complaint guidance and independent policing oversight.",
-  "Advice, complaints & oversight"
+  "Advice, complaints & oversight",
+  "PABI · community research",
+  "Research report",
+  "Executive summary, methodology and selected findings reviewed",
+  "Research on policing experiences, racial profiling, trust, reporting crime and complaints among Brazilians and people of African descent in Ireland.",
+  "The survey was small and self-selecting. Participants’ accounts do not estimate national prevalence or decide an individual case. This research does not set out current legal powers or evaluate this resource.",
+  "Examine respectful treatment, barriers to seeking help and community-informed review alongside legal and statistical sources.",
+  "Project information and report summaries in several languages.",
+  "The 2025 PABI report adds research on policing experiences, trust and barriers to reporting among Brazilians and people of African descent in Ireland. It supports attention to community experience; it does not evaluate this resource.",
+  "Read the PABI report (PDF)",
+  "PABI project and multilingual summaries"
 ];

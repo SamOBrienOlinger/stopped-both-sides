@@ -2245,5 +2245,15 @@ export default {
   "m2243": "Abrir un enlace no presenta una queja ni envía una solicitud de asesoramiento.",
   "m2244": "¿Necesitas información o apoyo después de un encuentro real con la policía?",
   "m2245": "Encuentra información jurídica, orientación sobre quejas relativas a la Garda y recursos de supervisión independiente de la actividad policial.",
-  "m2246": "Asesoramiento, quejas y supervisión"
+  "m2246": "Asesoramiento, quejas y supervisión",
+  "m2247": "PABI · investigación comunitaria",
+  "m2248": "Informe de investigación",
+  "m2249": "Se revisaron el resumen ejecutivo, la metodología y una selección de resultados",
+  "m2250": "Investigación sobre experiencias con la policía, perfilamiento racial, confianza, denuncia de delitos y quejas entre personas brasileñas y de ascendencia africana en Irlanda.",
+  "m2251": "La encuesta fue pequeña y las personas decidieron participar por iniciativa propia. Sus relatos no permiten estimar la prevalencia nacional ni resolver un caso individual. Esta investigación no expone las facultades legales actuales ni evalúa este recurso.",
+  "m2252": "Examina el trato respetuoso, las barreras para pedir ayuda y la revisión que incorpora las aportaciones de la comunidad, junto con fuentes jurídicas y estadísticas.",
+  "m2253": "Información sobre el proyecto y resúmenes del informe en varios idiomas.",
+  "m2254": "El informe PABI de 2025 aporta investigación sobre experiencias con la policía, confianza y barreras para denunciar entre personas brasileñas y de ascendencia africana en Irlanda. Apoya la atención a las experiencias de la comunidad; no evalúa este recurso.",
+  "m2255": "Lee el informe PABI (PDF)",
+  "m2256": "Proyecto PABI y resúmenes multilingües"
 };

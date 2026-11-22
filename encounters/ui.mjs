@@ -3,18 +3,18 @@ import {focusControl} from '../accessibility/focus.mjs';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=human-civil-rights-20261122';
+} from '../learning/play.mjs?v=pabi-privacy-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=consistent-situation-icons-1';
-import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=human-civil-rights-20261122';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=human-civil-rights-20261122';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=human-civil-rights-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=pabi-privacy-20261122';
+import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=pabi-privacy-20261122';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=pabi-privacy-20261122';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=pabi-privacy-20261122';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=human-civil-rights-20261122';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=human-civil-rights-20261122';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=pabi-privacy-20261122';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=human-civil-rights-20261122';
-import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=human-civil-rights-20261122';
-import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=human-civil-rights-20261122';
-import {ihrecGroundsUrl} from './discrimination.mjs?v=human-civil-rights-20261122';
+import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=pabi-privacy-20261122';
+import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=pabi-privacy-20261122';
+import {ihrecGroundsUrl} from './discrimination.mjs?v=pabi-privacy-20261122';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources for this decision</summary><ul lang="en-IE" data-no-translate>${ids.map(id=>{const s=references[id];return `<li><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)} ↗</a></li>`;}).join('')}</ul></details>`;

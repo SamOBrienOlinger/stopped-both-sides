@@ -2245,5 +2245,15 @@ export default {
   "m2243": "Otwarcie linku nie oznacza złożenia skargi ani prośby o poradę.",
   "m2244": "Potrzebujesz informacji lub wsparcia po rzeczywistym kontakcie z policją?",
   "m2245": "Znajdź informacje prawne, wskazówki dotyczące składania skarg na Garda oraz informacje o niezależnym nadzorze nad policją.",
-  "m2246": "Porady, skargi i nadzór"
+  "m2246": "Porady, skargi i nadzór",
+  "m2247": "PABI · badania społeczności",
+  "m2248": "Raport z badań",
+  "m2249": "Przeanalizowano streszczenie, metodologię i wybrane wyniki",
+  "m2250": "Badania dotyczące kontaktów z policją, profilowania rasowego, zaufania, zgłaszania przestępstw i skarg wśród Brazylijczyków i osób pochodzenia afrykańskiego w Irlandii.",
+  "m2251": "Ankieta była niewielka, a uczestnicy sami zgłaszali się do udziału. Ich relacje nie pozwalają oszacować skali zjawiska w kraju ani rozstrzygnąć indywidualnej sprawy. Badanie nie przedstawia aktualnych uprawnień prawnych ani nie ocenia tego materiału edukacyjnego.",
+  "m2252": "Analizuj pełne szacunku traktowanie, bariery w szukaniu pomocy i przegląd uwzględniający głos społeczności, korzystając również ze źródeł prawnych i statystycznych.",
+  "m2253": "Informacje o projekcie i streszczenia raportu w kilku językach.",
+  "m2254": "Raport PABI z 2025 roku uzupełnia badania dotyczące kontaktów z policją, zaufania i barier w zgłaszaniu zdarzeń wśród Brazylijczyków i osób pochodzenia afrykańskiego w Irlandii. Wspiera uwzględnianie doświadczeń społeczności; nie ocenia tego materiału edukacyjnego.",
+  "m2255": "Przeczytaj raport PABI (PDF)",
+  "m2256": "Projekt PABI i wielojęzyczne streszczenia"
 };
