@@ -4,7 +4,7 @@ const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener
 const study = (number, label, doi) => `<a href="https://doi.org/${doi}" target="_blank" rel="noopener noreferrer" lang="en-IE" dir="ltr" data-no-translate>${label} [${number}]</a>`;
 
 const goals = [
- ['01', 'Explore rights and support', 'Identify what needs clarification and find relevant Irish information sources.'],
+ ['01', 'Explore human and civil rights and support', 'Identify what needs clarification and find relevant Irish information sources.'],
  ['02', 'Examine the evidence', 'Separate what the situation states from assumptions about intention, guilt or risk.'],
  ['03', 'Compare perspectives', 'Consider what each person knows, what concerns them and how their responsibilities differ.'],
  ['04', 'Reflect and apply', 'Explain your decision, respond to new information and practise using a principle in another situation.']
@@ -65,7 +65,7 @@ const stages = [
 ];
 
 const outcomes = [
- ['Identify rights and sources of support','Recognise what needs clarification and locate an appropriate Irish source.','Explain a short case response and cite a relevant source.'],
+ ['Identify human and civil rights and sources of support','Recognise what needs clarification and locate an appropriate Irish source.','Explain a short case response and cite a relevant source.'],
  ['Distinguish observation from assumption','Separate supplied facts from interpretations about intention, guilt or risk.','Annotate a new vignette with facts, inferences and missing information.'],
  ['Explain a decision using evidence','Connect a proposed response to relevant facts and principles.','Give a brief written or spoken justification.'],
  ['Compare perspectives accurately','Describe differences in knowledge, concerns, powers and responsibilities.','Compare both roles without assuming equal authority or blame.'],
@@ -92,10 +92,10 @@ function panel(number, title, subtitle, content) {
 
 export function learningAbout() {
  return `<section class="learning-section" aria-labelledby="learning-heading">
-  <div class="learning-intro"><p class="eyebrow">EDUCATIONAL APPROACH</p><h2 id="learning-heading">Learning through choices</h2><p class="learning-lead">Practise decisions. Understand the reasons.</p><p>Explore rights, responsibilities and Garda decision-making through fictional encounters. Make a choice, read the explanation, compare perspectives and reconsider your response.</p><p class="learning-status"><strong>Research-informed educational prototype</strong><span>These are intended learning outcomes. The learning effects of this particular resource remain to be evaluated.</span></p></div>
+  <div class="learning-intro"><p class="eyebrow">EDUCATIONAL APPROACH</p><h2 id="learning-heading">Learning through choices</h2><p class="learning-lead">Practise decisions. Understand the reasons.</p><p>Explore human and civil rights, responsibilities and Garda decision-making through fictional encounters. Make a choice, read the explanation, compare perspectives and reconsider your response.</p><p class="learning-status"><strong>Research-informed educational prototype</strong><span>These are intended learning outcomes. The learning effects of this particular resource remain to be evaluated.</span></p></div>
   <div class="learning-goals">${goals.map(([number,title,description])=>`<div class="learning-goal"><span class="learning-goal-number" aria-hidden="true">${number}</span><h3>${title}</h3><p>${description}</p></div>`).join('')}</div>
   <div class="learning-cycle"><h3>In the resource</h3><p>Read a situation, choose a response, explore the explanation and continue. You can switch perspectives, try another answer and revisit the decisions in your recap.</p></div>
-  <div class="learning-context"><div><h3>Different perspectives, different responsibilities</h3><p>Considering both sides does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person’s misconduct. Rights never depend on a learning score.</p></div><div><h3>Using the resource for learning</h3><p>The resource provides choices, explanations, sources and opportunities to revisit decisions. The workshops, learner-written reflections and assessments below are suggested ways to use it.</p></div></div>
+  <div class="learning-context"><div><h3>Different perspectives, different responsibilities</h3><p>Considering both sides does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person’s misconduct. Human and civil rights never depend on a learning score.</p></div><div><h3>Using the resource for learning</h3><p>The resource provides choices, explanations, sources and opportunities to revisit decisions. The workshops, learner-written reflections and assessments below are suggested ways to use it.</p></div></div>
   <div class="learning-panels">
    ${panel('01','Research and teaching examples','Six ways to support learning through situations',`
     <p>These situations and features already exist in the resource. The accompanying exercises are optional activities for independent reflection or facilitated learning.</p>

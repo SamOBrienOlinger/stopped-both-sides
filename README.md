@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>One encounter. Two perspectives. Learn why a choice matters.</strong><br>
-  An interactive learning resource about public rights and Garda decisions in the Republic of Ireland.
+  An interactive learning resource about human and civil rights and Garda decisions in the Republic of Ireland.
 </p>
 
 <p align="center">
@@ -93,7 +93,7 @@ Both perspectives belong to the same learning resource. Choose either starting p
 
 | Start with the public perspective | Start with the Garda perspective |
 | --- | --- |
-| Explore rights, responsibilities and access to support. | Explore evidence, professional judgement and fair treatment. |
+| Explore human and civil rights, responsibilities and access to support. | Explore evidence, professional judgement and fair treatment. |
 | Street questions, a bag search, arrest, the station, a young person and concerns about racism. | Suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision. |
 | **[Explore the public perspective →](https://samobrienolinger.github.io/stopped-both-sides/)** | **[Explore the Garda perspective →](https://samobrienolinger.github.io/stopped-both-sides/garda/)** |
 
@@ -192,7 +192,7 @@ The documented source review is dated **7 September 2026**. Older publications a
 <details>
 <summary><strong>Read the source overview, educational rationale and related projects</strong></summary>
 
-### Public-rights sources
+### Human and civil rights sources
 
 - [Citizens Information — Questioning and surveillance](https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/).
 - [INAR — policing resources](https://inar.ie/?s=Police) and the [INAR / ICCL community and rights report on policing and racial discrimination (PDF)](https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf).
@@ -205,16 +205,16 @@ Further development offers opportunities for input from INAR, other community or
 
 ### Distinctive proposition and educational contribution
 
-> **One encounter. Two perspectives. Explore public rights and Garda decision-making in the same fictional situation, then compare the reasoning with sources.**
+> **One encounter. Two perspectives. Explore human and civil rights and Garda decision-making in the same fictional situation, then compare the reasoning with sources.**
 
-The strongest proposition is the **combination of public-rights education and reflective Garda decision-making within the same branching encounter**. Learners can switch roles without losing the situation or either role's answers. This makes it possible to compare how the two sets of decisions relate to one another, rather than presenting the public and Garda perspectives as unrelated lessons.
+The strongest proposition is the **combination of human and civil rights education and reflective Garda decision-making within the same branching encounter**. Learners can switch roles without losing the situation or either role's answers. This makes it possible to compare how the two sets of decisions relate to one another, rather than presenting the public and Garda perspectives as unrelated lessons.
 
 #### A potentially useful educational combination
 
 | What the resource brings together | Potential educational contribution |
 | --- | --- |
 | A shared situation, persistent characters and retained answers for both roles | Let learners compare perspectives within the same encounter and revisit the reasoning behind each decision. |
-| Public rights and responsibilities alongside Garda powers, evidence and professional judgement | Support discussion of how individual rights and the exercise of state authority interact in a specific Irish setting. |
+| Human and civil rights and responsibilities alongside Garda powers, evidence and professional judgement | Support discussion of how individual rights and the exercise of state authority interact in a specific Irish setting. |
 | Branching choices, immediate explanations, source links and a paired recap | Turn each decision into an opportunity to examine assumptions, communication, bias and reasons to reconsider, rather than reducing it to a right-or-wrong score. |
 | Browser-based exploration, opportunities to revisit decisions and reading controls without an account requirement | Offer a low-barrier format for independent exploration and potential facilitated discussion without requiring reports of real incidents. |
 
@@ -240,7 +240,7 @@ Specialist legal review, input from communities and Garda educators, accessibili
 
 **Practise a decision. Examine the reasoning. Compare perspectives. Apply what you learn.**
 
-Stopped: Both Sides uses **scenario-based learning** to help people explore rights, responsibilities and decision-making in fictional encounters involving the public and An Garda Síochána. Its intended contribution is to support **rights literacy, evidence-based reasoning, perspective comparison and reflective judgement**.
+Stopped: Both Sides uses **scenario-based learning** to help people explore human and civil rights, responsibilities and decision-making in fictional encounters involving the public and An Garda Síochána. Its intended contribution is to support **rights literacy, evidence-based reasoning, perspective comparison and reflective judgement**.
 
 The approach draws on research into educational games, explanatory feedback, perspective-taking, reflective review and practice. The studies below support these design principles; **the learning effects of this particular resource remain to be evaluated**. This is a focused pedagogical review, not a systematic review of every relevant study.
 
@@ -407,7 +407,7 @@ A later short activity could revisit the same objectives through another situati
 
 | Intended outcome | What the learner should demonstrate | Possible assessment |
 | --- | --- | --- |
-| **Identify rights and sources of support** | Recognise what needs clarification in a fictional encounter and locate an appropriate Irish source. | A short case response with a relevant source and explanation. |
+| **Identify human and civil rights and sources of support** | Recognise what needs clarification in a fictional encounter and locate an appropriate Irish source. | A short case response with a relevant source and explanation. |
 | **Distinguish observation from assumption** | Separate supplied information from interpretations about intention, guilt or risk. | Annotate a new vignette with facts, inferences and missing information. |
 | **Explain a decision using evidence** | Connect a proposed response to the relevant facts and principles. | A brief written or spoken justification. |
 | **Compare perspectives accurately** | Describe differences in knowledge, concerns, powers and responsibilities. | Compare both roles without assuming equal authority or blame. |
@@ -461,7 +461,7 @@ The current points system supports learning progress. It has not been validated 
 
 ### Educational rationale
 
-> Stopped: Both Sides uses scenario-based learning to help people explore rights, responsibilities and decision-making in fictional encounters involving the public and An Garda Síochána. Learners make choices, receive explanations linked to sources, compare perspectives and revisit their reasoning.
+> Stopped: Both Sides uses scenario-based learning to help people explore human and civil rights, responsibilities and decision-making in fictional encounters involving the public and An Garda Síochána. Learners make choices, receive explanations linked to sources, compare perspectives and revisit their reasoning.
 >
 > The approach draws on research into educational games, explanatory feedback, perspective-taking, reflective review and practice. Its intended learning outcomes include distinguishing evidence from assumption, identifying relevant rights and responsibilities, communicating clearly, reconsidering decisions when information changes and applying principles to unfamiliar situations.
 >

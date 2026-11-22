@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
-const hero="Explore your rights and police powers through interactions between members of the public and Gardaí.";
-const overview=["Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.","It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.","Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."];
+const hero="Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.";
+const overview=["Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.","It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.","Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."];
 for(const path of ['./','garda/']){
  test(path+' home shows the revised invitation and both Browse labels',async({page})=>{
   await page.goto(path);

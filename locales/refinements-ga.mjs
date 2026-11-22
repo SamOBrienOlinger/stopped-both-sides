@@ -46,7 +46,7 @@ export const refinementIrish={
  'Both perspectives completed.':'An dá dhearcadh críochnaithe.',
  'View scores':'Féach ar na scóir',
  'Garda resources':'Acmhainní don Gharda',
- 'Public rights resources':'Acmhainní faoi chearta an phobail',
+ 'Human and Civil Rights resources':"Acmhainní faoi chearta daonna agus sibhialta an phobail",
  'Individual practice':'Cleachtadh aonair',
  'Open the shared version to compare both perspectives.':'Oscail an leagan roinnte chun an dá dhearcadh a chur i gcomparáid.',
  'Use individual practice for a focused, single-role discussion in English. Choose the shared learning activity above to compare both perspectives in English or Irish.':'Úsáid cleachtadh aonair le haghaidh plé dírithe ar ról amháin i mBéarla. Roghnaigh an cluiche roinnte thuas chun an dá dhearcadh a chur i gcomparáid i mBéarla nó i nGaeilge.',

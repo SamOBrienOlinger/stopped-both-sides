@@ -1,10 +1,10 @@
-import {learningCopy} from './play-copy.mjs?v=learning-language-20261120';
-import {messages} from './messages.mjs?v=learning-language-20261120';
+import {learningCopy} from './play-copy.mjs?v=human-civil-rights-20261122';
+import {messages} from './messages.mjs?v=human-civil-rights-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=learning-language-20261120';
-import {gaContent} from './ga-content.mjs?v=learning-language-20261120';
-import {refinementIrish} from './refinements-ga.mjs?v=learning-language-20261120';
+import {encounters} from '../encounters/catalog.mjs?v=human-civil-rights-20261122';
+import {gaContent} from './ga-content.mjs?v=human-civil-rights-20261122';
+import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
@@ -24,8 +24,8 @@ const ui={
  'Choose this perspective':'Roghnaigh an taobh seo',
  'Public':'An pobal',
  'LEARN THROUGH EVERYDAY SITUATIONS':'FOGHLAIM TRÍ CHÁSANNA LAETHÚLA',
- 'Know your rights. Understand fair decisions.':'Bíodh do chearta ar eolas agat. Tuig cinntí córa.',
- 'Practise what to say and do in encounters with An Garda Síochána. Learn about rights, responsibilities and bias by trying the same situation from either side.':'Cleachtaigh cad atá le rá agus le déanamh i dteagmhálacha leis an nGarda Síochána. Foghlaim faoi chearta, freagrachtaí agus claonadh tríd an gcás céanna a thriail ón dá thaobh.',
+ 'Know your human and civil rights. Understand fair decisions.':'Bíodh do chearta daonna agus sibhialta ar eolas agat. Tuig cinntí córa.',
+ 'Practise what to say and do in encounters with An Garda Síochána. Learn about human and civil rights, responsibilities and bias by trying the same situation from either side.':'Cleachtaigh cad atá le rá agus le déanamh i dteagmhálacha leis an nGarda Síochána. Foghlaim faoi chearta daonna agus sibhialta, freagrachtaí agus claonadh tríd an gcás céanna a thriail ón dá thaobh.',
  'Which side will you try first?':'Cén taobh a thriailfidh tú ar dtús?',
  'You can switch sides at any stage.':'Is féidir leat taobh a athrú ag aon chéim.',
  'You are stopped. Learn what you can ask and what you may need to do.':'Stoptar thú. Foghlaim cad is féidir leat a iarraidh agus cad a d’fhéadfadh a bheith le déanamh agat.',
@@ -42,7 +42,7 @@ const ui={
  'Browse all 14 situations':'Brabhsáil na 14 chás','Choose any situation. Each one can be explored from both perspectives.':'Roghnaigh aon chás. Is féidir gach ceann a imirt ón dá thaobh.','Explore this situation':'Imir an cás seo',
  'YOUR TURN':'DO SHEALSA','Choose what you would say or do. You can try another answer.':'Roghnaigh cad a déarfá nó a dhéanfá. Is féidir freagra eile a thriail.','Next step':'An chéad chéim eile','See what you learned':'Féach ar an méid a d’fhoghlaim tú','Try another answer':'Bain triail as freagra eile',
  'Scores, sources and help':'Scóir, foinsí agus cabhair',
- 'One point means the response supports an appropriate resolution. Your rights never depend on your score.':'Ciallaíonn pointe amháin go dtacaíonn an freagra le réiteach cuí. Ní bhraitheann do chearta ar do scór riamh.',
+ 'One point means the response supports an appropriate resolution. Your human and civil rights never depend on your score.':'Ciallaíonn pointe amháin go dtacaíonn an freagra le réiteach cuí. Ní bhraitheann do chearta daonna agus sibhialta ar do scór riamh.',
  'Your avatar represents your role. The scene keeps its own names and facts.':'Léiríonn d’abhatár do ról. Coinníonn an scéal a ainmneacha agus a fhíricí féin.',
  'Switch sides to compare the same moment. Your active answer decides what happens at the next step.':'Athraigh taobh chun an nóiméad céanna a chur i gcomparáid. Cinneann do fhreagra gníomhach cad a tharlaíonn ag an gcéad chéim eile.',
  'Read the explanation after each choice. Its source links show where the information comes from.':'Léigh an míniú tar éis gach rogha. Léiríonn na naisc fhoinseacha cá as a dtagann an t-eolas.',
@@ -55,7 +55,7 @@ const ui={
  'Switch perspectives to explore the other character’s role. You can change that character too.':'Athraigh taobh chun imirt mar an carachtar eile. Is féidir an carachtar sin a athrú freisin.',
  'Available characters':'Carachtair atá ar fáil','Characters in this situation':'Carachtair sa chás seo','You':'Tusa','Other side':'An taobh eile','Choose':'Roghnaigh','Done':'Críochnaithe',
  'Character selected.':'Carachtar roghnaithe.','Character changed. Your progress is unchanged.':'Carachtar athraithe. Tá do dhul chun cinn mar a bhí.',
- 'Selected':'Roghnaithe','Play':'Imir','Explore':'Fiosraigh','Explore both perspectives':'An dá thaobh','Progress':'Dul chun cinn','Rights & sources':'Cearta agus foinsí','Evidence & sources':'Fianaise agus foinsí','About':'Eolas','Accessibility':'Inrochtaineacht',
+ 'Selected':'Roghnaithe','Play':'Imir','Explore':'Fiosraigh','Explore both perspectives':'An dá thaobh','Progress':'Dul chun cinn','Human and Civil Rights & sources':'Cearta daonna agus sibhialta agus foinsí','Evidence & sources':'Fianaise agus foinsí','About':'Eolas','Accessibility':'Inrochtaineacht',
  'Skip to the learning content':'Léim chuig an ábhar','Main navigation':'Príomhloingseoireacht','Language & reading':'Teanga agus léamh','Close settings':'Dún na socruithe','Language':'Teanga','Text size':'Méid an téacs','Standard (100%)':'Caighdeánach (100%)','Larger (115%)':'Níos mó (115%)','Large (130%)':'Mór (130%)','Extra large (150%)':'An-mhór (150%)','Contrast':'Codarsnacht','Standard':'Caighdeánach','High':'Ard','More reading space':'Níos mó spáis don léamh','Reduce motion':'Laghdaigh gluaiseacht','Apply preferences':'Cuir socruithe i bhfeidhm','Cancel':'Cealaigh','Reset reading preferences':'Athshocraigh socruithe léitheoireachta',
  'Your language and reading preferences are saved in this browser. Applying them keeps your answers, role and scores.':'Sábháiltear do theanga agus socruithe léitheoireachta sa bhrabhsálaí seo. Coinnítear do fhreagraí, do ról agus do scóir nuair a chuirtear i bhfeidhm iad.',
  'Irish covers all 14 shared situations, choices, explanations and progress. Source publications and the separate reference sections remain in English.':'Tá na 14 chás roinnte, roghanna, míniúcháin agus dul chun cinn ar fáil i nGaeilge. Fanann foilseacháin fhoinseacha agus na rannóga tagartha ar leith i mBéarla.',
@@ -68,16 +68,16 @@ const ui={
  'Practise what you can ask and what you may need to do when Gardaí stop, question, search or arrest you. Explore the same encounter from either side.':'Cleachtaigh cad is féidir leat a iarraidh agus cad a d’fhéadfadh a bheith de dhualgas ort nuair a stopann, ceistíonn, cuardaíonn nó gabhann Gardaí thú. Scrúdaigh an teagmháil chéanna ón dá thaobh.',
  'Practise checking assumptions, evidence and legal grounds when deciding to stop or search someone. See how the same encounter is experienced from either side.':'Cleachtaigh toimhdí, fianaise agus forais dhlíthiúla a sheiceáil nuair a chinneann tú duine a stopadh nó a chuardach. Féach ar an teagmháil chéanna ón dá thaobh.',
  '14 shared situations':'14 chás roinnte','No timer':'Gan teorainn ama','No sign-up':'Gan chlárú',
- 'Take your time. You can revisit any choice. Your score reflects learning in the resource; your rights never depend on it.':'Tóg do chuid ama. Is féidir filleadh ar aon rogha. Léiríonn do scór foghlaim sa chluiche; ní bhraitheann do chearta air riamh.',
+ 'Take your time. You can revisit any choice. Your score reflects learning in the resource; your human and civil rights never depend on it.':'Tóg do chuid ama. Is féidir filleadh ar aon rogha. Léiríonn do scór foghlaim sa chluiche; ní bhraitheann do chearta daonna agus sibhialta air riamh.',
  'Individual practice · original English scenarios':'Cleachtadh aonair · cásanna bunaidh i mBéarla',
  'These original English scenarios focus on one role. The shared situations above include both perspectives and are available in English and Irish.':'Díríonn na cásanna bunaidh Béarla seo ar ról amháin. Tá an dá thaobh sna cásanna roinnte thuas, i mBéarla agus i nGaeilge.',
  'EXPLORE BOTH PERSPECTIVES':'IMIR AN DÁ THAOBH','One encounter. Two perspectives.':'Teagmháil amháin. Dhá dhearcadh.','Start as either character, switch sides at any stage and build your learning score.':'Tosaigh mar cheachtar carachtar, athraigh taobh ag aon chéim agus forbair do scór foghlama.',
  'Start as a member of the public':'Tosaigh mar dhuine den phobal','Start as a Garda':'Tosaigh mar Gharda','My scores & progress':'Mo scóir agus mo dhul chun cinn','Continue your situation':'Lean le do chás','Last recap':'An t-athbhreithniú deireanach','Open recap':'Oscail an t-athbhreithniú','Resume your situation':'Lean den imirt',
  'ONE SITUATION · TWO PERSPECTIVES':'CÁS AMHÁIN · DHÁ DHEARCADH','Which role will you start with?':'Cén ról a roghnóidh tú ar dtús?','Choose a role, then a situation. Switch sides at any stage to explore the same moment with different choices and responsibilities.':'Roghnaigh ról, ansin cás. Athraigh taobh ag aon chéim chun an nóiméad céanna a scrúdú le roghanna agus freagrachtaí éagsúla.','Starting role':'Ról tosaigh','Member of the public':'Duine den phobal','Member of An Garda Síochána':'Comhalta den Gharda Síochána','Garda':'Garda',
- 'View your saved scores & progress':'Féach ar do scóir agus dul chun cinn sábháilte','RIGHTS & RESPONSIBILITIES':'CEARTA AGUS FREAGRACHTAÍ','BIAS & DECISION-MAKING':'CLAONADH AGUS CINNTEOIREACHT','Rights & responsibilities':'Cearta agus freagrachtaí','Bias & decision-making':'Claonadh agus cinnteoireacht','Explore the public perspective':'Imir mar dhuine den phobal','Explore the Garda perspective':'Imir mar Gharda',
+ 'View your saved scores & progress':'Féach ar do scóir agus dul chun cinn sábháilte','HUMAN AND CIVIL RIGHTS & RESPONSIBILITIES':'CEARTA DAONNA AGUS SIBHIALTA AGUS FREAGRACHTAÍ','BIAS & DECISION-MAKING':'CLAONADH AGUS CINNTEOIREACHT','Human and Civil Rights & responsibilities':'Cearta daonna agus sibhialta agus freagrachtaí','Bias & decision-making':'Claonadh agus cinnteoireacht','Explore the public perspective':'Imir mar dhuine den phobal','Explore the Garda perspective':'Imir mar Gharda',
  'Garda involved in the encounter':'Garda sa teagmháil','Garda in the custody team':'Garda san fhoireann choimeádta','Patrol Garda':'Garda patróil','Responding Garda':'Garda atá ag freagairt','Community Garda':'Garda pobail','Youth-facing Garda':'Garda ag obair le daoine óga','Garda working with a colleague':'Garda ag obair le comhghleacaí','Representative of a local community group (member of the public)':'Ionadaí ó ghrúpa pobail áitiúil (duine den phobal)','Supervising sergeant':'Sáirsint maoirseachta','Person matching the fuller description':'Duine a mheaitseálann an cur síos iomlán',
  'Current perspective':'Dearcadh reatha','EXPLORING THE GARDA PERSPECTIVE':'AG IMIRT MAR GHARDA','EXPLORING THE PUBLIC PERSPECTIVE':'AG IMIRT MAR DHUINE DEN PHOBAL','Garda perspective':'Dearcadh an Gharda','Public perspective':'Dearcadh an phobail','MEMBER OF THE PUBLIC PERSPECTIVE':'DEARCADH AN DUINE DEN PHOBAL','GARDA PERSPECTIVE':'DEARCADH AN GHARDA',
- 'Switch to the public perspective':'Athraigh go dearcadh an phobail','Switch to the Garda perspective':'Athraigh go dearcadh an Gharda','Switch to the Garda site':'Athraigh go suíomh an Gharda','Switch to the public rights site':'Athraigh go suíomh chearta an phobail',
+ 'Switch to the public perspective':'Athraigh go dearcadh an phobail','Switch to the Garda perspective':'Athraigh go dearcadh an Gharda','Switch to the Garda site':'Athraigh go suíomh an Gharda','Switch to the human and civil rights resource':'Athraigh go suíomh chearta daonna agus sibhialta an phobail',
  'Scores on this route':'Scóir ar an mbealach seo','points':'pointe','No answers yet':'Gan fhreagra fós','← All shared situations':'← Gach cás roinnte','My progress':'Mo dhul chun cinn',
  'These facts stay the same when you switch roles. Private thoughts and separate debriefs are identified in the scene.':'Fanann na fíricí seo mar an gcéanna nuair a athraíonn tú ról. Aithnítear smaointe príobháideacha agus comhráite athbhreithnithe ar leith sa scéal.',
  'Your answer is recorded for this role.':'Tá do fhreagra taifeadta don ról seo.','Choose a response and see how it addresses the situation.':'Roghnaigh freagra agus féach conas a phléann sé leis an gcás.','1 LEARNING POINT':'1 PHOINTE FOGHLAMA','0 POINTS · AN OPPORTUNITY TO REVIEW':'0 POINTE · DEIS ATHMHACHNAIMH','Consider this before continuing.':'Meas é seo sula leanann tú ar aghaidh.','This supports an appropriate response.':'Tacaíonn sé seo le freagra cuí.','Why this matters':'Cén fáth a bhfuil sé seo tábhachtach','Read the sources for this decision':'Léigh foinsí an chinnidh seo','opens in a new tab':'osclaítear i gcluaisín nua',
@@ -92,7 +92,7 @@ const ui={
  'Each stage awards 1 point for a response that supports an appropriate resolution according to its explanation and sources, or 0 for a response that needs review. More than one choice can earn a point. There are no deductions for taking time or switching roles.':'Tugann gach céim 1 phointe d’fhreagra a thacaíonn le réiteach cuí de réir an mhínithe agus na bhfoinsí, nó 0 d’fhreagra le hathmheas. Is féidir le níos mó ná rogha amháin pointe a fháil. Ní bhaintear pointí as am a ghlacadh ná ról a athrú.',
  'The current route shows points out of the decisions you answered. A completed role score requires an answer in that role at every stage on the route. Best completed results use percentages because different routes can have different lengths.':'Taispeánann an bealach reatha pointí as na cinntí a d’fhreagair tú. Teastaíonn freagra sa ról ag gach céim chun scór róil críochnaithe a fháil. Úsáidtear céatadáin do na torthaí is fearr mar go mbíonn faid éagsúla ag bealaí.',
  'Your saved learning points count your best result at each unique stage, so repeating a stage cannot inflate the total. Improving an answer from 0 to 1 updates your progress.':'Áirítear an toradh is fearr ag gach céim ar leith sna pointí sábháilte; ní ardaíonn athdhéanamh céime an t-iomlán. Nuashonraíonn feabhsú freagra ó 0 go 1 do dhul chun cinn.',
- 'A score is not a measure of a person’s bias, a professional qualification or a prediction of a real encounter. Rights remain the same regardless of a score.':'Ní tomhas ar chlaonadh duine, cáilíocht ghairmiúil ná tuar fíortheagmhála é scór. Fanann cearta mar an gcéanna beag beann ar scór.',
+ 'A score is not a measure of a person’s bias, a professional qualification or a prediction of a real encounter. Human and civil rights remain the same regardless of a score.':'Ní tomhas ar chlaonadh duine, cáilíocht ghairmiúil ná tuar fíortheagmhála é scór. Fanann cearta daonna agus sibhialta mar an gcéanna beag beann ar scór.',
  'Explore this perspective':'Imir an ról seo','Manage your progress':'Bainistigh do dhul chun cinn',
  'Only fictional learning choices and scores are saved locally. There is no account or upload. When you use the site-switch button, the resource carries this progress in the link’s fragment and merges it with progress already saved on the other site. Copying that link can share the included learning record. Separate browsers and devices do not automatically sync.':'Ní shábháiltear go háitiúil ach roghanna agus scóir fhicseanúla. Níl cuntas ná uaslódáil ann. Iompraíonn an cnaipe athraithe suímh an dul chun cinn i mblúire an naisc agus cumascann é le dul chun cinn ar an suíomh eile. Is féidir le cóipeáil an naisc an taifead foghlama sin a roinnt. Ní shioncronaíonn brabhsálaithe ná gléasanna ar leith go huathoibríoch.',
  'Clear the scores and resume point saved on this site in this browser? The companion site and previously copied links may still hold their own copy.':'An nglanfar na scóir agus an pointe atosaithe ar an suíomh seo sa bhrabhsálaí seo? D’fhéadfadh cóip a bheith ar an suíomh eile agus i naisc a cóipeáladh roimhe.',
@@ -108,7 +108,7 @@ Object.assign(ui,{
 Object.assign(ui,refinementIrish);
 ui['member of the public']=ui['Member of the public'];
 ui['Garda member']=ui['Member of An Garda Síochána'];
-ui['Your Rights']=ui['Public rights resources'];
+ui['Human and Civil Rights']=ui['Human and Civil Rights resources'];
 ui['Garda Guidance']=ui['Garda resources'];
 for(const [key,value] of Object.entries(ui))if(key.includes('site-switch button'))ui[key.replaceAll('site-switch button','resource-site link')]=value;
 Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
@@ -161,13 +161,13 @@ export {gaContent};
 // Each pack is hosted with the resource and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=learning-language-20261120'+retry),
- ar:retry=>import('./ar-content.mjs?v=learning-language-20261120'+retry),
- pl:retry=>import('./pl-content.mjs?v=learning-language-20261120'+retry),
- ro:retry=>import('./ro-content.mjs?v=learning-language-20261120'+retry),
- fr:retry=>import('./fr-content.mjs?v=learning-language-20261120'+retry),
- es:retry=>import('./es-content.mjs?v=learning-language-20261120'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=learning-language-20261120'+retry)
+ pt:retry=>import('./pt-content.mjs?v=human-civil-rights-20261122'+retry),
+ ar:retry=>import('./ar-content.mjs?v=human-civil-rights-20261122'+retry),
+ pl:retry=>import('./pl-content.mjs?v=human-civil-rights-20261122'+retry),
+ ro:retry=>import('./ro-content.mjs?v=human-civil-rights-20261122'+retry),
+ fr:retry=>import('./fr-content.mjs?v=human-civil-rights-20261122'+retry),
+ es:retry=>import('./es-content.mjs?v=human-civil-rights-20261122'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=human-civil-rights-20261122'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
@@ -444,18 +444,18 @@ const revisedSiteCopy={
   "es": "Explorar todas las situaciones",
   "zh-Hans": "浏览所有情境"
  },
- "Explore your rights and police powers through interactions between members of the public and Gardaí.": {
-  "ga": "Fiosraigh do chearta agus cumhachtaí póilíneachta trí theagmhálacha idir daoine den phobal agus na Gardaí.",
-  "pt": "Explore os seus direitos e os poderes da polícia através de interações entre membros do público e agentes da Garda.",
-  "ar": "تعرّف على حقوقك وصلاحيات الشرطة من خلال التفاعل بين أفراد الجمهور وعناصر الغاردا.",
-  "pl": "Poznaj swoje prawa i uprawnienia policji na przykładzie kontaktów między członkami społeczeństwa a funkcjonariuszami Garda.",
-  "ro": "Explorează-ți drepturile și atribuțiile poliției prin interacțiunile dintre membrii publicului și agenții Garda.",
-  "fr": "Découvrez vos droits et les pouvoirs de la police à travers des interactions entre des membres du public et des agents de la Garda.",
-  "es": "Explora tus derechos y las facultades de la policía a través de interacciones entre personas del público y agentes de la Garda.",
-  "zh-Hans": "通过公众与爱尔兰警察（Gardaí）的互动，了解你的权利和警方的法定权力。"
+ "Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.": {
+  "ga": "Fiosraigh do chearta daonna agus sibhialta agus cumhachtaí póilíneachta trí theagmhálacha idir daoine den phobal agus na Gardaí.",
+  "pt": "Explore os seus direitos humanos e civis e os poderes da polícia através de interações entre membros do público e agentes da Garda.",
+  "ar": "تعرّف على حقوقك الإنسانية والمدنية وصلاحيات الشرطة من خلال التفاعل بين أفراد الجمهور وعناصر الغاردا.",
+  "pl": "Poznaj swoje prawa człowieka i prawa obywatelskie i uprawnienia policji na przykładzie kontaktów między członkami społeczeństwa a funkcjonariuszami Garda.",
+  "ro": "Explorează-ți drepturile omului și drepturile civile și atribuțiile poliției prin interacțiunile dintre membrii publicului și agenții Garda.",
+  "fr": "Découvrez vos droits humains et civils et les pouvoirs de la police à travers des interactions entre des membres du public et des agents de la Garda.",
+  "es": "Explora tus derechos humanos y civiles y las facultades de la policía a través de interacciones entre personas del público y agentes de la Garda.",
+  "zh-Hans": "通过公众与爱尔兰警察（Gardaí）的互动，了解你的人权和公民权利和警方的法定权力。"
  }
 };
-const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána','Your Rights':'Public rights resources','Garda Guidance':'Garda resources'};
+const messageAliases={'Back to your recap':'Open recap','Return to your recap':'Open recap','Return to your situation':'Continue your situation','Garda member':'Member of An Garda Síochána','Human and Civil Rights':'Human and Civil Rights resources','Garda Guidance':'Garda resources'};
 export function languageLoaded(language){return ['en','ga'].includes(language)||packs.has(language);}
 export function loadLanguage(value){
  const language=normaliseLanguage(value);

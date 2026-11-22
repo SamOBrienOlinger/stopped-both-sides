@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Two-perspective learning about Garda encounters, rights, responsibilities and decision-making in Ireland",
+  "description": "Two-perspective learning about Garda encounters, human and civil rights, responsibilities and decision-making in Ireland",
   "scripts": {
     "dev": "node tests/browser/server.mjs",
     "test": "node scripts/test.mjs",

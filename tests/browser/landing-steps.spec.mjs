@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test';
 const paths=['./','garda/'];
 const unwanted=[
  'No sign-up. No timer. You can try again.',
- 'Take your time. You can revisit any choice. Your score reflects learning in the resource; your rights never depend on it.',
+ 'Take your time. You can revisit any choice. Your score reflects learning in the resource; your human and civil rights never depend on it.',
  'Choose any situation. Each one can be explored from both perspectives.'
 ];
 const headings=['Understand the situation you are in','Choose a response','Learn why it matters'];

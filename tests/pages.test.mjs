@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
 import {siteAddresses} from '../site.mjs';
 const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides/');
-import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=learning-language-20261120';
+import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=human-civil-rights-20261122';
 import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
 import {translateText,translateHTML} from '../locales/translate.mjs';
@@ -14,10 +14,10 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const subtitle='An interactive learning resource for the public and Gardaí.';
  const shared=readFileSync(new URL('../encounters/ui.mjs',import.meta.url),'utf8');
  assert.ok(shared.includes(subtitle));
-  assert.ok(shared.includes("Explore your rights and police powers through interactions between members of the public and Gardaí."));
+  assert.ok(shared.includes("Explore your human and civil rights and police powers through interactions between members of the public and Gardaí."));
   assert.ok(shared.includes('Browse all situations'));
-  assert.ok(shared.includes("Stopped: Both Sides explores rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
-  assert.ok(shared.includes("It helps the public understand their rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication."));
+  assert.ok(shared.includes("Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
+  assert.ok(shared.includes("It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication."));
   assert.ok(shared.includes("Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."));
  assert.match(shared,/<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides<\/h1>/);
  for(const path of ['','garda/']){
@@ -92,7 +92,7 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
   for(const [role,path] of [['public','index.html'],['garda','garda/index.html']]){
    const html=readFileSync(new URL('../'+path,import.meta.url),'utf8');
    const navigation=html.match(/<nav aria-label="Main navigation"[^>]*>([\s\S]*?)<\/nav>/)[1];
-   for(const [label,resourceRole,route] of [['Your Rights','public','rights'],['Garda Guidance','garda','evidence']]){
+   for(const [label,resourceRole,route] of [['Human and Civil Rights','public','rights'],['Garda Guidance','garda','evidence']]){
     const link=navigation.match(new RegExp('<a([^>]*)>'+label+'<\\/a>'));
     assert.ok(link,`${path}: ${label} belongs in the main navigation`);
     const href=link[1].match(/href="([^"]+)"/)[1];
@@ -117,5 +117,5 @@ test('Original public practice removes the retired explanatory paragraph without
  const publicApp=readFileSync(new URL('../app.mjs',import.meta.url),'utf8');
  assert.ok(!publicApp.includes("The next scene is fictional. No choice guarantees an outcome or excuses mistreatment. This resource cannot decide whether a particular stop, search or arrest is lawful."));
  assert.match(publicApp,/<div class="topline game-note">/);
- assert.match(publicApp,/<a href="#rights">Rights & sources<\/a>/);
+ assert.match(publicApp,/<a href="#rights">Human and Civil Rights & sources<\/a>/);
 });
