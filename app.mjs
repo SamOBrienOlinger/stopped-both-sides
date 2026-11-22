@@ -33,7 +33,7 @@ const sourceTopics=[
  {id:'search',title:'Searches',ids:['drugs','obstruction'],situation:'public-search'},
  {id:'custody',title:'Arrest and custody',ids:['legalAid','arrest','silence','interviews','custody','statements','dpp','eu'],situation:'public-custody'},
  {id:'young',title:'Under 18s',ids:['youth','childInterview','childSolicitor'],situation:'public-young-person'},
- {id:'complaints',title:'Complaints and community experience',ids:['fiosru','fiosruForm','inarReport','pabi','pabiSummaries','inar','ireport'],situation:'public-fair-treatment'}
+ {id:'complaints',title:'Complaints and community experience',ids:['fiosru','inarReport','pabi','ireport'],situation:'public-fair-treatment'}
 ];
 const rightsTopics=[{id:'support',title:'Advice &amp; support'},...sourceTopics];
 function sourceTopicsHTML(){return `${sourceTopics.map(t=>`<section class="source-topic" id="rights-${t.id}" tabindex="-1"><h2>${t.title}</h2><div class="sources-grid">${t.ids.map(id=>{const s=sources[id];return `<a class="source-card" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer"><strong lang="en-IE" data-no-translate>${esc(s.title)} ↗</strong><span>${esc(s.note)}</span></a>`;}).join('')}</div><button class="primary secondary" data-action="paired-start" data-id="${t.situation}" data-role="public">Practise a related situation</button></section>`).join('')}`;}

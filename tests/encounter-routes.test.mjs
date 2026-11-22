@@ -45,7 +45,11 @@ test('PABI can be found in each perspective’s reference page alongside the exi
  if(siteRole==='garda'){
   assert.match(main.innerHTML,/<details[^>]*id="source-pabi"[^>]*open/);
   assert.match(main.innerHTML,/survey was small and self-selecting/);
- }else assert.match(main.innerHTML,/https:\/\/inar\.ie\/pabi-project\//);
+ }else{
+  assert.doesNotMatch(main.innerHTML,/<a class="source-card" href="https:\/\/inar\.ie\/pabi-project\//);
+  assert.doesNotMatch(main.innerHTML,/<a class="source-card" href="https:\/\/inar\.ie\/\?s=Police/);
+  assert.doesNotMatch(main.innerHTML,/<a class="source-card" href="https:\/\/www\.fiosru\.ie\/complaints\/submit-a-complaint\//);
+ }
 });
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
