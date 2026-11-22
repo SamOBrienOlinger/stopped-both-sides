@@ -11,12 +11,12 @@
   z-index:80;
   background:var(--paper,#fff);
 }
-html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
-#main :is(h1,h2,[tabindex="-1"]) {scroll-margin-block-start:clamp(7rem,12vw,10rem)}
+html {scroll-padding-block-start:calc(var(--navigation-height,6rem) + .75rem)}
+#main :is(h1,h2,[tabindex="-1"]) {scroll-margin-block-start:.75rem}
 /* Scroll-to-element and keyboard navigation must reveal controls below the
    sticky header, including compact navigation and enlarged text. */
 #main :is(a,button,summary,input,select,[role="button"],[tabindex]) {
-  scroll-margin-block-start:clamp(7rem,12vw,10rem);
+  scroll-margin-block-start:.75rem;
 }
 .tap-icon {
   display:inline-block;
@@ -169,14 +169,17 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   gap:.75rem;
 }
 .footer-identity {
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:.15rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr));
+  align-items:center;
+  gap:.15rem .65rem;
   min-inline-size:0;
   padding-block-start:.75rem;
   border-block-start:1px solid var(--footer-rule);
+  overflow-wrap:anywhere;
 }
+.footer-identity>.back-to-top {grid-column:-2/-1;justify-self:end}
+.footer .footer-copyright {grid-column:1/-1}
 .footer .footer-creator {
   max-inline-size:100%;
   color:var(--footer-text);
@@ -233,9 +236,9 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
   outline-offset:3px;
 }
 @media(max-width:40rem) {
-  .footer {--footer-block-padding:.625rem}
+  .footer {--footer-block-padding:.5rem}
   .footer > .footer-inner,
-  .footer-top {gap:.5rem}
+  .footer-top {gap:.375rem}
   .footer .footer-tools {
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -246,14 +249,9 @@ html {scroll-padding-block-start:clamp(7rem,12vw,10rem)}
     padding:.35em .65em;
   }
   .footer-identity {
-    flex-direction:row;
-    flex-wrap:wrap;
-    align-items:baseline;
-    gap:.2rem .65rem;
+    align-items:center;
+    gap:.15rem .65rem;
     padding-block-start:.5rem;
-  }
-  .footer .footer-copyright {
-    flex:1 1 8rem;
   }
 }
 @media(hover:hover) {

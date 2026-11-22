@@ -120,7 +120,7 @@ for(const role of ['public','garda']){
   await expect(page.locator('#main h1')).toBeFocused();
   await revealsReady(page);
   expectPerceptibleFade(await page.evaluate(()=>window.__opacityTrace),'page',.6,900);
-  const group=page.locator('.content-page > .info-block').last();
+  const group=page.locator('.content-page > section.info-block').last();
   await expect(group).toHaveAttribute('data-reveal-pending','');
   expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBeCloseTo(.4,2);
   await recordOpacity(group,'reveal',true);
@@ -138,7 +138,7 @@ for(const role of ['public','garda']){
   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
   await revealsReady(page);
-  await page.locator('.content-page > .info-block').last().scrollIntoViewIfNeeded();
+  await page.locator('.content-page > section.info-block').last().scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
    'returning to a reference group does not replay its reveal').toBe(false);

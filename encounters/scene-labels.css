@@ -70,19 +70,19 @@
 .scene-character-dialog[data-dialog-fallback][open]{display:block;position:fixed;inset:0;z-index:1001;max-block-size:min(85vh,42rem)}
 .scene-character-dialog::backdrop{background:rgba(10,28,43,.68);backdrop-filter:blur(3px)}
 .scene-profile-shell{padding:clamp(1rem,3vw,1.65rem)}
-.scene-profile-top{display:flex;align-items:center;gap:1rem}
+.scene-profile-top{display:flex;flex-wrap:wrap;align-items:center;gap:1rem}
 .scene-profile-portrait{
- flex:0 0 auto;position:relative;inline-size:5.7rem;aspect-ratio:1;overflow:hidden;
+ flex:0 0 auto;position:relative;inline-size:clamp(64px,18vw,92px);aspect-ratio:1;overflow:hidden;
  border:2px solid var(--tone-line,#6d8c94);border-radius:1rem;background:var(--tone-pale,#edf6f5);
 }
 .scene-profile-portrait img{position:absolute;display:block;max-inline-size:none;max-width:none}
-.scene-profile-info{flex:1;min-inline-size:0}
+.scene-profile-info{flex:1 1 8rem;min-inline-size:0}
 .scene-character-dialog h2{margin:0 0 .3rem;font-size:clamp(1.4rem,3.7vw,2rem);line-height:1.2;color:var(--tone-deep,#175e61);overflow-wrap:anywhere}
 .scene-profile-role{margin:.2rem 0;font-size:1rem;font-weight:750;color:var(--tone-deep,#175e61)}
 .scene-profile-body{margin:1.2rem 0 1rem;line-height:1.65}
 .scene-profile-setting{margin:0;padding:.7rem .9rem;border-radius:.75rem;background:var(--tone-pale,#edf6f5);color:var(--tone-deep,#175e61);line-height:1.5}
 .scene-profile-actions{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-block-start:1.3rem;
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,7rem),1fr));gap:.65rem;margin-block-start:1.3rem;
 }
 .scene-profile-actions button{
  min-inline-size:0;min-block-size:48px;
@@ -93,7 +93,7 @@
 .scene-profile-close{background:var(--tone-deep,#175e61);color:#fff}
 .scene-profile-actions button:hover{filter:brightness(1.12)}
 .scene-profile-actions button:focus-visible{outline:3px solid var(--tone-deep,#175e61);outline-offset:3px}
-@media(max-width:390px){.scene-profile-top{align-items:flex-start;gap:.65rem}.scene-profile-portrait{inline-size:4.7rem}}
+@media(max-width:390px){.scene-profile-top{align-items:flex-start;gap:.65rem}}
 @media(forced-colors:active){
  .encounter-scene[data-caption-anchors] .scene-panel,
  .encounter-scene[data-caption-anchors] .scene-character-label,

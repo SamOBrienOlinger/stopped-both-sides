@@ -11,9 +11,9 @@ for(const [role,path] of [['public','./'],['garda','garda/']])test(`${role}: the
   await expect(art).toHaveCSS('object-fit','contain');
   await expect.poll(()=>art.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
   const url=await art.evaluate(img=>img.currentSrc);
-  expect(url).toMatch(/\/heroes\/garda-(480|960|1600)\.webp\b/);
+  expect(url).toMatch(/\/heroes\/garda-hi-vis-(480|960|1600)\.jpg\b/);
   const response=await page.request.get(url);
-  expect(response.status()).toBe(200);expect(response.headers()['content-type']).toContain('image/webp');
+  expect(response.status()).toBe(200);expect(response.headers()['content-type']).toContain('image/jpeg');
   await page.evaluate(()=>document.fonts.ready);
   const heading=landing.getByRole('heading',{name:'One situation. Two perspectives.'});
   await expect(heading).toBeVisible();

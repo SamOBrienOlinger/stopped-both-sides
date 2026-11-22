@@ -72,7 +72,7 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
    await expect.poll(()=>page.locator('#main img').evaluateAll(imgs=>imgs.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
    const result=await aligned(page);expect(result.labels).toBe(162);maxError=Math.max(maxError,result.maxError);rendered+=pairs.length;
   }
-  expect(cases).toHaveLength(79);expect(pairs).toHaveLength(81);expect(rendered).toBe(cases.length*pairs.length);
+  expect(cases).toHaveLength(99);expect(pairs).toHaveLength(81);expect(rendered).toBe(cases.length*pairs.length);
   await info.attach('caption-matrix.json',{body:JSON.stringify({browser:info.project.name,path,width,stages:cases.length,pairings:pairs.length,rendered,maxCentreErrorCssPx:maxError,mode:'real renderer with site CSS; not end-to-end gameplay sessions'},null,2),contentType:'application/json'});
  });
 }

@@ -9,7 +9,7 @@ for(const path of ['./','./garda/']){
   const art=page.locator('.reference-landing .encounter-hero-art');
   await expect(art).toHaveCount(1);
   await expect.poll(()=>art.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
-  expect(await art.evaluate(img=>img.currentSrc)).toMatch(/\/heroes\/garda-(480|960|1600)\.webp/);
+  expect(await art.evaluate(img=>img.currentSrc)).toMatch(/\/heroes\/garda-hi-vis-(480|960|1600)\.jpg/);
   await expect(page.locator('link[href*="uimproved.css"]')).toHaveCount(1);
   await expect(page.locator('script[src*="uimproved.mjs"]')).toHaveCount(1);
   const styles=await art.evaluate(element=>{

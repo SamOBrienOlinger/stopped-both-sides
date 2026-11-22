@@ -28,6 +28,18 @@ export function createLayout({main}){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const forced=matchMedia('(forced-colors: active)');
  const root=document.documentElement;
+ function sizeHeader(){
+  const height=header.getBoundingClientRect?.().height;
+  if(height>0){
+   const value=Math.ceil(height)+'px';
+   if(root.style.getPropertyValue('--navigation-height')!==value)root.style.setProperty('--navigation-height',value);
+  }
+ }
+ // Text preferences and translated navigation can change the header's height
+ // without crossing a viewport breakpoint. Keep focused content clear of it.
+ if(typeof globalThis.ResizeObserver==='function')new ResizeObserver(sizeHeader).observe(header);
+ globalThis.addEventListener?.('resize',sizeHeader);
+ document.fonts?.ready?.then(sizeHeader);
  const labels={en:'Menu',ga:'Roghchlár',pt:'Menu',ar:'القائمة',pl:'Menu',ro:'Meniu',fr:'Menu',es:'Menú',zh:'菜单'};
  let open=false,lastRoute='',panelAnimation=null,landingObserver=null,observedLanding=null;
  const background=new Map();
@@ -78,10 +90,13 @@ export function createLayout({main}){
   const current=toggle.querySelector('[data-menu-current]');
   current.textContent=active?.dataset.nav==='play'?'':active?.textContent.trim()||'';
   current.hidden=!current.textContent;
+  sizeHeader();
  }
  function close(restore=false,animate=true){open=false;sync(animate);if(restore)toggle.focus({preventScroll:true});}
  toggle.addEventListener('click',()=>{open=!open;sync(true);});
- header.addEventListener('keydown',event=>{
+ // Safari can leave focus on the page after a pointer opens the menu.
+ // Escape must still close the overlay and return focus to its trigger.
+ document.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&open){event.preventDefault();close(true);}
  });
  // Settings replace the compact menu. Returning from the dialog then restores
