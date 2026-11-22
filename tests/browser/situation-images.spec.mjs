@@ -61,15 +61,14 @@ async function checkScenes(cards,heading,ids){
  })));
 }
 
-for(const [entry,role] of [['./','public'],['garda/','garda']]){
- test(`${role} cards show their opening scene with a Garda and public character`,async({page})=>{
+for(const [entry,role] of [['./','public'],['garda/','garda']])for(const viewport of [{width:390,height:844},{width:1366,height:900}]){
+ test(`${role} ${viewport.width}px cards show their opening scene with the story's characters`,async({page})=>{
   const rendererURLs=new Set();
   page.on('request',request=>{
    const url=new URL(request.url());
    if(url.pathname.endsWith('/encounters/scenes.mjs'))rendererURLs.add(url.href);
   });
   await page.emulateMedia({reducedMotion:'reduce'});
-  for(const viewport of [{width:390,height:844},{width:1366,height:900}]){
    await page.setViewportSize(viewport);
    await page.goto(entry+'?lang=en#play');
    await page.locator('.topic-disclosure>summary').press('Enter');
@@ -91,7 +90,6 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
    for(const summary of await page.locator('.scenario-library .discrimination-ground>summary').all())await summary.press('Enter');
    await checkScenes(page.locator('.scenario-library .practice-content .scenario'),'h2',
     topicGroups.flatMap(topic=>topic.encounters).filter(id=>encounters[id].origin===role));
-  }
   expect([...rendererURLs], 'All pages should import the same cached scene renderer URL').toHaveLength(1);
  });
 }

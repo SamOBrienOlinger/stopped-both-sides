@@ -7,7 +7,7 @@ import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=contributors-expanded-20261122';
 import {createMotion} from '../accessibility/motion.mjs?v=colleague-witness-20261122';
-import {createEncounterMode} from '../encounters/ui.mjs?v=situation-cast-20261122';
+import {createEncounterMode} from '../encounters/ui.mjs?v=cast-audit-20261122';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');

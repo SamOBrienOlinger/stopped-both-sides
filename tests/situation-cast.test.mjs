@@ -5,6 +5,8 @@ import {discriminationEncounters} from '../encounters/discrimination.mjs';
 import {situationParticipants,participantLayout} from '../encounters/situation-cast.mjs';
 import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=situation-cast-20261122';
 import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=situation-cast-20261122';
+import {supportingCharacters} from '../encounters/supporting-characters.mjs';
+import {existsSync} from 'node:fs';
 
 const suppliedToken='eyJ2IjoyLCJlIjoiZGlzY3JpbWluYXRpb24tY29sbGVhZ3VlLXJhY2UiLCJyIjoiZ2FyZGEiLCJwIjpbXSwiYSI6W251bGwsbnVsbF0sImMiOlsicHVibGljLTYiLCJnYXJkYS00Il19';
 test('The reported race link shows a distinct Black affected adult, discriminatory colleague and two witnesses',()=>{
@@ -12,7 +14,8 @@ test('The reported race link shows a distinct Black affected adult, discriminato
  assert.equal(state.cast.public,'public-6','The existing public witness is retained');
  assert.equal(state.cast.garda,'garda-4');
  assert.deepEqual(people.map(person=>person.key),['affected','acting-garda','public','garda']);
- assert.equal(people[0].characterId,'public-5');
+ assert.equal(people[0].characterId,'support-race-adult');
+ assert.deepEqual(people[0].character.props,['backpack']);
  assert.equal(people[0].label,'Black adult being singled out');
  assert.notEqual(people[1].characterId,state.cast.garda);
  assert.equal(people[2].label,'Public witness');assert.equal(people[3].label,'Witnessing Garda');
@@ -35,7 +38,7 @@ test('Every discrimination stage and requested cast has distinct, fully labelled
    assert.ok(people.some(person=>person.key==='affected'&&!person.playable));
    assert.ok(people.some(person=>person.key==='acting-garda'&&!person.playable));
   }
-  if(encounter.id==='discrimination-colleague-race')assert.ok(['public-3','public-5'].includes(people[0].characterId));
+  if(encounter.id==='discrimination-colleague-race')assert.equal(people[0].characterId,'support-race-adult');
   checked++;
  }
  assert.equal(checked,20*2*81);
@@ -62,6 +65,8 @@ test('Companions, the child and stage-specific participants follow the written a
  assert.ok(people('discrimination-colleague-gender').some(person=>person.key==='companion'));
  const child=people('discrimination-colleague-family-status').find(person=>person.key==='child');
  assert.equal(child.label,'Child, 7 years old');assert.ok(child.scale<1);
+ assert.equal(child.characterId,'support-child');assert.equal(child.character.age,7);
+ assert.ok(!characters.public.some(person=>person.id===child.characterId),'A child uses dedicated child artwork');
  for(const id of ['discrimination-sexual-orientation','discrimination-colleague-sexual-orientation'])assert.ok(people(id).some(person=>person.key==='partner'));
  for(const [id,partners] of [['public-1',['public-5','public-8','public-9']],['public-4',['public-7','public-2','public-6']],['public-3',['public-9']]]){
   const pair=situationParticipants('discrimination-sexual-orientation',{...cast,public:id});
@@ -80,6 +85,22 @@ test('Companions, the child and stage-specific participants follow the written a
  for(const id of ['discrimination-housing-assistance','discrimination-colleague-housing-assistance']){
   assert.ok(people(id).some(person=>person.key==='agent'));
   assert.ok(!people(id,'follow-up').some(person=>person.key==='agent'));
+ }
+ for(const character of Object.values(supportingCharacters))assert.ok(existsSync(new URL(character.sceneArtwork.src)));
+});
+
+test('The fair steward and festival colleague appear only where the story places them; a later visitor has a different identity',()=>{
+ for(const publicCharacter of characters.public){
+  const cast={public:publicCharacter.id,garda:'garda-4'};
+  const fair=situationParticipants('discrimination-family-status',cast);
+  assert.ok(fair.some(person=>person.key==='steward'));
+  assert.ok(!situationParticipants('discrimination-family-status',cast,{nodeId:'follow-up'}).some(person=>person.key==='steward'));
+  const opening=situationParticipants('discrimination-sexual-orientation',cast);
+  const followUp=situationParticipants('discrimination-sexual-orientation',cast,{nodeId:'follow-up'});
+  const colleague=opening.find(person=>person.key==='colleague'),visitor=followUp.find(person=>person.key==='visitor');
+  assert.ok(colleague);assert.ok(visitor);assert.notEqual(colleague.characterId,visitor.characterId);
+  assert.ok(!opening.some(person=>person.key==='visitor'));assert.ok(!followUp.some(person=>person.key==='colleague'));
+  for(const person of opening.filter(person=>followUp.some(next=>next.key===person.key)))assert.equal(followUp.find(next=>next.key===person.key).characterId,person.characterId);
  }
 });
 

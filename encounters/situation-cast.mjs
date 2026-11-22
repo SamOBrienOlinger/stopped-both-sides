@@ -1,14 +1,15 @@
 import {characters,characterFor,castForSituation} from './characters.mjs?v=situation-cast-20261122';
+import {supportingCharacters} from './supporting-characters.mjs?v=cast-audit-20261122';
 
 // These are author-selected portraits for fictional roles, not assumptions
 // about a real person's identity, beliefs, disability or civil status.
 const women=['public-4','public-7','public-2','public-6'];
 const men=['public-5','public-8','public-1','public-9'];
 const older=['public-9','public-3','public-6'];
-const blackAdults=['public-5','public-3'];
 const adults=characters.public.map(character=>character.id);
 const officers=characters.garda.map(character=>character.id);
 const part=(key,role,label,portraits=adults,scale=1)=>({key,role,label,portraits,scale});
+const only=(stage,participant)=>({...participant,stages:[stage]});
 const originalRoles={
  gender:'Woman with a booking',
  'civil-status':'Divorced customer',
@@ -29,7 +30,7 @@ const affected={
  age:part('affected','public','Person reporting the theft, 72 years old',older),
  'religious-belief':part('affected','public','Person reporting anti-Muslim abuse'),
  'traveller-community':part('affected','public','Traveller reporting abuse'),
- race:part('affected','public','Black adult being singled out',blackAdults),
+ race:part('affected','public','Black adult being singled out',['support-race-adult']),
  disability:part('affected','public','Deaf adult requesting an ISL interpreter'),
  'housing-assistance':part('affected','public','Applicant receiving HAP')
 };
@@ -50,46 +51,48 @@ export function situationParticipants(id,requestedCast,{nodeId='opening'}={}){
   supports.push(affected[ground]);
   if(ground==='gender')supports.push(part('companion','public','Male companion',men));
   if(ground==='sexual-orientation')supports.push(part('partner','public','Her partner',women));
-  if(ground==='family-status')supports.push(part('child','public','Child, 7 years old',['public-1','public-7','public-4','public-2'],.62));
-  if(ground==='housing-assistance'&&nodeId==='opening')supports.push(part('agent','public','Letting agent'));
+  if(ground==='family-status')supports.push(part('child','public','Child, 7 years old',['support-child'],.85));
+  if(ground==='housing-assistance')supports.push(only('opening',part('agent','public','Letting agent')));
   supports.push(part('acting-garda','garda','Garda whose conduct is being challenged',officers));
  }else{
   if(ground==='gender'){
    supports.push(part('organiser','public','Workshop organiser'));
-   if(nodeId==='opening')supports.push(part('participant','public','Man offered the booked place',men));
+   supports.push(only('opening',part('participant','public','Man offered the booked place',men)));
   }
   if(ground==='civil-status'){
    supports.push(part('companion','public','Second ticket holder'),part('attendant','public','Ticket attendant'));
-   if(nodeId==='follow-up')supports.push(part('supervisor','public','Venue supervisor'));
+   supports.push(only('follow-up',part('supervisor','public','Venue supervisor')));
   }
-  if(ground==='family-status')supports.push(part('organiser','public','Course organiser'));
+  if(ground==='family-status')supports.push(part('organiser','public','Course organiser'),only('opening',part('steward','public','Steward who asks the Garda to help')));
   if(ground==='sexual-orientation'){
    const partners=women.includes(cast.public)?women:men.includes(cast.public)?men:['public-3','public-9'];
    supports.push(part('partner','public','Their partner',partners),part('steward','public','Gate steward'));
-   if(nodeId==='follow-up')supports.push(part('visitor','public','Visitor offering a witness account'));
+   supports.push(only('opening',part('colleague','public','Event colleague who calls the Garda')),only('follow-up',part('visitor','public','Visitor offering a witness account')));
   }
   if(ground==='age')supports.push(part('organiser','public','Course organiser'));
   if(ground==='religious-belief'){
    supports.push(part('volunteer','public','Booking volunteer'));
-   if(nodeId==='follow-up')supports.push(part('organiser','public','Class organiser'));
+   supports.push(only('follow-up',part('organiser','public','Class organiser')));
   }
   if(ground==='traveller-community'){
    supports.push(part('caretaker','public','Centre caretaker'));
-   if(nodeId==='follow-up')supports.push(part('manager','public','Centre manager'));
+   supports.push(only('follow-up',part('manager','public','Centre manager')));
   }
   if(ground==='race'){
    supports.push(part('steward','public','Ticket steward'));
-   if(nodeId==='follow-up')supports.push(part('supervisor','public','Club supervisor'));
+   supports.push(only('follow-up',part('supervisor','public','Club supervisor')));
   }
   if(ground==='disability')supports.push(part('friend','public','Friend accompanying the Deaf person'));
-  if(ground==='housing-assistance'&&nodeId==='opening')supports.push(part('agent','public','Letting agent'));
+  if(ground==='housing-assistance')supports.push(only('opening',part('agent','public','Letting agent')));
  }
+ // Reserve every participant's portrait before filtering by stage. A newcomer
+ // must not reuse the face of someone who appeared only in the previous stage.
  const supporting=supports.map(participant=>{
   const characterId=participant.portraits.find(candidate=>!used.has(candidate));
   if(!characterId)throw Error('No distinct portrait for '+id+'/'+participant.key);
   used.add(characterId);
-  return {...participant,characterId,character:characterFor(participant.role,characterId),playable:false};
- });
+  return {...participant,characterId,character:characterFor(participant.role,characterId)||supportingCharacters[characterId],playable:false};
+ }).filter(participant=>!participant.stages||participant.stages.includes(nodeId));
  const playable=['public','garda'].map(role=>({key:role,role,label:situationRoleLabel(id,role),characterId:cast[role],character:characterFor(role,cast[role]),playable:true,scale:1}));
  return [...(colleague?supporting:[playable[0],...supporting]),...(colleague?playable:[playable[1]])].map((participant,index)=>({...participant,number:index+1}));
 }

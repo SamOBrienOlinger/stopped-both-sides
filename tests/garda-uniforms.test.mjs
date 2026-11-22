@@ -59,7 +59,8 @@ test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',
     assert.match(html,new RegExp('data-scene-character="'+state.cast.public+'"'));
     const people=situationParticipants(encounter.id,state.cast,{nodeId})||[{role:'public'},{role:'garda'}];
     assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,people.filter(person=>person.role==='garda').length);
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,people.filter(person=>person.role==='public').length);
+    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,people.filter(person=>person.role==='public'&&!person.character?.sceneArtwork).length);
+    assert.equal((html.match(/characters\/discrimination-support-20261122.png/g)||[]).length,people.filter(person=>person.character?.sceneArtwork).length);
     assert.equal((html.match(/clip-path:inset\(/g)||[]).length,people.length);
     assert.ok(html.includes('data-scene-label-role="garda"'),'keep profile dialog buttons');
    }

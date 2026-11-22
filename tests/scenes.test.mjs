@@ -22,7 +22,8 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
     assert.match(html,new RegExp(`data-scene-character="${state.cast.public}"`));
     assert.match(html,new RegExp(`data-scene-character="${state.cast.garda}"`));
     const participants=situationParticipants(e.id,state.cast,{nodeId})||roles.map(role=>({role}));
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,participants.filter(person=>person.role==='public').length);
+    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,participants.filter(person=>person.role==='public'&&!person.character?.sceneArtwork).length);
+    assert.equal((html.match(/characters\/discrimination-support-20261122.png/g)||[]).length,participants.filter(person=>person.character?.sceneArtwork).length);
     assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,participants.filter(person=>person.role==='garda').length);
     assert.equal((html.match(/clip-path:inset\(/g)||[]).length,participants.length,'each character is isolated from neighbouring figures');
     assert.doesNotMatch(html,/Separate reflections|scene-portraits/);

@@ -2,9 +2,9 @@ import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layou
 import {backgroundImage} from './backgrounds.mjs?v=learning-language-20261120';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=colleague-witness-20261122';
 import {characterFor,defaultCast} from './characters.mjs?v=situation-cast-20261122';
-import {sceneCharacterArtwork} from './scene-artwork.mjs?v=learning-language-20261120';
+import {sceneCharacterArtwork} from './scene-artwork.mjs?v=cast-audit-20261122';
 import {discriminationEncounters} from './discrimination.mjs?v=colleague-witness-20261122';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=situation-cast-20261122';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=cast-audit-20261122';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
@@ -115,8 +115,8 @@ function backdrop(place,art,{sizes,lazy}){
  return `<img class="scene-backdrop" src="${image.src}"${responsive} alt="" width="${image.width}" height="${image.height}" decoding="async"${lazy?' loading="lazy"':''}>`;
 }
 
-function sceneActor(role,id,anchor,lazy,{key=role,number=null}={}){
- const art=sceneCharacterArtwork(characterFor(role,id));
+function sceneActor(role,id,anchor,lazy,{key=role,number=null,character=characterFor(role,id)}={}){
+ const art=sceneCharacterArtwork(character);
  return `<div class="scene-actor scene-actor--${role}" data-scene-character="${id}" data-scene-role="${key}" style="${sceneAnchorStyle(anchor)}${anchor.layer?'z-index:'+anchor.layer+';':''}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async"${lazy?' loading="lazy"':''} style="${art.style}"></div>${number?'<span class="scene-person-number">'+number+'</span>':''}</div>`;
 }
 
@@ -130,7 +130,7 @@ export function renderScenePreview(id){
  const art=backgroundImage(place),cast=defaultCast();
  checkSceneArtwork(place,art?.name||null);
  const participants=situationParticipants(id,cast);
- const actors=participants?participants.map((participant,index)=>sceneActor(participant.role,participant.characterId,participantLayout(place,participants,index),true,{key:participant.key})).join(''):roles.map(role=>sceneActor(role,cast[role],sceneActorLayout(place,role),true)).join('');
+ const actors=participants?participants.map((participant,index)=>sceneActor(participant.role,participant.characterId,participantLayout(place,participants,index),true,{key:participant.key,character:participant.character})).join(''):roles.map(role=>sceneActor(role,cast[role],sceneActorLayout(place,role),true)).join('');
  return locationArt(place,art,actors,{
   className:'situation-image',sizes:'auto, (max-width: 36rem) 100vw, 36rem',lazy:true
  });

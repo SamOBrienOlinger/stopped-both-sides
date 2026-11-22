@@ -16,7 +16,8 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.goto(path+'?lang=en'+stateHash(initial));
   const scene=page.locator(sceneSelector);await expect(scene).toBeVisible();
   await expect(scene.locator('.scene-actor')).toHaveCount(4);
-  await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','public-5');
+  await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','support-race-adult');
+  await expect(scene.locator('[data-scene-role="affected"] img')).toHaveAttribute('src',/discrimination-support-20261122.png/);
   await expect(scene.locator('[data-scene-participant="affected"]')).toContainText('Black adult being singled out');
   await expect(scene.locator('[data-scene-participant="acting-garda"]')).toContainText('Garda whose conduct is being challenged');
   await expect(scene.locator('[data-scene-label-role="public"]')).toContainText('Public witness');
@@ -31,7 +32,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.locator('[data-action="paired-character-close"]').click();
   await expect(caption).toBeFocused();
   expect(current(page).answers).toEqual(answered.answers);
-  await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','public-3');
+  await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','support-race-adult');
   await page.reload();await expect(scene).toBeVisible();
   expect(current(page).cast.public).toBe('public-5');
   for(const target of ['public','garda']){
