@@ -3,19 +3,19 @@ import {focusControl} from '../accessibility/focus.mjs';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=colleague-witness-20261122';
+} from '../learning/play.mjs?v=situation-locations-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=football-ground-20261122';
-import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=situation-cast-20261122';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=situation-cast-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=situation-locations-20261122';
+import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=situation-locations-20261122';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=situation-locations-20261122';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=situation-locations-20261122';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences,charactersForSituation} from './characters.mjs?v=situation-cast-20261122';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=football-ground-20261122';
-import {situationRoleLabel} from './situation-cast.mjs?v=group-spacing-20261122';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=situation-locations-20261122';
+import {situationRoleLabel} from './situation-cast.mjs?v=situation-locations-20261122';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=human-civil-rights-20261122';
-import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=colleague-witness-20261122';
-import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=search-practice-20261122';
-import {ihrecGroundsUrl} from './discrimination.mjs?v=colleague-witness-20261122';
+import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=situation-locations-20261122';
+import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=situation-locations-20261122';
+import {ihrecGroundsUrl} from './discrimination.mjs?v=situation-locations-20261122';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const titleHTML=e=>e.kind==='colleague-witness'?scenarioCopy(e.id,e.title):esc(e.title);
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';

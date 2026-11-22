@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
+import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 
 const paths=['./','garda/'];
 const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));

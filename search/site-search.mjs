@@ -1,7 +1,7 @@
-import {encounters,references} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {topicGroups} from '../encounters/presentation.mjs?v=colleague-witness-20261122';
+import {encounters,references} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {topicGroups} from '../encounters/presentation.mjs?v=situation-locations-20261122';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
-import {translateText,escapeHTML as esc} from '../locales/translate.mjs?v=football-ground-20261122';
+import {translateText,escapeHTML as esc} from '../locales/translate.mjs?v=situation-locations-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
 import {communitySources} from '../learning/community-resources.mjs?v=community-resources-20261122';
 

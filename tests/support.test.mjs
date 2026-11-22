@@ -4,7 +4,7 @@ import {supportSection,supportRecap} from '../learning/support.mjs';
 import {learningCopy} from '../locales/play-copy.mjs?v=colleague-witness-20261122';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
 
 const links=html=>[...html.matchAll(/href="([^"]+)"/g)].map(match=>match[1]);
 const textNodes=html=>[...new Set(html.replace(/<h3\b[^>]*data-no-translate[^>]*>[\s\S]*?<\/h3>/g,'').split(/<[^>]*>/).map(text=>text.trim().replaceAll('&amp;','&')).filter(text=>/\p{L}/u.test(text)))];

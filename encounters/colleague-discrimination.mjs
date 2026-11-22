@@ -174,7 +174,7 @@ export const colleagueDiscriminationCases=[
   ]
  },
  {
-  ground:'traveller-community',title:'Traveller community: a colleague prejudges the report',place:'square',
+  ground:'traveller-community',title:'Traveller community: a colleague prejudges the report',place:'community-fair',
   description:'A Garda dismisses a Traveller family’s report by relying on a stereotype about the community.',
   goal:'Challenge a group stereotype and preserve an individual account.',
   stages:[
@@ -257,7 +257,7 @@ export const colleagueDiscriminationCases=[
   ]
  },
  {
-  ground:'housing-assistance',title:'Housing assistance: a colleague takes sides',place:'street',
+  ground:'housing-assistance',title:'Housing assistance: a colleague takes sides',place:'flat-entrance',
   description:'At a refused flat viewing, a Garda disparages a HAP applicant and declines to hear what happened.',
   goal:'Separate an accommodation discrimination concern from the Garda colleague’s own conduct.',
   stages:[

@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
+import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const cast={public:'public-6',garda:'garda-9'};
@@ -113,10 +113,12 @@ async function characterGeometry(scene){
  }));
  for(const actor of actors){
   expect(actor.overflow,`${actor.character} stays inside its background`).toBeLessThanOrEqual(.05);
-  expect(actor.floorGap,'feet remain near the foreground floor').toBeGreaterThan(.04);
-  expect(actor.floorGap,'figures are not suspended above the foreground').toBeLessThan(.08);
-  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(actor.outdoor ? .46 : .5);
-  expect(actor.height,'the figure does not dominate the setting').toBeLessThan(actor.outdoor ? .51 : .6);
+  // Per-background perspective uses different depths and scale; the detailed
+  // all-situation test also checks viewport and preview/stage consistency.
+  expect(actor.floorGap,'feet retain a visible foreground margin').toBeGreaterThan(.005);
+  expect(actor.floorGap,'figures stand on the visible foreground floor').toBeLessThan(.35);
+  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(.35);
+  expect(actor.height,'the figure remains proportionate to doors and furniture').toBeLessThan(.6);
  }
  await expect(scene).not.toContainText('Separate reflections');
 }

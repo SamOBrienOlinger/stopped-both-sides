@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {characters,charactersForSituation,changeCharacter,createCharacterPreferences} from '../encounters/characters.mjs';
-import {discriminationEncounters} from '../encounters/discrimination.mjs';
-import {situationParticipants,participantLayout} from '../encounters/situation-cast.mjs';
-import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=situation-cast-20261122';
-import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=situation-cast-20261122';
+import {discriminationEncounters} from '../encounters/discrimination.mjs?v=situation-locations-20261122';
+import {situationParticipants,participantLayout} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=situation-locations-20261122';
 import {supportingCharacters} from '../encounters/supporting-characters.mjs';
 import {existsSync} from 'node:fs';
 

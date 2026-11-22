@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
-import {discriminationEncounters} from '../../encounters/discrimination.mjs';
-import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-cast-20261122';
-import {situationParticipants} from '../../encounters/situation-cast.mjs';
+import {discriminationEncounters} from '../../encounters/discrimination.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
+import {situationParticipants} from '../../encounters/situation-cast.mjs?v=situation-locations-20261122';
 import {openCharacterPicker} from './navigation.mjs';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 

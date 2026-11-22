@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {topicGroups} from '../../encounters/presentation.mjs';
+import {topicGroups} from '../../encounters/presentation.mjs?v=situation-locations-20261122';
 
 for(const [path,role] of [['./','public'],['garda/','garda']]){
  test(`${role}: every topic expands in place with only its own situations`,async({page})=>{

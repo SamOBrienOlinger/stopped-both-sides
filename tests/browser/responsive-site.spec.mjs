@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,answer,stateHash,decodeState} from '../../encounters/engine.mjs';
+import {startEncounter,answer,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 import {expectControlsFit} from './control-layout.mjs';
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 

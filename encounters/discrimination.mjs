@@ -1,4 +1,4 @@
-import {colleagueDiscriminationCases,colleagueDiscriminationReferences} from './colleague-discrimination.mjs?v=colleague-witness-20261122';
+import {colleagueDiscriminationCases,colleagueDiscriminationReferences} from './colleague-discrimination.mjs?v=situation-locations-20261122';
 
 // The ground names and order follow IHREC's protected-grounds page. Each case
 // has common facts and separate public and Garda decisions at the same moment.
@@ -10,7 +10,7 @@ const stage=(title,scene,publicView,gardaView)=>({title,scene,views:{public:publ
 
 const cases=[
  {
-  ground:'gender', title:'Gender', place:'square',
+  ground:'gender', title:'Gender', place:'bicycle-workshop',
   description:'At a bicycle repair workshop, the organiser gives someone else the place you booked after saying the session is for men.',
   goal:'Ask what the booking decision was based on.',
   stages:[
@@ -37,7 +37,7 @@ const cases=[
   ]
  },
  {
-  ground:'civil-status', title:'Civil status', place:'square',
+  ground:'civil-status', title:'Civil status', place:'exhibition-entrance',
   description:'A community venue tells a divorced customer that the advertised two-adult booking is only for married couples.',
   goal:'Identify when marital or civil partnership status is part of the decision.',
   stages:[
@@ -64,7 +64,7 @@ const cases=[
   ]
  },
  {
-  ground:'family-status', title:'Family status', place:'square',
+  ground:'family-status', title:'Family status', place:'community-fair',
   description:'A parent is turned away from an evening course after the organiser assumes childcare will affect attendance.',
   goal:'Separate attendance requirements from assumptions about parenting.',
   stages:[
@@ -91,7 +91,7 @@ const cases=[
   ]
  },
  {
-  ground:'sexual-orientation', title:'Sexual orientation', place:'square',
+  ground:'sexual-orientation', title:'Sexual orientation', place:'food-festival',
   description:'You and your partner are turned away from an event after the steward learns you are a same-sex couple.',
   goal:'Raise a concern while choosing what personal information to share.',
   stages:[
@@ -118,7 +118,7 @@ const cases=[
   ]
  },
  {
-  ground:'age', title:'Age', place:'square',
+  ground:'age', title:'Age', place:'community-fair',
   description:'A photography course is advertised for adults. A 67-year-old applicant is told the course has an upper age limit.',
   goal:'Ask for the purpose and evidence behind an age rule.',
   stages:[
@@ -145,7 +145,7 @@ const cases=[
   ]
  },
  {
-  ground:'religious-belief', source:'religion', title:'Religious belief', place:'square',
+  ground:'religious-belief', source:'religion', title:'Religious belief', place:'community-hall',
   description:'A volunteer refuses your booking for a publicly advertised music class after learning you have no religion.',
   goal:'Check whether religious belief or lack of belief affected access to a service.',
   stages:[
@@ -172,7 +172,7 @@ const cases=[
   ]
  },
  {
-  ground:'traveller-community', title:'Traveller community', place:'square',
+  ground:'traveller-community', title:'Traveller community', place:'community-hall',
   description:'A caretaker cancels your confirmed room booking after learning you belong to the Traveller community.',
   goal:'Record the actual reason given and challenge assumptions about a community.',
   stages:[
@@ -253,7 +253,7 @@ const cases=[
   ]
  },
  {
-  ground:'housing-assistance', source:'housing-assistance-payment/housing', title:'Housing assistance', place:'street',
+  ground:'housing-assistance', source:'housing-assistance-payment/housing', title:'Housing assistance', place:'flat-entrance',
   description:'A letting agent refuses your booked viewing after learning that you receive the Housing Assistance Payment (HAP).',
   goal:'Distinguish the accommodation concern from the Garda’s response at the property.',
   stages:[

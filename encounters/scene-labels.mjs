@@ -1,8 +1,8 @@
 import {characterArtwork,characterFor} from './characters.mjs?v=learning-language-20261120';
-import {roleLabels} from './catalog.mjs?v=colleague-witness-20261122';
+import {roleLabels} from './catalog.mjs?v=situation-locations-20261122';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',

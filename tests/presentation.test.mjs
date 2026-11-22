@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {encounters,roles} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,answer,continueEncounter,switchRole} from '../encounters/engine.mjs?v=colleague-witness-20261122';
-import {remainingDecisions,variations,topicGroups,learningStatus} from '../encounters/presentation.mjs?v=colleague-witness-20261122';
-import {recordProgress,emptyProgress} from '../encounters/progress.mjs?v=colleague-witness-20261122';
-import {translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {encounters,roles} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,switchRole} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {remainingDecisions,variations,topicGroups,learningStatus} from '../encounters/presentation.mjs?v=situation-locations-20261122';
+import {recordProgress,emptyProgress} from '../encounters/progress.mjs?v=situation-locations-20261122';
+import {translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
 
 test('Remaining-decision ranges bound every possible continuation, including perspective changes',()=>{
  for(const e of Object.values(encounters)){

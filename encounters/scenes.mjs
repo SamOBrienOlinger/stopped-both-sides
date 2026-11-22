@@ -1,10 +1,10 @@
-import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=football-ground-20261122';
-import {backgroundImage} from './backgrounds.mjs?v=football-ground-20261122';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=colleague-witness-20261122';
+import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
+import {backgroundImage} from './backgrounds.mjs?v=situation-locations-20261122';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=situation-locations-20261122';
 import {characterFor,defaultCast} from './characters.mjs?v=situation-cast-20261122';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=cast-audit-20261122';
-import {discriminationEncounters} from './discrimination.mjs?v=football-ground-20261122';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=group-spacing-20261122';
+import {discriminationEncounters} from './discrimination.mjs?v=situation-locations-20261122';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=situation-locations-20261122';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
@@ -51,11 +51,11 @@ export const sceneDirections={
   'fair-deadline':scene('advice-room',null,'separate','station')
  },
  'garda-street':{
-  'street-start':scene('street',null),
-  'street-reset':scene('street','public'),
-  'street-enquiry':scene('street','garda'),
-  'street-information':scene('street',null),
-  'street-identity':scene('street',null,'comparison')
+  'street-start':scene('closed-shop',null),
+  'street-reset':scene('closed-shop','public'),
+  'street-enquiry':scene('closed-shop','garda'),
+  'street-information':scene('closed-shop',null),
+  'street-identity':scene('closed-shop',null,'comparison')
  },
  'garda-description':{
   'description-start':scene('square',null),
@@ -106,7 +106,7 @@ export const sceneDirections={
 
 // Only exterior artwork changes. The station and private rooms retain their art.
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community','football-ground':'Outside the football ground'};
+const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community','football-ground':'Outside the football ground','bicycle-workshop':'At the bicycle repair workshop','exhibition-entrance':'At the exhibition entrance','community-fair':'At the community fair','food-festival':'At the food festival entrance','community-hall':'At the community hall','closed-shop':'Outside the closed shop','flat-entrance':'Outside the flats'};
 export const sceneAssets=Object.keys(places);
 
 function backdrop(place,art,{sizes,lazy}){

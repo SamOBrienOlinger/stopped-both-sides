@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {siteRole,siteBase} from './site-fixture.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
-import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=colleague-witness-20261122';
+import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=situation-locations-20261122';
 
 test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
  let stages=0;

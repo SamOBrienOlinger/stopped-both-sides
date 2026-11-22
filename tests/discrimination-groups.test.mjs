@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {topicGroups} from '../encounters/presentation.mjs';
-import {encounters} from '../encounters/catalog.mjs';
-import {discriminationGrounds} from '../encounters/visuals.mjs';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs';
+import {topicGroups} from '../encounters/presentation.mjs?v=situation-locations-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {discriminationGrounds} from '../encounters/visuals.mjs?v=situation-locations-20261122';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
 
 const grounds=['gender','civil-status','family-status','sexual-orientation','age','religious-belief','traveller-community','race','disability','housing-assistance'];
 const topic=topicGroups.find(group=>group.id==='discrimination');
