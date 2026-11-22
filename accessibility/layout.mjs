@@ -32,7 +32,17 @@ export function createLayout({main}){
   const height=header.getBoundingClientRect?.().height;
   if(height>0){
    const value=Math.ceil(height)+'px';
-   if(root.style.getPropertyValue('--navigation-height')!==value)root.style.setProperty('--navigation-height',value);
+   if(root.style.getPropertyValue('--navigation-height')!==value){
+    root.style.setProperty('--navigation-height',value);
+    // A font swap or wrapped navigation can grow after a control is focused.
+    // Keep that control clear of the sticky header without changing focus.
+    const focused=document.activeElement;
+    if(main.contains?.(focused))globalThis.requestAnimationFrame?.(()=>{
+     if(document.activeElement!==focused)return;
+     const box=focused.getBoundingClientRect(),bottom=header.getBoundingClientRect().bottom;
+     if(box.bottom>0&&box.top>=0&&box.top<bottom)focused.scrollIntoView?.({block:'nearest',behavior:'instant'});
+    });
+   }
   }
  }
  // Text preferences and translated navigation can change the header's height
@@ -102,7 +112,7 @@ export function createLayout({main}){
  // Settings replace the compact menu. Returning from the dialog then restores
  // focus to Menu, leaving the learning content visible and usable.
  header.addEventListener('click',event=>{
-  if(compact.matches&&event.target.closest('[data-reading-open]')){
+  if(compact.matches&&event.target.closest('[data-reading-open],[data-search-open]')){
    close(false,false);return;
   }
   const link=event.target.closest('nav a,.wordmark');

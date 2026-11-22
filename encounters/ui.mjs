@@ -13,7 +13,7 @@ import {characters,characterFor,characterArtwork,createCast,changeCharacter,crea
 import {renderScene,renderScenePreview} from './scenes.mjs?v=colleague-witness-20261122';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=human-civil-rights-20261122';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=colleague-witness-20261122';
-import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=colleague-witness-20261122';
+import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=search-practice-20261122';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=colleague-witness-20261122';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const titleHTML=e=>e.kind==='colleague-witness'?scenarioCopy(e.id,e.title):esc(e.title);
@@ -60,13 +60,21 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   if(replace){history.replaceState(null,'',hash);rerender(focus);}
   else if(location.hash===hash)rerender();else location.hash=hash;
  }
+ function startSituation(id,role=siteRole){
+  if(!hasOwn(encounters,id)||!roles.includes(role))return false;
+  const list=playLocation(location.hash,siteRole);
+  sharedReturn=list?playHash(list.mode,list.role,list.topic):defaultList('shared',id,role);
+  characterPickerTarget=null;setupCharacterOpen=false;
+  navigate(startEncounter(id,role,{characterId:characterPreferences.value[role]}));
+  return true;
+ }
  function returnLink(label,mode='shared',original=getOriginalSession(),secondary=false){
   const role=mode==='shared'?state.role:siteRole;
   const id=mode==='shared'?state.id:siteRole+'-'+original.scenarioId;
   const href=(mode==='shared'?sharedReturn:practiceReturn)||defaultList(mode,id,role);
   const list=playLocation(href,role);
   const target=list?listHref(list.mode,list.role,list.topic):href;
-  const cardId=list?.mode==='practice'?encounters[id].originalId:id;
+  const cardId=list?.mode==='practice'?(encounters[id].originalId||id):id;
   return `<a class="${label?`primary${secondary?' secondary':''}`:'text-button'}" data-return-to-play="${esc(cardId)}" href="${esc(target)}">${label||`← ${list?.mode==='practice'?'Back to practice':'Back to situations'}`}</a>`;
  }
  function focusReturnedList(){
@@ -189,9 +197,9 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const selectedTopic=topicGroups.find(group=>group.id===topic);
   const practice=mode==='practice';
   const localPractice=practice&&role===siteRole;
-  const groups=topicGroups.filter(group=>(!selectedTopic||group.id===topic)&&(!practice||group.encounters.some(id=>encounters[id].origin===role)))
-   .map(group=>practice?{...group,encounters:group.encounters.filter(id=>encounters[id].origin===role)}:group);
-  const openTopic=selectedTopic?.id||topicForSituation(practice&&returnFocus?role+'-'+returnFocus:returnFocus)||'';
+  const groups=topicGroups.filter(group=>(!selectedTopic||group.id===topic)&&(!practice||group.encounters.some(id=>encounters[id].origin===role||encounters[id].origin==='shared')))
+   .map(group=>practice?{...group,encounters:group.encounters.filter(id=>encounters[id].origin===role||encounters[id].origin==='shared')}:group);
+  const openTopic=selectedTopic?.id||topicForSituation(practice&&returnFocus&&!encounters[returnFocus]?role+'-'+returnFocus:returnFocus)||'';
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
    <h1>${heading}</h1>
@@ -200,7 +208,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
      ${roles.map(r=>`<a class="primary ${role===r?'':'secondary'}" href="${esc(listHref(mode,r,topic,browse))}" data-role-tone="${r}" ${role===r?'aria-current="true"':''}>${perspectiveIcon(r)}<span>${r==='public'?'Member of the public':'Member of An Garda Síochána'}</span><span class="role-status">${role===r?'Selected':'Choose'}</span></a>`).join('')}
     </div></details>
    </div>
-   ${!practice&&topic==='discrimination'?`<div class="info-block discrimination-intro"><p>Housing assistance applies to accommodation. The rules for other grounds depend on the setting.</p>${getLanguage()!=='en'?'<p class="small-note">The Discrimination scenarios are in English.</p>':''}<a class="text-button" href="${ihrecGroundsUrl}" target="_blank" rel="noopener noreferrer">Read IHREC's protected grounds ↗</a></div>`:''}
+   ${topic==='discrimination'?`<div class="info-block discrimination-intro"><p>Housing assistance applies to accommodation. The rules for other grounds depend on the setting.</p>${getLanguage()!=='en'?'<p class="small-note">The Discrimination scenarios are in English.</p>':''}<a class="text-button" href="${ihrecGroundsUrl}" target="_blank" rel="noopener noreferrer">Read IHREC's protected grounds ↗</a></div>`:''}
    ${modeOptions(mode,role,topic)}
    ${resumeLink(saved)}
    ${!practice&&!browse?`<div class="start-panel">
@@ -215,7 +223,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <details class="scenario-library" ${practice||browse?'open':''}>
      <summary id="situations-title">Browse all situations</summary>
      <div class="topic-filters" role="group" aria-label="Situation topics">${topicsForPlay(mode,role).map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
-     <div class="situation-topics">${practice?situationTopics(groups,group=>practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic}):`
+     <div class="situation-topics">${practice?situationTopics(groups,group=>group.id==='discrimination'?topicCards(group,role):practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic}):`
       ${situationTopics(groups,group=>topicCards(group,role),{openTopic})}`}</div>
     </details>`}
   </section>`;
@@ -457,12 +465,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   }
   if(action==='paired-landing-character'){characterPreferences.choose(role,button.dataset.character);setupCharacterOpen=false;navigate('encounters/'+role);return true;}
   if(action==='paired-start'||action==='paired-quick-start'){
-   const list=playLocation(location.hash,siteRole);
-   sharedReturn=list?.mode==='shared'?playHash(list.mode,list.role,list.topic):defaultList('shared',button.dataset.id,role);
-   characterPickerTarget=null;
-   setupCharacterOpen=false;
-   navigate(startEncounter(button.dataset.id,role,{characterId:characterPreferences.value[role]}));
-   return true;
+   return startSituation(button.dataset.id,role);
   }
   if(action==='paired-transfer'){characterPickerTarget=null;transferOriginal(getOriginalSession(),true,otherRole(siteRole),false);return true;}
   if(action==='paired-setup-characters'){setupCharacterOpen=!setupCharacterOpen;rerender(false);if(setupCharacterOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
@@ -497,6 +500,6 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   else if(action==='paired-replay-role'){characterPickerTarget=null;navigate(startEncounter(state.id,role,{cast:state.cast}));}
   return true;
  }
- return {handles,view,personalize,introduction,aboutIntroduction,perspectiveChoice,landing,resumeLink,referenceRoute,legacyBar,beginPractice,practiceSession,returnLink,focusReturnedList,legacyPanel:original=>scenePanel(legacyState(original),true),legacyScene:(original,index)=>{const s=legacyState(original);return renderScene(s,{step:s.history[index],compact:true});},updateSiteLink,handleClick,transferOriginal};
+ return {handles,view,startSituation,personalize,introduction,aboutIntroduction,perspectiveChoice,landing,resumeLink,referenceRoute,legacyBar,beginPractice,practiceSession,returnLink,focusReturnedList,legacyPanel:original=>scenePanel(legacyState(original),true),legacyScene:(original,index)=>{const s=legacyState(original);return renderScene(s,{step:s.history[index],compact:true});},updateSiteLink,handleClick,transferOriginal};
 }
 

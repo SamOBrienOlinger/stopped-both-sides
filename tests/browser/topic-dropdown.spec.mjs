@@ -67,7 +67,9 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(library.locator('.situation-topic[open]')).toHaveCount(0);
   await library.locator('[data-situation-topic="street"]>summary').press('Enter');
   await expect(library.locator('[data-action="start"][data-id="street"]')).toBeVisible();
-  await expect(library.locator('[data-situation-topic="discrimination"]')).toHaveCount(0);
+  await expect(library.locator('[data-situation-topic="discrimination"]')).toHaveCount(1);
+  await expect(library.locator('.discrimination-ground')).toHaveCount(10);
+  await expect(library.locator('.discrimination-ground [data-action="paired-start"]')).toHaveCount(20);
  });
 
  test(`${role}: topic disclosures fit small screens and enlarged Arabic text`,async({page})=>{

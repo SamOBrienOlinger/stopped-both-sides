@@ -265,7 +265,7 @@ test('Both situation browsers group every situation once and keep topics closed 
  }
 });
 
-test('All topics collapses all groups, selected-topic routes open their group, and practice retains only its own situations',()=>{
+test('All topics collapses all groups and practice includes its original situations and all Discrimination grounds',()=>{
  route('#play');action('paired-topic',{topic:'all'});
  assert.equal(location.hash,'#encounters/'+siteRole+'/all');
  assert.equal((main.innerHTML.match(/data-situation-topic="[^"]+" open/g)||[]).length,0);
@@ -281,5 +281,8 @@ test('All topics collapses all groups, selected-topic routes open their group, a
  assert.doesNotMatch(main.innerHTML,/data-situation-topic="[^"]+" open/);
  const ids=[...main.innerHTML.matchAll(/data-action="start" data-id="([^"]+)"/g)].map(match=>match[1]);
  assert.deepEqual(ids.sort(),scenarios.map(s=>s.id).sort());
- assert.doesNotMatch(main.innerHTML,/data-situation-topic="discrimination"/);
+ assert.match(main.innerHTML,/data-situation-topic="discrimination"/);
+ assert.equal((main.innerHTML.match(/class="discrimination-ground"/g)||[]).length,10);
+ const discrimination=[...main.innerHTML.matchAll(/data-action="paired-start" data-id="(discrimination-[^"]+)"/g)].map(match=>match[1]);
+ assert.deepEqual(discrimination.sort(),Object.keys(encounters).filter(id=>id.startsWith('discrimination-')).sort());
 });

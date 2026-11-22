@@ -5,7 +5,7 @@ const playTopics=[{id:'all',title:'All topics'},...topicGroups];
 
 export function topicsForPlay(mode,role){
  if(mode!=='practice')return playTopics;
- return playTopics.filter(topic=>topic.id==='all'||topic.encounters.some(id=>encounters[id].origin===role));
+ return playTopics.filter(topic=>topic.id==='all'||topic.encounters.some(id=>encounters[id].origin===role||encounters[id].origin==='shared'));
 }
 
 function availableTopic(mode,role,topic){

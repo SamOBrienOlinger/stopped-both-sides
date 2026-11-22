@@ -196,8 +196,17 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
    const change=await actions.locator('.scene-profile-change').boundingBox();
    const close=await actions.locator('.scene-profile-close').boundingBox();
    expect(change).not.toBeNull();expect(close).not.toBeNull();
-   expect(Math.abs(change.y-close.y)).toBeLessThan(2);
-   expect(change.x+change.width<=close.x+1||close.x+close.width<=change.x+1).toBe(true);
+   if(Math.abs(change.y-close.y)<2){
+    expect(change.x+change.width<=close.x+1||close.x+close.width<=change.x+1).toBe(true);
+   }else{
+    // Narrow/enlarged layouts stack the actions instead of clipping labels.
+    expect(change.y+change.height).toBeLessThanOrEqual(close.y+1);
+    expect(Math.abs(change.x-close.x)).toBeLessThan(2);
+    expect(Math.abs(change.width-close.width)).toBeLessThan(2);
+   }
+   for(const control of [actions.locator('.scene-profile-change'),actions.locator('.scene-profile-close')]){
+    expect(await control.evaluate(element=>element.scrollWidth-element.clientWidth)).toBeLessThanOrEqual(1);
+   }
    await expect(dialog.getByRole('heading',{name,exact:true})).toBeVisible();
    await expect(dialog.locator('.scene-profile-role')).toHaveText(role==='public'?'Member of the public':'Garda');
    await expect(dialog.locator('.scene-profile-body')).toContainText('in this encounter');

@@ -154,3 +154,32 @@
 .learning-section .learning-panel-body,
 .learning-section .learning-example,
 .learning-section .learning-evidence{padding-inline:var(--learning-inset)}
+
+/* Community input: short lists, then grouped links to potential contributors. */
+.input-disclosure .contribution-content{min-inline-size:0;padding-block-start:1.2rem}
+.input-disclosure .contribution-intro{font-size:1.125rem;color:var(--ink);margin-block-end:1.25rem}
+.input-disclosure .contribution-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:1.25rem}
+.input-disclosure .contribution-columns>section{padding:clamp(8px,2vw,1.25rem);background:var(--pale);border:1px solid var(--line);border-radius:14px}
+.input-disclosure .contribution-content :is(h3,h4,p,li){overflow-wrap:anywhere}
+.content-page .input-disclosure .contribution-content h3{font-size:1.125rem;line-height:1.5;letter-spacing:0;margin:0 0 .75rem;color:var(--deep)}
+.input-disclosure .contribution-points{margin:0;padding-inline-start:1.25rem}
+.input-disclosure .contribution-points li+li{margin-block-start:.5rem}
+.input-disclosure .contribution-contributors{margin-block-start:1.75rem}
+.input-disclosure .contribution-contributors>p{margin-block-end:1rem;color:var(--muted)}
+.content-page .input-disclosure .contribution-organisations{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:.875rem;list-style:none;padding:0;margin:0}
+.input-disclosure .contribution-organisations>li{min-inline-size:0;padding:clamp(8px,2vw,1.25rem);border:1px solid var(--line);border-inline-start:3px solid var(--teal);border-radius:12px;background:var(--paper,#fff)}
+.input-disclosure .contribution-organisations h4{font-size:1rem;line-height:1.5;margin:0 0 .6rem;color:var(--ink);overflow-wrap:anywhere}
+.input-disclosure .contribution-organisations ul{list-style:none;margin:0;padding:0}
+.input-disclosure .contribution-organisations ul>li{display:grid;grid-template-columns:.5em minmax(0,1fr);column-gap:.35em}
+.input-disclosure .contribution-organisations ul>li::before{content:'•';color:var(--deep);padding-block:.25rem}
+.input-disclosure .contribution-organisations ul li+li{margin-block-start:.35rem}
+.input-disclosure .contribution-organisations a{display:block;max-inline-size:100%;min-block-size:44px;padding-block:.25rem;line-height:1.7;overflow-wrap:anywhere}
+.content-page .input-disclosure .contribution-status{max-inline-size:none;display:grid;gap:.35rem;margin:1.5rem 0 0;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--pale);color:var(--ink)}
+.input-disclosure .contribution-status strong{color:var(--deep)}
+@media(forced-colors:active){
+ .input-disclosure .contribution-columns>section,
+ .input-disclosure .contribution-organisations>li,
+ .content-page .input-disclosure .contribution-status{background:Canvas;color:CanvasText;border-color:CanvasText}
+ .input-disclosure .contribution-content :is(h3,h4,strong){color:CanvasText}
+ .input-disclosure .contribution-organisations a{color:LinkText}
+}

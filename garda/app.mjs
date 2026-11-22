@@ -1,12 +1,13 @@
+import {createSiteSearch} from "../search/site-search.mjs?v=keyword-search-20261122";
 import {focusControl} from '../accessibility/focus.mjs';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=colleague-witness-20261122';
-import {createLayout} from '../accessibility/layout.mjs?v=responsive-layout-20261122';
+import {createLayout} from '../accessibility/layout.mjs?v=search-practice-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningAbout} from '../learning/about.mjs?v=learning-dropdown-20261122';
+import {learningAbout,prototypeInput} from '../learning/about.mjs?v=contributor-lists-20261122';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=colleague-witness-20261122';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=contributor-lists-20261122';
 import {createMotion} from '../accessibility/motion.mjs?v=colleague-witness-20261122';
-import {createEncounterMode} from '../encounters/ui.mjs?v=separate-role-switch-20261122';
+import {createEncounterMode} from '../encounters/ui.mjs?v=search-practice-20261122';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');
@@ -15,6 +16,7 @@ const paired=createEncounterMode({siteRole:'garda',main,practiceScenarios:scenar
 const layout=createLayout({main});
 const motion=createMotion({main,getLegacyState:()=>session});
 const reading=createReadingTools({main,siteRole:'garda',rerender:(focus=true)=>render(focus),transformContent:(html,hash)=>paired.personalize(html,hash),onRender:hash=>{layout.update(hash);motion.update(hash);},onDialogOpen:dialog=>motion.openDialog(dialog)});
+createSiteSearch({siteRole:"garda",getLanguage:()=>reading.language,getRole:()=>perspectiveForRoute(location.hash,"garda"),startSituation:(id,role)=>paired.startSituation(id,role)});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sourceLinks=ids=>`<details class="source-details"><summary>Evidence behind this explanation</summary><ul>${[...new Set(ids)].map(id=>`<li><a href="#evidence/${id}">${esc(sources[id].short)}</a><span class="citation-context">${esc(sources[id].kind)} · ${esc(sources[id].place)}</span></li>`).join('')}</ul></details>`;
 const returnToSession=()=>session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Return to your recap':'Return to your situation'} →</a></p>`:'';
@@ -53,7 +55,7 @@ function about(){
 ${learningAbout()} <section class="info-block important"><h2>A learning companion</h2><p>This independent prototype is for reflection between encounters. It cannot assess live incidents, provide operational authorisation or certify that a Garda’s decisions are free from bias.</p><p>The Irish examples include section 23 of the Misuse of Drugs Act and the distinction between voluntary enquiries and specific legal demands. Other powers, case law, urgent threats, custody and search procedures need their own current professional guidance.</p><p>It is not official Garda training. Legal, operational and community review remain outstanding.</p></section>
  <section class="info-block"><h2>Use it in a short learning discussion</h2><ol class="discussion-steps"><li><strong>Explore one situation.</strong> Say which facts matter before looking at the feedback.</li><li><strong>Compare the reasoning.</strong> Discuss the grounds, alternative explanations, identity cues and the person’s experience.</li><li><strong>Return later.</strong> Revisit the situation and consider one practical question for briefing or supervision.</li></ol><p>Facilitators should use fictional or appropriately anonymised examples and make room for disagreement supported by law and evidence. The activity should not be used as a staff appraisal.</p>${sourceLinks(['miller','wouters','merla'])}</section>
  <section class="info-block"><h2>Connected to the Garda Decision Making Model</h2><p>The learning prompts support gathering and checking information, assessing risk, considering the operational environment and legal powers, comparing options, and reviewing action. Human rights and ethics run through the decision.</p><p>This is an educational interpretation of the public framework. Members should use the current official model, policy and training in their work.</p>${sourceLinks(['model','ethics'])}</section>
- <details class="info-block input-disclosure"><summary>Help shape a stronger version</summary><p>Garda educators, independent legal specialists, INAR, ICCL, youth organisations, disability advocates, Traveller and Roma organisations, and other affected communities could help refine the situations and challenge missing perspectives.</p><p>Priorities include legal validation, community co-design, accessibility testing, reviewed translations and an independent evaluation of learning and transfer to practice. These are opportunities for collaboration; no partnership or approval is claimed.</p></details>
+ ${prototypeInput('garda')}
  <details class="info-block privacy-disclosure"><summary>Information and privacy</summary><p>The resource asks for no account or incident details. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. Review or clear local records under Scores & progress. Separate browsers do not automatically sync. There are no analytics or submissions to a application server. The hosting provider may keep standard access logs; external sources have their own privacy arrangements.</p></details>
  <section class="info-block"><h2>Two perspectives on an encounter</h2><p>Created by Sam O’Brien-Olinger / Sam Tim Solutions as a companion to the human and civil rights learning resource. The scenarios are invented and do not reproduce participants’ experiences from any cited study.</p><a class="text-button" href="${PUBLIC_COMPANION}" target="_blank" rel="noopener noreferrer">Visit the public perspective ↗</a></section><a href="#encounters" class="primary">Choose a situation →</a><p class="contribution-link"><a href="https://samobrienolinger.github.io/SamOBrienOlinger/" target="_blank" rel="noopener noreferrer">Contact the project creator or contribute feedback ↗</a></p></div>`;
 }

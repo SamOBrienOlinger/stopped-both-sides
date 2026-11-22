@@ -5,6 +5,69 @@ import {pabiReport} from './pabi.mjs?v=pabi-privacy-20261122';
 const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
 const study = (number, label, doi) => `<a href="https://doi.org/${doi}" target="_blank" rel="noopener noreferrer" lang="en-IE" dir="ltr" data-no-translate>${label} [${number}]</a>`;
 
+// Suggested contributors only. Names link to official sites, without implying
+// that any organisation has agreed to review or endorse this independent work.
+const contributorLink = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer" lang="en-IE" dir="ltr" data-no-translate>${label}</a>`;
+const contributorGroups = [
+ ['Human and Civil Rights and legal review', [
+  contributorLink('https://www.iccl.ie/about/','Irish Council for Civil Liberties (ICCL)'),
+  contributorLink('https://www.ihrec.ie/','Irish Human Rights and Equality Commission (IHREC)'),
+  contributorLink('https://www.flac.ie/about/','FLAC (Free Legal Advice Centres)'),
+  'Practising Irish solicitors'
+ ]],
+ ['Anti-racism and community experience', [
+  contributorLink('https://inar.ie/','Irish Network Against Racism (INAR)'),
+  contributorLink('https://www.paveepoint.ie/about-pavee-point/','Pavee Point Traveller and Roma Centre')
+ ]],
+ ['Young people and community learning', [
+  contributorLink('https://www.youth.ie/about/','National Youth Council of Ireland'),
+  contributorLink('https://www.aontas.com/about-us/','AONTAS')
+ ]],
+ ['Disability, accessibility and communication', [
+  contributorLink('https://nda.ie/about/','National Disability Authority'),
+  contributorLink('https://universaldesign.ie/about/what-we-do','Centre for Excellence in Universal Design')
+ ]],
+ ['Immigration and migrant perspectives', [
+  contributorLink('https://www.immigrantcouncil.ie/','Immigrant Council of Ireland')
+ ]],
+ ['Garda education and independent research', [
+  contributorLink('https://www.garda.ie/en/careers/the-garda-college/','Garda College'),
+  contributorLink('https://www.ul.ie/artsoc/ccjvs','University of Limerick: Centre for Crime, Justice and Victim Studies')
+ ]]
+];
+
+export function prototypeInput(siteRole='public') {
+ const summary=siteRole==='garda'?'Help shape a stronger version':'A prototype with space for input';
+ return `<details class="info-block input-disclosure"><summary>${summary}</summary>
+  <div class="contribution-content">
+   <p class="contribution-intro">Community voices and independent expertise could help shape the next version.</p>
+   <div class="contribution-columns">
+    <section aria-labelledby="contribution-help"><h3 id="contribution-help">How input could help</h3>
+     <ul class="contribution-points">
+      <li>Review legal wording, powers and sources.</li>
+      <li>Shape realistic situations with people affected.</li>
+      <li>Test accessibility and review translations.</li>
+      <li>Develop facilitated learning and evaluate its impact.</li>
+     </ul>
+    </section>
+    <section aria-labelledby="contribution-priorities"><h3 id="contribution-priorities">Priorities for further development</h3>
+     <ul class="contribution-points">
+      <li>Traveller and Roma perspectives.</li>
+      <li>Disability and communication needs.</li>
+      <li>Immigration and border contexts.</li>
+      <li>Facilitator-led learning.</li>
+     </ul>
+    </section>
+   </div>
+   <section class="contribution-contributors" aria-labelledby="contribution-contributors"><h3 id="contribution-contributors">Potential contributors</h3>
+    <p>Examples of organisations and institutions to approach, alongside people with lived experience:</p>
+    <ul class="contribution-organisations" role="list">${contributorGroups.map(([title,items])=>`<li><h4>${title}</h4><ul role="list">${items.map(item=>`<li>${item.startsWith('<a ')?item:`<span>${item}</span>`}</li>`).join('')}</ul></li>`).join('')}</ul>
+   </section>
+   <p class="contribution-status"><strong>An invitation for input</strong><span>These are potential contributions and future priorities. No partnership, endorsement or commitment is claimed. This work has not been commissioned or completed.</span></p>
+  </div>
+ </details>`;
+}
+
 const goals = [
  ['01', 'Explore human and civil rights and support', 'Identify what needs clarification and find relevant Irish information sources.'],
  ['02', 'Examine the evidence', 'Separate what the situation states from assumptions about intention, guilt or risk.'],

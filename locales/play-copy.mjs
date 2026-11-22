@@ -596,7 +596,116 @@ const communityResearch = [
   ]
  ]
 ];
-const translations = new Map([...labels,...content,...terminology,...communityResearch]);
+const contributionCopy = [
+ ['Community voices and independent expertise could help shape the next version.', [
+  'D’fhéadfadh guthanna pobail agus saineolas neamhspleách cuidiú leis an gcéad leagan eile a mhúnlú.',
+  'As vozes das comunidades e os conhecimentos independentes poderão ajudar a melhorar a próxima versão.',
+  'يمكن لأصوات المجتمعات والخبرات المستقلة أن تسهم في تطوير النسخة القادمة.',
+  'Głosy społeczności i niezależna wiedza mogą pomóc w opracowaniu kolejnej wersji.',
+  'Vocile comunităților și expertiza independentă ar putea contribui la dezvoltarea următoarei versiuni.',
+  'Les voix des communautés et une expertise indépendante pourraient contribuer à la prochaine version.',
+  'Las voces de las comunidades y los conocimientos independientes podrían ayudar a desarrollar la próxima versión.',
+  '社区的声音和独立专业意见可以帮助完善下一个版本。'
+ ]],
+ ['How input could help', ['Conas a d’fhéadfadh ionchur cuidiú','Como os contributos poderão ajudar','كيف يمكن للمساهمات أن تساعد','Jak mogą pomóc uwagi i sugestie','Cum ar putea ajuta contribuțiile','Comment les contributions pourraient aider','Cómo podrían ayudar las aportaciones','意见可以如何提供帮助']],
+ ['Review legal wording, powers and sources.', [
+  'Athbhreithniú a dhéanamh ar an bhfoclaíocht dhlíthiúil, ar chumhachtaí agus ar fhoinsí.',
+  'Rever a redação jurídica, os poderes e as fontes.',
+  'مراجعة الصياغة القانونية والصلاحيات والمصادر.',
+  'Przegląd sformułowań prawnych, uprawnień i źródeł.',
+  'Revizuirea formulărilor juridice, a atribuțiilor și a surselor.',
+  'Revoir les formulations juridiques, les pouvoirs et les sources.',
+  'Revisar la redacción jurídica, las facultades y las fuentes.',
+  '审查法律措辞、权限和资料来源。'
+ ]],
+ ['Shape realistic situations with people affected.', [
+  'Cásanna réalaíocha a mhúnlú in éineacht leis na daoine lena mbaineann.',
+  'Criar situações realistas com as pessoas afetadas.',
+  'صياغة مواقف واقعية بمشاركة الأشخاص المتأثرين.',
+  'Tworzenie realistycznych sytuacji wspólnie z osobami, których one dotyczą.',
+  'Crearea unor situații realiste împreună cu persoanele afectate.',
+  'Créer des situations réalistes avec les personnes concernées.',
+  'Crear situaciones realistas con las personas afectadas.',
+  '与受影响的人共同设计贴近实际的情境。'
+ ]],
+ ['Test accessibility and review translations.', [
+  'Inrochtaineacht a thástáil agus aistriúcháin a athbhreithniú.',
+  'Testar a acessibilidade e rever as traduções.',
+  'اختبار إمكانية الوصول ومراجعة الترجمات.',
+  'Testowanie dostępności i weryfikacja tłumaczeń.',
+  'Testarea accesibilității și revizuirea traducerilor.',
+  'Tester l’accessibilité et revoir les traductions.',
+  'Probar la accesibilidad y revisar las traducciones.',
+  '测试无障碍功能并审核翻译。'
+ ]],
+ ['Develop facilitated learning and evaluate its impact.', [
+  'Foghlaim faoi threoir éascaitheora a fhorbairt agus a tionchar a mheas.',
+  'Desenvolver atividades com facilitadores e avaliar o seu impacto.',
+  'تطوير التعلم بإشراف ميسّر وتقييم أثره.',
+  'Rozwijanie zajęć prowadzonych przez moderatora i ocena ich wpływu.',
+  'Dezvoltarea învățării cu facilitator și evaluarea impactului acesteia.',
+  'Développer des activités accompagnées et évaluer leurs effets.',
+  'Desarrollar actividades guiadas y evaluar su impacto.',
+  '开发由引导者带领的学习活动并评估其效果。'
+ ]],
+ ['Priorities for further development', ['Tosaíochtaí don fhorbairt bhreise','Prioridades para o desenvolvimento futuro','أولويات التطوير المستقبلي','Priorytety dalszego rozwoju','Priorități pentru dezvoltarea viitoare','Priorités de développement','Prioridades para el desarrollo futuro','后续开发重点']],
+ ['Traveller and Roma perspectives.', ['Dearcthaí an Lucht Siúil agus na Romach.','Perspetivas das comunidades Traveller e Roma.','وجهات نظر مجتمعات الترافيلر والروما.','Perspektywy społeczności Travellers i Romów.','Perspectivele comunităților Traveller și rome.','Perspectives des communautés Travellers et roms.','Perspectivas de las comunidades Traveller y romaní.','爱尔兰旅行者社群和罗姆人的视角。']],
+ ['Disability and communication needs.', ['Míchumas agus riachtanais chumarsáide.','Deficiência e necessidades de comunicação.','الإعاقة واحتياجات التواصل.','Niepełnosprawność i potrzeby komunikacyjne.','Dizabilitate și nevoi de comunicare.','Handicap et besoins de communication.','Discapacidad y necesidades de comunicación.','残障与沟通需求。']],
+ ['Immigration and border contexts.', ['Comhthéacsanna inimirce agus teorann.','Contextos de imigração e de fronteira.','سياقات الهجرة والحدود.','Sytuacje związane z imigracją i granicami.','Contexte de imigrație și de frontieră.','Situations liées à l’immigration et aux frontières.','Contextos de inmigración y fronteras.','移民与边境相关情境。']],
+ ['Facilitator-led learning.', ['Foghlaim faoi threoir éascaitheora.','Aprendizagem com facilitadores.','التعلم بإشراف ميسّر.','Zajęcia prowadzone przez moderatora.','Învățare cu facilitator.','Apprentissage accompagné.','Aprendizaje guiado.','由引导者带领的学习。']],
+ ['Potential contributors', ['Rannpháirtithe féideartha','Possíveis colaboradores','جهات محتملة للمساهمة','Potencjalni współtwórcy','Posibili colaboratori','Contributeurs potentiels','Posibles colaboradores','潜在贡献者']],
+ ['Examples of organisations and institutions to approach, alongside people with lived experience:', [
+  'Samplaí d’eagraíochtaí agus d’institiúidí a bhféadfaí teagmháil a dhéanamh leo, in éineacht le daoine a bhfuil taithí phearsanta acu:',
+  'Exemplos de organizações e instituições a contactar, juntamente com pessoas com experiência vivida:',
+  'أمثلة على منظمات ومؤسسات يمكن التواصل معها، إلى جانب أشخاص لديهم تجارب مباشرة:',
+  'Przykłady organizacji i instytucji, do których można się zwrócić, obok osób z własnym doświadczeniem:',
+  'Exemple de organizații și instituții care ar putea fi contactate, alături de persoane cu experiență directă:',
+  'Exemples d’organisations et d’institutions à solliciter, aux côtés de personnes ayant une expérience vécue :',
+  'Ejemplos de organizaciones e instituciones a las que se podría acudir, junto con personas con experiencia directa:',
+  '以下是可考虑联系的组织和机构，同时也应听取有亲身经历者的意见：'
+ ]],
+ ['Human and Civil Rights and legal review', ['Cearta Daonna agus Sibhialta agus athbhreithniú dlíthiúil','Direitos humanos e civis e revisão jurídica','حقوق الإنسان والحقوق المدنية والمراجعة القانونية','Prawa człowieka, prawa obywatelskie i przegląd prawny','Drepturile omului, drepturile civile și revizuirea juridică','Droits humains et civils et examen juridique','Derechos humanos y civiles y revisión jurídica','人权、公民权利与法律审查']],
+ ['Practising Irish solicitors', ['Aturnaetha cleachtacha in Éirinn','Solicitadores e advogados em exercício na Irlanda','محامون ممارسون في أيرلندا','Praktykujący prawnicy w Irlandii','Avocați practicanți în Irlanda','Avocats en exercice en Irlande','Profesionales de la abogacía en ejercicio en Irlanda','在爱尔兰执业的事务律师']],
+ ['Anti-racism and community experience', ['Frithchiníochas agus taithí an phobail','Antirracismo e experiência das comunidades','مناهضة العنصرية وتجارب المجتمعات','Przeciwdziałanie rasizmowi i doświadczenia społeczności','Antirasism și experiența comunităților','Antiracisme et expérience des communautés','Antirracismo y experiencia de las comunidades','反种族主义与社区经历']],
+ ['Young people and community learning', ['Daoine óga agus foghlaim phobail','Jovens e aprendizagem comunitária','الشباب والتعلم المجتمعي','Młodzież i edukacja społecznościowa','Tineri și învățare comunitară','Jeunes et apprentissage communautaire','Jóvenes y aprendizaje comunitario','青年与社区学习']],
+ ['Disability, accessibility and communication', ['Míchumas, inrochtaineacht agus cumarsáid','Deficiência, acessibilidade e comunicação','الإعاقة وإمكانية الوصول والتواصل','Niepełnosprawność, dostępność i komunikacja','Dizabilitate, accesibilitate și comunicare','Handicap, accessibilité et communication','Discapacidad, accesibilidad y comunicación','残障、无障碍与沟通']],
+ ['Immigration and migrant perspectives', ['Inimirce agus dearcthaí imirceach','Imigração e perspetivas dos migrantes','الهجرة ووجهات نظر المهاجرين','Imigracja i perspektywy migrantów','Imigrație și perspectivele migranților','Immigration et perspectives des migrants','Inmigración y perspectivas de las personas migrantes','移民事务与移民群体的视角']],
+ ['Garda education and independent research', ['Oideachas na nGardaí agus taighde neamhspleách','Formação da Garda e investigação independente','تعليم أفراد الشرطة الأيرلندية والبحث المستقل','Szkolenie Garda i niezależne badania','Formarea Garda și cercetare independentă','Formation de la Garda et recherche indépendante','Formación de la Garda e investigación independiente','爱尔兰警察教育与独立研究']],
+ ['An invitation for input', ['Cuireadh chun ionchur a thabhairt','Um convite a contribuir','دعوة للمساهمة','Zaproszenie do współtworzenia','O invitație la contribuții','Une invitation à contribuer','Una invitación a contribuir','诚邀提供意见']],
+ ['These are potential contributions and future priorities. No partnership, endorsement or commitment is claimed. This work has not been commissioned or completed.', [
+  'Is rannchuidithe féideartha agus tosaíochtaí don todhchaí iad seo. Ní mhaítear aon chomhpháirtíocht, formhuiniú ná gealltanas. Níor coimisiúnaíodh ná níor críochnaíodh an obair seo.',
+  'Estas são possíveis contribuições e prioridades futuras. Não se afirma qualquer parceria, apoio ou compromisso. Este trabalho não foi encomendado nem concluído.',
+  'هذه مساهمات محتملة وأولويات مستقبلية. لا يُدّعى وجود أي شراكة أو تأييد أو التزام. لم يتم التكليف بهذا العمل أو إنجازه.',
+  'Są to możliwe formy wkładu i przyszłe priorytety. Nie deklaruje się żadnego partnerstwa, poparcia ani zobowiązania. Prace te nie zostały zlecone ani ukończone.',
+  'Acestea sunt contribuții posibile și priorități viitoare. Nu se pretinde existența vreunui parteneriat, a vreunei aprobări sau a vreunui angajament. Această activitate nu a fost comandată sau finalizată.',
+  'Il s’agit de contributions possibles et de priorités futures. Aucun partenariat, soutien ou engagement n’est revendiqué. Ce travail n’a pas été commandé ni achevé.',
+  'Se trata de posibles aportaciones y prioridades futuras. No se afirma que exista ninguna colaboración, respaldo o compromiso. Este trabajo no ha sido encargado ni completado.',
+  '以上为可能的贡献和未来重点，不代表已建立任何合作、获得认可或作出承诺。这些工作尚未受委托开展，也尚未完成。'
+ ]]
+];
+const searchCopy = [
+ ['Search', ['Cuardaigh','Pesquisar','بحث','Szukaj','Caută','Rechercher','Buscar','搜索']],
+ ['Search the website', ['Cuardaigh an suíomh','Pesquisar no site','البحث في الموقع','Przeszukaj witrynę','Caută pe site','Rechercher sur le site','Buscar en el sitio','搜索网站']],
+ ['Close search', ['Dún an cuardach','Fechar pesquisa','إغلاق البحث','Zamknij wyszukiwanie','Închide căutarea','Fermer la recherche','Cerrar búsqueda','关闭搜索']],
+ ['Search situations, topics and sources.', ['Cuardaigh cásanna, topaicí agus foinsí.','Pesquise situações, temas e fontes.','ابحث في المواقف والمواضيع والمصادر.','Wyszukuj sytuacje, tematy i źródła.','Caută situații, teme și surse.','Recherchez des situations, des thèmes et des sources.','Busca situaciones, temas y fuentes.','搜索情境、主题和资料来源。']],
+ ['Keywords', ['Eochairfhocail','Palavras-chave','الكلمات المفتاحية','Słowa kluczowe','Cuvinte-cheie','Mots-clés','Palabras clave','关键词']],
+ ['Results', ['Torthaí','Resultados','النتائج','Wyniki','Rezultate','Résultats','Resultados','结果']],
+ ['Situation', ['Cás','Situação','موقف','Sytuacja','Situație','Situation','Situación','情境']],
+ ['Page', ['Leathanach','Página','صفحة','Strona','Pagină','Page','Página','页面']],
+ ['Source', ['Foinse','Fonte','مصدر','Źródło','Sursă','Source','Fuente','资料来源']],
+ ['No results. Try another keyword.', ['Gan torthaí. Bain triail as eochairfhocal eile.','Sem resultados. Experimente outra palavra-chave.','لا توجد نتائج. جرّب كلمة مفتاحية أخرى.','Brak wyników. Spróbuj innego słowa kluczowego.','Niciun rezultat. Încearcă alt cuvânt-cheie.','Aucun résultat. Essayez un autre mot-clé.','No hay resultados. Prueba otra palabra clave.','没有结果。请尝试其他关键词。']],
+ ['Showing the first 20 results. Add another keyword to narrow your search.', [
+  'Na chéad 20 toradh á dtaispeáint. Cuir eochairfhocal eile leis chun an cuardach a chúngú.',
+  'A mostrar os primeiros 20 resultados. Adicione outra palavra-chave para restringir a pesquisa.',
+  'يتم عرض أول 20 نتيجة. أضف كلمة مفتاحية أخرى لتضييق نطاق البحث.',
+  'Wyświetlono pierwsze 20 wyników. Dodaj kolejne słowo kluczowe, aby zawęzić wyszukiwanie.',
+  'Sunt afișate primele 20 de rezultate. Adaugă alt cuvânt-cheie pentru a restrânge căutarea.',
+  'Les 20 premiers résultats sont affichés. Ajoutez un mot-clé pour affiner la recherche.',
+  'Se muestran los primeros 20 resultados. Añade otra palabra clave para acotar la búsqueda.',
+  '显示前20条结果。请添加关键词以缩小搜索范围。'
+ ]]
+];
+const translations = new Map([...labels,...content,...terminology,...communityResearch,...contributionCopy,...searchCopy]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }

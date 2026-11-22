@@ -45,7 +45,7 @@ for(const [entry,role,reference] of [['./','public','#rights'],['garda/','garda'
     await page.setViewportSize({width,height:width===568?320:900});
     await expect.poll(()=>page.locator('.header').evaluate(header=>Math.abs(header.getBoundingClientRect().height-parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navigation-height'))))).toBeLessThanOrEqual(1);
     await page.locator('[data-action="paired-switch"]').evaluate(button=>{button.focus();button.scrollIntoView({block:'start',behavior:'instant'});});
-    await expect.poll(()=>page.locator('[data-action="paired-switch"]').evaluate(button=>button.getBoundingClientRect().top-document.querySelector('.header').getBoundingClientRect().bottom)).toBeGreaterThanOrEqual(0);
+    await expect.poll(()=>page.locator('[data-action="paired-switch"]').evaluate(button=>button.getBoundingClientRect().top-document.querySelector('.header').getBoundingClientRect().bottom),{message:`${role}: focused switch at ${width}px in ${language}`}).toBeGreaterThanOrEqual(0);
     expect(current(page)).toEqual(saved);
     await fits(page,`${role} answered ${language} game at ${width}px`);
    }
