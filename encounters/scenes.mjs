@@ -1,10 +1,10 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=learning-language-20261120';
-import {backgroundImage} from './backgrounds.mjs?v=learning-language-20261120';
+import {backgroundImage} from './backgrounds.mjs?v=group-spacing-20261122';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=colleague-witness-20261122';
 import {characterFor,defaultCast} from './characters.mjs?v=situation-cast-20261122';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=cast-audit-20261122';
 import {discriminationEncounters} from './discrimination.mjs?v=colleague-witness-20261122';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=cast-audit-20261122';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=group-spacing-20261122';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
@@ -121,15 +121,15 @@ function sceneActor(role,id,anchor,lazy,{key=role,number=null,character=characte
 }
 
 function locationArt(place,art,actors,{className,sizes,lazy}){
- const approved=art?` data-approved-art="${art.name}"`:'';
- return `<div class="scene-location ${className}" data-scene-place="${place}"${approved} aria-hidden="true">${backdrop(place,art,{sizes,lazy})}${actors}</div>`;
+ const artwork=art?` ${art.group?'data-group-art':'data-approved-art'}="${art.name}"`:'';
+ return `<div class="scene-location ${className}" data-scene-place="${place}"${artwork} aria-hidden="true">${backdrop(place,art,{sizes,lazy})}${actors}</div>`;
 }
 
 export function renderScenePreview(id){
  const {place}=sceneDirections[id][encounters[id].start];
- const art=backgroundImage(place),cast=defaultCast();
+ const cast=defaultCast(),participants=situationParticipants(id,cast);
+ const art=backgroundImage(place,{group:!!participants});
  checkSceneArtwork(place,art?.name||null);
- const participants=situationParticipants(id,cast);
  const actors=participants?participants.map((participant,index)=>sceneActor(participant.role,participant.characterId,participantLayout(place,participants,index),true,{key:participant.key,character:participant.character})).join(''):roles.map(role=>sceneActor(role,cast[role],sceneActorLayout(place,role),true)).join('');
  return locationArt(place,art,actors,{
   className:'situation-image',sizes:'auto, (max-width: 36rem) 100vw, 36rem',lazy:true
@@ -139,7 +139,7 @@ export function renderScenePreview(id){
 function renderSituationScene(state,m,compact){
  const participants=situationParticipants(state.id,state.cast,{nodeId:m.nodeId});
  if(!participants)return null;
- const art=backgroundImage(m.place);
+ const art=backgroundImage(m.place,{group:true});
  checkSceneArtwork(m.place,art?.name||null);
  const actors=participants.map((participant,index)=>sceneActor(participant.role,participant.characterId,participantLayout(m.place,participants,index),compact,participant)).join('');
  const image=locationArt(m.place,art,actors,{className:'scene-location--group',sizes:'(max-width: 660px) calc(100vw - 3rem), 640px',lazy:compact});

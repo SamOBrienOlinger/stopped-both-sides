@@ -5,6 +5,7 @@ import {startEncounter} from '../../encounters/engine.mjs?v=colleague-witness-20
 import {topicGroups} from '../../encounters/presentation.mjs?v=colleague-witness-20261122';
 import {renderScene} from '../../encounters/scenes.mjs?v=colleague-witness-20261122';
 import {situationParticipants} from '../../encounters/situation-cast.mjs';
+import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
 const situations=Object.values(encounters);
 const cast=defaultCast();
@@ -59,6 +60,7 @@ async function checkScenes(cards,heading,ids){
   asset:openingImage(id),fits:true,decorative:true,
   actors:previewCast(id)
  })));
+ expect(await previews.evaluateAll(discriminationSpacingErrors,ids),'Preview figure spacing').toEqual([]);
 }
 
 for(const [entry,role] of [['./','public'],['garda/','garda']])for(const viewport of [{width:390,height:844},{width:1366,height:900}]){

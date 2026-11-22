@@ -44,6 +44,14 @@ test('Every discrimination stage and requested cast has distinct, fully labelled
  assert.equal(checked,20*2*81);
 });
 
+test('The four people in the bus-stop scene spread across the available width',()=>{
+ const {id,cast}=decodeState(suppliedToken);
+ const people=situationParticipants(id,cast);
+ const centres=people.map((_,index)=>participantLayout('bus-stop',people,index).x);
+ // The reported layout squeezed the entire group into the rightmost third.
+ assert.ok(Math.max(...centres)-Math.min(...centres)>=60,'The two outer figures span at least 60% of the scene');
+});
+
 test('Age and gender requirements survive old links and reject character changes that contradict the account',()=>{
  for(const [id,allowed] of [['discrimination-gender',['public-4','public-2','public-6','public-7']],['discrimination-age',['public-9','public-3','public-6']]]){
   assert.deepEqual(charactersForSituation(id,'public').map(character=>character.id),allowed);

@@ -3,6 +3,7 @@ import {discriminationEncounters} from '../../encounters/discrimination.mjs';
 import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-cast-20261122';
 import {situationParticipants} from '../../encounters/situation-cast.mjs';
 import {openCharacterPicker} from './navigation.mjs';
+import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
 const suppliedToken='eyJ2IjoyLCJlIjoiZGlzY3JpbWluYXRpb24tY29sbGVhZ3VlLXJhY2UiLCJyIjoiZ2FyZGEiLCJwIjpbXSwiYSI6W251bGwsbnVsbF0sImMiOlsicHVibGljLTYiLCJnYXJkYS00Il19';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
@@ -100,5 +101,7 @@ test('All twenty discrimination scenes and follow-ups keep every participant and
    return errors;
   },expectations);
   expect(errors,width+'px').toEqual([]);
+  const locations=page.locator('#main .scene-location');
+  expect(await locations.evaluateAll(discriminationSpacingErrors,expectations.map(scene=>scene.id)),width+'px figure spacing').toEqual([]);
  }
 });

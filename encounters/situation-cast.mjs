@@ -97,14 +97,33 @@ export function situationParticipants(id,requestedCast,{nodeId='opening'}={}){
  return [...(colleague?supporting:[playable[0],...supporting]),...(colleague?playable:[playable[1]])].map((participant,index)=>({...participant,number:index+1}));
 }
 
+// Feet follow the pavement from the broad foreground to the shelter. The
+// adult and the officer are nearest the viewer, with a clear view for both witnesses.
+const busStopPositions={
+ affected:{x:24,width:23,bottom:3},
+ 'acting-garda':{x:47,width:21,bottom:7},
+ public:{x:68,width:17,bottom:15},
+ garda:{x:88,width:16,bottom:17}
+};
+
 export function participantLayout(place,participants,index){
- const participant=participants[index],count=participants.length;
- // The race scene keeps all four people on the pavement beside the bus.
- // The witnesses stand further back; the affected adult and colleague are in front.
- if(place==='bus-stop'&&count===4){
-  const anchors=[{x:58,width:29,bottom:5},{x:83,width:29,bottom:5},{x:52,width:22,bottom:34},{x:77,width:22,bottom:34}];
-  return {...anchors[index],labelSpace:100,layer:index<2?2:1};
+ const {key,scale}=participants[index],count=participants.length;
+ if(place==='bus-stop'){
+  const position=busStopPositions[key];
+  return {...position,width:position.width*scale,labelSpace:100};
  }
- const width=Math.min(32,92/count),x=(index+.5)*100/count;
- return {x,width:width*participant.scale,bottom:6,labelSpace:100,layer:1};
+ if(place==='street'||place==='square'){
+  // The street narrows towards the shelter. On the quay, the paving opens
+  // out towards the viewer below the river wall on the right.
+  const street=place==='street';
+  const depth=index/(count-1);
+  const left=count<4?16:11,right=street?69:78;
+  const interval=(right-left)/(count-1);
+  const width=Math.min(28,interval-1)*(street ? 1-.22*depth : .92+.08*depth);
+  return {x:left+(right-left)*depth,width:width*scale,bottom:street?3+24*depth:5-4*depth,labelSpace:100};
+ }
+ const slot=100/count;
+ const fartherBack=index%2===1;
+ const width=Math.min(28,slot*.82)*(fartherBack ? .88 : 1);
+ return {x:(index+.5)*slot,width:width*scale,bottom:fartherBack?12:4,labelSpace:100};
 }

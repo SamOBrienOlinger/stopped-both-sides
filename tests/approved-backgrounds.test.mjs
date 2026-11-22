@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs';
-import {renderScene} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
+import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
 import {startEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
@@ -31,4 +31,17 @@ test('Exterior art keeps selected roles and narrative state unchanged',()=>{
  }
  const indoor=renderScene(startEncounter('public-custody'));
  assert.doesNotMatch(indoor,/data-approved-art/);assert.match(indoor,/assets\/scenes\/station.webp/);
+});
+
+test('Outdoor discrimination scenes use the same clear foreground in play and previews',()=>{
+ for(const [place,id] of [['street','discrimination-housing-assistance'],['bus-stop','discrimination-colleague-race'],['square','discrimination-gender']]){
+  const image=backgroundImage(place,{group:true});
+  for(const source of image.srcset.split(', ')){
+   const [url,width]=source.split(' ');
+   assert.match(url,new RegExp('/assets/scenes/groups/'+image.name+'-'+parseInt(width,10)+'\\.webp\\?'));
+   assert.equal(readFileSync(new URL(url)).toString('ascii',8,12),'WEBP');
+  }
+  assert.ok(renderScene(startEncounter(id)).includes(image.src));
+  assert.ok(renderScenePreview(id).includes(image.src));
+ }
 });
