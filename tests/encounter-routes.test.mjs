@@ -259,16 +259,20 @@ test('Both situation browsers group every situation once and keep topics closed 
  }
 });
 
-test('All topics opens all groups, selected-topic routes open their group, and practice retains only its own situations',()=>{
+test('All topics collapses all groups, selected-topic routes open their group, and practice retains only its own situations',()=>{
  route('#play');action('paired-topic',{topic:'all'});
  assert.equal(location.hash,'#encounters/'+siteRole+'/all');
- assert.equal((main.innerHTML.match(/data-situation-topic="[^"]+" open/g)||[]).length,6);
+ assert.equal((main.innerHTML.match(/data-situation-topic="[^"]+" open/g)||[]).length,0);
  for(const topic of ['search','discrimination']){
   action('paired-topic',{topic});
   assert.match(main.innerHTML,new RegExp('data-situation-topic="'+topic+'" open'));
   assert.equal((main.innerHTML.match(/class="situation-topic"/g)||[]).length,1);
+  action('paired-topic',{topic:'all'});
+  assert.equal((main.innerHTML.match(/class="situation-topic"/g)||[]).length,6);
+  assert.doesNotMatch(main.innerHTML,/data-situation-topic="[^"]+" open/);
  }
  route('#practice/'+siteRole+'/all');action('paired-topic',{topic:'all'});
+ assert.doesNotMatch(main.innerHTML,/data-situation-topic="[^"]+" open/);
  const ids=[...main.innerHTML.matchAll(/data-action="start" data-id="([^"]+)"/g)].map(match=>match[1]);
  assert.deepEqual(ids.sort(),scenarios.map(s=>s.id).sort());
  assert.doesNotMatch(main.innerHTML,/data-situation-topic="discrimination"/);

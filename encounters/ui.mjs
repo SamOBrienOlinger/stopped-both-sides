@@ -5,7 +5,7 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=colleague-witness-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics} from './visuals.mjs?v=expandable-topics-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics} from './visuals.mjs?v=collapsed-topics-20261122';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=colleague-witness-20261122';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=colleague-witness-20261122';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=colleague-witness-20261122';
@@ -35,7 +35,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  let browserStorage;try{browserStorage=globalThis.localStorage;}catch{}
  const store=createProgressStore(browserStorage,siteRole);
  const characterPreferences=createCharacterPreferences(browserStorage),legacyCasts=new Map();
- let state=null,clearPending=false,characterPickerTarget=null,setupCharacterOpen=false,allTopicsExpanded=false;
+ let state=null,clearPending=false,characterPickerTarget=null,setupCharacterOpen=false;
  let sharedReturn='',practiceReturn='',reopenedPractice=false,returnFocus=null;
  const handles=hash=>/^(encounters|encounter|practice|progress|discussion)(?:$|[~/])/.test(hash);
  const defaultList=(mode,id,role)=>playHash(mode,role,topicForSituation(id));
@@ -185,7 +185,6 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const groups=topicGroups.filter(group=>(!selectedTopic||group.id===topic)&&(!practice||group.encounters.some(id=>encounters[id].origin===role)))
    .map(group=>practice?{...group,encounters:group.encounters.filter(id=>encounters[id].origin===role)}:group);
   const openTopic=selectedTopic?.id||topicForSituation(practice&&returnFocus?role+'-'+returnFocus:returnFocus)||'';
-  const openAll=topic==='all'&&allTopicsExpanded;
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
    <h1>${heading}</h1>
@@ -209,8 +208,8 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <details class="scenario-library" ${practice||browse?'open':''}>
      <summary id="situations-title">Browse all situations</summary>
      <div class="topic-filters" role="group" aria-label="Situation topics">${topicsForPlay(mode,role).map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
-     <div class="situation-topics">${practice?situationTopics(groups,group=>practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic,openAll}):`
-      ${situationTopics(groups,group=>situationCards(group.encounters.map(id=>encounters[id]),role),{openTopic,openAll})}`}</div>
+     <div class="situation-topics">${practice?situationTopics(groups,group=>practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic}):`
+      ${situationTopics(groups,group=>situationCards(group.encounters.map(id=>encounters[id]),role),{openTopic})}`}</div>
     </details>`}
   </section>`;
  }
@@ -276,7 +275,6 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   </section>${homeActions()}`;
  }
  function landing(){
-  allTopicsExpanded=false;
   const completed=store.value.saved.find(entry=>entry.complete);
   return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole,group=>situationCards(group.encounters.map(id=>encounters[id]),siteRole,'h3'))}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
    <details class="single-mode practice-shortcut">
@@ -443,7 +441,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    const list=playLocation(location.hash,siteRole)||{mode:'shared',role};
    const topic=list&&topicsForPlay(list.mode,list.role).find(item=>item.id===button.dataset.topic);
    if(topic){
-    allTopicsExpanded=topic.id==='all';
+    if(topic.id==='all')returnFocus=null;
     history.replaceState(null,'',playHash(list.mode,list.role,topic.id));
     rerender(false);
     document.querySelector('[data-topic="'+topic.id+'"]')?.focus({preventScroll:true});

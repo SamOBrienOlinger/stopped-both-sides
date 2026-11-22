@@ -25,8 +25,10 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   }
   await browser.getByRole('button',{name:'All topics',exact:true}).click();
   await expect(page).toHaveURL(new RegExp('#encounters/'+role+'/all$'));
-  await expect(page.locator('.scenario-library .situation-topic[open]')).toHaveCount(6);
-  await expect(page.locator('.scenario-library .encounter-card:visible')).toHaveCount(34);
+  await expect(page.locator('.scenario-library .situation-topic')).toHaveCount(6);
+  await expect(page.locator('.scenario-library .situation-topic[open]')).toHaveCount(0);
+  await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(34);
+  await expect(page.locator('.scenario-library .encounter-card:visible')).toHaveCount(0);
  });
 
  test(`${role}: catalogue filters, individual expansion and return focus work together`,async({page})=>{
@@ -47,10 +49,22 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(library.locator('.encounter-card:visible')).toHaveCount(20);
   await expect(library.locator('.situation-kind')).toHaveCount(10);
   await library.getByRole('button',{name:'All topics',exact:true}).click();
-  await expect(library.locator('.encounter-card:visible')).toHaveCount(34);
+  await expect(library.locator('.encounter-card')).toHaveCount(34);
+  await expect(library.locator('.encounter-card:visible')).toHaveCount(0);
+  await expect(library.locator('.situation-topic[open]')).toHaveCount(0);
+  // Clicking All topics again also resets manually opened groups on the same URL.
+  await search.locator(':scope>summary').press('Enter');
+  await expect(search.locator('.encounter-card:visible')).toHaveCount(3);
+  await library.getByRole('button',{name:'All topics',exact:true}).click();
+  await expect(library.locator('.situation-topic[open]')).toHaveCount(0);
+  await expect(library.locator('.encounter-card:visible')).toHaveCount(0);
   await page.goto(path+'?lang=en#practice/'+role+'/all');
   await library.getByRole('button',{name:'All topics',exact:true}).click();
-  await expect(library.locator('[data-action="start"]:visible')).toHaveCount(role==='garda'?8:6);
+  await expect(library.locator('[data-action="start"]')).toHaveCount(role==='garda'?8:6);
+  await expect(library.locator('[data-action="start"]:visible')).toHaveCount(0);
+  await expect(library.locator('.situation-topic[open]')).toHaveCount(0);
+  await library.locator('[data-situation-topic="street"]>summary').press('Enter');
+  await expect(library.locator('[data-action="start"][data-id="street"]')).toBeVisible();
   await expect(library.locator('[data-situation-topic="discrimination"]')).toHaveCount(0);
  });
 

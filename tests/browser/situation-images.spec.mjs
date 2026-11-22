@@ -79,9 +79,11 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
    }
    await page.goto(entry+'?lang=en#encounters/'+role+'/all');
    await page.getByRole('button',{name:'All topics',exact:true}).click();
+   for(const summary of await page.locator('.scenario-library .situation-topic>summary').all())await summary.press('Enter');
    await checkScenes(page.locator('.scenario-library .encounter-card'),'h2',topicGroups.flatMap(topic=>topic.encounters));
    await page.goto(entry+'?lang=en#practice/'+role+'/all');
    await page.getByRole('button',{name:'All topics',exact:true}).click();
+   for(const summary of await page.locator('.scenario-library .situation-topic>summary').all())await summary.press('Enter');
    await checkScenes(page.locator('.scenario-library .practice-content .scenario'),'h2',
     topicGroups.flatMap(topic=>topic.encounters).filter(id=>encounters[id].origin===role));
   }

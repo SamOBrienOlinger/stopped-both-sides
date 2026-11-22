@@ -48,6 +48,7 @@ test('Topics, source navigation and returning-player actions are usable with enl
  await page.locator('.scenario-library>summary').click();await page.getByRole('button',{name:'Young people',exact:true}).click();
  await expect(page.locator('.encounter-card')).toHaveCount(2);
  await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(34);
+ await page.locator('.scenario-library [data-situation-topic="street"]>summary').click();
  await page.locator('.scenario-library [data-action="paired-start"][data-id="public-street"]').click();
  await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
  await openNavigation(page);await page.locator('.header [data-nav="rights"]').click();await page.getByRole('link',{name:'Under 18s',exact:true}).click();

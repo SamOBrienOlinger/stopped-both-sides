@@ -38,8 +38,8 @@ export function routeTrail(state){
  const e=encounters[state.id];
  return `<nav class="route-navigation" aria-label="Review each decision"><ol class="route-trail">${state.history.map((step,i)=>`<li><button class="route-dot is-visited" data-action="paired-revisit" data-index="${i}" title="${esc(e.nodes[step.nodeId].title)}" aria-label="${esc(e.nodes[step.nodeId].title)}"><span aria-hidden="true">${i+1}</span></button></li>`).join('')}<li><span class="route-dot is-current" aria-current="step"><span class="sr-only">${esc(e.nodes[state.nodeId].title)}</span><span aria-hidden="true">${state.history.length+1}</span></span></li></ol></nav>`;
 }
-export function situationTopics(groups,renderCards,{openTopic='',openAll=false,preview=false}={}){
- return groups.map(topic=>`<details class="situation-topic" data-situation-topic="${topic.id}" ${openAll||openTopic===topic.id?'open':''}>
+export function situationTopics(groups,renderCards,{openTopic='',preview=false}={}){
+ return groups.map(topic=>`<details class="situation-topic" data-situation-topic="${topic.id}" ${openTopic===topic.id?'open':''}>
   <summary class="situation-topic-trigger">
    ${learningIcon(topic.id)}<strong>${topic.title}</strong><span class="situation-topic-count" aria-hidden="true">${topic.encounters.length}</span><span class="landing-disclosure-caret" aria-hidden="true"></span>
    ${preview?`<span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>`:''}
