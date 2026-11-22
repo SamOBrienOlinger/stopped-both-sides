@@ -283,6 +283,12 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions #paired-ti
 .flow-role-bar .perspective-status>.perspective-icon {inline-size:clamp(28px,7vw,42px);border-radius:.3rem}
 .flow-role-bar .perspective-toggle {min-block-size:44px;padding:.3rem .45rem;font-size:.875rem}
 .flow-role-bar .perspective-toggle>.perspective-icon {inline-size:1.5rem}
+.flow-role-controls {display:grid;grid-template-columns:minmax(0,1fr);justify-items:start;gap:.55rem;min-inline-size:0;margin-block-end:.9rem}
+.flow-role-controls>.flow-role-bar {inline-size:100%;margin:0}
+button.role-switch-button {display:inline-flex;align-items:center;justify-content:flex-start;gap:.45rem;inline-size:fit-content;max-inline-size:100%;min-block-size:44px;padding:.4rem .65rem;border:1px solid var(--deep);border-radius:.6rem;background:var(--paper,#fff);color:var(--deep);font-size:.875rem;font-weight:600;line-height:1.4;text-align:start;text-decoration:none}
+button.role-switch-button>.perspective-icon {inline-size:20px;block-size:auto}
+.role-switch-button>span {min-inline-size:0;overflow-wrap:anywhere}
+button.role-switch-button:hover {background:var(--pale)}
 .flow-role-bar.legacy-perspective {flex-direction:row;align-items:center;padding:.5rem .65rem}
 .flow-role-bar.legacy-perspective .perspective-status {flex:1 1 12rem;flex-direction:row;justify-content:start}
 .flow-role-bar.legacy-perspective>.perspective-toggle {flex:0 1 auto;inline-size:auto}
@@ -461,7 +467,7 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions #paired-ti
  background:var(--pale);
 }
 #main>.recap-practice {max-inline-size:64rem;margin-inline:auto}
-#main>.recap-characters,#main>.flow-role-bar:not(.legacy-perspective) {max-inline-size:64rem;margin-inline:auto}
+#main>.recap-characters,#main>.flow-role-controls,#main>.flow-role-bar:not(.legacy-perspective) {max-inline-size:64rem;margin-inline:auto}
 .paired-recap .summary-item {padding:clamp(.8rem,2.3vw,1.4rem);background:var(--paper,#fff)}
 .recap-practice,.progress-skills {margin-block:1rem}
 .recap-practice button {flex-wrap:wrap}
@@ -501,7 +507,7 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions #paired-ti
  .encounter-hero-art {display:none}
  .flow-game .decision-context,.summary-heading,
  .game-grid>.decision-choices,.decision-choices .feedback,
- .play-modes a,.flow-role-bar,.scene-explorer {
+ .play-modes a,.flow-role-bar,.scene-explorer,button.role-switch-button {
   background:Canvas;color:CanvasText;border-color:ButtonText;box-shadow:none;
  }
  .play-modes a[aria-current="page"] {outline:2px solid Highlight;outline-offset:-4px}

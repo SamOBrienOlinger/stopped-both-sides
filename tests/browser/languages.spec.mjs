@@ -192,7 +192,8 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await page.locator('[data-action="paired-answer"]').first().click();await fits(page,'game');
  if(width===320){
   const actions=page.locator('.flow-role-bar');
-  const bar=await actions.boundingBox(),switcher=await actions.locator('.perspective-toggle').boundingBox();
+  const bar=await actions.boundingBox(),switcher=await page.locator('.flow-role-bar + [data-action="paired-switch"]').boundingBox();
+  expect(switcher.y).toBeGreaterThanOrEqual(bar.y+bar.height);
   expect(switcher.x).toBeGreaterThanOrEqual(bar.x);
   expect(switcher.x+switcher.width).toBeLessThanOrEqual(bar.x+bar.width);
   const castGroup=page.locator('.scene-explorer .encounter-cast'),castWidth=(await castGroup.boundingBox()).width;

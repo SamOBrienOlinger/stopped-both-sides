@@ -131,13 +131,14 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const switchLabel=targetRole==='garda'?'Switch to the Garda perspective':'Switch to the public perspective';
   const character=characterFor(s.role,s.cast[s.role]);
   const portrait=s.complete?'':`<span class="turn-avatar" role="img" aria-label="${esc(character.name)}, your current ${esc(roleLabels[s.role])} character" data-role="${s.role}" data-character-id="${character.id}">${characterImage(s.role,character.id)}</span>`;
-  return `<div class="flow-role-bar">
+  return `<div class="flow-role-controls"><div class="flow-role-bar">
    <div class="perspective-status">
     ${perspectiveIcon(s.role)}
     <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionPosition(s.history.length+1,remainingDecisions(s))}</span></div>
     ${portrait}
    </div>
-   <button class="text-button perspective-toggle" data-action="paired-switch">${perspectiveIcon(targetRole)}<span>${switchLabel}</span></button>
+  </div>
+   <button class="text-button perspective-toggle role-switch-button" data-action="paired-switch">${perspectiveIcon(targetRole)}<span>${switchLabel}</span></button>
   </div>`;
  }
  function scenePanel(s,legacy=false){

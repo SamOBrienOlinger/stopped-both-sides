@@ -6,7 +6,7 @@ import {learningAbout} from '../learning/about.mjs?v=learning-dropdown-20261122'
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage} from '../accessibility/ui.mjs?v=colleague-witness-20261122';
 import {createMotion} from '../accessibility/motion.mjs?v=colleague-witness-20261122';
-import {createEncounterMode} from '../encounters/ui.mjs?v=active-role-icon-20261122';
+import {createEncounterMode} from '../encounters/ui.mjs?v=separate-role-switch-20261122';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');
