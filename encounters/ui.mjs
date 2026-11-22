@@ -194,13 +194,13 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
    <h1>${heading}</h1>
-   ${!practice&&topic==='discrimination'?`<div class="info-block discrimination-intro"><p>Housing assistance applies to accommodation. The rules for other grounds depend on the setting.</p>${getLanguage()!=='en'?'<p class="small-note">The Discrimination scenarios are in English.</p>':''}<a class="text-button" href="${ihrecGroundsUrl}" target="_blank" rel="noopener noreferrer">Read IHREC’s protected grounds ↗</a></div>`:''}
-   ${modeOptions(mode,role,topic)}
    <div class="setup-role"><strong>${role==='public'?'Public perspective':'Garda perspective'}</strong>
     <details><summary>Change starting role</summary><div class="role-picker" role="group" aria-label="Starting role">
      ${roles.map(r=>`<a class="primary ${role===r?'':'secondary'}" href="${esc(listHref(mode,r,topic,browse))}" data-role-tone="${r}" ${role===r?'aria-current="true"':''}>${perspectiveIcon(r)}<span>${r==='public'?'Member of the public':'Member of An Garda Síochána'}</span><span class="role-status">${role===r?'Selected':'Choose'}</span></a>`).join('')}
     </div></details>
    </div>
+   ${!practice&&topic==='discrimination'?`<div class="info-block discrimination-intro"><p>Housing assistance applies to accommodation. The rules for other grounds depend on the setting.</p>${getLanguage()!=='en'?'<p class="small-note">The Discrimination scenarios are in English.</p>':''}<a class="text-button" href="${ihrecGroundsUrl}" target="_blank" rel="noopener noreferrer">Read IHREC's protected grounds ↗</a></div>`:''}
+   ${modeOptions(mode,role,topic)}
    ${resumeLink(saved)}
    ${!practice&&!browse?`<div class="start-panel">
     <section class="recommended-situation" aria-labelledby="first-situation-title"><h2 id="first-situation-title">${esc(first.title)}</h2><p>${goal}</p>
