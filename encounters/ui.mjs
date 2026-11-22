@@ -194,7 +194,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
    <h1>${heading}</h1>
-   <div class="setup-role"><strong>${role==='public'?'Public perspective':'Garda perspective'}</strong>
+   <div class="setup-role"><strong>${perspectiveIcon(role)}<span>${role==='public'?'Public perspective':'Garda perspective'}</span></strong>
     <details><summary>Change starting role</summary><div class="role-picker" role="group" aria-label="Starting role">
      ${roles.map(r=>`<a class="primary ${role===r?'':'secondary'}" href="${esc(listHref(mode,r,topic,browse))}" data-role-tone="${r}" ${role===r?'aria-current="true"':''}>${perspectiveIcon(r)}<span>${r==='public'?'Member of the public':'Member of An Garda Síochána'}</span><span class="role-status">${role===r?'Selected':'Choose'}</span></a>`).join('')}
     </div></details>

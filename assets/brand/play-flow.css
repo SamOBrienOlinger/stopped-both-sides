@@ -160,6 +160,9 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions #paired-ti
 .play-modes a:hover {border-color:var(--deep)}
 .play-modes a:focus-visible {outline:3px solid var(--focus);outline-offset:3px}
 .simple-setup .start-panel {border-block-start:4px solid var(--deep);box-shadow:var(--play-shadow)}
+.setup-role>strong {display:flex;align-items:center;gap:.65rem;min-inline-size:0;max-inline-size:100%}
+.setup-role>strong>.perspective-icon {inline-size:clamp(2.5rem,8vw,3rem);max-inline-size:25%}
+.setup-role>strong>span {min-inline-size:0;overflow-wrap:anywhere}
 .simple-setup .setup-character {border-radius:.75rem}
 .scenario-library[open]>summary {border-block-end:1px solid var(--line)}
 .scenario-library .topic-filters {margin-block:1rem 1.3rem}
