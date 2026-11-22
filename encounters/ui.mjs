@@ -5,7 +5,7 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=colleague-witness-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics} from './visuals.mjs?v=collapsed-topics-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=ground-groups-20261122';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=colleague-witness-20261122';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=colleague-witness-20261122';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=colleague-witness-20261122';
@@ -171,6 +171,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
        <button class="primary secondary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Explore this situation: ${esc(e.title)} — ${roleLabels[role]}">Explore this situation</button>
       </article>`).join('')}</div>`;
  }
+ function topicCards(topic,role,heading='h2'){
+  const cards=group=>situationCards(group.encounters.map(id=>encounters[id]),role,heading);
+  return topic.id==='discrimination'
+   ?discriminationGrounds(topic,cards,{openGround:encounters[returnFocus]?.ground})
+   :cards(topic);
+ }
  function selection({mode,role,topic,browse}){
   const first=encounters[role+'-street'],selected=characterPreferences.value[role];
   const saved=store.value.saved.filter(entry=>{
@@ -209,7 +215,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
      <summary id="situations-title">Browse all situations</summary>
      <div class="topic-filters" role="group" aria-label="Situation topics">${topicsForPlay(mode,role).map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
      <div class="situation-topics">${practice?situationTopics(groups,group=>practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic}):`
-      ${situationTopics(groups,group=>situationCards(group.encounters.map(id=>encounters[id]),role),{openTopic})}`}</div>
+      ${situationTopics(groups,group=>topicCards(group,role),{openTopic})}`}</div>
     </details>`}
   </section>`;
  }
@@ -276,7 +282,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);
-  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole,group=>situationCards(group.encounters.map(id=>encounters[id]),siteRole,'h3'))}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
+  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole,group=>topicCards(group,siteRole,'h3'))}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
     <div class="practice-content"><p>Make choices in one role and review what you learned.</p><a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>

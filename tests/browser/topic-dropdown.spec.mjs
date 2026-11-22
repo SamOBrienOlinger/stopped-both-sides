@@ -18,7 +18,8 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
    await expect(group).toHaveAttribute('open','');
    const cards=group.locator('[data-action="paired-start"]');
    expect(await cards.evaluateAll(elements=>elements.map(element=>element.dataset.id))).toEqual(topic.encounters);
-   await expect(browser.locator('.encounter-card:visible')).toHaveCount(topic.encounters.length);
+   await expect(browser.locator('.encounter-card:visible')).toHaveCount(topic.id==='discrimination'?0:topic.encounters.length);
+   if(topic.id==='discrimination')await expect(group.locator('.discrimination-ground')).toHaveCount(10);
    await trigger.press('Space');
    await expect(group).not.toHaveAttribute('open','');
    await expect(browser.locator('.encounter-card:visible')).toHaveCount(0);
@@ -46,7 +47,8 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await library.getByRole('button',{name:'Discrimination',exact:true}).click();
   await expect(library.locator('.situation-topic')).toHaveCount(1);
   await expect(library.locator('[data-situation-topic="discrimination"]')).toHaveAttribute('open','');
-  await expect(library.locator('.encounter-card:visible')).toHaveCount(20);
+  await expect(library.locator('.encounter-card:visible')).toHaveCount(0);
+  await expect(library.locator('.discrimination-ground')).toHaveCount(10);
   await expect(library.locator('.situation-kind')).toHaveCount(10);
   await library.getByRole('button',{name:'All topics',exact:true}).click();
   await expect(library.locator('.encounter-card')).toHaveCount(34);
@@ -101,6 +103,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(page.locator('[data-id="discrimination-gender"]')).toHaveCount(1);
   await expect(page.locator('[data-id="discrimination-colleague-gender"]')).toHaveCount(1);
   await expect(page.locator('.discrimination-intro a')).toHaveAttribute('href','https://www.ihrec.ie/your-rights/protected-grounds');
+  await page.locator('[data-ground="housing-assistance"]>summary').press('Enter');
   await page.locator('[data-action="paired-start"][data-id="discrimination-housing-assistance"]').click();
   await expect(page.locator('#scene-title')).toHaveText('Turned away from a viewing');
   const story=await page.locator('.story-text').textContent();
@@ -116,6 +119,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(page.locator('.discrimination-intro')).toContainText('سيناريوهات التمييز باللغة الإنجليزية.');
   await page.setViewportSize({width:320,height:800});
   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
+  await page.locator('[data-ground="housing-assistance"]>summary').press('Enter');
   await page.locator('[data-action="paired-start"][data-id="discrimination-housing-assistance"]').click();
   await expect(page.locator('#scene-title>span[lang="en-IE"]')).toHaveText('Turned away from a viewing');
   await expect(page.locator('html')).toHaveAttribute('dir','rtl');

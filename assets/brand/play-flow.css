@@ -575,3 +575,25 @@ summary.situation-topic-trigger {
 @media(forced-colors:active){
  .situation-topic,.situation-topic-trigger,.situation-topic-count {background:Canvas;color:CanvasText;border-color:CanvasText}
 }
+
+/* Discrimination contains one independently expandable group per IHREC ground. */
+.situation-topic[data-situation-topic="discrimination"]>.situation-topic-content {padding-inline:clamp(8px,2vw,1.25rem)}
+.discrimination-grounds {display:grid;gap:.65rem;list-style:none;margin:0;padding:0;min-inline-size:0}
+.discrimination-grounds>li {min-inline-size:0;max-inline-size:none;margin:0}
+.discrimination-ground {min-inline-size:0;border:1px solid var(--line);border-radius:.85rem;background:var(--paper,#fff)}
+summary.discrimination-ground-trigger {display:grid;grid-template-columns:minmax(0,1fr) auto 1rem;align-items:center;gap:clamp(6px,1.5vw,.75rem);min-block-size:3.25rem;padding:.85rem clamp(8px,2vw,1rem);list-style:none;border-radius:inherit;color:var(--deep);cursor:pointer;text-align:start;overflow-wrap:anywhere}
+.discrimination-ground-trigger::-webkit-details-marker {display:none}
+.discrimination-ground-trigger::marker {content:""}
+.discrimination-ground-trigger strong {min-inline-size:0;font-size:1rem;line-height:1.5}
+.discrimination-ground-trigger .situation-topic-count {padding-inline:.25rem}
+.discrimination-ground-trigger .landing-disclosure-caret {inline-size:.75rem;block-size:.75rem;margin:0;justify-self:center}
+.discrimination-ground[open]>.discrimination-ground-trigger {border-block-end:1px solid var(--line);border-end-start-radius:0;border-end-end-radius:0;background:var(--pale)}
+.discrimination-ground[open]>.discrimination-ground-trigger .landing-disclosure-caret {transform:rotate(225deg)}
+.discrimination-ground-content {min-inline-size:0;padding:clamp(8px,2vw,1rem)}
+.discrimination-ground-content>.paired-catalog {margin-block:0}
+.discrimination-ground .encounter-card {padding:clamp(8px,2.2vw,1.4rem);overflow-wrap:anywhere}
+.discrimination-ground .encounter-card>.primary {padding-inline:clamp(8px,2vw,24px)}
+.discrimination-ground:not([open])>.discrimination-ground-content {display:none}
+@media(max-width:28rem){.scenario-library:has(.discrimination-grounds){padding-inline:8px}}
+@media(hover:hover) and (pointer:fine){.discrimination-ground-trigger:hover{background:var(--pale)}}
+@media(forced-colors:active){.discrimination-ground,.discrimination-ground-trigger,.discrimination-ground[open]>.discrimination-ground-trigger{background:Canvas;color:CanvasText;border-color:CanvasText}}

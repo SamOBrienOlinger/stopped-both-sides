@@ -244,7 +244,13 @@ test('Both situation browsers group every situation once and keep topics closed 
  const expected={street:3,search:3,custody:2,young:2,fairness:4,discrimination:20};
  for(const hash of ['#play','#encounters/'+siteRole+'/all']){
   route(hash);
-  const groups=[...main.innerHTML.matchAll(/<details class="situation-topic" data-situation-topic="([^"]+)" ([^>]*)>([\s\S]*?)<\/details>/g)];
+  const groups=[...main.innerHTML.matchAll(/<details class="situation-topic" data-situation-topic="([^"]+)" ([^>]*)>/g)].map(match=>{
+   const tags=/<details\b[^>]*>|<\/details>/g;tags.lastIndex=match.index+match[0].length;
+   let depth=1,end=tags.lastIndex,tag;
+   while(depth&&(tag=tags.exec(main.innerHTML))){depth+=tag[0].startsWith('</')?-1:1;end=tag.index;}
+   assert.equal(depth,0,'Every topic disclosure must close');
+   return [match[0],match[1],match[2],main.innerHTML.slice(match.index+match[0].length,end)];
+  });
   assert.deepEqual(groups.map(match=>match[1]),Object.keys(expected));
   for(const [,topic,attributes,content] of groups){
    assert.doesNotMatch(attributes,/\bopen\b/);

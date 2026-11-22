@@ -8,6 +8,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#encounters/'+role+'/discrimination');
   await expect(page.locator('.encounter-card')).toHaveCount(20);
+  await page.locator('[data-ground="gender"]>summary').press('Enter');
   await page.locator('[data-action="paired-start"][data-id="discrimination-colleague-gender"]').click();
   await expect(page.locator('.witness-role-context')).toContainText(role==='public'?'someone else':'witnesses a colleague');
   await expect(page.locator('[data-scene-label-role="public"]')).toContainText('Public witness');

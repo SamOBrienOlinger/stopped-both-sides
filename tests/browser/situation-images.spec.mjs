@@ -74,16 +74,19 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
    for(const topic of topicGroups){
     const group=page.locator(`[data-situation-topic="${topic.id}"]`);
     await group.locator(':scope>summary').press('Enter');
+    for(const summary of await group.locator('.discrimination-ground>summary').all())await summary.press('Enter');
     await checkScenes(group.locator('.encounter-card'),'h3',topic.encounters);
     await group.locator(':scope>summary').press('Space');
    }
    await page.goto(entry+'?lang=en#encounters/'+role+'/all');
    await page.getByRole('button',{name:'All topics',exact:true}).click();
    for(const summary of await page.locator('.scenario-library .situation-topic>summary').all())await summary.press('Enter');
+   for(const summary of await page.locator('.scenario-library .discrimination-ground>summary').all())await summary.press('Enter');
    await checkScenes(page.locator('.scenario-library .encounter-card'),'h2',topicGroups.flatMap(topic=>topic.encounters));
    await page.goto(entry+'?lang=en#practice/'+role+'/all');
    await page.getByRole('button',{name:'All topics',exact:true}).click();
    for(const summary of await page.locator('.scenario-library .situation-topic>summary').all())await summary.press('Enter');
+   for(const summary of await page.locator('.scenario-library .discrimination-ground>summary').all())await summary.press('Enter');
    await checkScenes(page.locator('.scenario-library .practice-content .scenario'),'h2',
     topicGroups.flatMap(topic=>topic.encounters).filter(id=>encounters[id].origin===role));
   }

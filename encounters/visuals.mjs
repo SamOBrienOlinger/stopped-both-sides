@@ -38,6 +38,21 @@ export function routeTrail(state){
  const e=encounters[state.id];
  return `<nav class="route-navigation" aria-label="Review each decision"><ol class="route-trail">${state.history.map((step,i)=>`<li><button class="route-dot is-visited" data-action="paired-revisit" data-index="${i}" title="${esc(e.nodes[step.nodeId].title)}" aria-label="${esc(e.nodes[step.nodeId].title)}"><span aria-hidden="true">${i+1}</span></button></li>`).join('')}<li><span class="route-dot is-current" aria-current="step"><span class="sr-only">${esc(e.nodes[state.nodeId].title)}</span><span aria-hidden="true">${state.history.length+1}</span></span></li></ol></nav>`;
 }
+export function discriminationGrounds(topic,renderCards,{openGround=''}={}){
+ const groups=new Map();
+ for(const id of topic.encounters){
+  const encounter=encounters[id],ground=encounter.ground;
+  if(!groups.has(ground))groups.set(ground,{id:ground,title:encounters['discrimination-'+ground].title,encounters:[]});
+  groups.get(ground).encounters.push(id);
+ }
+ return `<ul class="discrimination-grounds" role="list">${[...groups.values()].map(group=>`<li>
+  <details class="discrimination-ground" data-ground="${group.id}" ${openGround===group.id?'open':''}>
+   <summary class="discrimination-ground-trigger"><strong>${esc(group.title)}</strong><span class="situation-topic-count" aria-hidden="true">${group.encounters.length}</span><span class="landing-disclosure-caret" aria-hidden="true"></span></summary>
+   <div class="discrimination-ground-content">${renderCards(group)}</div>
+  </details>
+ </li>`).join('')}</ul>`;
+}
+
 export function situationTopics(groups,renderCards,{openTopic='',preview=false}={}){
  return groups.map(topic=>`<details class="situation-topic" data-situation-topic="${topic.id}" ${openTopic===topic.id?'open':''}>
   <summary class="situation-topic-trigger">
