@@ -6,6 +6,7 @@ import {characters} from '../encounters/characters.mjs';
 import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
 import {translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {backgroundImage} from '../encounters/backgrounds.mjs';
 import {situationParticipants} from '../encounters/situation-cast.mjs';
 
 test('Every stage and all 81 character pairs have a complete illustration',()=>{
@@ -84,7 +85,10 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
 test('Both entrypoints load scene styles and all locally delivered images exist',()=>{
  assert.ok(existsSync(new URL('../assets/scenes/contextual-cast.webp',import.meta.url)));
  assert.ok(existsSync(new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url)));
- for(const name of sceneAssets)assert.ok(existsSync(new URL(`../assets/scenes/${name}.webp`,import.meta.url)),name);
+ for(const place of sceneAssets){
+  const src=backgroundImage(place)?.src||`../assets/scenes/${place}.webp`;
+  assert.ok(existsSync(new URL(src,import.meta.url)),place);
+ }
  for(const path of ['../index.html','../garda/index.html'])assert.match(readFileSync(new URL(path,import.meta.url),'utf8'),/encounters\/scenes.css/);
  for(const label of ['On the street','At the bus stop','At the station','Time to reflect','Reviewing the encounter','In the community','Private advice · separate perspectives','Same facts · compare the written scenarios','Your chosen response','The scene'])assert.notEqual(translateText(label,'ga'),label);
 });

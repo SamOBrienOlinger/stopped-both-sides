@@ -1,5 +1,5 @@
 import {encounters} from './catalog.mjs?v=colleague-witness-20261122';
-import {renderScenePreview} from './scenes.mjs?v=group-spacing-20261122';
+import {renderScenePreview} from './scenes.mjs?v=football-ground-20261122';
 import {topicGroups} from './presentation.mjs?v=colleague-witness-20261122';
 import {practiceGoal} from '../learning/play.mjs?v=colleague-witness-20261122';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

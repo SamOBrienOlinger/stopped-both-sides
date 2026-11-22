@@ -199,7 +199,7 @@ const cases=[
   ]
  },
  {
-  ground:'race', title:'Race', place:'square',
+  ground:'race', title:'Race', place:'football-ground',
   description:'You have a valid ticket for a local match. A steward asks only you to prove your nationality before letting you in.',
   goal:'Ask whether the same entry conditions were applied to comparable ticket holders.',
   stages:[

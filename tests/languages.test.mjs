@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=contributors-expanded-20261122';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=football-ground-20261122';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
 import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
@@ -131,6 +131,11 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
    route(stateHash(base));
    const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast);
    assert.ok(main.innerHTML.includes(escapeHTML(translated)),`${language.id}/${e.id}/${node.id}`);
+   if(e.id==='discrimination-race'){
+    const caption=translateText('Outside the football ground',language.id);
+    assert.notEqual(caption,'Outside the football ground');
+    assert.ok(main.innerHTML.includes('<div class="scene-setting">'+escapeHTML(caption)+'</div>'));
+   }
    if(e.language)assert.ok(main.innerHTML.includes(`<p class="story-text"><span lang="${e.language}" dir="ltr" data-no-translate>${escapeHTML(node.scene)}</span></p>`));
    assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.public+'"'));assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.garda+'"'));
    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"/);

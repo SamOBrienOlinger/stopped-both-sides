@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs';
-import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
+import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
 import {startEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
@@ -34,7 +34,7 @@ test('Exterior art keeps selected roles and narrative state unchanged',()=>{
 });
 
 test('Outdoor discrimination scenes use the same clear foreground in play and previews',()=>{
- for(const [place,id] of [['street','discrimination-housing-assistance'],['bus-stop','discrimination-colleague-race'],['square','discrimination-gender']]){
+ for(const [place,id] of [['street','discrimination-housing-assistance'],['bus-stop','discrimination-colleague-race'],['square','discrimination-gender'],['football-ground','discrimination-race']]){
   const image=backgroundImage(place,{group:true});
   for(const source of image.srcset.split(', ')){
    const [url,width]=source.split(' ');
@@ -43,5 +43,20 @@ test('Outdoor discrimination scenes use the same clear foreground in play and pr
   }
   assert.ok(renderScene(startEncounter(id)).includes(image.src));
   assert.ok(renderScenePreview(id).includes(image.src));
+ }
+});
+
+test('Only the local match uses the stadium; the colleague race situation stays at the bus stop',()=>{
+ const place='football-ground',match='discrimination-race',witness='discrimination-colleague-race';
+ const matches=Object.keys(sceneDirections).filter(id=>Object.values(sceneDirections[id]).some(scene=>scene.place===place));
+ assert.deepEqual(matches,[match]);
+ const cast={public:'public-8',garda:'garda-9'};
+ for(const role of ['public','garda'])for(const nodeId of ['opening','follow-up']){
+  const html=renderScene({...startEncounter(match,role,{cast}),nodeId});
+  assert.match(html,/data-scene-place="football-ground"/);
+  assert.match(html,/>Outside the football ground</);
+  assert.match(html,/data-scene-character="public-8"/);
+  assert.match(html,/data-scene-character="garda-9"/);
+  assert.equal(sceneDirections[witness][nodeId].place,'bus-stop');
  }
 });

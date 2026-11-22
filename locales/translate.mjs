@@ -174,6 +174,16 @@ const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padSt
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
 // Localize revised interface copy without renumbering full-content packs.
 const revisedSiteCopy={
+ "Outside the football ground": {
+  "ga": "Taobh amuigh den staid sacair",
+  "pt": "No exterior do estádio de futebol",
+  "ar": "خارج ملعب كرة القدم",
+  "pl": "Przed stadionem piłkarskim",
+  "ro": "În fața stadionului de fotbal",
+  "fr": "Devant le stade de football",
+  "es": "A la entrada del estadio de fútbol",
+  "zh-Hans": "足球场外"
+ },
  "Start:": {
   "ga": "Tosaigh:",
   "pt": "Começar:",

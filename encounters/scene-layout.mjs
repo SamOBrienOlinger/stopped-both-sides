@@ -12,6 +12,7 @@ export const SCENE_LAYOUTS = Object.freeze({
   // The bus doors open onto the pavement on the right of the image.
   'bus-stop': outdoor('bus-stop', 58, 76),
   square: outdoor('quayside', 38, 56),
+  'football-ground': outdoor('football-ground', 30, 70),
   station: indoor(), 'advice-room': indoor(), 'meeting-room': indoor()
 });
 export function sceneActorLayout(place, role, { solo = false, wide = false } = {}) {

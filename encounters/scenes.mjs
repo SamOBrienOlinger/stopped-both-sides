@@ -1,9 +1,9 @@
-import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=learning-language-20261120';
-import {backgroundImage} from './backgrounds.mjs?v=group-spacing-20261122';
+import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=football-ground-20261122';
+import {backgroundImage} from './backgrounds.mjs?v=football-ground-20261122';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=colleague-witness-20261122';
 import {characterFor,defaultCast} from './characters.mjs?v=situation-cast-20261122';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=cast-audit-20261122';
-import {discriminationEncounters} from './discrimination.mjs?v=colleague-witness-20261122';
+import {discriminationEncounters} from './discrimination.mjs?v=football-ground-20261122';
 import {situationParticipants,participantLayout} from './situation-cast.mjs?v=group-spacing-20261122';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
@@ -104,10 +104,10 @@ export const sceneDirections={
  ]))
 };
 
-export const sceneAssets=['street','bus-stop','station','advice-room','meeting-room','square'];
 // Only exterior artwork changes. The station and private rooms retain their art.
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community'};
+const places={'street':'On the street','bus-stop':'At the bus stop',station:'At the station','advice-room':'Time to reflect','meeting-room':'Reviewing the encounter',square:'In the community','football-ground':'Outside the football ground'};
+export const sceneAssets=Object.keys(places);
 
 function backdrop(place,art,{sizes,lazy}){
  const image=art||{src:new URL(`../assets/scenes/${place}.webp?v=irish-streetlights-1`,import.meta.url).href,width:680,height:380};
