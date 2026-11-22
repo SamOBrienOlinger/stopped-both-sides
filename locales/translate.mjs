@@ -1,4 +1,4 @@
-import {learningCopy} from './play-copy.mjs?v=contributor-lists-20261122';
+import {learningCopy} from './play-copy.mjs?v=contributors-expanded-20261122';
 import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';

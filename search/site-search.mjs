@@ -1,8 +1,9 @@
 import {encounters,references} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
 import {topicGroups} from '../encounters/presentation.mjs?v=colleague-witness-20261122';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
-import {translateText,escapeHTML as esc} from '../locales/translate.mjs?v=contributor-lists-20261122';
-import {learningAbout,prototypeInput} from '../learning/about.mjs?v=contributor-lists-20261122';
+import {translateText,escapeHTML as esc} from '../locales/translate.mjs?v=contributors-expanded-20261122';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
+import {communitySources} from '../learning/community-resources.mjs?v=community-resources-20261122';
 
 const fold=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase().replace(/ł/g,'l').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 const indexes=new Map();
@@ -26,11 +27,11 @@ function searchIndex(language,siteRole){
   siteRole==='garda'?['Evidence library','#evidence','Garda resources']:['Human and Civil Rights & sources','#rights','Advice & support']
  ];
  for(const [title,href,description] of pages){
-  const content=href==='#about'?(learningAbout()+prototypeInput(siteRole)).split(/<[^>]*>/).map(text=>text.trim()).filter(Boolean):[];
+  const content=href==='#about'?(learningAbout()+prototypeInput(siteRole)+firstTimeGuide()).split(/<[^>]*>/).map(text=>text.trim()).filter(Boolean):[];
   entries.push({kind:'page',title,href,description,text:[title,description,...content]});
  }
  const urls=new Set();
- for(const source of Object.values(references)){
+ for(const source of [...Object.values(communitySources),...Object.values(references)]){
   if(urls.has(source.url))continue;
   urls.add(source.url);
   entries.push({kind:'source',title:source.title,href:source.url,description:source.note||'',text:[source.title,source.note,source.group]});

@@ -9,7 +9,7 @@ const {values}=parseArgs({options:{host:{type:'string',default:'127.0.0.1'},port
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const prefix='/stopped-both-sides/';
 const types={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8',
- '.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.jpeg':'image/jpeg',
+ '.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.jpeg':'image/jpeg','.pdf':'application/pdf',
  '.svg':'image/svg+xml','.ttf':'font/ttf','.png':'image/png','.webp':'image/webp','.json':'application/json'};
 createServer(async(req,res)=>{
  try{

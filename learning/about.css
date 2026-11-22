@@ -176,6 +176,26 @@
 .input-disclosure .contribution-organisations a{display:block;max-inline-size:100%;min-block-size:44px;padding-block:.25rem;line-height:1.7;overflow-wrap:anywhere}
 .content-page .input-disclosure .contribution-status{max-inline-size:none;display:grid;gap:.35rem;margin:1.5rem 0 0;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--pale);color:var(--ink)}
 .input-disclosure .contribution-status strong{color:var(--deep)}
+
+/* A first-page preview opens the complete, three-page printable guide. */
+.first-time-guide .guide-layout{display:grid;grid-template-columns:minmax(0,14rem) minmax(0,1fr);align-items:center;gap:clamp(1rem,3vw,2rem)}
+.first-time-guide .guide-thumbnail{display:flex;flex-direction:column;inline-size:100%;max-inline-size:14rem;justify-self:center;min-inline-size:0;border:1px solid var(--line);border-radius:12px;background:var(--paper,#fff);text-decoration:none;box-shadow:0 6px 20px #20394112;transform-origin:center}
+.guide-thumbnail .guide-preview{display:block;aspect-ratio:210/297;overflow:hidden;border-radius:11px 11px 0 0;background:var(--pale)}
+.first-time-guide .guide-preview img{display:block;inline-size:100%;block-size:100%;object-fit:cover;object-position:top}
+.first-time-guide .guide-open{display:block;text-align:center;min-block-size:44px;padding:.7rem .5rem;border-block-start:1px solid var(--line);font-weight:700;line-height:1.5;color:var(--deep);overflow-wrap:anywhere}
+.first-time-guide .guide-introduction{min-inline-size:0;overflow-wrap:anywhere}
+.first-time-guide .guide-introduction p{margin:0 0 1rem}
+.guide-thumbnail:focus-visible{outline:3px solid var(--focus);outline-offset:5px}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .guide-thumbnail{transition:transform .22s ease,box-shadow .22s ease}
+ .guide-thumbnail:hover,.guide-thumbnail:focus-visible{transform:scale(1.08);box-shadow:0 12px 28px #20394126}
+}
+.motion-reduce .guide-thumbnail{transform:none;transition:none}
+@media(max-width:40rem){.first-time-guide .guide-layout{grid-template-columns:minmax(0,1fr)}}
+@media(forced-colors:active){
+ .first-time-guide .guide-thumbnail,.first-time-guide .guide-open{background:Canvas;color:LinkText;border-color:CanvasText;box-shadow:none}
+ .guide-thumbnail:focus-visible{outline-color:Highlight}
+}
 @media(forced-colors:active){
  .input-disclosure .contribution-columns>section,
  .input-disclosure .contribution-organisations>li,

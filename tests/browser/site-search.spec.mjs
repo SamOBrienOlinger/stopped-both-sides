@@ -54,9 +54,9 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
    await page.goto(path+'?lang='+lang+'#about');
    const contribution=page.locator('.input-disclosure');
    await contribution.locator(':scope>summary').click();
-   await expect(contribution.locator('.contribution-organisations>li')).toHaveCount(6);
+   await expect(contribution.locator('.contribution-organisations>li')).toHaveCount(9);
    await expect(contribution.locator('.contribution-points>li')).toHaveCount(8);
-   await expect(contribution.locator('.contribution-organisations a')).toHaveCount(12);
+   await expect(contribution.locator('.contribution-organisations a')).toHaveCount(40);
    await page.evaluate(()=>{document.documentElement.style.setProperty('--reading-size','200%');document.documentElement.classList.add('reading-spacious');});
    for(const width of [280,390,768,1366,2560]){
     await page.setViewportSize({width,height:900});

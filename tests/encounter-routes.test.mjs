@@ -46,6 +46,17 @@ test('PABI can be found in each perspective’s reference page alongside the exi
   assert.match(main.innerHTML,/<details[^>]*id="source-pabi"[^>]*open/);
   assert.match(main.innerHTML,/survey was small and self-selecting/);
  }else{
+  const complaints=main.innerHTML.match(/<section class="source-topic" id="rights-complaints"[\s\S]*?<\/section>/)?.[0];
+  const community=main.innerHTML.match(/<section class="source-topic" id="rights-community"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(complaints);assert.ok(community);
+  assert.match(complaints,/<h2>Complaints<\/h2>/);
+  assert.deepEqual([...complaints.matchAll(/class="source-card" href="([^"]+)"/g)].map(match=>match[1]),[
+   'https://www.fiosru.ie/about-us/faqs/','https://inar.ie/ireport-racism-reporting-system/'
+  ]);
+  assert.match(community,/<h2>Community experiences<\/h2>/);
+  const communityLinks=[...community.matchAll(/class="source-card" href="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(communityLinks.length,12);assert.equal(new Set(communityLinks).size,12);
+  assert.match(community,/Policing_of_Africans_and_Brazilians_in_Ireland_Mar25\.pdf/);
   assert.doesNotMatch(main.innerHTML,/<a class="source-card" href="https:\/\/inar\.ie\/pabi-project\//);
   assert.doesNotMatch(main.innerHTML,/<a class="source-card" href="https:\/\/inar\.ie\/\?s=Police/);
   assert.doesNotMatch(main.innerHTML,/<a class="source-card" href="https:\/\/www\.fiosru\.ie\/complaints\/submit-a-complaint\//);

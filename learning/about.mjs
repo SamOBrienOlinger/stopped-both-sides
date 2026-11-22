@@ -13,26 +13,60 @@ const contributorGroups = [
   contributorLink('https://www.iccl.ie/about/','Irish Council for Civil Liberties (ICCL)'),
   contributorLink('https://www.ihrec.ie/','Irish Human Rights and Equality Commission (IHREC)'),
   contributorLink('https://www.flac.ie/about/','FLAC (Free Legal Advice Centres)'),
+  contributorLink('https://www.lawsociety.ie/','Law Society of Ireland'),
+  contributorLink('https://www.iprt.ie/about-us/','Irish Penal Reform Trust (IPRT)'),
+  contributorLink('https://childrensrights.ie/about-us/',"Children's Rights Alliance"),
+  contributorLink('https://www.universityofgalway.ie/irish-centre-human-rights/','University of Galway: Irish Centre for Human Rights'),
   'Practising Irish solicitors'
  ]],
  ['Anti-racism and community experience', [
   contributorLink('https://inar.ie/','Irish Network Against Racism (INAR)'),
-  contributorLink('https://www.paveepoint.ie/about-pavee-point/','Pavee Point Traveller and Roma Centre')
+  contributorLink('https://www.paveepoint.ie/about-pavee-point/','Pavee Point Traveller and Roma Centre'),
+  contributorLink('https://itmtrav.ie/','Irish Traveller Movement'),
+  contributorLink('https://blackandirish.com/non-profit/about-us/','Black &amp; Irish')
  ]],
  ['Young people and community learning', [
   contributorLink('https://www.youth.ie/about/','National Youth Council of Ireland'),
-  contributorLink('https://www.aontas.com/about-us/','AONTAS')
+  contributorLink('https://www.aontas.com/about-us/','AONTAS'),
+  contributorLink('https://www.foroige.ie/about/about-foroige/','Foróige'),
+  contributorLink('https://youthworkireland.ie/','Youth Work Ireland'),
+  contributorLink('https://www.nala.ie/about-us/','National Adult Literacy Agency (NALA)')
+ ]],
+ ['Gender, sexual orientation and age', [
+  contributorLink('https://www.nwci.ie/',"National Women's Council"),
+  contributorLink('https://lgbt.ie/','LGBT Ireland'),
+  contributorLink('https://teni.ie/','Transgender Equality Network Ireland (TENI)'),
+  contributorLink('https://www.ageaction.ie/','Age Action')
  ]],
  ['Disability, accessibility and communication', [
   contributorLink('https://nda.ie/about/','National Disability Authority'),
-  contributorLink('https://universaldesign.ie/about/what-we-do','Centre for Excellence in Universal Design')
+  contributorLink('https://universaldesign.ie/about/what-we-do','Centre for Excellence in Universal Design'),
+  contributorLink('https://ilmi.ie/about-ilmi/','Independent Living Movement Ireland (ILMI)'),
+  contributorLink('https://www.inclusionireland.ie/','Inclusion Ireland'),
+  contributorLink('https://www.irishdeafsociety.ie/','Irish Deaf Society'),
+  contributorLink('https://asiam.ie/','AsIAm')
  ]],
  ['Immigration and migrant perspectives', [
-  contributorLink('https://www.immigrantcouncil.ie/','Immigrant Council of Ireland')
+  contributorLink('https://www.immigrantcouncil.ie/','Immigrant Council of Ireland'),
+  contributorLink('https://www.irishrefugeecouncil.ie/','Irish Refugee Council'),
+  contributorLink('https://www.mrci.ie/','Migrant Rights Centre Ireland (MRCI)'),
+  contributorLink('https://doras.org/','Doras'),
+  contributorLink('https://nascireland.org/','Nasc, the Migrant and Refugee Rights Centre')
  ]],
  ['Garda education and independent research', [
   contributorLink('https://www.garda.ie/en/careers/the-garda-college/','Garda College'),
-  contributorLink('https://www.ul.ie/artsoc/ccjvs','University of Limerick: Centre for Crime, Justice and Victim Studies')
+  contributorLink('https://www.ul.ie/artsoc/ccjvs','University of Limerick: Centre for Crime, Justice and Victim Studies'),
+  contributorLink('https://www.ucd.ie/law/','University College Dublin: Sutherland School of Law'),
+  contributorLink('https://www.maynoothuniversity.ie/law','Maynooth University: School of Law and Criminology')
+ ]],
+ ['Policing oversight and accountability', [
+  contributorLink('https://www.pcsaireland.ie/about-us/what-we-do/','Policing and Community Safety Authority (PCSA)'),
+  contributorLink('https://www.fiosru.ie/about-us/','Fiosrú, Office of the Police Ombudsman')
+ ]],
+ ['Policy research and think tanks', [
+  contributorLink('https://www.esri.ie/research-areas/social-inclusion-and-equality','Economic and Social Research Institute (ESRI)'),
+  contributorLink('https://www.tasc.ie/about/','TASC (Think-tank for Action on Social Change)'),
+  contributorLink('https://www.socialjustice.ie/content/about-us','Social Justice Ireland')
  ]]
 ];
 
@@ -66,6 +100,21 @@ export function prototypeInput(siteRole='public') {
    <p class="contribution-status"><strong>An invitation for input</strong><span>These are potential contributions and future priorities. No partnership, endorsement or commitment is claimed. This work has not been commissioned or completed.</span></p>
   </div>
  </details>`;
+}
+
+export function firstTimeGuide() {
+ const pdf=new URL('../docs/user-guide/stopped-both-sides-user-flow.pdf',import.meta.url).href;
+ const preview=new URL('../docs/user-guide/stopped-both-sides-user-flow.png',import.meta.url).href;
+ return `<section class="info-block first-time-guide" aria-labelledby="first-time-guide-heading">
+  <h2 id="first-time-guide-heading">First-time user guide</h2>
+  <div class="guide-layout">
+   <a class="guide-thumbnail" href="${pdf}" target="_blank" rel="noopener noreferrer" aria-label="Open the first-time user guide PDF">
+    <span class="guide-preview"><img src="${preview}" width="1400" height="5943" alt="Preview of the first-time user guide" loading="lazy" decoding="async"></span>
+    <span class="guide-open">Open the full PDF</span>
+   </a>
+   <div class="guide-introduction"><p>Learn how to choose a role, explore a situation, compare perspectives and review your decisions.</p><p class="small-note"><span>English PDF</span> · <span>3 pages</span></p></div>
+  </div>
+ </section>`;
 }
 
 const goals = [

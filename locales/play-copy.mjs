@@ -683,6 +683,131 @@ const contributionCopy = [
   '以上为可能的贡献和未来重点，不代表已建立任何合作、获得认可或作出承诺。这些工作尚未受委托开展，也尚未完成。'
  ]]
 ];
+const additionalContributorLabels = [
+ ['Gender, sexual orientation and age', ['Inscne, claonadh gnéasach agus aois','Género, orientação sexual e idade','النوع الاجتماعي والتوجه الجنسي والعمر','Płeć, orientacja seksualna i wiek','Gen, orientare sexuală și vârstă','Genre, orientation sexuelle et âge','Género, orientación sexual y edad','性别、性取向与年龄']],
+ ['Policing oversight and accountability', ['Maoirseacht agus cuntasacht póilíneachta','Supervisão policial e responsabilização','الرقابة على الشرطة والمساءلة','Nadzór nad policją i odpowiedzialność','Supravegherea poliției și răspunderea','Contrôle de la police et responsabilité','Supervisión policial y rendición de cuentas','警务监督与问责']],
+ ['Policy research and think tanks', ['Taighde beartais agus meithleacha smaointe','Investigação de políticas e centros de reflexão','بحوث السياسات ومراكز الفكر','Badania polityk publicznych i ośrodki analityczne','Cercetare de politici publice și centre de analiză','Recherche sur les politiques publiques et groupes de réflexion','Investigación de políticas públicas y centros de pensamiento','政策研究与智库']]
+];
+const communityResourceCopy = [
+ ['Complaints', ['Gearáin','Reclamações','الشكاوى','Skargi','Plângeri','Réclamations','Reclamaciones','投诉']],
+ ['Community experiences', ['Eispéiris phobail','Experiências das comunidades','تجارب المجتمعات','Doświadczenia społeczności','Experiențele comunităților','Expériences des communautés','Experiencias de las comunidades','社区经历']],
+ ['Academic article on Traveller-police relations, accommodation and the policing of public space. The publisher provides an abstract; full text may require access.', [
+  'Alt acadúil ar chaidreamh an Lucht Siúil leis na póilíní, ar chóiríocht agus ar phóilíneacht spásanna poiblí. Tá achoimre ar fáil ón bhfoilsitheoir; d’fhéadfadh rochtain ar leith a bheith ag teastáil don téacs iomlán.',
+  'Artigo académico sobre as relações entre Travellers e polícia, alojamento e policiamento do espaço público. A editora disponibiliza um resumo; o texto integral pode exigir acesso.',
+  'مقال أكاديمي عن علاقة مجتمع الترافيلر بالشرطة والسكن ومراقبة الأماكن العامة. يتيح الناشر ملخصًا؛ وقد يتطلب النص الكامل صلاحية وصول.',
+  'Artykuł naukowy o relacjach Travellers z policją, zakwaterowaniu i kontroli przestrzeni publicznej. Wydawca udostępnia streszczenie; pełny tekst może wymagać dostępu.',
+  'Articol academic despre relațiile comunității Traveller cu poliția, locuire și controlul spațiului public. Editura oferă un rezumat; textul integral poate necesita acces.',
+  'Article universitaire sur les relations entre Travellers et police, le logement et le contrôle de l’espace public. Un résumé est disponible ; le texte intégral peut nécessiter un accès.',
+  'Artículo académico sobre las relaciones entre Travellers y policía, el alojamiento y el control del espacio público. La editorial ofrece un resumen; el texto completo puede requerir acceso.',
+  '关于爱尔兰旅行者社群与警察的关系、住房和公共空间警务的学术文章。出版商提供摘要，阅读全文可能需要访问权限。'
+ ]],
+ ['University research documenting Travellers’ accounts of Garda stops, searches, custody and access to justice in Ireland.', [
+  'Taighde ollscoile a dhoiciméadaíonn cuntais an Lucht Siúil ar stopanna, cuardaigh, coimeád agus rochtain ar cheartas in Éirinn.',
+  'Investigação universitária que documenta relatos de Travellers sobre abordagens, buscas, detenção e acesso à justiça na Irlanda.',
+  'بحث جامعي يوثّق روايات الترافيلر عن الاستيقاف والتفتيش والاحتجاز والوصول إلى العدالة في أيرلندا.',
+  'Badanie uniwersyteckie dokumentujące relacje Travellers o zatrzymaniach, przeszukaniach, pobycie w areszcie i dostępie do wymiaru sprawiedliwości w Irlandii.',
+  'Cercetare universitară care documentează relatările comunității Traveller despre opriri, percheziții, reținere și accesul la justiție în Irlanda.',
+  'Recherche universitaire documentant les récits des Travellers sur les contrôles, les fouilles, la garde à vue et l’accès à la justice en Irlande.',
+  'Investigación universitaria que documenta relatos de Travellers sobre controles, registros, detención y acceso a la justicia en Irlanda.',
+  '大学研究记录了爱尔兰旅行者社群对警察拦查、搜查、羁押及获得司法救济的经历描述。'
+ ]],
+ ['Historical ethnography of Garda culture and interactions with immigrant minority communities. The author also created this resource; full-book access may require a subscription.', [
+  'Eitneagrafaíocht stairiúil ar chultúr na nGardaí agus ar theagmhálacha le pobail mhionlaigh inimirceacha. Chruthaigh an t-údar an acmhainn seo freisin; d’fhéadfadh síntiús a bheith ag teastáil don leabhar iomlán.',
+  'Etnografia histórica da cultura da Garda e das interações com comunidades minoritárias imigrantes. O autor também criou este recurso; o livro completo pode exigir uma subscrição.',
+  'دراسة إثنوغرافية تاريخية لثقافة الشرطة الأيرلندية وتفاعلها مع مجتمعات الأقليات المهاجرة. أنشأ المؤلف هذا المورد أيضًا؛ وقد يتطلب الكتاب الكامل اشتراكًا.',
+  'Historyczna etnografia kultury Garda i kontaktów z mniejszościowymi społecznościami imigrantów. Autor stworzył również ten materiał; pełna książka może wymagać subskrypcji.',
+  'Etnografie istorică a culturii Garda și a interacțiunilor cu comunitățile minoritare de imigranți. Autorul a creat și această resursă; accesul la cartea integrală poate necesita abonament.',
+  'Ethnographie historique de la culture de la Garda et de ses interactions avec les minorités immigrées. L’auteur a aussi créé cette ressource ; le livre intégral peut nécessiter un abonnement.',
+  'Etnografía histórica de la cultura de la Garda y sus interacciones con comunidades minoritarias inmigrantes. El autor también creó este recurso; el libro completo puede requerir una suscripción.',
+  '关于爱尔兰警察文化及其与移民少数群体互动的历史民族志研究。作者也是本学习资源的创建者；阅读全文可能需要订阅。'
+ ]],
+ ['University research on disabled and Deaf people’s experiences of safety, reporting incidents and communication with Gardaí in Ireland.', [
+  'Taighde ollscoile ar eispéiris daoine faoi mhíchumas agus daoine Bodhra maidir le sábháilteacht, teagmhais a thuairisciú agus cumarsáid leis na Gardaí in Éirinn.',
+  'Investigação universitária sobre segurança, denúncia de incidentes e comunicação com a Garda entre pessoas com deficiência e pessoas surdas na Irlanda.',
+  'بحث جامعي عن تجارب الأشخاص ذوي الإعاقة والصم في السلامة والإبلاغ عن الحوادث والتواصل مع الشرطة الأيرلندية.',
+  'Badanie uniwersyteckie o doświadczeniach osób z niepełnosprawnościami i osób Głuchych dotyczących bezpieczeństwa, zgłaszania incydentów i komunikacji z Garda w Irlandii.',
+  'Cercetare universitară despre experiențele persoanelor cu dizabilități și ale persoanelor surde privind siguranța, raportarea incidentelor și comunicarea cu Garda în Irlanda.',
+  'Recherche universitaire sur les expériences des personnes handicapées et sourdes concernant la sécurité, le signalement d’incidents et la communication avec la Garda en Irlande.',
+  'Investigación universitaria sobre seguridad, denuncia de incidentes y comunicación con la Garda entre personas con discapacidad y personas sordas en Irlanda.',
+  '大学研究探讨爱尔兰残障人士及聋人在安全、报告事件和与警察沟通方面的经历。'
+ ]],
+ ['University report combining an international review with a Dublin roundtable involving representatives of marginalised communities and statutory agencies.', [
+  'Tuarascáil ollscoile a chomhcheanglaíonn athbhreithniú idirnáisiúnta le comhphlé i mBaile Átha Cliath idir ionadaithe pobail imeallaithe agus gníomhaireachtaí reachtúla.',
+  'Relatório universitário que combina uma revisão internacional com uma mesa-redonda em Dublin entre representantes de comunidades marginalizadas e entidades públicas.',
+  'تقرير جامعي يجمع بين مراجعة دولية ومائدة مستديرة في دبلن بمشاركة ممثلي المجتمعات المهمشة والهيئات القانونية العامة.',
+  'Raport uniwersytecki łączący przegląd międzynarodowy z debatą w Dublinie z udziałem przedstawicieli społeczności marginalizowanych i instytucji publicznych.',
+  'Raport universitar care combină o analiză internațională cu o masă rotundă la Dublin, cu reprezentanți ai comunităților marginalizate și ai instituțiilor publice.',
+  'Rapport universitaire associant une revue internationale à une table ronde à Dublin avec des représentants de communautés marginalisées et d’organismes publics.',
+  'Informe universitario que combina una revisión internacional con una mesa redonda en Dublín con representantes de comunidades marginadas y organismos públicos.',
+  '大学报告结合国际文献综述和都柏林圆桌讨论，参与者包括边缘化社区代表和法定机构。'
+ ]],
+ ['Traveller and Roma advocacy briefing on over-policing, protection from crime, trust and participation in policing decisions.', [
+  'Cáipéis abhcóideachta don Lucht Siúil agus do na Romaigh ar ró-phóilíneacht, cosaint ar choireacht, muinín agus rannpháirtíocht i gcinntí póilíneachta.',
+  'Documento de defesa das comunidades Traveller e Roma sobre policiamento excessivo, proteção contra o crime, confiança e participação nas decisões policiais.',
+  'مذكرة مناصرة للترافيلر والروما عن الإفراط في التدخل الشرطي والحماية من الجريمة والثقة والمشاركة في القرارات الشرطية.',
+  'Dokument rzeczniczy społeczności Travellers i Romów o nadmiernym nadzorze policyjnym, ochronie przed przestępczością, zaufaniu i udziale w decyzjach dotyczących policji.',
+  'Document de advocacy pentru comunitățile Traveller și rome privind intervențiile polițienești excesive, protecția împotriva infracțiunilor, încrederea și participarea la deciziile poliției.',
+  'Note de plaidoyer des communautés Travellers et roms sur le contrôle policier excessif, la protection contre la criminalité, la confiance et la participation aux décisions policières.',
+  'Documento de defensa de las comunidades Traveller y romaní sobre control policial excesivo, protección frente al delito, confianza y participación en las decisiones policiales.',
+  '旅行者和罗姆人权益倡导简报，讨论过度警务干预、犯罪保护、信任以及参与警务决策。'
+ ]],
+ ['University and advocacy research on Dublin Muslims’ experiences of hostility, Garda interactions, trust and barriers to reporting.', [
+  'Taighde ollscoile agus abhcóideachta ar eispéiris Mhoslamaigh Bhaile Átha Cliath maidir le naimhdeas, teagmhálacha leis na Gardaí, muinín agus bacainní ar thuairisciú.',
+  'Investigação universitária e de advocacy sobre experiências de hostilidade, interações com a Garda, confiança e barreiras à denúncia entre muçulmanos de Dublin.',
+  'بحث جامعي وحقوقي عن تجارب المسلمين في دبلن مع العداء والتفاعل مع الشرطة والثقة وعوائق الإبلاغ.',
+  'Badanie akademickie i rzecznicze o doświadczeniach muzułmanów w Dublinie dotyczących wrogości, kontaktów z Garda, zaufania i barier w zgłaszaniu incydentów.',
+  'Cercetare universitară și de advocacy despre experiențele musulmanilor din Dublin privind ostilitatea, interacțiunile cu Garda, încrederea și barierele raportării.',
+  'Recherche universitaire et associative sur les expériences des musulmans de Dublin concernant l’hostilité, les interactions avec la Garda, la confiance et les obstacles au signalement.',
+  'Investigación universitaria y de advocacy sobre experiencias de hostilidad, interacciones con la Garda, confianza y barreras para denunciar entre musulmanes de Dublín.',
+  '大学与权益倡导研究探讨都柏林穆斯林面对敌意、与警察互动、信任及报告事件障碍的经历。'
+ ]],
+ ['LGBTQ+ community submission on barriers to reporting, hate-crime responses and trans and non-binary people’s experiences of Garda contact.', [
+  'Aighneacht ón bpobal LGBTQ+ ar bhacainní ar thuairisciú, freagairtí ar choireacht fuatha agus eispéiris daoine trasinscneacha agus neamh-dhénártha leis na Gardaí.',
+  'Contributo da comunidade LGBTQ+ sobre barreiras à denúncia, respostas a crimes de ódio e experiências de pessoas trans e não binárias no contacto com a Garda.',
+  'مساهمة من مجتمع LGBTQ+ عن عوائق الإبلاغ والاستجابة لجرائم الكراهية وتجارب العابرين وغير الثنائيين في التواصل مع الشرطة.',
+  'Stanowisko społeczności LGBTQ+ o barierach w zgłaszaniu, reakcjach na przestępstwa z nienawiści oraz doświadczeniach osób trans i niebinarnych w kontaktach z Garda.',
+  'Contribuție a comunității LGBTQ+ privind barierele raportării, răspunsurile la infracțiunile motivate de ură și experiențele persoanelor trans și non-binare în contactul cu Garda.',
+  'Contribution de la communauté LGBTQ+ sur les obstacles au signalement, les réponses aux crimes de haine et les expériences des personnes trans et non binaires avec la Garda.',
+  'Aportación de la comunidad LGBTQ+ sobre barreras para denunciar, respuestas a delitos de odio y experiencias de personas trans y no binarias en sus contactos con la Garda.',
+  'LGBTQ+社区提交的意见，讨论报告事件的障碍、仇恨犯罪应对，以及跨性别和非二元人士与警察接触的经历。'
+ ]],
+ ['Advocacy research on sex workers’ experiences of Garda contact, trust and reporting violence in Ireland.', [
+  'Taighde abhcóideachta ar eispéiris oibrithe gnéis maidir le teagmháil leis na Gardaí, muinín agus foréigean a thuairisciú in Éirinn.',
+  'Investigação de advocacy sobre experiências de profissionais do sexo no contacto com a Garda, confiança e denúncia de violência na Irlanda.',
+  'بحث حقوقي عن تجارب العاملين في الجنس مع الشرطة والثقة والإبلاغ عن العنف في أيرلندا.',
+  'Badanie rzecznicze o doświadczeniach osób świadczących usługi seksualne dotyczących kontaktów z Garda, zaufania i zgłaszania przemocy w Irlandii.',
+  'Cercetare de advocacy despre experiențele lucrătorilor sexuali privind contactul cu Garda, încrederea și raportarea violenței în Irlanda.',
+  'Recherche associative sur les expériences des travailleurs et travailleuses du sexe concernant la Garda, la confiance et le signalement des violences en Irlande.',
+  'Investigación de advocacy sobre experiencias de personas que ejercen el trabajo sexual en sus contactos con la Garda, confianza y denuncia de violencia en Irlanda.',
+  '权益倡导研究探讨爱尔兰性工作者与警察接触、信任及报告暴力方面的经历。'
+ ]],
+ ['Official survey of reported discrimination in Garda contact, with breakdowns by ethnicity, religion, gender identity, sexual orientation and age.', [
+  'Suirbhé oifigiúil ar idirdhealú a tuairiscíodh i dteagmhálacha leis na Gardaí, le miondealú de réir eitneachta, reiligiúin, féiniúlachta inscne, claonta ghnéasaigh agus aoise.',
+  'Inquérito oficial sobre discriminação relatada no contacto com a Garda, com dados por etnia, religião, identidade de género, orientação sexual e idade.',
+  'مسح رسمي للتمييز المُبلّغ عنه في التواصل مع الشرطة، مع تصنيفات حسب الإثنية والدين والهوية الجندرية والتوجه الجنسي والعمر.',
+  'Oficjalne badanie zgłaszanej dyskryminacji w kontaktach z Garda, z podziałem według pochodzenia etnicznego, religii, tożsamości płciowej, orientacji seksualnej i wieku.',
+  'Sondaj oficial privind discriminarea raportată în contactul cu Garda, cu date după etnie, religie, identitate de gen, orientare sexuală și vârstă.',
+  'Enquête officielle sur la discrimination déclarée lors des contacts avec la Garda, avec une ventilation par origine ethnique, religion, identité de genre, orientation sexuelle et âge.',
+  'Encuesta oficial sobre discriminación declarada en contactos con la Garda, con datos por etnia, religión, identidad de género, orientación sexual y edad.',
+  '关于与警察接触时所报告歧视经历的官方调查，按族裔、宗教、性别认同、性取向和年龄分类。'
+ ]],
+ ['First-time user guide', ['Treoir don chéad úsáid','Guia para a primeira utilização','دليل المستخدم الجديد','Przewodnik dla nowych użytkowników','Ghid pentru prima utilizare','Guide pour une première utilisation','Guía para la primera visita','首次使用指南']],
+ ['Open the first-time user guide PDF', ['Oscail an treoir PDF don chéad úsáid','Abrir o guia PDF para a primeira utilização','فتح دليل المستخدم الجديد بصيغة PDF','Otwórz przewodnik PDF dla nowych użytkowników','Deschide ghidul PDF pentru prima utilizare','Ouvrir le guide PDF pour une première utilisation','Abrir la guía PDF para la primera visita','打开首次使用指南PDF']],
+ ['Preview of the first-time user guide', ['Réamhamharc ar an treoir don chéad úsáid','Pré-visualização do guia para a primeira utilização','معاينة دليل المستخدم الجديد','Podgląd przewodnika dla nowych użytkowników','Previzualizarea ghidului pentru prima utilizare','Aperçu du guide pour une première utilisation','Vista previa de la guía para la primera visita','首次使用指南预览']],
+ ['Open the full PDF', ['Oscail an PDF iomlán','Abrir o PDF completo','فتح ملف PDF الكامل','Otwórz pełny PDF','Deschide PDF-ul complet','Ouvrir le PDF complet','Abrir el PDF completo','打开完整PDF']],
+ ['Learn how to choose a role, explore a situation, compare perspectives and review your decisions.', [
+  'Foghlaim conas ról a roghnú, cás a fhiosrú, dearcthaí a chur i gcomparáid agus do chinntí a athbhreithniú.',
+  'Saiba como escolher um papel, explorar uma situação, comparar perspetivas e rever as suas decisões.',
+  'تعرّف على اختيار دور واستكشاف موقف ومقارنة وجهات النظر ومراجعة قراراتك.',
+  'Dowiedz się, jak wybrać rolę, przeanalizować sytuację, porównać perspektywy i przejrzeć swoje decyzje.',
+  'Află cum să alegi un rol, să explorezi o situație, să compari perspectivele și să îți revizuiești deciziile.',
+  'Découvrez comment choisir un rôle, explorer une situation, comparer les perspectives et revoir vos décisions.',
+  'Aprende a elegir un papel, explorar una situación, comparar perspectivas y revisar tus decisiones.',
+  '了解如何选择角色、探索情境、比较视角并回顾自己的决定。'
+ ]],
+ ['English PDF', ['PDF i mBéarla','PDF em inglês','ملف PDF باللغة الإنجليزية','PDF w języku angielskim','PDF în engleză','PDF en anglais','PDF en inglés','英文PDF']],
+ ['3 pages', ['3 leathanach','3 páginas','3 صفحات','3 strony','3 pagini','3 pages','3 páginas','3页']]
+];
 const searchCopy = [
  ['Search', ['Cuardaigh','Pesquisar','بحث','Szukaj','Caută','Rechercher','Buscar','搜索']],
  ['Search the website', ['Cuardaigh an suíomh','Pesquisar no site','البحث في الموقع','Przeszukaj witrynę','Caută pe site','Rechercher sur le site','Buscar en el sitio','搜索网站']],
@@ -705,7 +830,7 @@ const searchCopy = [
   '显示前20条结果。请添加关键词以缩小搜索范围。'
  ]]
 ];
-const translations = new Map([...labels,...content,...terminology,...communityResearch,...contributionCopy,...searchCopy]);
+const translations = new Map([...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }
