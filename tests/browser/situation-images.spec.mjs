@@ -4,9 +4,11 @@ import {defaultCast} from '../../encounters/characters.mjs';
 import {startEncounter} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 import {topicGroups} from '../../encounters/presentation.mjs?v=colleague-witness-20261122';
 import {renderScene} from '../../encounters/scenes.mjs?v=colleague-witness-20261122';
+import {situationParticipants} from '../../encounters/situation-cast.mjs';
 
 const situations=Object.values(encounters);
 const cast=defaultCast();
+const previewCast=id=>situationParticipants(id,cast)?.map(person=>({role:person.key,id:person.characterId,visible:true}))||Object.entries(cast).map(([role,id])=>({role,id,visible:true}));
 
 function responsiveAsset(source){
  const {pathname,search}=new URL(source);
@@ -23,12 +25,12 @@ async function checkScenes(cards,heading,ids){
  await expect(cards).toHaveCount(ids.length);
  const previews=cards.locator(`:scope > ${heading} + .situation-image`);
  await expect(previews).toHaveCount(ids.length);
- for(const preview of await previews.all()){
+ for(const [index,preview] of (await previews.all()).entries()){
   await preview.scrollIntoViewIfNeeded();
-  await expect.poll(()=>preview.evaluate(scene=>{
+  await expect.poll(()=>preview.evaluate((scene,count)=>{
    const images=[...scene.querySelectorAll('img')];
-   return images.length===3&&images.every(img=>img.complete&&img.naturalWidth>0);
-  })).toBe(true);
+   return images.length===count+1&&images.every(img=>img.complete&&img.naturalWidth>0);
+  },previewCast(ids[index]).length)).toBe(true);
  }
  const scenes=await previews.evaluateAll(elements=>elements.map(scene=>{
   const img=scene.querySelector('.scene-backdrop');
@@ -55,7 +57,7 @@ async function checkScenes(cards,heading,ids){
  }));
  expect(scenes.map(scene=>({...scene,asset:responsiveAsset(scene.asset)}))).toEqual(ids.map(id=>({
   asset:openingImage(id),fits:true,decorative:true,
-  actors:Object.entries(cast).map(([role,id])=>({role,id,visible:true}))
+  actors:previewCast(id)
  })));
 }
 

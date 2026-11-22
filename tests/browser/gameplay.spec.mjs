@@ -11,15 +11,17 @@ const gardaName=characterFor('garda',cast.garda).name;
 
 for(const entry of ['public','garda'])for(const e of Object.values(encounters))test(`${entry} site: ${e.id} completes with consistent characters and both perspectives`,async({page})=>{
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
- await page.goto((entry==='garda'?'garda/':'./')+stateHash(startEncounter(e.id,entry,{cast})));
+ const initial=startEncounter(e.id,entry,{cast}),selectedCast=initial.cast;
+ const publicName=characterFor('public',selectedCast.public).name;
+ await page.goto((entry==='garda'?'garda/':'./')+stateHash(initial));
  for(let step=0;step<10&&!current(page).complete;step++){
   await expect(page.locator('.paired-game')).toBeVisible();
   const base=current(page),node=e.nodes[base.nodeId],identity=storyIdentity(e);
-  await expect(page.locator('[data-cast-role="public"] strong')).toHaveText('Noor');
+  await expect(page.locator('[data-cast-role="public"] strong')).toHaveText(publicName);
   await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText(gardaName);
   await expect.poll(()=>page.locator('.paired-scene-lead img').evaluateAll(images=>images.length>0&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   if(identity&&node.scene.includes(identity.name)){
-   await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain('Noor');
+   await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain(publicName);
    expect((await page.locator('.story-text').allTextContents()).join(' ')).not.toContain(identity.name);
   }
   for(const role of [base.role,base.role==='public'?'garda':'public']){
@@ -32,7 +34,7 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
   }
   const answered=current(page),next=node.views[answered.role].choices[answered.answers[answered.role]].next;
   await page.locator('[data-action="paired-next"]').click();
-  await expect.poll(()=>current(page).nodeId).toBe(next);expect(current(page).cast).toEqual(cast);
+  await expect.poll(()=>current(page).nodeId).toBe(next);expect(current(page).cast).toEqual(selectedCast);
  }
  const complete=current(page);expect(complete.complete).toBe(true);
  await expect(page.locator('.paired-recap .encounter-scene')).toHaveCount(complete.history.length);
@@ -40,7 +42,7 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
  if(storyIdentity(e))await expect(page.locator('.paired-recap')).not.toContainText(storyIdentity(e).name);
  await page.reload();await expect(page.locator('.paired-recap')).toBeVisible();expect(current(page)).toEqual(complete);
  await page.locator('[data-action="paired-revisit"]').first().click();
- await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).nodeId).toBe(e.start);expect(current(page).cast).toEqual(cast);
+ await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).nodeId).toBe(e.start);expect(current(page).cast).toEqual(selectedCast);
  expect(current(page).answers).toEqual({public:null,garda:null});expect(errors).toEqual([]);
 });
 
