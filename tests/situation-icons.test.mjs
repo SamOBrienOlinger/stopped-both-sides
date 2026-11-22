@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {encounters} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {topicGroups} from '../encounters/presentation.mjs?v=pabi-privacy-20261122';
-import {learningIcon,scenarioIcon,topicExplorer,practiceCards} from '../encounters/visuals.mjs?v=exclusion-icon-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {topicGroups} from '../encounters/presentation.mjs?v=colleague-witness-20261122';
+import {learningIcon,scenarioIcon,topicExplorer,practiceCards} from '../encounters/visuals.mjs?v=colleague-witness-20261122';
 import publicData from '../encounters/original-public.mjs?v=pabi-privacy-20261122';
 import gardaData from '../encounters/original-garda.mjs?v=pabi-privacy-20261122';
 

@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
-import {encounters,roles} from '../../encounters/catalog.mjs?v=pabi-privacy-20261122';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
 import {characters} from '../../encounters/characters.mjs';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 
 // Reach every node through the real engine, rather than fabricating history.
 function reachable(id){
@@ -60,7 +60,7 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
   await page.goto(path+'?lang=en'+stateHash({...cases[0],role:path==='garda/'?'garda':'public'}));
   await expect(page.locator('.paired-scene-lead>.encounter-scene[data-caption-anchors]')).toBeVisible();
   const sceneWidth=await page.locator('.paired-scene-lead>.encounter-scene').evaluate(e=>e.getBoundingClientRect().width);
-  await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=learning-language-20261120');},basePath);
+  await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=colleague-witness-20261122');},basePath);
   let rendered=0,maxError=0;
   for(const item of cases){
    const state={...item,role:path==='garda/'?'garda':'public'};

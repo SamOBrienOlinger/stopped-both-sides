@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=pabi-privacy-20261122';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=colleague-witness-20261122';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 import {personalizeText,storyIdentity} from '../encounters/narrative.mjs';
-import {progressStorageKey} from '../encounters/progress.mjs?v=pabi-privacy-20261122';
+import {progressStorageKey} from '../encounters/progress.mjs?v=colleague-witness-20261122';
 import {siteRole,siteBase} from './site-fixture.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));

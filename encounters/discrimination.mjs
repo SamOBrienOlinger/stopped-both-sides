@@ -1,3 +1,5 @@
+import {colleagueDiscriminationCases,colleagueDiscriminationReferences} from './colleague-discrimination.mjs?v=colleague-witness-20261122';
+
 // The ground names and order follow IHREC's protected-grounds page. Each case
 // has common facts and separate public and Garda decisions at the same moment.
 export const ihrecGroundsUrl='https://www.ihrec.ie/your-rights/protected-grounds';
@@ -281,20 +283,28 @@ const cases=[
 
 export const discriminationReferences=Object.fromEntries([
  ...cases.map(({ground,source=ground,title})=>['equality:'+ground,{title:'IHREC · '+title,url:rightsUrl+source}]),
- ['equality:accommodation',{title:'Equal Status Act · Reasonable accommodation',url:'https://revisedacts.lawreform.ie/eli/2000/act/8/section/4/revised/en/html'}]
+ ['equality:accommodation',{title:'Equal Status Act · Reasonable accommodation',url:'https://revisedacts.lawreform.ie/eli/2000/act/8/section/4/revised/en/html'}],
+ ...Object.entries(colleagueDiscriminationReferences)
 ]);
 
-export const discriminationEncounters=Object.fromEntries(cases.map(({ground,title,description,goal,place,stages})=>{
- const id='discrimination-'+ground;
- const refs=['equality:'+ground,...(ground==='disability'?['equality:accommodation']:[]),'garda:ethics',...(ground==='race'?['garda:pabi']:[])];
+// Pair each existing situation with its new colleague-witness variation.
+const allCases=cases.flatMap(original=>{
+ const colleague=colleagueDiscriminationCases.find(item=>item.ground===original.ground);
+ if(!colleague)throw Error('Missing colleague-witness situation: '+original.ground);
+ return [original,{...colleague,kind:'colleague-witness'}];
+});
+export const discriminationEncounters=Object.fromEntries(allCases.map(({ground,title,description,goal,place,stages,kind,refs:extraRefs=[]})=>{
+ const id='discrimination-'+(kind==='colleague-witness'?'colleague-':'')+ground;
+ const refs=['equality:'+ground,...(ground==='disability'?['equality:accommodation']:[]),'garda:ethics',...(ground==='race'?['garda:pabi']:[]),...(kind==='colleague-witness'?['policing:ethics-speaking-up']:[]),...extraRefs];
  const nodes=Object.fromEntries(stages.map((item,index)=>{
   const nodeId=index===0?'opening':'follow-up';
   const next=index===0?'follow-up':'end';
-  const views=Object.fromEntries(Object.entries(item.views).map(([role,{prompt,lesson,preferred,review}])=>{
+  const views=Object.fromEntries(Object.entries(item.views).map(([role,{prompt,lesson,preferred,review,refs:roleRefs=[]}])=>{
    const choices=[preferred,review].map(([text,feedback],i)=>({text,feedback,next,review:i===1,points:i===0?1:0}));
-   return [role,{prompt,lesson,choices,refs}];
+   const context=kind==='colleague-witness'?(role==='public'?'You are a member of the public who directly witnesses the Garda’s behaviour towards someone else.':'You are the Garda who witnesses a colleague’s behaviour. You are not the colleague acting discriminatorily.'):undefined;
+   return [role,{prompt,lesson,choices,refs:[...new Set([...refs,...roleRefs])],...(context?{context}:{})}];
   }));
   return [nodeId,{...item,id:nodeId,views}];
  }));
- return [id,{id,ground,title,description,goal,place,nodes,start:'opening',origin:'shared',language:'en-IE',people:{public:'',garda:''},minutes:'3–4 minutes'}];
+ return [id,{id,ground,title,description,goal,place,nodes,start:'opening',origin:'shared',language:'en-IE',...(kind?{kind}:{}),people:kind==='colleague-witness'?{public:'Public witness',garda:'Witnessing Garda'}:{public:'',garda:''},minutes:'3–4 minutes'}];
 }));

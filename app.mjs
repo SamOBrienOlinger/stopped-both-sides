@@ -1,11 +1,11 @@
 import {focusControl} from './accessibility/focus.mjs';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=pabi-privacy-20261122';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=colleague-witness-20261122';
 import {createLayout} from './accessibility/layout.mjs?v=human-civil-rights-20261122';
 import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout} from './learning/about.mjs?v=learning-dropdown-20261122';
-import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=pabi-privacy-20261122';
-import {createMotion} from './accessibility/motion.mjs?v=pabi-privacy-20261122';
-import {createEncounterMode} from './encounters/ui.mjs?v=exclusion-icon-20261122';
+import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=colleague-witness-20261122';
+import {createMotion} from './accessibility/motion.mjs?v=colleague-witness-20261122';
+import {createEncounterMode} from './encounters/ui.mjs?v=colleague-witness-20261122';
 import {scenarios,scenarioById,sources} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');

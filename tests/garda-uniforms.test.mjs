@@ -5,9 +5,9 @@ import {characters,characterArtwork,createCast,changeCharacter} from '../encount
 import {gardaAtlas} from '../encounters/garda-atlas.mjs';
 import {gardaArtwork} from '../encounters/garda-artwork.mjs';
 import {sceneCharacterArtwork} from '../encounters/scene-artwork.mjs';
-import {encounters,roles} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=pabi-privacy-20261122';
+import {encounters,roles} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
 
 const asset=new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url);
 const names=['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'];
@@ -43,7 +43,7 @@ test('Final atlas is a real WebP and supplies nine preserved cast identities',()
 });
 
 test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',()=>{
- assert.equal(Object.keys(encounters).length,24);
+ assert.equal(Object.keys(encounters).length,34);
  assert.deepEqual(Object.keys(sceneDirections).sort(),Object.keys(encounters).sort());
  let stageCount=0,pairRenderings=0;
  for(const encounter of Object.values(encounters)){
@@ -63,7 +63,7 @@ test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',
    }
   }
  }
- assert.equal(stageCount,79);
+ assert.equal(stageCount,99);
  assert.equal(pairRenderings,stageCount*81);
 });
 
@@ -89,9 +89,9 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
 });
 
 test('Scene anchors, approved backgrounds and name dialogs are retained',()=>{
- const source=readFileSync(new URL('../encounters/scenes.mjs?v=pabi-privacy-20261122',import.meta.url),'utf8');
+ const source=readFileSync(new URL('../encounters/scenes.mjs?v=colleague-witness-20261122',import.meta.url),'utf8');
  const css=readFileSync(new URL('../encounters/scenes.css',import.meta.url),'utf8');
- const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=pabi-privacy-20261122',import.meta.url),'utf8');
+ const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=colleague-witness-20261122',import.meta.url),'utf8');
  assert.match(source,/backgroundImage\(place\)/);
  assert.match(source,/sceneActorLayout\(place,role/);
  assert.match(source,/scene-character-label/);

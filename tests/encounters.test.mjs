@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
-import {encounters,roles,references,stageCount} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {startEncounter,currentStage,switchRole,answer,continueEncounter,revisit,changeAnswer,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
-import {emptyProgress,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,createProgressStore,STORAGE_KEY} from '../encounters/progress.mjs?v=pabi-privacy-20261122';
+import {encounters,roles,references,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {startEncounter,currentStage,switchRole,answer,continueEncounter,revisit,changeAnswer,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {emptyProgress,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,createProgressStore,STORAGE_KEY} from '../encounters/progress.mjs?v=colleague-witness-20261122';
 import publicData from '../encounters/original-public.mjs?v=pabi-privacy-20261122';
 import gardaData from '../encounters/original-garda.mjs?v=pabi-privacy-20261122';
 import * as localData from '../data.mjs?v=pabi-privacy-20261122';
@@ -90,7 +90,7 @@ test('Broken storage, invalid links and malformed transferred records recover sa
 });
 test('Both shared perspectives read the original content directly and all imports exist',()=>{
  assert.equal(publicData.scenarios,localData.scenarios);assert.equal(publicData.sources,localData.sources);
- assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,79);
+ assert.equal(gardaData.scenarios,localGardaData.scenarios);assert.equal(gardaData.sources,localGardaData.sources);assert.equal(stageCount,99);
  const base=new URL('../encounters/',import.meta.url);
  for(const file of readdirSync(base).filter(f=>f.endsWith('.mjs'))){const content=readFileSync(new URL(file,base),'utf8');for(const m of content.matchAll(/from ['"](\.\/[^'"]+)['"]/g))assert.doesNotThrow(()=>readFileSync(new URL(m[1],base)));}
 });

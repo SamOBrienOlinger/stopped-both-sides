@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <strong>24 shared situations</strong> &nbsp; · &nbsp; <strong>79 stages</strong> &nbsp; · &nbsp; <strong>18 characters</strong><br>
+  <strong>34 shared situations</strong> &nbsp; · &nbsp; <strong>99 stages</strong> &nbsp; · &nbsp; <strong>18 characters</strong><br>
   Explore in your browser · No sign-up · No timer
 </p>
 
@@ -55,13 +55,13 @@ Explore a fictional encounter with An Garda Síochána, choose a response and re
 These steps describe the main **Explore both perspectives** learning activity. Start with either role: a member of the public or a Garda. You can finish a situation using just one role. The guide shows the English button names.
 
 1. **Choose a perspective.** Select [**Explore the public perspective**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Explore the Garda perspective**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is already chosen. To change them before starting, select **Choose a different character**, choose one, then select **Done**.
-2. **Start a situation.** Select **Start this situation** to try the suggested story. To pick another story, open **Browse all situations**, choose from 24 situations by topic, then select **Explore this situation** on its card.
+2. **Start a situation.** Select **Start this situation** to try the suggested story. To pick another story, open **Browse all situations**, choose from 34 situations by topic, then select **Explore this situation** on its card.
 3. **Read, then choose.** Read the fictional scene and question, then select one of the answer buttons.
 4. **Read the explanation.** After every answer, you see an explanation. Open **Why this matters** for more detail, or **Read the sources for this decision** for the supporting information.
 5. **Continue or finish.** The main button changes as you explore. When there is another decision, select **Next decision**, read the next scene and choose again. After your final answer, the button becomes **View recap**: select it to open a summary of your choices. A **New variation** notice means the facts have changed, so read the new scene carefully. When you continue, the answer for your current role decides what happens next.
 6. **Review what you learned.** The recap shows your choices and the explanations. You can revisit a decision, try the other role or select **Choose another situation**.
 
-Choose **Discrimination** under **Browse all situations** to explore the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). Each situation has two decisions, with responses and feedback from the public and Garda perspectives. The housing assistance situation concerns access to rented accommodation.
+Choose **Discrimination** under **Browse all situations** to explore **20 situations across the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds)**. Each ground has the existing situation and a new colleague-behaviour variation. Each situation has two decisions, with responses and feedback from both perspectives. In the new variations, the playable Garda and member of the public are witnesses; the colleague acting discriminatorily and the person being mistreated are separate people. The Garda response addresses intervention, respectful service and appropriate reporting; the public response supports safe, voluntary assistance, accurate witness accounts and complaint information. Housing assistance remains specific to accommodation, with any Garda-conduct concern treated separately.
 
 > [!TIP]
 > **Optional, before you move on:** select **Try another answer** to choose a new answer for your current role. Select **Compare the other side** to explore the other person’s perspective at the same point in the story; your first answer is kept. If you have not answered in that role yet, choose a response before continuing. Answers from both roles are kept when you switch. You can also use **Switch to the Garda perspective** or **Switch to the public perspective** during a situation.
@@ -258,7 +258,7 @@ The approach draws on research into educational games, explanatory feedback, per
 | **Practice and revision** | Revisit an idea, explore another response and explain what changed. | Replay, saved progress and paired recaps support returning to earlier decisions. |
 | **Source-based inquiry** | Check the basis of a claim and recognise its limits. | Explanations link to legal, professional, academic and community sources. |
 
-The **79 stages are spread across 24 shared situations**, with a playthrough following one authored route. The active role's selected answer determines the next branch; the other role's answer remains available for comparison. Branches illustrate teaching decisions and opportunities to reconsider. They do not predict what will happen in an actual encounter.
+The **99 stages are spread across 34 shared situations**, with a playthrough following one authored route. The active role's selected answer determines the next branch; the other role's answer remains available for comparison. Branches illustrate teaching decisions and opportunities to reconsider. They do not predict what will happen in an actual encounter.
 
 > [!IMPORTANT]
 > **Understanding both perspectives preserves the distinction between individual rights and state authority.** It does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person's misconduct, and rights never depend on a learning score.
@@ -552,13 +552,13 @@ npm test
 | `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and mixed-role routes, plus all 375 role-specific choices at 79 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and mixed-role routes, plus all 455 role-specific choices at 99 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
 
 The clearer-first-play implementation at commit [`5d8a9dd`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d) passed **88 Node checks locally** and [all 78 browser checks before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442): **26 each in Chromium, Firefox and WebKit**. These include recommended starts, keyboard catalogue access, character changes, retained counterparts, responsive layouts and enlarged Irish text. The [interface review](docs/UX-REVIEW.md) includes before/after captures and the limits of this verification.
 
 On `main`, the browser workflow waits for that commit's GitHub Pages publication and repeats the suite against the live site. [See browser runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) for deployment-specific results.
 
-The browser suite also completes all 24 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
+The browser suite also completes all 34 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
 
 The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
 

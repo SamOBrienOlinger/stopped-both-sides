@@ -1,5 +1,5 @@
 import {expect,test} from '@playwright/test';
-import {decodeState,startEncounter,stateHash} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {decodeState,startEncounter,stateHash} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 
 const sharedState=page=>decodeState(new URL(page.url()).hash.slice(11));
 const currentTopic=page=>page.locator('.topic-filter[aria-pressed="true"]');
@@ -57,7 +57,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   const discrimination=entry+'?lang=en#encounters/'+role+'/discrimination';
   await page.goto(discrimination);
   await expect(currentTopic(page)).toHaveText('Discrimination');
-  await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(10);
+  await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(20);
 
   const modes=page.getByRole('navigation',{name:'Ways to explore'});
   const practice=modes.getByRole('link',{name:/^Practise one role/});

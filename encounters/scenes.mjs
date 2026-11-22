@@ -1,9 +1,9 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=learning-language-20261120';
 import {backgroundImage} from './backgrounds.mjs?v=learning-language-20261120';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=pabi-privacy-20261122';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=colleague-witness-20261122';
 import {characterFor,defaultCast} from './characters.mjs?v=learning-language-20261120';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=learning-language-20261120';
-import {discriminationEncounters} from './discrimination.mjs?v=pabi-privacy-20261122';
+import {discriminationEncounters} from './discrimination.mjs?v=colleague-witness-20261122';
 
 // Keep objects in the written account: loose overlays cannot reliably match a
 // hand, surface or perspective across every character and location.
@@ -155,7 +155,13 @@ export function renderScene(state,options={}){
   const anchors=Object.fromEntries(members.map(role=>[role,sceneActorLayout(place,role,{solo:members.length===1,wide:outdoorSplit})]));
   const names=members.map(role=>{
    const character=characterFor(role,state.cast[role]);
-   return '<button type="button" class="scene-character-label" data-role-tone="'+role+'" data-scene-label-role="'+role+'" data-scene-character-id="'+esc(character.id)+'" style="'+sceneAnchorStyle(anchors[role])+'" aria-haspopup="dialog" aria-controls="scene-character-dialog" aria-label="About '+esc(character.name)+', '+esc(roleLabels[role])+'"><strong><span data-no-translate>'+esc(character.name)+'</span></strong><span class="scene-character-role">'+esc(roleLabels[role])+'</span><span class="scene-character-info" aria-hidden="true">i</span></button>';
+   const witness=encounters[state.id].kind==='colleague-witness';
+   const roleLabel=witness?encounters[state.id].people[role]:roleLabels[role];
+   // Native names include translated visible witness labels. Keep existing
+   // profile labels for the original situations.
+   const accessibleLabel=witness?'':' aria-label="About '+esc(character.name)+', '+esc(roleLabel)+'"';
+   const purpose=witness?'<span class="sr-only">Character information</span> ':'';
+   return '<button type="button" class="scene-character-label" data-role-tone="'+role+'" data-scene-label-role="'+role+'" data-scene-character-id="'+esc(character.id)+'" style="'+sceneAnchorStyle(anchors[role])+'" aria-haspopup="dialog" aria-controls="scene-character-dialog"'+accessibleLabel+'>'+purpose+'<strong><span data-no-translate>'+esc(character.name)+'</span></strong><span class="scene-character-role">'+esc(roleLabel)+'</span><span class="scene-character-info" aria-hidden="true">i</span></button>';
   }).join('');
   const actors=members.map(role=>sceneActor(role,state.cast[role],anchors[role],compact)).join('');
   const image=locationArt(place,art,actors,{

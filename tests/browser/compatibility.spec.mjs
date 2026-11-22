@@ -1,6 +1,6 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {decodeState} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 import {expectControlsFit} from './control-layout.mjs';
 
 const sizes=[[320,568],[390,844],[568,320],[768,1024],[1024,768],[1366,768],[1920,1080],[2560,1440]];
@@ -102,7 +102,7 @@ async function checkDialog(page){
 }
 async function chooseFirst(page,role,testInfo){
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
- await expect(page.locator('.encounter-card')).toHaveCount(24);
+ await expect(page.locator('.encounter-card')).toHaveCount(34);
  await page.locator('.setup-role summary').click();
  await page.locator(`.role-picker a[href="#encounters/${role}"]`).click();
  await expect(page.locator('.character-option')).toHaveCount(0);
@@ -231,7 +231,7 @@ for(const role of ['public','garda']){
    await page.goto(paths[role]);await ready(page);
    await checkHeroControls(page);
    await page.locator(`.paired-entry a.perspective-card-link[data-role-tone="${role}"]`).tap();
-   await expect(page.locator('.encounter-card')).toHaveCount(24);
+   await expect(page.locator('.encounter-card')).toHaveCount(34);
    await page.locator('[data-action="paired-quick-start"]').tap();
    await expect(page.locator('.paired-game')).toBeVisible();
    await page.locator('[data-action="paired-answer"]').first().tap();

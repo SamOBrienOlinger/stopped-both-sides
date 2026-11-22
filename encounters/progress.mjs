@@ -1,7 +1,7 @@
-import {encounters,roles} from './catalog.mjs?v=pabi-privacy-20261122';
-import {decodeState,encodeState} from './engine.mjs?v=pabi-privacy-20261122';
+import {encounters,roles} from './catalog.mjs?v=colleague-witness-20261122';
+import {decodeState,encodeState} from './engine.mjs?v=colleague-witness-20261122';
 import {hasOwn} from '../compatibility.mjs';
-import {playLocation} from './play-navigation.mjs?v=pabi-privacy-20261122';
+import {playLocation} from './play-navigation.mjs?v=colleague-witness-20261122';
 // This validated storage schema contains only JSON values; never requires structuredClone.
 const cloneProgress=progress=>JSON.parse(JSON.stringify(progress));
 export const STORAGE_KEY='garda-encounter-progress-v1';

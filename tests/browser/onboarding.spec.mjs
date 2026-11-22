@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {decodeState,otherRole} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {decodeState,otherRole} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 
 const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{
@@ -50,7 +50,7 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  await page.locator('.topline a').first().click();
  await expect(page.locator('.scenario-library')).toHaveAttribute('open','');
  await expect(page.locator(`.scenario-library [data-action="paired-start"][data-id="${role}-street"]`)).toBeFocused();
- await expect(page.locator('[data-action="paired-start"]:visible')).toHaveCount(24);
+ await expect(page.locator('[data-action="paired-start"]:visible')).toHaveCount(34);
  await page.locator('[data-action="paired-start"][data-id="public-search"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();
  expect(state(page).id).toBe('public-search');

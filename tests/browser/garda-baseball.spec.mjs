@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {characters} from '../../encounters/characters.mjs';
-import {encounters} from '../../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {encounters} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 
 const file=/\/assets\/characters\/garda-baseball-2026\.webp(?:\?|$)/;
 const stage='.paired-scene-lead>.encounter-scene';

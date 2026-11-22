@@ -1,6 +1,6 @@
 # Bibliography
 
-36 sources, including 26 academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.
+39 sources, including 26 academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.
 
 ## Irish law and professional practice
 
@@ -83,3 +83,13 @@
 - **Isabela Merla, Fiona Gabbert and Adrian J. Scott (2025).** [Interventions to Reduce Implicit Bias in High-Stakes Professional Judgements: A Systematic Review](https://pubmed.ncbi.nlm.nih.gov/41301393/). *Behavioral Sciences*. Academic review; Multiple professions and jurisdictions. Review access: Primary abstract reviewed. Source key: `merla`.
 
 - **Pieter Wouters, Christof van Nimwegen, Herre van Oostendorp and Erik D. van der Spek (2013).** [A meta-analysis of the cognitive and motivational effects of serious games](https://research.tue.nl/en/publications/a-meta-analysis-of-the-cognitive-and-motivational-effects-of-seri/). *Journal of Educational Psychology*. Academic review; Multiple educational settings. Review access: University-repository abstract and results reviewed. Source key: `wouters`.
+
+## Additional sources for colleague-witness situations
+
+These sources support Garda ethical commitments, public direct-witness complaint information and communication with crime victims. They are linked from the relevant decisions.
+
+- [Fiosrú · Direct witnesses and complaints on another person’s behalf](https://www.fiosru.ie/about-us/faqs/).
+
+- [An Garda Síochána · Equality, speaking up and reporting wrongdoing](https://www.garda.ie/en/about-us/our-policing-principles/garda-ethics-signatures-december-18.pdf).
+
+- [Criminal Justice (Victims of Crime) Act 2017 · Section 22: communication and interpretation](https://revisedacts.lawreform.ie/eli/2017/act/28/section/22/revised/en/html).

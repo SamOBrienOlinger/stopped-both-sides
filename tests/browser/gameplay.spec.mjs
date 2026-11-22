@@ -1,8 +1,8 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
-import {encounters,roles} from '../../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 import {storyIdentity} from '../../encounters/narrative.mjs';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);

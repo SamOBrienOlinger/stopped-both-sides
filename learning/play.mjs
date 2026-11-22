@@ -1,7 +1,7 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=pabi-privacy-20261122';
-import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {decodeState} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
-import {topicGroups} from '../encounters/presentation.mjs?v=pabi-privacy-20261122';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {topicGroups} from '../encounters/presentation.mjs?v=colleague-witness-20261122';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,
  reviewExamples, reviewQuestions, reviewScene, searchFigures, termFor

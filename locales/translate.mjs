@@ -1,8 +1,8 @@
-import {learningCopy} from './play-copy.mjs?v=pabi-privacy-20261122';
+import {learningCopy} from './play-copy.mjs?v=colleague-witness-20261122';
 import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
 import {gaContent} from './ga-content.mjs?v=human-civil-rights-20261122';
 import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

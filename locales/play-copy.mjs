@@ -2,6 +2,10 @@
 const languages = ['ga','pt','ar','pl','ro','fr','es','zh-Hans'];
 
 const labels = [
+ ['Character information', ['Eolas faoin gcarachtar','Informações sobre a personagem','معلومات الشخصية','Informacje o postaci','Informații despre personaj','Informations sur le personnage','Información sobre el personaje','角色信息']],
+ ['Public witness', ['Finné ón bpobal','Testemunha do público','شاهد من الجمهور','Świadek z grona osób postronnych','Martor din rândul publicului','Témoin membre du public','Testigo del público','公众目击者']],
+ ['Witnessing Garda', ['Garda atá ina fhinné','Garda que testemunha a situação','عنصر الغاردا الشاهد','Funkcjonariusz Garda będący świadkiem','Membru Garda martor','Garda témoin','Garda que presencia la situación','目击事件的警员']],
+ ['Witnessing a colleague', ['Iompar comhghleacaí a fheiceáil','Testemunhar a conduta de um colega','مشاهدة سلوك زميل','Będąc świadkiem zachowania współpracownika','Martor la comportamentul unui coleg','Témoin du comportement d’un collègue','Presenciar la conducta de un colega','目击同事的行为']],
  ['Human and Civil Rights', ['Cearta Daonna agus Sibhialta','Direitos humanos e civis','حقوق الإنسان والحقوق المدنية','Prawa człowieka i prawa obywatelskie','Drepturile omului și drepturile civile','Droits humains et civils','Derechos humanos y civiles','人权和公民权利']],
  ['Back to Top', ['Ar ais go barr','Voltar ao topo','العودة إلى الأعلى','Powrót na górę','Înapoi sus','Retour en haut','Volver arriba','返回顶部']],
  ['One situation.', ['Cás amháin.','Uma situação.','موقف واحد.','Jedna sytuacja.','O situație.','Une situation.','Una situación.','同一个情境。']],

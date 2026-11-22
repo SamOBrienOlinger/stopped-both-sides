@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
-import {encounters} from '../../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {encounters} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 
 const cast={public:'public-8',garda:'garda-9'};
 const sceneSelector='.paired-scene-lead>.encounter-scene';

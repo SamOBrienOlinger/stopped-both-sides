@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs';
-import {renderScene} from '../encounters/scenes.mjs?v=pabi-privacy-20261122';
-import {startEncounter} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {renderScene} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
+import {startEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
  assert.equal(manifest.length,5);assert.equal(new Set(Object.values(approvedBackgrounds)).size,5);

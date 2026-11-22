@@ -52,12 +52,12 @@ for(const {path,role} of pages){
   await page.locator('.topic-disclosure>summary').press('Enter');
   await page.getByRole('link',{name:/^Discrimination/}).click();
   await expect(page.getByRole('heading',{name:'Discrimination',exact:true})).toBeVisible();
-  await expect(page.locator('.encounter-card h2')).toHaveText([
-   'Gender','Civil status','Family status','Sexual orientation','Age','Religious belief',
-   'Traveller community','Race','Disability','Housing assistance'
-  ]);
+  await expect(page.locator('.encounter-card')).toHaveCount(20);
+  await expect(page.locator('.encounter-card .situation-kind')).toHaveCount(10);
+  await expect(page.locator('[data-id="discrimination-gender"]')).toHaveCount(1);
+  await expect(page.locator('[data-id="discrimination-colleague-gender"]')).toHaveCount(1);
   await expect(page.locator('.discrimination-intro a')).toHaveAttribute('href','https://www.ihrec.ie/your-rights/protected-grounds');
-  await page.getByRole('button',{name:/^Explore this situation: Housing assistance/}).click();
+  await page.locator('[data-action="paired-start"][data-id="discrimination-housing-assistance"]').click();
   await expect(page.locator('#scene-title')).toHaveText('Turned away from a viewing');
   const story=await page.locator('.story-text').textContent();
   await page.locator('[data-action="paired-answer"]').first().click();
@@ -66,7 +66,7 @@ for(const {path,role} of pages){
   await page.locator('[data-action="paired-switch"]').click();
   await expect(page.locator('.story-text')).toHaveText(story);
   await page.getByRole('link',{name:'Back to situations'}).click();
-  await expect(page.getByRole('button',{name:/^Explore this situation: Housing assistance/})).toBeFocused();
+  await expect(page.locator('[data-action="paired-start"][data-id="discrimination-housing-assistance"]')).toBeFocused();
   await page.goto(path+'?lang=ar#encounters/'+role+'/discrimination');
   await expect(page.getByRole('heading',{name:'التمييز',exact:true})).toBeVisible();
   await expect(page.locator('.discrimination-intro')).toContainText('سيناريوهات التمييز باللغة الإنجليزية.');

@@ -1,5 +1,5 @@
-import {encounters,roles} from './catalog.mjs?v=pabi-privacy-20261122';
-import {topicGroups} from './presentation.mjs?v=pabi-privacy-20261122';
+import {encounters,roles} from './catalog.mjs?v=colleague-witness-20261122';
+import {topicGroups} from './presentation.mjs?v=colleague-witness-20261122';
 
 const playTopics=[{id:'all',title:'All topics'},...topicGroups];
 

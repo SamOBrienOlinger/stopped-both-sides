@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {encounters,roles,sites} from '../encounters/catalog.mjs?v=pabi-privacy-20261122';
-import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=pabi-privacy-20261122';
-import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=pabi-privacy-20261122';
+import {encounters,roles,sites} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=colleague-witness-20261122';
 import {storyIdentity} from '../encounters/narrative.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
 const {scenarios}=await import(new URL('data.mjs',siteBase));
@@ -186,7 +186,7 @@ test('Every stage and every choice render the selected cast and preserve the nex
   }
   assert.equal(seen.size,Object.keys(e.nodes).length);
  }
- assert.equal(stages,79);assert.equal(choices,375);
+ assert.equal(stages,99);assert.equal(choices,455);
 });
 
 
@@ -211,7 +211,7 @@ test('Original practice uses its pictured character in every named scene and com
 });
 
 test('Home topic shortcuts open the matching catalogue for each starting role',()=>{
- const topics={street:3,search:3,custody:2,young:2,fairness:4,discrimination:10};
+ const topics={street:3,search:3,custody:2,young:2,fairness:4,discrimination:20};
  route('#play');
  for(const topic of Object.keys(topics))assert.ok(main.innerHTML.includes(`#encounters/${siteRole}/${topic}`));
  for(const role of roles)for(const [topic,count] of Object.entries(topics)){

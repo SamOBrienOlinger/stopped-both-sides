@@ -1,6 +1,6 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=pabi-privacy-20261122';
+import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const cast={public:'public-2',garda:'garda-5'};
 for(const role of ['public','garda'])test(`${role}: facts, identity and variation precede decisions at phone and desktop widths`,async({page},testInfo)=>{
@@ -47,7 +47,7 @@ test('Topics, source navigation and returning-player actions are usable with enl
  await page.setViewportSize({width:390,height:844});await page.goto('./#encounters/public');
  await page.locator('.scenario-library summary').click();await page.getByRole('button',{name:'Young people',exact:true}).click();
  await expect(page.locator('.encounter-card')).toHaveCount(2);
- await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(24);
+ await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(34);
  await page.locator('.scenario-library [data-action="paired-start"][data-id="public-street"]').click();
  await page.locator('[data-action="paired-answer"]').first().click();const saved=current(page);
  await openNavigation(page);await page.locator('.header [data-nav="rights"]').click();await page.getByRole('link',{name:'Under 18s',exact:true}).click();
