@@ -2,7 +2,7 @@ import {focusControl} from './accessibility/focus.mjs';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=pabi-privacy-20261122';
 import {createLayout} from './accessibility/layout.mjs?v=human-civil-rights-20261122';
 import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
-import {learningAbout} from './learning/about.mjs?v=pabi-privacy-20261122';
+import {learningAbout} from './learning/about.mjs?v=learning-dropdown-20261122';
 import {createReadingTools,accessibilityPage} from './accessibility/ui.mjs?v=pabi-privacy-20261122';
 import {createMotion} from './accessibility/motion.mjs?v=pabi-privacy-20261122';
 import {createEncounterMode} from './encounters/ui.mjs?v=pabi-privacy-20261122';

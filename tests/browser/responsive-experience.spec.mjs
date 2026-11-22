@@ -143,10 +143,11 @@ for(const path of ['./','garda/']){
   expect(await page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),initialHeading),
    'the initially visible About introduction must not dim after appearing').toBe(false);
   await expect(initialGroup).not.toHaveAttribute('data-motion','reveal');
-  const laterGroup=page.locator('.content-page > .info-block').last();
+  const laterGroup=page.locator('.content-page > section.info-block').last();
   const laterHeading=await laterGroup.locator('h2').textContent();
   await laterGroup.scrollIntoViewIfNeeded();
   await expect.poll(()=>page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),laterHeading)).toBe(true);
+  await page.locator('.learning-disclosure>summary').click();
   const panel=page.locator('.learning-panel').first(),summary=panel.locator('summary');
   await summary.scrollIntoViewIfNeeded();await summary.focus();
   const beforeDisclosure=await panel.evaluate(panelGeometry);
@@ -189,7 +190,8 @@ for(const path of ['./','garda/']){
   await expect.poll(()=>page.locator('.encounter-hero-art').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
   await expect(page.locator('.landing-role-actions a')).toHaveCount(2);
   if(path==='./')await page.screenshot({path:testInfo.outputPath('mobile-landing-390.png')});
-  await page.goto(path+'#about');await expect(page.locator('.learning-panel').first()).toBeVisible();
+  await page.goto(path+'#about');await page.locator('.learning-disclosure>summary').click();
+  await expect(page.locator('.learning-panel').first()).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);await frames(page);
   await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');await frames(page);
   const toggle=page.locator('[data-nav-toggle]'),nav=page.locator('#main-navigation');

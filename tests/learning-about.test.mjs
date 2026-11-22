@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {learningAbout} from '../learning/about.mjs?v=pabi-privacy-20261122';
+import {learningAbout} from '../learning/about.mjs?v=learning-dropdown-20261122';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages} from '../locales/languages.mjs';
 import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=pabi-privacy-20261122';

@@ -97,7 +97,8 @@ export function learningAbout() {
   <div class="learning-intro"><p class="eyebrow">EDUCATIONAL APPROACH</p><h2 id="learning-heading">Learning through choices</h2><p class="learning-lead">Practise decisions. Understand the reasons.</p><p>Explore human and civil rights, responsibilities and Garda decision-making through fictional encounters. Make a choice, read the explanation, compare perspectives and reconsider your response.</p><p class="learning-status"><strong>Research-informed educational prototype</strong><span>These are intended learning outcomes. The learning effects of this particular resource remain to be evaluated.</span></p></div>
   <div class="learning-goals">${goals.map(([number,title,description])=>`<div class="learning-goal"><span class="learning-goal-number" aria-hidden="true">${number}</span><h3>${title}</h3><p>${description}</p></div>`).join('')}</div>
   <div class="learning-cycle"><h3>In the resource</h3><p>Read a situation, choose a response, explore the explanation and continue. You can switch perspectives, try another answer and revisit the decisions in your recap.</p></div>
-  <div class="learning-context"><div><h3>Different perspectives, different responsibilities</h3><p>Considering both sides does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person’s misconduct. Human and civil rights never depend on a learning score.</p></div><div><h3>Using the resource for learning</h3><p>The resource provides choices, explanations, sources and opportunities to revisit decisions. The workshops, learner-written reflections and assessments below are suggested ways to use it.</p></div></div>
+  <div class="learning-context"><div><h3>Different perspectives, different responsibilities</h3><p>Considering both sides does not imply equal powers, equal responsibility or equal blame. A member of the public is not responsible for another person’s misconduct. Human and civil rights never depend on a learning score.</p></div></div>
+  <details class="learning-disclosure"><summary>Using the resource for learning</summary><p>The resource provides choices, explanations, sources and opportunities to revisit decisions. The workshops, learner-written reflections and assessments below are suggested ways to use it.</p>
   <div class="learning-panels">
    ${panel('01','Research and teaching examples','Six ways to support learning through situations',`
     <p>These situations and features already exist in the resource. The accompanying exercises are optional activities for independent reflection or facilitated learning.</p>
@@ -143,5 +144,6 @@ export function learningAbout() {
     <p>This review complements the scenario evidence library and the separate content-review record.</p><p>${external('https://github.com/SamOBrienOlinger/stopped-both-sides/blob/main/README.md#educational-approach-methodology-and-learning-outcomes','Read the full educational methodology in the README')}</p>
    `)}
   </div>
+  </details>
  </section>`;
 }

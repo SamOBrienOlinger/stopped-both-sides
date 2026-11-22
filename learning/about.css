@@ -30,10 +30,12 @@
 .learning-cycle{padding:1.25rem var(--learning-space);background:var(--pale);border-block-end:1px solid var(--line)}
 .learning-cycle h3{font-size:.875rem;color:var(--deep);margin:0 0 .25rem}
 .learning-cycle p{font-size:.9375rem;margin:0}
-.learning-context{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;padding:var(--learning-space)}
+.learning-context{padding:var(--learning-space)}
 .learning-context h3{font-size:1rem;line-height:1.5;margin:0 0 .5rem;color:var(--deep)}
 .learning-context p{font-size:.875rem;color:var(--muted);margin:0}
-.learning-panels{padding:0 var(--learning-space) var(--learning-space)}
+.learning-disclosure{margin:0 var(--learning-space) var(--learning-space);padding:1rem;border:1px solid var(--line);border-radius:14px;background:#fff}
+.learning-disclosure>p{margin:1rem 0; font-size:.9375rem;color:var(--muted)}
+.learning-panels{padding:0}
 .learning-panel{border:1px solid var(--line);border-radius:14px;margin-block-end:.65rem;background:#fff}
 .learning-panel:last-child{margin-block-end:0}
 .learning-panel>summary{
@@ -108,8 +110,7 @@
 .learning-reference-links a:hover{background:var(--pale)}
 .reading-spacious .learning-section p,.reading-spacious .learning-section li,.reading-spacious .learning-section dd{line-height:1.9}
 @media(max-width:40rem){
- .learning-goals,.learning-context{grid-template-columns:minmax(0,1fr)}
- .learning-context{gap:1.25rem}
+ .learning-goals{grid-template-columns:minmax(0,1fr)}
  .learning-goal{padding-block:1.125rem}
  .learning-panel>summary{gap:.65rem;padding:.875rem}
  .learning-panel-number{inline-size:1.75rem;block-size:1.75rem;font-size:.6875rem}
@@ -130,7 +131,8 @@
  .learning-toggle{display:none}
 }
 .privacy-disclosure>summary,
-.input-disclosure>summary {
+.input-disclosure>summary,
+.learning-disclosure>summary {
  cursor:pointer;
  min-block-size:44px;
  align-content:center;
@@ -138,7 +140,8 @@
  font-weight:700;
 }
 .privacy-disclosure>summary:focus-visible,
-.input-disclosure>summary:focus-visible {
+.input-disclosure>summary:focus-visible,
+.learning-disclosure>summary:focus-visible {
  outline:3px solid currentColor;
  outline-offset:4px;
  border-radius:.25rem;
