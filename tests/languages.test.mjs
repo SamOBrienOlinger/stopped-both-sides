@@ -132,7 +132,7 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
    const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast);
    assert.ok(main.innerHTML.includes(escapeHTML(translated)),`${language.id}/${e.id}/${node.id}`);
    if(e.language)assert.ok(main.innerHTML.includes(`<p class="story-text"><span lang="${e.language}" dir="ltr" data-no-translate>${escapeHTML(node.scene)}</span></p>`));
-   assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
+   assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.public+'"'));assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.garda+'"'));
    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"/);
    assert.doesNotMatch(main.innerHTML,/[←→]/);
    for(const role of roles)for(let index=0;index<node.views[role].choices.length;index++)queue.push(continueEncounter(answer(switchRole(base,role),index)));

@@ -33,8 +33,12 @@ function geometry(){
    const box=label.getBoundingClientRect(),frame=actor?.getBoundingClientRect();labels++;boxes.push(box);
    const context={scene:panel.closest('[data-scene-id]').dataset.sceneId,character:actor?.dataset.sceneCharacter,role};
    if(!frame){errors.push({...context,issue:'missing actor'});continue;}
-   const drift=Math.abs(box.left+box.width/2-frame.left-frame.width/2);maxError=Math.max(maxError,drift);
+   const grouped=panel.closest('[data-cast-layout="group"]');
+   // Group scenes use a numbered roster, keeping five people's labels readable
+   // on phones. Pair scenes retain captions directly under their figures.
+   const drift=grouped?0:Math.abs(box.left+box.width/2-frame.left-frame.width/2);maxError=Math.max(maxError,drift);
    if(drift>1)errors.push({...context,issue:'caption drift',drift});
+   if(grouped&&label.querySelector('.scene-roster-number')?.textContent!==actor.querySelector('.scene-person-number')?.textContent)errors.push({...context,issue:'roster number mismatch'});
    if(box.top<bounds.bottom-.5||box.left<bounds.left-.5||box.right>bounds.right+.5)errors.push({...context,issue:'caption outside its panel'});
    if(label.scrollWidth>label.clientWidth+1||label.scrollHeight>label.clientHeight+1)errors.push({...context,issue:'caption text overflow'});
    if(label.closest('[aria-hidden="true"]'))errors.push({...context,issue:'caption hidden from assistive technology'});

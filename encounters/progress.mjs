@@ -1,5 +1,5 @@
 import {encounters,roles} from './catalog.mjs?v=colleague-witness-20261122';
-import {decodeState,encodeState} from './engine.mjs?v=colleague-witness-20261122';
+import {decodeState,encodeState} from './engine.mjs?v=situation-cast-20261122';
 import {hasOwn} from '../compatibility.mjs';
 import {playLocation} from './play-navigation.mjs?v=search-practice-20261122';
 // This validated storage schema contains only JSON values; never requires structuredClone.

@@ -6,6 +6,7 @@ import {characters} from '../encounters/characters.mjs';
 import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
 import {translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
+import {situationParticipants} from '../encounters/situation-cast.mjs';
 
 test('Every stage and all 81 character pairs have a complete illustration',()=>{
  let covered=0;
@@ -18,11 +19,12 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
     const state={...startEncounter(e.id,'public',{cast:{public:p.id,garda:g.id}}),nodeId};
     const html=renderScene(state),model=sceneModel(state);
     assert.ok(sceneAssets.includes(model.place));assert.ok(sceneAssets.includes(model.otherPlace));
-    assert.match(html,new RegExp(`data-scene-character="${p.id}"`));
-    assert.match(html,new RegExp(`data-scene-character="${g.id}"`));
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,1);
-    assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,1);
-    assert.equal((html.match(/clip-path:inset\(/g)||[]).length,2,'each character is isolated from neighbouring figures');
+    assert.match(html,new RegExp(`data-scene-character="${state.cast.public}"`));
+    assert.match(html,new RegExp(`data-scene-character="${state.cast.garda}"`));
+    const participants=situationParticipants(e.id,state.cast,{nodeId})||roles.map(role=>({role}));
+    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,participants.filter(person=>person.role==='public').length);
+    assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,participants.filter(person=>person.role==='garda').length);
+    assert.equal((html.match(/clip-path:inset\(/g)||[]).length,participants.length,'each character is isolated from neighbouring figures');
     assert.doesNotMatch(html,/Separate reflections|scene-portraits/);
     assert.doesNotMatch(html,/undefined|NaN|data-pose|scene-pose|reflecting-clean|speaking-clean|listening-clean/);
     assert.doesNotMatch(html,/scene-prop|props\.webp/,`${e.id}/${nodeId} must not place loose objects on the floor`);
@@ -71,7 +73,7 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
   while(!state.complete){state=continueEncounter(answer(state,0));state=decodeState(encodeState(state));assert.deepEqual(state.cast,cast);}
   for(const step of state.history){
    const html=renderScene(state,{step,compact:true});
-   assert.match(html,/data-scene-character="public-9"/);assert.match(html,/data-scene-character="garda-5"/);
+   assert.match(html,new RegExp('data-scene-character="'+cast.public+'"'));assert.match(html,new RegExp('data-scene-character="'+cast.garda+'"'));
    assert.equal(sceneModel(state,{step}).nodeId,step.nodeId);
   }
   assert.deepEqual(startEncounter(state.id,role,{cast:state.cast}).cast,cast);

@@ -31,3 +31,19 @@
 @media(max-width:660px){.story>.encounter-scene{margin-left:-12px;margin-right:-12px}.scene-setting{padding:.65rem .8rem}.scene-cast-names{gap:.75rem}.scene-cast-names strong{font-size:.8125rem}}
 @media(forced-colors:active){.encounter-scene,.scene-setting{border-color:CanvasText}.scene-setting,.encounter-scene,.scene-cast-names>span{background:Canvas;color:CanvasText!important}.scene-cast-names>span>span{color:CanvasText}.scene-actor::before{display:none}}
 @media print{.encounter-scene{break-inside:avoid}.paired-game>.story{position:static}}
+
+/* Numbered participants separate the people affected from the two playable
+   roles. Their cards remain readable without trying to squeeze five captions
+   beneath five small figures on a phone. */
+.scene-person-number{position:absolute;inset-block-start:0;inset-inline-start:50%;transform:translate(-50%,-30%);display:grid;place-items:center;inline-size:1.35rem;block-size:1.35rem;border:2px solid #fff;border-radius:50%;background:#183c3c;color:#fff;font:800 .8rem/1 Arial,sans-serif;box-shadow:0 1px 4px #183c3c55}
+.encounter-scene[data-cast-layout="group"] .scene-panel>.scene-participant-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:.6rem;padding:.8rem;margin:0;direction:ltr}
+.encounter-scene[data-cast-layout="group"] .scene-participant-list>.scene-character-label,
+.scene-supporting-person{position:relative;display:flex;align-items:flex-start;justify-content:flex-start;gap:.6rem;min-inline-size:0;max-inline-size:100%;inline-size:100%;margin:0;padding:.75rem;border:1px solid var(--line);border-radius:.7rem;background:var(--paper,#fff);text-align:start;left:auto;top:auto;transform:none;white-space:normal;overflow-wrap:anywhere;box-shadow:none}
+.encounter-scene[data-cast-layout="group"] .scene-participant-list>.scene-character-label{border-inline-start:4px solid var(--tone-deep,#175e61);background:var(--tone-pale,#edf6f5);padding-inline-end:1.4rem;min-block-size:44px;cursor:pointer}
+.scene-roster-number{display:grid;place-items:center;flex:0 0 auto;inline-size:1.4rem;block-size:1.4rem;border-radius:50%;background:var(--ink,#183c3c);color:var(--paper,#fff);font:800 .8rem/1 Arial,sans-serif}
+.scene-supporting-person>div,.scene-playable-person{display:flex;flex-direction:column;min-inline-size:0;gap:.2rem}
+.scene-supporting-person strong{font-size:.875rem;line-height:1.4;color:var(--ink)}
+.scene-supporting-person>div>span{font-size:.75rem;line-height:1.5;color:var(--muted)}
+.scene-cast-requirement{padding:.75rem 1rem;border-inline-start:3px solid var(--deep);background:var(--pale);line-height:1.6}
+[dir=rtl] .encounter-scene[data-cast-layout="group"] .scene-character-label{direction:rtl}
+@media(forced-colors:active){.scene-supporting-person,.scene-person-number,.scene-roster-number{border:1px solid CanvasText;background:Canvas;color:CanvasText}.scene-supporting-person strong,.scene-supporting-person>div>span{color:CanvasText}}

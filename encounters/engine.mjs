@@ -1,13 +1,13 @@
 import {hasOwn} from '../compatibility.mjs';
 import {encounters, roles} from './catalog.mjs?v=colleague-witness-20261122';
-import {createCast,defaultCast,validCast} from './characters.mjs';
+import {createCast,defaultCast,validCast,castForSituation} from './characters.mjs?v=situation-cast-20261122';
 
 export const otherRole = role => role === 'public' ? 'garda' : 'public';
 const validRole = role => roles.includes(role);
 const answers = () => ({public:null,garda:null});
 export function startEncounter(id,role='public',options={}) {
   if (!hasOwn(encounters,id) || !validRole(role)) throw new Error('Unknown encounter or role');
-  const cast=validCast(options.cast)?{...options.cast}:createCast(role,options.characterId,options.random);
+  const cast=castForSituation(id,validCast(options.cast)?options.cast:createCast(role,options.characterId,options.random));
   return {id,role,nodeId:encounters[id].start,history:[],answers:answers(),complete:false,cast};
 }
 export const currentStage = state => state && !state.complete ? encounters[state.id].nodes[state.nodeId] : null;

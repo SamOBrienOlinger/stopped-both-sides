@@ -92,11 +92,11 @@ export function installSceneCaptionLayout(root){
   const modal=ensureDialog(),art=characterArtwork(character),image=modal.querySelector('.scene-profile-portrait img');
   modal.setAttribute('data-role-tone',role);
   modal.querySelector('#scene-character-dialog-name').textContent=character.name;
-  modal.querySelector('.scene-profile-role').textContent=roleLabels[role];
+  modal.querySelector('.scene-profile-role').textContent=button.dataset.sceneProfileRole||roleLabels[role];
   const change=modal.querySelector('.scene-profile-change');
   change.lang=doc.documentElement.lang||'en-IE';
   change.textContent=translateText('Change character',normaliseLanguage(change.lang));
-  modal.querySelector('.scene-profile-body').textContent=roleDescriptions[role];
+  modal.querySelector('.scene-profile-body').textContent=button.dataset.sceneProfileDescription||roleDescriptions[role];
   const place=button.closest('.scene-panel')?.querySelector('[data-scene-place]')?.dataset.scenePlace;
   modal.querySelector('.scene-profile-setting').textContent='Scene: '+(placeNames[place]||'A shared encounter');
   image.src=art.src;image.width=art.width;image.height=art.height;image.style.cssText=art.style;

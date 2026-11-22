@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs';
 import {encounters,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {characters} from '../encounters/characters.mjs';
+import {characters,characterFor,castForSituation} from '../encounters/characters.mjs';
 import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
 import {startEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
 test('every scene and all 81 casts retain matching caption and actor identities',()=>{
@@ -12,7 +12,9 @@ test('every scene and all 81 casts retain matching caption and actor identities'
   for(const place of [d.place,d.otherPlace])assert.ok(SCENE_LAYOUTS[place]);
   for(const p of characters.public)for(const g of characters.garda){
    const html=renderScene({...startEncounter(id),nodeId,cast:{public:p.id,garda:g.id}});
-   for(const [role,c] of [['public',p],['garda',g]]){
+   const cast=castForSituation(id,{public:p.id,garda:g.id});
+   for(const role of ['public','garda']){
+    const c=characterFor(role,cast[role]);
     assert.ok(html.includes('data-scene-character="'+c.id+'"'));
     assert.ok(html.includes('data-scene-label-role="'+role+'"'));
     assert.ok(html.includes(c.name));

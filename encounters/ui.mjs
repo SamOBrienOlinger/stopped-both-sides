@@ -5,12 +5,13 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=colleague-witness-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=ground-groups-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=situation-cast-20261122';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=colleague-witness-20261122';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=colleague-witness-20261122';
-import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=human-civil-rights-20261122';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=colleague-witness-20261122';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=situation-cast-20261122';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=situation-cast-20261122';
+import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences,charactersForSituation} from './characters.mjs?v=situation-cast-20261122';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=situation-cast-20261122';
+import {situationRoleLabel} from './situation-cast.mjs?v=situation-cast-20261122';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=human-civil-rights-20261122';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=colleague-witness-20261122';
 import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=search-practice-20261122';
@@ -96,13 +97,15 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  function castDisplay(s){
   const e=encounters[s.id],stage=s.complete?e.nodes[s.history.at(-1).nodeId]:currentStage(s);
   const cards=[s.role,otherRole(s.role)].map(role=>{
-   const context=characterContext(e,stage,role);
+   const context=situationRoleLabel(s.id,role)||characterContext(e,stage,role);
    return `<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${s.cast[role]}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,s.cast[role])}<div><span class="cast-label">${role===s.role?'Your character':'Other character'}</span><strong data-no-translate>${esc(characterFor(role,s.cast[role]).name)}</strong>${context?`<span class="scenario-person">${esc(context)}</span>`:''}</div></div>`;
   });
   return `<div class="encounter-cast" aria-label="Characters in this situation">${cards.join('')}</div>`;
  }
  function characterPicker(role,selected,inGame=false){
-  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div><div class="character-options" role="group" aria-label="Available characters">${characters[role].map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
+  const available=inGame?charactersForSituation(state?.id,role):characters[role];
+  const requirement=available.length<characters[role].length?`<p class="scene-cast-requirement">${scenarioCopy(state.id,'These characters match the age or gender stated in this situation.')}</p>`:'';
+  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div>${requirement}<div class="character-options" role="group" aria-label="Available characters">${available.map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
  }
  function focusCharacterPicker(){focusControl(document.querySelector('#character-picker-title'));}
  function openCharacterPicker(event){

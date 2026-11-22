@@ -182,7 +182,7 @@ test('Every stage and every choice render the selected cast and preserve the nex
    const node=e.nodes[base.nodeId],identity=storyIdentity(e);
    for(const role of roles)for(const [index,choice] of node.views[role].choices.entries()){
     const active=switchRole(base,role);route(stateHash(active));action('paired-character-close');
-    assert.match(main.innerHTML,/data-character-id="public-2"/);assert.match(main.innerHTML,/data-character-id="garda-5"/);
+    assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.public+'"'));assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.garda+'"'));
     assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
     assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to situations/);
     assert.doesNotMatch(main.innerHTML,/[←→]/);
