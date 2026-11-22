@@ -144,7 +144,7 @@ for(const path of ['./','garda/']){
    'the initially visible About introduction must not dim after appearing').toBe(false);
   await expect(initialGroup).not.toHaveAttribute('data-motion','reveal');
   const laterGroup=page.locator('.content-page > section.info-block').last();
-  const laterHeading=await laterGroup.locator('h2').textContent();
+  const laterHeading=await laterGroup.locator(':scope > h2').textContent();
   await laterGroup.scrollIntoViewIfNeeded();
   await expect.poll(()=>page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),laterHeading)).toBe(true);
   await page.locator('.learning-disclosure>summary').click();
@@ -187,7 +187,8 @@ for(const path of ['./','garda/']){
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.goto(path);
   await expect(page.locator('.reference-landing')).toBeVisible();await page.evaluate(()=>document.fonts.ready);await frames(page);
-  await expect.poll(()=>page.locator('.encounter-hero-art').evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  await expect(page.locator('.encounter-hero-art')).toHaveCount(2);
+  await expect.poll(()=>page.locator('.encounter-hero-art').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   await expect(page.locator('.landing-role-actions a')).toHaveCount(2);
   if(path==='./')await page.screenshot({path:testInfo.outputPath('mobile-landing-390.png')});
   await page.goto(path+'#about');await page.locator('.learning-disclosure>summary').click();

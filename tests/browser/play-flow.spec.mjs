@@ -10,6 +10,8 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(entry+'?lang=en');
   const start=page.locator('.home-play [data-action="paired-quick-start"]');
+  await expect(start).toBeVisible();
+  await start.scrollIntoViewIfNeeded();
   await expect(start).toBeInViewport();
   await start.press('Enter');
   await expect(page.locator('#scene-title')).toBeFocused();
@@ -52,7 +54,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await expect(page.locator('.scenario-library [data-action="paired-start"][data-id="public-search"]')).toBeFocused();
  });
 
- test(`${role} can open desktop practice from Discrimination`,async({page})=>{
+ test(`${role} can open desktop practice from Discrimination while retaining the topic`,async({page})=>{
   await page.setViewportSize({width:1366,height:768});
   const discrimination=entry+'?lang=en#encounters/'+role+'/discrimination';
   await page.goto(discrimination);
@@ -62,17 +64,30 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   const modes=page.getByRole('navigation',{name:'Ways to explore'});
   const practice=modes.getByRole('link',{name:/^Practise one role/});
   const firstPractice=page.locator('.scenario-library [data-action="start"][data-id="street"]');
+  await expect(practice).toHaveAttribute('href','#practice/'+role+'/discrimination');
   await practice.click();
-  expect(new URL(page.url()).hash).toBe('#practice/'+role+'/all');
+  // Shared Discrimination situations are available in individual practice too.
+  // Switching mode retains that topic; All topics is an explicit user choice.
+  await expect(page).toHaveURL(new RegExp('#practice/'+role+'/discrimination$'));
   await expect(practice).toHaveAttribute('aria-current','page');
+  await expect(currentTopic(page)).toHaveText('Discrimination');
+  await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(20);
+  await expect(page.locator('.scenario-library .discrimination-ground')).toHaveCount(10);
+  await expect(page.locator('.topic-filter[data-topic="discrimination"]')).toHaveCount(1);
+  await page.getByRole('button',{name:'All topics',exact:true}).click();
+  await expect(page).toHaveURL(new RegExp('#practice/'+role+'/all$'));
   await expect(currentTopic(page)).toHaveText('All topics');
-  await expect(page.locator('.topic-filter[data-topic="discrimination"]')).toHaveCount(0);
   await page.locator('.scenario-library [data-situation-topic="street"]>summary').click();
   await expect(firstPractice).toBeVisible();
 
   await page.goBack();
+  await expect(page).toHaveURL(new RegExp('#encounters/'+role+'/discrimination$'));
   await expect(currentTopic(page)).toHaveText('Discrimination');
   await page.goto(entry+'?lang=en#practice/'+role+'/discrimination');
+  await expect(page).toHaveURL(new RegExp('#practice/'+role+'/discrimination$'));
+  await expect(currentTopic(page)).toHaveText('Discrimination');
+  await expect(page.locator('.scenario-library .encounter-card')).toHaveCount(20);
+  await page.getByRole('button',{name:'All topics',exact:true}).click();
   await expect(currentTopic(page)).toHaveText('All topics');
   await page.locator('.scenario-library [data-situation-topic="street"]>summary').click();
   await firstPractice.click();
@@ -116,8 +131,11 @@ test('a practice recap and an unfinished shared situation stay independently acc
  await page.reload();
  await expect(another).toBeVisible();
  await page.goto('./?lang=en#play');
- await expect(page.locator('.home-play .session-return')).toBeInViewport();
- await page.locator('.home-play').getByRole('link',{name:'Resume your situation',exact:true}).click();
+ const resume=page.locator('.home-play').getByRole('link',{name:'Resume your situation',exact:true});
+ await expect(resume).toBeVisible();
+ await resume.scrollIntoViewIfNeeded();
+ await expect(resume).toBeInViewport();
+ await resume.click();
  await expect(page.locator('#feedback')).toBeVisible();
  expect(new URL(page.url()).hash).toBe(interrupted);
 });

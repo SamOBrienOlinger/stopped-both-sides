@@ -38,7 +38,8 @@ for(const path of entrypoints){
     await page.setViewportSize({width,height});
     await page.goto(path+'?lang='+lang+'#play');
     await expect(page.locator('a.perspective-card-link')).toHaveCount(2);
-    await expect.poll(()=>page.locator('.encounter-hero-art').evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
+    await expect(page.locator('.encounter-hero-art')).toHaveCount(2);
+    await expect.poll(()=>page.locator('.encounter-hero-art').evaluateAll(images=>images.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
     await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
     await expect.poll(()=>page.evaluate(()=>{
      const root=document.documentElement;

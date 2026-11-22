@@ -125,7 +125,7 @@ for(const role of ['public','garda']){
   expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBeCloseTo(.4,2);
   await recordOpacity(group,'reveal',true);
   await group.scrollIntoViewIfNeeded();
-  const heading=await group.locator('h2').textContent();
+  const heading=await group.locator(':scope > h2').textContent();
   await expect.poll(async()=>(await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading)).toBe(true);
   const revealTrace=await page.evaluate(()=>window.__opacityTrace);
   expect(revealTrace.samples[0]).toMatchObject({opacity:.4,pending:true,cue:null});

@@ -65,6 +65,18 @@ test('PABI can be found in each perspective’s reference page alongside the exi
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
+ const headingEnd=main.innerHTML.indexOf('</h1>',main.innerHTML.indexOf('id="paired-title"'));
+ const pair=main.innerHTML.match(/<div class="encounter-hero-pair" aria-hidden="true">([\s\S]*?)<\/div>/);
+ assert.ok(pair,'both views of the encounter are grouped below the heading');
+ assert.ok(pair.index>headingEnd&&pair.index<main.innerHTML.indexOf('class="landing-deck"'));
+ const heroImages=[...pair[1].matchAll(/<img\b[^>]*>/g)].map(match=>match[0]);
+ assert.equal(heroImages.length,2);
+ assert.match(heroImages[0],/data-hero-perspective="garda"[^>]*garda-hi-vis-960\.jpg/);
+ assert.match(heroImages[1],/data-hero-perspective="public"[^>]*public-hi-vis-960\.webp/);
+ for(const image of heroImages){
+  assert.match(image,/480w[^>]*960w[^>]*1600w/);
+  assert.match(image,/width="1600" height="900" alt=""/);
+ }
  const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};
  for(const role of roles){
   const href=new URL('#encounters/'+role,sites.public).href;

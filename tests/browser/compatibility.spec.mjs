@@ -47,26 +47,46 @@ async function checkHeroControls(page){
   expect(target.width,'touch target width').toBeGreaterThanOrEqual(44);
   expect(target.clipped,'translated control text must fit').toBe(false);
  }
- const art=hero.locator('.encounter-hero-art');
+ const pair=hero.locator('.encounter-hero-pair');
+ const images=pair.locator('.encounter-hero-art');
+ await expect(images).toHaveCount(2);
  if(await page.locator('html').evaluate(root=>root.classList.contains('contrast-high'))){
-  await expect(art).toBeHidden();
+  await expect(pair).toBeHidden();
+  for(const art of await images.all())await expect(art).toBeHidden();
  }else{
-  await expect(art).toBeVisible();
-  await expect.poll(()=>art.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  await expect(pair).toBeVisible();
+  for(const art of await images.all())await expect(art).toBeVisible();
+  await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   const layout=await hero.evaluate(element=>{
    const copy=element.querySelector('.landing-instructions');
-   const art=element.querySelector('.encounter-hero-art');
-   return {width:copy.clientWidth,artRect:art.getBoundingClientRect().toJSON(),
+   const pair=element.querySelector('.encounter-hero-pair');
+   return {width:copy.clientWidth,pairRect:pair.getBoundingClientRect().toJSON(),
     titleBottom:copy.querySelector('#paired-title').getBoundingClientRect().bottom,
     deckTop:copy.querySelector('.landing-deck').getBoundingClientRect().top,
-    sourceRatio:art.naturalWidth/art.naturalHeight,fit:getComputedStyle(art).objectFit};
+    sideBySide:matchMedia('(min-width:44rem)').matches,
+    images:[...pair.querySelectorAll('.encounter-hero-art')].map(art=>({
+     rect:art.getBoundingClientRect().toJSON(),sourceRatio:art.naturalWidth/art.naturalHeight,fit:getComputedStyle(art).objectFit
+    }))};
   });
-  const {width,artRect,titleBottom,deckTop,sourceRatio,fit}=layout;
-  expect(fit,'the full scene is visible').toBe('contain');
-  expect(Math.abs(artRect.width/artRect.height-sourceRatio),'the image keeps its source proportions').toBeLessThan(.01);
-  expect(artRect.top,'the illustration follows the two-line heading').toBeGreaterThan(titleBottom);
-  expect(artRect.bottom,'the introduction follows the illustration').toBeLessThan(deckTop);
-  expect(Math.abs(artRect.width-width)).toBeLessThanOrEqual(1);
+  const {width,pairRect,titleBottom,deckTop,sideBySide}=layout;
+  expect(pairRect.top,'both illustrations follow the two-line heading').toBeGreaterThan(titleBottom);
+  expect(pairRect.bottom,'the introduction follows both illustrations').toBeLessThan(deckTop);
+  expect(Math.abs(pairRect.width-width)).toBeLessThanOrEqual(1);
+  for(const {rect,sourceRatio,fit} of layout.images){
+   expect(fit,'the full scene is visible').toBe('contain');
+   expect(Math.abs(rect.width/rect.height-sourceRatio),'each image keeps its source proportions').toBeLessThan(.01);
+   expect(rect.left,'each image stays within its pair').toBeGreaterThanOrEqual(pairRect.left-1);
+   expect(rect.right,'each image stays within its pair').toBeLessThanOrEqual(pairRect.right+1);
+  }
+  const [first,second]=layout.images.map(image=>image.rect);
+  expect(Math.abs(first.width-second.width),'both views receive equal space').toBeLessThanOrEqual(1);
+  if(sideBySide){
+   expect(Math.abs(first.top-second.top),'desktop views align').toBeLessThanOrEqual(1);
+   expect(second.left,'desktop views are separate').toBeGreaterThan(first.right);
+  }else{
+   expect(Math.abs(first.left-second.left),'mobile views align').toBeLessThanOrEqual(1);
+   expect(second.top,'mobile views are separate').toBeGreaterThan(first.bottom);
+  }
  }
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
