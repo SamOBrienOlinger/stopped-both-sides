@@ -67,12 +67,14 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await expect(practice).toHaveAttribute('aria-current','page');
   await expect(currentTopic(page)).toHaveText('All topics');
   await expect(page.locator('.topic-filter[data-topic="discrimination"]')).toHaveCount(0);
+  await page.locator('.scenario-library [data-situation-topic="street"]>summary').click();
   await expect(firstPractice).toBeVisible();
 
   await page.goBack();
   await expect(currentTopic(page)).toHaveText('Discrimination');
   await page.goto(entry+'?lang=en#practice/'+role+'/discrimination');
   await expect(currentTopic(page)).toHaveText('All topics');
+  await page.locator('.scenario-library [data-situation-topic="street"]>summary').click();
   await firstPractice.click();
   await expect(page.locator('#choice-title')).toBeVisible();
  });

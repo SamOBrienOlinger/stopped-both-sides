@@ -71,12 +71,19 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
    await page.setViewportSize(viewport);
    await page.goto(entry+'?lang=en#play');
    await page.locator('.topic-disclosure>summary').press('Enter');
-   await checkScenes(page.locator('.topic-grid>.topic-card'),'strong',topicGroups.map(topic=>topic.encounters[0]));
+   for(const topic of topicGroups){
+    const group=page.locator(`[data-situation-topic="${topic.id}"]`);
+    await group.locator(':scope>summary').press('Enter');
+    await checkScenes(group.locator('.encounter-card'),'h3',topic.encounters);
+    await group.locator(':scope>summary').press('Space');
+   }
    await page.goto(entry+'?lang=en#encounters/'+role+'/all');
-   await checkScenes(page.locator('.scenario-library .encounter-card'),'h2',situations.map(situation=>situation.id));
+   await page.getByRole('button',{name:'All topics',exact:true}).click();
+   await checkScenes(page.locator('.scenario-library .encounter-card'),'h2',topicGroups.flatMap(topic=>topic.encounters));
    await page.goto(entry+'?lang=en#practice/'+role+'/all');
+   await page.getByRole('button',{name:'All topics',exact:true}).click();
    await checkScenes(page.locator('.scenario-library .practice-content .scenario'),'h2',
-    situations.filter(situation=>situation.origin===role).map(situation=>situation.id));
+    topicGroups.flatMap(topic=>topic.encounters).filter(id=>encounters[id].origin===role));
   }
   expect([...rendererURLs], 'All pages should import the same cached scene renderer URL').toHaveLength(1);
  });

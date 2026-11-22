@@ -38,16 +38,20 @@ export function routeTrail(state){
  const e=encounters[state.id];
  return `<nav class="route-navigation" aria-label="Review each decision"><ol class="route-trail">${state.history.map((step,i)=>`<li><button class="route-dot is-visited" data-action="paired-revisit" data-index="${i}" title="${esc(e.nodes[step.nodeId].title)}" aria-label="${esc(e.nodes[step.nodeId].title)}"><span aria-hidden="true">${i+1}</span></button></li>`).join('')}<li><span class="route-dot is-current" aria-current="step"><span class="sr-only">${esc(e.nodes[state.nodeId].title)}</span><span aria-hidden="true">${state.history.length+1}</span></span></li></ol></nav>`;
 }
-export function topicExplorer(groups,role){
- const links=groups.map(topic=>`<a class="topic-card" href="#encounters/${role}/${topic.id}">
-  ${learningIcon(topic.id)}<strong>${topic.title}</strong>
-  ${renderScenePreview(topic.encounters[0])}
-  <span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>
- </a>`).join('');
+export function situationTopics(groups,renderCards,{openTopic='',openAll=false,preview=false}={}){
+ return groups.map(topic=>`<details class="situation-topic" data-situation-topic="${topic.id}" ${openAll||openTopic===topic.id?'open':''}>
+  <summary class="situation-topic-trigger">
+   ${learningIcon(topic.id)}<strong>${topic.title}</strong><span class="situation-topic-count" aria-hidden="true">${topic.encounters.length}</span><span class="landing-disclosure-caret" aria-hidden="true"></span>
+   ${preview?`<span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>`:''}
+  </summary>
+  <div class="situation-topic-content">${renderCards(topic)}</div>
+ </details>`).join('');
+}
+export function topicExplorer(groups,role,renderCards=()=> ''){
  return `<section class="topic-explorer" aria-labelledby="topic-explorer-title">
   <details class="topic-disclosure">
    <summary class="topic-disclosure-trigger landing-disclosure-trigger"><h2 id="topic-explorer-title">Browse all situations<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
-   <div class="topic-grid">${links}</div>
+   <div class="topic-grid situation-topics"><div class="topic-filters"><button class="topic-filter" data-action="paired-topic" data-topic="all" data-role="${role}">All topics</button></div>${situationTopics(groups,topic=>`<a class="text-button" href="#encounters/${role}/${topic.id}">Browse situations</a>${renderCards(topic)}`,{preview:true})}</div>
   </details>
  </section>`;
 }

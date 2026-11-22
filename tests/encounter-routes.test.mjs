@@ -239,3 +239,37 @@ test('The interactive stage trail revisits the correct scene and retains the cas
   assert.equal(state().role,role);assert.deepEqual(state().cast,before.cast);
  }
 });
+
+test('Both situation browsers group every situation once and keep topics closed until requested',()=>{
+ const expected={street:3,search:3,custody:2,young:2,fairness:4,discrimination:20};
+ for(const hash of ['#play','#encounters/'+siteRole+'/all']){
+  route(hash);
+  const groups=[...main.innerHTML.matchAll(/<details class="situation-topic" data-situation-topic="([^"]+)" ([^>]*)>([\s\S]*?)<\/details>/g)];
+  assert.deepEqual(groups.map(match=>match[1]),Object.keys(expected));
+  for(const [,topic,attributes,content] of groups){
+   assert.doesNotMatch(attributes,/\bopen\b/);
+   const ids=[...content.matchAll(/data-action="paired-start" data-id="([^"]+)"/g)].map(match=>match[1]);
+   assert.equal(ids.length,expected[topic],topic);
+   for(const id of ids)assert.ok(encounters[id],id+' is playable');
+   assert.ok(ids.every(id=>topic==='discrimination'?id.startsWith('discrimination-'):!id.startsWith('discrimination-')));
+  }
+  const all=[...main.innerHTML.matchAll(/data-action="paired-start" data-id="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(new Set(all).size,situationCount);
+  assert.match(main.innerHTML,/data-action="paired-topic" data-topic="all"/);
+ }
+});
+
+test('All topics opens all groups, selected-topic routes open their group, and practice retains only its own situations',()=>{
+ route('#play');action('paired-topic',{topic:'all'});
+ assert.equal(location.hash,'#encounters/'+siteRole+'/all');
+ assert.equal((main.innerHTML.match(/data-situation-topic="[^"]+" open/g)||[]).length,6);
+ for(const topic of ['search','discrimination']){
+  action('paired-topic',{topic});
+  assert.match(main.innerHTML,new RegExp('data-situation-topic="'+topic+'" open'));
+  assert.equal((main.innerHTML.match(/class="situation-topic"/g)||[]).length,1);
+ }
+ route('#practice/'+siteRole+'/all');action('paired-topic',{topic:'all'});
+ const ids=[...main.innerHTML.matchAll(/data-action="start" data-id="([^"]+)"/g)].map(match=>match[1]);
+ assert.deepEqual(ids.sort(),scenarios.map(s=>s.id).sort());
+ assert.doesNotMatch(main.innerHTML,/data-situation-topic="discrimination"/);
+});

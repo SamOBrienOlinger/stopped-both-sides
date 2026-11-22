@@ -184,7 +184,8 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await page.locator('.single-mode summary').click();await page.locator('.single-mode .practice-content a').click();await fits(page,'original cards');
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.paired-picker')).toBeVisible();
- await page.locator('.scenario-library summary').click();await fits(page,'catalogue');
+ await page.locator('.scenario-library>summary').click();await fits(page,'catalogue');
+ await page.locator('.scenario-library .situation-topic>summary').first().click();
  const first=page.locator('[data-action="paired-start"]').first();
  expect(await first.getAttribute('aria-label')).toContain(translateText('Explore this situation',language));
  await first.click();await expect(page.locator('.paired-game')).toBeVisible();

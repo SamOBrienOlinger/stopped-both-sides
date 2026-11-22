@@ -126,7 +126,8 @@ for(const role of ['public','garda']){
    await captureHero(page,role,width,'standard',testInfo);
    await captureControls(page,role,width,'standard',testInfo,[['navbar','.header'],['how-it-works','.how-to-play'],['footer','.footer']]);
    await page.locator('.single-mode summary').click();await page.locator('.single-mode .practice-content a').click();await fits(page,'original situations');
-   await page.locator('.scenario-library [data-action="start"]').first().click();
+   await page.locator('.scenario-library .situation-topic>summary').first().click();
+  await page.locator('.scenario-library [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
    await page.locator('[data-action="choose"]').first().click();
    await expect(page.locator('#feedback')).toBeVisible();await fits(page,'original practice feedback');

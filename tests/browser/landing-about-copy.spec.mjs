@@ -10,7 +10,7 @@ for(const path of ['./','garda/']){
   await expect(page.locator('.about-opening')).toHaveCount(0);
   await expect(page.locator('.topic-explorer h2')).toHaveText('Browse all situations');
   await page.goto(path+'#encounters');
-  await expect(page.locator('.scenario-library summary')).toHaveText('Browse all situations');
+  await expect(page.locator('.scenario-library>summary')).toHaveText('Browse all situations');
   await expect(page.locator('.scenario-library')).toHaveCount(1);
  });
  test(path+' About begins with the complete relocated project overview',async({page})=>{

@@ -1,56 +1,86 @@
 import {test,expect} from '@playwright/test';
+import {topicGroups} from '../../encounters/presentation.mjs';
 
-const pages=[{path:'./',role:'public'},{path:'garda/',role:'garda'}];
-const categories=[
- ['street','Street stops','Stopped on the street'],
- ['search','Searches','Asked to open your bag'],
- ['custody','Arrest and custody','Told you are under arrest'],
- ['young','Young people','You are sixteen'],
- ['fairness','Fair treatment','“Why was I singled out?”'],
- ['discrimination','Discrimination','10 protected grounds']
-];
-
-for(const {path,role} of pages){
- test(path+' Browse all situations is a keyboard-accessible dropdown with working topic links',async({page})=>{
+for(const [path,role] of [['./','public'],['garda/','garda']]){
+ test(`${role}: every topic expands in place with only its own situations`,async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#play');
-  const disclosure=page.locator('.topic-explorer details.topic-disclosure');
-  const trigger=disclosure.locator('summary.topic-disclosure-trigger');
-  const links=disclosure.locator('a.topic-card');
-  await expect(disclosure).toHaveCount(1);
-  await expect(trigger.getByRole('heading',{name:'Browse all situations'})).toBeVisible();
-  await expect(disclosure).not.toHaveAttribute('open','');
-  await expect(links).toHaveCount(categories.length);
-  await expect(links.first()).toBeHidden();
-  await trigger.click();
-  await expect(disclosure).toHaveAttribute('open','');
-  await expect(links.first()).toBeVisible();
-  await expect(links.filter({hasText:'→'})).toHaveCount(0);
-  await expect(links.locator('strong')).toHaveText(categories.map(x=>x[1]));
-  await expect(links.locator('.topic-preview')).toHaveText(categories.map(x=>x[2]));
-  for(const [id,title,example] of categories){
-   const link=links.filter({has:page.locator('strong').filter({hasText:title})});
-   await expect(link).toHaveAttribute('href','#encounters/'+role+'/'+id);
-   await expect(link).toContainText(example);
+  const browser=page.locator('.topic-disclosure');
+  await browser.locator(':scope>summary').press('Enter');
+  const groups=browser.locator('.situation-topic');
+  await expect(groups).toHaveCount(6);
+  await expect(browser.locator('.encounter-card:visible')).toHaveCount(0);
+  for(const topic of topicGroups){
+   const group=browser.locator(`[data-situation-topic="${topic.id}"]`);
+   const trigger=group.locator(':scope>summary');
+   await expect(trigger.locator('strong')).toHaveText(topic.title);
+   await trigger.press('Enter');
+   await expect(group).toHaveAttribute('open','');
+   const cards=group.locator('[data-action="paired-start"]');
+   expect(await cards.evaluateAll(elements=>elements.map(element=>element.dataset.id))).toEqual(topic.encounters);
+   await expect(browser.locator('.encounter-card:visible')).toHaveCount(topic.encounters.length);
+   await trigger.press('Space');
+   await expect(group).not.toHaveAttribute('open','');
+   await expect(browser.locator('.encounter-card:visible')).toHaveCount(0);
   }
-  await trigger.focus();
-  await page.keyboard.press('Space');
-  await expect(disclosure).not.toHaveAttribute('open','');
-  await expect(links.first()).toBeHidden();
-  await page.keyboard.press('Enter');
-  await expect(disclosure).toHaveAttribute('open','');
-  await disclosure.locator('a.topic-card[href="#encounters/'+role+'/search"]').click();
-  await expect(page).toHaveURL(new RegExp('#encounters/'+role+'/search$'));
-  await expect(page.locator('.simple-setup.topic-selected')).toBeVisible();
-  await expect(page.locator('.scenario-library')).toHaveAttribute('open','');
-  await expect(page.locator('.scenario-library [data-action="paired-start"]')).toHaveCount(3);
+  await browser.getByRole('button',{name:'All topics',exact:true}).click();
+  await expect(page).toHaveURL(new RegExp('#encounters/'+role+'/all$'));
+  await expect(page.locator('.scenario-library .situation-topic[open]')).toHaveCount(6);
+  await expect(page.locator('.scenario-library .encounter-card:visible')).toHaveCount(34);
+ });
+
+ test(`${role}: catalogue filters, individual expansion and return focus work together`,async({page})=>{
+  await page.goto(path+'?lang=en#encounters/'+role+'/all');
+  const library=page.locator('.scenario-library');
+  await expect(library.locator('.situation-topic[open]')).toHaveCount(0);
+  const search=library.locator('[data-situation-topic="search"]');
+  await search.locator(':scope>summary').click();
+  await expect(search.locator('.encounter-card:visible')).toHaveCount(3);
+  await search.locator('[data-id="public-search"]').click();
+  await expect(page.locator('#scene-title')).toBeVisible();
+  await page.locator('[data-return-to-play]').click();
+  await expect(library.locator('[data-id="public-search"]')).toBeFocused();
+  await expect(search).toHaveAttribute('open','');
+  await library.getByRole('button',{name:'Discrimination',exact:true}).click();
+  await expect(library.locator('.situation-topic')).toHaveCount(1);
+  await expect(library.locator('[data-situation-topic="discrimination"]')).toHaveAttribute('open','');
+  await expect(library.locator('.encounter-card:visible')).toHaveCount(20);
+  await expect(library.locator('.situation-kind')).toHaveCount(10);
+  await library.getByRole('button',{name:'All topics',exact:true}).click();
+  await expect(library.locator('.encounter-card:visible')).toHaveCount(34);
+  await page.goto(path+'?lang=en#practice/'+role+'/all');
+  await library.getByRole('button',{name:'All topics',exact:true}).click();
+  await expect(library.locator('[data-action="start"]:visible')).toHaveCount(role==='garda'?8:6);
+  await expect(library.locator('[data-situation-topic="discrimination"]')).toHaveCount(0);
+ });
+
+ test(`${role}: topic disclosures fit small screens and enlarged Arabic text`,async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
+  for(const lang of ['en','ar']){
+   await page.goto(path+'?lang='+lang+'#play');
+   await page.locator('.topic-disclosure>summary').click();
+   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
+   const search=page.locator('[data-situation-topic="search"]');
+   await search.locator(':scope>summary').press('Enter');
+   for(const width of [320,390,768,1366]){
+    await page.setViewportSize({width,height:900});
+    await expect.poll(()=>page.evaluate(()=>{
+     const root=document.documentElement;
+     const headers=[...document.querySelectorAll('.situation-topic-trigger')];
+     const cards=[...document.querySelectorAll('[data-situation-topic="search"] .encounter-card')];
+     return root.scrollWidth<=root.clientWidth+2&&headers.every(el=>el.scrollWidth<=el.clientWidth+2)&&cards.every(el=>el.scrollWidth<=el.clientWidth+2);
+    })).toBe(true);
+   }
+  }
  });
  test(`${role}: the Discrimination topic covers every IHREC ground and opens the housing assistance situation`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#play');
   await page.locator('.topic-disclosure>summary').press('Enter');
-  await page.getByRole('link',{name:/^Discrimination/}).click();
+  const discrimination=page.locator('.topic-disclosure [data-situation-topic="discrimination"]');
+  await discrimination.locator(':scope>summary').press('Enter');
+  await discrimination.getByRole('link',{name:'Browse situations',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Discrimination',exact:true})).toBeVisible();
   await expect(page.locator('.encounter-card')).toHaveCount(20);
   await expect(page.locator('.encounter-card .situation-kind')).toHaveCount(10);
@@ -77,47 +107,5 @@ for(const {path,role} of pages){
   await expect(page.locator('html')).toHaveAttribute('dir','rtl');
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);
  });
- test(path+' opened dropdown fits phone, desktop, 200 percent text and Arabic RTL',async({page},testInfo)=>{
-  test.setTimeout(140000);
-  await page.emulateMedia({reducedMotion:'reduce'});
-  for(const lang of ['en','ar']){
-   await page.goto(path+'?lang='+lang+'#play');
-   const disclosure=page.locator('.topic-explorer details.topic-disclosure');
-   const trigger=disclosure.locator('summary');
-   await expect(trigger).toBeVisible();
-   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
-   await trigger.click();
-   await expect(disclosure).toHaveAttribute('open','');
-   for(const width of [320,390,768,1366]){
-    await page.setViewportSize({width,height:width<700?844:900});
-    await expect.poll(()=>disclosure.evaluate((element,topicCount)=>{
-     const root=document.documentElement,trigger=element.querySelector('summary');
-     const links=[...element.querySelectorAll('a.topic-card')];
-     const box=element.getBoundingClientRect();
-     const positions=links.map(item=>item.getBoundingClientRect());
-     return {
-      enlarged:getComputedStyle(root).getPropertyValue('--reading-size').trim()==='200%',
-      noOverflow:root.scrollWidth<=root.clientWidth+2,
-      fits:box.left>=-2&&box.right<=root.clientWidth+2,
-      headingFits:trigger.scrollWidth<=trigger.clientWidth+2,
-      allVisible:positions.length===topicCount&&positions.every(p=>p.width>0&&p.height>0),
-      ordered:positions.every((p,i)=>!i||positions[i-1].bottom<=p.top+2),
-      textFits:links.every(item=>item.scrollWidth<=item.clientWidth+2),
-      lastTitleReadable:(()=>{
-       const card=links[links.length-1],title=card.querySelector('strong');
-       return !!title&&title.getBoundingClientRect().width>=card.getBoundingClientRect().width*.5;
-      })()
-     };
-    },categories.length)).toEqual({enlarged:true,noOverflow:true,fits:true,headingFits:true,allVisible:true,ordered:true,textFits:true,lastTitleReadable:true});
-   }
-  }
-  await page.goto(path+'?lang=en#play');
-  await page.emulateMedia({reducedMotion:'reduce'});
-  const dropdown=page.locator('.topic-explorer details.topic-disclosure');
-  await dropdown.locator('summary').click();
-  for(const width of [390,1366]){
-   await page.setViewportSize({width,height:900});
-   await dropdown.screenshot({path:testInfo.outputPath(role+'-topic-dropdown-'+width+'.png'),animations:'disabled'});
-  }
- });
+
 }

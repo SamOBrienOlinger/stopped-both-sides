@@ -88,6 +88,7 @@ for(const role of ['public','garda']){
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
   await page.locator('.single-mode .practice-content a').click();
+  await page.locator('.scenario-library .situation-topic>summary').first().click();
   await page.locator('.scenario-library [data-action="start"]').first().click();
   await page.locator('[data-action="choose"]').first().click();
   await expect(page.locator('#feedback')).toBeVisible();

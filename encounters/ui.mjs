@@ -5,7 +5,7 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=colleague-witness-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer} from './visuals.mjs?v=colleague-witness-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics} from './visuals.mjs?v=expandable-topics-20261122';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=colleague-witness-20261122';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=colleague-witness-20261122';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=colleague-witness-20261122';
@@ -35,7 +35,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  let browserStorage;try{browserStorage=globalThis.localStorage;}catch{}
  const store=createProgressStore(browserStorage,siteRole);
  const characterPreferences=createCharacterPreferences(browserStorage),legacyCasts=new Map();
- let state=null,clearPending=false,characterPickerTarget=null,setupCharacterOpen=false;
+ let state=null,clearPending=false,characterPickerTarget=null,setupCharacterOpen=false,allTopicsExpanded=false;
  let sharedReturn='',practiceReturn='',reopenedPractice=false,returnFocus=null;
  const handles=hash=>/^(encounters|encounter|practice|progress|discussion)(?:$|[~/])/.test(hash);
  const defaultList=(mode,id,role)=>playHash(mode,role,topicForSituation(id));
@@ -158,6 +158,19 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    `<a href="${esc(listHref(id,role,topic))}" ${mode===id?'aria-current="page"':''}><strong>${title}</strong><span>${description}</span></a>`
   ).join('')}</nav>`;
  }
+ function situationCards(list,role,heading='h2'){
+  return `<div class="paired-catalog">${list.map(e=>`<article class="scenario encounter-card">
+       <div class="catalogue-visual" aria-hidden="true">${scenarioIcon(e.id)}</div>
+       ${e.kind==='colleague-witness'?'<p class="eyebrow situation-kind">Witnessing a colleague</p>':''}
+       <${heading}>${titleHTML(e)}</${heading}>
+       ${renderScenePreview(e.id)}
+       <p>${scenarioCopy(e.id,e.description)}</p>
+       <p class="scenario-goal">${practiceGoal(e.id)}</p>
+       <p class="small-note"><span>${esc(e.minutes)}</span> · <span>${roleLabels[role]}</span></p>
+       <p class="catalogue-status">${roles.map(r=>`<span><span>${r==='public'?'Public':'Garda'}</span>: <span>${learningStatus(store.value,e.id,r)}</span></span>`).join('')}</p>
+       <button class="primary secondary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Explore this situation: ${esc(e.title)} — ${roleLabels[role]}">Explore this situation</button>
+      </article>`).join('')}</div>`;
+ }
  function selection({mode,role,topic,browse}){
   const first=encounters[role+'-street'],selected=characterPreferences.value[role];
   const saved=store.value.saved.filter(entry=>{
@@ -167,10 +180,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const returning=saved.some(entry=>!entry.complete);
   const goal=role==='public'?'Practise asking why you have been stopped and whether you are free to leave.':'Practise separating what you observed from what you assumed.';
   const selectedTopic=topicGroups.find(group=>group.id===topic);
-  const catalogue=Object.values(encounters).filter(e=>!selectedTopic||selectedTopic.encounters.includes(e.id));
   const practice=mode==='practice';
   const localPractice=practice&&role===siteRole;
-  const practiceList=localPractice?practiceScenarios.filter(s=>catalogue.some(e=>e.id===role+'-'+s.id)):[];
+  const groups=topicGroups.filter(group=>(!selectedTopic||group.id===topic)&&(!practice||group.encounters.some(id=>encounters[id].origin===role)))
+   .map(group=>practice?{...group,encounters:group.encounters.filter(id=>encounters[id].origin===role)}:group);
+  const openTopic=selectedTopic?.id||topicForSituation(practice&&returnFocus?role+'-'+returnFocus:returnFocus)||'';
+  const openAll=topic==='all'&&allTopicsExpanded;
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
    <h1>${heading}</h1>
@@ -194,18 +209,8 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <details class="scenario-library" ${practice||browse?'open':''}>
      <summary id="situations-title">Browse all situations</summary>
      <div class="topic-filters" role="group" aria-label="Situation topics">${topicsForPlay(mode,role).map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
-     ${practice?(practiceList.length?practiceCards(practiceList,role):`<p>No practice situations for this topic.</p><a class="text-button" href="${listHref('shared',role,topic)}">Explore both perspectives</a>`):`
-      <div class="paired-catalog">${catalogue.map(e=>`<article class="scenario encounter-card">
-       <div class="catalogue-visual" aria-hidden="true">${scenarioIcon(e.id)}</div>
-       ${e.kind==='colleague-witness'?'<p class="eyebrow situation-kind">Witnessing a colleague</p>':''}
-       <h2>${titleHTML(e)}</h2>
-       ${renderScenePreview(e.id)}
-       <p>${scenarioCopy(e.id,e.description)}</p>
-       <p class="scenario-goal">${practiceGoal(e.id)}</p>
-       <p class="small-note"><span>${esc(e.minutes)}</span> · <span>${roleLabels[role]}</span></p>
-       <p class="catalogue-status">${roles.map(r=>`<span><span>${r==='public'?'Public':'Garda'}</span>: <span>${learningStatus(store.value,e.id,r)}</span></span>`).join('')}</p>
-       <button class="primary secondary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Explore this situation: ${esc(e.title)} — ${roleLabels[role]}">Explore this situation</button>
-      </article>`).join('')}</div>`}
+     <div class="situation-topics">${practice?situationTopics(groups,group=>practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic,openAll}):`
+      ${situationTopics(groups,group=>situationCards(group.encounters.map(id=>encounters[id]),role),{openTopic,openAll})}`}</div>
     </details>`}
   </section>`;
  }
@@ -271,8 +276,9 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   </section>${homeActions()}`;
  }
  function landing(){
+  allTopicsExpanded=false;
   const completed=store.value.saved.find(entry=>entry.complete);
-  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole)}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
+  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole,group=>situationCards(group.encounters.map(id=>encounters[id]),siteRole,'h3'))}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
     <div class="practice-content"><p>Make choices in one role and review what you learned.</p><a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>
@@ -434,9 +440,10 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const button=event.target.closest('button[data-action]');if(!button||!button.dataset.action.startsWith('paired-'))return false;
   const action=button.dataset.action,role=button.dataset.role||siteRole;
   if(action==='paired-topic'){
-   const list=playLocation(location.hash,siteRole);
+   const list=playLocation(location.hash,siteRole)||{mode:'shared',role};
    const topic=list&&topicsForPlay(list.mode,list.role).find(item=>item.id===button.dataset.topic);
    if(topic){
+    allTopicsExpanded=topic.id==='all';
     history.replaceState(null,'',playHash(list.mode,list.role,topic.id));
     rerender(false);
     document.querySelector('[data-topic="'+topic.id+'"]')?.focus({preventScroll:true});

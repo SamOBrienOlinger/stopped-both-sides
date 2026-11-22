@@ -46,6 +46,7 @@ for(const path of paths){
   await expect(page.locator('.play-modes a[aria-current="page"]')).toContainText('Practise one role');
   const scenarios=page.locator('.scenario-library [data-action="start"]');
   await expect(scenarios).toHaveCount(path==='garda/'?8:6);
+  await page.locator('.scenario-library .situation-topic>summary').first().click();
   await scenarios.first().click();
   await expect(page).toHaveURL(/#scenario\//);
   await expect(page.locator('#scene-title')).toBeVisible();

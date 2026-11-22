@@ -45,7 +45,7 @@ for(const role of ['public','garda'])test(`${role}: facts, identity and variatio
 
 test('Topics, source navigation and returning-player actions are usable with enlarged text',async({page},testInfo)=>{
  await page.setViewportSize({width:390,height:844});await page.goto('./#encounters/public');
- await page.locator('.scenario-library summary').click();await page.getByRole('button',{name:'Young people',exact:true}).click();
+ await page.locator('.scenario-library>summary').click();await page.getByRole('button',{name:'Young people',exact:true}).click();
  await expect(page.locator('.encounter-card')).toHaveCount(2);
  await page.getByRole('button',{name:'All topics',exact:true}).click();await expect(page.locator('.encounter-card')).toHaveCount(34);
  await page.locator('.scenario-library [data-action="paired-start"][data-id="public-street"]').click();
