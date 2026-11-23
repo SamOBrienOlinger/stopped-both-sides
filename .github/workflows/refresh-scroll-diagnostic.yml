@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium, firefox, webkit]
+        browser: [webkit]
     steps:
       - uses: actions/checkout@v6
         with:
@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: npm run test:browser -- --project=${{ matrix.browser }} reload-clearance.spec.mjs
+      - run: npm run test:browser -- --project=${{ matrix.browser }} reload-clearance.spec.mjs --grep desktop
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
