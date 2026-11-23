@@ -400,10 +400,14 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
   line-height:1.45;
 }
 
-/* Portfolio's one-second rise/fade and 100ms sequential delay. The default
-   state remains visible: reduced-motion and no-JS readers see plain text. */
+/* Keep the portfolio's one-second rise/fade and authored stagger. Each copy
+   line starts when it reaches the viewport; images and controls stay still.
+   The default remains visible for reduced-motion and no-JS readers. */
 @media(prefers-reduced-motion:no-preference){
-  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions > [data-landing-reveal="pending"]{
+    opacity:0;
+  }
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions > :is([data-landing-reveal="active"],[data-landing-reveal="complete"]){
     animation:landing-portfolio-line-reveal 1s ease-out var(--landing-reveal-delay,0s) both;
   }
   .reference-landing .landing-instructions > #perspectives-title{--landing-reveal-delay:.1s}
@@ -419,8 +423,11 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
   .reference-landing .landing-instructions{background:Canvas;color:CanvasText}
   .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){color:CanvasText}
 }
+@media(prefers-reduced-motion:reduce),(forced-colors:active){
+  .reference-landing .landing-instructions > [data-landing-reveal]{animation:none!important;opacity:1!important;transform:none!important}
+}
 @media print{
-  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){animation:none!important;opacity:1;transform:none}
+  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){animation:none!important;opacity:1!important;transform:none!important}
 }
 
 

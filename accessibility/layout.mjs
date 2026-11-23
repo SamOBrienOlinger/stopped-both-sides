@@ -1,6 +1,7 @@
 // Presentation enhancements run after translation. Original wording, inline
 // citations, game state and language-pack lookup keys stay intact.
 import {decorateCardHeadings} from './card-headings.mjs?v=card-headings-20261123';
+import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 export function paragraphChunks(text,language='en'){
  const authored=text.split(/\r?\n[ \t]*\r?\n/).map(paragraph=>paragraph.trim()).filter(Boolean);
  if(authored.length>1)return authored;
@@ -52,7 +53,8 @@ export function createLayout({main}){
  globalThis.addEventListener?.('resize',sizeHeader);
  document.fonts?.ready?.then(sizeHeader);
  const labels={en:'Menu',ga:'Roghchlár',pt:'Menu',ar:'القائمة',pl:'Menu',ro:'Meniu',fr:'Menu',es:'Menú',zh:'菜单'};
- let open=false,lastRoute='',panelAnimation=null,landingObserver=null,observedLanding=null;
+ let open=false,lastRoute='',panelAnimation=null,landingObserver=null,observedLanding=null,lastLandingPreferences=null;
+ const landingLines=new Map();
  const background=new Map();
  header.classList.add('navigation-ready');
  const motionAllowed=()=>!reduced.matches&&!forced.matches&&!root.classList.contains('motion-reduce');
@@ -134,22 +136,71 @@ export function createLayout({main}){
  const settlePanel=()=>sync();
  reduced.addEventListener('change',settlePanel);
  forced.addEventListener('change',settlePanel);
- function syncLandingReveal(){
-  // Mirror the portfolio hero's staggered, viewport-triggered word reveal.
-  // The text remains fully readable if JS or the observer is missing.
-  const next=main.querySelector('.reference-landing .landing-instructions');
-  if(next===observedLanding)return;
-  landingObserver?.disconnect();
-  landingObserver=null;
-  observedLanding=next;
-  if(!next||typeof globalThis.IntersectionObserver!=='function')return;
-  landingObserver=new IntersectionObserver(entries=>{
-   for(const entry of entries){
-    entry.target.classList.toggle('is-revealing',entry.isIntersecting);
-   }
-  },{rootMargin:'0px 0px -15% 0px',threshold:0});
-  landingObserver.observe(next);
+ const landingMotionAllowed=()=>motionAllowed()&&!root.classList.contains('contrast-high');
+ function settleLandingLine(line,complete=false){
+  const state=landingLines.get(line);
+  state?.stop?.();clearTimeout(state?.timer);
+  landingObserver?.unobserve(line);
+  if(complete&&state){
+   state.stop=null;state.timer=0;state.status='complete';
+   line.setAttribute('data-landing-reveal','complete');
+  }else{
+   landingLines.delete(line);
+   line.removeAttribute('data-landing-reveal');
+  }
  }
+ function clearLandingReveal(){
+  landingObserver?.disconnect();landingObserver=null;
+  for(const line of [...landingLines.keys()])settleLandingLine(line);
+ }
+ function revealLandingLine(line){
+  const state=landingLines.get(line);
+  if(!state||state.status!=='pending')return;
+  if(!line.isConnected||!landingMotionAllowed()||line.contains(document.activeElement)){
+   settleLandingLine(line);return;
+  }
+  landingObserver?.unobserve(line);
+  state.status='active';line.setAttribute('data-landing-reveal','active');
+  const animations=(line.getAnimations?.()||[]).filter(animation=>
+   animation.animationName==='landing-portfolio-line-reveal');
+  const complete=()=>{if(landingLines.get(line)===state)settleLandingLine(line,true);};
+  if(animations.length)state.stop=paceAnimations(animations,complete);
+  else state.timer=setTimeout(complete,2000);
+ }
+ function syncLandingReveal(){
+  // The two images make this a tall invitation. Each line owns its viewport
+  // entrance, so later copy does not spend its animation above the scroll.
+  // Default CSS stays visible when JS, the observer or motion is unavailable.
+  const next=main.querySelector('.reference-landing .landing-instructions');
+  const preferences=[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
+   ...['contrast-high','reading-spacious','motion-reduce'].map(name=>root.classList.contains(name))].join('|');
+  const preferenceChange=lastLandingPreferences!==null&&preferences!==lastLandingPreferences;
+  lastLandingPreferences=preferences;
+  if(next===observedLanding){
+   if(preferenceChange||!landingMotionAllowed())clearLandingReveal();
+   return;
+  }
+  clearLandingReveal();observedLanding=next;
+  if(!next||preferenceChange||!landingMotionAllowed()||typeof globalThis.IntersectionObserver!=='function')return;
+  landingObserver=new IntersectionObserver(entries=>{
+   for(const entry of entries)if(entry.isIntersecting)revealLandingLine(entry.target);
+  },{rootMargin:'0px 0px -15% 0px',threshold:0});
+  for(const line of next.querySelectorAll(':scope > :is(.encounter-hero-title,.landing-deck,.small-note)')){
+   // The caller restores route focus/scroll after update(). The observer
+   // measures that new viewport, rather than the previous page's scroll.
+   if(line.contains(document.activeElement))continue;
+   landingLines.set(line,{status:'pending',stop:null,timer:0});
+   line.setAttribute('data-landing-reveal','pending');landingObserver.observe(line);
+  }
+ }
+ main.addEventListener('focusin',event=>{
+  // Route focus must expose its heading immediately, before the next frame.
+  // Unobserving also prevents scrolling away and back from restarting it.
+  for(const line of [...landingLines.keys()])if(line.contains(event.target))settleLandingLine(line);
+ });
+ const settleLandingPreference=()=>{if(!landingMotionAllowed())clearLandingReveal();};
+ reduced.addEventListener('change',settleLandingPreference);
+ forced.addEventListener('change',settleLandingPreference);
 
  function update(hash){
   const route=String(hash).split('~')[0];

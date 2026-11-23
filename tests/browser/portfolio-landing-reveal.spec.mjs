@@ -18,13 +18,33 @@ async function captureLanding(page,path){
 
 for(const path of paths){
  test(path+' landing invitation matches the portfolio staggered reveal and honours reduced motion',async({page},testInfo)=>{
+  test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.setViewportSize({width:1366,height:768});
+  await page.addInitScript(()=>{
+   window.__landingStarts=[];
+   document.addEventListener('animationstart',event=>{
+    if(event.animationName==='landing-portfolio-line-reveal')window.__landingStarts.push(event.target.textContent);
+   });
+  });
   await page.goto(path+'?lang=en#play');
   const group=page.locator('.reference-landing .landing-instructions');
   await expect(group).toBeVisible();
   const lines=group.locator(invitationText);
   await expect(lines).toHaveText(invitation);
-  await expect.poll(()=>group.evaluate(element=>element.classList.contains('is-revealing'))).toBe(true);
+  await page.evaluate(()=>document.fonts.ready);
+  const deck=group.locator('.landing-deck');
+  expect(await deck.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
+   'the later copy begins below the viewport in the two-image hero').toBeGreaterThan(0);
+  await expect(deck).toHaveAttribute('data-landing-reveal','pending');
+  await expect(deck).toHaveCSS('animation-name','none');
+  expect(await page.evaluate(text=>window.__landingStarts.includes(text),invitation[2]),
+   'offscreen copy has not already spent its entrance').toBe(false);
+  for(const line of await lines.all()){
+   await line.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+   await expect(line).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);
+   await expect(line).toHaveAttribute('data-landing-reveal','complete');
+  }
   const animation=await lines.evaluateAll(children=>children.map(child=>({
    name:getComputedStyle(child).animationName,
    duration:getComputedStyle(child).animationDuration,
@@ -37,13 +57,20 @@ for(const path of paths){
   expect(animation.every(item=>item.align==='start'||item.align==='left')).toBe(true);
   await expect(group.locator('.landing-role-actions')).toHaveCSS('animation-name','none');
   for(const image of await group.locator('.encounter-hero-art').all())await expect(image).toHaveCSS('animation-name','none');
-  await group.evaluate(async element=>{
-   await document.fonts.ready;
-   await Promise.all([...element.children].flatMap(child=>child.getAnimations())
-    .map(animation=>animation.finished.catch(()=>{})));
-  });
   await expect.poll(()=>lines.evaluateAll(children=>children
    .map(child=>getComputedStyle(child).opacity))).toEqual(Array(4).fill('1'));
+  const starts=await page.evaluate(()=>window.__landingStarts);
+  for(const text of invitation)expect(starts.filter(value=>value===text),
+   'each line enters once when it is reached').toHaveLength(1);
+  await lines.first().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+  await lines.last().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  expect(await page.evaluate(()=>window.__landingStarts),'scrolling away and back does not replay settled text').toEqual(starts);
+  await lines.first().focus();
+  await expect(lines.first()).not.toHaveAttribute('data-landing-reveal');
+  await expect(lines.first()).toHaveCSS('animation-name','none');
+  await expect(lines.first()).toHaveCSS('opacity','1');
+  await expect(lines.first()).toHaveCSS('transform','none');
   const label=path==='garda/'?'garda':'public';
   await captureLanding(page,testInfo.outputPath(label+'-landing-typography-desktop.png'));
   await page.setViewportSize({width:390,height:844});
@@ -60,6 +87,19 @@ for(const path of paths){
    const box=group.getBoundingClientRect();
    return root.scrollWidth<=root.clientWidth+2 && box.left>=-2 && box.right<=root.clientWidth+2;
   })).toBe(true);
+ });
+
+ test(path+' landing invitation remains readable without an intersection observer',async({page})=>{
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.addInitScript(()=>{window.IntersectionObserver=undefined;});
+  await page.goto(path+'?lang=en#play');
+  const lines=page.locator('.landing-instructions').locator(invitationText);
+  await expect(lines).toHaveText(invitation);
+  await expect(page.locator('[data-landing-reveal]')).toHaveCount(0);
+  expect(await lines.evaluateAll(elements=>elements.map(element=>({
+   opacity:getComputedStyle(element).opacity,transform:getComputedStyle(element).transform,
+   animation:getComputedStyle(element).animationName
+  })))).toEqual(Array(4).fill({opacity:'1',transform:'none',animation:'none'}));
  });
 
  test(path+' landing pairs each heading with its image and keeps route focus unframed',async({page},testInfo)=>{

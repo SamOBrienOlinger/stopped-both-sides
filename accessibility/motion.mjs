@@ -1,5 +1,5 @@
 import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {createDisclosures} from './disclosures.mjs?v=learning-language-20261120';
+import {createDisclosures} from './disclosures.mjs?v=landing-render-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 import {headingsForCard} from './card-headings.mjs?v=card-headings-20261123';
 
@@ -123,7 +123,11 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(element.matches?.('[data-card-heading]'))return;
    if(elements.has(element))return;
    elements.add(element);
+   // A resumed run and an earlier recap can have the same display title.
+   // Their actual destinations identify distinct saved records across redraws.
+   const savedTarget=element.dataset.headingCard==='saved'?element.querySelector('.saved-session-link')?.getAttribute('href'):'';
    const identity=element.id||element.querySelector('[data-action="paired-start"][data-id]')?.dataset.id||
+    (savedTarget?`saved:${element.dataset.saveMode||''}:${savedTarget}`:'')||
     (headingEntrance(element)?`${element.dataset.headingCard}:${headingsForCard(element)[0].textContent}`:'')||element.dataset.roleTone||index;
    const key=`${next.revealScope}|${selector}|${identity}`;
    targets.push({element,key});
@@ -158,7 +162,9 @@ export function createMotion({main,getLegacyState=()=>null}){
     if(!entry.isIntersecting)continue;
     const key=keys.get(entry.target);
     observer?.unobserve(entry.target);
-    if(seen.has(key))continue;
+    // A shared or previously consumed identity must never leave another
+    // queued instance hidden after it has been unobserved.
+    if(seen.has(key)){remove(entry.target);continue;}
     seen.add(key);cue(entry.target,next.complete?'recap':'reveal');
    }
   },{threshold:0,rootMargin:'0px 0px 80px 0px'});
@@ -195,7 +201,10 @@ export function createMotion({main,getLegacyState=()=>null}){
   // new viewport afterwards; a second render cancels this queued registration.
   // A preference redraw must not replay either on-screen or later-scroll cues.
   const pageChange=before&&next.mode==='content'&&before.page!==next.page&&!preferenceChange;
-  if(pageChange&&allowed())cue(main,'page',()=>{if(previous===next)observeReveals(next,false);});
+  // The landing's individual text entrances own its arrival. A whole-page
+  // fade would dim those lines again, including the heading given route focus.
+  const landingEntry=main.querySelector('.reference-landing .landing-instructions');
+  if(pageChange&&allowed()&&!landingEntry)cue(main,'page',()=>{if(previous===next)observeReveals(next,false);});
   else afterFocus(main,'observe',()=>observeReveals(next,preferenceChange));
  }
 
