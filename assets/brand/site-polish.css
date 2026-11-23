@@ -1,15 +1,19 @@
 /* Navigation, landing invitation, About heading and footer polish.
    Loaded after the shared role palettes so both entrypoints behave alike. */
 
-/* Keep navigation available without disturbing compact-menu positioning. */
-.header,
+/* The fallback menu stays in normal flow while the application loads. Its
+   expanded links must not become a tall overlay over the loading page. */
+.header {
+  position:relative;
+  z-index:80;
+  background:var(--paper,#fff);
+}
+/* Pin navigation only once its compact menu is wired and ready to use. */
 .header.navigation-ready {
   position:-webkit-sticky;
   position:sticky;
   inset-block-start:0;
   top:0;
-  z-index:80;
-  background:var(--paper,#fff);
 }
 html {scroll-padding-block-start:calc(var(--navigation-height,6rem) + .75rem)}
 #main :is(h1,h2,[tabindex="-1"]) {scroll-margin-block-start:.75rem}

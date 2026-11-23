@@ -9,8 +9,14 @@
  const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
  if('scrollRestoration' in history){
   history.scrollRestoration=reloading?'manual':'auto';
-  // Keep a later Back/Forward visit native-restorable before this document leaves.
-  if(reloading)addEventListener('pagehide',()=>{history.scrollRestoration='auto';});
+  // A native refresh can snapshot the outgoing entry before the new page runs.
+  // Claim that reload at pageswap; keep normal departures native-restorable.
+  let outgoingReload=false;
+  if('onpageswap' in window)addEventListener('pageswap',event=>{
+   outgoingReload=event.activation?.navigationType==='reload';
+   if(outgoingReload)history.scrollRestoration='manual';
+  });
+  addEventListener('pagehide',()=>{if(!outgoingReload)history.scrollRestoration='auto';});
  }
  if(reloading)window.scrollTo({top:0,left:0,behavior:'instant'});
 }
@@ -22,10 +28,10 @@
 <link rel="stylesheet" href="./styles.css">
 <link rel="stylesheet" href="./encounters/styles.css">
 <link rel="stylesheet" href="./encounters/scenes.css?v=group-spacing-20261122">
-<link rel="stylesheet" href="./accessibility/styles.css">
+<link rel="stylesheet" href="./accessibility/styles.css?v=sitewide-rendering-20261123">
 <link rel="stylesheet" href="./accessibility/perspectives.css">
 <link rel="stylesheet" href="./accessibility/responsive.css">
-<script type="module" src="./app.mjs?v=refresh-scroll-20261123"></script>
+<script type="module" src="./app.mjs?v=sitewide-rendering-20261123"></script>
 <link rel="stylesheet" href="./assets/brand/landing.css?v=landing-about-copy-1">
 <link rel="stylesheet" href="./assets/brand/buttons.css?v=learning-flow-2">
 <link rel="stylesheet" href="./encounters/refinements.css?v=scene-above-context-1">
@@ -42,7 +48,7 @@
 <link rel="stylesheet" href="./assets/brand/approved-backgrounds.css?v=quayside-lamps-1">
 <link rel="stylesheet" href="./encounters/scene-labels.css?v=caption-fit-20261122">
 <link rel="stylesheet" href="./encounters/turn-headshot.css?v=phlow-1">
-<link rel="stylesheet" href="./assets/brand/site-polish.css?v=landing-render-20261123">
+<link rel="stylesheet" href="./assets/brand/site-polish.css?v=sitewide-rendering-20261123">
 <script type="module" src="./encounters/scene-labels.mjs?v=situation-locations-20261122"></script>
 <link rel="stylesheet" href="./assets/brand/play-flow.css?v=catalogue-focus-20261123">
 <link rel="stylesheet" href="./assets/brand/back-to-top.css?v=responsive-layout-20261122">
@@ -77,6 +83,19 @@
     </div>
   </div>
 </footer>
+<script>
+// Position the parsed loading page before the deferred application starts.
+// The head-level reset runs before this document has its real scroll range.
+if(performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1){
+ const positionLoadingPage=()=>{
+  if(document.querySelector('#main .initial'))window.scrollTo({top:0,left:0,behavior:'instant'});
+ };
+ positionLoadingPage();
+ // Native restoration can finish after this script but before the parser
+ // becomes interactive. This event does not wait for the app module.
+ if(document.readyState==='loading')document.addEventListener('readystatechange',positionLoadingPage,{once:true});
+}
+</script>
 </body>
 </html>
 
