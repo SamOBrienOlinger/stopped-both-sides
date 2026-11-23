@@ -68,7 +68,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']])for(const viewpor
   const rendererURLs=new Set();
   page.on('request',request=>{
    const url=new URL(request.url());
-   if(url.pathname.endsWith('/encounters/scenes.mjs?v=nia-public-20261123'))rendererURLs.add(url.href);
+   if(url.pathname.endsWith('/encounters/scenes.mjs'))rendererURLs.add(url.href);
   });
   await page.emulateMedia({reducedMotion:'reduce'});
    await page.setViewportSize(viewport);

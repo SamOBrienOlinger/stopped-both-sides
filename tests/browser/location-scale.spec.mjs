@@ -45,7 +45,7 @@ test('All 34 browse pictures and all 99 stages preserve actor scale across mobil
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.goto('./?lang=en#play');
  await page.evaluate(async({states,ids})=>{
-  const renderer=performance.getEntriesByType('resource').find(entry=>new URL(entry.name).pathname.endsWith('/encounters/scenes.mjs?v=nia-public-20261123'))?.name;
+  const renderer=performance.getEntriesByType('resource').find(entry=>new URL(entry.name).pathname.endsWith('/encounters/scenes.mjs'))?.name;
   if(!renderer)throw Error('The application has not loaded its scene renderer');
   const {renderScene,renderScenePreview}=await import(renderer);
   const main=document.querySelector('#main');

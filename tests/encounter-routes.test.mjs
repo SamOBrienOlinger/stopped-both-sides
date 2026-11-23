@@ -18,7 +18,7 @@ globalThis.history={replaceState(_state,_title,url){currentHash=url;}};
 globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='[data-site-switch]')return siteLink;if(q==='.skip')return {addEventListener(type,fn){callbacks.skip=fn;}};if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,fn){callbacks[type]=fn;}};
-await import(new URL('app.mjs?v=support-language-20261123',siteBase));
+ await import(new URL('app.mjs?v=nia-public-20261123',siteBase));
 const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The resource could not load/);
 function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}
