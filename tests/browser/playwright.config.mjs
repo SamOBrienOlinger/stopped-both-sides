@@ -5,7 +5,7 @@ const liveURL=process.env.TEST_BASE_URL;
 const repositoryRoot=fileURLToPath(new URL('../../',import.meta.url));
 export default defineConfig({
  testDir:'.',testMatch:'*.spec.mjs',timeout:60000,expect:{timeout:10000},
- testIgnore:process.env.BROWSER_SUITE==='general'?['**/sitewide-rendering.spec.mjs']:[],
+ testIgnore:process.env.BROWSER_SUITE==='general'?['**/sitewide-rendering.spec.mjs','**/refresh-settlement.spec.mjs']:[],
  fullyParallel:false,workers:1,retries:0,forbidOnly:!!process.env.CI,
  outputDir:fileURLToPath(new URL('../../test-results/',import.meta.url)),
  reporter:[['list'],['html',{outputFolder:fileURLToPath(new URL('../../playwright-report/',import.meta.url)),open:'never'}]],

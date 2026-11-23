@@ -128,6 +128,8 @@ for(const role of ['public','garda'])for(const language of added){
   await expect(page.locator('.paired-game')).toBeVisible();expect(current(page)).toEqual(before);
   await page.reload();await expect(page.locator('.paired-game')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang',language.tag);expect(current(page)).toEqual(before);
+  // Fresh reader input precedes Playwright's implicit scroll to the footer.
+  await page.keyboard.press('Escape');
   await applyLanguage(page,'en',{footer:true});
   expect(current(page)).toEqual(before);
   await expect(page.locator('html')).toHaveAttribute('dir','ltr');

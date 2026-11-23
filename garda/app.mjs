@@ -105,7 +105,15 @@ window.addEventListener('hashchange',()=>render());
 await reading.ready;
 // Establish the refresh position without giving static headings keyboard focus.
 // User-initiated route changes still focus their heading through render().
-const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
-const sourceLink=location.hash.startsWith('#evidence/');
-render(!reloading&&sourceLink,{position:reloading||sourceLink});
+const pageStart=window.__stoppedPageStart;
+const reloading=pageStart?.reloading??(performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1);
+const sourceLink=!pageStart?.restoringHistory&&location.hash.startsWith('#evidence/');
+const refreshPosition=reloading&&(pageStart?.active??true);
+render(!reloading&&sourceLink,{position:refreshPosition||(!reloading&&sourceLink)});
+// Re-resolve source targets after each layout change; rendering replaces nodes.
+pageStart?.claim(()=>{
+ const hash=location.hash.slice(1).split('~')[0];
+ const id=hash.startsWith('evidence/')?hash.slice(9):'';
+ return id?document.getElementById(hasOwn(sources,id)?'source-'+id:id):null;
+});
 

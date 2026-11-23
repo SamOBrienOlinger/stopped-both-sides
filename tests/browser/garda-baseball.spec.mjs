@@ -75,7 +75,10 @@ for(const [path,role] of entrypoints){
    await expect(choice).toHaveAttribute('aria-pressed','true');
    if(role==='garda')await imageLoaded(choice.locator('img'));
   }
-  await page.reload();await page.locator('[data-action="paired-setup-characters"]').click();
+  await page.reload();
+  // Fresh reader input precedes Playwright's implicit scroll to character setup.
+  await page.keyboard.press('Escape');
+  await page.locator('[data-action="paired-setup-characters"]').click();
   await expect(page.locator('[data-character="'+role+'-9"]')).toHaveAttribute('aria-pressed','true');
  });
 }

@@ -1,0 +1,156 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {runInNewContext} from 'node:vm';
+
+const source=readFileSync(new URL('../accessibility/start-position.js',import.meta.url),'utf8');
+
+function surface(){
+ const listeners=new Map();
+ return {
+  addEventListener(type,callback){
+   if(!listeners.has(type))listeners.set(type,new Set());
+   listeners.get(type).add(callback);
+  },
+  removeEventListener(type,callback){listeners.get(type)?.delete(callback);},
+  emit(type,properties={}){
+   const event={type,target:this,isTrusted:false,...properties};
+   for(const callback of [...(listeners.get(type)||[])])callback(event);
+  }
+ };
+}
+
+// Execute the production classic script against a small browser host. These
+// tests vary lifecycle/input ordering; browser tests cover real trusted input
+// and layout. No controller logic is reimplemented in the fixture.
+function browser(type='reload',offset=480){
+ const attributes=new Set(type==='reload'?['data-start-position']:[]);
+ let pendingOffset=null;
+ const root={setAttribute:name=>attributes.add(name),removeAttribute:name=>attributes.delete(name),
+  hasAttribute:name=>attributes.has(name),
+  getBoundingClientRect(){
+   // Native restoration may remain deferred until the first styled layout.
+   if(pendingOffset!==null){host.scrollY=pendingOffset;pendingOffset=null;}
+   return {top:-host.scrollY,height:4000};
+  }};
+ let finishFonts;
+ const fonts={...surface(),ready:new Promise(resolve=>{finishFonts=resolve;})};
+ const document={...surface(),documentElement:root,fonts,scrollingElement:{scrollHeight:4000},
+  querySelector:()=>null};
+ const frames=new Map(),writes=[];let nextFrame=0;
+ const host={...surface(),document,history:{scrollRestoration:type==='reload'?'manual':'auto'},
+  performance:{getEntriesByType:()=>[{type}]},innerHeight:800,scrollX:0,scrollY:offset,
+  visualViewport:surface(),
+  getComputedStyle:element=>element===root?{scrollPaddingTop:'12px'}:{scrollMarginTop:'8px'},
+  requestAnimationFrame:callback=>{frames.set(++nextFrame,callback);return nextFrame;},
+  cancelAnimationFrame:id=>frames.delete(id),
+  scrollTo({top,left}){
+   host.scrollY=top;host.scrollX=left;writes.push({top,left});host.emit('scroll');
+  }
+ };
+ host.window=host;
+ runInNewContext(source,host,{filename:'accessibility/start-position.js'});
+ return {host,root,document,fonts,finishFonts,writes,controller:host.__stoppedPageStart,
+  paint(){const callbacks=[...frames.values()];frames.clear();for(const callback of callbacks)callback();},
+  restore(top,{emit=true}={}){host.scrollY=top;if(emit)host.emit('scroll');},
+  deferRestore(top){pendingOffset=top;},
+  anchor(top){return {isConnected:true,getBoundingClientRect:()=>({top:top-host.scrollY})};}
+ };
+}
+
+test('parser readiness corrects a restored offset synchronously before the next frame',()=>{
+ const e=browser();e.restore(480,{emit:false});
+ assert.equal(e.host.scrollY,480,'the native offset is present before parser readiness');
+ e.document.emit('readystatechange');
+ assert.equal(e.host.scrollY,0,'the first parsed frame must not wait for animation-frame correction');
+});
+
+test('startup claim and parser readiness settle a native offset deferred until styled layout',()=>{
+ for(const boundary of ['claim','readystatechange']){
+  const e=browser();e.deferRestore(1499);
+  assert.equal(e.host.scrollY,0,'the native offset is not yet exposed to script');
+  if(boundary==='claim')e.controller.claim(()=>null);
+  else e.document.emit('readystatechange');
+  // Inspect the first styled layout without advancing animation frames. A
+  // controller that checked stale scrollY before layout leaves this concealed.
+  assert.equal(Math.abs(e.root.getBoundingClientRect().top),0,boundary+' exposes the opening before the first frame');
+  assert.equal(e.host.scrollY,0,boundary+' settles the deferred native offset');
+ }
+});
+
+test('a native scroll event repairs its offset synchronously before the next frame',()=>{
+ const e=browser();e.paint();
+ e.restore(640);
+ assert.equal(e.host.scrollY,0,'scroll correction must not wait for another animation frame');
+});
+
+test('a late native offset is corrected after load and pageshow without repeated settled writes',async()=>{
+ const e=browser();e.host.emit('load');e.host.emit('pageshow',{persisted:false});e.paint();
+ e.restore(640);e.paint();e.paint();
+ assert.equal(e.host.scrollY,0);
+ const writes=e.writes.length;
+ e.host.visualViewport.emit('resize');e.host.visualViewport.emit('scroll');
+ e.finishFonts();await Promise.resolve();e.fonts.emit('loadingdone');e.paint();e.paint();
+ assert.equal(e.host.scrollY,0);
+ assert.equal(e.writes.length,writes,'settled lifecycle events must not start a scroll loop');
+});
+
+test('fresh input before readiness cancels queued work and a later render cannot reclaim scrolling',async()=>{
+ for(const type of ['pointerdown','touchstart','wheel','keydown','click']){
+  const e=browser();e.restore(240,{emit:false});e.host.emit(type,{isTrusted:true});
+  e.controller.claim(()=>null);
+  e.finishFonts();await Promise.resolve();
+  e.host.emit('load');e.host.emit('pageshow',{persisted:false});
+  e.host.visualViewport.emit('resize');e.paint();e.paint();
+  assert.equal(e.host.scrollY,240,type);
+  assert.equal(e.host.history.scrollRestoration,'auto',type);
+  assert.equal(e.root.hasAttribute('data-start-position'),false,type);
+ }
+});
+
+test('synthetic activation and the tail of an old touch gesture do not surrender refresh ownership',()=>{
+ const e=browser();
+ e.host.emit('click');e.host.emit('touchmove',{isTrusted:true});e.host.emit('touchend',{isTrusted:true});
+ e.restore(720);e.paint();
+ assert.equal(e.host.scrollY,0);
+ assert.equal(e.host.history.scrollRestoration,'manual');
+});
+
+test('pagehide cancels pending correction and a BFCache return preserves its native position',()=>{
+ const e=browser();e.restore(360,{emit:false});e.host.emit('pagehide',{persisted:true});e.paint();
+ assert.equal(e.host.scrollY,360,'a departing page must not run its queued correction');
+ assert.equal(e.host.history.scrollRestoration,'manual','departure must not undo refresh policy');
+ e.restore(520);e.host.emit('pageshow',{persisted:true});e.controller.claim(()=>null);
+ e.host.visualViewport.emit('resize');e.paint();
+ assert.equal(e.host.scrollY,520);
+ assert.equal(e.host.history.scrollRestoration,'auto');
+});
+
+test('ordinary navigation and cold Back retain native positioning through app readiness',()=>{
+ for(const type of ['navigate','back_forward']){
+  const e=browser(type,360);e.controller.claim(()=>null);
+  e.host.emit('load');e.host.emit('pageshow',{persisted:false});e.host.visualViewport.emit('resize');e.paint();
+  assert.equal(e.host.scrollY,360,type);
+  assert.equal(e.host.history.scrollRestoration,'auto',type);
+  assert.equal(e.writes.length,0,type);
+ }
+});
+
+test('source positioning resolves replacement content and its current layout',()=>{
+ const e=browser();let target=e.anchor(1000);
+ e.controller.claim(()=>target);e.paint();
+ assert.equal(e.host.scrollY,980,'source has both root padding and target margin clearance');
+ target.isConnected=false;target=e.anchor(1400);
+ e.restore(480);e.host.visualViewport.emit('resize');e.paint();e.paint();
+ assert.equal(e.host.scrollY,1380,'a replaced source is resolved after a later restoration');
+});
+
+test('a failed application script restores fallback navigation and relinquishes pending positioning',()=>{
+ const e=browser();e.host.emit('error',{target:{tagName:'IMG'}});
+ assert.equal(e.root.hasAttribute('data-scripted'),true,'image failure does not disable startup');
+ e.restore(320,{emit:false});e.host.emit('error',{target:{tagName:'SCRIPT'}});
+ e.controller.claim(()=>null);e.host.emit('load');e.paint();
+ assert.equal(e.root.hasAttribute('data-scripted'),false);
+ assert.equal(e.host.history.scrollRestoration,'auto');
+ assert.equal(e.host.scrollY,320);
+});

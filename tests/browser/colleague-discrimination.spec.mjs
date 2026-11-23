@@ -22,6 +22,8 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.locator('[data-action="paired-answer"]').first().click();
   await page.reload();
   expect(current(page).answers).toEqual({public:0,garda:0});
+  // Fresh reader input precedes Playwright's implicit scroll to the next action.
+  await page.keyboard.press('Escape');
   await page.locator('[data-action="paired-next"]').click();
   await expect(page.locator('#scene-title')).toHaveText('An apology and an accurate record');
   for(const target of ['public','garda']){

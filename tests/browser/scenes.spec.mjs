@@ -47,6 +47,8 @@ for(const role of ['public','garda'])test(`${role}: illustrated decisions remain
  await page.locator('[data-action="paired-next"]').click();
  await expect(page.locator('.paired-scene-lead>.encounter-scene')).toBeVisible();expect(current(page).cast).toEqual(cast);
  await page.reload();await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).cast).toEqual(cast);
+ // Fresh reader input precedes Playwright's implicit scroll to the choices.
+ await page.keyboard.press('Escape');
  for(let i=0;i<8&&!current(page).complete;i++){
   await page.locator('[data-action="paired-answer"]').first().click();await page.locator('[data-action="paired-next"]').click();
  }
