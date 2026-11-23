@@ -103,5 +103,7 @@ main.addEventListener('click',event=>{if(paired.handleClick(event))return;
 document.querySelector('.skip')?.addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});focusPageStart(main,{focus:false});});
 window.addEventListener('hashchange',()=>render());
 await reading.ready;
-render(false);
+// Re-establish the route after the compact header and saved reading preferences settle.
+const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
+render(reloading);
 
