@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
+import {expectStaticHeadings} from './static-headings.mjs';
 import {startEncounter,answer,continueEncounter} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=situation-locations-20261122';
 
@@ -16,7 +17,7 @@ function resumeBesideRecap(role){
 }
 
 for(const [role,path] of [['public','./'],['garda','garda/']]){
- test(role+' landing reveals both a resume card and a recap with the same title',async({page},testInfo)=>{
+ test(role+' landing keeps a resume card and same-title recap immediately readable',async({page},testInfo)=>{
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.setViewportSize({width:390,height:568});
   await page.addInitScript(({key,value})=>localStorage.setItem(key,value),{
@@ -29,34 +30,18 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await page.evaluate(()=>document.fonts.ready);await frames(page);
   for(const card of await cards.all())expect(await card.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
    'both saved records begin beyond the observer preload margin').toBeGreaterThan(80);
-  await expect(cards.locator('[data-heading-pending]')).toHaveCount(2);
-  await page.evaluate(()=>{
-   const titles=[...document.querySelectorAll('#main .flow-save .flow-save-copy > strong')];
-   window.__savedHeadingEntrances=[];
-   new MutationObserver(records=>{
-    for(const {target} of records)if(target.hasAttribute('data-heading-motion')&&titles.includes(target)){
-     window.__savedHeadingEntrances.push(titles.indexOf(target));
-    }
-   }).observe(document.querySelector('#main'),{subtree:true,attributes:true,attributeFilter:['data-heading-motion']});
-  });
-  for(const card of await cards.all())await card.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
-  await expect.poll(()=>page.evaluate(()=>window.__savedHeadingEntrances.slice().sort()),
-   'each distinct saved record receives its own entrance').toEqual([0,1]);
-  for(const title of await titles.all()){
-   await expect(title).not.toHaveAttribute('data-heading-pending');
-   await expect(title).not.toHaveAttribute('data-heading-motion');
-   await expect(title).toHaveCSS('opacity','1');
-   await expect(title).toHaveCSS('transform','none');
+  await expect(cards.locator('[data-heading-pending],[data-heading-motion]')).toHaveCount(0);
+  await expectStaticHeadings(titles,'offscreen saved titles');
+  for(const card of await cards.all()){
+   await card.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+   await expectStaticHeadings(card.locator('.flow-save-copy > strong'),'saved title reached by scrolling');
   }
   await expect(cards.locator('.saved-session-link')).toHaveCount(2);
   expect(await cards.locator('.saved-session-link').evaluateAll(links=>new Set(links.map(link=>link.href)).size)).toBe(2);
   await page.screenshot({path:testInfo.outputPath(role+'-same-title-saved-cards.png')});
   await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await frames(page);
   await cards.last().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));await frames(page);
-  expect(await page.evaluate(()=>window.__savedHeadingEntrances.slice().sort()),
-   'returning to the saved cards does not replay either entrance').toEqual([0,1]);
-  expect(await titles.evaluateAll(elements=>elements.every(element=>getComputedStyle(element).opacity==='1')),
-   'neither same-title record needs a preference change or redraw to become readable').toBe(true);
+  await expectStaticHeadings(titles,'saved titles after returning to the cards');
  });
 
  test(role+' motion-enabled Home return exposes its focused heading without a second page fade',async({page},testInfo)=>{

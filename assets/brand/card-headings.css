@@ -31,37 +31,11 @@
 html:lang(ar) #main [data-card-heading] {letter-spacing:normal;line-height:1.55}
 html:lang(zh) #main [data-card-heading] {letter-spacing:normal;line-height:1.45}
 
-/* The existing motion controller owns registration, pacing and cancellation.
-   Only owned titles move: the card, its controls and any nested cards remain
-   stationary and opaque, so an ancestor cannot apply a second fade. */
-@keyframes ui-card-heading-arrive {
- from {opacity:0;transform:translateY(37.5%)}
- to {opacity:1;transform:translateY(0)}
-}
-@media(prefers-reduced-motion:no-preference) {
- #main [data-heading-reveal][data-reveal-pending],
- #main [data-heading-reveal]:is([data-motion="reveal"],[data-motion="recap"]) {
-  opacity:1;
-  animation:none;
- }
- /* Keep an offscreen title inside its control while it waits. The entrance
-    keyframe supplies the rise only when the title actually becomes visible. */
- #main [data-heading-pending] {opacity:0}
- #main [data-heading-motion] {
-  animation:ui-card-heading-arrive 1s ease-out both;
- }
-}
-.motion-reduce #main :is([data-heading-pending],[data-heading-motion]),
-.contrast-high #main :is([data-heading-pending],[data-heading-motion]) {
- animation:none!important;opacity:1!important;transform:none!important;
-}
-@media(prefers-reduced-motion:reduce),(forced-colors:active) {
- #main :is([data-heading-pending],[data-heading-motion]) {
-  animation:none!important;opacity:1!important;transform:none!important;
- }
-}
-@media print {
- #main :is([data-heading-pending],[data-heading-motion]) {
-  animation:none!important;opacity:1!important;transform:none!important;
- }
+/* Secondary headings are immediately readable in cards, disclosures and
+   dialogs. The motion controller also keeps their ancestors free of fades.
+   Primary h1 and independent controls retain their presentation cues. */
+:is(h2,h3,h4,h5,h6,summary,[data-card-heading]:not(h1),[role="heading"]:not([aria-level="1"])) {
+ animation:none!important;
+ opacity:1!important;
+ transform:none!important;
 }

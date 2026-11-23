@@ -1,5 +1,6 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
+import {expectStaticHeadings} from './static-headings.mjs';
 import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
@@ -17,6 +18,7 @@ test.beforeEach(async({page})=>{
   const record=element=>{
    const kind=element.getAttribute?.('data-motion');
    if(kind)window.__motionLog.push({kind,id:element.id,className:String(element.className),
+    recapTakeaways:!!element.closest('.recap-takeaways'),
     animated:element.getAnimations({subtree:true}).some(animation=>animation.playState==='running')});
   };
   new MutationObserver(records=>{
@@ -137,6 +139,7 @@ for(const role of ['public','garda']){
   await resetCues(page);
   await answerImmediately(page);
   await hasCues(page,'feedback');
+  await expectStaticHeadings(page.locator('#feedback :is(h2,h3)'),'feedback heading');
   await noStageReplay(page);
   await focusedContentVisible(page);
   const answered=current(page);
@@ -146,6 +149,7 @@ for(const role of ['public','garda']){
   await page.keyboard.press('Enter');
   await expect(page.locator('#choice-title')).toBeFocused();
   await hasCues(page,'perspective');
+  await expectStaticHeadings(page.locator('#choice-title'),'choice heading after switching perspective');
   await noStageReplay(page);
   expect(current(page).nodeId).toBe(answered.nodeId);
   expect(current(page).answers).toEqual(answered.answers);
@@ -167,9 +171,10 @@ for(const role of ['public','garda']){
   }
   expect(current(page).complete).toBe(true);
   await hasCues(page,'recap');
-  expect(await page.evaluate(()=>window.__motionLog.some(event=>event.kind==='recap'&&event.className.includes('recap-takeaways'))),
-   'the recap introduction highlights the learning takeaways').toBe(true);
+  expect(await page.evaluate(()=>window.__motionLog.some(event=>event.kind==='recap'&&event.recapTakeaways)),
+   'the recap introduction highlights takeaway content without fading its heading').toBe(true);
   await expect(page.locator('.recap-takeaways')).toBeVisible();
+  await expectStaticHeadings(page.locator('.recap-takeaways :is(h2,h3)'),'recap takeaway heading');
   await readableLayout(page);
   expect(errors).toEqual([]);
  });
@@ -186,6 +191,7 @@ for(const role of ['public','garda']){
   await openNavigation(page);await page.locator('#language-settings-trigger').click();
   await expect(page.locator('#reading-title')).toBeFocused();
   await hasCues(page,'dialog');
+  await expectStaticHeadings(page.locator('#reading-title'),'reading-dialog heading');
   await page.locator('#reading-language').selectOption('ga');
   await page.locator('#reading-size').selectOption('150');
   await page.locator('[name="spacing"]').check();
@@ -202,6 +208,7 @@ for(const role of ['public','garda']){
   const caption=await openCharacterPicker(page);
   await expect(page.locator('#character-picker-title')).toBeFocused();
   await hasCues(page,'picker');
+  await expectStaticHeadings(page.locator('#character-picker-title'),'character-picker heading');
   await noStageReplay(page);
   await resetCues(page);
   const chosen=role==='public'?'public-3':'garda-3';
@@ -278,6 +285,7 @@ for(const role of ['public','garda']){
   await resetCues(page);
   await answerImmediately(page,'[data-action="choose"]');
   await hasCues(page,'feedback');
+  await expectStaticHeadings(page.locator('#feedback :is(h2,h3)'),'feedback heading');
   await noStageReplay(page);
   await resetCues(page);
   await page.locator('[data-action="next"]').click();

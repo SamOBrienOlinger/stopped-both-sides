@@ -1,5 +1,6 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
+import {expectStaticHeadings} from './static-headings.mjs';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 
 const paths={public:'./',garda:'garda/'};
@@ -11,48 +12,6 @@ async function revealsReady(page){
  await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');
  await frames(page);
 }
-async function recordOpacity(target,kind,includePending=false,title=false){
- await target.evaluate((element,{kind,includePending,title})=>{
-  window.__opacityTrace=new Promise(resolve=>{
-   const samples=[],startedAt=performance.now();let active=false;
-   const sample=()=>{
-    const cue=element.getAttribute('data-motion'),pending=element.hasAttribute('data-reveal-pending');
-    const surface=title?element.querySelector(':scope > [data-card-heading]'):element;
-    const style=getComputedStyle(surface),owner=getComputedStyle(element),opacity=Number(style.opacity),time=performance.now();
-    if(cue===kind)active=true;
-    if(active||includePending)samples.push({time,opacity,cue,pending,transform:style.transform,
-     rise:style.transform==='none'?0:new DOMMatrixReadOnly(style.transform).m42,
-     ownerOpacity:Number(owner.opacity),ownerTransform:owner.transform});
-    if(active&&cue!==kind&&!pending&&opacity===1){resolve({complete:true,samples});return;}
-    if(time-startedAt>8000){resolve({complete:false,samples});return;}
-    requestAnimationFrame(sample);
-   };
-   sample();
-  });
- },{kind,includePending,title});
-}
-function expectPerceptibleFade(trace,kind,maximumStart,minimumElapsed,title=false){
- expect(trace.complete,'the cue reaches full opacity and removes its temporary state').toBe(true);
- const active=trace.samples.filter(sample=>sample.cue===kind),final=trace.samples.at(-1);
- expect(active.length,'the browser draws multiple frames of the fade').toBeGreaterThan(4);
- expect(Math.min(...active.map(sample=>sample.opacity)),'the starting opacity visibly differs from the final state').toBeLessThan(maximumStart);
- const intermediate=active.filter(sample=>sample.opacity>maximumStart&&sample.opacity<.97);
- expect(new Set(intermediate.map(sample=>Math.round(sample.opacity*100))).size,
-  'opacity progresses through several visible intermediate values').toBeGreaterThan(4);
- expect(final.time-active[0].time,'the fade remains gradual instead of snapping to its endpoint').toBeGreaterThan(minimumElapsed);
- for(let index=1;index<trace.samples.length;index++){
-  expect(trace.samples[index].opacity-trace.samples[index-1].opacity,
-   'the surface never flashes bright and then dims').toBeGreaterThanOrEqual(-.02);
- }
- if(title){
-  expect(active.some(sample=>sample.rise>1),'the heading visibly rises while it fades').toBe(true);
-  expect(trace.samples.every(sample=>sample.ownerOpacity===1&&sample.ownerTransform==='none'),
-   'the card and controls stay stationary and opaque, without a second parent fade').toBe(true);
-  expect(final.rise).toBe(0);
- }else expect(trace.samples.every(sample=>sample.transform==='none'),'opacity cues keep surfaces stationary').toBe(true);
- expect(final).toMatchObject({opacity:1,pending:false,cue:null});
-}
-
 test.beforeEach(async({page})=>{
  await page.emulateMedia({reducedMotion:'no-preference'});
  await page.addInitScript(()=>{
@@ -114,7 +73,7 @@ for(const role of ['public','garda']){
   if(action==='change-character')await expect(page.locator('#character-picker-title')).toBeFocused();
  });
 
- test(`${role}: topic filters do not animate a redraw and reference groups reveal once per visit`,async({page})=>{
+ test(`${role}: topic filters and page changes keep reference subheadings static`,async({page})=>{
   await page.goto(paths[role]+'#encounters/'+role);
   await page.locator('.scenario-library > summary').click();
   await reset(page);
@@ -122,96 +81,73 @@ for(const role of ['public','garda']){
   await expect(page.locator('.encounter-card')).toHaveCount(2);
   await frames(page);
   expect(await kinds(page),'filtering changes results without replaying presentation cues').toEqual([]);
-  await openNavigation(page);await recordOpacity(page.locator('#main'),'page');
+  await expectStaticHeadings(page.locator('.encounter-card :is(h2,h3)'),'filtered catalogue headings');
+  await openNavigation(page);
   await page.locator('.header [data-nav="about"]').click();
   await expect.poll(()=>kinds(page)).toContain('page');
   await expect(page.locator('#main h1')).toBeFocused();
-  await revealsReady(page);
-  expectPerceptibleFade(await page.evaluate(()=>window.__opacityTrace),'page',.6,900);
-  // The first public information card can already be inside the observer's
-  // 80px preload band after the responsive opening reflows. This shared card
-  // starts farther down both About pages, so it tests a genuine later entry.
-  const group=page.locator('.learning-intro');
+  await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');
+  await expectStaticHeadings(page.locator('#main :is(h2,h3,h4,[data-card-heading]:not(h1))'),
+   'About subheadings during the primary page cue');
+  const group=page.locator('.learning-intro'),heading=group.locator(':scope > h2');
   await page.evaluate(()=>document.fonts.ready);
-  expect(await group.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
-   'the reference target starts beyond the observer preload margin').toBeGreaterThan(80);
-  await expect(group).toHaveAttribute('data-reveal-pending','');
-  expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBe(1);
-  await expect(group.locator(':scope > h2')).toHaveAttribute('data-heading-pending','');
-  await recordOpacity(group,'reveal',true,true);
+  await expect(group).not.toHaveAttribute('data-reveal-pending');
+  await expectStaticHeadings(heading,'offscreen reference heading');
   await group.scrollIntoViewIfNeeded();
-  const heading=await group.locator(':scope > h2').textContent();
-  await expect.poll(async()=>(await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading)).toBe(true);
-  const revealTrace=await page.evaluate(()=>window.__opacityTrace);
-  expect(revealTrace.samples[0]).toMatchObject({opacity:0,pending:true,cue:null,ownerOpacity:1});
-  // The one-second landing rise/fade belongs to the title alone. Preserve
-  // intermediate-frame and lifecycle checks without dimming its card twice.
-  expectPerceptibleFade(revealTrace,'reveal',.75,800,true);
+  await expectStaticHeadings(heading,'reference heading reached by scrolling');
   await reset(page);
   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
   await revealsReady(page);
   await group.scrollIntoViewIfNeeded();
-  await frames(page);
-  expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
-   'returning to a reference group does not replay its reveal').toBe(false);
+  await expectStaticHeadings(heading,'reference heading after returning');
+  expect((await events(page)).some(event=>event.kind==='reveal'&&event.className.includes('learning-intro')),
+   'reference headings never receive a later-entry cue').toBe(false);
  });
 
- test(`${role}: focusing a newly revealed dropdown cancels its group entrance permanently`,async({page})=>{
+ test(`${role}: dropdown headings stay static before focus and after repeated scrolling`,async({page})=>{
   await page.setViewportSize({width:390,height:568});
   await page.goto(paths[role]);
-  // The hero can be classified as initially visible while the first layout
-  // settles. Use a group well below the initial viewport so this test starts
-  // with an actual later entrance rather than depending on initial geometry.
-  const group=page.locator('.topic-explorer');
+  const group=page.locator('.topic-explorer'),heading=group.locator('h2');
   await expect(group).toBeVisible();await page.evaluate(()=>document.fonts.ready);
   await revealsReady(page);
-  const heading=await group.locator('h2').textContent();
   expect(await group.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
-   'the target starts below the viewport and the observer’s 80px preload margin').toBeGreaterThan(80);
-  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.heading===heading)).toHaveLength(0);
+   'the target starts below the viewport and the observer preload margin').toBeGreaterThan(80);
+  await expect(group).not.toHaveAttribute('data-reveal-pending');
+  await expectStaticHeadings(heading,'offscreen Browse all situations');
   await group.scrollIntoViewIfNeeded();
-  await expect(group).toHaveAttribute('data-motion','reveal');
+  await expectStaticHeadings(heading,'Browse all situations after scrolling');
   await group.locator('summary.topic-disclosure-trigger').focus();
-  await expect(group).not.toHaveAttribute('data-motion','reveal');
+  await expectStaticHeadings(heading,'focused catalogue disclosure heading');
   await page.locator('.wordmark').evaluate(element=>element.focus({preventScroll:true}));
-  await frames(page);
-  await expect(group).not.toHaveAttribute('data-motion','reveal');
   await page.locator('.wordmark').scrollIntoViewIfNeeded();
-  await group.scrollIntoViewIfNeeded();await frames(page);
-  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.heading===heading),
-   'leaving focus or scrolling back cannot restart the cancelled card entrance').toHaveLength(1);
+  await group.scrollIntoViewIfNeeded();
+  await expectStaticHeadings(heading,'catalogue heading after returning');
+  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.className.includes('topic-explorer')),
+   'the catalogue group is never a parent fade surface').toHaveLength(0);
  });
 
- test(`${role}: pending entrances stay readable on focus and clear when motion is reduced`,async({page})=>{
+ test(`${role}: heading visibility does not depend on focus or the motion preference`,async({page})=>{
   await page.setViewportSize({width:390,height:568});
   await page.goto(paths[role]);
-  const group=page.locator('.topic-explorer');
+  const group=page.locator('.topic-explorer'),heading=group.locator('h2');
   await expect(group).toBeVisible();await page.evaluate(()=>document.fonts.ready);await revealsReady(page);
-  const heading=await group.locator('h2').textContent();
-  await expect(group).toHaveAttribute('data-reveal-pending','');
-  expect(await page.locator('.reference-landing').evaluate(element=>Number(getComputedStyle(element).opacity)),
-   'the first viewport remains fully readable').toBe(1);
+  await expectStaticHeadings(heading,'secondary heading before focus');
   const focus=await group.evaluate(element=>{
    const trigger=element.querySelector('summary.topic-disclosure-trigger');trigger.focus({preventScroll:true});
    return {focused:document.activeElement===trigger,opacity:Number(getComputedStyle(element).opacity),
     pending:element.hasAttribute('data-reveal-pending'),cue:element.getAttribute('data-motion')};
   });
-  expect(focus,'focus settles a pending entrance synchronously before the control is used')
+  expect(focus,'a heading-bearing control is available before any focus settlement')
    .toEqual({focused:true,opacity:1,pending:false,cue:null});
-  await page.locator('.wordmark').evaluate(element=>element.focus({preventScroll:true}));
-  await group.scrollIntoViewIfNeeded();await frames(page);
-  expect((await events(page)).filter(event=>event.kind==='reveal'&&event.heading===heading),
-   'a pending entrance consumed by focus is never replayed').toHaveLength(0);
-  // Reset the viewport before reloading so reduced motion is tested against
-  // a fresh offscreen queue, independently of the focus cancellation above.
   await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await page.reload();await revealsReady(page);
-  await expect(page.locator('[data-reveal-pending]')).not.toHaveCount(0);
+  await expect(page.locator('.landing-instructions [data-landing-reveal="pending"]')).not.toHaveCount(0);
   await page.emulateMedia({reducedMotion:'reduce'});
-  await expect(page.locator('[data-reveal-pending],[data-motion]')).toHaveCount(0);
-  expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBe(1);
+  await expect(page.locator('[data-reveal-pending],[data-motion],[data-landing-reveal]')).toHaveCount(0);
+  await expectStaticHeadings(heading,'secondary heading with reduced motion');
   await page.emulateMedia({reducedMotion:'no-preference'});await frames(page);
   await expect(page.locator('[data-reveal-pending],[data-motion]')).toHaveCount(0);
+  await expectStaticHeadings(heading,'secondary heading when motion is restored');
  });
 
  test(`${role}: recap cards and progress avoid replaying cues when controls redraw them`,async({page})=>{
@@ -221,7 +157,7 @@ for(const role of ['public','garda']){
   const card=page.locator('.paired-recap > .summary-item').last();
   await card.scrollIntoViewIfNeeded();
   const heading=await card.locator('h2').textContent();
-  await expect.poll(async()=>(await events(page)).some(event=>event.kind==='recap'&&event.heading===heading)).toBe(true);
+  await expectStaticHeadings(card.locator('h2'),'recap card heading on first entry');
   await reset(page);
   await openCharacterPicker(page);
   await page.locator('[data-action="paired-character-close"]').click();
@@ -251,7 +187,8 @@ test('Changing the system motion preference stops an active cue and retains the 
  await expect(page.locator('.paired-game')).toBeVisible();
  await reset(page);
  await page.locator('[data-action="paired-answer"]').first().click();
- await expect(page.locator('#feedback')).toHaveAttribute('data-motion','feedback');
+ await expect(page.locator('#feedback [data-motion="feedback"]')).not.toHaveCount(0);
+ await expectStaticHeadings(page.locator('#feedback :is(h2,h3)'),'feedback heading during its content cue');
  const answered=current(page);
  await page.emulateMedia({reducedMotion:'reduce'});
  await expect(page.locator('[data-motion]')).toHaveCount(0);

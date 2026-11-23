@@ -3,13 +3,16 @@ import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=situation-
 import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=situation-locations-20261122';
 import {playHash,topicForSituation} from '../../encounters/play-navigation.mjs?v=situation-locations-20261122';
 import {openNavigation} from './navigation.mjs';
+import {expectStaticHeadings} from './static-headings.mjs';
 
-const arrest=startEncounter('public-arrest','public',{cast:{public:'public-2',garda:'garda-5'}});
-const returnTo=playHash('shared','public',topicForSituation(arrest.id));
-const saved=packProgress(recordProgress(emptyProgress(),arrest,{returnTo}));
+const savedSituation=startEncounter('discrimination-colleague-race','public',{cast:{public:'public-2',garda:'garda-5'}});
+const returnTo=playHash('shared','public',topicForSituation(savedSituation.id));
+const saved=packProgress(recordProgress(emptyProgress(),savedSituation,{returnTo}));
 const reports=new WeakMap();
 const profiles=[
+ {name:'small phone',width:320,height:740,size:100},
  {name:'phone',width:390,height:844,size:100},
+ {name:'wide phone',width:430,height:932,size:100},
  {name:'desktop',width:1366,height:768,size:100},
  {name:'phone 200%',width:390,height:844,size:200}
 ];
@@ -32,7 +35,7 @@ async function captureAction(page,testInfo,label,options,action){
    const ready=location.hash===hash&&(sameRoute||main.firstElementChild!==before);
    if(!ready&&++attempts<120){frame=requestAnimationFrame(sample);return;}
    const header=document.querySelector('.header'),button=returned?
-    main.querySelector('.scenario-library [data-action="paired-start"][data-id="public-arrest"]'):null;
+    main.querySelector('.scenario-library [data-action="paired-start"][data-id="discrimination-colleague-race"]'):null;
    const card=button?.closest('.encounter-card'),title=card?.querySelector('h2,h3');
    const active=document.activeElement;
    record.samples.push({ready,hash:location.hash,scrollY:Math.round(scrollY),viewport:innerHeight,
@@ -110,14 +113,14 @@ async function deepScroll(page){
 async function savedCardGeometry(page,testInfo,label,selector){
  const card=page.locator(selector),title=card.locator('.flow-save-copy > strong');
  await expect(card).toHaveCount(1);
- await expect(title).toHaveText('Told you are under arrest');
+ await expect(title).toHaveText('Race: a colleague singles someone out');
  await expect(card.locator('.flow-save-copy > span')).toHaveText(/Member of the public\s*·\s*Explore both perspectives\s*·\s*Decision\s*1/);
  await expect(card.locator('.saved-session-link')).toHaveText('Resume your situation');
- // This separate check concerns the card's internal layout; route-entry
- // measurements above never use this scroll or its settled heading state.
+ // Check immediate opacity before scrolling: offscreen saved text must not
+ // wait for an entrance. Route-entry checks above never repair scrolling.
+ await expectStaticHeadings(title,label+' before scrolling');
  await card.scrollIntoViewIfNeeded();
- await expect.soft(title,label+' title is revealed').toHaveCSS('opacity','1');
- await expect.soft(title,label+' title has settled').toHaveCSS('transform','none');
+ await expectStaticHeadings(title,label+' after scrolling');
  const geometry=await card.evaluate(element=>{
   const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
   const card=box(element),copy=element.querySelector('.flow-save-copy'),title=copy.querySelector('strong'),meta=copy.querySelector(':scope > span'),action=element.querySelector('.saved-session-link');
@@ -130,8 +133,11 @@ async function savedCardGeometry(page,testInfo,label,selector){
     for(const r of range.getClientRects())if(r.width&&r.height)text.push({left:r.left,right:r.right,top:r.top,bottom:r.bottom});
    }
   }
+  const styles=getComputedStyle(element);
   return {card,copy:box(copy),title:box(title),meta:box(meta),action:box(action),text,
-   rootFont:getComputedStyle(document.documentElement).fontSize,
+   rootFont:getComputedStyle(document.documentElement).fontSize,viewportWidth:innerWidth,
+   paddingBlock:parseFloat(styles.paddingTop)+parseFloat(styles.paddingBottom),
+   borderBlock:parseFloat(styles.borderTopWidth)+parseFloat(styles.borderBottomWidth),
    horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+1};
  });
  const issues=[];
@@ -143,9 +149,21 @@ async function savedCardGeometry(page,testInfo,label,selector){
  if(Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1)issues.push('copy overlaps Resume');
  if(geometry.text.some(r=>r.left<geometry.card.left-1||r.right>geometry.card.right+1||r.top<geometry.card.top-1||r.bottom>geometry.card.bottom+1))issues.push('rendered text escapes the card');
  if(geometry.horizontalOverflow)issues.push('horizontal page overflow');
+ const font=parseFloat(geometry.rootFont);
+ if(geometry.meta.top-geometry.title.bottom>font*.75+1)issues.push('excessive title-to-details gap');
+ if(geometry.copy.height>geometry.title.height+geometry.meta.height+font*.75+1)issues.push('copy has excess empty height');
+ if(geometry.action.height<44)issues.push('Resume tap target is too short');
+ if(geometry.viewportWidth<=640){
+  if(b.top<a.bottom-1)issues.push('phone Resume does not follow the copy');
+  if(Math.abs(a.width-b.width)>1||Math.abs(a.left-b.left)>1)issues.push('phone copy and Resume do not share the card width');
+  if(b.top-a.bottom>font*1.5+1)issues.push('excessive gap before Resume');
+  const expected=geometry.copy.height+geometry.action.height+(b.top-a.bottom)+geometry.paddingBlock+geometry.borderBlock;
+  if(Math.abs(geometry.card.height-expected)>2)issues.push('phone card has excess empty height');
+ }
  reports.get(page).push({label,geometry,issues});
- if(issues.length)await page.screenshot({path:testInfo.outputPath(label.replace(/[^a-z0-9]+/gi,'-')+'.png')});
+ await card.screenshot({path:testInfo.outputPath(label.replace(/[^a-z0-9]+/gi,'-')+'.png')});
  expect.soft(issues,label).toEqual([]);
+ return geometry;
 }
 
 test.afterEach(async({page},testInfo)=>{
@@ -159,7 +177,7 @@ test.afterEach(async({page},testInfo)=>{
 });
 
 for(const [site,path] of [['public','./'],['garda','garda/']])for(const profile of profiles){
- test(`${site}: arrest resume and page openings clear navigation at ${profile.name}`,async({page},testInfo)=>{
+ test(`${site}: Race resume and page openings clear navigation at ${profile.name}`,async({page},testInfo)=>{
   test.setTimeout(120000);reports.set(page,[]);
   await page.setViewportSize({width:profile.width,height:profile.height});
   await page.emulateMedia({reducedMotion:'no-preference'});
@@ -177,7 +195,7 @@ for(const [site,path] of [['public','./'],['garda','garda/']])for(const profile 
   // Open real catalogue content so even a short desktop setup page can be
   // deeply scrolled. The first same-route click then puts focus on its h1.
   await page.locator('.scenario-library > summary').click();
-  await page.locator('.scenario-library [data-situation-topic="custody"] > summary').click();
+  await page.locator('.scenario-library [data-situation-topic="discrimination"] > summary').click();
   await nav(page,testInfo,'Explore initial same-route return','encounters',{context:'.paired-picker',sameRoute:true});
   await deepScroll(page);
   await nav(page,testInfo,'Explore same-route after scrolling','encounters',{context:'.paired-picker',sameRoute:true});
@@ -186,25 +204,31 @@ for(const [site,path] of [['public','./'],['garda','garda/']])for(const profile 
   await nav(page,testInfo,'Explore to reference page',reference);
   await deepScroll(page);
   await nav(page,testInfo,'Reference page to Progress','progress',{context:'.progress-page > .eyebrow'});
-  await savedCardGeometry(page,testInfo,'Progress arrest resume card','.saved-situations .flow-save');
+  const progressGeometry=await savedCardGeometry(page,testInfo,'Progress Race resume card','.saved-situations .flow-save');
 
   await nav(page,testInfo,'Progress to About','about',{context:'.about-opening'});
   await deepScroll(page);
   await nav(page,testInfo,'About to Home','play',{context:'.reference-landing'});
-  await savedCardGeometry(page,testInfo,'Home arrest resume card','.home-play .flow-save');
+  const homeGeometry=await savedCardGeometry(page,testInfo,'Home Race resume card','.home-play .flow-save');
+  if(profile.width<=640){
+   expect.soft(Math.abs(homeGeometry.card.width-progressGeometry.card.width),
+    'the same saved card uses the available width on Home and Progress').toBeLessThanOrEqual(2);
+   expect.soft(Math.abs(homeGeometry.card.height-progressGeometry.card.height),
+    'Home does not stretch the same saved card into a tall empty panel').toBeLessThanOrEqual(20*profile.size/100);
+  }
   await deepScroll(page);
   await nav(page,testInfo,'Home same-route after scrolling','play',{context:'.reference-landing',sameRoute:true});
 
   const resume='.home-play .saved-session-link';
-  await captureAction(page,testInfo,'Resume arrest from Home',{
-   trigger:resume,hash:stateHash(arrest),context:'.flow-topline',focus:'#scene-title'
+  await captureAction(page,testInfo,'Resume Race from Home',{
+   trigger:resume,hash:stateHash(savedSituation),context:'.flow-topline',focus:'#scene-title'
   },()=>page.locator(resume).click());
-  const returned=await captureAction(page,testInfo,'Back to arrest card',{
+  const returned=await captureAction(page,testInfo,'Back to Race card',{
    trigger:'[data-return-to-play]',hash:returnTo,returned:true
   },()=>page.locator('[data-return-to-play]').click());
   if(returned.samples.at(-1)?.titleFocused){
    await page.keyboard.press('Tab');
-   await expect(page.locator('.scenario-library [data-action="paired-start"][data-id="public-arrest"]')).toBeFocused();
+   await expect(page.locator('.scenario-library [data-action="paired-start"][data-id="discrimination-colleague-race"]')).toBeFocused();
   }
  });
 }

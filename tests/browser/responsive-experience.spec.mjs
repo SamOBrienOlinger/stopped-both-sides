@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation,expectSettingsFocusReturn} from './navigation.mjs';
 import {expectControlsFit} from './control-layout.mjs';
+import {expectStaticHeadings} from './static-headings.mjs';
 
 const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 const panelGeometry=element=>{
@@ -241,7 +242,9 @@ for(const path of ['./','garda/']){
   const laterGroup=page.locator('.content-page > section.info-block').last();
   const laterHeading=await laterGroup.locator(':scope > h2').textContent();
   await laterGroup.scrollIntoViewIfNeeded();
-  await expect.poll(()=>page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),laterHeading)).toBe(true);
+  await expectStaticHeadings(laterGroup.locator(':scope > h2'),'later About subheading');
+  expect(await page.evaluate(heading=>window.surfaceCues.some(cue=>cue.kind==='reveal'&&cue.heading===heading),laterHeading),
+   'heading-bearing cards are never queued for a later fade').toBe(false);
   await page.locator('.learning-disclosure>summary').click();
   const panel=page.locator('.learning-panel').first(),summary=panel.locator('summary');
   await summary.scrollIntoViewIfNeeded();await summary.focus();
@@ -271,10 +274,10 @@ for(const path of ['./','garda/']){
   expect(surfaceCues.filter(cue=>cue.transform!=='none'||cue.nested||
    (cue.headingOnly&&(cue.opacity!==1||cue.animation!=='none'))),
    'surface cues stay stationary, and heading-only owners never multiply a nested fade').toEqual([]);
-  expect(surfaceCues.some(cue=>cue.headingOnly&&cue.headingAnimations.length),
-   'the recorder observes the owned heading entrances').toBe(true);
-  expect(surfaceCues.flatMap(cue=>cue.headingAnimations).every(count=>count<=1),
-   'each owned title has at most one active heading animation').toBe(true);
+  expect(surfaceCues.some(cue=>cue.headingOnly||cue.headingAnimations.length),
+   'secondary headings never receive an entrance cue').toBe(false);
+  await expectStaticHeadings(page.locator('#main :is(h2,h3,h4,[data-card-heading]:not(h1))'),
+   'visible About subheadings while disclosures are usable');
   const text=await page.locator('#main').innerText();
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect(page.locator('[data-motion]')).toHaveCount(0);

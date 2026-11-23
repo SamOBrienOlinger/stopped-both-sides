@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import {expectStaticHeadings} from './static-headings.mjs';
 
 test.beforeEach(async({page})=>{
  await page.emulateMedia({reducedMotion:'no-preference'});
@@ -99,7 +100,11 @@ async function recordCatalogueToggle(panel){
       inlineHeight:element.style.height,height:box.height,
       heightEffect:element.getAnimations().some(animation=>animation.effect.getKeyframes().some(frame=>'height' in frame)),
       contentFits:!element.open||content.every(child=>child.getBoundingClientRect().bottom<=box.bottom+1),
-      titleOpacity:getComputedStyle(title).opacity});
+      titleOpacity:getComputedStyle(title).opacity,titleTransform:getComputedStyle(title).transform,
+      titleAnimation:getComputedStyle(title).animationName,
+      ancestorFade:(()=>{for(let parent=title.parentElement;parent;parent=parent.parentElement){
+       const style=getComputedStyle(parent);if(style.opacity!=='1'||style.transform!=='none')return true;
+      }return false;})()});
      if(samples.length<4)requestAnimationFrame(sample);
      else resolve({trusted:event.isTrusted,prevented:event.defaultPrevented,
       targetIsSummary:event.target===summary,samples});
@@ -116,7 +121,7 @@ async function expectNativeToggle(page,open){
  expect(record.targetIsSummary,'the native control owns activation over its title and decorative content').toBe(true);
  expect(record.samples).toHaveLength(4);
  for(const sample of record.samples)expect(sample).toMatchObject({
-  open,state:null,inlineHeight:'',heightEffect:false,contentFits:true,titleOpacity:'1'
+  open,state:null,inlineHeight:'',heightEffect:false,contentFits:true,titleOpacity:'1',titleTransform:'none',titleAnimation:'none',ancestorFade:false
  });
  const heights=record.samples.map(sample=>sample.height);
  expect(Math.max(...heights)-Math.min(...heights),'the catalogue is fully laid out on its first rendered frame').toBeLessThanOrEqual(1);
@@ -225,7 +230,7 @@ test('navigation cleans up a disclosure removed while its action is pressed',asy
 });
 
 for(const [entry,role] of [['./','public'],['garda/','garda']]){
- test(`${role}: catalogue controls open natively while newly exposed headings retain their entrance`,async({page})=>{
+ test(`${role}: catalogue controls open natively with immediately static headings`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto(entry+'?lang=en#encounters/'+role);
   await page.evaluate(()=>document.fonts.ready);
@@ -238,29 +243,14 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await recordCatalogueToggle(street);await summary.click();
   await expectNativeToggle(page,true);
 
-  // The last real Street card begins below the viewport. Native expansion
-  // must register its title for the same later-entry rise/fade as other cards.
+  // Titles below the initial viewport are already readable. Scrolling into
+  // the newly expanded catalogue must not start a title or parent entrance.
   const later=street.locator('.encounter-card').last(),heading=later.locator(':scope > h2');
   expect(await later.evaluate(element=>element.getBoundingClientRect().top>innerHeight+80)).toBe(true);
-  await expect(heading).toHaveAttribute('data-heading-pending','');
-  await later.evaluate(element=>{
-   const heading=element.querySelector(':scope > h2'),action=element.querySelector('button');
-   window.__catalogueHeadingEntrances=[];
-   heading.addEventListener('animationstart',event=>{
-    const cardStyle=getComputedStyle(element),actionStyle=getComputedStyle(action);
-    window.__catalogueHeadingEntrances.push({name:event.animationName,
-     cardOpacity:cardStyle.opacity,cardTransform:cardStyle.transform,
-     actionOpacity:actionStyle.opacity,actionTransform:actionStyle.transform});
-   });
-  });
-  await later.scrollIntoViewIfNeeded();
-  await expect.poll(()=>page.evaluate(()=>window.__catalogueHeadingEntrances)).toEqual([{
-   name:'ui-card-heading-arrive',cardOpacity:'1',cardTransform:'none',actionOpacity:'1',actionTransform:'none'
-  }]);
   await expect(heading).not.toHaveAttribute('data-heading-pending');
-  await expect(heading).not.toHaveAttribute('data-heading-motion');
-  await expect(heading).toHaveCSS('opacity','1');
-  await expect(heading).toHaveCSS('transform','none');
+  await expectStaticHeadings(heading,'offscreen catalogue card title');
+  await later.scrollIntoViewIfNeeded();
+  await expectStaticHeadings(heading,'newly reached catalogue card title');
 
   // Keyboard toggles preserve the summary focus and expose actions at once.
   await summary.focus();await recordCatalogueToggle(street);await summary.press('Space');
@@ -283,8 +273,12 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await page.keyboard.press('Tab');
   await expect(topics.getByRole('button',{name:'All topics',exact:true})).toBeFocused();
   const discrimination=topics.locator('[data-situation-topic="discrimination"]');
+  const discriminationTitle=discrimination.locator(':scope > summary .catalogue-summary-content > strong');
+  await expect(discriminationTitle).toHaveText('Discrimination');
+  await expectStaticHeadings(discriminationTitle,'Discrimination before opening');
   await recordCatalogueToggle(discrimination);await discrimination.locator(':scope > summary').click();
   await expectNativeToggle(page,true);
+  await expectStaticHeadings(discriminationTitle,'Discrimination after native opening');
   await page.keyboard.press('Tab');
   await expect(discrimination.locator(':scope > .situation-topic-content > a.text-button')).toBeFocused();
   const ground=discrimination.locator('[data-ground="gender"]');

@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
 import {createDisclosures} from './disclosures.mjs?v=landing-render-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
-import {headingsForCard} from './card-headings.mjs?v=catalogue-keyboard-20261123';
+import {secondaryHeadingSelector} from './card-headings.mjs?v=static-headings-20261123';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.
@@ -15,7 +15,7 @@ export function createMotion({main,getLegacyState=()=>null}){
  const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce')&&!root.classList.contains('contrast-high');
  const catalogueDisclosure=element=>element?.matches?.('.scenario-library,.topic-disclosure,.situation-topic,.discrimination-ground');
  const all=selector=>Array.from(main.querySelectorAll(selector));
- const headingEntrance=element=>element.hasAttribute?.('data-heading-entrance')&&headingsForCard(element).length>0;
+ const hasSecondaryHeading=element=>element.matches(secondaryHeadingSelector)||!!element.querySelector(secondaryHeadingSelector);
  const preferences=()=>[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
   ...['contrast-high','reading-spacious','motion-reduce'].map(name=>root.classList.contains(name))].join('|');
 
@@ -28,11 +28,6 @@ export function createMotion({main,getLegacyState=()=>null}){
   active.delete(element);
   element.removeAttribute('data-motion');
   element.removeAttribute('data-reveal-pending');pendingReveals.delete(element);
-  element.removeAttribute('data-heading-reveal');
-  for(const heading of headingsForCard(element)){
-   heading.removeAttribute('data-heading-pending');
-   heading.removeAttribute('data-heading-motion');
-  }
  }
  function clear(){
   for(const frame of frames.keys())cancelAnimationFrame(frame);
@@ -45,27 +40,39 @@ export function createMotion({main,getLegacyState=()=>null}){
   const frame=requestAnimationFrame(()=>{frames.delete(frame);callback();});
   frames.set(frame,{element,kind});
  }
+ function cueTargets(element,kind){
+  if(element.matches(secondaryHeadingSelector))return [];
+  // A page entrance belongs to its primary heading. Fading main would also
+  // fade every static section heading through its ancestor's opacity.
+  if(kind==='page')return element.matches('h1')?[element]:Array.from(element.querySelectorAll('h1'));
+  if(!hasSecondaryHeading(element))return [element];
+  // Keep event cues on complete prose/control groups that contain no static
+  // headings. The groups are disjoint, so no ancestor multiplies their fade.
+  return Array.from(element.children).flatMap(child=>cueTargets(child,kind));
+ }
  function cue(element,kind,finished=()=>{}){
   if(!element)return;
+  const targets=cueTargets(element,kind);
+  if(targets.length!==1||targets[0]!==element){
+   remove(element);
+   let remaining=targets.length;
+   if(!remaining){finished();return;}
+   for(const target of targets)cue(target,kind,()=>{if(--remaining===0)finished();});
+   return;
+  }
   const abort=()=>{remove(element);finished();};
   if(!allowed()){abort();return;}
   afterFocus(element,kind,()=>{
    // Focus, visibility or a preference may change between intersection and
-   // this frame. Refusing a cue must also settle any pending title opacity.
+   // this frame. Refusing a cue must also settle any pending surface opacity.
    if(!element.isConnected||!element.getClientRects().length||!allowed()){abort();return;}
    if(isEntrance(kind)&&element.contains(document.activeElement)){abort();return;}
    remove(element);
-   const headingTargets=isEntrance(kind)&&headingEntrance(element)?headingsForCard(element):[];
-   if(headingTargets.length){
-    element.setAttribute('data-heading-reveal','');
-    for(const heading of headingTargets)heading.setAttribute('data-heading-motion','');
-   }
    element.setAttribute('data-motion',kind);
    // Only pace the finite presentation cues owned by this controller. Ambient
    // loops and unrelated hover transitions retain their own native timelines.
    const animations=(element.getAnimations?.({subtree:true})||[]).filter(animation=>
     String(animation.animationName||'').startsWith('ui-')&&
-    (!headingTargets.length||headingTargets.includes(animation.effect?.target))&&
     Number.isFinite(animation.effect?.getComputedTiming().endTime));
    const complete=()=>{remove(element);finished();};
    if(animations.length){
@@ -99,8 +106,8 @@ export function createMotion({main,getLegacyState=()=>null}){
    progress:all('.progress-page progress').map(element=>element.value).join(',')};
  }
 
- // Keep the initial viewport steady. Later cards reveal only their own titles;
- // a surrounding group must not fade the same content a second time.
+ // Secondary headings are readable immediately, including before scrolling.
+ // Only groups without those headings may receive a later entrance.
  function observeReveals(next,suppress,disclosure=null){
   observer?.disconnect();observer=null;
   // Refresh the offscreen queue in one task. A pending entrance that has
@@ -114,22 +121,14 @@ export function createMotion({main,getLegacyState=()=>null}){
     '.topic-explorer','.learning-goals','.source-topic',
     '.learning-intro','.learning-cycle','.learning-context','.learning-panel',
     '.learning-example','.learning-outcomes > li','.evidence-group > h2']:[];
-  selectors.push('[data-heading-entrance]');
   const targets=[],elements=new Set();
   for(const selector of selectors)all(selector).forEach((element,index)=>{
    if(element.parentElement?.closest('details:not([open])'))return;
-   // A broad section with leaf cards is not a second animation surface.
-   // Its own tagged heading can still reveal without moving those cards.
-   if(!headingEntrance(element)&&element.querySelector('[data-heading-entrance]'))return;
-   if(element.matches?.('[data-card-heading]'))return;
+   if(hasSecondaryHeading(element))return;
    if(elements.has(element))return;
    elements.add(element);
-   // A resumed run and an earlier recap can have the same display title.
-   // Their actual destinations identify distinct saved records across redraws.
-   const savedTarget=element.dataset.headingCard==='saved'?element.querySelector('.saved-session-link')?.getAttribute('href'):'';
    const identity=element.id||element.querySelector('[data-action="paired-start"][data-id]')?.dataset.id||
-    (savedTarget?`saved:${element.dataset.saveMode||''}:${savedTarget}`:'')||
-    (headingEntrance(element)?`${element.dataset.headingCard}:${headingsForCard(element)[0].textContent}`:'')||element.dataset.roleTone||index;
+    element.dataset.roleTone||index;
    const key=`${next.revealScope}|${selector}|${identity}`;
    targets.push({element,key});
   });
@@ -137,7 +136,7 @@ export function createMotion({main,getLegacyState=()=>null}){
   const candidates=targets.filter(({element,key})=>{
    let nested=false;
    for(let parent=element.parentElement;parent&&parent!==main;parent=parent.parentElement){
-    if(elements.has(parent)&&!headingEntrance(parent)){nested=true;break;}
+    if(elements.has(parent)){nested=true;break;}
    }
    if(suppress||!allowed()||nested||disclosure?.contains(element)){
     seen.add(key);return false;
@@ -151,10 +150,6 @@ export function createMotion({main,getLegacyState=()=>null}){
   });
   if(!candidates.length||typeof globalThis.IntersectionObserver!=='function')return;
   for(const {element,key} of candidates){
-   if(headingEntrance(element)){
-    element.setAttribute('data-heading-reveal','');
-    for(const heading of headingsForCard(element))heading.setAttribute('data-heading-pending','');
-   }
    element.setAttribute('data-reveal-pending','');pendingReveals.set(element,key);
   }
   const keys=new Map(candidates.map(item=>[item.element,item.key]));
@@ -222,16 +217,16 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(previous)observeReveals(previous,false,details);
   },onFinish:details=>details.removeAttribute('data-motion')});
  // Catalogue actions must appear at their final positions as soon as native
- // details opens. Their offscreen titles still get the normal once-only reveal;
- // visible titles remain readable without a second parent height transition.
+ // details opens. Their titles stay visible without a heading entrance or a
+ // second parent height transition.
  main.addEventListener('toggle',event=>{
   const details=event.target,next=previous;
   if(!next||!catalogueDisclosure(details))return;
   afterFocus(details,'observe',()=>{
    if(previous!==next||!details.isConnected)return;
-   // The parent page cue already refreshes titles when its fade completes.
-   if(main.getAttribute('data-motion')==='page'||
-    [...frames.values()].some(pending=>pending.element===main&&pending.kind==='page'))return;
+   // The primary page cue refreshes non-heading reveals when it completes.
+   if(main.querySelector('[data-motion="page"]')||
+    [...frames.values()].some(pending=>main.contains(pending.element)&&pending.kind==='page'))return;
    observeReveals(next,false);
   });
  },true);
