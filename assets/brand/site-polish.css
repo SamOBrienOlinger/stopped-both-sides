@@ -335,7 +335,7 @@ html {scroll-padding-block-start:calc(var(--navigation-height,6rem) + .75rem)}
 @media print {.header{position:static}}
 
 
-/* Portfolio-inspired invitation: four staggered display lines mirror the
+/* Portfolio-inspired invitation: four display lines mirror the
    Curiosity / Creativity / Purpose hero without replacing meaningful text. */
 .reference-landing .landing-instructions{
   display:flex;
@@ -422,7 +422,6 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
   html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions > :is([data-landing-reveal="active"],[data-landing-reveal="complete"]){
     animation:landing-portfolio-line-reveal 1s ease-out var(--landing-reveal-delay,0s) both;
   }
-  .reference-landing .landing-instructions > #perspectives-title{--landing-reveal-delay:.1s}
   .reference-landing .landing-instructions > .landing-deck{--landing-reveal-delay:.2s}
   .reference-landing .landing-instructions > .landing-purpose{--landing-reveal-delay:.2s}
   .reference-landing .landing-instructions > .small-note{--landing-reveal-delay:.3s}

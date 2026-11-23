@@ -1,5 +1,6 @@
 // Deliberately name each card's title. Inline emphasis, character names,
 // scores and action labels are not display headings.
+export const secondaryHeadingSelector='h2,h3,h4,h5,h6,summary,[data-card-heading]:not(h1),[role="heading"]:not([aria-level="1"])';
 const families=[
  ['scenario','.scenario',':scope > h2,:scope > h3','card'],
  ['information','.info-block',':scope > h2,:scope > h3','card'],
@@ -33,18 +34,17 @@ const families=[
  ['how-to','.how-to-play',':scope > .how-to-disclosure > summary > h2','card'],
  ['practice','.single-mode',':scope > summary > h2','card'],
  ['how-step','.how-step',':scope > .how-step-copy > strong','compact'],
- // These headings size fluidly but retain the game's existing state cues.
- ['story','.decision-context,.game-grid > .story',':scope > h1','feature',false],
- ['decision','.decision-choices > .prompt',':scope > h2','card',false],
- ['feedback','.feedback',':scope > h2','card',false],
- ['recap-header','.summary-heading',':scope > h1','feature',false]
+ ['story','.decision-context,.game-grid > .story',':scope > h1','feature'],
+ ['decision','.decision-choices > .prompt',':scope > h2','card'],
+ ['feedback','.feedback',':scope > h2','card'],
+ ['recap-header','.summary-heading',':scope > h1','feature']
 ];
 
 export function decorateCardHeadings(main){
  if(!main?.querySelectorAll)return;
- // These two authored summaries contain only their translated title. Give
- // the text its own motion surface, preserving the native summary and marker
- // as a stationary, fully visible control. Repeated updates do not rewrap it.
+ // These authored summaries contain only their translated title. Give the
+ // text its fluid typography without changing the native summary or marker.
+ // Repeated updates do not rewrap it.
  for(const summary of main.querySelectorAll('.info-block:is(.privacy-disclosure,.input-disclosure) > summary')){
   if(summary.childElementCount||!summary.textContent.trim())continue;
   const title=summary.ownerDocument.createElement('span');
@@ -52,20 +52,12 @@ export function decorateCardHeadings(main){
   while(summary.firstChild)title.append(summary.firstChild);
   summary.append(title);
  }
- for(const [family,selector,title,tier,reveal=true] of families){
+ for(const [family,selector,title,tier] of families){
   for(const card of main.querySelectorAll(selector)){
    const headings=Array.from(card.querySelectorAll(title));
    if(!headings.length)continue;
    card.setAttribute('data-heading-card',family);
-   if(reveal)card.setAttribute('data-heading-entrance','');
    for(const heading of headings)heading.setAttribute('data-card-heading',tier);
   }
  }
-}
-
-// A group may own its section title and contain separately observed cards.
-// Never animate a nested card's title again through the ancestor.
-export function headingsForCard(card){
- return Array.from(card?.querySelectorAll?.('[data-card-heading]')||[])
-  .filter(heading=>heading.closest('[data-heading-card]')===card);
 }

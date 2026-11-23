@@ -1,6 +1,6 @@
 // Presentation enhancements run after translation. Original wording, inline
 // citations, game state and language-pack lookup keys stay intact.
-import {decorateCardHeadings} from './card-headings.mjs?v=catalogue-keyboard-20261123';
+import {decorateCardHeadings} from './card-headings.mjs?v=static-headings-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 import {focusPageStart} from './focus.mjs?v=mobile-flow-20261123b';
 export function paragraphChunks(text,language='en'){
@@ -197,7 +197,7 @@ export function createLayout({main}){
   landingObserver=new IntersectionObserver(entries=>{
    for(const entry of entries)if(entry.isIntersecting)revealLandingLine(entry.target);
   },{rootMargin:'0px 0px -15% 0px',threshold:0});
-  for(const line of next.querySelectorAll(':scope > :is(.encounter-hero-title,.landing-deck,.small-note)')){
+  for(const line of next.querySelectorAll(':scope > :is(h1.encounter-hero-title,.landing-deck,.small-note)')){
    // The caller restores route focus/scroll after update(). The observer
    // measures that new viewport, rather than the previous page's scroll.
    if(line.contains(document.activeElement))continue;

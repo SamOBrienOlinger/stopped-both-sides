@@ -117,18 +117,25 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
 .home-play .primary {box-shadow:none}
 .home-start .primary {flex-wrap:wrap;gap:.18em .3em}
 .home-start-role {font-size:.875rem;color:var(--muted)}
-.home-play .flow-save {flex:1 1 100%;margin:0;background:var(--paper,#fff);color:var(--ink)}
+.home-play .flow-save {flex:0 0 100%;margin:0;background:var(--paper,#fff);color:var(--ink)}
 
 .flow-save {
- display:flex;
- flex-wrap:wrap;
- align-items:center;
- justify-content:space-between;
- gap:.5rem 1rem;
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ align-content:start;
+ align-items:start;
+ inline-size:100%;
+ max-inline-size:100%;
  min-inline-size:0;
- padding:clamp(.85rem,2.2vw,1.25rem);
 }
-.flow-save-copy {display:grid;gap:.3rem;flex:1 1 14rem;min-inline-size:0}
+/* Own these insets instead of inheriting the older session-return layout.
+   Side padding follows the card width even when the reader enlarges text. */
+#main .flow-save {
+ gap:.75rem 1rem;
+ padding-block:.85rem;
+ padding-inline:clamp(8px,4%,1rem);
+}
+.flow-save-copy {display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:.3rem;min-inline-size:0}
 /* Resume cards need a compact title beside readable details and actions,
    including when the general card-heading styles are applied later. */
 #main .flow-save .flow-save-copy>strong {
@@ -136,7 +143,14 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  font-size:clamp(1.0625rem,calc(1rem + .5cqi),1.125rem);
 }
 .flow-save-copy>span {color:var(--muted);font-size:.9375rem;line-height:1.5}
-#main .flow-save .saved-session-link {font-size:1rem;margin-block-start:0}
+#main .flow-save .saved-session-link {
+ justify-self:stretch;
+ inline-size:100%;
+ min-inline-size:0;
+ max-inline-size:100%;
+ margin:0;
+ font-size:1rem;
+}
 .flow-save.session-return .saved-session-link,
 .flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {
  background:var(--deep);
@@ -511,11 +525,14 @@ button.role-switch-button:hover {background:var(--pale)}
  .game-grid.paired-game.flow-game {grid-template-columns:minmax(0,4fr) minmax(0,5fr);gap:1.25rem}
  .comparison-roles {grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+@media(min-width:48rem) {
+ .flow-save {grid-template-columns:minmax(0,1fr) fit-content(45%);align-items:center}
+ #main .flow-save .saved-session-link {inline-size:auto;justify-self:end}
+}
 @media(max-width:34rem) {
  .home-play {align-items:stretch;flex-direction:column}
  .home-start {justify-items:stretch}
- .home-play .flow-save {flex:auto}
- .flow-save .flow-save-copy,.flow-save .saved-session-link {inline-size:100%}
+ .home-play .flow-save {flex:none}
  .flow-game .decision-context,.game-grid>.decision-choices {padding:.8rem}
  .flow-role-bar {padding:.35rem .55rem}
 }

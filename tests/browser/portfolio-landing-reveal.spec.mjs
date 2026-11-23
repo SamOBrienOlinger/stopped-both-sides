@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 import {openNavigation} from './navigation.mjs';
+import {expectStaticHeadings} from './static-headings.mjs';
 
 const paths=['./','garda/'];
 const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));
@@ -17,7 +18,7 @@ async function captureLanding(page,path){
 }
 
 for(const path of paths){
- test(path+' landing invitation matches the portfolio staggered reveal and honours reduced motion',async({page},testInfo)=>{
+ test(path+' landing keeps its subheading static while primary copy honours reduced motion',async({page},testInfo)=>{
   test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.setViewportSize({width:1366,height:768});
@@ -40,28 +41,36 @@ for(const path of paths){
   await expect(deck).toHaveCSS('animation-name','none');
   expect(await page.evaluate(text=>window.__landingStarts.includes(text),invitation[2]),
    'offscreen copy has not already spent its entrance').toBe(false);
+  const animatedLines=group.locator(':scope > :is(h1.encounter-hero-title,.landing-deck,.small-note)');
+  const secondary=group.locator('#perspectives-title');
+  await expectStaticHeadings(secondary,'landing subheading before scrolling');
   for(const line of await lines.all()){
    await line.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
-   await expect(line).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);
-   await expect(line).toHaveAttribute('data-landing-reveal','complete');
+   if(await line.evaluate(element=>element.tagName==='H2')){
+    await expect(line).not.toHaveAttribute('data-landing-reveal');
+    await expectStaticHeadings(line,'landing subheading after scrolling');
+   }else{
+    await expect(line).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);
+    await expect(line).toHaveAttribute('data-landing-reveal','complete');
+   }
   }
-  const animation=await lines.evaluateAll(children=>children.map(child=>({
+  const animation=await animatedLines.evaluateAll(children=>children.map(child=>({
    name:getComputedStyle(child).animationName,
    duration:getComputedStyle(child).animationDuration,
    delay:getComputedStyle(child).animationDelay,
    align:getComputedStyle(child).textAlign
   })));
-  expect(animation.map(item=>item.name)).toEqual(Array(4).fill('landing-portfolio-line-reveal'));
-  expect(animation.map(item=>item.duration)).toEqual(Array(4).fill('1s'));
-  expect(animation.map(item=>item.delay)).toEqual(['0s','0.1s','0.2s','0.3s']);
+  expect(animation.map(item=>item.name)).toEqual(Array(3).fill('landing-portfolio-line-reveal'));
+  expect(animation.map(item=>item.duration)).toEqual(Array(3).fill('1s'));
+  expect(animation.map(item=>item.delay)).toEqual(['0s','0.2s','0.3s']);
   expect(animation.every(item=>item.align==='start'||item.align==='left')).toBe(true);
   await expect(group.locator('.landing-role-actions')).toHaveCSS('animation-name','none');
   for(const image of await group.locator('.encounter-hero-art').all())await expect(image).toHaveCSS('animation-name','none');
   await expect.poll(()=>lines.evaluateAll(children=>children
    .map(child=>getComputedStyle(child).opacity))).toEqual(Array(4).fill('1'));
   const starts=await page.evaluate(()=>window.__landingStarts);
-  for(const text of invitation)expect(starts.filter(value=>value===text),
-   'each line enters once when it is reached').toHaveLength(1);
+  for(const [index,text] of invitation.entries())expect(starts.filter(value=>value===text),
+   'only the primary heading and prose enter when reached').toHaveLength(index===1?0:1);
   await lines.first().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
   await lines.last().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
