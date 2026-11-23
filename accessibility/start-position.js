@@ -29,6 +29,10 @@
    const margin=parseFloat(getComputedStyle(element).scrollMarginTop)||0;
    const maximum=Math.max(0,(document.scrollingElement?.scrollHeight||0)-innerHeight);
    top=Math.max(0,Math.min(maximum,scrollY+element.getBoundingClientRect().top-padding-margin));
+  }else{
+   // Firefox can apply a saved offset during its first layout. Read current
+   // geometry before deciding that an earlier scrollY of zero is settled.
+   root.getBoundingClientRect?.();
   }
   // No writes at the settled position: a scroll event must not create a loop.
   if(Math.abs(scrollY-top)>.5||Math.abs(scrollX)>.5)window.scrollTo({top,left:0,behavior:'instant'});
@@ -75,7 +79,9 @@
  for(const type of ['pointerdown','touchstart','wheel','keydown','click'])listen(window,type,userIntent,{capture:true,passive:true});
  listen(window,'hashchange',()=>release());
  listen(window,'popstate',()=>release());
- listen(window,'scroll',schedule,{passive:true});
+ // Repair native restoration in the scroll event itself. An earlier queued
+ // frame callback must not see the stale offset before a deferred repair.
+ listen(window,'scroll',position,{passive:true});
  listen(window,'resize',schedule,{passive:true});
  listen(window.visualViewport,'resize',schedule,{passive:true});
  listen(window.visualViewport,'scroll',schedule,{passive:true});

@@ -25,8 +25,14 @@ function surface(){
 // and layout. No controller logic is reimplemented in the fixture.
 function browser(type='reload',offset=480){
  const attributes=new Set(type==='reload'?['data-start-position']:[]);
+ let pendingOffset=null;
  const root={setAttribute:name=>attributes.add(name),removeAttribute:name=>attributes.delete(name),
-  hasAttribute:name=>attributes.has(name)};
+  hasAttribute:name=>attributes.has(name),
+  getBoundingClientRect(){
+   // Native restoration may remain deferred until the first styled layout.
+   if(pendingOffset!==null){host.scrollY=pendingOffset;pendingOffset=null;}
+   return {top:-host.scrollY,height:4000};
+  }};
  let finishFonts;
  const fonts={...surface(),ready:new Promise(resolve=>{finishFonts=resolve;})};
  const document={...surface(),documentElement:root,fonts,scrollingElement:{scrollHeight:4000},
@@ -46,16 +52,36 @@ function browser(type='reload',offset=480){
  runInNewContext(source,host,{filename:'accessibility/start-position.js'});
  return {host,root,document,fonts,finishFonts,writes,controller:host.__stoppedPageStart,
   paint(){const callbacks=[...frames.values()];frames.clear();for(const callback of callbacks)callback();},
-  restore(top){host.scrollY=top;host.emit('scroll');},
+  restore(top,{emit=true}={}){host.scrollY=top;if(emit)host.emit('scroll');},
+  deferRestore(top){pendingOffset=top;},
   anchor(top){return {isConnected:true,getBoundingClientRect:()=>({top:top-host.scrollY})};}
  };
 }
 
 test('parser readiness corrects a restored offset synchronously before the next frame',()=>{
- const e=browser();e.restore(480);
+ const e=browser();e.restore(480,{emit:false});
  assert.equal(e.host.scrollY,480,'the native offset is present before parser readiness');
  e.document.emit('readystatechange');
  assert.equal(e.host.scrollY,0,'the first parsed frame must not wait for animation-frame correction');
+});
+
+test('startup claim and parser readiness settle a native offset deferred until styled layout',()=>{
+ for(const boundary of ['claim','readystatechange']){
+  const e=browser();e.deferRestore(1499);
+  assert.equal(e.host.scrollY,0,'the native offset is not yet exposed to script');
+  if(boundary==='claim')e.controller.claim(()=>null);
+  else e.document.emit('readystatechange');
+  // Inspect the first styled layout without advancing animation frames. A
+  // controller that checked stale scrollY before layout leaves this concealed.
+  assert.equal(Math.abs(e.root.getBoundingClientRect().top),0,boundary+' exposes the opening before the first frame');
+  assert.equal(e.host.scrollY,0,boundary+' settles the deferred native offset');
+ }
+});
+
+test('a native scroll event repairs its offset synchronously before the next frame',()=>{
+ const e=browser();e.paint();
+ e.restore(640);
+ assert.equal(e.host.scrollY,0,'scroll correction must not wait for another animation frame');
 });
 
 test('a late native offset is corrected after load and pageshow without repeated settled writes',async()=>{
@@ -71,7 +97,7 @@ test('a late native offset is corrected after load and pageshow without repeated
 
 test('fresh input before readiness cancels queued work and a later render cannot reclaim scrolling',async()=>{
  for(const type of ['pointerdown','touchstart','wheel','keydown','click']){
-  const e=browser();e.restore(240);e.host.emit(type,{isTrusted:true});
+  const e=browser();e.restore(240,{emit:false});e.host.emit(type,{isTrusted:true});
   e.controller.claim(()=>null);
   e.finishFonts();await Promise.resolve();
   e.host.emit('load');e.host.emit('pageshow',{persisted:false});
@@ -91,7 +117,7 @@ test('synthetic activation and the tail of an old touch gesture do not surrender
 });
 
 test('pagehide cancels pending correction and a BFCache return preserves its native position',()=>{
- const e=browser();e.restore(360);e.host.emit('pagehide',{persisted:true});e.paint();
+ const e=browser();e.restore(360,{emit:false});e.host.emit('pagehide',{persisted:true});e.paint();
  assert.equal(e.host.scrollY,360,'a departing page must not run its queued correction');
  assert.equal(e.host.history.scrollRestoration,'manual','departure must not undo refresh policy');
  e.restore(520);e.host.emit('pageshow',{persisted:true});e.controller.claim(()=>null);
@@ -122,7 +148,7 @@ test('source positioning resolves replacement content and its current layout',()
 test('a failed application script restores fallback navigation and relinquishes pending positioning',()=>{
  const e=browser();e.host.emit('error',{target:{tagName:'IMG'}});
  assert.equal(e.root.hasAttribute('data-scripted'),true,'image failure does not disable startup');
- e.restore(320);e.host.emit('error',{target:{tagName:'SCRIPT'}});
+ e.restore(320,{emit:false});e.host.emit('error',{target:{tagName:'SCRIPT'}});
  e.controller.claim(()=>null);e.host.emit('load');e.paint();
  assert.equal(e.root.hasAttribute('data-scripted'),false);
  assert.equal(e.host.history.scrollRestoration,'auto');
