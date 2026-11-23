@@ -121,9 +121,9 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       # Run first-paint and refresh coverage immediately, without waiting for
-      # unrelated browser cases. The general shards exclude this same file.
+      # unrelated browser cases. The general shards exclude these same files.
       - name: Check mobile rendering and refresh
-        run: npm run test:browser -- --project=${{ matrix.browser }} sitewide-rendering.spec.mjs
+        run: npm run test:browser -- --project=${{ matrix.browser }} refresh-settlement.spec.mjs sitewide-rendering.spec.mjs
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:

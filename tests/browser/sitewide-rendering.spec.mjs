@@ -246,7 +246,9 @@ async function historyAfterReload(page,role,path,browserName,testInfo){
  await expect(page.locator('#paired-title')).toBeAttached();
  await page.evaluate(()=>document.fonts.ready);
  // Playwright's mobile WebKit driver does not support mouse.wheel. Only set
- // its pre-navigation reading position; all reload and Back checks stay native.
+ // its pre-navigation reading position after real input releases startup
+ // positioning; all reload and Back checks stay native.
+ await page.keyboard.press('Escape');
  if(browserName==='webkit')await page.evaluate(()=>scrollTo({top:500,left:0,behavior:'instant'}));
  else {await page.mouse.move(195,400);await page.mouse.wheel(0,500);}
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
@@ -338,12 +340,12 @@ for(const [role,path] of [['public','./'],['garda','garda/']])for(const profile 
 
 for(const [role,path] of [['public','./'],['garda','garda/']]){
  for(const profile of profiles.filter(profile=>profile.size!==150)){
-  test(role+' '+profile.name+' late restored offset cannot put content behind the mobile header',async({page},testInfo)=>{
+  test(role+' '+profile.name+' deliberate reading scroll remains clear after refresh',async({page},testInfo)=>{
    await page.setViewportSize({width:profile.width,height:profile.height});
    await page.emulateMedia({reducedMotion:'reduce'});
    await prepare(page,role,profile);
-   testInfo.annotations.push({type:'fault injection',description:
-    'A synthetic late scroll offset after a genuine reload models browser restoration. This is not a physical iOS pull-to-refresh test.'});
+   testInfo.annotations.push({type:'reading scroll',description:
+    'Trusted keyboard input releases startup positioning before this deliberate reading scroll. Late browser restoration is covered separately.'});
    const observations=[];
    const inspect=async(label,expectedScroll)=>{
     const samples=await page.evaluate(()=>new Promise(resolve=>{
@@ -396,11 +398,12 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
      await expect.poll(()=>page.evaluate(()=>scrollY),'native reload itself still starts at zero').toBe(0);
      await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
      await expect(page.locator('html')).toHaveCSS('font-size',profile.size===200?'32px':'16px');
-     // Fault injection happens only after the native reload has finished.
-     // No application focus or scroll repair is applied before observation.
+     // The reader has taken control. Startup restoration must not undo this
+     // later reading position when mobile browser chrome changes height.
+     await page.keyboard.press('Escape');
      const offset=profile.size===200?80:48;
      await page.evaluate(top=>scrollTo({top,left:0,behavior:'instant'}),offset);
-     const late=await inspect(hash+' late browser offset',offset);
+     const late=await inspect(hash+' deliberate reading offset',offset);
      expect(late[0].hits.length,'the overlap check includes visible heading or introductory text').toBeGreaterThan(0);
      await page.setViewportSize({width:profile.width,height:profile.height-120});
      await inspect(hash+' shorter browser viewport',offset);
@@ -413,7 +416,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
      await inspect(hash+' deliberate later reading scroll',450);
     }
    }finally{
-    await testInfo.attach('late-restoration-geometry.json',{body:Buffer.from(JSON.stringify(observations)),contentType:'application/json'});
+    await testInfo.attach('reading-scroll-geometry.json',{body:Buffer.from(JSON.stringify(observations)),contentType:'application/json'});
    }
   });
  }
