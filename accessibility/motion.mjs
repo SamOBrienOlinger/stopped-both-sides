@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
 import {createDisclosures} from './disclosures.mjs?v=learning-language-20261120';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 

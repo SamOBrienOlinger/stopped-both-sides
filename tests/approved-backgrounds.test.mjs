@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
-import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs';
-import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
-import {startEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
+import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=situation-locations-20261122';
+import {startEncounter} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=situation-locations-20261122';
 test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
  assert.equal(manifest.length,5);assert.equal(new Set(Object.values(approvedBackgrounds)).size,5);
@@ -18,7 +19,9 @@ test('All five background illustrations match their recorded responsive assets',
   }
  }
  for(const key of Object.keys(approvedBackgrounds)){
-  const image=backgroundImage(key);assert.ok(image.src.includes('/assets/dublin-approved/'));assert.equal(image.srcset.split(', ').length,3);
+  const image=backgroundImage(key),directory=['public','garda'].includes(key)?'dublin-approved':'scenes/groups';
+  assert.ok(image.src.includes('/assets/'+directory+'/'),key+' uses the correct foreground artwork');
+  assert.equal(image.srcset.split(', ').length,3);
  }
  assert.equal(backgroundImage('station'),null);
 });
@@ -34,7 +37,7 @@ test('Exterior art keeps selected roles and narrative state unchanged',()=>{
 });
 
 test('Outdoor discrimination scenes use the same clear foreground in play and previews',()=>{
- for(const [place,id] of [['street','discrimination-housing-assistance'],['bus-stop','discrimination-colleague-race'],['square','discrimination-gender'],['football-ground','discrimination-race']]){
+ for(const [place,id] of [['bus-stop','discrimination-colleague-race'],['square','discrimination-colleague-sexual-orientation'],['football-ground','discrimination-race']]){
   const image=backgroundImage(place,{group:true});
   for(const source of image.srcset.split(', ')){
    const [url,width]=source.split(' ');
@@ -59,4 +62,48 @@ test('Only the local match uses the stadium; the colleague race situation stays 
   assert.match(html,/data-scene-character="garda-9"/);
   assert.equal(sceneDirections[witness][nodeId].place,'bus-stop');
  }
+});
+
+// These assignments come from the written settings. They intentionally do not
+// derive their expected location from the renderer under test.
+const situationLocations={
+ 'discrimination-gender':'bicycle-workshop',
+ 'discrimination-civil-status':'exhibition-entrance',
+ 'discrimination-family-status':'community-fair',
+ 'discrimination-sexual-orientation':'food-festival',
+ 'discrimination-age':'community-fair',
+ 'discrimination-religious-belief':'community-hall',
+ 'discrimination-traveller-community':'community-hall',
+ 'discrimination-colleague-traveller-community':'community-fair',
+ 'garda-street':'closed-shop',
+ 'discrimination-housing-assistance':'flat-entrance',
+ 'discrimination-colleague-housing-assistance':'flat-entrance'
+};
+
+test('Venue-specific browse pictures and every encounter stage match the written locations',()=>{
+ for(const [id,place] of Object.entries(situationLocations)){
+  const image=backgroundImage(place,{group:id.startsWith('discrimination-')});
+  assert.ok(image,id+' has dedicated artwork');
+  assert.equal(image.name,place);
+  const preview=renderScenePreview(id);
+  assert.ok(preview.includes('data-scene-place="'+place+'"'),id+' preview location');
+  assert.ok(preview.includes(image.src),id+' preview artwork');
+  for(const nodeId of Object.keys(encounters[id].nodes))for(const role of ['public','garda']){
+   const state={...startEncounter(id,role),nodeId};
+   const html=renderScene(state);
+   assert.equal(sceneDirections[id][nodeId].place,place,id+'/'+nodeId);
+   assert.ok(html.includes('data-scene-place="'+place+'"'),id+'/'+nodeId+' setting');
+   assert.ok(html.includes(image.src),id+'/'+nodeId+' artwork');
+  }
+  for(const source of image.srcset.split(', ')){
+   const [url,width]=source.split(' ');
+   assert.match(url,new RegExp('/assets/scenes/locations/'+place+'-'+parseInt(width,10)+'\\.webp\\?'));
+   assert.equal(readFileSync(new URL(url)).toString('ascii',8,12),'WEBP');
+  }
+ }
+ // Correct existing locations must not change when a new venue is introduced.
+ assert.equal(sceneDirections['garda-description']['description-detail'].place,'square');
+ assert.equal(sceneDirections['public-street']['street-start'].place,'street');
+ assert.equal(sceneDirections['discrimination-colleague-race'].opening.place,'bus-stop');
+ assert.equal(sceneDirections['discrimination-race'].opening.place,'football-ground');
 });

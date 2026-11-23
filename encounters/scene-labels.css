@@ -20,9 +20,10 @@
  position:relative;left:var(--scene-x);transform:translateX(-50%);
  display:flex;flex-direction:column;align-items:center;justify-content:center;
  box-sizing:border-box;inline-size:max-content;
- max-inline-size:min(10.75rem,calc(var(--scene-label-space) - .65rem));
+ /* Preserve usable text space when an edge actor is shown with enlarged type. */
+ max-inline-size:min(10.75rem,calc(var(--scene-label-space) - 4px));
  min-inline-size:0;min-block-size:3.15rem;
- padding:.55rem .9rem .55rem .65rem;margin:0;gap:.12rem;
+ padding:.55rem clamp(4px,2%,.9rem);margin:0;gap:.12rem;
  appearance:none;-webkit-appearance:none;border:1px solid var(--tone-line,#6d8c94);
  border-inline-start:4px solid var(--tone-deep,#175e61);border-radius:.9rem;
  background:linear-gradient(145deg,#fff,var(--tone-pale,#edf6f5));
@@ -33,10 +34,10 @@
  cursor:pointer;animation:none;transition:border-color .15s ease,box-shadow .15s ease,background-color .15s ease;
 }
 .encounter-scene[data-caption-anchors] .scene-character-label strong{
- display:block;max-inline-size:100%;font-size:.94rem;line-height:1.35;font-weight:800;overflow-wrap:anywhere;
+ display:block;min-inline-size:0;max-inline-size:100%;font-size:.94rem;line-height:1.35;font-weight:800;overflow-wrap:anywhere;
 }
 .encounter-scene[data-caption-anchors] .scene-character-label .scene-character-role{
- display:block;max-inline-size:100%;font-size:.75rem;line-height:1.35;overflow-wrap:anywhere;
+ display:block;min-inline-size:0;max-inline-size:100%;font-size:.75rem;line-height:1.35;overflow-wrap:anywhere;
 }
 .encounter-scene[data-caption-anchors] .scene-character-label .scene-character-info{
  position:absolute;inset-block-start:.33rem;inset-inline-end:.35rem;
@@ -57,6 +58,12 @@
  position:absolute;top:var(--scene-label-top,.6rem);
 }
 [dir="rtl"] .encounter-scene[data-caption-anchors] .scene-character-label{direction:rtl}
+@media(max-width:660px){
+ /* The information marker gets its own line instead of covering wrapped names. */
+ .encounter-scene[data-caption-anchors] .scene-cast-names>.scene-character-label .scene-character-info{
+  position:static;order:-1;align-self:flex-end;flex:0 0 auto;
+ }
+}
 
 /* A single native, focus-managed profile dialog serves play and recap scenes. */
 .scene-character-dialog{

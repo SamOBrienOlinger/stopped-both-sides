@@ -1,7 +1,9 @@
 import {test,expect} from '@playwright/test';
-import {encounters,roles} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=situation-locations-20261122';
 import {characters} from '../../encounters/characters.mjs';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=situation-locations-20261122';
+import {expectControlsFit} from './control-layout.mjs';
+import {openCharacterPicker} from './navigation.mjs';
 
 // Reach every node through the real engine, rather than fabricating history.
 function reachable(id){
@@ -153,6 +155,32 @@ test('caption fallback remains readable without the enhancement script',async({p
  await expect(page.locator('.paired-scene-lead>.encounter-scene')).toBeVisible();
  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
  await aligned(page);
+});
+
+test('edge captions retain enlarged text and their actor alignment at 280px',async({page},info)=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:280,height:900});
+ for(const [path,role] of [['./','public'],['garda/','garda']]){
+  // This bus-stop officer sits near the right edge. A fixed rem inset used to
+  // consume the caption's available width at 200%, clipping Garda Jamie.
+  const state=startEncounter('public-search',role,{cast:{public:'public-1',garda:'garda-3'}});
+  await openCaptionScene(page,path+'?lang=ar'+stateHash(state));
+  await page.evaluate(()=>{
+   document.documentElement.style.setProperty('--reading-size','200%');
+   document.documentElement.classList.add('reading-spacious');
+  });
+  await aligned(page);
+  await expectControlsFit(page,role+' enlarged edge captions at 280px');
+  const caption=page.locator('button[data-scene-label-role="garda"]').first();
+  const marker=await caption.locator('.scene-character-info').boundingBox();
+  const name=await caption.locator('strong').boundingBox();
+  expect(marker).not.toBeNull();expect(name).not.toBeNull();
+  expect(marker.y+marker.height).toBeLessThanOrEqual(name.y+1);
+  await page.locator('.paired-scene-lead>.encounter-scene').screenshot({path:info.outputPath(role+'-enlarged-edge-caption.png')});
+  await openCharacterPicker(page,role);
+  await aligned(page);
+  await expectControlsFit(page,role+' enlarged edge captions with character choices');
+ }
 });
 
 test('landing role links keep their text inside during hover, focus and reduced motion',async({page})=>{

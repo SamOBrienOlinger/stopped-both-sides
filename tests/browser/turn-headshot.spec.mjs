@@ -1,8 +1,8 @@
 import {openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {encounters,roleLabels} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {encounters,roleLabels} from '../../encounters/catalog.mjs?v=situation-locations-20261122';
 import {characters} from '../../encounters/characters.mjs';
-import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
+import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 
 const cast={public:'public-6',garda:'garda-2'}; // Rory is Garda #2
 const paths=['./','garda/'];

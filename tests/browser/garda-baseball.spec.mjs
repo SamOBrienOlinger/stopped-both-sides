@@ -1,7 +1,8 @@
 import {test,expect} from '@playwright/test';
 import {characters} from '../../encounters/characters.mjs';
-import {encounters} from '../../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
+import {encounters} from '../../encounters/catalog.mjs?v=situation-locations-20261122';
+import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=situation-locations-20261122';
+import {sceneDirections} from '../../encounters/scenes.mjs?v=situation-locations-20261122';
 
 const file=/\/assets\/characters\/garda-baseball-2026\.webp(?:\?|$)/;
 const stage='.paired-scene-lead>.encounter-scene';
@@ -56,7 +57,7 @@ for(const [path,role] of entrypoints){
    await visibleActor(page,g.id);
    await expect(page.locator(stage+' .scene-panel')).toHaveCount(1);
    const location=page.locator(stage+' .scene-location');
-   await expect(location).toHaveAttribute('data-scene-place',/^(street|bus-stop|square|station|advice-room|meeting-room)$/);
+   await expect(location).toHaveAttribute('data-scene-place',sceneDirections[encounter.id][encounter.start].place);
    await expect(page.locator('.paired-scene-lead')).toBeVisible();
    const labels=page.locator(stage+' [data-scene-label-role]');await expect(labels).toHaveCount(2);
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);

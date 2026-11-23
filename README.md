@@ -17,10 +17,10 @@
 
 <p align="center">
   <a href="https://samobrienolinger.github.io/stopped-both-sides/">
-    <img src="assets/heroes/public-960.webp" width="340" alt="Explore the public perspective: a fictional character speaks with a Garda on an Irish street">
+    <img src="assets/heroes/public-hi-vis-960.webp" width="340" alt="Explore the public perspective: a fictional character speaks with a Garda on an Irish street">
   </a>
   <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">
-    <img src="assets/heroes/garda-960.webp" width="340" alt="Explore the Garda perspective: the same street encounter viewed from the other side">
+    <img src="assets/heroes/garda-hi-vis-960.jpg" width="340" alt="Explore the Garda perspective: the same street encounter viewed from the other side">
   </a>
 </p>
 

@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
 import {characters} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
-import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
-import {translateText} from '../locales/translate.mjs?v=colleague-witness-20261122';
-import {backgroundImage} from '../encounters/backgrounds.mjs';
-import {situationParticipants} from '../encounters/situation-cast.mjs';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=situation-locations-20261122';
+import {translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
+import {backgroundImage} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
+import {situationParticipants} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
 
 test('Every stage and all 81 character pairs have a complete illustration',()=>{
  let covered=0;

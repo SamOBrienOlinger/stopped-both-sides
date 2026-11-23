@@ -2,7 +2,7 @@ import {learningCopy} from './play-copy.mjs?v=contributors-expanded-20261122';
 import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=situation-locations-20261122';
 import {gaContent} from './ga-content.mjs?v=human-civil-rights-20261122';
 import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -174,6 +174,76 @@ const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padSt
 const lowercaseIds=new Map(messages.map((text,index)=>[text.toLowerCase(),'m'+String(index).padStart(4,'0')]));
 // Localize revised interface copy without renumbering full-content packs.
 const revisedSiteCopy={
+ "Outside the flats": {
+  "ga": "Taobh amuigh de na hárasáin",
+  "pt": "No exterior dos apartamentos",
+  "ar": "خارج مبنى الشقق",
+  "pl": "Przed budynkiem z mieszkaniami",
+  "ro": "În fața apartamentelor",
+  "fr": "Devant les appartements",
+  "es": "Fuera del edificio de apartamentos",
+  "zh-Hans": "在公寓楼外"
+ },
+ "At the bicycle repair workshop": {
+  "ga": "Ag an gceardlann deisiúcháin rothar",
+  "pt": "Na oficina de reparação de bicicletas",
+  "ar": "في ورشة إصلاح الدراجات",
+  "pl": "Na warsztatach naprawy rowerów",
+  "ro": "La atelierul de reparații de biciclete",
+  "fr": "À l’atelier de réparation de vélos",
+  "es": "En el taller de reparación de bicicletas",
+  "zh-Hans": "在自行车维修工作坊"
+ },
+ "At the exhibition entrance": {
+  "ga": "Ag bealach isteach an taispeántais",
+  "pt": "À entrada da exposição",
+  "ar": "عند مدخل المعرض",
+  "pl": "Przy wejściu na wystawę",
+  "ro": "La intrarea în expoziție",
+  "fr": "À l’entrée de l’exposition",
+  "es": "En la entrada de la exposición",
+  "zh-Hans": "在展览入口"
+ },
+ "At the community fair": {
+  "ga": "Ag an aonach pobail",
+  "pt": "Na feira da comunidade",
+  "ar": "في المعرض المجتمعي",
+  "pl": "Na lokalnym festynie",
+  "ro": "La târgul comunitar",
+  "fr": "À la foire de quartier",
+  "es": "En la feria comunitaria",
+  "zh-Hans": "在社区活动集市"
+ },
+ "At the food festival entrance": {
+  "ga": "Ag bealach isteach na féile bia",
+  "pt": "À entrada do festival gastronómico",
+  "ar": "عند مدخل مهرجان الطعام",
+  "pl": "Przy wejściu na festiwal kulinarny",
+  "ro": "La intrarea la festivalul gastronomic",
+  "fr": "À l’entrée du festival gastronomique",
+  "es": "En la entrada del festival gastronómico",
+  "zh-Hans": "在美食节入口"
+ },
+ "At the community hall": {
+  "ga": "Ag halla an phobail",
+  "pt": "No centro comunitário",
+  "ar": "عند القاعة المجتمعية",
+  "pl": "Przy domu kultury",
+  "ro": "La centrul comunitar",
+  "fr": "À la salle communale",
+  "es": "En el centro comunitario",
+  "zh-Hans": "在社区活动中心"
+ },
+ "Outside the closed shop": {
+  "ga": "Taobh amuigh den siopa dúnta",
+  "pt": "No exterior da loja fechada",
+  "ar": "خارج المتجر المغلق",
+  "pl": "Przed zamkniętym sklepem",
+  "ro": "În fața magazinului închis",
+  "fr": "Devant le magasin fermé",
+  "es": "Fuera de la tienda cerrada",
+  "zh-Hans": "在已打烊的商店外"
+ },
  "Outside the football ground": {
   "ga": "Taobh amuigh den staid sacair",
   "pt": "No exterior do estádio de futebol",

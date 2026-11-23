@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
 import {characters,characterArtwork,createCast,changeCharacter} from '../encounters/characters.mjs';
-import {situationParticipants} from '../encounters/situation-cast.mjs';
+import {situationParticipants} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
 import {gardaAtlas} from '../encounters/garda-atlas.mjs';
 import {gardaArtwork} from '../encounters/garda-artwork.mjs';
 import {sceneCharacterArtwork} from '../encounters/scene-artwork.mjs';
-import {encounters,roles} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=colleague-witness-20261122';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
+import {encounters,roles} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=situation-locations-20261122';
 
 const asset=new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url);
 const names=['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'];
@@ -92,9 +92,9 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
 });
 
 test('Scene anchors, approved backgrounds and name dialogs are retained',()=>{
- const source=readFileSync(new URL('../encounters/scenes.mjs?v=colleague-witness-20261122',import.meta.url),'utf8');
+ const source=readFileSync(new URL('../encounters/scenes.mjs?v=situation-locations-20261122',import.meta.url),'utf8');
  const css=readFileSync(new URL('../encounters/scenes.css',import.meta.url),'utf8');
- const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=colleague-witness-20261122',import.meta.url),'utf8');
+ const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=situation-locations-20261122',import.meta.url),'utf8');
  assert.match(source,/backgroundImage\(place\)/);
  assert.match(source,/sceneActorLayout\(place,role/);
  assert.match(source,/scene-character-label/);

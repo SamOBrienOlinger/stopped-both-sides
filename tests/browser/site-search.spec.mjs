@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
-import {decodeState} from '../../encounters/engine.mjs';
+import {decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 
 for(const [path,role] of [['./','public'],['garda/','garda']]){
  test(`${role}: keyword search opens from the requested navbar position, handles no results and preserves an answered game`,async({page})=>{

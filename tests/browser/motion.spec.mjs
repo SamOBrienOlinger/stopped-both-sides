@@ -1,6 +1,6 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=colleague-witness-20261122';
+import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 const paths={public:'./',garda:'garda/'};

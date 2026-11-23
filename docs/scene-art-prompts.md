@@ -1,8 +1,46 @@
 # Interaction scene artwork
 
-**Current revision:** see the [29 October 2026 visual audit](visual-audit-2026-10-29.md) for corrected character cutouts, removed loose props and Irish background references. The prompts below document the original generation; the prop atlas is no longer rendered.
+**Current revision:** the 22 November 2026 situation backgrounds are documented below. See the [29 October 2026 visual audit](visual-audit-2026-10-29.md) for earlier character cutouts, removed loose props and Irish background references. The original generation prompts are retained below; the prop atlas is no longer rendered.
 
 Created 17 September 2026 with the built-in OpenAI image-generation tool. The current cast sheet supplied the identity reference; the current public homepage hero supplied the environment style reference. Generated transparent sprite atlases are stored as WebP in `assets/scenes/`, with six backgrounds extracted into individual WebP files. No AI request occurs during play.
+
+## Situation backgrounds — 22 November 2026
+
+Seven new backgrounds were generated with the built-in OpenAI image-generation tool to match the locations described in the encounters. The production brief kept the existing moulded toy-brick style, a broad empty foreground and recognisable setting details behind the participants. Characters remain separate runtime sprites, preserving the selected cast and allowing their scale and spacing to be adjusted independently of the scenery.
+
+The PNG sources were converted and resized into `assets/scenes/locations/{name}-{width}.webp`, with **480×270, 960×540 and 1600×900** variants for each background. This produces 21 responsive WebP assets; conversion did not add or remove scene content. The approved shared riverside artwork and the football-ground assets were not replaced.
+
+| Background name | Concise production brief | Situation mappings |
+| --- | --- | --- |
+| `bicycle-workshop` | Outdoor bicycle repair workshop in a public square, with bicycles, a repair stand and workshop equipment behind a clear paved foreground. | `discrimination-gender` |
+| `exhibition-entrance` | Community exhibition entrance with an admission desk, display cues and enough clear floor for the ticket holders, attendant and responding Garda. | `discrimination-civil-status` |
+| `community-fair` | Community learning fair with registration stalls and course noticeboards around an open paved area. Keep the setting broad enough for both course bookings and a community-event report. | `discrimination-family-status`, `discrimination-age`, `discrimination-colleague-traveller-community` |
+| `food-festival` | Outdoor food-festival entrance with a ticket checkpoint and food stalls beyond it; leave room for the couple, event staff, witness and Garda. | `discrimination-sexual-orientation` |
+| `community-hall` | Public community-hall entrance with booking and activity cues, suitable for music-class admission and a community-centre room booking. | `discrimination-religious-belief`, `discrimination-traveller-community` |
+| `closed-shop` | Closed Irish shopfront at dusk, with a clear pedestrian foreground and consistent setting throughout the enquiry and identity comparison. | `garda-street` |
+| `flat-entrance` | Identifiable flat entrance and a broad paved setback that can accommodate the applicant, letting agent, public witness and Gardaí at a plausible scale. | `discrimination-housing-assistance`, `discrimination-colleague-housing-assistance` |
+
+These mappings cover **11 situations and 25 stages**: two stages in each of ten discrimination situations, plus all five stages of `garda-street`. Browse-card previews resolve the same location as the opening stage. The flat-entrance background was added after the layout review found that the housing-assistance group could not fit naturally on the existing narrow suburban pavement.
+
+This section records artwork provenance, briefs and assignments. Browser and visual verification results are recorded separately.
+
+All situation illustrations now use the clear street, bus-stop and quayside variants in `assets/scenes/groups/`, including ordinary two-person encounters. The original `assets/dublin-approved/` files and homepage heroes remain intact. The remaining grey-haired pedestrian in the group bus-stop background was removed with the image-generation editing tool to prevent overlap with the runtime cast; the bus, driver, shelter and boarding-side arrangement remain. Its three responsive WebP variants were regenerated.
+
+Character scale and floor depth are calibrated by setting in `encounters/scene-layout.mjs`. Group layouts allow transparent frame margins to overlap while maintaining visible gaps between people, mobility aids and numbered badges. Larger groups stand farther back; the child retains a smaller scale. Browser regression checks measure the alpha silhouette after the real CSS crop rather than mistaking transparent sprite margins for visible bodies.
+
+## Landing-page opposite perspective — 22 November 2026
+
+The landing page now pairs the existing `assets/heroes/garda-hi-vis-{width}.jpg` with a new `assets/heroes/public-hi-vis-{width}.webp` beneath “One situation. Two perspectives.” Both have 480×270, 960×540 and 1600×900 variants and keep their full composition. The README shows the same updated pair. The original `public-{width}.webp` and `garda-{width}.webp` remain available.
+
+The new public-facing view was edited with the built-in OpenAI image-generation tool from `assets/heroes/public-960.webp`, using `assets/heroes/garda-hi-vis-960.jpg` only as the uniform reference. It retains the supplied reverse-view composition while matching the Garda’s light-blue short sleeves, fluorescent vest and equipment belt. The generated PNG was converted to the three responsive WebP sizes without adding or removing content.
+
+Uniform-continuity edit prompt:
+
+> Use case: precise-object-edit. Asset type: the second landing-page hero for Stopped: Both Sides. EDIT TARGET is image 1 (red-haired man facing the viewer, Garda seen from behind, GPO on the right). Image 2 is a uniform-reference ONLY, showing the same Garda from the front; do NOT copy its camera composition. Make the uniform of the rear-view Garda in image 1 consistent with image 2: light-blue short sleeves with exposed medium-brown forearms, fluorescent yellow high-visibility vest with silver reflective strips, dark navy trousers and a black equipment belt. The vest is a waist-length vest, with black belt visible below. Keep her rear view, head/hair bun, identity, hand gesture, position and scale exactly as in image 1. Preserve the red-haired man, glasses, red jacket, teal backpack, his scale and pose exactly. Preserve all other scene details: Irish GPO columns on right, correct Irish tricolour, left row of shops, green brick trees, existing lamps, wet paving reflections, blue sky. Do not add people, objects, captions, logos, text, framing, borders or watermarks. Keep original wide 16:9 composition and stylized toy-brick material finish. This is a minimal uniform-continuity edit of image 1, not a new scene or a montage. Render at 1600x900 or higher 16:9.
+
+Final equipment-detail correction prompt:
+
+> Use case: precise-object-edit. Make ONE tiny correction to this image. The Garda is seen FROM BEHIND. Remove ONLY the small silver rectangular buckle in the centre of her lower-back black equipment belt, and continue plain black belt webbing across that exact spot, seamlessly, with the same belt thickness and surface finish. A front buckle must not appear on her back. Preserve the black side pouches and every other detail of the belt. Keep EVERYTHING ELSE unchanged: camera, full 16:9 framing, both characters' poses and identities, Garda hair bun, light-blue short sleeves, yellow reflective vest, skin, navy trousers, red-haired man, glasses, red jacket, teal backpack, hands, wet reflective Dublin street, GPO building on right, Irish flag, sky, trees and lamps. Do not move, resize, crop, recolour or redesign anything else. No text, borders or watermark. Minimal in-place correction only.
 
 ## Listening poses
 

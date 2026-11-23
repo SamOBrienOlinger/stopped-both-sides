@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs';
-import {encounters,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
+import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs?v=situation-locations-20261122';
+import {encounters,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
 import {characters,characterFor,castForSituation} from '../encounters/characters.mjs';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=colleague-witness-20261122';
-import {startEncounter} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=situation-locations-20261122';
+import {startEncounter} from '../encounters/engine.mjs?v=situation-locations-20261122';
 test('every scene and all 81 casts retain matching caption and actor identities',()=>{
  let count=0;
  for(const [id,e] of Object.entries(encounters))for(const nodeId of Object.keys(e.nodes)){
@@ -25,10 +25,16 @@ test('every scene and all 81 casts retain matching caption and actor identities'
  assert.equal(count,stageCount*81);
 });
 test('scene layout preserves shared/solo anchors and rejects mismatched artwork',()=>{
- assert.equal(sceneActorLayout('street','garda').x,50);
- assert.equal(sceneActorLayout('street','public').x,34);
- assert.equal(sceneActorLayout('station','garda',{solo:true}).x,50);
- assert.equal(sceneActorLayout('station','garda',{solo:true,wide:true}).width,32);
+ for(const place of Object.keys(SCENE_LAYOUTS)){
+  const publicAnchor=sceneActorLayout(place,'public'),gardaAnchor=sceneActorLayout(place,'garda');
+  assert.ok(publicAnchor.x<gardaAnchor.x,place+' separates the ordinary two-person cast');
+  for(const anchor of [publicAnchor,gardaAnchor,sceneActorLayout(place,'public',{solo:true}),sceneActorLayout(place,'garda',{solo:true,wide:true})]){
+   assert.ok(anchor.width>0&&anchor.width<100,place+' has a finite character size');
+   assert.ok(anchor.x-anchor.width/2>=0&&anchor.x+anchor.width/2<=100,place+' retains the full sprite frame');
+   assert.ok(anchor.bottom>=0&&anchor.bottom<40,place+' keeps feet on the visible floor');
+  }
+ }
+ assert.deepEqual(sceneActorLayout('station','public',{solo:true}),sceneActorLayout('station','garda',{solo:true}));
  assert.throws(()=>sceneActorLayout('unknown','public'));
  assert.throws(()=>sceneActorLayout('street','unknown'));
  assert.throws(()=>checkSceneArtwork('street','bus-stop'));

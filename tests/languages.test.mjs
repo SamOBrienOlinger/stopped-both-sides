@@ -2,15 +2,31 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=football-ground-20261122';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=situation-locations-20261122';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=colleague-witness-20261122';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
 import {personalizeText,storyIdentity} from '../encounters/narrative.mjs';
-import {progressStorageKey} from '../encounters/progress.mjs?v=colleague-witness-20261122';
+import {progressStorageKey} from '../encounters/progress.mjs?v=situation-locations-20261122';
 import {siteRole,siteBase} from './site-fixture.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));
+const locationCaptions={
+ 'discrimination-gender':'At the bicycle repair workshop',
+ 'discrimination-civil-status':'At the exhibition entrance',
+ 'discrimination-family-status':'At the community fair',
+ 'discrimination-age':'At the community fair',
+ 'discrimination-colleague-traveller-community':'At the community fair',
+ 'discrimination-sexual-orientation':'At the food festival entrance',
+ 'discrimination-religious-belief':'At the community hall',
+ 'discrimination-traveller-community':'At the community hall',
+ 'garda-street':'Outside the closed shop',
+ 'discrimination-housing-assistance':'Outside the flats',
+ 'discrimination-colleague-housing-assistance':'Outside the flats',
+ 'discrimination-race':'Outside the football ground'
+};
+
+
 const ids=messages.map((_,index)=>'m'+String(index).padStart(4,'0'));
 const tokens=text=>(text.match(/\{\w+\}/g)||[]).sort();
 for(const {id} of added){
@@ -131,9 +147,11 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
    route(stateHash(base));
    const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast);
    assert.ok(main.innerHTML.includes(escapeHTML(translated)),`${language.id}/${e.id}/${node.id}`);
-   if(e.id==='discrimination-race'){
-    const caption=translateText('Outside the football ground',language.id);
-    assert.notEqual(caption,'Outside the football ground');
+   if(locationCaptions[e.id]){
+    const source=e.id==='garda-street'&&node.id==='street-identity'
+     ?'Same facts · compare the written scenarios':locationCaptions[e.id];
+    const caption=translateText(source,language.id);
+    assert.notEqual(caption,source);
     assert.ok(main.innerHTML.includes('<div class="scene-setting">'+escapeHTML(caption)+'</div>'));
    }
    if(e.language)assert.ok(main.innerHTML.includes(`<p class="story-text"><span lang="${e.language}" dir="ltr" data-no-translate>${escapeHTML(node.scene)}</span></p>`));
@@ -168,5 +186,17 @@ test(`${siteRole}: original practice, references and recaps keep their functiona
    assert.doesNotMatch(main.innerHTML,/>Learn at your own pace\.</);
   }
   route(recapHash);assert.deepEqual(current(),completed);
+ }
+});
+
+test('All venue-specific setting captions translate in every supported non-English language',async()=>{
+ for(const language of languages.filter(item=>item.id!=='en')){
+  await loadLanguage(language.id);
+  for(const source of new Set(Object.values(locationCaptions))){
+   const caption=translateText(source,language.id);
+   assert.notEqual(caption,source,language.id+': '+source);
+   assert.ok(caption.trim());
+   assert.doesNotMatch(caption,/[<>]/);
+  }
  }
 });

@@ -3,19 +3,19 @@ import {focusControl} from '../accessibility/focus.mjs';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=colleague-witness-20261122';
+} from '../learning/play.mjs?v=situation-locations-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=football-ground-20261122';
-import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=colleague-witness-20261122';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=situation-cast-20261122';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=situation-cast-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=situation-locations-20261122';
+import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=situation-locations-20261122';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=situation-locations-20261122';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=situation-locations-20261122';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences,charactersForSituation} from './characters.mjs?v=situation-cast-20261122';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=football-ground-20261122';
-import {situationRoleLabel} from './situation-cast.mjs?v=group-spacing-20261122';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=situation-locations-20261122';
+import {situationRoleLabel} from './situation-cast.mjs?v=situation-locations-20261122';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=human-civil-rights-20261122';
-import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=colleague-witness-20261122';
-import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=search-practice-20261122';
-import {ihrecGroundsUrl} from './discrimination.mjs?v=colleague-witness-20261122';
+import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=situation-locations-20261122';
+import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=situation-locations-20261122';
+import {ihrecGroundsUrl} from './discrimination.mjs?v=situation-locations-20261122';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const titleHTML=e=>e.kind==='colleague-witness'?scenarioCopy(e.id,e.title):esc(e.title);
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
@@ -280,12 +280,17 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    const label=role==='public'?'Explore the public perspective':'Explore the Garda perspective';
    return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${perspectiveIcon(role)}<span>${label}</span></a>`;
   }).join('');
-  const image=width=>new URL(`../assets/heroes/garda-hi-vis-${width}.jpg?v=ciara-reference-label-20261120`,import.meta.url).href;
-  const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
+  const heroImages=['garda','public'].map(perspective=>{
+   const image=width=>new URL(perspective==='garda'
+    ?`../assets/heroes/garda-hi-vis-${width}.jpg?v=ciara-reference-label-20261120`
+    :`../assets/heroes/public-hi-vis-${width}.webp?v=hero-perspectives-20261122`,import.meta.url).href;
+   const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
+   return `<img class="encounter-hero-art" data-hero-perspective="${perspective}" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 44rem) 20.5rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async"${perspective==='garda'?' fetchpriority="high"':''}>`;
+  }).join('');
   return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title">
    <div class="landing-instructions">
     <h1 id="paired-title"><span>One situation.</span> <span>Two perspectives.</span></h1>
-    <img class="encounter-hero-art" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 44rem) 42rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async" fetchpriority="high">
+    <div class="encounter-hero-pair" aria-hidden="true">${heroImages}</div>
     <p class="landing-deck">Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.</p>
     <div class="landing-role-actions">${links}</div>
     <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
