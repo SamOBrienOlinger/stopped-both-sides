@@ -14,8 +14,10 @@
 @media(max-width:71.999rem){
   html[data-scripted] .header:not(.navigation-ready) nav {display:none}
 }
-/* Pin navigation only once its compact menu is wired and ready to use. */
-.header.navigation-ready {
+/* Keep the compact loading bar and the ready navigation visible after a
+   refresh or reading scroll. Sticky positioning retains their space in flow. */
+.header.navigation-ready,
+html[data-scripted] .header {
   position:-webkit-sticky;
   position:sticky;
   inset-block-start:0;
@@ -309,20 +311,20 @@ html[data-start-position] {overflow-anchor:none;scroll-behavior:auto}
   .reference-landing .landing-instructions #paired-title {font-size:clamp(1.5rem,6vw,2rem)}
   .about-opening>.about-heading-block {padding-inline-start:.9rem}
 }
-/* Mobile browsers can restore a scroll offset after their pull-to-refresh
-   gesture settles. Keep navigation in the document flow on compact/touch
-   screens so that even a late restore cannot place it over the page opening.
-   The deliberate Menu overlay remains anchored to the header's inner box. */
-@media (max-width:71.999rem), (hover:none), (pointer:coarse), (any-pointer:coarse){
-  .header.navigation-ready {position:relative;inset-block-start:auto;top:auto}
-  html {scroll-padding-block-start:.75rem}
+/* Account for display cutouts in the same height measured for page clearance. */
+@media(max-width:71.999rem){
+  .header .header-inner {padding-block-start:max(.75rem,env(safe-area-inset-top))}
 }
-/* On very short landscape viewports, especially with 200% text, the
-   otherwise-sticky header can occupy nearly the whole screen and cover scene
-   character buttons. Make it part of the document flow so it scrolls away. */
+/* Keep navigation available on short screens while leaving room to read.
+   Let the brand and Menu control size this row instead of its usual 5rem
+   minimum. The route caption is secondary; both primary labels stay visible. */
 @media (max-height:28rem) and (orientation:landscape){
-  .header.navigation-ready {position:static;inset-block-start:auto;top:auto}
-  html {scroll-padding-block-start:.75rem}
+  html .header .header-inner {
+    min-block-size:0;
+    padding-block:.375rem;
+    padding-block-start:max(.375rem,env(safe-area-inset-top));
+  }
+  .header .nav-toggle [data-menu-current] {display:none}
   #main :is(h1,h2,a,button,summary,input,select,[role="button"],[tabindex]) {
     scroll-margin-block-start:1rem;
   }

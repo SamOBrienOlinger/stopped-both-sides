@@ -22,6 +22,24 @@ const profiles=[
  {name:'phone landscape',width:568,height:320,size:150}
 ];
 
+function navigationIssues(sample,{loading=false}={}){
+ const issues=[],{header,navigation}=sample;
+ const viewport=navigation?.viewport;
+ if(!header||!viewport)return ['navigation geometry is missing'];
+ const within=box=>box&&box.height>0&&box.right>box.left&&box.top>=viewport.top-1&&
+  box.bottom<=viewport.bottom+1&&box.left>=viewport.left-1&&box.right<=viewport.right+1;
+ if(!within(header))issues.push('the navigation bar is outside the visual viewport');
+ if(viewport.bottom-header.bottom<44)issues.push('the navigation bar leaves too little reading space');
+ if(navigation.opacity!==1)issues.push('the navigation bar is not opaque');
+ if(!loading&&!navigation.ready)issues.push('the navigation controls are not ready');
+ for(const control of navigation.controls){
+  if(loading&&control.name==='Menu'&&!navigation.ready)continue;
+  if(!within(control.box)||!control.painted||!control.hit)
+   issues.push(control.name+' is not visible and usable in the navigation bar');
+ }
+ return issues;
+}
+
 function completed(id,role){
  let state=startEncounter(id,role,{cast});
  for(let step=0;step<20&&!state.complete;step++)state=continueEncounter(answer(state,0));
@@ -102,6 +120,19 @@ async function prepare(page,role,profile){
    const box=element.getBoundingClientRect();
    return {top:box.top,bottom:box.bottom,left:box.left,right:box.right,height:box.height};
   };
+  const navigation=()=>{
+   const header=document.querySelector('.header');
+   const top=window.visualViewport?.offsetTop||0,left=window.visualViewport?.offsetLeft||0;
+   return {ready:header?.classList.contains('navigation-ready'),opacity:header&&Number(getComputedStyle(header).opacity),
+    viewport:{top,left,bottom:top+(window.visualViewport?.height||innerHeight),
+     right:left+(window.visualViewport?.width||innerWidth)},
+    controls:[['wordmark','.wordmark'],['Menu','[data-nav-toggle]']].map(([name,selector])=>{
+     const element=header?.querySelector(selector),box=rect(element),style=element&&getComputedStyle(element);
+     const hit=box&&document.elementFromPoint((box.left+box.right)/2,(box.top+box.bottom)/2);
+     return {name,box,painted:!!style&&style.display!=='none'&&style.visibility==='visible'&&Number(style.opacity)>0,
+      hit:!!element&&!!hit&&element.contains(hit)};
+    })};
+  };
   let firstAt=null,loadedAt=null,fontsAt=null;
   window.addEventListener('load',()=>{
    loadedAt=performance.now();document.fonts.ready.then(()=>{fontsAt=performance.now();});
@@ -112,7 +143,7 @@ async function prepare(page,role,profile){
     const header=document.querySelector('.header'),nav=header?.querySelector('nav');
     const styles=[...document.querySelectorAll('head link[rel~="stylesheet"]')];
     const pendingStylesheets=styles.filter(link=>!link.sheet).map(link=>new URL(link.href).pathname);
-    record.initialShell.push({at:performance.now(),header:rect(header),
+    record.initialShell.push({at:performance.now(),header:rect(header),navigation:navigation(),
      stylesReady:styles.length>0&&pendingStylesheets.length===0,pendingStylesheets,
      headerPosition:header&&getComputedStyle(header).position,
      navigationReady:header?.classList.contains('navigation-ready'),
@@ -129,7 +160,7 @@ async function prepare(page,role,profile){
     const opening=options.target?document.querySelector(options.target):main.firstElementChild;
     const styles=getComputedStyle(heading),root=document.documentElement;
     record.samples.push({at:performance.now(),scrollY,scrollX,hash:location.hash,
-     header:rect(header),headerPosition:position,opening:rect(opening),heading:rect(heading),
+     header:rect(header),navigation:navigation(),headerPosition:position,opening:rect(opening),heading:rect(heading),
      skip:rect(skip),skipFocused:document.activeElement===skip,
      height:innerHeight,width:innerWidth,rootFont:getComputedStyle(root).fontSize,
      overflow:root.scrollWidth>root.clientWidth+1,
@@ -208,6 +239,8 @@ async function reloadRoute(page,testInfo,role,profile,route){
   // every linked stylesheet exists; final-route checks remain unconditional.
   if(sample.stylesReady&&sticky&&sample.heading&&sample.heading.top<Math.max(sample.header?.bottom||0,0)-1)
    issues.push('loading frame '+i+': heading is concealed by navigation');
+  if(sample.stylesReady)for(const issue of navigationIssues(sample,{loading:true}))
+   issues.push('loading frame '+i+': '+issue);
   if(sample.readyState!=='loading'&&Math.abs(sample.scrollY)>1)
    issues.push('loading frame '+i+': the parsed page retained its old scroll offset');
   if(sample.stylesReady&&sample.skip&&!sample.skipFocused&&sample.skip.bottom>1)
@@ -217,6 +250,7 @@ async function reloadRoute(page,testInfo,role,profile,route){
   const sticky=['sticky','-webkit-sticky','fixed'].includes(sample.headerPosition);
   const obscured=sticky?Math.max(sample.header?.bottom||0,0):0;
   const prefix='frame '+i+': ';
+  for(const issue of navigationIssues(sample))issues.push(prefix+issue);
   if(!route.target&&Math.abs(sample.scrollY)>1)issues.push(prefix+'ordinary page did not start at the document top');
   if(!sample.opening||sample.opening.top<obscured-1||sample.opening.top>=sample.height)
    issues.push(prefix+'page opening is concealed or outside the viewport');
@@ -327,12 +361,12 @@ for(const [role,path] of [['public','./'],['garda','garda/']])for(const profile 
     if(browserName==='chromium')expect(await page.evaluate(()=>navigator.maxTouchPoints)).toBeGreaterThan(0);
     await reloadRoute(page,testInfo,role,profile,route);
    });
-   if(profile.all){
+   if(profile.all||profile.size===200){
     const anchor=role==='public'?{name:'Requested support topic',hash:'#rights/support',target:'#rights-support'}:
      {name:'Requested evidence record',hash:'#evidence/model',target:'#source-model'};
     await page.goto(path+'?lang=en'+anchor.hash);
     await reloadRoute(page,testInfo,role,profile,anchor);
-    await test.step('Native Back and Forward after reload',()=>historyAfterReload(page,role,path,browserName,testInfo));
+    if(profile.all)await test.step('Native Back and Forward after reload',()=>historyAfterReload(page,role,path,browserName,testInfo));
    }
   });
  });
@@ -357,19 +391,32 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
        bottom:(visualViewport?.offsetTop||0)+(visualViewport?.height||innerHeight),
        right:(visualViewport?.offsetLeft||0)+(visualViewport?.width||innerWidth)};
       const head=box(header),opening=box(main.firstElementChild),hits=[];
-      for(const element of [main.querySelector('h1'),main.querySelector('.eyebrow')].filter(Boolean)){
+      const navigation={ready:header.classList.contains('navigation-ready'),opacity:Number(getComputedStyle(header).opacity),viewport,
+       controls:[['wordmark','.wordmark'],['Menu','[data-nav-toggle]']].map(([name,selector])=>{
+        const element=header.querySelector(selector),bounds=element&&box(element),style=element&&getComputedStyle(element);
+        const hit=bounds&&document.elementFromPoint((bounds.left+bounds.right)/2,(bounds.top+bounds.bottom)/2);
+        return {name,box:bounds,painted:!!style&&style.display!=='none'&&style.visibility==='visible'&&Number(style.opacity)>0,
+         hit:!!element&&!!hit&&element.contains(hit)};
+       })};
+      // A pinned bar covers text that has deliberately scrolled past it.
+      // The reading area below the bar must remain unobstructed, while the
+      // route opening itself must clear the complete bar at scroll zero.
+      const readingTop=Math.max(viewport.top,head.bottom);
+      for(const element of main.querySelectorAll('h1,h2,h3,p,summary')){
        const range=document.createRange();range.selectNodeContents(element);
-       for(const rect of [...range.getClientRects()].slice(0,4)){
+       for(const rect of range.getClientRects()){
         const left=Math.max(rect.left,viewport.left),right=Math.min(rect.right,viewport.right);
-        const top=Math.max(rect.top,viewport.top),bottom=Math.min(rect.bottom,viewport.bottom);
+        const top=Math.max(rect.top,readingTop),bottom=Math.min(rect.bottom,viewport.bottom);
         if(right-left<2||bottom-top<2)continue;
         const hit=document.elementFromPoint((left+right)/2,(top+bottom)/2);
         hits.push({text:element.textContent.trim().slice(0,60),inMain:!!hit&&main.contains(hit),
          coveredByHeader:!!hit&&header.contains(hit)});
+        if(hits.length===12)break;
        }
+       if(hits.length===12)break;
       }
       const overlap=Math.min(head.bottom,opening.bottom,viewport.bottom)-Math.max(head.top,opening.top,viewport.top);
-      samples.push({scrollY,header:head,opening,viewport,hits,
+      samples.push({scrollY,header:head,navigation,opening,viewport,hits,
        overlap:Math.min(head.right,opening.right)>Math.max(head.left,opening.left)?Math.max(0,overlap):0,
        overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+1});
       if(samples.length===16)resolve(samples);else requestAnimationFrame(frame);
@@ -378,7 +425,8 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
     }));
     observations.push({label,expectedScroll,samples});
     for(const sample of samples){
-     expect.soft(sample.overlap,label+' navigation does not cover the visible page opening').toBeLessThanOrEqual(1);
+     expect.soft(navigationIssues(sample),label+' keeps navigation visible and usable').toEqual([]);
+     if(expectedScroll===0)expect.soft(sample.overlap,label+' navigation does not cover the page opening at the top').toBeLessThanOrEqual(1);
      expect.soft(sample.overflow,label+' no horizontal overflow').toBe(false);
      expect.soft(Math.abs(sample.scrollY-expectedScroll),label+' keeps the requested reading position').toBeLessThanOrEqual(1);
      for(const hit of sample.hits)expect.soft(hit,label+' visible text wins the hit test')

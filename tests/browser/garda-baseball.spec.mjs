@@ -112,7 +112,31 @@ test('Phone, desktop, 200% text and Arabic RTL preserve crop, captions and usabl
   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
   for(const [w,h] of [[320,900],[390,844],[568,320],[768,1024],[1366,900]]){
    await page.setViewportSize({width:w,height:h});
-   if(h<=448&&w>h)await expect(page.locator('.header')).toHaveCSS('position','static');
+   if(h<=448&&w>h){
+    await page.locator(stage).scrollIntoViewIfNeeded();
+    await expect.poll(()=>page.evaluate(()=>{
+     const header=document.querySelector('.header'),menu=header?.querySelector('[data-nav-toggle]');
+     if(!header||!menu)return {ready:false};
+     const bounds=header.getBoundingClientRect(),control=menu.getBoundingClientRect();
+     const viewport={top:visualViewport?.offsetTop||0,left:visualViewport?.offsetLeft||0,
+      width:visualViewport?.width||innerWidth,height:visualViewport?.height||innerHeight};
+     const right=viewport.left+viewport.width,bottom=viewport.top+viewport.height;
+     const hit=document.elementFromPoint(control.left+control.width/2,control.top+control.height/2);
+     return {
+      scrolled:scrollY>1,
+      headerPinned:Math.abs(bounds.top-viewport.top)<=1,
+      headerFits:bounds.left>=viewport.left-1&&bounds.right<=right+1&&bounds.bottom<=bottom,
+      menuUsable:control.width>=44&&control.height>=44,
+      menuFits:control.left>=viewport.left-1&&control.right<=right+1&&
+       control.top>=viewport.top-1&&control.bottom<=bottom,
+      menuReceivesHits:!!hit&&menu.contains(hit),
+      contentRoom:bottom-bounds.bottom>=44,
+      geometry:{scrollY,viewport,header:bounds.toJSON(),menu:control.toJSON(),remaining:bottom-bounds.bottom}
+     };
+    }),{message:language+' enlarged landscape keeps navigation usable with room for content'}).toMatchObject({
+     scrolled:true,headerPinned:true,headerFits:true,menuUsable:true,menuFits:true,menuReceivesHits:true,contentRoom:true
+    });
+   }
    await visibleActor(page,id);
    const label=page.locator(stage+' [data-scene-label-role="garda"]');
    await expect(label).toBeVisible();
