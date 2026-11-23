@@ -83,6 +83,43 @@ const cleanPanel=panel=>panel.evaluate(element=>({open:element.open,
  overflow:element.style.overflow,anchor:element.style.overflowAnchor}));
 const openAndSettled={open:true,state:null,height:'',overflow:'',anchor:''};
 
+// Observe the first painted result of an actual summary activation. Checking
+// only its eventual open attribute would also pass an animated height clip.
+async function recordCatalogueToggle(panel){
+ await panel.evaluate(element=>{
+  const summary=element.querySelector(':scope > summary');
+  window.__catalogueToggle=new Promise(resolve=>{
+   summary.addEventListener('click',event=>{
+    const samples=[];
+    const sample=()=>{
+     const box=element.getBoundingClientRect();
+     const content=[...element.children].filter(child=>child!==summary);
+     const title=summary.querySelector('[data-card-heading]')||summary;
+     samples.push({open:element.open,state:element.getAttribute('data-disclosure-state'),
+      inlineHeight:element.style.height,height:box.height,
+      heightEffect:element.getAnimations().some(animation=>animation.effect.getKeyframes().some(frame=>'height' in frame)),
+      contentFits:!element.open||content.every(child=>child.getBoundingClientRect().bottom<=box.bottom+1),
+      titleOpacity:getComputedStyle(title).opacity});
+     if(samples.length<4)requestAnimationFrame(sample);
+     else resolve({trusted:event.isTrusted,prevented:event.defaultPrevented,samples});
+    };
+    requestAnimationFrame(sample);
+   },{once:true});
+  });
+ });
+}
+async function expectNativeToggle(page,open){
+ const record=await page.evaluate(()=>window.__catalogueToggle);
+ expect(record.trusted,'the disclosure receives a real pointer or keyboard activation').toBe(true);
+ expect(record.prevented,'the catalogue keeps the summary native toggle action').toBe(false);
+ expect(record.samples).toHaveLength(4);
+ for(const sample of record.samples)expect(sample).toMatchObject({
+  open,state:null,inlineHeight:'',heightEffect:false,contentFits:true,titleOpacity:'1'
+ });
+ const heights=record.samples.map(sample=>sample.height);
+ expect(Math.max(...heights)-Math.min(...heights),'the catalogue is fully laid out on its first rendered frame').toBeLessThanOrEqual(1);
+}
+
 function heldSteady(record,id){
  expect(record,'the browser delivered a real pointerdown').toBeDefined();
  expect(record.down.state,'the press begins before expansion settles').toBe('opening');
@@ -186,6 +223,70 @@ test('navigation cleans up a disclosure removed while its action is pressed',asy
 });
 
 for(const [entry,role] of [['./','public'],['garda/','garda']]){
+ test(`${role}: catalogue controls open natively while newly exposed headings retain their entrance`,async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(entry+'?lang=en#encounters/'+role);
+  await page.evaluate(()=>document.fonts.ready);
+  const library=page.locator('.scenario-library'),librarySummary=library.locator(':scope > summary');
+  await recordCatalogueToggle(library);await librarySummary.click();
+  await expectNativeToggle(page,true);
+  const street=library.locator('[data-situation-topic="street"]'),summary=street.locator(':scope > summary');
+  await recordCatalogueToggle(street);await summary.click();
+  await expectNativeToggle(page,true);
+
+  // The last real Street card begins below the viewport. Native expansion
+  // must register its title for the same later-entry rise/fade as other cards.
+  const later=street.locator('.encounter-card').last(),heading=later.locator(':scope > h2');
+  expect(await later.evaluate(element=>element.getBoundingClientRect().top>innerHeight+80)).toBe(true);
+  await expect(heading).toHaveAttribute('data-heading-pending','');
+  await later.evaluate(element=>{
+   const heading=element.querySelector(':scope > h2'),action=element.querySelector('button');
+   window.__catalogueHeadingEntrances=[];
+   heading.addEventListener('animationstart',event=>{
+    const cardStyle=getComputedStyle(element),actionStyle=getComputedStyle(action);
+    window.__catalogueHeadingEntrances.push({name:event.animationName,
+     cardOpacity:cardStyle.opacity,cardTransform:cardStyle.transform,
+     actionOpacity:actionStyle.opacity,actionTransform:actionStyle.transform});
+   });
+  });
+  await later.scrollIntoViewIfNeeded();
+  await expect.poll(()=>page.evaluate(()=>window.__catalogueHeadingEntrances)).toEqual([{
+   name:'ui-card-heading-arrive',cardOpacity:'1',cardTransform:'none',actionOpacity:'1',actionTransform:'none'
+  }]);
+  await expect(heading).not.toHaveAttribute('data-heading-pending');
+  await expect(heading).not.toHaveAttribute('data-heading-motion');
+  await expect(heading).toHaveCSS('opacity','1');
+  await expect(heading).toHaveCSS('transform','none');
+
+  // Keyboard toggles preserve the summary focus and expose actions at once.
+  await summary.focus();await recordCatalogueToggle(street);await summary.press('Space');
+  await expectNativeToggle(page,false);await expect(summary).toBeFocused();
+  await recordCatalogueToggle(street);await summary.press('Enter');
+  await expectNativeToggle(page,true);await expect(summary).toBeFocused();
+  await page.keyboard.press('Tab');
+  const start=street.locator('[data-action="paired-start"][data-id="public-street"]');
+  await expect(start).toBeFocused();
+  await start.press('Enter');
+  await expect(page.locator('#scene-title')).toBeVisible();
+  await expect(page.locator('[data-action="paired-answer"]').first()).toBeVisible();
+
+  // The landing browser exposes the same action cards through two more
+  // native layers. None may leave an immediately available Start clipped.
+  await page.goto(entry+'?lang=en#play');
+  const topics=page.locator('.topic-disclosure');
+  await recordCatalogueToggle(topics);await topics.locator(':scope > summary').click();
+  await expectNativeToggle(page,true);
+  const discrimination=topics.locator('[data-situation-topic="discrimination"]');
+  await recordCatalogueToggle(discrimination);await discrimination.locator(':scope > summary').click();
+  await expectNativeToggle(page,true);
+  const ground=discrimination.locator('[data-ground="gender"]');
+  await recordCatalogueToggle(ground);await ground.locator(':scope > summary').click();
+  await expectNativeToggle(page,true);
+  await ground.locator('[data-action="paired-start"][data-id="discrimination-gender"]').click();
+  await expect(page.locator('#scene-title')).toBeVisible();
+  await expect(page.locator('[data-action="paired-answer"]').first()).toBeVisible();
+ });
+
  test(`${role}: an immediate shared-situation click after expanding Street stops reaches the choices`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto(entry+'?lang=en#encounters/'+role);

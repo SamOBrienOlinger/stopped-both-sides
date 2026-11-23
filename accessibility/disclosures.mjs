@@ -2,7 +2,7 @@ import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120
 
 // Animate measured pixels rather than the experimental details-content pseudo
 // element, so opening and closing behave the same in all supported browsers.
-export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}}){
+export function createDisclosures({main,allowed,animateWhen=()=>true,onStart=()=>{},onFinish=()=>{}}){
  const active=new Map();
  let press=null;
  const properties=['height','overflow','overflow-anchor'];
@@ -103,12 +103,13 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
    event.preventDefault();retarget(running,!running.open);
    return;
   }
-  if(!allowed()||typeof details.animate!=='function')return;
-  // A new nested disclosure changes its ancestor's measured content size.
-  // Complete that earlier interaction before measuring this one.
+  // A nested disclosure changes its ancestor's measured content size, even
+  // when this disclosure uses native opening. Settle the related presentation
+  // before measuring or letting the browser toggle this one immediately.
   for(const state of [...active.values()]){
    if(state.details.contains(details)||details.contains(state.details))finish(state);
   }
+  if(!allowed()||!animateWhen(details)||typeof details.animate!=='function')return;
   const open=!details.open,from=details.getBoundingClientRect().height;
   const styles=Object.fromEntries(properties.map(property=>[property,{
    value:details.style.getPropertyValue(property),priority:details.style.getPropertyPriority(property)

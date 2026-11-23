@@ -13,6 +13,7 @@ export function createMotion({main,getLegacyState=()=>null}){
  const active=new Map(),frames=new Map(),seen=new Set(),pendingReveals=new Map();
  let previous=null,observer=null;
  const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce')&&!root.classList.contains('contrast-high');
+ const catalogueDisclosure=element=>element?.matches?.('.scenario-library,.topic-disclosure,.situation-topic,.discrimination-ground');
  const all=selector=>Array.from(main.querySelectorAll(selector));
  const headingEntrance=element=>element.hasAttribute?.('data-heading-entrance')&&headingsForCard(element).length>0;
  const preferences=()=>[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
@@ -208,7 +209,7 @@ export function createMotion({main,getLegacyState=()=>null}){
   else afterFocus(main,'observe',()=>observeReveals(next,preferenceChange));
  }
 
- const disclosures=createDisclosures({main,allowed,onStart(details){
+ const disclosures=createDisclosures({main,allowed,animateWhen:details=>!catalogueDisclosure(details),onStart(details){
    // A disclosure is one height transition, not a page fade, parent reveal and
    // second set of entrances competing with its newly exposed children.
    for(const element of [...active.keys()]){
@@ -220,6 +221,20 @@ export function createMotion({main,getLegacyState=()=>null}){
    details.setAttribute('data-motion','disclosure');
    if(previous)observeReveals(previous,false,details);
   },onFinish:details=>details.removeAttribute('data-motion')});
+ // Catalogue actions must appear at their final positions as soon as native
+ // details opens. Their offscreen titles still get the normal once-only reveal;
+ // visible titles remain readable without a second parent height transition.
+ main.addEventListener('toggle',event=>{
+  const details=event.target,next=previous;
+  if(!next||!catalogueDisclosure(details))return;
+  afterFocus(details,'observe',()=>{
+   if(previous!==next||!details.isConnected)return;
+   // The parent page cue already refreshes titles when its fade completes.
+   if(main.getAttribute('data-motion')==='page'||
+    [...frames.values()].some(pending=>pending.element===main&&pending.kind==='page'))return;
+   observeReveals(next,false);
+  });
+ },true);
  // Cancelling the attribute as well as the animation makes focus cancellation
  // permanent; moving focus away cannot restart an entrance from its first frame.
  main.addEventListener('focusin',event=>{
