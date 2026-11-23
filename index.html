@@ -9,8 +9,14 @@
  const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
  if('scrollRestoration' in history){
   history.scrollRestoration=reloading?'manual':'auto';
-  // Keep a later Back/Forward visit native-restorable before this document leaves.
-  if(reloading)addEventListener('pagehide',()=>{history.scrollRestoration='auto';});
+  // A native refresh can snapshot the outgoing entry before the new page runs.
+  // Claim that reload at pageswap; keep normal departures native-restorable.
+  let outgoingReload=false;
+  if('onpageswap' in window)addEventListener('pageswap',event=>{
+   outgoingReload=event.activation?.navigationType==='reload';
+   if(outgoingReload)history.scrollRestoration='manual';
+  });
+  addEventListener('pagehide',()=>{if(!outgoingReload)history.scrollRestoration='auto';});
  }
  if(reloading)window.scrollTo({top:0,left:0,behavior:'instant'});
 }

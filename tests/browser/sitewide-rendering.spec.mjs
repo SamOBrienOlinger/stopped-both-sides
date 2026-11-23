@@ -14,6 +14,7 @@ const test=base.extend({
 });
 const cast={public:'public-2',garda:'garda-5'};
 const observationKey='sitewide-render-observation',seedKey='sitewide-render-seeded';
+const departureKey='sitewide-render-departure';
 const reports=new WeakMap();
 const profiles=[
  {name:'mobile portrait',width:390,height:844,size:100,all:true},
@@ -58,7 +59,7 @@ async function prepare(page,role,profile){
  const progress=packProgress(recordProgress(emptyProgress(),startEncounter('public-arrest',role,{cast}),{
   returnTo:`#encounters/${role}/custody`
  }));
- await page.addInitScript(({progressKey,preferenceKey,progress,size,observationKey,seedKey})=>{
+ await page.addInitScript(({progressKey,preferenceKey,progress,size,observationKey,departureKey,seedKey})=>{
   if(!sessionStorage.getItem(seedKey)){
    localStorage.setItem(progressKey,progress);
    localStorage.setItem(preferenceKey,JSON.stringify({language:'en',size:Math.min(size,150),
@@ -77,9 +78,19 @@ async function prepare(page,role,profile){
     observer.observe(document,{childList:true,subtree:true});
    }
   }
+  let swap=null;
+  window.addEventListener('pageswap',event=>{
+   swap={type:event.activation?.navigationType||null,at:performance.now()};
+  });
+  window.addEventListener('pagehide',event=>{
+   if(!sessionStorage.getItem(observationKey))return;
+   sessionStorage.setItem(departureKey,JSON.stringify({pageswapSupported:'onpageswap' in window,
+    pageswap:swap,pagehide:{at:performance.now(),persisted:event.persisted,restoration:history.scrollRestoration}}));
+  });
   const options=JSON.parse(sessionStorage.getItem(observationKey)||'null');
   if(!options)return;
   const record={...options,samples:[],initialShell:[],focusEvents:[],done:false,
+   departure:JSON.parse(sessionStorage.getItem(departureKey)||'null'),
    environment:{userAgent:navigator.userAgent,maxTouchPoints:navigator.maxTouchPoints,
     coarsePointer:matchMedia('(pointer:coarse)').matches,hover:matchMedia('(hover:hover)').matches}};
   window.__sitewideRendering=record;
@@ -99,7 +110,10 @@ async function prepare(page,role,profile){
    const main=document.querySelector('#main'),heading=main?.querySelector('h1'),skip=document.querySelector('.skip');
    if(main?.querySelector('.initial')){
     const header=document.querySelector('.header'),nav=header?.querySelector('nav');
+    const styles=[...document.querySelectorAll('head link[rel~="stylesheet"]')];
+    const pendingStylesheets=styles.filter(link=>!link.sheet).map(link=>new URL(link.href).pathname);
     record.initialShell.push({at:performance.now(),header:rect(header),
+     stylesReady:styles.length>0&&pendingStylesheets.length===0,pendingStylesheets,
      headerPosition:header&&getComputedStyle(header).position,
      navigationReady:header?.classList.contains('navigation-ready'),
      navHidden:nav?.hidden,navAriaHidden:nav?.getAttribute('aria-hidden'),
@@ -134,7 +148,7 @@ async function prepare(page,role,profile){
   };
   requestAnimationFrame(sample);
  },{progressKey:progressStorageKey(role),preferenceKey:preferencesStorageKey(role),progress,
-  size:profile.size,observationKey,seedKey});
+  size:profile.size,observationKey,departureKey,seedKey});
 }
 
 async function textFits(page){
@@ -158,8 +172,10 @@ async function reloadRoute(page,testInfo,role,profile,route){
   scrollRange:Math.max(0,document.documentElement.scrollHeight-innerHeight)}));
  if(scrollRange>1)expect(oldScroll,route.name+' has a scrolled document to refresh').toBeGreaterThan(0);
  else expect(oldScroll,route.name+' fits without scrolling').toBeLessThanOrEqual(1);
- await page.evaluate(({key,options})=>sessionStorage.setItem(key,JSON.stringify(options)),{
-  key:observationKey,options:{name:route.name,target:route.target||null,oldScroll}
+ await page.evaluate(({key,departureKey,options})=>{
+  sessionStorage.removeItem(departureKey);sessionStorage.setItem(key,JSON.stringify(options));
+ },{
+  key:observationKey,departureKey,options:{name:route.name,target:route.target||null,oldScroll}
  });
  const appPath=new URL('app.mjs',page.url()).pathname,matcher=url=>url.pathname===appPath;
  const delayed=profile.all&&route.name==='About';let delayedRequests=0;
@@ -181,13 +197,20 @@ async function reloadRoute(page,testInfo,role,profile,route){
  if(delayed&&delayedRequests!==1)issues.push('delayed app bootstrap did not run exactly once');
  if(record.after.url!==before.url)issues.push('refresh changed the current route');
  if(JSON.stringify(record.after.stored)!==JSON.stringify(before.stored))issues.push('refresh changed progress or preferences');
+ if(record.departure?.pageswapSupported){
+  if(record.departure.pageswap?.type!=='reload')issues.push('supported pageswap did not identify the native reload');
+  if(record.departure.pagehide?.restoration!=='manual')issues.push('outgoing reload did not keep manual restoration through pagehide');
+ }
  for(const [i,sample] of record.initialShell.entries()){
   const sticky=['sticky','-webkit-sticky','fixed'].includes(sample.headerPosition);
-  if(sticky&&sample.heading&&sample.heading.top<Math.max(sample.header?.bottom||0,0)-1)
+  // Firefox can expose construction geometry to rAF before blocking styles
+  // are ready. Preserve those diagnostics, but test visual bounds only once
+  // every linked stylesheet exists; final-route checks remain unconditional.
+  if(sample.stylesReady&&sticky&&sample.heading&&sample.heading.top<Math.max(sample.header?.bottom||0,0)-1)
    issues.push('loading frame '+i+': heading is concealed by navigation');
   if(sample.readyState!=='loading'&&Math.abs(sample.scrollY)>1)
    issues.push('loading frame '+i+': the parsed page retained its old scroll offset');
-  if(sample.skip&&!sample.skipFocused&&sample.skip.bottom>1)
+  if(sample.stylesReady&&sample.skip&&!sample.skipFocused&&sample.skip.bottom>1)
    issues.push('loading frame '+i+': unfocused skip link overlaps the page');
  }
  for(const [i,sample] of record.samples.entries()){
@@ -214,6 +237,47 @@ async function reloadRoute(page,testInfo,role,profile,route){
  });
  expect.soft(record.issues,role+' '+profile.name+' '+route.name).toEqual([]);
  await page.evaluate(key=>sessionStorage.removeItem(key),observationKey);
+}
+
+async function historyAfterReload(page,role,path,browserName){
+ await page.goto(path+'?lang=en#play');
+ await expect(page.locator('#paired-title')).toBeAttached();
+ await page.reload();
+ await expect(page.locator('#paired-title')).toBeAttached();
+ await page.evaluate(()=>document.fonts.ready);
+ await page.mouse.move(195,400);await page.mouse.wheel(0,500);
+ await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
+ const readingPosition=await page.evaluate(()=>new Promise((resolve,reject)=>{
+  const started=performance.now();let previous=scrollY,stable=0;
+  const sample=()=>{
+   const header=document.querySelector('.header').getBoundingClientRect().bottom;
+   const moving=document.querySelector('.landing-instructions').getAnimations({subtree:true}).some(animation=>{
+    if(animation.playState==='finished'||animation.playState==='idle')return false;
+    const box=animation.effect?.target?.getBoundingClientRect();
+    return box&&box.bottom>header&&box.top<innerHeight;
+   });
+   stable=!moving&&Math.abs(scrollY-previous)<.5?stable+1:0;previous=scrollY;
+   if(stable>=6)resolve(scrollY);
+   else if(performance.now()-started>5000)reject(new Error('Native reading position did not settle'));
+   else requestAnimationFrame(sample);
+  };
+  requestAnimationFrame(sample);
+ }));
+ const keys=[progressStorageKey(role),preferencesStorageKey(role)];
+ const storage=()=>page.evaluate(keys=>keys.map(key=>localStorage.getItem(key)),keys);
+ const before={url:page.url(),stored:await storage()};
+ await page.goto('privacy.html');await expect(page).toHaveURL(/\/privacy\.html$/);
+ await page.goBack();await expect(page).toHaveURL(before.url);
+ await expect(page.locator('#paired-title')).toBeAttached();
+ await page.evaluate(()=>document.fonts.ready);
+ // Playwright disables BFCache. Existing WebKit cold-Back behavior is top0;
+ // Chromium/Firefox must retain their previous native reading position.
+ const expected=browserName==='webkit'?0:readingPosition;
+ await expect.poll(()=>page.evaluate(value=>Math.abs(scrollY-value),expected),
+  {message:role+' native Back after reload preserves its browser restoration policy'}).toBeLessThanOrEqual(2);
+ expect(await page.evaluate(()=>history.scrollRestoration)).toBe('auto');
+ expect(await storage()).toEqual(before.stored);
+ await page.goForward();await expect(page).toHaveURL(/\/privacy\.html$/);
 }
 
 test.afterEach(async({page},testInfo)=>{
@@ -249,6 +313,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']])for(const profile 
      {name:'Requested evidence record',hash:'#evidence/model',target:'#source-model'};
     await page.goto(path+'?lang=en'+anchor.hash);
     await reloadRoute(page,testInfo,role,profile,anchor);
+    await test.step('Native Back and Forward after reload',()=>historyAfterReload(page,role,path,browserName));
    }
   });
  });
