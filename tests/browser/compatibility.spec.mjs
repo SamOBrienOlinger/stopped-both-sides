@@ -207,6 +207,8 @@ for(const role of ['public','garda']){
   await expect(page.locator('html')).toHaveAttribute('lang','ga');
   const saved=readState(page);await page.reload();await ready(page);
   expect(readState(page)).toEqual(saved);
+  // Fresh reader input precedes Playwright's implicit scroll to the game controls.
+  await page.keyboard.press('Escape');
   for(let stage=0;stage<10&&!readState(page).complete;stage++){
    if(readState(page).answers[readState(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();
    await page.locator('[data-action="paired-next"]').click();

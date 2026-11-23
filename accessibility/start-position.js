@@ -79,6 +79,9 @@
  listen(window,'resize',schedule,{passive:true});
  listen(window.visualViewport,'resize',schedule,{passive:true});
  listen(window.visualViewport,'scroll',schedule,{passive:true});
+ // The parser can restore its saved range before deferred modules run.
+ // Settle synchronously at that boundary, before the next painted frame.
+ listen(document,'readystatechange',position);
  listen(window,'load',schedule,{once:true});
  listen(document,'DOMContentLoaded',schedule,{once:true});
  document.fonts?.ready?.then(schedule);

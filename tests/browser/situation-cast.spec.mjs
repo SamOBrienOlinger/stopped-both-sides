@@ -36,6 +36,8 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','support-race-adult');
   await page.reload();await expect(scene).toBeVisible();
   expect(current(page).cast.public).toBe('public-5');
+  // Fresh reader input precedes Playwright's implicit scroll to the scene labels.
+  await page.keyboard.press('Escape');
   for(const target of ['public','garda']){
    await scene.locator('[data-scene-label-role="'+target+'"]').click();
    await expect(page.locator('#scene-character-dialog .scene-profile-body')).toContainText(target==='public'?'not the person being targeted':'not the Garda whose conduct');

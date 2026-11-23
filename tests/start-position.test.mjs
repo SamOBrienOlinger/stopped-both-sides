@@ -51,6 +51,13 @@ function browser(type='reload',offset=480){
  };
 }
 
+test('parser readiness corrects a restored offset synchronously before the next frame',()=>{
+ const e=browser();e.restore(480);
+ assert.equal(e.host.scrollY,480,'the native offset is present before parser readiness');
+ e.document.emit('readystatechange');
+ assert.equal(e.host.scrollY,0,'the first parsed frame must not wait for animation-frame correction');
+});
+
 test('a late native offset is corrected after load and pageshow without repeated settled writes',async()=>{
  const e=browser();e.host.emit('load');e.host.emit('pageshow',{persisted:false});e.paint();
  e.restore(640);e.paint();e.paint();

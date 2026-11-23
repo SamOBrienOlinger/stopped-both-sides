@@ -41,6 +41,8 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
  for(const role of roles)expect(complete.history.every(step=>step.answers[role]!==null)).toBe(true);
  if(storyIdentity(e))await expect(page.locator('.paired-recap')).not.toContainText(storyIdentity(e).name);
  await page.reload();await expect(page.locator('.paired-recap')).toBeVisible();expect(current(page)).toEqual(complete);
+ // Fresh reader input precedes Playwright's implicit scroll to the recap action.
+ await page.keyboard.press('Escape');
  await page.locator('[data-action="paired-revisit"]').first().click();
  await expect(page.locator('.paired-game')).toBeVisible();expect(current(page).nodeId).toBe(e.start);expect(current(page).cast).toEqual(selectedCast);
  expect(current(page).answers).toEqual({public:null,garda:null});expect(errors).toEqual([]);

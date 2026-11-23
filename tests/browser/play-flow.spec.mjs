@@ -109,6 +109,8 @@ test('a practice recap and an unfinished shared situation stay independently acc
  await page.locator('.choice').nth(1).click();
  await page.reload();
  await expect(page.locator('.choice[aria-pressed="true"]')).toBeVisible();
+ // Fresh reader input precedes Playwright's implicit scroll to the answer action.
+ await page.keyboard.press('Escape');
  await page.getByRole('button',{name:'Try another answer',exact:true}).click();
  await expect(page.locator('#choice-title')).toBeFocused();
  await expect(page.locator('.choice[aria-pressed="true"]')).toHaveCount(0);

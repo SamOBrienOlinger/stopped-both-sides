@@ -15,7 +15,10 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  await chosen.focus();await page.keyboard.press('Space');
  await expect(page.locator(`[data-character="${selectedId}"]`)).toHaveAttribute('aria-pressed','true');
  await expect(page.locator(`[data-character="${selectedId}"]`)).toBeFocused();
- await page.reload();await page.locator('[data-action="paired-setup-characters"]').click();await expect(page.locator(`[data-character="${selectedId}"]`)).toHaveAttribute('aria-pressed','true');
+ await page.reload();
+ // Fresh reader input precedes Playwright's implicit scroll to character setup.
+ await page.keyboard.press('Escape');
+ await page.locator('[data-action="paired-setup-characters"]').click();await expect(page.locator(`[data-character="${selectedId}"]`)).toHaveAttribute('aria-pressed','true');
  await page.locator('[data-action="paired-setup-done"]').click();
  await page.locator('[data-action="paired-quick-start"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();

@@ -74,7 +74,10 @@
     </div>
   </div>
 </footer>
-
+<script>
+// Expose the parsed loading page before deferred application code runs.
+window.__stoppedPageStart?.claim(()=>null);
+</script>
 </body>
 </html>
 

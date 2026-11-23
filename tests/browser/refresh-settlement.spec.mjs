@@ -191,14 +191,15 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    await seen;
    await page.waitForFunction(()=>document.querySelector('#main .initial')&&
     [...document.querySelectorAll('link[rel~="stylesheet"]')].every(link=>link.sheet));
-   await page.evaluate(()=>document.fonts.ready);
+   // Some engines keep FontFaceSet.ready pending until deferred modules
+   // finish. Measure the styled loading frame while this module is held;
+   // neither fonts.ready nor screenshot's implicit font wait can run here.
    loading=await page.evaluate(()=>({
     header:document.querySelector('.header').getBoundingClientRect().toJSON(),
     opening:document.querySelector('#main .initial').getBoundingClientRect().toJSON(),
     navigation:document.querySelector('#main-navigation').getBoundingClientRect().toJSON(),
     width:innerWidth,height:innerHeight,scrollY
    }));
-   await page.screenshot({path:testInfo.outputPath('compact-loading-header.png')});
   }finally{
    // Removing an in-flight route can handle it before its released callback
    // resumes. Complete this one request before unregistering the interceptor.
