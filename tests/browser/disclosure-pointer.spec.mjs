@@ -101,7 +101,8 @@ async function recordCatalogueToggle(panel){
       contentFits:!element.open||content.every(child=>child.getBoundingClientRect().bottom<=box.bottom+1),
       titleOpacity:getComputedStyle(title).opacity});
      if(samples.length<4)requestAnimationFrame(sample);
-     else resolve({trusted:event.isTrusted,prevented:event.defaultPrevented,samples});
+     else resolve({trusted:event.isTrusted,prevented:event.defaultPrevented,
+      targetIsSummary:event.target===summary,samples});
     };
     requestAnimationFrame(sample);
    },{once:true});
@@ -112,6 +113,7 @@ async function expectNativeToggle(page,open){
  const record=await page.evaluate(()=>window.__catalogueToggle);
  expect(record.trusted,'the disclosure receives a real pointer or keyboard activation').toBe(true);
  expect(record.prevented,'the catalogue keeps the summary native toggle action').toBe(false);
+ expect(record.targetIsSummary,'the native control owns activation over its title and decorative content').toBe(true);
  expect(record.samples).toHaveLength(4);
  for(const sample of record.samples)expect(sample).toMatchObject({
   open,state:null,inlineHeight:'',heightEffect:false,contentFits:true,titleOpacity:'1'
@@ -230,6 +232,8 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   const library=page.locator('.scenario-library'),librarySummary=library.locator(':scope > summary');
   await recordCatalogueToggle(library);await librarySummary.click();
   await expectNativeToggle(page,true);
+  await page.keyboard.press('Tab');
+  await expect(library.getByRole('button',{name:'All topics',exact:true})).toBeFocused();
   const street=library.locator('[data-situation-topic="street"]'),summary=street.locator(':scope > summary');
   await recordCatalogueToggle(street);await summary.click();
   await expectNativeToggle(page,true);
@@ -276,9 +280,13 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   const topics=page.locator('.topic-disclosure');
   await recordCatalogueToggle(topics);await topics.locator(':scope > summary').click();
   await expectNativeToggle(page,true);
+  await page.keyboard.press('Tab');
+  await expect(topics.getByRole('button',{name:'All topics',exact:true})).toBeFocused();
   const discrimination=topics.locator('[data-situation-topic="discrimination"]');
   await recordCatalogueToggle(discrimination);await discrimination.locator(':scope > summary').click();
   await expectNativeToggle(page,true);
+  await page.keyboard.press('Tab');
+  await expect(discrimination.locator(':scope > .situation-topic-content > a.text-button')).toBeFocused();
   const ground=discrimination.locator('[data-ground="gender"]');
   await recordCatalogueToggle(ground);await ground.locator(':scope > summary').click();
   await expectNativeToggle(page,true);

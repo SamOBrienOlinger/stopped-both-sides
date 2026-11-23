@@ -565,8 +565,11 @@ summary.situation-topic-trigger {
  text-align:start;
  overflow-wrap:anywhere;
 }
-/* A grid on the native summary can trap sequential focus in WebKit. Keep the
-   control a block and align its unchanged title, count and icon inside it. */
+/* Catalogue summaries own pointer activation. Their noninteractive text and
+   artwork share that hit target, preserving subsequent native Tab navigation. */
+#main :is(.scenario-library,.topic-disclosure,.situation-topic,.discrimination-ground) > summary > * {
+ pointer-events:none;
+}
 summary > .catalogue-summary-content {
  display:grid;
  align-items:center;
