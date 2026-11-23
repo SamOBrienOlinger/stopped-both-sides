@@ -81,38 +81,61 @@ for(const {path,role} of cases){
   await expect(settings).toBeFocused();
  });
 
- test(path+' navigation clears mobile reading content and stays available on desktop',async({page})=>{
+ test(path+' navigation stays visible and usable while reading on mobile and desktop',async({page})=>{
   test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'reduce'});
+  const navigation=()=>page.evaluate(()=>{
+   const header=document.querySelector('.header'),box=header.getBoundingClientRect(),style=getComputedStyle(header);
+   const top=window.visualViewport?.offsetTop||0,left=window.visualViewport?.offsetLeft||0;
+   const viewport={top,left,bottom:top+(window.visualViewport?.height||innerHeight),
+    right:left+(window.visualViewport?.width||innerWidth)};
+   const within=bounds=>bounds.width>0&&bounds.height>0&&bounds.top>=viewport.top-1&&
+    bounds.bottom<=viewport.bottom+1&&bounds.left>=viewport.left-1&&bounds.right<=viewport.right+1;
+   const control=selector=>{
+    const element=header.querySelector(selector),bounds=element.getBoundingClientRect(),style=getComputedStyle(element);
+    const hit=document.elementFromPoint((bounds.left+bounds.right)/2,(bounds.top+bounds.bottom)/2);
+    return {box:bounds.toJSON(),usable:within(bounds)&&style.visibility==='visible'&&Number(style.opacity)>0&&
+     !!hit&&element.contains(hit)};
+   };
+   return {scrollY,headerAtTop:Math.abs(box.top-viewport.top)<=2,
+    headerVisible:within(box)&&style.visibility==='visible'&&Number(style.opacity)===1,
+    wordmark:control('.wordmark'),menu:control('[data-nav-toggle]'),
+    noHorizontalOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth+2};
+  });
   for(const [width,height] of [[320,568],[390,844],[768,1024],[1366,768]]){
    await page.setViewportSize({width,height});
    await page.goto(path+'#about');
    await expect(page.locator('.about-opening')).toBeVisible();
-   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
-   await expect.poll(()=>page.evaluate(()=>{
-    const header=document.querySelector('.header');
-    return {
-     headerTop:Math.round(header.getBoundingClientRect().top),
-     headerBottom:Math.round(header.getBoundingClientRect().bottom),
-     scrolled:window.scrollY>50,
-     noHorizontalOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth+2
-    };
-   }).then(bounds=>({
-    navigationClear:width<1152?bounds.headerBottom<=0:Math.abs(bounds.headerTop)<=2,
-    scrolled:bounds.scrolled,noHorizontalOverflow:bounds.noHorizontalOverflow
-   }))).toEqual({navigationClear:true,scrolled:true,noHorizontalOverflow:true});
+   await page.evaluate(()=>document.fonts.ready);
+   await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,left:0,behavior:'instant'}));
+   await expect.poll(()=>navigation().then(bounds=>({
+    headerAtTop:bounds.headerAtTop,headerVisible:bounds.headerVisible,wordmarkUsable:bounds.wordmark.usable,
+    menuUsable:width>=1152||bounds.menu.usable,scrolled:bounds.scrollY>50,noHorizontalOverflow:bounds.noHorizontalOverflow
+   }))).toEqual({headerAtTop:true,headerVisible:true,wordmarkUsable:true,menuUsable:true,scrolled:true,noHorizontalOverflow:true});
    if(width<1152){
-    // Return to the menu through the page, rather than assuming a phone
-    // header is still pinned above the section being read.
-    await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
-    await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
+    const before=await navigation(),readingY=before.scrollY,button=before.menu.box;
     const toggle=page.locator('[data-nav-toggle]');
-    await toggle.click();
+    // Activate the on-screen control from the bottom-page reading position.
+    // A locator click could conceal a missing bar by scrolling it into view.
+    await page.mouse.click((button.left+button.right)/2,(button.top+button.bottom)/2);
     await expect(toggle).toHaveAttribute('aria-expanded','true');
     await expect(page.locator('#main-navigation')).toBeVisible();
+    await expect.poll(()=>page.locator('#main-navigation').evaluate(nav=>{
+     const panel=nav.getBoundingClientRect(),header=document.querySelector('.header').getBoundingClientRect();
+     const first=nav.querySelector('a,button'),control=first.getBoundingClientRect();
+     const hit=document.elementFromPoint((control.left+control.right)/2,(control.top+control.bottom)/2);
+     const bottom=(window.visualViewport?.offsetTop||0)+(window.visualViewport?.height||innerHeight);
+     return panel.top>=header.bottom-1&&panel.bottom<=bottom+1&&!!hit&&first.contains(hit);
+    }),{message:'the menu is visible and usable below the persistent bar'}).toBe(true);
+    expect(Math.abs(await page.evaluate(()=>scrollY)-readingY),'opening Menu preserves the reading position').toBeLessThanOrEqual(2);
     await page.keyboard.press('Escape');
     await expect(toggle).toHaveAttribute('aria-expanded','false');
+    await expect(page.locator('#main-navigation')).toBeHidden();
     await expect(toggle).toBeFocused();
+    const closed=await navigation();
+    expect(Math.abs(closed.scrollY-readingY),'closing Menu preserves the reading position').toBeLessThanOrEqual(2);
+    expect(closed.headerAtTop&&closed.headerVisible&&closed.wordmark.usable&&closed.menu.usable&&closed.noHorizontalOverflow,
+     'the bar remains available after Menu closes').toBe(true);
    }
   }
  });

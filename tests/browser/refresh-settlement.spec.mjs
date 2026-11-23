@@ -1,5 +1,6 @@
 import {test as base,expect,devices} from '@playwright/test';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
+import {expectControlsFit} from './control-layout.mjs';
 
 // Mobile WebKit exercises its own viewport and focus behavior. This still
 // cannot operate Safari's browser-chrome pull-to-refresh gesture: the late
@@ -12,8 +13,77 @@ const test=base.extend({
 const caseKey='refresh-settlement-case';
 const profiles=[
  {name:'phone',width:390,height:844,size:100},
- {name:'small phone 200%',width:320,height:740,size:200}
+ {name:'small phone 200%',width:320,height:740,size:200},
+ {name:'landscape 200%',width:568,height:320,size:200}
 ];
+
+function navigationIssues(sample,{loading=false}={}){
+ const issues=[],{header,navigation}=sample;
+ const viewport=navigation?.viewport;
+ if(!header||!viewport)return ['navigation geometry is missing'];
+ const within=box=>box&&box.height>0&&box.right>box.left&&box.top>=viewport.top-1&&
+  box.bottom<=viewport.bottom+1&&box.left>=viewport.left-1&&box.right<=viewport.right+1;
+ if(!within(header))issues.push('the navigation bar is outside the visual viewport');
+ if(viewport.bottom-header.bottom<44)issues.push('the navigation bar leaves too little reading space');
+ if(navigation.opacity!==1)issues.push('the navigation bar is not opaque');
+ if(!loading&&!navigation.ready)issues.push('the navigation controls are not ready');
+ for(const control of navigation.controls){
+  if(loading&&control.name==='Menu'&&!navigation.ready)continue;
+  if(!within(control.box)||!control.painted||!control.hit)
+   issues.push(control.name+' is not visible and usable in the navigation bar');
+ }
+ return issues;
+}
+
+// Read geometry without focusing or scrolling a locator. The actual menu
+// activation below must work from the visible page the reader has reached.
+function navigationGeometry(){
+ const header=document.querySelector('.header'),box=element=>element?.getBoundingClientRect().toJSON()||null;
+ const top=window.visualViewport?.offsetTop||0,left=window.visualViewport?.offsetLeft||0;
+ return {scrollY,header:box(header),navigation:{ready:header?.classList.contains('navigation-ready'),
+  opacity:header&&Number(getComputedStyle(header).opacity),viewport:{top,left,
+   bottom:top+(window.visualViewport?.height||innerHeight),right:left+(window.visualViewport?.width||innerWidth)},
+  controls:[['wordmark','.wordmark'],['Menu','[data-nav-toggle]']].map(([name,selector])=>{
+   const element=header?.querySelector(selector),bounds=box(element),style=element&&getComputedStyle(element);
+   const hit=bounds&&document.elementFromPoint((bounds.left+bounds.right)/2,(bounds.top+bounds.bottom)/2);
+   return {name,box:bounds,painted:!!style&&style.display!=='none'&&style.visibility==='visible'&&Number(style.opacity)>0,
+    hit:!!element&&!!hit&&element.contains(hit)};
+  })}};
+}
+
+async function tapVisibleNavigation(page,browserName,testInfo,label){
+ const before=await page.evaluate(navigationGeometry);
+ expect(navigationIssues(before),label+' exposes navigation before any locator can scroll it').toEqual([]);
+ const control=before.navigation.controls.find(control=>control.name==='Menu').box;
+ const point={x:(control.left+control.right)/2,y:(control.top+control.bottom)/2};
+ const tap=()=>browserName==='firefox'?page.mouse.click(point.x,point.y):page.touchscreen.tap(point.x,point.y);
+ await tap();
+ await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','true');
+ const readOpen=()=>page.locator('#main-navigation').evaluate(nav=>{
+  const header=document.querySelector('.header').getBoundingClientRect(),panel=nav.getBoundingClientRect();
+  const first=nav.querySelector('a,button'),control=first.getBoundingClientRect();
+  const hit=document.elementFromPoint((control.left+control.right)/2,(control.top+control.bottom)/2);
+  return {header:header.toJSON(),panel:panel.toJSON(),first:control.toJSON(),firstHit:!!hit&&first.contains(hit),
+   viewportBottom:(window.visualViewport?.offsetTop||0)+(window.visualViewport?.height||innerHeight),scrollY};
+ });
+ let open;
+ await expect.poll(async()=>{
+  open=await readOpen();
+  return open.panel.top>=open.header.bottom-1&&open.panel.bottom<=open.viewportBottom+1&&open.firstHit;
+ },{message:label+' opens a usable menu in the visible space below the bar'}).toBe(true);
+ expect(open.panel.top,label+' opens its menu below the bar').toBeGreaterThanOrEqual(open.header.bottom-1);
+ expect(open.panel.bottom,label+' keeps its menu inside the viewport').toBeLessThanOrEqual(open.viewportBottom+1);
+ expect(open.firstHit,label+' exposes a usable first navigation link').toBe(true);
+ await expectControlsFit(page,label+' menu');
+ await tap();
+ await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
+ await expect(page.locator('#main-navigation')).toBeHidden();
+ const closed=await page.evaluate(navigationGeometry);
+ expect(navigationIssues(closed),label+' leaves the navigation bar available').toEqual([]);
+ for(const sample of [open,closed])expect(Math.abs(sample.scrollY-before.scrollY),
+  label+' menu activation preserves the reading position').toBeLessThanOrEqual(2);
+ await testInfo.attach(label+'-navigation.json',{body:Buffer.from(JSON.stringify({before,open,closed})),contentType:'application/json'});
+}
 
 async function prepare(page,role,profile){
  await page.addInitScript(({caseKey,preferenceKey,size})=>{
@@ -41,6 +111,18 @@ async function prepare(page,role,profile){
   if(!options)return;
   const record=window.__refreshSettlement={...options,samples:[],injections:[],events:[],frame:0,running:true};
   const box=element=>element?.getBoundingClientRect().toJSON()||null;
+  const navigation=()=>{
+   const header=document.querySelector('.header');
+   const top=window.visualViewport?.offsetTop||0,left=window.visualViewport?.offsetLeft||0;
+   return {ready:header?.classList.contains('navigation-ready'),opacity:header&&Number(getComputedStyle(header).opacity),
+    viewport:{top,left,bottom:top+(window.visualViewport?.height||innerHeight),right:left+(window.visualViewport?.width||innerWidth)},
+    controls:[['wordmark','.wordmark'],['Menu','[data-nav-toggle]']].map(([name,selector])=>{
+     const element=header?.querySelector(selector),bounds=box(element),style=element&&getComputedStyle(element);
+     const hit=bounds&&document.elementFromPoint((bounds.left+bounds.right)/2,(bounds.top+bounds.bottom)/2);
+     return {name,box:bounds,painted:!!style&&style.display!=='none'&&style.visibility==='visible'&&Number(style.opacity)>0,
+      hit:!!element&&!!hit&&element.contains(hit)};
+    })};
+  };
   const ready=()=>document.querySelector('#main h1')&&!document.querySelector('#main .initial');
   const capture=()=>{
    const header=document.querySelector('.header'),main=document.querySelector('#main');
@@ -49,7 +131,7 @@ async function prepare(page,role,profile){
     bottom:(window.visualViewport?.offsetTop||0)+(window.visualViewport?.height||innerHeight)};
    const target=options.target?document.querySelector(options.target):main.firstElementChild;
    record.samples.push({at:performance.now(),scrollY,hash:location.hash,viewport,
-    header:box(header),headerPosition:getComputedStyle(header).position,target:box(target),
+    header:box(header),navigation:navigation(),headerPosition:getComputedStyle(header).position,target:box(target),
     heading:box(options.target?target?.querySelector('h1,h2,h3'):main.querySelector('h1')),
     rootFont:getComputedStyle(document.documentElement).fontSize,
     overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+1,
@@ -90,8 +172,12 @@ async function inspectSettlement(page,testInfo,profile,{target=null}={}){
  const settled=()=>page.evaluate(target=>{
   const element=target?document.querySelector(target):document.querySelector('#main>:first-child');
   if(!element)return false;
-  const top=visualViewport?.offsetTop||0,box=element.getBoundingClientRect();
-  return box.top>=top-1&&box.top<(visualViewport?.height||innerHeight)+top&&
+  const header=document.querySelector('.header'),position=header&&getComputedStyle(header).position;
+  const viewportTop=visualViewport?.offsetTop||0;
+  const top=Math.max(viewportTop,
+   ['sticky','fixed','-webkit-sticky'].includes(position)?header.getBoundingClientRect().bottom:0);
+  const box=element.getBoundingClientRect();
+  return box.top>=top-1&&box.top<(visualViewport?.height||innerHeight)+viewportTop&&
    (target!==null||Math.abs(scrollY)<=1);
  },target);
  await expect.poll(settled,{message:'startup restores the visible route opening after pageshow'}).toBe(true);
@@ -137,6 +223,7 @@ async function inspectSettlement(page,testInfo,profile,{target=null}={}){
   const overlay=['sticky','fixed','-webkit-sticky'].includes(sample.headerPosition);
   const top=Math.max(sample.viewport.top,overlay?sample.header.bottom:0);
   const prefix='frame '+index+': ';
+  for(const issue of navigationIssues(sample))issues.push(prefix+issue);
   if(!sample.target||sample.target.top<top-1||sample.target.top>=sample.viewport.bottom)
    issues.push(prefix+'route opening stayed concealed after browser restoration');
   if(!target&&Math.abs(sample.scrollY)>1)issues.push(prefix+'ordinary route did not settle at the page top');
@@ -176,7 +263,7 @@ test.afterEach(async({page},testInfo)=>{
 });
 
 for(const [role,path] of [['public','./'],['garda','garda/']]){
- for(const profile of profiles)test(role+' '+profile.name+' refresh settles late browser restoration without a loading-header jump',async({page,baseURL},testInfo)=>{
+ for(const profile of profiles)test(role+' '+profile.name+' refresh settles late browser restoration without a loading-header jump',async({page,baseURL,browserName},testInfo)=>{
   await page.setViewportSize({width:profile.width,height:profile.height});
   await page.emulateMedia({reducedMotion:'reduce'});
   await prepare(page,role,profile);
@@ -203,9 +290,10 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    loading=await page.evaluate(()=>({
     header:document.querySelector('.header').getBoundingClientRect().toJSON(),
     opening:document.querySelector('#main .initial').getBoundingClientRect().toJSON(),
-    navigation:document.querySelector('#main-navigation').getBoundingClientRect().toJSON(),
+    navigationPanel:document.querySelector('#main-navigation').getBoundingClientRect().toJSON(),
     width:innerWidth,height:innerHeight,scrollY
    }));
+   loading.navigation=(await page.evaluate(navigationGeometry)).navigation;
   }finally{
    // Keep the released interceptor until this isolated context is closed:
    // disabling it while module dependencies start can strand their requests.
@@ -215,6 +303,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
   const ready=await page.locator('.header').evaluate(header=>header.getBoundingClientRect().toJSON());
   await testInfo.attach('loading-header-geometry.json',{body:Buffer.from(JSON.stringify({loading,ready})),contentType:'application/json'});
+  expect.soft(navigationIssues(loading,{loading:true}),'the styled loading navigation stays visible').toEqual([]);
   expect.soft(loading.header.height,'the loading header already has its compact footprint').toBeLessThanOrEqual(ready.height+2);
   expect.soft(loading.opening.top,'loading content follows the compact header').toBeGreaterThanOrEqual(loading.header.bottom-1);
   // Reading before refresh is trusted browser input. No such input is sent
@@ -224,10 +313,11 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await arm(page,{hash:'#play'});
   await page.reload({waitUntil:'commit'});
   await inspectSettlement(page,testInfo,profile);
+  await tapVisibleNavigation(page,browserName,testInfo,'after-refresh');
  });
 
- test(role+' requested source topic survives late refresh restoration',async({page},testInfo)=>{
-  const profile=profiles[0],hash=role==='public'?'#rights/support':'#evidence/model';
+ for(const profile of profiles)test(role+' '+profile.name+' requested source topic survives late refresh restoration',async({page,browserName},testInfo)=>{
+  const hash=role==='public'?'#rights/support':'#evidence/model';
   const target=role==='public'?'#rights-support':'#source-model';
   await page.setViewportSize({width:profile.width,height:profile.height});
   await page.emulateMedia({reducedMotion:'reduce'});
@@ -236,6 +326,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await arm(page,{hash,target});
   await page.reload({waitUntil:'commit'});
   await inspectSettlement(page,testInfo,profile,{target});
+  await tapVisibleNavigation(page,browserName,testInfo,'after-source-refresh');
  });
 
  test(role+' fresh trusted reading input releases startup positioning',async({page,browserName},testInfo)=>{
@@ -256,16 +347,31 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    await page.setViewportSize({width:profile.width,height:profile.height-100});
    const samples=await page.evaluate(()=>new Promise(resolve=>{
     const samples=[];const frame=()=>{
-     samples.push({at:performance.now(),scrollY});
+     const header=document.querySelector('.header'),box=element=>element?.getBoundingClientRect().toJSON()||null;
+     const top=window.visualViewport?.offsetTop||0,left=window.visualViewport?.offsetLeft||0;
+     samples.push({at:performance.now(),scrollY,header:box(header),navigation:{ready:header.classList.contains('navigation-ready'),
+      opacity:Number(getComputedStyle(header).opacity),viewport:{top,left,
+       bottom:top+(window.visualViewport?.height||innerHeight),right:left+(window.visualViewport?.width||innerWidth)},
+      controls:[['wordmark','.wordmark'],['Menu','[data-nav-toggle]']].map(([name,selector])=>{
+       const element=header.querySelector(selector),bounds=box(element),style=element&&getComputedStyle(element);
+       const hit=bounds&&document.elementFromPoint((bounds.left+bounds.right)/2,(bounds.top+bounds.bottom)/2);
+       return {name,box:bounds,painted:!!style&&style.display!=='none'&&style.visibility==='visible'&&Number(style.opacity)>0,
+        hit:!!element&&!!hit&&element.contains(hit)};
+      })}});
      if(samples.length===40)resolve(samples);else requestAnimationFrame(frame);
     };requestAnimationFrame(frame);
    }));
    const inputs=await page.evaluate(()=>window.__refreshInputs);
    observations.push({input,inputs,readingPosition,samples});
    expect(inputs.some(event=>event.type===input&&event.trusted),'the release used trusted '+input).toBe(true);
-   for(const sample of samples)expect(Math.abs(sample.scrollY-readingPosition),
-    'viewport settlement must not undo fresh '+input+' reading').toBeLessThanOrEqual(2);
+   for(const sample of samples){
+    expect(Math.abs(sample.scrollY-readingPosition),'viewport settlement must not undo fresh '+input+' reading').toBeLessThanOrEqual(2);
+    expect(navigationIssues(sample),'fresh '+input+' reading keeps navigation available').toEqual([]);
+   }
+   await tapVisibleNavigation(page,browserName,testInfo,'after-'+input);
    await page.setViewportSize({width:profile.width,height:profile.height});
+   expect(navigationIssues(await page.evaluate(navigationGeometry)),
+    'restoring the viewport keeps navigation available after '+input).toEqual([]);
   }
   await testInfo.attach('trusted-reading-after-refresh.json',{body:Buffer.from(JSON.stringify(observations)),contentType:'application/json'});
  });
