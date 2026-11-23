@@ -64,7 +64,19 @@ for(const path of ['./','garda/']){
    for(const dimension of Object.keys(beforeMenu))expect(Math.abs(duringMenu[dimension]-beforeMenu[dimension]),
     'opening navigation overlays the page without moving its header or content').toBeLessThan(1);
   }
-  await page.keyboard.press('Tab');await expect(nav.locator('a').first()).toBeFocused();
+  await expect(toggle).toBeFocused();
+  await page.keyboard.press('Tab');
+  // Firefox makes an overflowing scroll container a native keyboard stop.
+  // Permit that exact stop, then require the first link through normal Tab input.
+  if(await nav.evaluate(element=>document.activeElement===element)){
+   expect(await nav.evaluate(element=>{
+    const style=getComputedStyle(element);
+    return (/^(auto|scroll)$/.test(style.overflowY)&&element.scrollHeight>element.clientHeight)||
+     (/^(auto|scroll)$/.test(style.overflowX)&&element.scrollWidth>element.clientWidth);
+   }),'a native navigation stop must expose actual scroll overflow').toBe(true);
+   await page.keyboard.press('Tab');
+  }
+  await expect(nav.locator('a').first()).toBeFocused();
   await page.keyboard.press('Escape');await expect(toggle).toBeFocused();await expect(nav).toBeHidden();
   await expect(page.locator('#main')).not.toHaveAttribute('inert');
   await expect(page.locator('.footer')).not.toHaveAttribute('inert');
