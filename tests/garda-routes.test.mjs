@@ -13,7 +13,7 @@ globalThis.location={get hash(){return currentHash;},set hash(value){currentHash
 globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='.skip')return skip;if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,callback){callbacks[type]=callback;}};
-await import('../garda/app.mjs?v=hero-perspectives-20261122');
+await import('../garda/app.mjs?v=site-typography-20261123');
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 function action(name,extra={}){callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(name==='start')callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 
@@ -59,5 +59,6 @@ test('Skip link focuses the current content without changing the route or select
  const content=main.innerHTML,hash=location.hash;let prevented=false;
  callbacks.skip({preventDefault(){prevented=true;}});
  assert.ok(prevented);assert.equal(focused.at(-1),'main');assert.equal(location.hash,hash);assert.equal(main.innerHTML,content);
- route('#main');assert.match(main.innerHTML,/<h1 id="paired-title"><span>One situation\.<\/span> <span>Two perspectives\.<\/span><\/h1>/);
+ route('#main');assert.match(main.innerHTML,/<h1\b[^>]*id="paired-title"[^>]*>One situation\.<\/h1>/);
+ assert.match(main.innerHTML,/<h2\b[^>]*id="perspectives-title"[^>]*>Two perspectives\.<\/h2>/);
 });

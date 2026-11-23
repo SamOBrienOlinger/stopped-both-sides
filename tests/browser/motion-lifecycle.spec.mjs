@@ -11,24 +11,27 @@ async function revealsReady(page){
  await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');
  await frames(page);
 }
-async function recordOpacity(target,kind,includePending=false){
- await target.evaluate((element,{kind,includePending})=>{
+async function recordOpacity(target,kind,includePending=false,title=false){
+ await target.evaluate((element,{kind,includePending,title})=>{
   window.__opacityTrace=new Promise(resolve=>{
    const samples=[],startedAt=performance.now();let active=false;
    const sample=()=>{
     const cue=element.getAttribute('data-motion'),pending=element.hasAttribute('data-reveal-pending');
-    const style=getComputedStyle(element),opacity=Number(style.opacity),time=performance.now();
+    const surface=title?element.querySelector(':scope > [data-card-heading]'):element;
+    const style=getComputedStyle(surface),owner=getComputedStyle(element),opacity=Number(style.opacity),time=performance.now();
     if(cue===kind)active=true;
-    if(active||includePending)samples.push({time,opacity,cue,pending,transform:style.transform});
+    if(active||includePending)samples.push({time,opacity,cue,pending,transform:style.transform,
+     rise:style.transform==='none'?0:new DOMMatrixReadOnly(style.transform).m42,
+     ownerOpacity:Number(owner.opacity),ownerTransform:owner.transform});
     if(active&&cue!==kind&&!pending&&opacity===1){resolve({complete:true,samples});return;}
     if(time-startedAt>8000){resolve({complete:false,samples});return;}
     requestAnimationFrame(sample);
    };
    sample();
   });
- },{kind,includePending});
+ },{kind,includePending,title});
 }
-function expectPerceptibleFade(trace,kind,maximumStart,minimumElapsed){
+function expectPerceptibleFade(trace,kind,maximumStart,minimumElapsed,title=false){
  expect(trace.complete,'the cue reaches full opacity and removes its temporary state').toBe(true);
  const active=trace.samples.filter(sample=>sample.cue===kind),final=trace.samples.at(-1);
  expect(active.length,'the browser draws multiple frames of the fade').toBeGreaterThan(4);
@@ -41,7 +44,12 @@ function expectPerceptibleFade(trace,kind,maximumStart,minimumElapsed){
   expect(trace.samples[index].opacity-trace.samples[index-1].opacity,
    'the surface never flashes bright and then dims').toBeGreaterThanOrEqual(-.02);
  }
- expect(trace.samples.every(sample=>sample.transform==='none'),'opacity cues keep surfaces stationary').toBe(true);
+ if(title){
+  expect(active.some(sample=>sample.rise>1),'the heading visibly rises while it fades').toBe(true);
+  expect(trace.samples.every(sample=>sample.ownerOpacity===1&&sample.ownerTransform==='none'),
+   'the card and controls stay stationary and opaque, without a second parent fade').toBe(true);
+  expect(final.rise).toBe(0);
+ }else expect(trace.samples.every(sample=>sample.transform==='none'),'opacity cues keep surfaces stationary').toBe(true);
  expect(final).toMatchObject({opacity:1,pending:false,cue:null});
 }
 
@@ -120,25 +128,30 @@ for(const role of ['public','garda']){
   await expect(page.locator('#main h1')).toBeFocused();
   await revealsReady(page);
   expectPerceptibleFade(await page.evaluate(()=>window.__opacityTrace),'page',.6,900);
-  const group=page.locator('.content-page > section.info-block').last();
+  // The first public information card can already be inside the observer's
+  // 80px preload band after the responsive opening reflows. This shared card
+  // starts farther down both About pages, so it tests a genuine later entry.
+  const group=page.locator('.learning-intro');
+  await page.evaluate(()=>document.fonts.ready);
+  expect(await group.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
+   'the reference target starts beyond the observer preload margin').toBeGreaterThan(80);
   await expect(group).toHaveAttribute('data-reveal-pending','');
-  expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBeCloseTo(.4,2);
-  await recordOpacity(group,'reveal',true);
+  expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBe(1);
+  await expect(group.locator(':scope > h2')).toHaveAttribute('data-heading-pending','');
+  await recordOpacity(group,'reveal',true,true);
   await group.scrollIntoViewIfNeeded();
   const heading=await group.locator(':scope > h2').textContent();
   await expect.poll(async()=>(await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading)).toBe(true);
   const revealTrace=await page.evaluate(()=>window.__opacityTrace);
-  expect(revealTrace.samples[0]).toMatchObject({opacity:.4,pending:true,cue:null});
-  // WebKit may deliver the first active animation frame after the fade has
-  // progressed; the pending sample above already proves the .4 start state.
-  // Still require a visibly translucent active frame, multiple intermediate
-  // frames, monotonic progression and the full gradual duration.
-  expectPerceptibleFade(revealTrace,'reveal',.75,1350);
+  expect(revealTrace.samples[0]).toMatchObject({opacity:0,pending:true,cue:null,ownerOpacity:1});
+  // The one-second landing rise/fade belongs to the title alone. Preserve
+  // intermediate-frame and lifecycle checks without dimming its card twice.
+  expectPerceptibleFade(revealTrace,'reveal',.75,800,true);
   await reset(page);
   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
   await revealsReady(page);
-  await page.locator('.content-page > section.info-block').last().scrollIntoViewIfNeeded();
+  await group.scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
    'returning to a reference group does not replay its reveal').toBe(false);

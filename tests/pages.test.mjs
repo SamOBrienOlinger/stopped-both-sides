@@ -12,7 +12,7 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));
  assert.equal(pkg.name,'stopped-both-sides');
  const subtitle='An interactive learning resource for the public and Gardaí.';
- const shared=readFileSync(new URL('../encounters/ui.mjs?v=hero-perspectives-20261122',import.meta.url),'utf8');
+ const shared=readFileSync(new URL('../encounters/ui.mjs?v=landing-sequence-20261123',import.meta.url),'utf8');
  assert.ok(shared.includes(subtitle));
   assert.ok(shared.includes("Explore your human and civil rights and police powers through interactions between members of the public and Gardaí."));
   assert.ok(shared.includes('Browse all situations'));
@@ -109,12 +109,12 @@ test('Both entrypoints stay within one deployment on Pages, custom domains and l
  const gardaShell=readFileSync(new URL('../garda/index.html',import.meta.url),'utf8');
  assert.match(gardaShell,/\.\.\/accessibility\/perspectives\.css/);
  assert.match(gardaShell,/\.\.\/encounters\/styles\.css/);
- const gardaApp=readFileSync(new URL('../garda/app.mjs?v=hero-perspectives-20261122',import.meta.url),'utf8');
+ const gardaApp=readFileSync(new URL('../garda/app.mjs?v=site-typography-20261123',import.meta.url),'utf8');
  assert.match(gardaApp,/from '\.\.\/encounters\/ui\.mjs(?:\?[^']+)?'/);
 });
 
 test('Original public practice removes the retired explanatory paragraph without losing source access',()=>{
- const publicApp=readFileSync(new URL('../app.mjs?v=hero-perspectives-20261122',import.meta.url),'utf8');
+ const publicApp=readFileSync(new URL('../app.mjs?v=site-typography-20261123',import.meta.url),'utf8');
  assert.ok(!publicApp.includes("The next scene is fictional. No choice guarantees an outcome or excuses mistreatment. This resource cannot decide whether a particular stop, search or arrest is lawful."));
  assert.match(publicApp,/<div class="topline game-note">/);
  assert.match(publicApp,/<a href="#rights">Human and Civil Rights & sources<\/a>/);

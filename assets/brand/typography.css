@@ -1,0 +1,213 @@
+/* Shared reading rhythm. Component layouts own their grids and control gaps;
+   prose owns one trailing gap, so adjacent margins do not accumulate. */
+:root {
+ /* Reading-size preferences grow text, not a large fixed minimum gutter. */
+ --page-gutter:clamp(12px,3vw,2rem);
+ --copy-leading:1.7;
+ --copy-paragraph-gap:.85em;
+ --copy-heading-gap:.5em;
+ --copy-section-gap:clamp(1.25rem,2.5vw,2rem);
+ --copy-card-inset:clamp(8px,4%,1.5rem);
+ --copy-card-block:clamp(.875rem,2vw,1.5rem);
+}
+.reading-spacious {
+ --copy-leading:1.95;
+ --copy-paragraph-gap:1.25em;
+ --copy-heading-gap:.65em;
+}
+
+#main :where(
+ .content-page,.progress-page,.paired-picker,.scenario,.info-block,
+ .decision-context,.story,.decision-choices,.summary-item,.summary-aside,
+ .support-card,.support-recap,.recommended-situation,.learning-section,
+ .practice-content,.case-disclosure,.recap-role,.decision-comparison-role
+) p:not(:where(
+ .eyebrow,.small-note,.support-kind,.support-checked,.catalogue-status,
+ .source-meta,.access-note,.learning-citations,.progress-number,.chosen,.game-note
+)) {
+ min-inline-size:0;
+ max-inline-size:min(100%,68ch);
+ margin-block:0 var(--copy-paragraph-gap);
+ line-height:var(--copy-leading);
+ overflow-wrap:anywhere;
+ text-wrap:pretty;
+}
+
+/* Metadata stays compact; it should not inherit the old 24px paragraph top
+   margin or the spacious-reading paragraph gap intended for running prose. */
+#main :where(
+ .content-page,.progress-page,.paired-picker,.scenario,.info-block,
+ .decision-context,.story,.decision-choices,.summary-item,.summary-aside,
+ .support-card,.support-recap,.recommended-situation,.learning-section,
+ .practice-content,.case-disclosure,.recap-role,.decision-comparison-role
+) :where(p.eyebrow,p.small-note,p.support-kind,p.catalogue-status,
+ p.source-meta,p.access-note,p.learning-citations,p.chosen,p.game-note) {
+ margin-block:0 .5rem;
+}
+
+/* These are text headings, not disclosure hit targets, scene captions or the
+   landing grid, whose spacing is supplied by its own gap. */
+#main :where(h1,h2,h3,h4):not(:where(
+ .landing-instructions *,summary *,.scene-stage *,
+ .character-picker *,.scene-profile-shell *,.section-heading *
+)) {
+ min-inline-size:0;
+ margin-block:0 var(--copy-heading-gap);
+ overflow-wrap:anywhere;
+}
+
+/* Plain text lists use logical indents in either reading direction. Lists
+   that implement grids, timelines or controls retain their component layout. */
+#main :where(
+ .content-page,.info-block,.feedback,.case-disclosure,.summary-aside,
+ .recap-role,.decision-comparison-role
+) :where(ul,ol):not(:where(
+ .summary-list,.route-trail,.how-steps,.decision-guide,.learning-stages,
+ .learning-outcomes,.learning-references,.contribution-organisations,
+ .discrimination-grounds,.contribution-organisations ul
+)) {
+ margin-block:0 var(--copy-paragraph-gap);
+ padding-inline:1.25em 0;
+}
+#main :where(
+ .info-block,.feedback,.case-disclosure,.summary-aside,
+ .recap-role,.decision-comparison-role,.learning-panel-body
+) :where(ul,ol):not(:where(
+ .summary-list,.route-trail,.how-steps,.decision-guide,.learning-stages,
+ .learning-outcomes,.learning-references,.contribution-organisations,
+ .discrimination-grounds,.contribution-organisations ul
+)) > li {
+ margin-block:0;
+ line-height:var(--copy-leading);
+ overflow-wrap:anywhere;
+}
+#main :where(
+ .info-block,.feedback,.case-disclosure,.summary-aside,
+ .recap-role,.decision-comparison-role,.learning-panel-body
+) :where(ul,ol):not(:where(
+ .summary-list,.route-trail,.how-steps,.decision-guide,.learning-stages,
+ .learning-outcomes,.learning-references,.contribution-organisations,
+ .discrimination-grounds,.contribution-organisations ul
+)) > li + li {margin-block-start:.45em}
+#main :where(.content-page,.info-block,.feedback,.case-disclosure) li > :where(ul,ol):not(:where(.contribution-organisations ul)) {
+ margin-block:.45em 0;
+}
+#main :where(.content-page,.info-block,.case-disclosure) dd:not(:where(.learning-levels dd)) {
+ margin-inline-start:0;
+ margin-block:.25em var(--copy-paragraph-gap);
+ line-height:var(--copy-leading);
+ overflow-wrap:anywhere;
+}
+
+/* Percent-based side insets give enlarged text useful room in a narrow card.
+   Block insets still scale with reading size. No content gets a fixed height. */
+#main :where(
+ .info-block:not(.flow-save,.first-time-guide),.scenario,.source-card,.support-card,.support-recap,
+ .summary-item,.summary-aside,.recap-role,.decision-comparison-role,
+ .start-panel,.decision-context,.game-grid > .story,.game-grid > .decision-choices,
+ .feedback,.learning-example,.learning-evidence,
+ .contribution-columns > section,.contribution-organisations > li
+) {
+ min-inline-size:0;
+ padding-block:var(--copy-card-block);
+ padding-inline:var(--copy-card-inset);
+}
+
+/* Disclosures have a padded summary/body rather than an extra padded shell. */
+#main :where(.evidence-record) > summary,
+#main :where(.learning-panel) > summary {
+ padding-block:var(--copy-card-block);
+ padding-inline:var(--copy-card-inset);
+}
+#main :where(.evidence-body) {
+ padding-inline:var(--copy-card-inset);
+ padding-block:0 var(--copy-card-block);
+}
+#main :where(.learning-panel-body,.learning-intro,.learning-goal,.learning-cycle,.learning-context) {
+ padding-block:var(--copy-card-block);
+ padding-inline:var(--copy-card-inset);
+}
+#main .learning-section {--learning-inset:var(--copy-card-inset)}
+#main .learning-section .learning-disclosure {
+ margin-inline:var(--copy-card-inset);
+ padding-inline:var(--copy-card-inset);
+}
+#main :where(.content-page) > :where(.info-block,.learning-section),
+#main :where(.source-topic,.evidence-group) {margin-block:var(--copy-section-gap)}
+#main .info-block > .info-block {margin-block:var(--copy-paragraph-gap)}
+#main .progress-number {margin-block:.25rem .75rem}
+
+/* A final paragraph/list should not add a second inset at the bottom of a
+   card. This also overrides first-heading margins from older stylesheet layers. */
+#main :where(p,ul,ol,dl,blockquote):first-child {margin-block-start:0}
+#main :where(p,ul,ol,dl,blockquote):last-child {margin-block-end:0}
+.footer p {margin-block:0;line-height:var(--copy-leading)}
+
+/* The standalone privacy page shares the site's type and reading measure,
+   without requiring the application's presentation controller. */
+html.privacy-page {font-size:var(--reading-size,100%)}
+.privacy-page body {
+ font-family:inherit;
+ font-size:1rem;
+ line-height:var(--copy-leading);
+}
+.privacy-page #main {
+ inline-size:100%;
+ max-inline-size:74ch;
+ min-inline-size:0;
+ min-block-size:0;
+ margin-inline:auto;
+ padding-block:var(--copy-section-gap) 1rem;
+ padding-inline:max(var(--page-gutter),env(safe-area-inset-left)) max(var(--page-gutter),env(safe-area-inset-right));
+ container-type:inline-size;
+}
+.privacy-page #main > .content-page {max-inline-size:100%;margin:0}
+.privacy-page #main h1 {
+ max-inline-size:min(100%,24ch);
+ font-size:clamp(1.75rem,calc(1rem + 2.5vw),3.25rem);
+ font-size:clamp(1.75rem,calc(1rem + 5cqi),3.25rem);
+ line-height:1.15;
+ text-wrap:balance;
+}
+.privacy-page #main h2 {
+ margin-block:var(--copy-section-gap) var(--copy-heading-gap);
+ font-size:clamp(1.25rem,calc(1rem + 1vw),1.8rem);
+ font-size:clamp(1.25rem,calc(1rem + 2cqi),1.8rem);
+ line-height:1.3;
+ text-wrap:balance;
+}
+.privacy-page #main .notice {
+ padding-block:var(--copy-card-block);
+ padding-inline:var(--copy-card-inset);
+}
+.privacy-page #main nav a {
+ display:inline-flex;
+ align-items:center;
+ min-block-size:44px;
+ max-inline-size:100%;
+ padding-block:.25rem;
+ overflow-wrap:anywhere;
+}
+.privacy-page .privacy-footer {
+ max-inline-size:74ch;
+ margin-inline:auto;
+ padding-block:.25rem 1rem;
+ padding-inline:max(var(--page-gutter),env(safe-area-inset-left)) max(var(--page-gutter),env(safe-area-inset-right));
+ font-size:1rem;
+ line-height:1.5;
+}
+.privacy-page .privacy-footer .back-to-top {
+ min-block-size:44px;
+ padding:.35em .65em;
+ font-size:.875rem;
+}
+
+@media print {
+ :root {
+  --copy-paragraph-gap:.7em;
+  --copy-section-gap:1rem;
+  --copy-card-block:.75rem;
+ }
+ .privacy-page #main {max-inline-size:none;padding:0}
+ .privacy-page .privacy-footer {display:none}
+}

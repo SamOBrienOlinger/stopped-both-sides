@@ -1,0 +1,67 @@
+/* Important titles use the available card width and the reader's text size.
+   Semantic heading levels, colours, emphasis and authored margins stay intact. */
+#main [data-heading-card] {
+ min-inline-size:0;
+}
+/* Native disclosure titles inherit the surrounding size context. Containment
+   on details or summary can make WebKit scroll a revealed button between
+   pointerdown and pointerup, changing which control receives the click. */
+#main [data-heading-card]:not(details) {container-type:inline-size}
+#main .card-summary-title {display:inline-block}
+#main [data-card-heading] {
+ min-inline-size:0;
+ max-inline-size:100%;
+ overflow-wrap:anywhere;
+ text-wrap:balance;
+ font-size:clamp(1.25rem,calc(1rem + 1vw),1.8rem);
+ font-size:clamp(1.25rem,calc(1rem + 2cqi),1.8rem);
+ line-height:1.3;
+}
+#main [data-card-heading="feature"] {
+ font-size:clamp(1.75rem,calc(1rem + 2.5vw),3.25rem);
+ font-size:clamp(1.75rem,calc(1rem + 5cqi),3.25rem);
+ line-height:1.15;
+}
+#main [data-card-heading="compact"] {
+ font-size:clamp(1.0625rem,calc(.95rem + .625vw),1.4rem);
+ font-size:clamp(1.0625rem,calc(.95rem + 1.25cqi),1.4rem);
+ line-height:1.4;
+}
+#main .card-summary-title {display:inline-block;vertical-align:top}
+html:lang(ar) #main [data-card-heading] {letter-spacing:normal;line-height:1.55}
+html:lang(zh) #main [data-card-heading] {letter-spacing:normal;line-height:1.45}
+
+/* The existing motion controller owns registration, pacing and cancellation.
+   Only owned titles move: the card, its controls and any nested cards remain
+   stationary and opaque, so an ancestor cannot apply a second fade. */
+@keyframes ui-card-heading-arrive {
+ from {opacity:0;transform:translateY(37.5%)}
+ to {opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:no-preference) {
+ #main [data-heading-reveal][data-reveal-pending],
+ #main [data-heading-reveal]:is([data-motion="reveal"],[data-motion="recap"]) {
+  opacity:1;
+  animation:none;
+ }
+ /* Keep an offscreen title inside its control while it waits. The entrance
+    keyframe supplies the rise only when the title actually becomes visible. */
+ #main [data-heading-pending] {opacity:0}
+ #main [data-heading-motion] {
+  animation:ui-card-heading-arrive 1s ease-out both;
+ }
+}
+.motion-reduce #main :is([data-heading-pending],[data-heading-motion]),
+.contrast-high #main :is([data-heading-pending],[data-heading-motion]) {
+ animation:none!important;opacity:1!important;transform:none!important;
+}
+@media(prefers-reduced-motion:reduce),(forced-colors:active) {
+ #main :is([data-heading-pending],[data-heading-motion]) {
+  animation:none!important;opacity:1!important;transform:none!important;
+ }
+}
+@media print {
+ #main :is([data-heading-pending],[data-heading-motion]) {
+  animation:none!important;opacity:1!important;transform:none!important;
+ }
+}

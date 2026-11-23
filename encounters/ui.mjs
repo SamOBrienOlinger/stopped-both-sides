@@ -280,17 +280,19 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    const label=role==='public'?'Explore the public perspective':'Explore the Garda perspective';
    return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${perspectiveIcon(role)}<span>${label}</span></a>`;
   }).join('');
-  const heroImages=['garda','public'].map(perspective=>{
+  const heroImage=perspective=>{
    const image=width=>new URL(perspective==='garda'
     ?`../assets/heroes/garda-hi-vis-${width}.jpg?v=ciara-reference-label-20261120`
     :`../assets/heroes/public-hi-vis-${width}.webp?v=hero-perspectives-20261122`,import.meta.url).href;
    const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
-   return `<img class="encounter-hero-art" data-hero-perspective="${perspective}" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 44rem) 20.5rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async"${perspective==='garda'?' fetchpriority="high"':''}>`;
-  }).join('');
-  return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title">
+   return `<img class="encounter-hero-art" data-hero-perspective="${perspective}" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 46rem) 42rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async"${perspective==='garda'?' fetchpriority="high"':''}>`;
+  };
+  return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title perspectives-title">
    <div class="landing-instructions">
-    <h1 id="paired-title"><span>One situation.</span> <span>Two perspectives.</span></h1>
-    <div class="encounter-hero-pair" aria-hidden="true">${heroImages}</div>
+    <h1 id="paired-title" class="encounter-hero-title">One situation.</h1>
+    ${heroImage('garda')}
+    <h2 id="perspectives-title" class="encounter-hero-title">Two perspectives.</h2>
+    ${heroImage('public')}
     <p class="landing-deck">Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.</p>
     <div class="landing-role-actions">${links}</div>
     <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>

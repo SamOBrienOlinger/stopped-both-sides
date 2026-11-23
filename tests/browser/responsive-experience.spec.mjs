@@ -44,6 +44,73 @@ function expectGradualDisclosure(samples,before,opening){
 }
 
 for(const path of ['./','garda/']){
+ test(`${path} navigation fits every control and scrolls enlarged menus within the viewport`,async({page},testInfo)=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.setViewportSize({width:375,height:812});
+  await page.goto(path+'?lang=en#play');
+  await page.evaluate(()=>document.fonts.ready);
+  const nav=page.locator('#main-navigation'),toggle=page.locator('[data-nav-toggle]');
+  const controls=nav.locator(':scope > :is(a,button)');
+  await expect(controls).toHaveCount(8);
+  const before=await page.locator('#main').evaluate(element=>element.getBoundingClientRect().top+scrollY);
+  await openNavigation(page);
+  await expectControlsFit(page,'all eight navigation items on a regular phone');
+  await expect.poll(()=>nav.evaluate(element=>{
+   const box=element.getBoundingClientRect(),header=document.querySelector('.header').getBoundingClientRect();
+   const targets=[...element.querySelectorAll(':scope > :is(a,button)')];
+   return {withinViewport:box.top>=header.bottom&&box.bottom<=innerHeight,
+    allVisible:element.scrollHeight<=element.clientHeight+1&&targets.every(target=>{
+     const rect=target.getBoundingClientRect();
+     return rect.top>=box.top&&rect.bottom<=box.bottom&&rect.left>=box.left&&rect.right<=box.right;
+    }),generousTargets:targets.every(target=>target.getBoundingClientRect().height>=48)};
+  })).toEqual({withinViewport:true,allVisible:true,generousTargets:true});
+  expect(await page.locator('#main').evaluate(element=>element.getBoundingClientRect().top+scrollY),'opening the larger menu does not move the page').toBeCloseTo(before,0);
+  await page.screenshot({path:testInfo.outputPath((path==='garda/'?'garda':'public')+'-navigation-375.png')});
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  for(const width of [1366,1920]){
+   await page.setViewportSize({width,height:900});
+   await expect(toggle).toBeHidden();
+   await expect(nav).toBeVisible();
+   await expectControlsFit(page,'complete desktop navigation at '+width+'px');
+   await expect.poll(()=>page.locator('.header').evaluate(header=>{
+    const box=header.getBoundingClientRect();
+    return box.height<=128&&[...header.querySelectorAll('nav>:is(a,button)')].every(control=>{
+     const rect=control.getBoundingClientRect();
+     return rect.height>=48&&rect.left>=0&&rect.right<=innerWidth&&rect.top>=box.top&&rect.bottom<=box.bottom;
+    });
+   })).toBe(true);
+  }
+  for(const lang of ['en','ar']){
+   await page.setViewportSize({width:280,height:568});
+   await page.goto(path+'?lang='+lang+'#play');
+   await expect(page.locator('html')).toHaveAttribute('lang',lang==='en'?'en-IE':'ar');
+   await page.evaluate(async()=>{await document.fonts.ready;document.documentElement.style.setProperty('--reading-size','200%');});
+   await openNavigation(page);
+   await expect.poll(()=>nav.evaluate(element=>{
+    const box=element.getBoundingClientRect(),header=document.querySelector('.header').getBoundingClientRect();
+    return {withinViewport:box.top>=header.bottom-1&&box.bottom<=innerHeight+1,
+     scrolls:element.scrollHeight>element.clientHeight+1,horizontal:element.scrollWidth<=element.clientWidth+1};
+   })).toEqual({withinViewport:true,scrolls:true,horizontal:true});
+   await expectControlsFit(page,lang+' enlarged navigation keeps every label inside its control');
+   await toggle.focus();
+   for(const [index,control] of (await controls.all()).entries()){
+    await page.keyboard.press('Tab');
+    if(index===0&&await nav.evaluate(element=>document.activeElement===element))await page.keyboard.press('Tab');
+    await expect(control).toBeFocused();
+   }
+   const last=controls.last();
+   await expect(last).toHaveAttribute('id','language-settings-trigger');
+   await expect.poll(()=>last.evaluate(control=>{
+    const box=control.getBoundingClientRect(),panel=control.parentElement.getBoundingClientRect();
+    return control.parentElement.scrollTop>0&&box.top>=panel.top-1&&box.bottom<=panel.bottom+1&&box.bottom<=innerHeight+1;
+   }),'the final menu control can be reached and read in the scrolled panel').toBe(true);
+   await page.keyboard.press('Escape');
+   await expect(toggle).toBeFocused();
+   await expect(page.locator('#main')).not.toHaveAttribute('inert');
+  }
+ });
+
  test(`${path} compact navigation supports keyboard, settings, route changes and resizing`,async({page})=>{
   await page.setViewportSize({width:320,height:700});
   await page.goto(path);
@@ -114,9 +181,25 @@ for(const path of ['./','garda/']){
      const element=record.target;
      const kind=element.getAttribute?.('data-motion');
      if(!['reveal','recap','disclosure'].includes(kind))continue;
+     const style=getComputedStyle(element);
+     const headingOnly=element.hasAttribute('data-heading-reveal')&&['reveal','recap'].includes(kind);
+     const ancestors=[];
+     for(let parent=element.parentElement;parent;parent=parent.parentElement){
+      if(!parent.matches('[data-motion="reveal"],[data-motion="recap"],[data-motion="disclosure"]'))continue;
+      const parentStyle=getComputedStyle(parent);
+      // Parent and child cards may reveal separate owned titles. Neither
+      // owner may fade or move the other card's content a second time.
+      ancestors.push({kind:parent.getAttribute('data-motion'),headingOnly:parent.hasAttribute('data-heading-reveal'),
+       opacity:Number(parentStyle.opacity),transform:parentStyle.transform,animation:parentStyle.animationName});
+     }
+     const headingAnimations=headingOnly?[...element.querySelectorAll('[data-heading-motion]')]
+      .filter(title=>title.closest('[data-heading-card]')===element)
+      .map(title=>title.getAnimations().filter(animation=>animation.animationName==='ui-card-heading-arrive'&&
+       !['finished','idle'].includes(animation.playState)).length):[];
      window.surfaceCues.push({kind,heading:element.querySelector('h1,h2,p')?.textContent||'',
-      transform:getComputedStyle(element).transform,
-      nested:!!element.parentElement?.closest('[data-motion="reveal"],[data-motion="recap"],[data-motion="disclosure"]')});
+      transform:style.transform,opacity:Number(style.opacity),animation:style.animationName,headingOnly,headingAnimations,
+      nested:ancestors.some(parent=>!parent.headingOnly||!['reveal','recap'].includes(parent.kind)||
+       parent.opacity!==1||parent.transform!=='none'||parent.animation!=='none')});
     }
    }).observe(document,{subtree:true,attributes:true,attributeFilter:['data-motion']});
   });
@@ -162,6 +245,10 @@ for(const path of ['./','garda/']){
   await page.locator('.learning-disclosure>summary').click();
   const panel=page.locator('.learning-panel').first(),summary=panel.locator('summary');
   await summary.scrollIntoViewIfNeeded();await summary.focus();
+  // Focusing a nested summary settles its opening parent. Let that layout
+  // and the browser's focus scroll finish before recording the child baseline.
+  await expect(page.locator('.learning-disclosure')).not.toHaveAttribute('data-disclosure-state');
+  await frames(page);
   const beforeDisclosure=await panel.evaluate(panelGeometry);
   await recordDisclosure(panel);
   await page.keyboard.press('Enter');
@@ -180,8 +267,14 @@ for(const path of ['./','garda/']){
   await page.keyboard.press('Enter');await expect(panel).toHaveAttribute('data-motion','disclosure');
   await expect(panel.locator('.learning-example')).toHaveCount(6);
   await expect(panel.locator('[data-motion="reveal"],[data-motion="recap"]')).toHaveCount(0);
-  expect(await page.evaluate(()=>window.surfaceCues.every(cue=>cue.transform==='none'&&!cue.nested)),
-   'surface cues do not translate content or multiply through nested groups').toBe(true);
+  const surfaceCues=await page.evaluate(()=>window.surfaceCues);
+  expect(surfaceCues.filter(cue=>cue.transform!=='none'||cue.nested||
+   (cue.headingOnly&&(cue.opacity!==1||cue.animation!=='none'))),
+   'surface cues stay stationary, and heading-only owners never multiply a nested fade').toEqual([]);
+  expect(surfaceCues.some(cue=>cue.headingOnly&&cue.headingAnimations.length),
+   'the recorder observes the owned heading entrances').toBe(true);
+  expect(surfaceCues.flatMap(cue=>cue.headingAnimations).every(count=>count<=1),
+   'each owned title has at most one active heading animation').toBe(true);
   const text=await page.locator('#main').innerText();
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect(page.locator('[data-motion]')).toHaveCount(0);

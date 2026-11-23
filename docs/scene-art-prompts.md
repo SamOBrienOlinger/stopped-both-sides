@@ -30,7 +30,7 @@ Character scale and floor depth are calibrated by setting in `encounters/scene-l
 
 ## Landing-page opposite perspective — 22 November 2026
 
-The landing page now pairs the existing `assets/heroes/garda-hi-vis-{width}.jpg` with a new `assets/heroes/public-hi-vis-{width}.webp` beneath “One situation. Two perspectives.” Both have 480×270, 960×540 and 1600×900 variants and keep their full composition. The README shows the same updated pair. The original `public-{width}.webp` and `garda-{width}.webp` remain available.
+The landing page shows the existing `assets/heroes/garda-hi-vis-{width}.jpg` directly beneath “One situation.”, followed by “Two perspectives.” and the new reverse view, `assets/heroes/public-hi-vis-{width}.webp`. This heading–image sequence stays in one fluid column on phones and larger screens, with a maximum width of 42rem. The two headings retain the one-second rise-and-fade reveal and respect reduced-motion preferences; their navigation focus does not draw a decorative outline. Both have 480×270, 960×540 and 1600×900 variants and keep their full composition. The README shows the same updated pair. The original `public-{width}.webp` and `garda-{width}.webp` remain available.
 
 The new public-facing view was edited with the built-in OpenAI image-generation tool from `assets/heroes/public-960.webp`, using `assets/heroes/garda-hi-vis-960.jpg` only as the uniform reference. It retains the supplied reverse-view composition while matching the Garda’s light-blue short sleeves, fluorescent vest and equipment belt. The generated PNG was converted to the three responsive WebP sizes without adding or removing content.
 

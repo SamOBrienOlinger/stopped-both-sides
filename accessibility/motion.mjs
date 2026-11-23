@@ -1,6 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
 import {createDisclosures} from './disclosures.mjs?v=learning-language-20261120';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
+import {headingsForCard} from './card-headings.mjs?v=card-headings-20261123';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.
@@ -11,8 +12,9 @@ export function createMotion({main,getLegacyState=()=>null}){
  const forced=globalThis.matchMedia?.('(forced-colors: active)');
  const active=new Map(),frames=new Map(),seen=new Set(),pendingReveals=new Map();
  let previous=null,observer=null;
- const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce');
+ const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce')&&!root.classList.contains('contrast-high');
  const all=selector=>Array.from(main.querySelectorAll(selector));
+ const headingEntrance=element=>element.hasAttribute?.('data-heading-entrance')&&headingsForCard(element).length>0;
  const preferences=()=>[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
   ...['contrast-high','reading-spacious','motion-reduce'].map(name=>root.classList.contains(name))].join('|');
 
@@ -25,6 +27,11 @@ export function createMotion({main,getLegacyState=()=>null}){
   active.delete(element);
   element.removeAttribute('data-motion');
   element.removeAttribute('data-reveal-pending');pendingReveals.delete(element);
+  element.removeAttribute('data-heading-reveal');
+  for(const heading of headingsForCard(element)){
+   heading.removeAttribute('data-heading-pending');
+   heading.removeAttribute('data-heading-motion');
+  }
  }
  function clear(){
   for(const frame of frames.keys())cancelAnimationFrame(frame);
@@ -38,16 +45,26 @@ export function createMotion({main,getLegacyState=()=>null}){
   frames.set(frame,{element,kind});
  }
  function cue(element,kind,finished=()=>{}){
-  if(!element||!allowed())return;
+  if(!element)return;
+  const abort=()=>{remove(element);finished();};
+  if(!allowed()){abort();return;}
   afterFocus(element,kind,()=>{
-   if(!element.isConnected||!element.getClientRects().length||!allowed()){finished();return;}
-   if(isEntrance(kind)&&element.contains(document.activeElement)){finished();return;}
+   // Focus, visibility or a preference may change between intersection and
+   // this frame. Refusing a cue must also settle any pending title opacity.
+   if(!element.isConnected||!element.getClientRects().length||!allowed()){abort();return;}
+   if(isEntrance(kind)&&element.contains(document.activeElement)){abort();return;}
    remove(element);
+   const headingTargets=isEntrance(kind)&&headingEntrance(element)?headingsForCard(element):[];
+   if(headingTargets.length){
+    element.setAttribute('data-heading-reveal','');
+    for(const heading of headingTargets)heading.setAttribute('data-heading-motion','');
+   }
    element.setAttribute('data-motion',kind);
    // Only pace the finite presentation cues owned by this controller. Ambient
    // loops and unrelated hover transitions retain their own native timelines.
    const animations=(element.getAnimations?.({subtree:true})||[]).filter(animation=>
     String(animation.animationName||'').startsWith('ui-')&&
+    (!headingTargets.length||headingTargets.includes(animation.effect?.target))&&
     Number.isFinite(animation.effect?.getComputedTiming().endTime));
    const complete=()=>{remove(element);finished();};
    if(animations.length){
@@ -81,8 +98,8 @@ export function createMotion({main,getLegacyState=()=>null}){
    progress:all('.progress-page progress').map(element=>element.value).join(',')};
  }
 
- // Keep the initial viewport steady. Only groups reached later can receive a
- // cue, and a group and its descendants never animate independently.
+ // Keep the initial viewport steady. Later cards reveal only their own titles;
+ // a surrounding group must not fade the same content a second time.
  function observeReveals(next,suppress,disclosure=null){
   observer?.disconnect();observer=null;
   // Refresh the offscreen queue in one task. A pending entrance that has
@@ -96,12 +113,18 @@ export function createMotion({main,getLegacyState=()=>null}){
     '.topic-explorer','.learning-goals','.source-topic',
     '.learning-intro','.learning-cycle','.learning-context','.learning-panel',
     '.learning-example','.learning-outcomes > li','.evidence-group > h2']:[];
+  selectors.push('[data-heading-entrance]');
   const targets=[],elements=new Set();
   for(const selector of selectors)all(selector).forEach((element,index)=>{
    if(element.parentElement?.closest('details:not([open])'))return;
+   // A broad section with leaf cards is not a second animation surface.
+   // Its own tagged heading can still reveal without moving those cards.
+   if(!headingEntrance(element)&&element.querySelector('[data-heading-entrance]'))return;
+   if(element.matches?.('[data-card-heading]'))return;
    if(elements.has(element))return;
    elements.add(element);
-   const identity=element.id||element.querySelector('[data-action="paired-start"][data-id]')?.dataset.id||element.dataset.roleTone||index;
+   const identity=element.id||element.querySelector('[data-action="paired-start"][data-id]')?.dataset.id||
+    (headingEntrance(element)?`${element.dataset.headingCard}:${headingsForCard(element)[0].textContent}`:'')||element.dataset.roleTone||index;
    const key=`${next.revealScope}|${selector}|${identity}`;
    targets.push({element,key});
   });
@@ -109,7 +132,7 @@ export function createMotion({main,getLegacyState=()=>null}){
   const candidates=targets.filter(({element,key})=>{
    let nested=false;
    for(let parent=element.parentElement;parent&&parent!==main;parent=parent.parentElement){
-    if(elements.has(parent)){nested=true;break;}
+    if(elements.has(parent)&&!headingEntrance(parent)){nested=true;break;}
    }
    if(suppress||!allowed()||nested||disclosure?.contains(element)){
     seen.add(key);return false;
@@ -123,6 +146,10 @@ export function createMotion({main,getLegacyState=()=>null}){
   });
   if(!candidates.length||typeof globalThis.IntersectionObserver!=='function')return;
   for(const {element,key} of candidates){
+   if(headingEntrance(element)){
+    element.setAttribute('data-heading-reveal','');
+    for(const heading of headingsForCard(element))heading.setAttribute('data-heading-pending','');
+   }
    element.setAttribute('data-reveal-pending','');pendingReveals.set(element,key);
   }
   const keys=new Map(candidates.map(item=>[item.element,item.key]));
