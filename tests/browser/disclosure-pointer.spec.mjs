@@ -282,7 +282,10 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   const ground=discrimination.locator('[data-ground="gender"]');
   await recordCatalogueToggle(ground);await ground.locator(':scope > summary').click();
   await expectNativeToggle(page,true);
-  await ground.locator('[data-action="paired-start"][data-id="discrimination-gender"]').click();
+  await ground.locator(':scope > summary').focus();await page.keyboard.press('Tab');
+  const groundStart=ground.locator('[data-action="paired-start"][data-id="discrimination-gender"]');
+  await expect(groundStart).toBeFocused();
+  await groundStart.click();
   await expect(page.locator('#scene-title')).toBeVisible();
   await expect(page.locator('[data-action="paired-answer"]').first()).toBeVisible();
  });

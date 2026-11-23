@@ -68,7 +68,7 @@ test('Expanded ground buttons and situations fit mobile, desktop and enlarged Ar
   }
   if(language==='ar'){
    await expect(page.locator('html')).toHaveAttribute('dir','rtl');
-   await expect(group.locator(':scope>summary>strong')).not.toHaveText('Gender');
+   await expect(group.locator(':scope>summary>.catalogue-summary-content>strong')).not.toHaveText('Gender');
   }
  }
 });

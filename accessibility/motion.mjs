@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
 import {createDisclosures} from './disclosures.mjs?v=landing-render-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
-import {headingsForCard} from './card-headings.mjs?v=card-headings-20261123';
+import {headingsForCard} from './card-headings.mjs?v=catalogue-keyboard-20261123';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.

@@ -1,6 +1,6 @@
 // Presentation enhancements run after translation. Original wording, inline
 // citations, game state and language-pack lookup keys stay intact.
-import {decorateCardHeadings} from './card-headings.mjs?v=card-headings-20261123';
+import {decorateCardHeadings} from './card-headings.mjs?v=catalogue-keyboard-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 export function paragraphChunks(text,language='en'){
  const authored=text.split(/\r?\n[ \t]*\r?\n/).map(paragraph=>paragraph.trim()).filter(Boolean);

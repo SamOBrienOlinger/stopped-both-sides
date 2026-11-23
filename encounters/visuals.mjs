@@ -47,7 +47,7 @@ export function discriminationGrounds(topic,renderCards,{openGround=''}={}){
  }
  return `<ul class="discrimination-grounds" role="list">${[...groups.values()].map(group=>`<li>
   <details class="discrimination-ground" data-ground="${group.id}" ${openGround===group.id?'open':''}>
-   <summary class="discrimination-ground-trigger"><strong>${esc(group.title)}</strong><span class="situation-topic-count" aria-hidden="true">${group.encounters.length}</span><span class="landing-disclosure-caret" aria-hidden="true"></span></summary>
+   <summary class="discrimination-ground-trigger"><span class="catalogue-summary-content"><strong>${esc(group.title)}</strong><span class="situation-topic-count" aria-hidden="true">${group.encounters.length}</span><span class="landing-disclosure-caret" aria-hidden="true"></span></span></summary>
    <div class="discrimination-ground-content">${renderCards(group)}</div>
   </details>
  </li>`).join('')}</ul>`;
@@ -55,10 +55,10 @@ export function discriminationGrounds(topic,renderCards,{openGround=''}={}){
 
 export function situationTopics(groups,renderCards,{openTopic='',preview=false}={}){
  return groups.map(topic=>`<details class="situation-topic" data-situation-topic="${topic.id}" ${openTopic===topic.id?'open':''}>
-  <summary class="situation-topic-trigger">
+  <summary class="situation-topic-trigger"><span class="catalogue-summary-content">
    ${learningIcon(topic.id)}<strong>${topic.title}</strong><span class="situation-topic-count" aria-hidden="true">${topic.encounters.length}</span><span class="landing-disclosure-caret" aria-hidden="true"></span>
    ${preview?`<span class="topic-preview">${esc(topic.preview||encounters[topic.encounters[0]].title)}</span>`:''}
-  </summary>
+  </span></summary>
   <div class="situation-topic-content">${renderCards(topic)}</div>
  </details>`).join('');
 }
