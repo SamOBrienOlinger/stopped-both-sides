@@ -181,9 +181,25 @@ for(const path of ['./','garda/']){
      const element=record.target;
      const kind=element.getAttribute?.('data-motion');
      if(!['reveal','recap','disclosure'].includes(kind))continue;
+     const style=getComputedStyle(element);
+     const headingOnly=element.hasAttribute('data-heading-reveal')&&['reveal','recap'].includes(kind);
+     const ancestors=[];
+     for(let parent=element.parentElement;parent;parent=parent.parentElement){
+      if(!parent.matches('[data-motion="reveal"],[data-motion="recap"],[data-motion="disclosure"]'))continue;
+      const parentStyle=getComputedStyle(parent);
+      // Parent and child cards may reveal separate owned titles. Neither
+      // owner may fade or move the other card's content a second time.
+      ancestors.push({kind:parent.getAttribute('data-motion'),headingOnly:parent.hasAttribute('data-heading-reveal'),
+       opacity:Number(parentStyle.opacity),transform:parentStyle.transform,animation:parentStyle.animationName});
+     }
+     const headingAnimations=headingOnly?[...element.querySelectorAll('[data-heading-motion]')]
+      .filter(title=>title.closest('[data-heading-card]')===element)
+      .map(title=>title.getAnimations().filter(animation=>animation.animationName==='ui-card-heading-arrive'&&
+       !['finished','idle'].includes(animation.playState)).length):[];
      window.surfaceCues.push({kind,heading:element.querySelector('h1,h2,p')?.textContent||'',
-      transform:getComputedStyle(element).transform,
-      nested:!!element.parentElement?.closest('[data-motion="reveal"],[data-motion="recap"],[data-motion="disclosure"]')});
+      transform:style.transform,opacity:Number(style.opacity),animation:style.animationName,headingOnly,headingAnimations,
+      nested:ancestors.some(parent=>!parent.headingOnly||!['reveal','recap'].includes(parent.kind)||
+       parent.opacity!==1||parent.transform!=='none'||parent.animation!=='none')});
     }
    }).observe(document,{subtree:true,attributes:true,attributeFilter:['data-motion']});
   });
@@ -247,8 +263,14 @@ for(const path of ['./','garda/']){
   await page.keyboard.press('Enter');await expect(panel).toHaveAttribute('data-motion','disclosure');
   await expect(panel.locator('.learning-example')).toHaveCount(6);
   await expect(panel.locator('[data-motion="reveal"],[data-motion="recap"]')).toHaveCount(0);
-  expect(await page.evaluate(()=>window.surfaceCues.every(cue=>cue.transform==='none'&&!cue.nested)),
-   'surface cues do not translate content or multiply through nested groups').toBe(true);
+  const surfaceCues=await page.evaluate(()=>window.surfaceCues);
+  expect(surfaceCues.filter(cue=>cue.transform!=='none'||cue.nested||
+   (cue.headingOnly&&(cue.opacity!==1||cue.animation!=='none'))),
+   'surface cues stay stationary, and heading-only owners never multiply a nested fade').toEqual([]);
+  expect(surfaceCues.some(cue=>cue.headingOnly&&cue.headingAnimations.length),
+   'the recorder observes the owned heading entrances').toBe(true);
+  expect(surfaceCues.flatMap(cue=>cue.headingAnimations).every(count=>count<=1),
+   'each owned title has at most one active heading animation').toBe(true);
   const text=await page.locator('#main').innerText();
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect(page.locator('[data-motion]')).toHaveCount(0);

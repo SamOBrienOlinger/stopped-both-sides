@@ -128,7 +128,13 @@ for(const role of ['public','garda']){
   await expect(page.locator('#main h1')).toBeFocused();
   await revealsReady(page);
   expectPerceptibleFade(await page.evaluate(()=>window.__opacityTrace),'page',.6,900);
-  const group=page.locator('.content-page > section.info-block').last();
+  // The first public information card can already be inside the observer's
+  // 80px preload band after the responsive opening reflows. This shared card
+  // starts farther down both About pages, so it tests a genuine later entry.
+  const group=page.locator('.learning-intro');
+  await page.evaluate(()=>document.fonts.ready);
+  expect(await group.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
+   'the reference target starts beyond the observer preload margin').toBeGreaterThan(80);
   await expect(group).toHaveAttribute('data-reveal-pending','');
   expect(await group.evaluate(element=>Number(getComputedStyle(element).opacity))).toBe(1);
   await expect(group.locator(':scope > h2')).toHaveAttribute('data-heading-pending','');
@@ -145,7 +151,7 @@ for(const role of ['public','garda']){
   await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
   await openNavigation(page);await page.locator('.header [data-nav="about"]').click();
   await revealsReady(page);
-  await page.locator('.content-page > section.info-block').last().scrollIntoViewIfNeeded();
+  await group.scrollIntoViewIfNeeded();
   await frames(page);
   expect((await events(page)).some(event=>event.kind==='reveal'&&event.heading===heading),
    'returning to a reference group does not replay its reveal').toBe(false);
