@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,currentStage,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {startEncounter,currentStage,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
 
 const readState=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 

@@ -1,7 +1,7 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {expectStaticHeadings} from './static-headings.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
 
 const paths={public:'./',garda:'garda/'};
 const cast={public:'public-2',garda:'garda-5'};

@@ -2,15 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {characters} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=link-audit-20261123';
+import {characters} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=nia-public-20261123';
 import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
 import {backgroundImage} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
-import {situationParticipants} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
+import {situationParticipants} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
 
-test('Every stage and all 81 character pairs have a complete illustration',()=>{
- let covered=0;
+test('Every stage and all 90 character pairs have a complete illustration',()=>{
+ let covered=0,pairRenderings=0;
  assert.deepEqual(Object.keys(sceneDirections).sort(),Object.keys(encounters).sort());
  for(const e of Object.values(encounters)){
   assert.deepEqual(Object.keys(sceneDirections[e.id]).sort(),Object.keys(e.nodes).sort());
@@ -18,12 +18,13 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
    covered++;
    for(const p of characters.public)for(const g of characters.garda){
     const state={...startEncounter(e.id,'public',{cast:{public:p.id,garda:g.id}}),nodeId};
-    const html=renderScene(state),model=sceneModel(state);
+    const html=renderScene(state),model=sceneModel(state);pairRenderings++;
     assert.ok(sceneAssets.includes(model.place));assert.ok(sceneAssets.includes(model.otherPlace));
     assert.match(html,new RegExp(`data-scene-character="${state.cast.public}"`));
     assert.match(html,new RegExp(`data-scene-character="${state.cast.garda}"`));
-    const participants=situationParticipants(e.id,state.cast,{nodeId})||roles.map(role=>({role}));
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,participants.filter(person=>person.role==='public'&&!person.character?.sceneArtwork).length);
+    const participants=situationParticipants(e.id,state.cast,{nodeId})||roles.map(role=>({role,characterId:state.cast[role]}));
+    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,participants.filter(person=>person.role==='public'&&person.characterId!=='public-10'&&!person.character?.sceneArtwork).length);
+    assert.equal((html.match(/characters\/nia-public-20261123\.png/g)||[]).length,participants.filter(person=>person.characterId==='public-10').length);
     assert.equal((html.match(/characters\/discrimination-support-20261122.png/g)||[]).length,participants.filter(person=>person.character?.sceneArtwork).length);
     assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,participants.filter(person=>person.role==='garda').length);
     assert.equal((html.match(/clip-path:inset\(/g)||[]).length,participants.length,'each character is isolated from neighbouring figures');
@@ -34,6 +35,7 @@ test('Every stage and all 81 character pairs have a complete illustration',()=>{
   }
  }
  assert.equal(covered,stageCount);
+ assert.equal(pairRenderings,stageCount*90);
 });
 
 test('Answers update the phase while illustrated characters retain their neutral stance',()=>{
@@ -85,6 +87,7 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
 test('Both entrypoints load scene styles and all locally delivered images exist',()=>{
  assert.ok(existsSync(new URL('../assets/scenes/contextual-cast.webp',import.meta.url)));
  assert.ok(existsSync(new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url)));
+ assert.ok(existsSync(new URL('../assets/characters/nia-public-20261123.png',import.meta.url)));
  for(const place of sceneAssets){
   const src=backgroundImage(place)?.src||`../assets/scenes/${place}.webp`;
   assert.ok(existsSync(new URL(src,import.meta.url)),place);

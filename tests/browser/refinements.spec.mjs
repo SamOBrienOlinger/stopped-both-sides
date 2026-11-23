@@ -1,6 +1,6 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {startEncounter,stateHash,decodeState,answer,continueEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const cast={public:'public-2',garda:'garda-5'};
 for(const role of ['public','garda'])test(`${role}: facts, identity and variation precede decisions at phone and desktop widths`,async({page},testInfo)=>{

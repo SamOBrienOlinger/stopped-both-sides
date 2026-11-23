@@ -1,6 +1,6 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
 import {expectControlsFit} from './control-layout.mjs';
 
 const sizes=[[320,568],[390,844],[568,320],[768,1024],[1024,768],[1366,768],[1920,1080],[2560,1440]];
@@ -122,7 +122,7 @@ async function chooseFirst(page,role,testInfo){
  await expect(page.locator('.character-option')).toHaveCount(0);
  await fits(page,'simple setup');
  await page.locator('[data-action="paired-setup-characters"]').click();
- await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'character picker');
+ await expect(page.locator('.character-option')).toHaveCount(role==='public'?10:9);await fits(page,'character picker');
  await captureControls(page,role,page.viewportSize().width,'standard',testInfo,[['character-picker','.character-picker']]);
  await page.locator('[data-action="paired-setup-done"]').click();
  await expect(page.locator(`[data-action="paired-start"]`).first()).toHaveAttribute('data-role',role);
@@ -160,7 +160,7 @@ for(const role of ['public','garda']){
    await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.flow-role-bar'],['feedback-actions','.flow-feedback-actions'],['footer','.footer']]);
    const caption=await openCharacterPicker(page);
    await expect(page.locator('#character-picker-title')).toBeFocused();
-   await expect(page.locator('.character-option')).toHaveCount(9);await fits(page,'large Irish character picker');
+   await expect(page.locator('.character-option')).toHaveCount(role==='public'?10:9);await fits(page,'large Irish character picker');
    await captureControls(page,role,width,'large-irish',testInfo,[['character-picker','.character-picker']]);
    await page.locator('[data-action="paired-character-close"]').click();
    await expect(caption).toBeFocused();

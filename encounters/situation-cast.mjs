@@ -1,10 +1,10 @@
-import {characters,characterFor,castForSituation} from './characters.mjs?v=situation-cast-20261122';
+import {characters,characterFor,castForSituation} from './characters.mjs?v=nia-public-20261123';
 import {supportingCharacters} from './supporting-characters.mjs?v=cast-audit-20261122';
 import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
 
 // These are author-selected portraits for fictional roles, not assumptions
 // about a real person's identity, beliefs, disability or civil status.
-const women=['public-4','public-7','public-2','public-6'];
+const women=['public-4','public-7','public-2','public-6','public-10'];
 const men=['public-5','public-8','public-1','public-9'];
 const older=['public-9','public-3','public-6'];
 const adults=characters.public.map(character=>character.id);

@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
-import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=link-audit-20261123';
-import {startEncounter} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=nia-public-20261123';
+import {startEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
 test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));

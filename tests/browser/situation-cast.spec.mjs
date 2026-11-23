@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {discriminationEncounters} from '../../encounters/discrimination.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
-import {situationParticipants} from '../../encounters/situation-cast.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {situationParticipants} from '../../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {openCharacterPicker} from './navigation.mjs';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
@@ -28,7 +28,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.locator('[data-action="paired-answer"]').first().click();
   const answered=current(page);
   const caption=await openCharacterPicker(page,'public');
-  await expect(page.locator('.character-option')).toHaveCount(9);
+  await expect(page.locator('.character-option')).toHaveCount(10);
   await page.locator('[data-character="public-5"]').click();
   await page.locator('[data-action="paired-character-close"]').click();
   await expect(caption).toBeFocused();
@@ -48,12 +48,12 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
  });
 
  test(`${role}: character choices retain the written gender, same-sex couple and older age`,async({page})=>{
-  for(const [id,count,label] of [['discrimination-gender',4,'Woman with a booking'],['discrimination-sexual-orientation',9,'Member of the couple'],['discrimination-age',3,'Applicant, 67 years old']]){
+  for(const [id,count,label] of [['discrimination-gender',5,'Woman with a booking'],['discrimination-sexual-orientation',10,'Member of the couple'],['discrimination-age',3,'Applicant, 67 years old']]){
    await page.goto(path+'?lang=en'+stateHash(startEncounter(id,role,{cast:{public:'public-1',garda:'garda-4'}})));
    await expect(page.locator(sceneSelector+' [data-scene-label-role="public"]')).toContainText(label);
    await openCharacterPicker(page,'public');
    await expect(page.locator('.character-option')).toHaveCount(count);
-   if(count<9){
+   if(count<10){
     await expect(page.locator('.scene-cast-requirement')).toContainText('match the age or gender');
     await expect(page.locator('[data-character="public-1"]')).toHaveCount(0);
    }
@@ -75,7 +75,7 @@ test('All twenty discrimination scenes and follow-ups keep every participant and
  });
  const expectations=states.map(state=>({id:state.id+'/'+state.nodeId,people:situationParticipants(state.id,state.cast,{nodeId:state.nodeId}).map(person=>({key:person.key,id:person.characterId,number:person.number}))}));
  await page.evaluate(async states=>{
-  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=link-audit-20261123');
+  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=nia-public-20261123');
   document.querySelector('#main').innerHTML=states.map(state=>'<div style="max-width:40rem;margin:auto">'+renderScene(state)+'</div>').join('');
   document.querySelectorAll('#main img').forEach(image=>image.loading='eager');
  },states);

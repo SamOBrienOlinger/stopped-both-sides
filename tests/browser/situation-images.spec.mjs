@@ -1,10 +1,10 @@
 import {expect,test} from '@playwright/test';
 import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {defaultCast} from '../../encounters/characters.mjs';
-import {startEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {defaultCast} from '../../encounters/characters.mjs?v=nia-public-20261123';
+import {startEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
 import {topicGroups} from '../../encounters/presentation.mjs?v=link-audit-20261123';
-import {renderScene} from '../../encounters/scenes.mjs?v=link-audit-20261123';
-import {situationParticipants} from '../../encounters/situation-cast.mjs?v=situation-locations-20261122';
+import {renderScene} from '../../encounters/scenes.mjs?v=nia-public-20261123';
+import {situationParticipants} from '../../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
 const situations=Object.values(encounters);

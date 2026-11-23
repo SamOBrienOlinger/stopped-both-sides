@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {createDisclosures} from './disclosures.mjs?v=landing-render-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 import {secondaryHeadingSelector} from './card-headings.mjs?v=static-headings-20261123';

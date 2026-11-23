@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {encounters,roles} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {characters} from '../../encounters/characters.mjs';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {characters} from '../../encounters/characters.mjs?v=nia-public-20261123';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
 import {expectControlsFit} from './control-layout.mjs';
 import {openCharacterPicker} from './navigation.mjs';
 
@@ -58,15 +58,15 @@ async function aligned(page){
  const result=await page.evaluate(geometry);expect(result.labels).toBeGreaterThan(0);return result;
 }
 
-// All reachable stage models x all 81 casts, on both CSS entry points at both widths.
+// All reachable stage models x all 90 casts, on both CSS entry points at both widths.
 for(const path of ['./','garda/'])for(const width of [390,1366]){
- test(`${path} ${width}px: every stage and all 81 character pairings keep names anchored`,async({page},info)=>{
+ test(`${path} ${width}px: every stage and all 90 character pairings keep names anchored`,async({page},info)=>{
   test.setTimeout(300000);
   await page.emulateMedia({reducedMotion:'reduce'});await page.setViewportSize({width,height:900});
   await page.goto(path+'?lang=en'+stateHash({...cases[0],role:path==='garda/'?'garda':'public'}));
   await expect(page.locator('.paired-scene-lead>.encounter-scene[data-caption-anchors]')).toBeVisible();
   const sceneWidth=await page.locator('.paired-scene-lead>.encounter-scene').evaluate(e=>e.getBoundingClientRect().width);
-  await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=link-audit-20261123');},basePath);
+  await page.evaluate(async root=>{window.captionRenderer=await import(root+'encounters/scenes.mjs?v=nia-public-20261123');},basePath);
   let rendered=0,maxError=0;
   for(const item of cases){
    const state={...item,role:path==='garda/'?'garda':'public'};
@@ -76,9 +76,9 @@ for(const path of ['./','garda/'])for(const width of [390,1366]){
     root.querySelectorAll('img').forEach(i=>i.loading='eager');
    },{state,pairs,sceneWidth});
    await expect.poll(()=>page.locator('#main img').evaluateAll(imgs=>imgs.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
-   const result=await aligned(page);expect(result.labels).toBe(162);maxError=Math.max(maxError,result.maxError);rendered+=pairs.length;
+   const result=await aligned(page);expect(result.labels).toBe(180);maxError=Math.max(maxError,result.maxError);rendered+=pairs.length;
   }
-  expect(cases).toHaveLength(99);expect(pairs).toHaveLength(81);expect(rendered).toBe(cases.length*pairs.length);
+  expect(cases).toHaveLength(99);expect(pairs).toHaveLength(90);expect(rendered).toBe(cases.length*pairs.length);
   await info.attach('caption-matrix.json',{body:JSON.stringify({browser:info.project.name,path,width,stages:cases.length,pairings:pairs.length,rendered,maxCentreErrorCssPx:maxError,mode:'real renderer with site CSS; not end-to-end gameplay sessions'},null,2),contentType:'application/json'});
  });
 }

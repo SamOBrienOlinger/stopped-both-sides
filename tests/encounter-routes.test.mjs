@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {encounters,roles,sites} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=link-audit-20261123';
-import {storyIdentity} from '../encounters/narrative.mjs';
+import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';
+import {storyIdentity} from '../encounters/narrative.mjs?v=nia-public-20261123';
 import {siteRole,siteBase} from './site-fixture.mjs';
 const {scenarios}=await import(new URL(siteRole==='garda'?'data.mjs?v=link-audit-20261123':'data.mjs',siteBase));
 const situationCount=Object.keys(encounters).length;
@@ -18,7 +18,7 @@ globalThis.history={replaceState(_state,_title,url){currentHash=url;}};
 globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='[data-site-switch]')return siteLink;if(q==='.skip')return {addEventListener(type,fn){callbacks.skip=fn;}};if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,fn){callbacks[type]=fn;}};
-await import(new URL('app.mjs?v=support-language-20261123',siteBase));
+ await import(new URL('app.mjs?v=nia-public-20261123',siteBase));
 const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The resource could not load/);
 function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}
@@ -136,7 +136,7 @@ test('A selected answer, both scores and the exact stage survive switches, sourc
  action('paired-switch');assert.equal(state().answers[state().role],state().role==='public'?0:1);
 });
 test('Chosen characters remain editable without replacing the opposing character or route',()=>{
- route('#encounters/public');action('paired-setup-characters');assert.equal((main.innerHTML.match(/data-action="paired-character-select"/g)||[]).length,9);
+ route('#encounters/public');action('paired-setup-characters');assert.equal((main.innerHTML.match(/data-action="paired-character-select"/g)||[]).length,10);
  action('paired-character-select',{role:'public',character:'public-6'});
  action('paired-start',{id:'public-search',role:'public'});assert.equal(state().cast.public,'public-6');
  action('paired-answer',{index:'0'});const before=state();

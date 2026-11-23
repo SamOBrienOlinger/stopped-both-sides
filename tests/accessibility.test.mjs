@@ -4,8 +4,8 @@ import {siteRole,siteBase} from './site-fixture.mjs';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=link-audit-20261123';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=link-audit-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';
 
 test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
  let stages=0;
@@ -48,7 +48,7 @@ globalThis.location={get hash(){return address.hash;},set hash(v){address.hash=v
 globalThis.history={replaceState(_state,_title,url){address=new URL(url,address);}};
 globalThis.document={title:'',documentElement:{lang:'en-IE',attrs:{},setAttribute(k,v){this.attrs[k]=v;},style:{setProperty(){}},classList:{toggle(k,v){if(v)classes.add(k);else classes.delete(k);}}},querySelector(q){if(q==='#main')return main;if(q==='#reading-dialog')return dialog;if(q==='[data-reading-open]')return openButton;if(q==='[data-site-switch]')return siteLink;if(q==='#page-status')return {textContent:''};if(q==='#feedback'||q==='#choice-title'||q==='h1'||q==='[data-action="paired-clear"]'||q==='[data-action="paired-clear-confirm"]')return heading(q);return null;},querySelectorAll(q){return q==='[data-reading-open]'?[openButton]:[];},addEventListener(k,v){callbacks['document-'+k]=v;}};
 globalThis.window={scrollTo(){},addEventListener(k,v){callbacks[k]=v;}};
-await import(new URL('app.mjs?v=support-language-20261123',siteBase));
+ await import(new URL('app.mjs?v=nia-public-20261123',siteBase));
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(n!==assignments)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 function settings(language='ga'){

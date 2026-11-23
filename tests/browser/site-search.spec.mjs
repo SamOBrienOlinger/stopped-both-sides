@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
-import {decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
 
 for(const [path,role] of [['./','public'],['garda/','garda']]){
  test(`${role}: keyword search opens from the requested navbar position, handles no results and preserves an answered game`,async({page})=>{
