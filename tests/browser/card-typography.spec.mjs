@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=link-audit-20261123';
 
 const cast={public:'public-2',garda:'garda-5'};
 function recapFor(role){

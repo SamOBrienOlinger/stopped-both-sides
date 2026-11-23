@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {encounters,roles,sites} from '../encounters/catalog.mjs?v=situation-locations-20261122';
-import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=situation-locations-20261122';
+import {encounters,roles,sites} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {decodeState,switchRole,stateHash,startEncounter,answer,continueEncounter} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {unpackProgress,progressTotals,progressStorageKey} from '../encounters/progress.mjs?v=link-audit-20261123';
 import {storyIdentity} from '../encounters/narrative.mjs';
 import {siteRole,siteBase} from './site-fixture.mjs';
-const {scenarios}=await import(new URL('data.mjs',siteBase));
+const {scenarios}=await import(new URL(siteRole==='garda'?'data.mjs?v=link-audit-20261123':'data.mjs',siteBase));
 const situationCount=Object.keys(encounters).length;
 const siteStorageKey=progressStorageKey(siteRole);
 const callbacks={},focused=[],memory=new Map();let currentHash='',assignments=0;
@@ -18,7 +18,7 @@ globalThis.history={replaceState(_state,_title,url){currentHash=url;}};
 globalThis.matchMedia=()=>({matches:true});
 globalThis.document={title:'',querySelector(q){if(q==='#main')return main;if(q==='[data-site-switch]')return siteLink;if(q==='.skip')return {addEventListener(type,fn){callbacks.skip=fn;}};if(q==='#feedback'&&main.innerHTML.includes('id="feedback"'))return {focus(){focused.push('feedback');},scrollIntoView(){}};return null;},querySelectorAll(q){return q==='[data-nav]'?nav:[];},getElementById(id){return main.innerHTML.includes(`id="${id}"`)?{focus(){focused.push(id);},scrollIntoView(){}}:null;}};
 globalThis.window={scrollTo(){},addEventListener(type,fn){callbacks[type]=fn;}};
-await import(new URL('app.mjs',siteBase));
+await import(new URL('app.mjs?v=link-audit-20261123',siteBase));
 const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The resource could not load/);
 function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}

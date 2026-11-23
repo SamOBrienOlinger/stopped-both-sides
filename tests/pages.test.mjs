@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
 import {siteAddresses} from '../site.mjs';
 const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides/');
-import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=link-audit-20261123';
 import {createPreferences} from '../accessibility/preferences.mjs';
-import {translateText,translateHTML} from '../locales/translate.mjs?v=situation-locations-20261122';
+import {translateText,translateHTML} from '../locales/translate.mjs?v=link-audit-20261123';
 
 test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));

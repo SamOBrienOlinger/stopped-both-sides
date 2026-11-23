@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {characters} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=situation-locations-20261122';
-import {translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=link-audit-20261123';
+import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
 import {backgroundImage} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
 import {situationParticipants} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
 

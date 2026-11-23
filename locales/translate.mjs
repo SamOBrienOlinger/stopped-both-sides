@@ -2,7 +2,7 @@ import {learningCopy} from './play-copy.mjs?v=contributors-expanded-20261122';
 import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {gaContent} from './ga-content.mjs?v=human-civil-rights-20261122';
 import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

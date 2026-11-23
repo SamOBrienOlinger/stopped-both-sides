@@ -1,4 +1,4 @@
-import {encounters,roles} from './catalog.mjs?v=situation-locations-20261122';
+import {encounters,roles} from './catalog.mjs?v=link-audit-20261123';
 import {discriminationEncounters} from './discrimination.mjs?v=situation-locations-20261122';
 
 // Explicit teaching transitions: these are variations, not consequences of a choice.

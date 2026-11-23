@@ -1,6 +1,6 @@
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
 import {backgroundImage} from './backgrounds.mjs?v=situation-locations-20261122';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=situation-locations-20261122';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=link-audit-20261123';
 import {characterFor,defaultCast} from './characters.mjs?v=situation-cast-20261122';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=cast-audit-20261122';
 import {discriminationEncounters} from './discrimination.mjs?v=situation-locations-20261122';

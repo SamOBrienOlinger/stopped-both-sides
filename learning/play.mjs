@@ -1,7 +1,7 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=situation-locations-20261122';
-import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=situation-locations-20261122';
-import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {topicGroups} from '../encounters/presentation.mjs?v=situation-locations-20261122';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=link-audit-20261123';
+import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,
  reviewExamples, reviewQuestions, reviewScene, searchFigures, termFor

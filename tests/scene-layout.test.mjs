@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs?v=situation-locations-20261122';
-import {encounters,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {encounters,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {characters,characterFor,castForSituation} from '../encounters/characters.mjs';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=situation-locations-20261122';
-import {startEncounter} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=link-audit-20261123';
+import {startEncounter} from '../encounters/engine.mjs?v=link-audit-20261123';
 test('every scene and all 81 casts retain matching caption and actor identities',()=>{
  let count=0;
  for(const [id,e] of Object.entries(encounters))for(const nodeId of Object.keys(e.nodes)){

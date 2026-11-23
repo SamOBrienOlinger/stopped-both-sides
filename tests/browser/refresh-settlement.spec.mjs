@@ -282,8 +282,12 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   try{
    await page.goto(path+'?lang=en#play',{waitUntil:'commit'});
    await seen;
+   // WebKit can pause animation-frame polling while the deferred app module
+   // is held. This wait concerns DOM/CSS readiness, so use a bounded timer;
+   // the rendered geometry and refresh assertions below stay unchanged.
    await page.waitForFunction(()=>document.querySelector('#main .initial')&&
-    [...document.querySelectorAll('link[rel~="stylesheet"]')].every(link=>link.sheet));
+    [...document.querySelectorAll('link[rel~="stylesheet"]')].every(link=>link.sheet),
+    undefined,{polling:50,timeout:10000});
    // Some engines keep FontFaceSet.ready pending until deferred modules
    // finish. Measure the styled loading frame while this module is held;
    // neither fonts.ready nor screenshot's implicit font wait can run here.

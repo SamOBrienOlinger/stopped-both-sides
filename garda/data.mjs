@@ -1,6 +1,6 @@
 import {reviewBackground} from '../learning/play-content.mjs?v=learning-language-20261120';
 
-export {sources,CHECKED,groups,PUBLIC_COMPANION} from './sources.mjs?v=pabi-privacy-20261122';
+export {sources,CHECKED,groups,PUBLIC_COMPANION} from './sources.mjs?v=link-audit-20261123';
 const c=(text,feedback,next,review=false)=>({text,feedback,next,review});
 const n=(title,story,prompt,concept,lesson,phrase,refs,choices,facts=[],quote='')=>({title,story,prompt,concept,lesson,phrase,sources:refs,choices,facts,quote});
 export const scenarios=[

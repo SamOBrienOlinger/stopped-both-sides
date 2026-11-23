@@ -6,9 +6,9 @@ import {situationParticipants} from '../encounters/situation-cast.mjs?v=situatio
 import {gardaAtlas} from '../encounters/garda-atlas.mjs';
 import {gardaArtwork} from '../encounters/garda-artwork.mjs';
 import {sceneCharacterArtwork} from '../encounters/scene-artwork.mjs';
-import {encounters,roles} from '../encounters/catalog.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=situation-locations-20261122';
+import {encounters,roles} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=link-audit-20261123';
 
 const asset=new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url);
 const names=['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'];

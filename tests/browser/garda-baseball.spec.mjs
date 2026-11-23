@@ -1,8 +1,8 @@
 import {test,expect} from '@playwright/test';
 import {characters} from '../../encounters/characters.mjs';
-import {encounters} from '../../encounters/catalog.mjs?v=situation-locations-20261122';
-import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=situation-locations-20261122';
-import {sceneDirections} from '../../encounters/scenes.mjs?v=situation-locations-20261122';
+import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
+import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {sceneDirections} from '../../encounters/scenes.mjs?v=link-audit-20261123';
 
 const file=/\/assets\/characters\/garda-baseball-2026\.webp(?:\?|$)/;
 const stage='.paired-scene-lead>.encounter-scene';
@@ -88,8 +88,8 @@ test('All 81 cast pairings use one new Garda image and one preserved public imag
  await page.goto('./#play');
  const result=await page.evaluate(async()=>{
   const {characters}=await import('/stopped-both-sides/encounters/characters.mjs?v=learning-language-20261120');
-  const {startEncounter}=await import('/stopped-both-sides/encounters/engine.mjs');
-  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=learning-language-20261120');
+  const {startEncounter}=await import('/stopped-both-sides/encounters/engine.mjs?v=link-audit-20261123');
+  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=link-audit-20261123');
   let checked=0;
   for(const p of characters.public)for(const g of characters.garda){
    const html=renderScene(startEncounter('garda-search','garda',{cast:{public:p.id,garda:g.id}}));

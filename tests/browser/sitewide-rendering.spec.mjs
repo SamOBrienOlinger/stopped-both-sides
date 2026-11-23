@@ -1,6 +1,6 @@
 import {test as base,expect,devices} from '@playwright/test';
-import {startEncounter,answer,continueEncounter,encodeState,stateHash} from '../../encounters/engine.mjs?v=situation-locations-20261122';
-import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,encodeState,stateHash} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=link-audit-20261123';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 // A narrow desktop viewport does not exercise mobile focus/viewport behavior.

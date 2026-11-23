@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {discriminationEncounters} from '../../encounters/discrimination.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
+import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
 import {situationParticipants} from '../../encounters/situation-cast.mjs?v=situation-locations-20261122';
 import {openCharacterPicker} from './navigation.mjs';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
@@ -75,7 +75,7 @@ test('All twenty discrimination scenes and follow-ups keep every participant and
  });
  const expectations=states.map(state=>({id:state.id+'/'+state.nodeId,people:situationParticipants(state.id,state.cast,{nodeId:state.nodeId}).map(person=>({key:person.key,id:person.characterId,number:person.number}))}));
  await page.evaluate(async states=>{
-  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=situation-cast-20261122');
+  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=link-audit-20261123');
   document.querySelector('#main').innerHTML=states.map(state=>'<div style="max-width:40rem;margin:auto">'+renderScene(state)+'</div>').join('');
   document.querySelectorAll('#main img').forEach(image=>image.loading='eager');
  },states);
