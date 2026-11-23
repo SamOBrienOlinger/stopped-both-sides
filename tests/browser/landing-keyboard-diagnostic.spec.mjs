@@ -59,10 +59,10 @@ async function recordCatalogueToggle(panel){
   });
  });
 }
-async function expectNativeToggle(page,open){
+async function expectNativeToggle(page,open,prevented=false){
  const record=await page.evaluate(()=>window.__catalogueToggle);
  expect(record.trusted,'the disclosure receives a real pointer or keyboard activation').toBe(true);
- expect(record.prevented,'the catalogue keeps the summary native toggle action').toBe(false);
+ expect(record.prevented,'only the explicit scripted control prevents the native toggle').toBe(prevented);
  expect(record.samples).toHaveLength(4);
  for(const sample of record.samples)expect(sample).toMatchObject({
   open,state:null,inlineHeight:'',heightEffect:false,contentFits:true,titleOpacity:'1'
@@ -71,17 +71,36 @@ async function expectNativeToggle(page,open){
  expect(Math.max(...heights)-Math.min(...heights),'the catalogue is fully laid out on its first rendered frame').toBeLessThanOrEqual(1);
 }
 
-for(const [entry,role] of [['./','public'],['garda/','garda']]){
- test(`${role}: native catalogue keyboard focus after close and reopen`,async({page})=>{
+const variants=[
+ {id:'current',css:''},
+ {id:'all-heading-containment-off',css:'[data-heading-card]{container-type:normal!important}'},
+ {id:'scenario-containment-off',css:'.scenario{container-type:normal!important}'},
+ {id:'scenario-overflow-visible',css:'.scenario{overflow:visible!important}'},
+ {id:'street-summary-block',css:'.scenario-library [data-situation-topic="street"] > summary{display:block!important}'},
+ {id:'scripted-street-toggle',css:'',scripted:true}
+];
+
+for(const variant of variants)for(const [entry,role] of [['./','public'],['garda/','garda']]){
+ test(`${role}: ${variant.id} native catalogue keyboard focus after close and reopen`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
+  if(variant.scripted)await page.addInitScript(()=>{
+   document.addEventListener('click',event=>{
+    const summary=event.target.closest?.('.scenario-library [data-situation-topic="street"] > summary');
+    if(!summary||event.defaultPrevented||event.button>0)return;
+    const control=event.target.closest?.('a,button,input,select,textarea');
+    if(control&&summary.contains(control))return;
+    event.preventDefault();summary.parentElement.open=!summary.parentElement.open;
+   },true);
+  });
   await page.goto(entry+'?lang=en#encounters/'+role);
+  await page.addStyleTag({content:variant.css||'/* unchanged native catalogue styles */'});
   await page.evaluate(()=>document.fonts.ready);
   const library=page.locator('.scenario-library'),librarySummary=library.locator(':scope > summary');
   await recordCatalogueToggle(library);await librarySummary.click();
   await expectNativeToggle(page,true);
   const street=library.locator('[data-situation-topic="street"]'),summary=street.locator(':scope > summary');
   await recordCatalogueToggle(street);await summary.click();
-  await expectNativeToggle(page,true);
+  await expectNativeToggle(page,true,!!variant.scripted);
 
   // The last real Street card begins below the viewport. Native expansion
   // must register its title for the same later-entry rise/fade as other cards.
@@ -109,9 +128,9 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
 
   // Keyboard toggles preserve the summary focus and expose actions at once.
   await summary.focus();await recordCatalogueToggle(street);await summary.press('Space');
-  await expectNativeToggle(page,false);await expect(summary).toBeFocused();
+  await expectNativeToggle(page,false,!!variant.scripted);await expect(summary).toBeFocused();
   await recordCatalogueToggle(street);await summary.press('Enter');
-  await expectNativeToggle(page,true);await expect(summary).toBeFocused();
+  await expectNativeToggle(page,true,!!variant.scripted);await expect(summary).toBeFocused();
   for(let index=1;index<=4;index++){
    await page.evaluate(index=>{
     const evidence=window.__nativeKeyboardEvidence;
