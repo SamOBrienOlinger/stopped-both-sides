@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+{
+ // Claim reload positioning before deferred code or content can restore an old offset.
+ const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
+ if('scrollRestoration' in history)history.scrollRestoration=reloading?'manual':'auto';
+ if(reloading)window.scrollTo({top:0,left:0,behavior:'instant'});
+}
+</script>
 <meta name="theme-color" content="#284f7e">
 <meta name="description" content="An interactive learning resource for the public and Gardaí. Explore human and civil rights, responsibilities and fair decision-making in Ireland.">
 <title>Stopped: Both Sides | Garda perspective</title>
@@ -13,7 +21,7 @@
 <link rel="stylesheet" href="../accessibility/styles.css">
 <link rel="stylesheet" href="../accessibility/perspectives.css">
 <link rel="stylesheet" href="../accessibility/responsive.css">
-<script type="module" src="./app.mjs?v=header-clearance-20261123"></script>
+<script type="module" src="./app.mjs?v=refresh-scroll-20261123"></script>
 <link rel="stylesheet" href="../assets/brand/landing.css?v=landing-about-copy-1">
 <link rel="stylesheet" href="../assets/brand/buttons.css?v=learning-flow-2">
 <link rel="stylesheet" href="../encounters/refinements.css?v=scene-above-context-1">
