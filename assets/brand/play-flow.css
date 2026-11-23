@@ -128,8 +128,15 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  min-inline-size:0;
  padding:clamp(.85rem,2.2vw,1.25rem);
 }
-.flow-save-copy {display:grid;gap:.15rem;flex:1 1 14rem;min-inline-size:0}
-.flow-save-copy>span {color:var(--muted);font-size:.875rem}
+.flow-save-copy {display:grid;gap:.3rem;flex:1 1 14rem;min-inline-size:0}
+/* Resume cards need a compact title beside readable details and actions,
+   including when the general card-heading styles are applied later. */
+#main .flow-save .flow-save-copy>strong {
+ font-size:1.0625rem;
+ font-size:clamp(1.0625rem,calc(1rem + .5cqi),1.125rem);
+}
+.flow-save-copy>span {color:var(--muted);font-size:.9375rem;line-height:1.5}
+#main .flow-save .saved-session-link {font-size:1rem;margin-block-start:0}
 .flow-save.session-return .saved-session-link,
 .flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {
  background:var(--deep);
@@ -508,7 +515,7 @@ button.role-switch-button:hover {background:var(--pale)}
  .home-play {align-items:stretch;flex-direction:column}
  .home-start {justify-items:stretch}
  .home-play .flow-save {flex:auto}
- .flow-save a {inline-size:100%}
+ .flow-save .flow-save-copy,.flow-save .saved-session-link {inline-size:100%}
  .flow-game .decision-context,.game-grid>.decision-choices {padding:.8rem}
  .flow-role-bar {padding:.35rem .55rem}
 }
