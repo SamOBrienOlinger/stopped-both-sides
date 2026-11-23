@@ -2,7 +2,7 @@ import {communitySources,communitySourceIds} from "./learning/community-resource
 import {createSiteSearch} from "./search/site-search.mjs?v=situation-locations-20261122";
 import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=situation-locations-20261122';
-import {createLayout} from './accessibility/layout.mjs?v=static-headings-20261123';
+import {createLayout} from './accessibility/layout.mjs?v=portfolio-entrance-20261123';
 import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=contributors-expanded-20261122';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=situation-locations-20261122';

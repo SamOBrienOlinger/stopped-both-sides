@@ -62,7 +62,7 @@ export function createLayout({main}){
  document.fonts?.ready?.then(sizeHeader);
  const labels={en:'Menu',ga:'Roghchlár',pt:'Menu',ar:'القائمة',pl:'Menu',ro:'Meniu',fr:'Menu',es:'Menú',zh:'菜单'};
  let open=false,lastRoute='',panelAnimation=null,landingObserver=null,observedLanding=null,lastLandingPreferences=null;
- const landingLines=new Map();
+ const landingItems=new Map();
  const background=new Map();
  header.classList.add('navigation-ready');
  const motionAllowed=()=>!reduced.matches&&!forced.matches&&!root.classList.contains('motion-reduce');
@@ -149,39 +149,74 @@ export function createLayout({main}){
  reduced.addEventListener('change',settlePanel);
  forced.addEventListener('change',settlePanel);
  const landingMotionAllowed=()=>motionAllowed()&&!root.classList.contains('contrast-high');
- function settleLandingLine(line,complete=false){
-  const state=landingLines.get(line);
+ function settleLandingItem(item,complete=false){
+  const state=landingItems.get(item);
   state?.stop?.();clearTimeout(state?.timer);
-  landingObserver?.unobserve(line);
+  state?.cancelReadiness?.();
+  landingObserver?.unobserve(item);
+  item.style.removeProperty('--landing-reveal-delay');
   if(complete&&state){
    state.stop=null;state.timer=0;state.status='complete';
-   line.setAttribute('data-landing-reveal','complete');
+   item.setAttribute('data-landing-reveal','complete');
   }else{
-   landingLines.delete(line);
-   line.removeAttribute('data-landing-reveal');
+   landingItems.delete(item);
+   item.removeAttribute('data-landing-reveal');
   }
  }
  function clearLandingReveal(){
   landingObserver?.disconnect();landingObserver=null;
-  for(const line of [...landingLines.keys()])settleLandingLine(line);
+  for(const item of [...landingItems.keys()])settleLandingItem(item);
  }
- function revealLandingLine(line){
-  const state=landingLines.get(line);
-  if(!state||state.status!=='pending')return;
-  if(!line.isConnected||!landingMotionAllowed()||line.contains(document.activeElement)){
-   settleLandingLine(line);return;
+ function revealLandingItem(item){
+  const state=landingItems.get(item);
+  if(!state||state.status!=='pending'||!state.ready||!state.visible)return;
+  if(!item.isConnected||!landingMotionAllowed()||item.contains(document.activeElement)){
+   settleLandingItem(item);return;
   }
-  landingObserver?.unobserve(line);
-  state.status='active';line.setAttribute('data-landing-reveal','active');
-  const animations=(line.getAnimations?.()||[]).filter(animation=>
+  landingObserver?.unobserve(item);
+  item.style.setProperty('--landing-reveal-delay',state.delay+'ms');
+  state.status='active';item.setAttribute('data-landing-reveal','active');
+  const animations=(item.getAnimations?.()||[]).filter(animation=>
    animation.animationName==='landing-portfolio-line-reveal');
-  const complete=()=>{if(landingLines.get(line)===state)settleLandingLine(line,true);};
+  const complete=()=>{if(landingItems.get(item)===state)settleLandingItem(item,true);};
   if(animations.length)state.stop=paceAnimations(animations,complete);
   else state.timer=setTimeout(complete,2000);
  }
+ function prepareLandingImage(image,state){
+  // Reserve the image's authored dimensions while its pixels load. Its fade
+  // starts only once it can paint; the neighbouring copy never waits for it.
+  const current=()=>landingItems.get(image)===state&&state.status==='pending'&&image.isConnected;
+  const cleanup=()=>{
+   image.removeEventListener('load',loaded);image.removeEventListener('error',failed);
+   state.cancelReadiness=null;
+  };
+  const ready=()=>{
+   if(!current())return;
+   state.ready=true;
+   revealLandingItem(image);
+  };
+  const failed=()=>{cleanup();if(current())settleLandingItem(image);};
+  const loaded=()=>{
+   cleanup();
+   if(!current())return;
+   if(!image.naturalWidth){failed();return;}
+   // A decode can be cancelled by a responsive source change. A successfully
+   // loaded image may still paint; a removed route or preference change must
+   // never be revived by either completion path.
+   try{Promise.resolve(image.decode?.()).then(ready,()=>{
+    if(image.complete&&image.naturalWidth)ready();else failed();
+   });}catch{ready();}
+  };
+  state.cancelReadiness=cleanup;
+  if(image.complete)loaded();
+  else{
+   image.addEventListener('load',loaded,{once:true});
+   image.addEventListener('error',failed,{once:true});
+  }
+ }
  function syncLandingReveal(){
-  // The two images make this a tall invitation. Each line owns its viewport
-  // entrance, so later copy does not spend its animation above the scroll.
+  // This is a tall invitation. Each item owns its viewport entrance, so later
+  // text, imagery and actions do not spend their animation before being read.
   // Default CSS stays visible when JS, the observer or motion is unavailable.
   const next=main.querySelector('.reference-landing .landing-instructions');
   const preferences=[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
@@ -195,20 +230,35 @@ export function createLayout({main}){
   clearLandingReveal();observedLanding=next;
   if(!next||preferenceChange||!landingMotionAllowed()||typeof globalThis.IntersectionObserver!=='function')return;
   landingObserver=new IntersectionObserver(entries=>{
-   for(const entry of entries)if(entry.isIntersecting)revealLandingLine(entry.target);
+   const arriving=new Set();
+   for(const entry of entries){
+    const state=landingItems.get(entry.target);
+    if(!state||state.status!=='pending')continue;
+    state.visible=entry.isIntersecting;
+    if(entry.isIntersecting)arriving.add(entry.target);
+   }
+   // Stagger newly visible neighbours in reading order. Later scrolls begin
+   // their own short sequence instead of inheriting a long page-wide delay.
+   let index=0;
+   for(const [item,state] of landingItems)if(arriving.has(item)){
+    state.delay=Math.min(index++*100,300);
+    revealLandingItem(item);
+   }
   },{rootMargin:'0px 0px -15% 0px',threshold:0});
-  for(const line of next.querySelectorAll(':scope > :is(h1.encounter-hero-title,.landing-deck,.small-note)')){
+  for(const item of next.querySelectorAll(':scope > :is(.encounter-hero-title,.encounter-hero-art,.landing-deck,.landing-role-actions,.small-note)')){
    // The caller restores route focus/scroll after update(). The observer
    // measures that new viewport, rather than the previous page's scroll.
-   if(line.contains(document.activeElement))continue;
-   landingLines.set(line,{status:'pending',stop:null,timer:0});
-   line.setAttribute('data-landing-reveal','pending');landingObserver.observe(line);
+   if(item.contains(document.activeElement))continue;
+   const state={status:'pending',stop:null,timer:0,ready:item.tagName!=='IMG',visible:false,delay:0,cancelReadiness:null};
+   landingItems.set(item,state);
+   item.setAttribute('data-landing-reveal','pending');landingObserver.observe(item);
+   if(!state.ready)prepareLandingImage(item,state);
   }
  }
  main.addEventListener('focusin',event=>{
   // Route focus must expose its heading immediately, before the next frame.
   // Unobserving also prevents scrolling away and back from restarting it.
-  for(const line of [...landingLines.keys()])if(line.contains(event.target))settleLandingLine(line);
+  for(const item of [...landingItems.keys()])if(item.contains(event.target))settleLandingItem(item);
  });
  const settleLandingPreference=()=>{if(!landingMotionAllowed())clearLandingReveal();};
  reduced.addEventListener('change',settleLandingPreference);

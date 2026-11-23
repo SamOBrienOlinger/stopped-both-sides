@@ -33,8 +33,9 @@ html:lang(zh) #main [data-card-heading] {letter-spacing:normal;line-height:1.45}
 
 /* Secondary headings are immediately readable in cards, disclosures and
    dialogs. The motion controller also keeps their ancestors free of fades.
-   Primary h1 and independent controls retain their presentation cues. */
-:is(h2,h3,h4,h5,h6,summary,[data-card-heading]:not(h1),[role="heading"]:not([aria-level="1"])) {
+   The requested opening sequence owns its specific "Two perspectives" title;
+   all other secondary headings retain this immediate, stationary rendering. */
+:is(h2,h3,h4,h5,h6,summary,[data-card-heading]:not(h1),[role="heading"]:not([aria-level="1"])):not(:where(.reference-landing .landing-instructions > #perspectives-title)) {
  animation:none!important;
  opacity:1!important;
  transform:none!important;
