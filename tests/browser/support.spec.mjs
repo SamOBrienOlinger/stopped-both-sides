@@ -2,6 +2,7 @@ import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
 import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=link-audit-20261123';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
+import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 await Promise.all(['ar','fr'].map(loadLanguage));
 const title='Advice, complaints and policing oversight';
@@ -78,4 +79,47 @@ for(const entry of ['public','garda'])test(`${entry}: footer and completed recap
  await page.locator('.support-recap a').click();
  await expect(page.locator('#rights-support')).toBeFocused();
  await expect(page.locator('#support-heading')).toHaveText(translateText(title,'fr'));
+});
+
+for(const source of ['query','saved'])test(`garda: pending initial language from ${source} survives a footer handoff`,async({page})=>{
+ const keys={garda:preferencesStorageKey('garda'),public:preferencesStorageKey('public')};
+ const saved={
+  [keys.garda]:JSON.stringify({language:source==='saved'?'fr':'es',size:100,contrast:'standard',spacing:false,motion:false}),
+  [keys.public]:JSON.stringify({language:'en',size:100,contrast:'standard',spacing:false,motion:false})
+ };
+ await page.addInitScript(records=>{
+  for(const [key,value] of Object.entries(records))if(localStorage.getItem(key)===null)localStorage.setItem(key,value);
+ },saved);
+ let release,held=false,sourceRequestFinished;
+ const sourceRequestDone=new Promise(resolve=>{sourceRequestFinished=resolve;});
+ const holdFirstPack=async route=>{
+  if(held){await route.continue();return;}
+  held=true;
+  await new Promise(resolve=>{release=resolve;});
+  // Following the footer cancels this old document's pending request. The
+  // destination must obtain its own pack, without waiting for this one.
+  try{await route.continue();}catch{}finally{sourceRequestFinished();}
+ };
+ await page.route('**/fr-content.mjs*',holdFirstPack);
+ try{
+  await page.goto('garda/'+(source==='query'?'?lang=fr':''),{waitUntil:'commit'});
+  await expect.poll(()=>held).toBe(true);
+  await expect(page.locator('#main .initial')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
+  const footer=page.locator('.footer [data-support-crosslink]');
+  const target=new URL(await footer.getAttribute('href'),page.url());
+  expect(target.searchParams.get('lang')).toBe('fr');
+  expect(target.hash).toBe('#rights/support');
+  const siteLink=new URL(await page.locator('[data-site-switch]').getAttribute('href'),page.url());
+  expect(siteLink.searchParams.get('lang')).toBe('fr');
+  await footer.click();
+  await expect(page).toHaveURL(target.href);
+  await expect(page.locator('#rights-support')).toBeFocused();
+  await expect(page.locator('#support-heading')).toHaveText(translateText(title,'fr'));
+  await expect(page.locator('html')).toHaveAttribute('lang','fr');
+  expect(await page.evaluate(keys=>Object.fromEntries(Object.values(keys).map(key=>[key,localStorage.getItem(key)])),keys)).toEqual(saved);
+ }finally{
+  if(release){release();await sourceRequestDone;}
+  await page.unroute('**/fr-content.mjs*',holdFirstPack);
+ }
 });

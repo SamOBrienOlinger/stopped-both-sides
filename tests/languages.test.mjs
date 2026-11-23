@@ -112,7 +112,7 @@ globalThis.location={get hash(){return address.hash;},set hash(value){address.ha
 globalThis.history={replaceState(_state,_title,url){address=new URL(url,address);}};
 globalThis.document={title:'',documentElement:{lang:'en-IE',attrs:{},setAttribute(k,v){this.attrs[k]=v;},style:{setProperty(){}},classList:{toggle(){}}},querySelector(q){if(q==='#main')return main;if(q==='#reading-dialog')return dialog;if(q==='[data-reading-open]')return opener;if(q==='[data-site-switch]')return siteLink;if(q==='#page-status')return live;return null;},querySelectorAll(q){return q==='[data-reading-open]'?[opener]:[];},getElementById(id){return id===opener.id?opener:null;},addEventListener(k,v){callbacks['document-'+k]=v;}};
 globalThis.window={scrollTo(){},addEventListener(k,v){callbacks[k]=v;}};
-await import(new URL('app.mjs?v=link-audit-20261123',siteBase));
+await import(new URL('app.mjs?v=support-language-20261123',siteBase));
 const current=()=>decodeState(location.hash.slice(11).split('~')[0]);
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/class="error"/);}
 function action(name,extra={}){const before=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(assignments!==before)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/class="error"/);}
