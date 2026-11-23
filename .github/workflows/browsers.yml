@@ -2,7 +2,7 @@ name: Browser compatibility
 
 on:
   push:
-    branches-ignore: [main]
+    branches-ignore: [main, diagnostic/refresh-scroll-20261123]
   pull_request:
     branches: [main]
   workflow_dispatch:

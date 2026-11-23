@@ -1,0 +1,36 @@
+name: Native refresh diagnostics
+on:
+  push:
+    branches: [diagnostic/refresh-scroll-20261123]
+permissions:
+  contents: read
+jobs:
+  clearance:
+    name: Native reload baseline (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+      - name: Verify unchanged published application
+        run: git diff --exit-code 1aa6018ceffccafc499a5e294df874697f01190f -- . ':!tests' ':!.github'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npm run test:browser -- --project=${{ matrix.browser }} reload-clearance.spec.mjs
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: refresh-scroll-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
