@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {createDisclosures} from './disclosures.mjs?v=learning-language-20261120';
+import {createDisclosures} from './disclosures.mjs?v=landing-render-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
-import {headingsForCard} from './card-headings.mjs?v=card-headings-20261123';
+import {headingsForCard} from './card-headings.mjs?v=catalogue-keyboard-20261123';
 
 // Presentation only. The game has already updated its state, text and focus
 // before a cue starts; nothing waits for an animation or transition event.
@@ -13,6 +13,7 @@ export function createMotion({main,getLegacyState=()=>null}){
  const active=new Map(),frames=new Map(),seen=new Set(),pendingReveals=new Map();
  let previous=null,observer=null;
  const allowed=()=>!reduced?.matches&&!forced?.matches&&!root.classList.contains('motion-reduce')&&!root.classList.contains('contrast-high');
+ const catalogueDisclosure=element=>element?.matches?.('.scenario-library,.topic-disclosure,.situation-topic,.discrimination-ground');
  const all=selector=>Array.from(main.querySelectorAll(selector));
  const headingEntrance=element=>element.hasAttribute?.('data-heading-entrance')&&headingsForCard(element).length>0;
  const preferences=()=>[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
@@ -123,7 +124,11 @@ export function createMotion({main,getLegacyState=()=>null}){
    if(element.matches?.('[data-card-heading]'))return;
    if(elements.has(element))return;
    elements.add(element);
+   // A resumed run and an earlier recap can have the same display title.
+   // Their actual destinations identify distinct saved records across redraws.
+   const savedTarget=element.dataset.headingCard==='saved'?element.querySelector('.saved-session-link')?.getAttribute('href'):'';
    const identity=element.id||element.querySelector('[data-action="paired-start"][data-id]')?.dataset.id||
+    (savedTarget?`saved:${element.dataset.saveMode||''}:${savedTarget}`:'')||
     (headingEntrance(element)?`${element.dataset.headingCard}:${headingsForCard(element)[0].textContent}`:'')||element.dataset.roleTone||index;
    const key=`${next.revealScope}|${selector}|${identity}`;
    targets.push({element,key});
@@ -158,7 +163,9 @@ export function createMotion({main,getLegacyState=()=>null}){
     if(!entry.isIntersecting)continue;
     const key=keys.get(entry.target);
     observer?.unobserve(entry.target);
-    if(seen.has(key))continue;
+    // A shared or previously consumed identity must never leave another
+    // queued instance hidden after it has been unobserved.
+    if(seen.has(key)){remove(entry.target);continue;}
     seen.add(key);cue(entry.target,next.complete?'recap':'reveal');
    }
   },{threshold:0,rootMargin:'0px 0px 80px 0px'});
@@ -195,11 +202,14 @@ export function createMotion({main,getLegacyState=()=>null}){
   // new viewport afterwards; a second render cancels this queued registration.
   // A preference redraw must not replay either on-screen or later-scroll cues.
   const pageChange=before&&next.mode==='content'&&before.page!==next.page&&!preferenceChange;
-  if(pageChange&&allowed())cue(main,'page',()=>{if(previous===next)observeReveals(next,false);});
+  // The landing's individual text entrances own its arrival. A whole-page
+  // fade would dim those lines again, including the heading given route focus.
+  const landingEntry=main.querySelector('.reference-landing .landing-instructions');
+  if(pageChange&&allowed()&&!landingEntry)cue(main,'page',()=>{if(previous===next)observeReveals(next,false);});
   else afterFocus(main,'observe',()=>observeReveals(next,preferenceChange));
  }
 
- const disclosures=createDisclosures({main,allowed,onStart(details){
+ const disclosures=createDisclosures({main,allowed,animateWhen:details=>!catalogueDisclosure(details),onStart(details){
    // A disclosure is one height transition, not a page fade, parent reveal and
    // second set of entrances competing with its newly exposed children.
    for(const element of [...active.keys()]){
@@ -211,6 +221,20 @@ export function createMotion({main,getLegacyState=()=>null}){
    details.setAttribute('data-motion','disclosure');
    if(previous)observeReveals(previous,false,details);
   },onFinish:details=>details.removeAttribute('data-motion')});
+ // Catalogue actions must appear at their final positions as soon as native
+ // details opens. Their offscreen titles still get the normal once-only reveal;
+ // visible titles remain readable without a second parent height transition.
+ main.addEventListener('toggle',event=>{
+  const details=event.target,next=previous;
+  if(!next||!catalogueDisclosure(details))return;
+  afterFocus(details,'observe',()=>{
+   if(previous!==next||!details.isConnected)return;
+   // The parent page cue already refreshes titles when its fade completes.
+   if(main.getAttribute('data-motion')==='page'||
+    [...frames.values()].some(pending=>pending.element===main&&pending.kind==='page'))return;
+   observeReveals(next,false);
+  });
+ },true);
  // Cancelling the attribute as well as the animation makes focus cancellation
  // permanent; moving focus away cannot restart an entrance from its first frame.
  main.addEventListener('focusin',event=>{

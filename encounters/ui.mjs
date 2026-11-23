@@ -5,7 +5,7 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
 } from '../learning/play.mjs?v=situation-locations-20261122';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=situation-locations-20261122';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=catalogue-keyboard-20261123';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=situation-locations-20261122';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=situation-locations-20261122';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=situation-locations-20261122';

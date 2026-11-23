@@ -2,9 +2,9 @@ import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120
 
 // Animate measured pixels rather than the experimental details-content pseudo
 // element, so opening and closing behave the same in all supported browsers.
-export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}}){
+export function createDisclosures({main,allowed,animateWhen=()=>true,onStart=()=>{},onFinish=()=>{}}){
  const active=new Map();
- let pointerFocus=false;
+ let press=null;
  const properties=['height','overflow','overflow-anchor'];
  const restore=(element,property,value)=>{
   if(value.value)element.style.setProperty(property,value.value,value.priority);
@@ -23,6 +23,13 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
  }
  function finish(state,open=state.open){
   if(active.get(state.details)!==state)return;
+  // Completing a clipped panel between pointerdown and click can change the
+  // browser's scroll position and send pointerup to a different control.
+  // An unrelated redraw may remove the panel; detached content can clean up.
+  if(press?.states.has(state)&&!press.clicked&&state.details.isConnected){
+   state.pendingOpen=open;return;
+  }
+  press?.states.delete(state);state.frozen=false;
   active.delete(state.details);state.stopClock?.();
   state.animation.onfinish=null;state.animation.oncancel=null;
   state.details.open=open;
@@ -33,6 +40,25 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   else state.summary.setAttribute('aria-expanded',state.expanded);
   state.details.removeAttribute('data-disclosure-state');
   onFinish(state.details);
+ }
+ function freeze(state){
+  // Keep the native height effect installed until activation fixes its target.
+  // Stop both clocks: the frame clock writes currentTime independently, and
+  // stopping it restores the animation's original playback rate.
+  const animation=state.animation,time=animation.currentTime;
+  press.states.add(state);state.frozen=true;
+  state.stopClock?.();
+  animation.onfinish=null;animation.oncancel=null;
+  animation.playbackRate=0;
+  if(time!==null)animation.currentTime=time;
+ }
+ function releasePress(){
+  const previous=press;
+  if(!previous)return;
+  press=null;globalThis.clearTimeout(previous.timer);
+  for(const state of previous.states){
+   if(state.frozen){state.frozen=false;finish(state,state.pendingOpen??state.open);}
+  }
  }
  function play(state){
   const animation=state.animation;
@@ -47,6 +73,9 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   // timeline can resample a later frame in Firefox; a new pixel start keeps
   // the pressed panel exactly where it was when the user changed direction.
   const from=state.details.getBoundingClientRect().height,to=open?state.openHeight:state.closedHeight;
+  // A summary click may reverse the panel held by this press. Its new
+  // animation starts at the held height and must not be settled on release.
+  press?.states.delete(state);state.frozen=false;delete state.pendingOpen;
   state.details.style.setProperty('height',from+'px');
   state.stopClock?.();
   state.animation.onfinish=null;state.animation.oncancel=null;state.animation.cancel();
@@ -61,6 +90,9 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   }catch{finish(state);}
  }
  main.addEventListener('click',event=>{
+  // Click's target is now fixed. Nested disclosures may safely settle their
+  // ancestors before measuring, and summary reversals retain their animation.
+  if(press)press.clicked=true;
   const summary=event.target.closest?.('summary'),details=summary?.parentElement;
   if(event.defaultPrevented||event.button>0||details?.tagName!=='DETAILS'||summary!==details.querySelector('summary'))return;
   // Links and controls inside a summary keep their own native action.
@@ -71,12 +103,13 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
    event.preventDefault();retarget(running,!running.open);
    return;
   }
-  if(!allowed()||typeof details.animate!=='function')return;
-  // A new nested disclosure changes its ancestor's measured content size.
-  // Complete that earlier interaction before measuring this one.
+  // A nested disclosure changes its ancestor's measured content size, even
+  // when this disclosure uses native opening. Settle the related presentation
+  // before measuring or letting the browser toggle this one immediately.
   for(const state of [...active.values()]){
    if(state.details.contains(details)||details.contains(state.details))finish(state);
   }
+  if(!allowed()||!animateWhen(details)||typeof details.animate!=='function')return;
   const open=!details.open,from=details.getBoundingClientRect().height;
   const styles=Object.fromEntries(properties.map(property=>[property,{
    value:details.style.getPropertyValue(property),priority:details.style.getPropertyPriority(property)
@@ -116,11 +149,34 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   const state=active.get(event.target);
   if(state&&!event.target.open)finish(state,false);
  },true);
- main.addEventListener('pointerdown',()=>{pointerFocus=true;},true);
- globalThis.addEventListener?.('pointerup',()=>setTimeout(()=>{pointerFocus=false;},0));
- globalThis.addEventListener?.('pointercancel',()=>{pointerFocus=false;});
+ document.addEventListener('pointerdown',event=>{
+  if(event.button>0||event.isPrimary===false)return;
+  // Transfer an interrupted press without settling underneath its next target.
+  // A completed click normally clears this before another pointerdown arrives.
+  if(press)globalThis.clearTimeout(press.timer);
+  press={id:event.pointerId,clicked:false,states:new Set(),timer:0};
+  // An expanding ancestor or an earlier sibling can move the pressed target.
+  // Include controls outside main, such as footer links below an opening card.
+  // Hold every active disclosure until the native activation has completed.
+  for(const state of [...active.values()]){
+   if(state.details.isConnected)freeze(state);else finish(state);
+  }
+ },true);
+ globalThis.addEventListener?.('pointerup',event=>{
+  if(!press||event.pointerId!==press.id)return;
+  const previous=press;
+  // Click normally releases synchronously below. A drag/release outside main
+  // may produce no click there; pointerup has already fixed its release target.
+  previous.timer=globalThis.setTimeout(()=>{if(press===previous)releasePress();},0);
+ },true);
+ globalThis.addEventListener?.('pointercancel',event=>{
+  if(press&&event.pointerId===press.id)releasePress();
+ },true);
+ globalThis.addEventListener?.('blur',releasePress);
+ document.addEventListener?.('visibilitychange',()=>{if(document.hidden)releasePress();});
+ document.addEventListener('click',releasePress);
  main.addEventListener('click',event=>{
-  pointerFocus=false;
+  releasePress();
   // Pointer focus happens between down and up. Changing a clipped layout then
   // can move the pressed control and lose its click. Once activation reaches
   // click, its target is fixed and the presentation can safely settle.
@@ -131,7 +187,7 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
  main.addEventListener('focusin',event=>{
   // Tabbing into newly opened content must never leave the focused control
   // clipped while a presentation effect is still drawing the panel.
-  if(pointerFocus)return;
+  if(press&&!press.clicked)return;
   for(const state of [...active.values()]){
    if(state.open&&state.details.contains(event.target)&&!state.summary.contains(event.target))finish(state);
   }
