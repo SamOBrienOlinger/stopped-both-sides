@@ -341,7 +341,7 @@ html {scroll-padding-block-start:calc(var(--navigation-height,6rem) + .75rem)}
   text-align:center;
 }
 .reference-landing .landing-instructions::before{display:none}
-.reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+.reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){
   box-sizing:border-box;
   width:100%;
   min-inline-size:0;
@@ -391,11 +391,11 @@ html {scroll-padding-block-start:calc(var(--navigation-height,6rem) + .75rem)}
 }
 
 /* Avoid tight tracking or clipped glyphs in scripts requiring more space. */
-html:lang(ar) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+html:lang(ar) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){
   letter-spacing:normal;
   line-height:1.55;
 }
-html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){
   letter-spacing:normal;
   line-height:1.45;
 }
@@ -403,10 +403,11 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
 /* Portfolio's one-second rise/fade and 100ms sequential delay. The default
    state remains visible: reduced-motion and no-JS readers see plain text. */
 @media(prefers-reduced-motion:no-preference){
-  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){
+  html:not(.motion-reduce):not(.contrast-high) .reference-landing .landing-instructions.is-revealing > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){
     animation:landing-portfolio-line-reveal 1s ease-out var(--landing-reveal-delay,0s) both;
   }
-  .reference-landing .landing-instructions > .landing-deck{--landing-reveal-delay:.1s}
+  .reference-landing .landing-instructions > #perspectives-title{--landing-reveal-delay:.1s}
+  .reference-landing .landing-instructions > .landing-deck{--landing-reveal-delay:.2s}
   .reference-landing .landing-instructions > .landing-purpose{--landing-reveal-delay:.2s}
   .reference-landing .landing-instructions > .small-note{--landing-reveal-delay:.3s}
 }
@@ -416,10 +417,10 @@ html:lang(zh) .reference-landing .landing-instructions > :is(.landing-deck,#pair
 }
 @media(forced-colors:active){
   .reference-landing .landing-instructions{background:Canvas;color:CanvasText}
-  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){color:CanvasText}
+  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){color:CanvasText}
 }
 @media print{
-  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,.landing-purpose,.small-note){animation:none!important;opacity:1;transform:none}
+  .reference-landing .landing-instructions > :is(.landing-deck,#paired-title,#perspectives-title,.landing-purpose,.small-note){animation:none!important;opacity:1;transform:none}
 }
 
 

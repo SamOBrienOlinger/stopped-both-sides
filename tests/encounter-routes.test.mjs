@@ -65,12 +65,15 @@ test('PABI can be found in each perspective’s reference page alongside the exi
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
- const headingEnd=main.innerHTML.indexOf('</h1>',main.innerHTML.indexOf('id="paired-title"'));
- const pair=main.innerHTML.match(/<div class="encounter-hero-pair" aria-hidden="true">([\s\S]*?)<\/div>/);
- assert.ok(pair,'both views of the encounter are grouped below the heading');
- assert.ok(pair.index>headingEnd&&pair.index<main.innerHTML.indexOf('class="landing-deck"'));
- const heroImages=[...pair[1].matchAll(/<img\b[^>]*>/g)].map(match=>match[0]);
+ const title=main.innerHTML.match(/<h1\b[^>]*id="paired-title"[^>]*>One situation\.<\/h1>/);
+ const secondTitle=main.innerHTML.match(/<h2\b[^>]*id="perspectives-title"[^>]*>Two perspectives\.<\/h2>/);
+ assert.ok(title);assert.ok(secondTitle);
+ const matches=[...main.innerHTML.matchAll(/<img\b[^>]*class="encounter-hero-art"[^>]*>/g)];
+ const heroImages=matches.map(match=>match[0]);
  assert.equal(heroImages.length,2);
+ assert.ok(title.index<matches[0].index&&matches[0].index<secondTitle.index&&secondTitle.index<matches[1].index,
+  'each heading is followed by its corresponding view in reading order');
+ assert.ok(matches[1].index<main.innerHTML.indexOf('class="landing-deck"'));
  assert.match(heroImages[0],/data-hero-perspective="garda"[^>]*garda-hi-vis-960\.jpg/);
  assert.match(heroImages[1],/data-hero-perspective="public"[^>]*public-hi-vis-960\.webp/);
  for(const image of heroImages){
