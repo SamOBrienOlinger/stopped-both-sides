@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="../assets/brand/approved-backgrounds.css?v=quayside-lamps-1">
 <link rel="stylesheet" href="../encounters/scene-labels.css?v=caption-fit-20261122">
 <link rel="stylesheet" href="../encounters/turn-headshot.css?v=phlow-1">
-<link rel="stylesheet" href="../assets/brand/site-polish.css?v=landing-render-20261123">
+<link rel="stylesheet" href="../assets/brand/site-polish.css?v=sitewide-rendering-20261123">
 <script type="module" src="../encounters/scene-labels.mjs?v=situation-locations-20261122"></script>
 <link rel="stylesheet" href="../assets/brand/play-flow.css?v=catalogue-focus-20261123">
 <link rel="stylesheet" href="../assets/brand/back-to-top.css?v=responsive-layout-20261122">
@@ -77,6 +77,13 @@
     </div>
   </div>
 </footer>
+<script>
+// Position the parsed loading page before the deferred application starts.
+// The head-level reset runs before this document has its real scroll range.
+if(performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1){
+ window.scrollTo({top:0,left:0,behavior:'instant'});
+}
+</script>
 </body>
 </html>
 

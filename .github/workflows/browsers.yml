@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
+      BROWSER_SUITE: general
       TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
     strategy:
       fail-fast: false
@@ -75,13 +76,58 @@ jobs:
           PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      # Partition each browser's full suite to stay within each job's
+      # Partition the general suite to stay within each job's
       # 30-minute budget. A failure must not cancel other verification/evidence.
       - run: npm run test:browser -- --project=${{ matrix.browser }} --shard=${{ matrix.shard }}
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
           name: browser-report-${{ matrix.artifact }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  mobile-rendering:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    name: ${{ matrix.browser }} mobile refresh and first paint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+      - name: Assert exact code revision under test
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          echo "Testing integration commit $EXPECTED_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Wait for this Pages publication
+        if: github.event_name == 'workflow_run'
+        run: node tests/browser/wait-for-pages.mjs
+        env:
+          PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      # Run first-paint and refresh coverage immediately, without waiting for
+      # unrelated browser cases. The general shards exclude this same file.
+      - name: Check mobile rendering and refresh
+        run: npm run test:browser -- --project=${{ matrix.browser }} sitewide-rendering.spec.mjs
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: browser-report-mobile-${{ matrix.browser }}
           path: |
             playwright-report/
             test-results/

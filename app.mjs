@@ -67,5 +67,6 @@ await reading.ready;
 // Establish the refresh position without giving static headings keyboard focus.
 // User-initiated route changes still focus their heading through render().
 const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
-render(false,{position:reloading||location.hash.startsWith('#rights/')});
+const sourceLink=location.hash.startsWith('#rights/');
+render(!reloading&&sourceLink,{position:reloading||sourceLink});
 

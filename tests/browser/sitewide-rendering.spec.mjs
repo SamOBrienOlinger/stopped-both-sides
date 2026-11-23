@@ -4,8 +4,8 @@ import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../.
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 // A narrow desktop viewport does not exercise mobile focus/viewport behavior.
-// Firefox does not support Playwright's isMobile option; it still runs the same
-// touch, viewport and user-agent coverage without claiming mobile emulation.
+// Firefox does not support Playwright's isMobile option and does not expose
+// touch points here; its coverage uses a narrow viewport and mobile user agent.
 const test=base.extend({
  isMobile:async({browserName},use)=>use(browserName!=='firefox'),
  hasTouch:true,
@@ -79,7 +79,9 @@ async function prepare(page,role,profile){
   }
   const options=JSON.parse(sessionStorage.getItem(observationKey)||'null');
   if(!options)return;
-  const record={...options,samples:[],initialShell:[],focusEvents:[],done:false};
+  const record={...options,samples:[],initialShell:[],focusEvents:[],done:false,
+   environment:{userAgent:navigator.userAgent,maxTouchPoints:navigator.maxTouchPoints,
+    coarsePointer:matchMedia('(pointer:coarse)').matches,hover:matchMedia('(hover:hover)').matches}};
   window.__sitewideRendering=record;
   document.addEventListener('focusin',event=>record.focusEvents.push({
    tag:event.target.tagName,id:event.target.id,at:performance.now()
@@ -95,9 +97,16 @@ async function prepare(page,role,profile){
   },{once:true});
   const sample=()=>{
    const main=document.querySelector('#main'),heading=main?.querySelector('h1');
-   if(main?.querySelector('.initial')&&record.initialShell.length<4){
-    record.initialShell.push({at:performance.now(),header:rect(document.querySelector('.header')),
-     opening:rect(main.firstElementChild),heading:rect(heading),scrollY,height:innerHeight});
+   if(main?.querySelector('.initial')){
+    const header=document.querySelector('.header'),nav=header?.querySelector('nav');
+    record.initialShell.push({at:performance.now(),header:rect(header),
+     headerPosition:header&&getComputedStyle(header).position,
+     navigationReady:header?.classList.contains('navigation-ready'),
+     navHidden:nav?.hidden,navAriaHidden:nav?.getAttribute('aria-hidden'),
+     opening:rect(main.firstElementChild),heading:rect(heading),scrollY,height:innerHeight,
+     restoration:history.scrollRestoration,readyState:document.readyState,
+     navigationType:performance.getEntriesByType('navigation')[0]?.type,
+     visualViewport:window.visualViewport&&{offsetTop:visualViewport.offsetTop,pageTop:visualViewport.pageTop}});
    }
    if(heading&&!main.querySelector('.initial')){
     if(firstAt===null){firstAt=performance.now();document.fonts.ready.then(()=>{fontsAt=performance.now();});}
@@ -132,7 +141,7 @@ async function textFits(page){
   .map(element=>({tag:element.tagName,className:element.className,text:element.textContent.trim().slice(0,80)})));
 }
 
-async function reloadRoute(page,role,profile,route){
+async function reloadRoute(page,testInfo,role,profile,route){
  await expect(page.locator('#main h1')).toBeAttached();
  await expect(page.locator('#main .initial,.error')).toHaveCount(0);
  await page.evaluate(()=>document.fonts.ready);
@@ -151,13 +160,22 @@ async function reloadRoute(page,role,profile,route){
   key:observationKey,options:{name:route.name,target:route.target||null,oldScroll}
  });
  const appPath=new URL('app.mjs',page.url()).pathname,matcher=url=>url.pathname===appPath;
- const delayed=profile.all&&route.name==='About';let delayedRequests=0;
- const delay=async request=>{delayedRequests++;await new Promise(resolve=>setTimeout(resolve,600));await request.continue();};
+ const delayed=profile.all&&route.name==='About';let delayedRequests=0,releaseModule;
+ const moduleGate=new Promise(resolve=>{releaseModule=resolve;});
+ const delay=async request=>{delayedRequests++;await moduleGate;await request.continue();};
  if(delayed)await page.route(matcher,delay);
  try{
   await page.reload({waitUntil:'commit'});
+  if(delayed){
+   await expect(page.locator('#main .initial h1')).toBeVisible();
+   await new Promise(resolve=>setTimeout(resolve,600));
+   // The app module is still held. A viewport screenshot does not scroll,
+   // focus, finish animations or otherwise repair the loading document.
+   await page.screenshot({path:testInfo.outputPath('initial-shell-before-about-module.png')});
+   releaseModule();
+  }
   await expect.poll(()=>page.evaluate(()=>window.__sitewideRendering?.done),{timeout:30000}).toBe(true);
- }finally{if(delayed)await page.unroute(matcher,delay);}
+ }finally{releaseModule();if(delayed)await page.unroute(matcher,delay);}
  const record=await page.evaluate(()=>window.__sitewideRendering);
  record.delayedRequests=delayedRequests;
  record.before=before;record.after={url:page.url(),stored:await storage()};
@@ -168,6 +186,13 @@ async function reloadRoute(page,role,profile,route){
  if(delayed&&delayedRequests!==1)issues.push('delayed app bootstrap did not run exactly once');
  if(record.after.url!==before.url)issues.push('refresh changed the current route');
  if(JSON.stringify(record.after.stored)!==JSON.stringify(before.stored))issues.push('refresh changed progress or preferences');
+ for(const [i,sample] of record.initialShell.entries()){
+  const sticky=['sticky','-webkit-sticky','fixed'].includes(sample.headerPosition);
+  if(sticky&&sample.heading&&sample.heading.top<Math.max(sample.header?.bottom||0,0)-1)
+   issues.push('loading frame '+i+': heading is concealed by navigation');
+  if(sample.readyState!=='loading'&&Math.abs(sample.scrollY)>1)
+   issues.push('loading frame '+i+': the parsed page retained its old scroll offset');
+ }
  for(const [i,sample] of record.samples.entries()){
   const sticky=['sticky','-webkit-sticky','fixed'].includes(sample.headerPosition);
   const obscured=sticky?Math.max(sample.header?.bottom||0,0):0;
@@ -186,6 +211,9 @@ async function reloadRoute(page,role,profile,route){
  }
  if(record.clippedText.length)issues.push('text extends outside its layout box');
  record.issues=[...new Set(issues)];
+ if(route.name==='Home'||route.name==='Answered encounter')await page.screenshot({
+  path:testInfo.outputPath(route.name==='Home'?'home-after-refresh.png':'answered-encounter-after-refresh.png')
+ });
  expect.soft(record.issues,role+' '+profile.name+' '+route.name).toEqual([]);
  await page.evaluate(key=>sessionStorage.removeItem(key),observationKey);
 }
@@ -206,22 +234,23 @@ test.afterEach(async({page},testInfo)=>{
 for(const [role,path] of [['public','./'],['garda','garda/']])for(const profile of profiles){
  test.describe(role+' '+profile.name,()=>{
   test.use({viewport:{width:profile.width,height:profile.height},reducedMotion:'no-preference'});
-  test('every page opening survives mobile refresh',async({page,browserName},testInfo)=>{
+  test('every page opening survives mobile refresh',async({page,browserName,isMobile,hasTouch},testInfo)=>{
    test.setTimeout(profile.all?180000:90000);reports.set(page,[]);
    testInfo.annotations.push({type:'device',description:browserName==='firefox'?
-    'Touch/narrow Firefox context; Firefox does not implement isMobile emulation':
+    'Narrow viewport and mobile user agent; Firefox does not implement isMobile emulation':
     'Mobile viewport, touch, mobile user agent and device scale factor'});
+   testInfo.annotations.push({type:'context-options',description:JSON.stringify({isMobile,hasTouch})});
    await prepare(page,role,profile);
    for(const route of routesFor(role,profile.all))await test.step(route.name,async()=>{
     await page.goto(path+'?lang=en'+route.hash);
-    expect(await page.evaluate(()=>navigator.maxTouchPoints)).toBeGreaterThan(0);
-    await reloadRoute(page,role,profile,route);
+    if(browserName==='chromium')expect(await page.evaluate(()=>navigator.maxTouchPoints)).toBeGreaterThan(0);
+    await reloadRoute(page,testInfo,role,profile,route);
    });
    if(profile.all){
     const anchor=role==='public'?{name:'Requested support topic',hash:'#rights/support',target:'#rights-support'}:
      {name:'Requested evidence record',hash:'#evidence/model',target:'#source-model'};
     await page.goto(path+'?lang=en'+anchor.hash);
-    await reloadRoute(page,role,profile,anchor);
+    await reloadRoute(page,testInfo,role,profile,anchor);
    }
   });
  });
@@ -315,4 +344,26 @@ test('standalone documents reflow in a real mobile viewport',async({page})=>{
   expect(geometry.overflow).toBeLessThanOrEqual(2);
   expect(geometry.clipped).toBe(false);
  }
+});
+
+test.describe('navigation before application startup',()=>{
+ test.use({javaScriptEnabled:false,viewport:{width:390,height:844}});
+ test('fallback navigation stays exposed and scrolls clear of the loading content',async({page})=>{
+  for(const path of ['./','garda/']){
+   await page.goto(path);
+   await expect(page.locator('.header')).not.toHaveClass(/navigation-ready/);
+   await expect(page.locator('[data-nav-toggle]')).toBeHidden();
+   for(const link of await page.locator('#main-navigation a').all())await expect(link).toBeVisible();
+   await page.locator('#main h1').scrollIntoViewIfNeeded();
+   const geometry=await page.evaluate(()=>({
+    position:getComputedStyle(document.querySelector('.header')).position,
+    headerBottom:document.querySelector('.header').getBoundingClientRect().bottom,
+    heading:document.querySelector('#main h1').getBoundingClientRect().toJSON(),
+    height:innerHeight
+   }));
+   expect(geometry.position).toBe('relative');
+   expect(geometry.heading.top).toBeGreaterThanOrEqual(Math.max(geometry.headerBottom,0));
+   expect(geometry.heading.bottom).toBeLessThanOrEqual(geometry.height);
+  }
+ });
 });
