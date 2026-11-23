@@ -1,9 +1,12 @@
 /* Important titles use the available card width and the reader's text size.
    Semantic heading levels, colours, emphasis and authored margins stay intact. */
 #main [data-heading-card] {
- container-type:inline-size;
  min-inline-size:0;
 }
+/* Native disclosure titles inherit the surrounding size context. Containment
+   on details or summary can make WebKit scroll a revealed button between
+   pointerdown and pointerup, changing which control receives the click. */
+#main [data-heading-card]:not(details) {container-type:inline-size}
 #main .card-summary-title {display:inline-block}
 #main [data-card-heading] {
  min-inline-size:0;
@@ -41,7 +44,9 @@ html:lang(zh) #main [data-card-heading] {letter-spacing:normal;line-height:1.45}
   opacity:1;
   animation:none;
  }
- #main [data-heading-pending] {opacity:0;transform:translateY(37.5%)}
+ /* Keep an offscreen title inside its control while it waits. The entrance
+    keyframe supplies the rise only when the title actually becomes visible. */
+ #main [data-heading-pending] {opacity:0}
  #main [data-heading-motion] {
   animation:ui-card-heading-arrive 1s ease-out both;
  }

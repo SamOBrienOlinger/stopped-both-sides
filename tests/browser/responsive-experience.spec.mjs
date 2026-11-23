@@ -245,6 +245,10 @@ for(const path of ['./','garda/']){
   await page.locator('.learning-disclosure>summary').click();
   const panel=page.locator('.learning-panel').first(),summary=panel.locator('summary');
   await summary.scrollIntoViewIfNeeded();await summary.focus();
+  // Focusing a nested summary settles its opening parent. Let that layout
+  // and the browser's focus scroll finish before recording the child baseline.
+  await expect(page.locator('.learning-disclosure')).not.toHaveAttribute('data-disclosure-state');
+  await frames(page);
   const beforeDisclosure=await panel.evaluate(panelGeometry);
   await recordDisclosure(panel);
   await page.keyboard.press('Enter');
