@@ -42,14 +42,15 @@ export function createDisclosures({main,allowed,onStart=()=>{},onFinish=()=>{}})
   onFinish(state.details);
  }
  function freeze(state){
-  // Preserve the pixels already drawn, including the clip. Merely pausing
-  // WAAPI is insufficient: the frame clock writes currentTime independently.
-  const height=state.details.getBoundingClientRect().height;
+  // Keep the native height effect installed until activation fixes its target.
+  // Stop both clocks: the frame clock writes currentTime independently, and
+  // stopping it restores the animation's original playback rate.
+  const animation=state.animation,time=animation.currentTime;
   press.states.add(state);state.frozen=true;
   state.stopClock?.();
-  state.animation.onfinish=null;state.animation.oncancel=null;
-  state.details.style.setProperty('height',height+'px');
-  state.animation.cancel();
+  animation.onfinish=null;animation.oncancel=null;
+  animation.playbackRate=0;
+  if(time!==null)animation.currentTime=time;
  }
  function releasePress(){
   const previous=press;
