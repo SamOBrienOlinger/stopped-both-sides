@@ -141,7 +141,7 @@ jobs:
 
   landing-image-recovery:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
-    name: ${{ matrix.browser }} landing image recovery
+    name: ${{ matrix.browser }} landing image recovery and controls
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -170,12 +170,13 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       # These engines can treat repeated hash-URL visits as same-document.
-      # Exercise fresh cancellation/failure documents without waiting for the
-      # general suite; the WebKit repetition job covers the same cases there.
-      - name: Repeat image cancellation and failure
+      # Exercise fresh cancellation/failure documents and both navigation
+      # controls promptly; WebKit repeats the same cases in its landing job.
+      - name: Repeat image recovery and navigation controls
         run: >-
           npm run test:browser -- --project=${{ matrix.browser }} --repeat-each=3
-          portfolio-landing-reveal.spec.mjs --grep "pending image cancellation and failure"
+          portfolio-landing-reveal.spec.mjs remaining-controls.spec.mjs
+          --grep "pending image cancellation and failure|previous-stage control|Back to Top"
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
@@ -217,7 +218,7 @@ jobs:
         run: >-
           npm run test:browser -- --project=webkit --repeat-each=3
           landing-motion-regressions.spec.mjs disclosure-pointer.spec.mjs
-          portfolio-landing-reveal.spec.mjs refinements.spec.mjs
+          portfolio-landing-reveal.spec.mjs refinements.spec.mjs remaining-controls.spec.mjs
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:

@@ -40,7 +40,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   for(const activation of ['pointer','keyboard']){
    const before=readState(page),previous=before.history.at(-1);
    const control=page.locator('[data-action="paired-back"]');
-   await expect(control).toHaveText('← Revisit the previous stage');
+   await expect(control).toHaveAccessibleName('Revisit the previous stage');
    if(activation==='pointer')await control.click();else await control.press('Enter');
    await expect.poll(()=>readState(page)).toEqual({
     ...before,nodeId:previous.nodeId,history:before.history.slice(0,-1),
