@@ -337,6 +337,87 @@ for(const [role,path] of [['public','./'],['garda','garda/']])for(const profile 
 }
 
 for(const [role,path] of [['public','./'],['garda','garda/']]){
+ for(const profile of profiles.filter(profile=>profile.size!==150)){
+  test(role+' '+profile.name+' late restored offset cannot put content behind the mobile header',async({page},testInfo)=>{
+   await page.setViewportSize({width:profile.width,height:profile.height});
+   await page.emulateMedia({reducedMotion:'reduce'});
+   await prepare(page,role,profile);
+   testInfo.annotations.push({type:'fault injection',description:
+    'A synthetic late scroll offset after a genuine reload models browser restoration. This is not a physical iOS pull-to-refresh test.'});
+   const observations=[];
+   const inspect=async(label,expectedScroll)=>{
+    const samples=await page.evaluate(()=>new Promise(resolve=>{
+     const samples=[];
+     const frame=()=>{
+      const header=document.querySelector('.header'),main=document.querySelector('#main');
+      const box=element=>element.getBoundingClientRect().toJSON();
+      const viewport={top:visualViewport?.offsetTop||0,left:visualViewport?.offsetLeft||0,
+       bottom:(visualViewport?.offsetTop||0)+(visualViewport?.height||innerHeight),
+       right:(visualViewport?.offsetLeft||0)+(visualViewport?.width||innerWidth)};
+      const head=box(header),opening=box(main.firstElementChild),hits=[];
+      for(const element of [main.querySelector('h1'),main.querySelector('.eyebrow')].filter(Boolean)){
+       const range=document.createRange();range.selectNodeContents(element);
+       for(const rect of [...range.getClientRects()].slice(0,4)){
+        const left=Math.max(rect.left,viewport.left),right=Math.min(rect.right,viewport.right);
+        const top=Math.max(rect.top,viewport.top),bottom=Math.min(rect.bottom,viewport.bottom);
+        if(right-left<2||bottom-top<2)continue;
+        const hit=document.elementFromPoint((left+right)/2,(top+bottom)/2);
+        hits.push({text:element.textContent.trim().slice(0,60),inMain:!!hit&&main.contains(hit),
+         coveredByHeader:!!hit&&header.contains(hit)});
+       }
+      }
+      const overlap=Math.min(head.bottom,opening.bottom,viewport.bottom)-Math.max(head.top,opening.top,viewport.top);
+      samples.push({scrollY,header:head,opening,viewport,hits,
+       overlap:Math.min(head.right,opening.right)>Math.max(head.left,opening.left)?Math.max(0,overlap):0,
+       overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+1});
+      if(samples.length===16)resolve(samples);else requestAnimationFrame(frame);
+     };
+     requestAnimationFrame(frame);
+    }));
+    observations.push({label,expectedScroll,samples});
+    for(const sample of samples){
+     expect.soft(sample.overlap,label+' navigation does not cover the visible page opening').toBeLessThanOrEqual(1);
+     expect.soft(sample.overflow,label+' no horizontal overflow').toBe(false);
+     expect.soft(Math.abs(sample.scrollY-expectedScroll),label+' keeps the requested reading position').toBeLessThanOrEqual(1);
+     for(const hit of sample.hits)expect.soft(hit,label+' visible text wins the hit test')
+      .toMatchObject({inMain:true,coveredByHeader:false});
+    }
+    return samples;
+   };
+   try{
+    for(const hash of ['#play','#about']){
+     await page.goto(path+'?lang=en'+hash);
+     await expect(page.locator('#main h1')).toBeVisible();
+     await page.reload();
+     await expect(page.locator('#main .initial,.error')).toHaveCount(0);
+     await expect(page.locator('#main h1')).toBeVisible();
+     await page.evaluate(()=>document.fonts.ready);
+     expect(await page.evaluate(()=>performance.getEntriesByType('navigation')[0]?.type)).toBe('reload');
+     await expect.poll(()=>page.evaluate(()=>scrollY),'native reload itself still starts at zero').toBe(0);
+     await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
+     await expect(page.locator('html')).toHaveCSS('font-size',profile.size===200?'32px':'16px');
+     // Fault injection happens only after the native reload has finished.
+     // No application focus or scroll repair is applied before observation.
+     const offset=profile.size===200?80:48;
+     await page.evaluate(top=>scrollTo({top,left:0,behavior:'instant'}),offset);
+     const late=await inspect(hash+' late browser offset',offset);
+     expect(late[0].hits.length,'the overlap check includes visible heading or introductory text').toBeGreaterThan(0);
+     await page.setViewportSize({width:profile.width,height:profile.height-120});
+     await inspect(hash+' shorter browser viewport',offset);
+     await page.setViewportSize({width:profile.width,height:profile.height});
+     await inspect(hash+' restored browser viewport',offset);
+     await page.evaluate(()=>scrollTo({top:0,left:0,behavior:'instant'}));
+     const top=await inspect(hash+' returned to page top',0);
+     expect(top[0].opening.top).toBeGreaterThanOrEqual(top[0].header.bottom-1);
+     await page.evaluate(()=>scrollTo({top:450,left:0,behavior:'instant'}));
+     await inspect(hash+' deliberate later reading scroll',450);
+    }
+   }finally{
+    await testInfo.attach('late-restoration-geometry.json',{body:Buffer.from(JSON.stringify(observations)),contentType:'application/json'});
+   }
+  });
+ }
+
  test(role+' keyboard navigation keeps control focus visible without boxing the heading',async({page},testInfo)=>{
   await page.setViewportSize({width:320,height:740});
   await page.goto(path+'?lang=en#play');

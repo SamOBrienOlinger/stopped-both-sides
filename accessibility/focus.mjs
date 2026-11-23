@@ -1,17 +1,24 @@
+function headerOcclusion() {
+ const header=document.querySelector('.header');
+ const position=header&&globalThis.getComputedStyle?.(header)?.position;
+ // A header in normal flow scrolls away rather than covering the content.
+ return header&&(!position||position==='sticky'||position==='-webkit-sticky'||position==='fixed')
+  ?Math.max(header.getBoundingClientRect?.()?.bottom||0,0):0;
+}
+
 export function focusControl(element) {
  if(!element)return false;
  element.focus?.({preventScroll:true});
  const box=element.getBoundingClientRect?.();
  if(!box)return true;
- const header=document.querySelector('.header')?.getBoundingClientRect?.();
- const top=Math.max(header?.bottom||0,0)+12;
+ const top=headerOcclusion()+12;
  if(box.top<top||box.bottom>window.innerHeight-12){
   window.scrollBy?.({top:box.top-top,behavior:'instant'});
  }
  return true;
 }
 
-// A new page starts at the document top. The sticky header stays in normal
+// A new page starts at the document top. The header stays in normal
 // flow, so scrolling a later heading is not a substitute for exposing it all.
 export function focusPageStart(main,{focus=true}={}) {
  if(!main)return false;
@@ -27,12 +34,7 @@ export function focusContext(control,context) {
  if(!control)return false;
  const heading=context?.querySelector?.(':scope > h1,:scope > h2,:scope > h3');
  if(!heading)return focusControl(control);
- const header=document.querySelector('.header');
- const position=header&&globalThis.getComputedStyle?.(header)?.position;
- // A static landscape header scrolls away instead of covering the content.
- const occlusion=header&&(!position||position==='sticky'||position==='-webkit-sticky'||position==='fixed')
-  ?Math.max(header.getBoundingClientRect?.()?.bottom||0,0):0;
- const top=occlusion+12,bottom=window.innerHeight-12,available=bottom-top;
+ const top=headerOcclusion()+12,bottom=window.innerHeight-12,available=bottom-top;
  const selection=()=>{
   const bounds=context?.getBoundingClientRect?.();
   const action=control.getBoundingClientRect?.(),title=heading.getBoundingClientRect?.();

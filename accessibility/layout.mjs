@@ -2,7 +2,7 @@
 // citations, game state and language-pack lookup keys stay intact.
 import {decorateCardHeadings} from './card-headings.mjs?v=catalogue-keyboard-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
-import {focusPageStart} from './focus.mjs?v=header-clearance-20261123';
+import {focusPageStart} from './focus.mjs?v=mobile-flow-20261123b';
 export function paragraphChunks(text,language='en'){
  const authored=text.split(/\r?\n[ \t]*\r?\n/).map(paragraph=>paragraph.trim()).filter(Boolean);
  if(authored.length>1)return authored;
@@ -31,19 +31,24 @@ export function createLayout({main}){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const forced=matchMedia('(forced-colors: active)');
  const root=document.documentElement;
+ const headerOverlays=()=>{
+  const position=globalThis.getComputedStyle?.(header)?.position;
+  return !position||position==='sticky'||position==='-webkit-sticky'||position==='fixed';
+ };
  function sizeHeader(){
   const height=header.getBoundingClientRect?.().height;
   if(height>0){
    const value=Math.ceil(height)+'px';
    if(root.style.getPropertyValue('--navigation-height')!==value){
     root.style.setProperty('--navigation-height',value);
-    // Preserve keyboard access when late fonts or wrapped navigation grow.
+    // Preserve keyboard access when an overlay header grows. A normal-flow
+    // header cannot cover the control and must not cause corrective scrolling.
     // Route headings retain focus while someone reads: they must never pull
     // the page back merely because the header changes size afterwards.
     const focused=document.activeElement;
     const isControl=element=>element?.tabIndex>=0||element?.matches?.('a[href],button,input,select,textarea,summary,[role="button"]');
-    if(main.contains?.(focused)&&isControl(focused))globalThis.requestAnimationFrame?.(()=>{
-     if(document.activeElement!==focused||!isControl(focused))return;
+    if(headerOverlays()&&main.contains?.(focused)&&isControl(focused))globalThis.requestAnimationFrame?.(()=>{
+     if(!headerOverlays()||document.activeElement!==focused||!isControl(focused))return;
      const box=focused.getBoundingClientRect(),bottom=header.getBoundingClientRect().bottom;
      if(box.bottom>0&&box.top<bottom)focused.scrollIntoView?.({block:'nearest',behavior:'instant'});
     });
