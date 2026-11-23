@@ -1,0 +1,37 @@
+name: Landing keyboard diagnostics
+on:
+  push:
+    branches: [diagnostic/landing-render-20261123]
+permissions:
+  contents: read
+jobs:
+  keyboard:
+    name: Native catalogue keyboard (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [webkit]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 10
+      - name: Verify unchanged candidate application
+        run: git diff --exit-code 23be5465b032b01bf35eca1db09e697e66675199 -- app.mjs index.html garda accessibility assets encounters
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npm run test:browser -- --project=${{ matrix.browser }} landing-keyboard-diagnostic.spec.mjs
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: native-keyboard-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
