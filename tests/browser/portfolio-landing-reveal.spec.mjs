@@ -190,7 +190,12 @@ for(const path of paths){
    await page.emulateMedia({reducedMotion:'no-preference'});
    const held=await holdFirstHero(page,{fail:failure});
    try{
-    await page.goto(path+'?lang=en#play',{waitUntil:'domcontentloaded'});await held.requested;
+    // A second goto to the same hash URL can stay in the existing document.
+    // Distinct fixture URLs give each mode a fresh image request and preserve
+    // initial-navigation semantics (reload has its own scroll-restoration guard).
+    const imageCase=failure?'failure':'cancel';
+    await page.goto(path+'?lang=en&hero-image-case='+imageCase+'#play',{waitUntil:'domcontentloaded'});
+    await held.requested;
     const group=page.locator('.landing-instructions'),items=group.locator(heroItems);
     const image=group.locator('[data-hero-perspective="garda"]');
     await expect(image).toHaveAttribute('data-landing-reveal','pending');

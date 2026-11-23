@@ -139,6 +139,52 @@ jobs:
             test-results/
           retention-days: 7
 
+  landing-image-recovery:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    name: ${{ matrix.browser }} landing image recovery
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+      - name: Assert exact code revision under test
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Wait for this Pages publication
+        if: github.event_name == 'workflow_run'
+        run: node tests/browser/wait-for-pages.mjs
+        env:
+          PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      # These engines can treat repeated hash-URL visits as same-document.
+      # Exercise fresh cancellation/failure documents without waiting for the
+      # general suite; the WebKit repetition job covers the same cases there.
+      - name: Repeat image cancellation and failure
+        run: >-
+          npm run test:browser -- --project=${{ matrix.browser }} --repeat-each=3
+          portfolio-landing-reveal.spec.mjs --grep "pending image cancellation and failure"
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: browser-report-image-recovery-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
   landing-interactions:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     name: Repeat landing interactions (WebKit)
