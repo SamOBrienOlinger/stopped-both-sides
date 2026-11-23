@@ -103,7 +103,7 @@ async function deepScroll(page){
  await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'}));
  // This is a setup scroll on the old page, never a repair of the destination.
  await expect.poll(()=>page.locator('#main h1').evaluate(element=>
-  element.getBoundingClientRect().bottom-document.querySelector('.header').getBoundingClientRect().bottom
+  element.getBoundingClientRect().bottom
  )).toBeLessThan(0);
 }
 

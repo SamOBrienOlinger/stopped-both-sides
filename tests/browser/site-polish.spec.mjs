@@ -81,7 +81,7 @@ for(const {path,role} of cases){
   await expect(settings).toBeFocused();
  });
 
- test(path+' top navigation stays visible after scrolling with compact menu usable',async({page})=>{
+ test(path+' navigation clears mobile reading content and stays available on desktop',async({page})=>{
   test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const [width,height] of [[320,568],[390,844],[768,1024],[1366,768]]){
@@ -92,12 +92,20 @@ for(const {path,role} of cases){
    await expect.poll(()=>page.evaluate(()=>{
     const header=document.querySelector('.header');
     return {
-     stuck:getComputedStyle(header).position==='sticky'&&Math.abs(header.getBoundingClientRect().top)<=2,
+     headerTop:Math.round(header.getBoundingClientRect().top),
+     headerBottom:Math.round(header.getBoundingClientRect().bottom),
      scrolled:window.scrollY>50,
      noHorizontalOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth+2
     };
-   })).toEqual({stuck:true,scrolled:true,noHorizontalOverflow:true});
+   }).then(bounds=>({
+    navigationClear:width<1152?bounds.headerBottom<=0:Math.abs(bounds.headerTop)<=2,
+    scrolled:bounds.scrolled,noHorizontalOverflow:bounds.noHorizontalOverflow
+   }))).toEqual({navigationClear:true,scrolled:true,noHorizontalOverflow:true});
    if(width<1152){
+    // Return to the menu through the page, rather than assuming a phone
+    // header is still pinned above the section being read.
+    await page.evaluate(()=>window.scrollTo({top:0,left:0,behavior:'instant'}));
+    await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
     const toggle=page.locator('[data-nav-toggle]');
     await toggle.click();
     await expect(toggle).toHaveAttribute('aria-expanded','true');
@@ -109,7 +117,7 @@ for(const {path,role} of cases){
   }
  });
 
- test(path+' in-page focus targets clear the sticky header when scrolled into view',async({page})=>{
+ test(path+' in-page focus targets remain visible when scrolled into view',async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto(path+'#encounters');
   const button=page.locator('[data-action="paired-setup-characters"]');
@@ -119,8 +127,8 @@ for(const {path,role} of cases){
    buttonTop:element.getBoundingClientRect().top,
    headerBottom:document.querySelector('.header').getBoundingClientRect().bottom
   }));
-  expect(bounds.buttonTop,'the focused character control remains below sticky navigation')
-   .toBeGreaterThanOrEqual(bounds.headerBottom-2);
+  expect(bounds.buttonTop,'the focused character control remains in the viewport below any visible navigation')
+   .toBeGreaterThanOrEqual(Math.max(0,bounds.headerBottom)-2);
   await button.focus();
   await expect(button).toBeFocused();
   await button.click();

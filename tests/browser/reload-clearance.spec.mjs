@@ -103,9 +103,11 @@ async function scrollBeforeReload(page,context,position){
   await page.mouse.wheel(0,geometry.documentHeight*2);
   await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
  }else{
-  await page.mouse.wheel(0,Math.ceil(geometry.top-geometry.header+12));
+  // Put the opening above the viewport itself. A header in document flow
+  // moves with the opening, so comparing their offsets cannot prove a scroll.
+  await page.mouse.wheel(0,Math.ceil(geometry.top+12));
   await expect.poll(()=>page.locator(context).evaluate(element=>
-   element.getBoundingClientRect().top-document.querySelector('.header').getBoundingClientRect().bottom
+   element.getBoundingClientRect().top
   ),'native wheel setup conceals the route opening').toBeLessThan(0);
  }
  await frames(page);
@@ -115,7 +117,7 @@ async function scrollBeforeReload(page,context,position){
 
 async function reloadAndInspect(page,testInfo,site,profile,label,context,position,{anchor=false,delay=false}={}){
  const before=await scrollBeforeReload(page,context,position),hash=new URL(page.url()).hash;
- if(position==='near')expect(before.contextTop,label+' setup conceals the opening').toBeLessThan(before.headerBottom);
+ if(position==='near')expect(before.contextTop,label+' setup places the opening above the viewport').toBeLessThan(0);
  const keys={progressKey:progressStorageKey(site),preferenceKey:preferencesStorageKey(site)};
  const storage=()=>page.evaluate(({progressKey,preferenceKey})=>({
   progress:localStorage.getItem(progressKey),preferences:localStorage.getItem(preferenceKey)

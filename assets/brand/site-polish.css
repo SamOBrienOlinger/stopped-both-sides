@@ -300,6 +300,14 @@ html {scroll-padding-block-start:calc(var(--navigation-height,6rem) + .75rem)}
   .reference-landing .landing-instructions #paired-title {font-size:clamp(1.5rem,6vw,2rem)}
   .about-opening>.about-heading-block {padding-inline-start:.9rem}
 }
+/* Mobile browsers can restore a scroll offset after their pull-to-refresh
+   gesture settles. Keep navigation in the document flow on compact/touch
+   screens so that even a late restore cannot place it over the page opening.
+   The deliberate Menu overlay remains anchored to the header's inner box. */
+@media (max-width:71.999rem), (hover:none), (pointer:coarse){
+  .header.navigation-ready {position:relative;inset-block-start:auto;top:auto}
+  html {scroll-padding-block-start:.75rem}
+}
 /* On very short landscape viewports, especially with 200% text, the
    otherwise-sticky header can occupy nearly the whole screen and cover scene
    character buttons. Make it part of the document flow so it scrolls away. */

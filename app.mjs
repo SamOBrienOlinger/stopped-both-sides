@@ -1,13 +1,13 @@
 import {communitySources,communitySourceIds} from "./learning/community-resources.mjs?v=community-resources-20261122";
 import {createSiteSearch} from "./search/site-search.mjs?v=situation-locations-20261122";
-import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=header-clearance-20261123';
+import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=situation-locations-20261122';
-import {createLayout} from './accessibility/layout.mjs?v=sitewide-rendering-20261123';
+import {createLayout} from './accessibility/layout.mjs?v=mobile-flow-20261123b';
 import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=contributors-expanded-20261122';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=situation-locations-20261122';
 import {createMotion} from './accessibility/motion.mjs?v=catalogue-keyboard-20261123';
-import {createEncounterMode} from './encounters/ui.mjs?v=header-clearance-20261123';
+import {createEncounterMode} from './encounters/ui.mjs?v=mobile-flow-20261123b';
 import {scenarios,scenarioById,sources} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');
