@@ -68,7 +68,7 @@
 
 ## What training can and cannot change
 
-- **Joel Miller, Paul Quinton, Banos Alexandrou and Daniel Packham (2020).** [Can police training reduce ethnic/racial disparities in stop and search? Evidence from a multisite UK trial](https://www.researchwithrutgers.com/en/publications/can-police-training-reduce-ethnicracial-disparities-in-stop-and-s/). *Criminology & Public Policy*. Academic trial; Six agencies in England. Review access: University-repository abstract reviewed. Source key: `miller`.
+- **Joel Miller, Paul Quinton, Banos Alexandrou and Daniel Packham (2020).** [Can police training reduce ethnic/racial disparities in stop and search? Evidence from a multisite UK trial](https://www.researchwithrutgers.org/en/publications/can-police-training-reduce-ethnicracial-disparities-in-stop-and-s/). *Criminology & Public Policy*. Academic trial; Six agencies in England. Review access: University-repository abstract reviewed. Source key: `miller`.
 
 - **Robert E. Worden and colleagues (2024).** [Implicit bias training for police: Evaluating impacts on enforcement disparities](https://pubmed.ncbi.nlm.nih.gov/39133609/). *Law and Human Behavior*. Academic trial; New York City, United States. Review access: Primary abstract reviewed; manuscript access restricted. Source key: `worden`.
 

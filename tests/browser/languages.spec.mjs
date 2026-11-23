@@ -2,9 +2,9 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
-import {progressStorageKey} from '../../encounters/progress.mjs?v=situation-locations-20261122';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
+import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {progressStorageKey} from '../../encounters/progress.mjs?v=link-audit-20261123';
 import {expectControlsFit} from './control-layout.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));
@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=learning-language-20261120',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=link-audit-20261123',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -366,7 +366,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=learning-language-20261120',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=link-audit-20261123',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);

@@ -1,7 +1,7 @@
-import {encounters} from './catalog.mjs?v=situation-locations-20261122';
-import {renderScenePreview} from './scenes.mjs?v=situation-locations-20261122';
-import {topicGroups} from './presentation.mjs?v=situation-locations-20261122';
-import {practiceGoal} from '../learning/play.mjs?v=situation-locations-20261122';
+import {encounters} from './catalog.mjs?v=link-audit-20261123';
+import {renderScenePreview} from './scenes.mjs?v=link-audit-20261123';
+import {topicGroups} from './presentation.mjs?v=link-audit-20261123';
+import {practiceGoal} from '../learning/play.mjs?v=link-audit-20261123';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){

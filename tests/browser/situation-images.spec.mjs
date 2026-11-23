@@ -1,9 +1,9 @@
 import {expect,test} from '@playwright/test';
-import {encounters} from '../../encounters/catalog.mjs?v=situation-locations-20261122';
+import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
 import {defaultCast} from '../../encounters/characters.mjs';
-import {startEncounter} from '../../encounters/engine.mjs?v=situation-locations-20261122';
-import {topicGroups} from '../../encounters/presentation.mjs?v=situation-locations-20261122';
-import {renderScene} from '../../encounters/scenes.mjs?v=situation-locations-20261122';
+import {startEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {topicGroups} from '../../encounters/presentation.mjs?v=link-audit-20261123';
+import {renderScene} from '../../encounters/scenes.mjs?v=link-audit-20261123';
 import {situationParticipants} from '../../encounters/situation-cast.mjs?v=situation-locations-20261122';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 

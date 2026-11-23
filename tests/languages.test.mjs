@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=situation-locations-20261122';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=link-audit-20261123';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
 import {personalizeText,storyIdentity} from '../encounters/narrative.mjs';
-import {progressStorageKey} from '../encounters/progress.mjs?v=situation-locations-20261122';
+import {progressStorageKey} from '../encounters/progress.mjs?v=link-audit-20261123';
 import {siteRole,siteBase} from './site-fixture.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));
@@ -112,7 +112,7 @@ globalThis.location={get hash(){return address.hash;},set hash(value){address.ha
 globalThis.history={replaceState(_state,_title,url){address=new URL(url,address);}};
 globalThis.document={title:'',documentElement:{lang:'en-IE',attrs:{},setAttribute(k,v){this.attrs[k]=v;},style:{setProperty(){}},classList:{toggle(){}}},querySelector(q){if(q==='#main')return main;if(q==='#reading-dialog')return dialog;if(q==='[data-reading-open]')return opener;if(q==='[data-site-switch]')return siteLink;if(q==='#page-status')return live;return null;},querySelectorAll(q){return q==='[data-reading-open]'?[opener]:[];},getElementById(id){return id===opener.id?opener:null;},addEventListener(k,v){callbacks['document-'+k]=v;}};
 globalThis.window={scrollTo(){},addEventListener(k,v){callbacks[k]=v;}};
-await import(new URL('app.mjs',siteBase));
+await import(new URL('app.mjs?v=link-audit-20261123',siteBase));
 const current=()=>decodeState(location.hash.slice(11).split('~')[0]);
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/class="error"/);}
 function action(name,extra={}){const before=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(assignments!==before)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/class="error"/);}

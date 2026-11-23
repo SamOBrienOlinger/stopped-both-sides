@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sources as publicSources} from '../data.mjs?v=pabi-privacy-20261122';
-import {sources as gardaSources} from '../garda/sources.mjs?v=pabi-privacy-20261122';
-import {encounters,references,roles} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {sources as gardaSources} from '../garda/sources.mjs?v=link-audit-20261123';
+import {encounters,references,roles} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {pabiReport} from '../learning/pabi.mjs?v=pabi-privacy-20261122';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateText} from '../locales/translate.mjs?v=situation-locations-20261122';
+import {loadLanguage,translateText} from '../locales/translate.mjs?v=link-audit-20261123';
 
 test('The distinct 2025 PABI report has shared bibliographic details and explicit limits',()=>{
  assert.equal(publicSources.pabi.url,pabiReport.url);

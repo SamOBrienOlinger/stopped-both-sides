@@ -1,5 +1,5 @@
 import publicData from './original-public.mjs?v=pabi-privacy-20261122';
-import gardaData from './original-garda.mjs?v=pabi-privacy-20261122';
+import gardaData from './original-garda.mjs?v=link-audit-20261123';
 import {counterparts} from './counterparts.mjs?v=learning-language-20261120';
 import {discriminationEncounters,discriminationReferences} from './discrimination.mjs?v=situation-locations-20261122';
 export const roles=['public','garda'];

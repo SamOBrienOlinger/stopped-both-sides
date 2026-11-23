@@ -1,6 +1,6 @@
 import {writeFileSync} from 'node:fs';
-import {sources,groups,scenarios} from '../garda/data.mjs?v=pabi-privacy-20261122';
-import {encounters,references} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {sources,groups,scenarios} from '../garda/data.mjs?v=link-audit-20261123';
+import {encounters,references} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {colleagueDiscriminationReferences} from '../encounters/colleague-discrimination.mjs?v=situation-locations-20261122';
 const root=new URL('../research/',import.meta.url);
 let refs=`# Bibliography\n\n${Object.keys(sources).length+Object.keys(colleagueDiscriminationReferences).length} sources, including ${Object.values(sources).filter(s=>s.kind.startsWith('Academic')).length} academic publications. This is a selected evidence library. Source limitations and design interpretations appear in the site's Evidence & sources section.\n\n`;

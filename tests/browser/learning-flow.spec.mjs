@@ -1,6 +1,6 @@
 import {expect,test} from '@playwright/test';
-import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=situation-locations-20261122';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=situation-locations-20261122';
+import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
 
 const contrast=([foreground,background])=>{
  const linear=channel=>channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4;

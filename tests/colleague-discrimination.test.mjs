@@ -1,16 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {encounters,references,roles,stageCount} from '../encounters/catalog.mjs?v=situation-locations-20261122';
+import {encounters,references,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {discriminationEncounters} from '../encounters/discrimination.mjs?v=situation-locations-20261122';
-import {topicGroups} from '../encounters/presentation.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=situation-locations-20261122';
-import {emptyProgress,recordProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=situation-locations-20261122';
-import {renderScene} from '../encounters/scenes.mjs?v=situation-locations-20261122';
+import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {emptyProgress,recordProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=link-audit-20261123';
+import {renderScene} from '../encounters/scenes.mjs?v=link-audit-20261123';
 import {storyIdentity,personalizeText} from '../encounters/narrative.mjs';
-import {learningIcon,scenarioIcon} from '../encounters/visuals.mjs?v=situation-locations-20261122';
-import {loadLanguage,translateText,translateHTML} from '../locales/translate.mjs?v=situation-locations-20261122';
+import {learningIcon,scenarioIcon} from '../encounters/visuals.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText,translateHTML} from '../locales/translate.mjs?v=link-audit-20261123';
 import {languages} from '../locales/languages.mjs';
-import {scenarioCopy} from '../learning/play.mjs?v=situation-locations-20261122';
+import {scenarioCopy} from '../learning/play.mjs?v=link-audit-20261123';
 
 const grounds=['gender','civil-status','family-status','sexual-orientation','age','religious-belief','traveller-community','race','disability','housing-assistance'];
 const witnessCases=Object.values(encounters).filter(e=>e.kind==='colleague-witness');

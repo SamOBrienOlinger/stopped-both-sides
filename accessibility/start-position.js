@@ -85,9 +85,24 @@
  listen(window,'resize',schedule,{passive:true});
  listen(window.visualViewport,'resize',schedule,{passive:true});
  listen(window.visualViewport,'scroll',schedule,{passive:true});
+ // The first frame can run before the parser creates the loading page.
+ // Firefox can then restore its old offset as later chunks establish a
+ // scroll range. Settle those chunks at their mutation checkpoint, before
+ // another frame can expose the loading heading behind the sticky bar.
+ let parserObserver=null;
+ if(document.readyState==='loading'&&typeof MutationObserver==='function'){
+  parserObserver=new MutationObserver(()=>{
+   if(active&&document.readyState==='loading'&&document.querySelector('#main .initial'))position();
+  });
+  parserObserver.observe(document,{childList:true,subtree:true});
+  cleanup.push(()=>parserObserver?.disconnect());
+ }
  // The parser can restore its saved range before deferred modules run.
  // Settle synchronously at that boundary, before the next painted frame.
- listen(document,'readystatechange',position);
+ listen(document,'readystatechange',()=>{
+  if(document.readyState!=='loading')parserObserver?.disconnect();
+  position();
+ });
  listen(window,'load',schedule,{once:true});
  listen(document,'DOMContentLoaded',schedule,{once:true});
  document.fonts?.ready?.then(schedule);

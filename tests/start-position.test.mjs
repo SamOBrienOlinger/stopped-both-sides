@@ -25,7 +25,8 @@ function surface(){
 // and layout. No controller logic is reimplemented in the fixture.
 function browser(type='reload',offset=480){
  const attributes=new Set(type==='reload'?['data-start-position']:[]);
- let pendingOffset=null;
+ let pendingOffset=null,initialShell=false;
+ const parserObservers=new Set();
  const root={setAttribute:name=>attributes.add(name),removeAttribute:name=>attributes.delete(name),
   hasAttribute:name=>attributes.has(name),
   getBoundingClientRect(){
@@ -35,12 +36,17 @@ function browser(type='reload',offset=480){
   }};
  let finishFonts;
  const fonts={...surface(),ready:new Promise(resolve=>{finishFonts=resolve;})};
- const document={...surface(),documentElement:root,fonts,scrollingElement:{scrollHeight:4000},
-  querySelector:()=>null};
+ const document={...surface(),documentElement:root,fonts,scrollingElement:{scrollHeight:4000},readyState:'loading',
+  querySelector:selector=>selector==='#main .initial'&&initialShell?{}:null};
  const frames=new Map(),writes=[];let nextFrame=0;
  const host={...surface(),document,history:{scrollRestoration:type==='reload'?'manual':'auto'},
   performance:{getEntriesByType:()=>[{type}]},innerHeight:800,scrollX:0,scrollY:offset,
   visualViewport:surface(),
+  MutationObserver:class{
+   constructor(callback){this.callback=callback;}
+   observe(){parserObservers.add(this.callback);}
+   disconnect(){parserObservers.delete(this.callback);}
+  },
   getComputedStyle:element=>element===root?{scrollPaddingTop:'12px'}:{scrollMarginTop:'8px'},
   requestAnimationFrame:callback=>{frames.set(++nextFrame,callback);return nextFrame;},
   cancelAnimationFrame:id=>frames.delete(id),
@@ -54,6 +60,7 @@ function browser(type='reload',offset=480){
   paint(){const callbacks=[...frames.values()];frames.clear();for(const callback of callbacks)callback();},
   restore(top,{emit=true}={}){host.scrollY=top;if(emit)host.emit('scroll');},
   deferRestore(top){pendingOffset=top;},
+  parseInitial(){initialShell=true;for(const callback of [...parserObservers])callback([{type:'childList'}]);},
   anchor(top){return {isConnected:true,getBoundingClientRect:()=>({top:top-host.scrollY})};}
  };
 }
@@ -78,6 +85,18 @@ test('startup claim and parser readiness settle a native offset deferred until s
  }
 });
 
+test('parser insertions settle late first-layout restoration before another animation frame',()=>{
+ const e=browser();e.paint();
+ // The early frame can run before body content exists. Later parser chunks
+ // establish a scroll range while the document is still loading.
+ for(const offset of [1360,1499]){
+  e.deferRestore(offset);e.parseInitial();
+  assert.equal(Math.abs(e.root.getBoundingClientRect().top),0,
+   'the loading shell must already be clear at the next layout read');
+  assert.equal(e.host.scrollY,0);
+ }
+});
+
 test('a native scroll event repairs its offset synchronously before the next frame',()=>{
  const e=browser();e.paint();
  e.restore(640);
@@ -99,6 +118,7 @@ test('fresh input before readiness cancels queued work and a later render cannot
  for(const type of ['pointerdown','touchstart','wheel','keydown','click']){
   const e=browser();e.restore(240,{emit:false});e.host.emit(type,{isTrusted:true});
   e.controller.claim(()=>null);
+  e.parseInitial();
   e.finishFonts();await Promise.resolve();
   e.host.emit('load');e.host.emit('pageshow',{persisted:false});
   e.host.visualViewport.emit('resize');e.paint();e.paint();
