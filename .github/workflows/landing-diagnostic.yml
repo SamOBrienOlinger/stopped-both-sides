@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 2
+          fetch-depth: 10
       - name: Verify unchanged candidate application
         run: git diff --exit-code 484bedf38c23f5ad957b6f711dad29a6473b8b02 -- app.mjs garda accessibility assets encounters
       - uses: actions/setup-node@v7

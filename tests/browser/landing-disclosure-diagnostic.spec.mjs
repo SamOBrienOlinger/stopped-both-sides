@@ -1,12 +1,13 @@
 import {test,expect} from '@playwright/test';
 
-// Diagnostic branch only. The workflow repeats these eight cases five times.
+// Diagnostic branch only. The workflow repeats these ten cases five times.
 // Each variant preserves the real browse and Start clicks without settlement
 // waits; only the indicated presentation capability changes.
 const variants=[
  {name:'current'},
  {name:'all-heading-containment-off',css:'#main [data-heading-card]{container-type:normal!important}'},
  {name:'disclosure-related-containment-off',css:'#main :is(details [data-heading-card],[data-heading-card]:has(details),details[data-heading-card]){container-type:normal!important}'},
+ {name:'paint-only-clipping',css:'#main details[data-disclosure-state]{overflow:visible!important;clip-path:inset(0)}'},
  {name:'native-disclosure-opening',nativeOpen:true}
 ];
 
@@ -15,47 +16,32 @@ async function recordNativeFlow(page,nativeOpen){
   // Exercise the production controller's native-disclosure fallback without
   // changing unrelated heading or page motion, or substituting activations.
   if(nativeOpen)Object.defineProperty(HTMLDetailsElement.prototype,'animate',{configurable:true,value:undefined});
-  const events=[];let armed=false,frame=0;
+  const events=[];let armed=false;
   const id=element=>{
    if(!element)return null;
    const action=element.closest?.('[data-action]'),topic=element.closest?.('[data-situation-topic]');
-   return {tag:element.tagName||element.nodeName,id:element.id||'',className:String(element.className||''),
+   return {tag:element.tagName||element.nodeName,id:element.id||'',
     action:action?.getAttribute('data-action')||null,situation:action?.getAttribute('data-id')||null,
-    topic:topic?.getAttribute('data-situation-topic')||null,text:element.textContent?.trim().slice(0,90)||''};
+    topic:topic?.getAttribute('data-situation-topic')||null};
   };
-  const box=element=>{
-   if(!element)return null;
-   const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};
-  };
-  const snapshot=(full=false)=>{
-   const button=document.querySelector('.scenario-library [data-action="paired-start"][data-id="public-street"]');
+  const snapshot=()=>{
    const street=document.querySelector('.scenario-library [data-situation-topic="street"]');
    const library=document.querySelector('.scenario-library');
-   const result={time:performance.now(),hash:location.hash,scrollY,rootScroll:document.scrollingElement?.scrollTop,
-    viewport:{height:innerHeight,width:innerWidth,pageTop:visualViewport?.pageTop,offsetTop:visualViewport?.offsetTop},
-    active:id(document.activeElement),button:box(button),street:street?{...box(street),open:street.open,
-     state:street.getAttribute('data-disclosure-state'),style:street.getAttribute('style'),scrollTop:street.scrollTop,
-     animations:street.getAnimations().map(animation=>({time:animation.currentTime,state:animation.playState,rate:animation.playbackRate}))}:null,
-    library:library?{...box(library),open:library.open,state:library.getAttribute('data-disclosure-state'),scrollTop:library.scrollTop}:null};
-   if(full){
-    result.ancestors=[];
-    for(let element=button;element;element=element.parentElement){
-     const style=getComputedStyle(element);
-     result.ancestors.push({element:id(element),box:box(element),container:style.containerType,
-      overflowX:style.overflowX,overflowY:style.overflowY,scrollTop:element.scrollTop,
-      scrollHeight:element.scrollHeight,clientHeight:element.clientHeight,
-      transform:style.transform,position:style.position,overflowAnchor:style.overflowAnchor});
-    }
-   }
-   return result;
+   return {time:performance.now(),hash:location.hash,scrollY,active:id(document.activeElement),
+    street:street?{open:street.open,state:street.getAttribute('data-disclosure-state'),style:street.getAttribute('style')}:null,
+    library:library?{open:library.open,state:library.getAttribute('data-disclosure-state'),style:library.getAttribute('style')}:null};
   };
-  const record=(kind,event,full=true)=>{
+  const record=(kind,event)=>{
+   // Arm in the already requested Street click, without another browser RPC
+   // between opening Street stops and pressing its action. Attribute reads
+   // below do not force layout or sample the animation timeline.
+   if(kind==='window-capture'&&event?.type==='click'&&
+    event.target.closest?.('summary')?.parentElement?.getAttribute('data-situation-topic')==='street')armed=true;
    if(!armed)return;
    const point=typeof event?.clientX==='number'?{x:event.clientX,y:event.clientY}:null;
-   events.push({kind,...snapshot(full),event:event?{type:event.type,time:event.timeStamp,trusted:event.isTrusted,
+   events.push({kind,...snapshot(),event:event?{type:event.type,time:event.timeStamp,trusted:event.isTrusted,
     phase:event.eventPhase,target:id(event.target),relatedTarget:id(event.relatedTarget),
-    pointerId:event.pointerId,button:event.button,buttons:event.buttons,point,
-    hit:point?id(document.elementFromPoint(point.x,point.y)):null}:null});
+    pointerId:event.pointerId,button:event.button,buttons:event.buttons,point}:null});
   };
   for(const type of ['pointerdown','mousedown','focus','focusin','pointerup','mouseup','click','pointercancel']){
    // Window capture precedes the production document-level press hold.
@@ -63,20 +49,9 @@ async function recordNativeFlow(page,nativeOpen){
    // Window bubble follows both the document hold and main's event handlers.
    window.addEventListener(type,event=>record('window-bubble',event));
   }
-  window.addEventListener('scroll',event=>record('scroll',event,false),true);
-  document.addEventListener('DOMContentLoaded',()=>{
-   new MutationObserver(records=>{
-    if(records.some(record=>record.target.matches?.('.scenario-library,.scenario-library [data-situation-topic="street"]')))
-     record('disclosure-mutation',null,false);
-   }).observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['style','open','data-disclosure-state']});
-  },{once:true});
-  const draw=()=>{
-   if(!armed)return;
-   record('frame',null,false);frame=requestAnimationFrame(draw);
-  };
+  window.addEventListener('scroll',event=>record('scroll',event),true);
   window.__realDisclosureDiagnostic={
-   start(){armed=true;record('before-start',null);frame=requestAnimationFrame(draw);},
-   stop(){record('after-start',null);armed=false;cancelAnimationFrame(frame);return {events,final:snapshot(true)};}
+   stop(){record('after-start',null);armed=false;return {events,final:snapshot()};}
   };
  },{nativeOpen:!!nativeOpen});
 }
@@ -92,9 +67,10 @@ for(const variant of variants)for(const [entry,role] of [['./','public'],['garda
    if(variant.css)await page.addStyleTag({content:variant.css});
    await page.locator('.scenario-library>summary').click();
    await page.getByRole('button',{name:'Young people',exact:true}).click();
+   if(role==='public')await expect(page.locator('.encounter-card')).toHaveCount(2);
    await page.getByRole('button',{name:'All topics',exact:true}).click();
+   if(role==='public')await expect(page.locator('.encounter-card')).toHaveCount(34);
    await page.locator('.scenario-library [data-situation-topic="street"]>summary').click();
-   await page.evaluate(()=>window.__realDisclosureDiagnostic.start());
    await page.locator('.scenario-library [data-action="paired-start"][data-id="public-street"]').click();
    await expect(page.locator('#scene-title')).toBeVisible({timeout:3000});
    await expect(page.locator('[data-action="paired-answer"]').first()).toBeVisible({timeout:3000});
@@ -106,7 +82,7 @@ for(const variant of variants)for(const [entry,role] of [['./','public'],['garda
   console.log(JSON.stringify({variant:variant.name,role,repeat:testInfo.repeatEachIndex,success:result.success,
    events:result.events?.filter(event=>event.kind==='window-capture'&&event.event?.type!=='focus').map(event=>({
     type:event.event.type,time:event.time,scrollY:event.scrollY,state:event.street?.state,
-    target:event.event.target,hit:event.event.hit,button:event.button,street:event.street}))}));
+    target:event.event.target,street:event.street}))}));
   expect(failure,'the real native Start click reaches an encounter').toBeNull();
  });
 }
