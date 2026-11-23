@@ -245,7 +245,10 @@ async function historyAfterReload(page,role,path,browserName){
  await page.reload();
  await expect(page.locator('#paired-title')).toBeAttached();
  await page.evaluate(()=>document.fonts.ready);
- await page.mouse.move(195,400);await page.mouse.wheel(0,500);
+ // Playwright's mobile WebKit driver does not support mouse.wheel. Only set
+ // its pre-navigation reading position; all reload and Back checks stay native.
+ if(browserName==='webkit')await page.evaluate(()=>scrollTo({top:500,left:0,behavior:'instant'}));
+ else {await page.mouse.move(195,400);await page.mouse.wheel(0,500);}
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
  const readingPosition=await page.evaluate(()=>new Promise((resolve,reject)=>{
   const started=performance.now();let previous=scrollY,stable=0;
