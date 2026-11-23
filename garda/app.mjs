@@ -1,13 +1,13 @@
 import {createSiteSearch} from "../search/site-search.mjs?v=situation-locations-20261122";
-import {focusControl} from '../accessibility/focus.mjs';
+import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=header-clearance-20261123';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=situation-locations-20261122';
-import {createLayout} from '../accessibility/layout.mjs?v=catalogue-keyboard-20261123';
+import {createLayout} from '../accessibility/layout.mjs?v=header-clearance-20261123';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=situation-locations-20261122';
 import {createMotion} from '../accessibility/motion.mjs?v=catalogue-keyboard-20261123';
-import {createEncounterMode} from '../encounters/ui.mjs?v=catalogue-keyboard-20261123';
+import {createEncounterMode} from '../encounters/ui.mjs?v=header-clearance-20261123';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');
@@ -20,7 +20,7 @@ createSiteSearch({siteRole:"garda",getLanguage:()=>reading.language,getRole:()=>
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sourceLinks=ids=>`<details class="source-details"><summary>Evidence behind this explanation</summary><ul>${[...new Set(ids)].map(id=>`<li><a href="#evidence/${id}">${esc(sources[id].short)}</a><span class="citation-context">${esc(sources[id].kind)} · ${esc(sources[id].place)}</span></li>`).join('')}</ul></details>`;
 const returnToSession=()=>session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Return to your recap':'Return to your situation'} →</a></p>`:'';
-const focusMain=()=>{const heading=main.querySelector?.('h1');(heading||main).focus({preventScroll:true});main.scrollIntoView?.({block:'start',behavior:'instant'});};
+const focusMain=()=>focusPageStart(main);
 function game(){
  if(session.complete)return summary();
  const s=scenarioById[session.scenarioId],node=currentNode(session),selected=session.selected,choice=selected===null?null:node.choices[selected],remaining=remainingSteps(session),total=session.history.length+remaining.max;
@@ -100,7 +100,7 @@ main.addEventListener('click',event=>{if(paired.handleClick(event))return;
   case 'back':session=previous(session);render();break;
  }
 });
-document.querySelector('.skip')?.addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});main.scrollIntoView({block:'start',behavior:'instant'});});
+document.querySelector('.skip')?.addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});focusPageStart(main,{focus:false});});
 window.addEventListener('hashchange',()=>render());
 await reading.ready;
 render(false);

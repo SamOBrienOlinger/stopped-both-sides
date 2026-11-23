@@ -1,13 +1,13 @@
 import {communitySources,communitySourceIds} from "./learning/community-resources.mjs?v=community-resources-20261122";
 import {createSiteSearch} from "./search/site-search.mjs?v=situation-locations-20261122";
-import {focusControl} from './accessibility/focus.mjs';
+import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=header-clearance-20261123';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=situation-locations-20261122';
-import {createLayout} from './accessibility/layout.mjs?v=catalogue-keyboard-20261123';
+import {createLayout} from './accessibility/layout.mjs?v=header-clearance-20261123';
 import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=contributors-expanded-20261122';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=situation-locations-20261122';
 import {createMotion} from './accessibility/motion.mjs?v=catalogue-keyboard-20261123';
-import {createEncounterMode} from './encounters/ui.mjs?v=catalogue-keyboard-20261123';
+import {createEncounterMode} from './encounters/ui.mjs?v=header-clearance-20261123';
 import {scenarios,scenarioById,sources} from './data.mjs?v=pabi-privacy-20261122';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
 const main=document.querySelector('#main');
@@ -19,7 +19,7 @@ const reading=createReadingTools({main,siteRole:'public',rerender:(focus=true)=>
 createSiteSearch({siteRole:"public",getLanguage:()=>reading.language,getRole:()=>perspectiveForRoute(location.hash,"public"),startSituation:(id,role)=>paired.startSituation(id,role)});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources</summary><ul lang="en-IE" data-no-translate>${[...new Set(ids)].map(id=>`<li><a href="${esc(sources[id].url)}" target="_blank" rel="noopener noreferrer">${esc(sources[id].title)} ↗</a></li>`).join('')}</ul></details>`;
-const focusMain=()=>{const heading=main.querySelector?.('h1');(heading||main).focus({preventScroll:true});main.scrollIntoView?.({block:'start',behavior:'instant'});};
+const focusMain=()=>focusPageStart(main);
 function game(){
  if(session.complete)return summary();
  const s=scenarioById[session.scenarioId],node=currentNode(session),selected=session.selected,choice=selected===null?null:node.choices[selected],remaining=remainingSteps(session),total=session.history.length+remaining.max;
@@ -61,7 +61,7 @@ main.addEventListener('click',event=>{if(paired.handleClick(event))return;const 
    if(!session||session.complete||session.selected===null)return;
    session={...session,selected:null};render(false);focusControl(document.querySelector('#choice-title'));break;
   }case 'next':{const next=advance(session);if(next===session)return;session=next;render();break;}case 'back':session=previous(session);render();break;}});
-document.querySelector('.skip')?.addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});main.scrollIntoView({block:'start',behavior:'instant'});});
+document.querySelector('.skip')?.addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});focusPageStart(main,{focus:false});});
 window.addEventListener('hashchange',()=>render());
 await reading.ready;
 render(location.hash.startsWith('#rights/'));

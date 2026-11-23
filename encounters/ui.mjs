@@ -1,5 +1,5 @@
 import {hasOwn} from '../compatibility.mjs';
-import {focusControl} from '../accessibility/focus.mjs';
+import {focusControl,focusContext} from '../accessibility/focus.mjs?v=header-clearance-20261123';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
@@ -82,9 +82,10 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const returned=returnFocus;
   returnFocus=null;
   if(!returned)return false;
-  const card=[...(main.querySelectorAll?.('.scenario-library button[data-id]')||[])]
+  const action=[...(main.querySelectorAll?.('.scenario-library button[data-id]')||[])]
    .find(button=>button.dataset.id===returned);
-  return focusControl(card||main.querySelector?.('#situations-title'));
+  return action?focusContext(action,action.closest?.('.scenario')):
+   focusControl(main.querySelector?.('#situations-title'));
  }
  function scoreStrip(s,compact=false){
   const scores=runScores(s);
