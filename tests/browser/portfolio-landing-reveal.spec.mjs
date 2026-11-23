@@ -17,20 +17,71 @@ async function captureLanding(page,path){
  await page.screenshot({path,fullPage:true});
 }
 
+const heroSelectors=['#paired-title','[data-hero-perspective="garda"]','#perspectives-title',
+ '[data-hero-perspective="public"]','.landing-deck','.landing-role-actions','.small-note'];
+const heroItems=':scope > :is(.encounter-hero-title,.encounter-hero-art,.landing-deck,.landing-role-actions,.small-note)';
+const settledStyles=elements=>elements.map(element=>({opacity:getComputedStyle(element).opacity,
+ transform:getComputedStyle(element).transform,animation:getComputedStyle(element).animationName}));
+const visibleStyles=Array(7).fill({opacity:'1',transform:'none',animation:'none'});
+const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+
+async function recordEntrances(page){
+ await page.addInitScript(()=>{
+  window.__landingStarts=[];window.__landingActionFrames=[];
+  const decoded=new WeakSet(),decode=HTMLImageElement.prototype.decode;
+  if(decode)HTMLImageElement.prototype.decode=function(...args){
+   return decode.apply(this,args).then(value=>{decoded.add(this);return value;});
+  };
+  document.addEventListener('animationstart',event=>{
+   const item=event.target;
+   if(event.animationName!=='landing-portfolio-line-reveal'||!item.parentElement?.matches('.landing-instructions'))return;
+   const key=item.id||(item.dataset.heroPerspective?'image-'+item.dataset.heroPerspective:
+    item.matches('.landing-deck')?'deck':item.matches('.landing-role-actions')?'actions':'note');
+   const style=getComputedStyle(item);
+   window.__landingStarts.push({key,text:item.textContent,duration:style.animationDuration,
+    easing:style.animationTimingFunction,delay:style.animationDelay,
+    image:item.tagName==='IMG'?{complete:item.complete,width:item.naturalWidth,decoded:!decode||decoded.has(item)}:null});
+   if(key!=='actions')return;
+   const sample=()=>{
+    if(!item.isConnected||item.getAttribute('data-landing-reveal')!=='active')return;
+    const header=document.querySelector('.header').getBoundingClientRect();
+    window.__landingActionFrames.push([...item.querySelectorAll('a')].map(link=>{
+     const rect=link.getBoundingClientRect(),x=rect.left+rect.width/2,y=rect.top+rect.height/2;
+     const onScreen=x>=0&&x<innerWidth&&y>=header.bottom&&y<innerHeight;
+     const hit=onScreen&&document.elementFromPoint(x,y);
+     return {top:rect.top+scrollY,left:rect.left+scrollX,width:rect.width,height:rect.height,
+      onScreen,hit:!onScreen||!!hit&&link.contains(hit)};
+    }));
+    requestAnimationFrame(sample);
+   };
+   requestAnimationFrame(sample);
+  });
+ });
+}
+
+async function holdFirstHero(page,{fail=false}={}){
+ let release,seen;
+ const gate=new Promise(resolve=>{release=resolve;}),requested=new Promise(resolve=>{seen=resolve;});
+ const pending=[];
+ await page.route(url=>/\/assets\/heroes\/garda-hi-vis-\d+\.jpg$/.test(url.pathname),route=>{
+  seen();
+  const work=(async()=>{await gate;await (fail?route.abort('failed'):route.continue());})();
+  pending.push(work);return work;
+ });
+ // Released image routes remain registered until context teardown. Later
+ // scenarios install their own matcher without interrupting in-flight work.
+ return {requested,release:async()=>{release();await Promise.all(pending);}};
+}
+
 for(const path of paths){
- test(path+' landing keeps its subheading static while primary copy honours reduced motion',async({page},testInfo)=>{
+ test(path+' landing reveals its complete invitation once with smooth text and decoded imagery',async({page},testInfo)=>{
   test.setTimeout(90000);
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.setViewportSize({width:1366,height:768});
-  await page.addInitScript(()=>{
-   window.__landingStarts=[];
-   document.addEventListener('animationstart',event=>{
-    if(event.animationName==='landing-portfolio-line-reveal')window.__landingStarts.push(event.target.textContent);
-   });
-  });
+  await recordEntrances(page);
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.reference-landing .landing-instructions');
-  await expect(group).toBeVisible();
+  const group=page.locator('.reference-landing .landing-instructions'),items=group.locator(heroItems);
+  await expect(group).toBeVisible();await expect(items).toHaveCount(7);
   const lines=group.locator(invitationText);
   await expect(lines).toHaveText(invitation);
   await page.evaluate(()=>document.fonts.ready);
@@ -39,62 +90,55 @@ for(const path of paths){
    'the later copy begins below the viewport in the two-image hero').toBeGreaterThan(0);
   await expect(deck).toHaveAttribute('data-landing-reveal','pending');
   await expect(deck).toHaveCSS('animation-name','none');
-  expect(await page.evaluate(text=>window.__landingStarts.includes(text),invitation[2]),
+  expect(await page.evaluate(()=>window.__landingStarts.some(item=>item.key==='deck')),
    'offscreen copy has not already spent its entrance').toBe(false);
-  const animatedLines=group.locator(':scope > :is(h1.encounter-hero-title,.landing-deck,.small-note)');
-  const secondary=group.locator('#perspectives-title');
-  await expectStaticHeadings(secondary,'landing subheading before scrolling');
-  for(const line of await lines.all()){
-   await line.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
-   if(await line.evaluate(element=>element.tagName==='H2')){
-    await expect(line).not.toHaveAttribute('data-landing-reveal');
-    await expectStaticHeadings(line,'landing subheading after scrolling');
-   }else{
-    await expect(line).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);
-    await expect(line).toHaveAttribute('data-landing-reveal','complete');
-   }
+  await expectStaticHeadings(page.locator('#main h2:not(#perspectives-title)'),
+   'subheadings outside the requested hero stay static');
+  for(const selector of heroSelectors){
+   const item=group.locator(selector);
+   await item.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+   await expect(item).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);
+   await expect(item).toHaveAttribute('data-landing-reveal','complete');
   }
-  const animation=await animatedLines.evaluateAll(children=>children.map(child=>({
-   name:getComputedStyle(child).animationName,
-   duration:getComputedStyle(child).animationDuration,
-   delay:getComputedStyle(child).animationDelay,
-   align:getComputedStyle(child).textAlign
-  })));
-  expect(animation.map(item=>item.name)).toEqual(Array(3).fill('landing-portfolio-line-reveal'));
-  expect(animation.map(item=>item.duration)).toEqual(Array(3).fill('1s'));
-  expect(animation.map(item=>item.delay)).toEqual(['0s','0.2s','0.3s']);
-  expect(animation.every(item=>item.align==='start'||item.align==='left')).toBe(true);
-  await expect(group.locator('.landing-role-actions')).toHaveCSS('animation-name','none');
-  for(const image of await group.locator('.encounter-hero-art').all())await expect(image).toHaveCSS('animation-name','none');
-  await expect.poll(()=>lines.evaluateAll(children=>children
-   .map(child=>getComputedStyle(child).opacity))).toEqual(Array(4).fill('1'));
+  await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
   const starts=await page.evaluate(()=>window.__landingStarts);
-  for(const [index,text] of invitation.entries())expect(starts.filter(value=>value===text),
-   'only the primary heading and prose enter when reached').toHaveLength(index===1?0:1);
+  expect(starts.map(item=>item.key).sort()).toEqual(['paired-title','image-garda','perspectives-title','image-public','deck','actions','note'].sort());
+  for(const item of starts){
+   expect(item.duration,item.key+' uses the reference duration').toBe('1s');
+   expect(item.easing,item.key+' uses the reference easing').toBe('ease-out');
+   expect(['0s','0.1s','0.2s','0.3s'],item.key+' has a short 100ms-step stagger').toContain(item.delay);
+   if(item.image)expect(item.image,item.key+' can paint before its entrance starts')
+    .toMatchObject({complete:true,decoded:true});
+   if(item.image)expect(item.image.width).toBeGreaterThan(0);
+  }
+  const actionFrames=await page.evaluate(()=>window.__landingActionFrames);
+  expect(actionFrames.length,'observe controls during their entrance').toBeGreaterThan(1);
+  expect(actionFrames.flat().some(item=>item.onScreen),'the action links are inspected in the visible viewport').toBe(true);
+  for(const sample of actionFrames)for(const [index,link] of sample.entries()){
+   expect(link.hit,'visible action links receive pointer hits throughout the fade').toBe(true);
+   for(const axis of ['top','left','width','height'])expect(Math.abs(link[axis]-actionFrames[0][index][axis]),
+    'the '+axis+' of an action target remains stationary').toBeLessThanOrEqual(1);
+  }
   await lines.first().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
   await lines.last().evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
-  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  expect(await page.evaluate(()=>window.__landingStarts),'scrolling away and back does not replay settled text').toEqual(starts);
+  await frames(page);
+  expect(await page.evaluate(()=>window.__landingStarts),'scrolling back does not replay settled content').toEqual(starts);
   await lines.first().focus();
   await expect(lines.first()).not.toHaveAttribute('data-landing-reveal');
-  await expect(lines.first()).toHaveCSS('animation-name','none');
   await expect(lines.first()).toHaveCSS('opacity','1');
   await expect(lines.first()).toHaveCSS('transform','none');
+  await expect(lines.first()).toHaveCSS('animation-name','none');
   const label=path==='garda/'?'garda':'public';
   await captureLanding(page,testInfo.outputPath(label+'-landing-typography-desktop.png'));
   await page.setViewportSize({width:390,height:844});
-  await group.evaluate(async element=>{
-   await Promise.all([...element.children].flatMap(child=>child.getAnimations())
-    .map(animation=>animation.finished.catch(()=>{})));
-  });
   await captureLanding(page,testInfo.outputPath(label+'-landing-typography-phone.png'));
   await page.emulateMedia({reducedMotion:'reduce'});
-  await expect.poll(()=>lines.evaluateAll(children=>children.map(child=>getComputedStyle(child).animationName))).toEqual(Array(4).fill('none'));
+  await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
   await page.setViewportSize({width:320,height:568});
   await expect.poll(()=>page.evaluate(()=>{
    const root=document.documentElement,group=document.querySelector('.landing-instructions');
    const box=group.getBoundingClientRect();
-   return root.scrollWidth<=root.clientWidth+2 && box.left>=-2 && box.right<=root.clientWidth+2;
+   return root.scrollWidth<=root.clientWidth+2&&box.left>=-2&&box.right<=root.clientWidth+2;
   })).toBe(true);
  });
 
@@ -102,13 +146,84 @@ for(const path of paths){
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.addInitScript(()=>{window.IntersectionObserver=undefined;});
   await page.goto(path+'?lang=en#play');
-  const lines=page.locator('.landing-instructions').locator(invitationText);
-  await expect(lines).toHaveText(invitation);
+  const group=page.locator('.landing-instructions');
+  await expect(group.locator(invitationText)).toHaveText(invitation);
+  await expect(group.locator(heroItems)).toHaveCount(7);
   await expect(page.locator('[data-landing-reveal]')).toHaveCount(0);
-  expect(await lines.evaluateAll(elements=>elements.map(element=>({
-   opacity:getComputedStyle(element).opacity,transform:getComputedStyle(element).transform,
-   animation:getComputedStyle(element).animationName
-  })))).toEqual(Array(4).fill({opacity:'1',transform:'none',animation:'none'}));
+  expect(await group.locator(heroItems).evaluateAll(settledStyles)).toEqual(visibleStyles);
+ });
+
+ test(path+' delayed hero pixels keep their space while the copy reveals independently',async({page})=>{
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.setViewportSize({width:1366,height:768});
+  await recordEntrances(page);
+  const held=await holdFirstHero(page);
+  try{
+   await page.goto(path+'?lang=en#play',{waitUntil:'domcontentloaded'});await held.requested;
+   const group=page.locator('.landing-instructions'),image=group.locator('[data-hero-perspective="garda"]');
+   const title=group.locator('#paired-title'),deck=group.locator('.landing-deck');
+   await expect(title).toHaveAttribute('data-landing-reveal','complete');
+   await expect(image).toHaveAttribute('data-landing-reveal','pending');
+   const reserved=await image.evaluate(element=>({width:element.getBoundingClientRect().width,height:element.getBoundingClientRect().height}));
+   expect(reserved.width).toBeGreaterThan(0);
+   expect(Math.abs(reserved.width/reserved.height-16/9)).toBeLessThan(.02);
+   await deck.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+   await expect(deck).toHaveAttribute('data-landing-reveal','complete');
+   expect(await image.evaluate(element=>element.complete),'copy finishes while the requested image is still pending').toBe(false);
+   expect(await page.evaluate(()=>window.__landingStarts.some(item=>item.key==='image-garda'))).toBe(false);
+   await held.release();
+   await expect.poll(()=>image.evaluate(element=>element.complete&&element.naturalWidth>0)).toBe(true);
+   await image.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+   await expect(image).toHaveAttribute('data-landing-reveal','complete');
+   const loaded=await image.evaluate(element=>({width:element.getBoundingClientRect().width,height:element.getBoundingClientRect().height}));
+   for(const axis of ['width','height'])expect(Math.abs(loaded[axis]-reserved[axis]),'image decoding preserves its reserved '+axis).toBeLessThanOrEqual(1);
+   const starts=await page.evaluate(()=>window.__landingStarts.filter(item=>item.key==='image-garda'));
+   expect(starts).toHaveLength(1);expect(starts[0].image).toMatchObject({complete:true,decoded:true});
+  }finally{await held.release();}
+ });
+
+ test(path+' pending image cancellation and failure never leave the invitation hidden',async({page})=>{
+  test.setTimeout(90000);
+  await page.setViewportSize({width:390,height:844});
+  await recordEntrances(page);
+  for(const failure of [false,true]){
+   await page.emulateMedia({reducedMotion:'no-preference'});
+   const held=await holdFirstHero(page,{fail:failure});
+   try{
+    await page.goto(path+'?lang=en#play',{waitUntil:'domcontentloaded'});await held.requested;
+    const group=page.locator('.landing-instructions'),items=group.locator(heroItems);
+    const image=group.locator('[data-hero-perspective="garda"]');
+    await expect(image).toHaveAttribute('data-landing-reveal','pending');
+    if(!failure){
+     // Focus a real keyboard destination while its action group is pending.
+     const link=group.locator('.perspective-card-link').first();
+     await expect(group.locator('.landing-role-actions')).toHaveAttribute('data-landing-reveal','pending');
+     await link.focus();await expect(link).toBeFocused();
+     await expect(group.locator('.landing-role-actions')).not.toHaveAttribute('data-landing-reveal');
+     await expect(group.locator('.landing-role-actions')).toHaveCSS('opacity','1');
+     await expect(group.locator('.landing-role-actions')).toHaveCSS('transform','none');
+     await page.emulateMedia({reducedMotion:'reduce'});
+     await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
+     const before=await page.evaluate(()=>window.__landingStarts);
+     await held.release();
+     await expect.poll(()=>image.evaluate(element=>element.complete&&element.naturalWidth>0)).toBe(true);
+     await page.emulateMedia({reducedMotion:'no-preference'});
+     await image.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));await frames(page);
+     await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
+     expect(await page.evaluate(()=>window.__landingStarts),'a late image completion cannot restart cancelled entrances').toEqual(before);
+    }else{
+     await held.release();
+     await expect.poll(()=>image.evaluate(element=>element.complete&&element.naturalWidth===0)).toBe(true);
+     await expect(image).not.toHaveAttribute('data-landing-reveal');
+     await expect(image).toHaveCSS('opacity','1');
+     await expect(image).toHaveCSS('transform','none');
+     await group.locator('.landing-deck').evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
+     await expect(group.locator('.landing-deck')).toHaveAttribute('data-landing-reveal','complete');
+     expect(await page.evaluate(()=>window.__landingStarts.some(item=>item.key==='image-garda')),
+      'a failed image does not run an empty entrance').toBe(false);
+    }
+   }finally{await held.release();}
+  }
  });
 
  test(path+' landing pairs each heading with its image and keeps route focus unframed',async({page},testInfo)=>{
