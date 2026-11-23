@@ -96,7 +96,7 @@ async function prepare(page,role,profile){
    loadedAt=performance.now();document.fonts.ready.then(()=>{fontsAt=performance.now();});
   },{once:true});
   const sample=()=>{
-   const main=document.querySelector('#main'),heading=main?.querySelector('h1');
+   const main=document.querySelector('#main'),heading=main?.querySelector('h1'),skip=document.querySelector('.skip');
    if(main?.querySelector('.initial')){
     const header=document.querySelector('.header'),nav=header?.querySelector('nav');
     record.initialShell.push({at:performance.now(),header:rect(header),
@@ -104,6 +104,7 @@ async function prepare(page,role,profile){
      navigationReady:header?.classList.contains('navigation-ready'),
      navHidden:nav?.hidden,navAriaHidden:nav?.getAttribute('aria-hidden'),
      opening:rect(main.firstElementChild),heading:rect(heading),scrollY,height:innerHeight,
+     skip:rect(skip),skipFocused:document.activeElement===skip,
      restoration:history.scrollRestoration,readyState:document.readyState,
      navigationType:performance.getEntriesByType('navigation')[0]?.type,
      visualViewport:window.visualViewport&&{offsetTop:visualViewport.offsetTop,pageTop:visualViewport.pageTop}});
@@ -115,6 +116,7 @@ async function prepare(page,role,profile){
     const styles=getComputedStyle(heading),root=document.documentElement;
     record.samples.push({at:performance.now(),scrollY,scrollX,hash:location.hash,
      header:rect(header),headerPosition:position,opening:rect(opening),heading:rect(heading),
+     skip:rect(skip),skipFocused:document.activeElement===skip,
      height:innerHeight,width:innerWidth,rootFont:getComputedStyle(root).fontSize,
      overflow:root.scrollWidth>root.clientWidth+1,
      activeTag:document.activeElement?.tagName,activeId:document.activeElement?.id,
@@ -185,6 +187,8 @@ async function reloadRoute(page,testInfo,role,profile,route){
    issues.push('loading frame '+i+': heading is concealed by navigation');
   if(sample.readyState!=='loading'&&Math.abs(sample.scrollY)>1)
    issues.push('loading frame '+i+': the parsed page retained its old scroll offset');
+  if(sample.skip&&!sample.skipFocused&&sample.skip.bottom>1)
+   issues.push('loading frame '+i+': unfocused skip link overlaps the page');
  }
  for(const [i,sample] of record.samples.entries()){
   const sticky=['sticky','-webkit-sticky','fixed'].includes(sample.headerPosition);
@@ -195,6 +199,7 @@ async function reloadRoute(page,testInfo,role,profile,route){
    issues.push(prefix+'page opening is concealed or outside the viewport');
   if(!route.target&&sample.heading.top<obscured-1)issues.push(prefix+'heading is concealed by navigation');
   if(sample.headingFocused)issues.push(prefix+'refresh stole focus for a static heading');
+  if(sample.skip&&!sample.skipFocused&&sample.skip.bottom>1)issues.push(prefix+'unfocused skip link overlaps the page');
   if(sample.outlineStyle!=='none'&&parseFloat(sample.outlineWidth)>0)
    issues.push(prefix+'static heading has a visible outline');
   if(sample.overflow)issues.push(prefix+'horizontal page overflow');
@@ -250,10 +255,36 @@ for(const [role,path] of [['public','./'],['garda','garda/']])for(const profile 
 }
 
 for(const [role,path] of [['public','./'],['garda','garda/']]){
- test(role+' keyboard navigation keeps control focus visible without boxing the heading',async({page})=>{
-  await page.setViewportSize({width:390,height:844});
+ test(role+' keyboard navigation keeps control focus visible without boxing the heading',async({page},testInfo)=>{
+  await page.setViewportSize({width:320,height:740});
   await page.goto(path+'?lang=en#play');
   await expect(page.locator('#paired-title')).toBeVisible();
+  await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+  await page.evaluate(()=>document.fonts.ready);
+  const skip=page.locator('.skip'),url=page.url();
+  expect(await skip.evaluate(link=>link.getBoundingClientRect().bottom),
+   'the entire enlarged skip link stays offscreen until keyboard focus').toBeLessThanOrEqual(0);
+  await page.keyboard.press('Tab');
+  await expect(skip).toBeFocused();
+  const skipBounds=await skip.evaluate(link=>{
+   const box=link.getBoundingClientRect(),styles=getComputedStyle(link);
+   return {top:box.top,bottom:box.bottom,left:box.left,right:box.right,
+    viewportWidth:innerWidth,viewportHeight:innerHeight,outline:parseFloat(styles.outlineWidth)};
+  });
+  expect(skipBounds.top).toBeGreaterThanOrEqual(0);
+  expect(skipBounds.bottom).toBeLessThanOrEqual(skipBounds.viewportHeight);
+  expect(skipBounds.left).toBeGreaterThanOrEqual(0);
+  expect(skipBounds.right).toBeLessThanOrEqual(skipBounds.viewportWidth);
+  expect(skipBounds.outline).toBeGreaterThan(0);
+  await page.screenshot({path:testInfo.outputPath('skip-link-focused-200.png'),timeout:5000});
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(url);
+  await expect(page.locator('#main')).toBeFocused();
+  await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
+  expect(await skip.evaluate(link=>link.getBoundingClientRect().bottom)).toBeLessThanOrEqual(0);
+  // Continue the route-focus checks at the ordinary mobile reading size.
+  await page.evaluate(()=>{document.documentElement.style.removeProperty('font-size');});
+  await page.setViewportSize({width:390,height:844});
   const toggle=page.locator('[data-nav-toggle]');
   if(await toggle.isVisible()){
    // Native keyboard input establishes focus-visible modality. Locator focus

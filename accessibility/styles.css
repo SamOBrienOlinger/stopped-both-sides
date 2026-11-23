@@ -14,3 +14,8 @@
    text clear without drawing a box around the opening of the page. Decision
    prompts, links, buttons, disclosure summaries and feedback keep their cues. */
 #main h1[tabindex="-1"]:focus{outline:none;box-shadow:none}
+
+/* Enlarged or translated skip text can wrap beyond a fixed negative offset.
+   Move the whole link out of view until keyboard focus makes it available. */
+.skip{top:0;max-inline-size:calc(100% - 30px);transform:translateY(calc(-100% - 1rem))}
+.skip:focus{transform:none}
