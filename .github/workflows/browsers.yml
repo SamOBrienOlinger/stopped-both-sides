@@ -130,6 +130,13 @@ jobs:
       # unrelated browser cases. The general shards exclude these same files.
       - name: Check mobile rendering and refresh
         run: npm run test:browser -- --project=${{ matrix.browser }} refresh-settlement.spec.mjs sitewide-rendering.spec.mjs
+      - name: Repeat Firefox parser-time refresh at enlarged text
+        if: matrix.browser == 'firefox'
+        run: >-
+          npm run test:browser -- --project=firefox --repeat-each=3
+          --output=test-results/firefox-parser-repeat --reporter=list
+          sitewide-rendering.spec.mjs
+          --grep "garda small phone with enlarged text every page opening survives mobile refresh"
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
