@@ -91,18 +91,18 @@ async function observeReloads(page,site,profile){
 
 async function scrollBeforeReload(page,context,position){
  await page.evaluate(()=>document.fonts.ready);
+ const geometry=await page.locator(context).evaluate(element=>({
+  top:element.getBoundingClientRect().top,header:document.querySelector('.header').getBoundingClientRect().bottom,
+  width:innerWidth,height:innerHeight,documentHeight:document.documentElement.scrollHeight
+ }));
+ await page.mouse.move(geometry.width/2,Math.min(geometry.height-20,geometry.header+100));
  if(position==='top'){
-  await page.keyboard.press('ControlOrMeta+Home');
+  await page.mouse.wheel(0,-geometry.documentHeight*2);
   await expect.poll(()=>page.evaluate(()=>scrollY)).toBe(0);
  }else if(position==='deep'){
-  await page.keyboard.press('ControlOrMeta+End');
+  await page.mouse.wheel(0,geometry.documentHeight*2);
   await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
  }else{
-  const geometry=await page.locator(context).evaluate(element=>({
-   top:element.getBoundingClientRect().top,header:document.querySelector('.header').getBoundingClientRect().bottom,
-   width:innerWidth,height:innerHeight
-  }));
-  await page.mouse.move(geometry.width/2,Math.min(geometry.height-20,geometry.header+100));
   await page.mouse.wheel(0,Math.ceil(geometry.top-geometry.header+12));
   await expect.poll(()=>page.locator(context).evaluate(element=>
    element.getBoundingClientRect().top-document.querySelector('.header').getBoundingClientRect().bottom
@@ -169,13 +169,27 @@ async function checkNativeHistory(page,site){
  await page.locator('#main-navigation [data-nav="play"]').click();
  await expect(page.locator('#paired-title')).toBeVisible();
  await page.evaluate(()=>document.fonts.ready);
- const destination=await page.evaluate(()=>Math.min(500,document.documentElement.scrollHeight-innerHeight));
  await page.mouse.move(600,400);await page.mouse.wheel(0,500);
- await expect.poll(()=>page.evaluate(target=>Math.abs(scrollY-target),destination),
-  'native wheel setup reaches its bounded destination').toBeLessThanOrEqual(2);
- await frames(page);
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
- const before={url:page.url(),scrollY:await page.evaluate(()=>scrollY)};
+ // Native wheel distance can include scroll anchoring. Record the actual
+ // settled reading position after the visible text entrances have finished.
+ const readingPosition=await page.evaluate(()=>new Promise((resolve,reject)=>{
+  const started=performance.now();let previous=scrollY,stable=0;
+  const sample=()=>{
+   const header=document.querySelector('.header').getBoundingClientRect().bottom;
+   const moving=document.querySelector('.landing-instructions').getAnimations({subtree:true}).some(animation=>{
+    if(animation.playState==='finished'||animation.playState==='idle')return false;
+    const box=animation.effect?.target?.getBoundingClientRect();
+    return box&&box.bottom>header&&box.top<innerHeight;
+   });
+   stable=!moving&&Math.abs(scrollY-previous)<.5?stable+1:0;previous=scrollY;
+   if(stable>=6)resolve(scrollY);
+   else if(performance.now()-started>10000)reject(new Error('Native reading position did not settle'));
+   else requestAnimationFrame(sample);
+  };
+  requestAnimationFrame(sample);
+ }));
+ const before={url:page.url(),scrollY:readingPosition};
  await page.goto('privacy.html');
  await expect(page).toHaveURL(/\/privacy\.html$/);
  await page.goBack();
