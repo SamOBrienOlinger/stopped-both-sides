@@ -7,7 +7,11 @@
 {
  // Claim reload positioning before deferred code or content can restore an old offset.
  const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
- if('scrollRestoration' in history)history.scrollRestoration=reloading?'manual':'auto';
+ if('scrollRestoration' in history){
+  history.scrollRestoration=reloading?'manual':'auto';
+  // Keep a later Back/Forward visit native-restorable before this document leaves.
+  if(reloading)addEventListener('pagehide',()=>{history.scrollRestoration='auto';});
+ }
  if(reloading)window.scrollTo({top:0,left:0,behavior:'instant'});
 }
 </script>
