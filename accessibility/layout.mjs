@@ -2,6 +2,7 @@
 // citations, game state and language-pack lookup keys stay intact.
 import {decorateCardHeadings} from './card-headings.mjs?v=catalogue-keyboard-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
+import {focusPageStart} from './focus.mjs?v=header-clearance-20261123';
 export function paragraphChunks(text,language='en'){
  const authored=text.split(/\r?\n[ \t]*\r?\n/).map(paragraph=>paragraph.trim()).filter(Boolean);
  if(authored.length>1)return authored;
@@ -42,7 +43,7 @@ export function createLayout({main}){
     if(main.contains?.(focused))globalThis.requestAnimationFrame?.(()=>{
      if(document.activeElement!==focused)return;
      const box=focused.getBoundingClientRect(),bottom=header.getBoundingClientRect().bottom;
-     if(box.bottom>0&&box.top>=0&&box.top<bottom)focused.scrollIntoView?.({block:'nearest',behavior:'instant'});
+     if(box.bottom>0&&box.top<bottom)focused.scrollIntoView?.({block:'nearest',behavior:'instant'});
     });
    }
   }
@@ -121,7 +122,11 @@ export function createLayout({main}){
   const link=event.target.closest('nav a,.wordmark');
   if(link){
    close(false,false);
-   if(link.origin===location.origin&&link.pathname===location.pathname&&link.hash===location.hash)main.querySelector('h1')?.focus();
+   // Re-selecting the current page does not fire hashchange. Give it the same
+   // full-page entry as a new route, even when Safari retains heading focus.
+   if(!event.defaultPrevented&&event.button===0&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey&&link.href===location.href){
+    event.preventDefault();focusPageStart(main);
+   }
   }
  });
  document.addEventListener('click',event=>{if(open&&!header.contains(event.target)&&!document.querySelector('dialog[open]'))close();});
