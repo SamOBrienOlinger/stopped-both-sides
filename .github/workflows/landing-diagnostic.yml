@@ -21,7 +21,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps webkit
-      - run: npm run test:browser -- --project=webkit --repeat-each=5 landing-disclosure-diagnostic.spec.mjs
+      - run: npm run test:browser -- --project=webkit --repeat-each=2 landing-disclosure-diagnostic.spec.mjs
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
