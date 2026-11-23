@@ -81,7 +81,13 @@
 // Position the parsed loading page before the deferred application starts.
 // The head-level reset runs before this document has its real scroll range.
 if(performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1){
- window.scrollTo({top:0,left:0,behavior:'instant'});
+ const positionLoadingPage=()=>{
+  if(document.querySelector('#main .initial'))window.scrollTo({top:0,left:0,behavior:'instant'});
+ };
+ positionLoadingPage();
+ // Native restoration can finish after this script but before the parser
+ // becomes interactive. This event does not wait for the app module.
+ if(document.readyState==='loading')document.addEventListener('readystatechange',positionLoadingPage,{once:true});
 }
 </script>
 </body>

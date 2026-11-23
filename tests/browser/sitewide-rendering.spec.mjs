@@ -160,22 +160,15 @@ async function reloadRoute(page,testInfo,role,profile,route){
   key:observationKey,options:{name:route.name,target:route.target||null,oldScroll}
  });
  const appPath=new URL('app.mjs',page.url()).pathname,matcher=url=>url.pathname===appPath;
- const delayed=profile.all&&route.name==='About';let delayedRequests=0,releaseModule;
- const moduleGate=new Promise(resolve=>{releaseModule=resolve;});
- const delay=async request=>{delayedRequests++;await moduleGate;await request.continue();};
+ const delayed=profile.all&&route.name==='About';let delayedRequests=0;
+ // The delay ends independently of screenshots and document readiness. The
+ // observer still records the complete loading phase without blocking it.
+ const delay=async request=>{delayedRequests++;await new Promise(resolve=>setTimeout(resolve,600));await request.continue();};
  if(delayed)await page.route(matcher,delay);
  try{
   await page.reload({waitUntil:'commit'});
-  if(delayed){
-   await expect(page.locator('#main .initial h1')).toBeVisible();
-   await new Promise(resolve=>setTimeout(resolve,600));
-   // The app module is still held. A viewport screenshot does not scroll,
-   // focus, finish animations or otherwise repair the loading document.
-   await page.screenshot({path:testInfo.outputPath('initial-shell-before-about-module.png')});
-   releaseModule();
-  }
   await expect.poll(()=>page.evaluate(()=>window.__sitewideRendering?.done),{timeout:30000}).toBe(true);
- }finally{releaseModule();if(delayed)await page.unroute(matcher,delay);}
+ }finally{if(delayed)await page.unroute(matcher,delay);}
  const record=await page.evaluate(()=>window.__sitewideRendering);
  record.delayedRequests=delayedRequests;
  record.before=before;record.after={url:page.url(),stored:await storage()};
@@ -212,7 +205,7 @@ async function reloadRoute(page,testInfo,role,profile,route){
  if(record.clippedText.length)issues.push('text extends outside its layout box');
  record.issues=[...new Set(issues)];
  if(route.name==='Home'||route.name==='Answered encounter')await page.screenshot({
-  path:testInfo.outputPath(route.name==='Home'?'home-after-refresh.png':'answered-encounter-after-refresh.png')
+  path:testInfo.outputPath(route.name==='Home'?'home-after-refresh.png':'answered-encounter-after-refresh.png'),timeout:5000
  });
  expect.soft(record.issues,role+' '+profile.name+' '+route.name).toEqual([]);
  await page.evaluate(key=>sessionStorage.removeItem(key),observationKey);
@@ -348,12 +341,13 @@ test('standalone documents reflow in a real mobile viewport',async({page})=>{
 
 test.describe('navigation before application startup',()=>{
  test.use({javaScriptEnabled:false,viewport:{width:390,height:844}});
- test('fallback navigation stays exposed and scrolls clear of the loading content',async({page})=>{
+ test('fallback navigation stays exposed and scrolls clear of the loading content',async({page},testInfo)=>{
   for(const path of ['./','garda/']){
    await page.goto(path);
    await expect(page.locator('.header')).not.toHaveClass(/navigation-ready/);
    await expect(page.locator('[data-nav-toggle]')).toBeHidden();
    for(const link of await page.locator('#main-navigation a').all())await expect(link).toBeVisible();
+   await page.screenshot({path:testInfo.outputPath(path==='./'?'public-loading-shell.png':'garda-loading-shell.png'),timeout:5000});
    await page.locator('#main h1').scrollIntoViewIfNeeded();
    const geometry=await page.evaluate(()=>({
     position:getComputedStyle(document.querySelector('.header')).position,
