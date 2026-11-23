@@ -75,9 +75,6 @@ async function prepare(page,role,profile){
   addEventListener('pageshow',event=>{
    record.events.push({type:'pageshow',at:performance.now(),persisted:event.persisted});
    setTimeout(()=>injectWhenReady('after pageshow'),100);
-   // Existing coverage ended after 750ms. Restore again after that point,
-   // while browser chrome and the startup visual viewport can still settle.
-   setTimeout(()=>injectWhenReady('late pageshow restoration'),1000);
   },{once:true});
   const frame=()=>{record.frame++;capture();if(record.running)requestAnimationFrame(frame);};
   requestAnimationFrame(frame);
@@ -105,11 +102,20 @@ async function inspectSettlement(page,testInfo,profile,{target=null}={}){
  await expect.poll(settled,{message:'the opening survives browser viewport contraction'}).toBe(true);
  await page.setViewportSize({width:profile.width,height:profile.height});
  expect(await page.evaluate(()=>window.__refreshSettlement.inject('restored visual viewport'))).toBe(true);
+ await expect.poll(settled,{message:'the opening settles after browser viewport restoration'}).toBe(true);
+ // Existing coverage ended after 750ms. Restore beyond that point, once the
+ // viewport fault has settled, so two injections cannot overwrite each other.
  await expect.poll(()=>page.evaluate(()=>{
   const record=window.__refreshSettlement;
-  return record.injections.some(item=>item.label==='late pageshow restoration')&&
-   performance.now()-record.lastRestoreAt>=350;
+  const shown=record.events.find(event=>event.type==='pageshow');
+  return !!shown&&performance.now()-shown.at>=1000;
  }),{message:'observe beyond the former 750ms refresh coverage'}).toBe(true);
+ expect(await page.evaluate(()=>window.__refreshSettlement.inject('late pageshow restoration'))).toBe(true);
+ await expect.poll(()=>page.evaluate(()=>{
+  const record=window.__refreshSettlement;
+  const frames=record.samples.filter(sample=>sample.at>=record.lastRestoreAt&&sample.framesSinceRestore>=3);
+  return performance.now()-record.lastRestoreAt>=350&&frames.length>=16;
+ }),{message:'observe at least 16 settled frames even when mobile rendering is throttled'}).toBe(true);
  await expect.poll(settled,{message:'the late restored offset settles at the route opening'}).toBe(true);
  const record=await page.evaluate(()=>{
   const record=window.__refreshSettlement;record.running=false;
