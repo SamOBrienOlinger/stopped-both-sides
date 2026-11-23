@@ -5,7 +5,7 @@ import {createLayout} from '../accessibility/layout.mjs?v=portfolio-entrance-202
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=link-audit-20261123';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=support-language-20261123';
 import {createMotion} from '../accessibility/motion.mjs?v=link-audit-20261123';
 import {createEncounterMode} from '../encounters/ui.mjs?v=link-audit-20261123';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=link-audit-20261123';

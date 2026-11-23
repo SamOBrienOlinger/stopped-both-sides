@@ -265,6 +265,7 @@ test('An unavailable initial language shows a visible recovery notice and retain
  await expect(page.locator('.paired-game')).toBeVisible();
  await expect(page.locator('.translation-note')).toContainText('The language could not be loaded.');
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');expect(current(page)).toEqual(initial);
+ await expect(page.locator('[data-site-switch]')).toHaveAttribute('href',/[?&]lang=en(?:&|#|$)/);
  await page.unroute('**/fr-content.mjs*');
  await applyLanguage(page,'fr');
  await expect(page.locator('.translation-note')).toHaveCount(0);expect(current(page)).toEqual(initial);
@@ -339,6 +340,7 @@ for(const chosen of ['en','fr'])test(`An explicit ${chosen} preference takes pre
  await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const tag=languages.find(language=>language.id===chosen).tag;
  await expect(page.locator('html')).toHaveAttribute('lang',tag);
+ await expect(page.locator('[data-site-switch]')).toHaveAttribute('href',new RegExp('[?&]lang='+chosen+'(?:&|#|$)'));
  const record=await saved(page,'public');
  await startup.release();
  await expect(page.locator('html')).toHaveAttribute('lang',tag);
@@ -346,6 +348,7 @@ for(const chosen of ['en','fr'])test(`An explicit ${chosen} preference takes pre
  await expect(page.locator('html')).toHaveCSS('--reading-size','150%');
  await expectSettingsFocusReturn(page);
  expect(new URL(page.url()).searchParams.get('lang')).toBe(chosen);
+ await expect(page.locator('[data-site-switch]')).toHaveAttribute('href',new RegExp('[?&]lang='+chosen+'(?:&|#|$)'));
  expect(current(page)).toEqual(startup.initial);expect(await saved(page,'public')).toEqual(record);
  await openSettings(page);await expect(page.locator('#reading-language')).toHaveValue(chosen);
 });

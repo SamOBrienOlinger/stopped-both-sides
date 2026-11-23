@@ -182,8 +182,8 @@ jobs:
       - name: Repeat image recovery and navigation controls
         run: >-
           npm run test:browser -- --project=${{ matrix.browser }} --repeat-each=3
-          portfolio-landing-reveal.spec.mjs remaining-controls.spec.mjs
-          --grep "pending image cancellation and failure|previous-stage control|Back to Top"
+          portfolio-landing-reveal.spec.mjs remaining-controls.spec.mjs support.spec.mjs
+          --grep "pending image cancellation and failure|previous-stage control|Back to Top|pending initial language"
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
@@ -225,7 +225,7 @@ jobs:
         run: >-
           npm run test:browser -- --project=webkit --repeat-each=3
           landing-motion-regressions.spec.mjs disclosure-pointer.spec.mjs
-          portfolio-landing-reveal.spec.mjs refinements.spec.mjs remaining-controls.spec.mjs
+          portfolio-landing-reveal.spec.mjs refinements.spec.mjs remaining-controls.spec.mjs support.spec.mjs
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:

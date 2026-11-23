@@ -5,7 +5,7 @@ import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecisio
 import {createLayout} from './accessibility/layout.mjs?v=portfolio-entrance-20261123';
 import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=contributors-expanded-20261122';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=link-audit-20261123';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=support-language-20261123';
 import {createMotion} from './accessibility/motion.mjs?v=link-audit-20261123';
 import {createEncounterMode} from './encounters/ui.mjs?v=link-audit-20261123';
 import {scenarios,scenarioById,sources} from './data.mjs?v=pabi-privacy-20261122';
