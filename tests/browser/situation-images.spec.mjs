@@ -1,10 +1,10 @@
 import {expect,test} from '@playwright/test';
 import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {defaultCast} from '../../encounters/characters.mjs';
-import {startEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {defaultCast} from '../../encounters/characters.mjs?v=nia-public-20261123';
+import {startEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
 import {topicGroups} from '../../encounters/presentation.mjs?v=link-audit-20261123';
-import {renderScene} from '../../encounters/scenes.mjs?v=link-audit-20261123';
-import {situationParticipants} from '../../encounters/situation-cast.mjs?v=situation-locations-20261122';
+import {renderScene} from '../../encounters/scenes.mjs?v=nia-public-20261123';
+import {situationParticipants} from '../../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
 const situations=Object.values(encounters);
@@ -68,7 +68,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']])for(const viewpor
   const rendererURLs=new Set();
   page.on('request',request=>{
    const url=new URL(request.url());
-   if(url.pathname.endsWith('/encounters/scenes.mjs'))rendererURLs.add(url.href);
+   if(url.pathname.endsWith('/encounters/scenes.mjs?v=nia-public-20261123'))rendererURLs.add(url.href);
   });
   await page.emulateMedia({reducedMotion:'reduce'});
    await page.setViewportSize(viewport);

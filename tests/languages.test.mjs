@@ -5,9 +5,9 @@ import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs
 import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=link-audit-20261123';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {personalizeText,storyIdentity} from '../encounters/narrative.mjs';
-import {progressStorageKey} from '../encounters/progress.mjs?v=link-audit-20261123';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {personalizeText,storyIdentity} from '../encounters/narrative.mjs?v=nia-public-20261123';
+import {progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';
 import {siteRole,siteBase} from './site-fixture.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));

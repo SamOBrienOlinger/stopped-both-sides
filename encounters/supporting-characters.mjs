@@ -1,4 +1,4 @@
-// Dedicated story participants stay separate from the nine selectable public
+// Dedicated story participants stay separate from the selectable public
 // avatars. Both sprites share a transparent atlas and the same foot baseline.
 const src=new URL('../assets/characters/discrimination-support-20261122.png',import.meta.url).href;
 const artwork=(left,crop)=>({src,width:1774,height:887,

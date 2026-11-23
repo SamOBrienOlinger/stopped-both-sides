@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {encounters,stageCount} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {defaultCast} from '../../encounters/characters.mjs';
-import {startEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {defaultCast} from '../../encounters/characters.mjs?v=nia-public-20261123';
+import {startEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 import {measureLocations} from './location-measurements.mjs';
 
@@ -45,7 +45,7 @@ test('All 34 browse pictures and all 99 stages preserve actor scale across mobil
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.goto('./?lang=en#play');
  await page.evaluate(async({states,ids})=>{
-  const renderer=performance.getEntriesByType('resource').find(entry=>new URL(entry.name).pathname.endsWith('/encounters/scenes.mjs'))?.name;
+  const renderer=performance.getEntriesByType('resource').find(entry=>new URL(entry.name).pathname.endsWith('/encounters/scenes.mjs?v=nia-public-20261123'))?.name;
   if(!renderer)throw Error('The application has not loaded its scene renderer');
   const {renderScene,renderScenePreview}=await import(renderer);
   const main=document.querySelector('#main');

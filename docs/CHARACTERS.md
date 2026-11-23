@@ -1,11 +1,11 @@
 # Characters and encounter casting
 
-Players can choose from nine LEGO-style characters for each perspective. The 18 characters carry forward the previously selected design concept, including men, women and people with an ambiguous gender presentation. The interface labels characters by name without asking players to disclose their identity.
+Players can choose from ten LEGO-style public characters and nine Garda characters. The 19 characters include men, women and people with an ambiguous gender presentation. Nia is a Black adult woman added to the public roster; the original 18 characters retain their IDs and preferences. The interface labels characters by name without asking players to disclose their identity.
 
 ## Play behaviour
 
 - Choose a side, then start the recommended situation with the ready-selected character. **Choose a different character** opens the optional picker; **Done** closes it. **Browse all 14 situations** opens the full catalogue.
-- A character for the opposite side is sampled uniformly from that side's nine characters when the encounter starts. Randomness does not depend on answers, scores or appearance.
+- A character for the opposite side is sampled uniformly from that side's roster when the encounter starts: ten public characters or nine Garda characters. Randomness does not depend on answers, scores or appearance.
 - Both characters appear at every stage, during feedback and in the recap. The same pair remains in place across stages and reloads.
 - **Change character** opens an inline picker. Choosing a character updates only the active side's name and picture and leaves the opposing character, stage, answers and scores intact.
 - **Switch perspective** puts the player in the existing opposite character's place. That character can then be changed using the same control.
@@ -32,6 +32,7 @@ Node coverage includes all random-selection intervals, character edits without s
 
 ## Artwork record
 
+- Nia (`public-10`) uses dedicated transparent artwork through `encounters/public-artwork.mjs` in the picker, character details and scenes. She is included in the author-selected women’s cast for situations that state a woman’s role. Existing older-person restrictions remain unchanged, and selecting her does not alter the written account or scoring.
 - Aisling (`garda-5`) now has light cream skin and a navy hijab. Her selection portrait and three scene poses use the dedicated 1254 × 1254 transparent [atlas](../assets/characters/aisling-hijab.webp), routed through `characterArtwork()`. Ciara and the other characters retain their original artwork. Saved cast IDs and progress remain compatible. The [generation record](aisling-art-prompt.md) describes this revision.
 - Faces, heads, necks and hands use a natural skin-tone spectrum from cream through tan to dark brown across both roles. Each character's exposed skin matches, and the two hero viewpoints use the same tones for Alex and Ciara. Appearance has no effect on scenario facts or scoring.
 - The September 2026 colour revision uses the built-in image-generation tool to edit the original artwork, retaining the cast layout, clothing, assistive devices and role colours. All responsive hero sizes derive from the same revised image for their viewpoint.
@@ -52,4 +53,4 @@ Private advice and independent reflections use separated backgrounds so the illu
 
 Scenes load from static local WebP assets: no runtime AI calls, extra service accounts or loading between generated images. The three pose sheets are fetched when an active scene first appears and reused thereafter; recap images load lazily. Fixed aspect ratios reserve their space. Labels and response captions remain ordinary accessible, translatable text. Reduced-motion and forced-colour settings are respected.
 
-The final prompts and references are recorded in [scene-art-prompts.md](scene-art-prompts.md). The scene tests cover all 81 possible pairs at all 59 stages, every answer's visual change, cast continuity and independent reflection boundaries. Browser coverage checks loaded assets, character bounds and horizontal reflow at phone, tablet and desktop widths.
+The final prompts and references are recorded in [scene-art-prompts.md](scene-art-prompts.md). The current scene tests cover all 90 possible pairs across the stage catalogue, every answer's visual change, cast continuity and independent reflection boundaries. Browser coverage checks loaded assets, character bounds and horizontal reflow at phone, tablet and desktop widths.

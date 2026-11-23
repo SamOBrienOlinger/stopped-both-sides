@@ -1,6 +1,6 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
+import {decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} character choice, changes and counterpart survive the full encounter`,async({page})=>{
  const other=role==='public'?'garda':'public',errors=[],selectedId=role==='garda'?'garda-5':'public-6';
@@ -8,7 +8,7 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  await page.setViewportSize({width:390,height:844});
  await page.goto((role==='public'?'./':'garda/')+'#encounters/'+role);
  await page.locator('[data-action="paired-setup-characters"]').click();
- await expect(page.locator('.character-option')).toHaveCount(9);
+ await expect(page.locator('.character-option')).toHaveCount(role==='public'?10:9);
  await expect.poll(()=>page.locator('.character-image img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
  const chosen=page.locator(`[data-character="${selectedId}"]`);
  if(role==='garda')await expect(chosen.locator('img')).toHaveAttribute('src',/characters\/garda-baseball-2026.webp/);
@@ -22,7 +22,7 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  await page.locator('[data-action="paired-setup-done"]').click();
  await page.locator('[data-action="paired-quick-start"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();
- const initial=current(page);expect(initial.cast[role]).toBe(selectedId);expect(initial.cast[other]).toMatch(new RegExp('^'+other+'-[1-9]$'));
+ const initial=current(page);expect(initial.cast[role]).toBe(selectedId);expect(initial.cast[other]).toMatch(new RegExp('^'+other+'-'+(other==='public'?'(?:[1-9]|10)':'[1-9]')+'$'));
  await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',selectedId);
  await page.locator('[data-action="paired-answer"]').first().click();await expect(page.locator('#feedback')).toBeVisible();
  const answered=current(page);

@@ -1,4 +1,4 @@
-import {characterArtwork,characterFor} from './characters.mjs?v=learning-language-20261120';
+import {characterArtwork,characterFor} from './characters.mjs?v=nia-public-20261123';
 import {roleLabels} from './catalog.mjs?v=link-audit-20261123';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';

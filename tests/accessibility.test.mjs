@@ -4,8 +4,8 @@ import {siteRole,siteBase} from './site-fixture.mjs';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=link-audit-20261123';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=link-audit-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';
 
 test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
  let stages=0;

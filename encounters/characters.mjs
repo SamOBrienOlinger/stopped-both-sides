@@ -1,4 +1,5 @@
 import {gardaArtwork} from './garda-artwork.mjs?v=learning-language-20261120';
+import {publicArtwork} from './public-artwork.mjs?v=nia-public-20261123';
 
 // Most situations allow any portrait. A stated age or gender must also match
 // the public character in the few situations where that person is the target.
@@ -6,13 +7,14 @@ const make=(role,names)=>names.map((name,index)=>({
  id:role+'-'+(index+1),name,column:index%3+(role==='garda'?3:0),row:Math.floor(index/3)
 }));
 export const characters={
- public:make('public',['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Hassan','Pat']),
+ public:make('public',['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Hassan','Pat','Nia']),
  garda:make('garda',['Garda Sergeant Ciara','Garda Rory','Garda Jamie','Garda Lee','Garda Aisling','Garda Sergeant Kai','Garda Conor','Garda Orla','Garda Sergeant Charlie'])
 };
 export const characterFor=(role,id)=>characters[role]?.find(character=>character.id===id)||null;
-// Character IDs, preferences and the public-character poses stay unchanged.
+// Dedicated artwork is resolved before the legacy sheets. Existing character
+// IDs, preferences and atlas coordinates remain unchanged as the roster grows.
 export function characterArtwork(character,pose='portrait'){
- const updated=gardaArtwork(character);
+ const updated=publicArtwork(character)||gardaArtwork(character);
  if(updated)return updated;
  const {column,row}=character;
  const path=pose==='portrait'?'characters/cast.webp?v=garda-neutral-1':`scenes/${pose}-clean.webp`;
@@ -23,7 +25,7 @@ export function characterArtwork(character,pose='portrait'){
 export const defaultCast=()=>({public:characters.public[0].id,garda:characters.garda[0].id});
 export const validCast=cast=>!!cast&&['public','garda'].every(role=>!!characterFor(role,cast[role]));
 const situationPortraits={
- 'discrimination-gender':['public-4','public-2','public-6','public-7'],
+ 'discrimination-gender':['public-4','public-2','public-6','public-7','public-10'],
  'discrimination-age':['public-9','public-3','public-6']
 };
 export function charactersForSituation(id,role){

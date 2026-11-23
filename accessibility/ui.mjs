@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {createPreferences,defaults} from './preferences.mjs?v=learning-language-20261120';
 import {createDialogController} from './dialog.mjs?v=learning-language-20261120';
 import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=link-audit-20261123';

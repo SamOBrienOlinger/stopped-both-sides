@@ -1,8 +1,8 @@
 import {test,expect} from '@playwright/test';
-import {characters} from '../../encounters/characters.mjs';
+import {characters} from '../../encounters/characters.mjs?v=nia-public-20261123';
 import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=link-audit-20261123';
-import {sceneDirections} from '../../encounters/scenes.mjs?v=link-audit-20261123';
+import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {sceneDirections} from '../../encounters/scenes.mjs?v=nia-public-20261123';
 
 const file=/\/assets\/characters\/garda-baseball-2026\.webp(?:\?|$)/;
 const stage='.paired-scene-lead>.encounter-scene';
@@ -64,11 +64,11 @@ for(const [path,role] of entrypoints){
   }
  });
 
- test(`${path}: nine Garda character choices update selector and survivor state`,async({page})=>{
+ test(`${path}: character choices update the selector and survive reload`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto(path+'#encounters/'+role);
   await page.locator('[data-action="paired-setup-characters"]').click();
-  await expect(page.locator('.character-option')).toHaveCount(9);
+  await expect(page.locator('.character-option')).toHaveCount(role==='public'?10:9);
   for(const g of characters[role]){
    const choice=page.locator('[data-character="'+g.id+'"]');
    await choice.click();
@@ -79,28 +79,29 @@ for(const [path,role] of entrypoints){
   // Fresh reader input precedes Playwright's implicit scroll to character setup.
   await page.keyboard.press('Escape');
   await page.locator('[data-action="paired-setup-characters"]').click();
-  await expect(page.locator('[data-character="'+role+'-9"]')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('[data-character="'+characters[role].at(-1).id+'"]')).toHaveAttribute('aria-pressed','true');
  });
 }
 
-test('All 81 cast pairings use one new Garda image and one preserved public image in rendered scenes',async({page})=>{
+test('All 90 cast pairings use the matching Garda and public artwork in rendered scenes',async({page})=>{
  test.setTimeout(120000);
  await page.goto('./#play');
  const result=await page.evaluate(async()=>{
-  const {characters}=await import('/stopped-both-sides/encounters/characters.mjs?v=learning-language-20261120');
-  const {startEncounter}=await import('/stopped-both-sides/encounters/engine.mjs?v=link-audit-20261123');
-  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=link-audit-20261123');
+  const {characters}=await import('/stopped-both-sides/encounters/characters.mjs?v=nia-public-20261123');
+  const {startEncounter}=await import('/stopped-both-sides/encounters/engine.mjs?v=nia-public-20261123');
+  const {renderScene}=await import('/stopped-both-sides/encounters/scenes.mjs?v=nia-public-20261123');
   let checked=0;
   for(const p of characters.public)for(const g of characters.garda){
    const html=renderScene(startEncounter('garda-search','garda',{cast:{public:p.id,garda:g.id}}));
    if((html.match(/garda-baseball-2026.webp/g)||[]).length!==1)return {checked,wrong:g.id+' '+p.id};
-   if((html.match(/contextual-cast.webp/g)||[]).length!==1)return {checked,wrong:g.id+' '+p.id};
+   const publicImage=p.id==='public-10'?/nia-public-20261123\.png/g:/contextual-cast\.webp/g;
+   if((html.match(publicImage)||[]).length!==1)return {checked,wrong:g.id+' '+p.id};
    if(!html.includes('data-scene-character="'+g.id+'"'))return {checked,wrong:g.id};
    checked++;
   }
   return {checked};
  });
- expect(result).toEqual({checked:81});
+ expect(result).toEqual({checked:90});
 });
 
 test('Phone, desktop, 200% text and Arabic RTL preserve crop, captions and usable profile dialogs',async({page},info)=>{

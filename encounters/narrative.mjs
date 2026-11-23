@@ -1,4 +1,4 @@
-import {characterFor} from './characters.mjs';
+import {characterFor} from './characters.mjs?v=nia-public-20261123';
 
 // The catalogue keeps stable teaching text and translation keys. Resolve its
 // story identity against the saved cast only when displaying a running game.

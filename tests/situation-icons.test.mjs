@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
-import {learningIcon,scenarioIcon,topicExplorer,practiceCards} from '../encounters/visuals.mjs?v=link-audit-20261123';
+import {learningIcon,scenarioIcon,topicExplorer,practiceCards} from '../encounters/visuals.mjs?v=nia-public-20261123';
 import publicData from '../encounters/original-public.mjs?v=pabi-privacy-20261122';
 import gardaData from '../encounters/original-garda.mjs?v=link-audit-20261123';
 

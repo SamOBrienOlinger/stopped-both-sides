@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {characters,charactersForSituation,changeCharacter,createCharacterPreferences} from '../encounters/characters.mjs';
+import {characters,charactersForSituation,changeCharacter,createCharacterPreferences} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {discriminationEncounters} from '../encounters/discrimination.mjs?v=situation-locations-20261122';
-import {situationParticipants,participantLayout} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
-import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=link-audit-20261123';
+import {situationParticipants,participantLayout} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
+import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=nia-public-20261123';
 import {supportingCharacters} from '../encounters/supporting-characters.mjs';
 import {existsSync} from 'node:fs';
 
@@ -41,7 +41,7 @@ test('Every discrimination stage and requested cast has distinct, fully labelled
   if(encounter.id==='discrimination-colleague-race')assert.equal(people[0].characterId,'support-race-adult');
   checked++;
  }
- assert.equal(checked,20*2*81);
+ assert.equal(checked,20*2*90);
 });
 
 test('The four people in the bus-stop scene spread across the available width',()=>{
@@ -53,18 +53,22 @@ test('The four people in the bus-stop scene spread across the available width',(
 });
 
 test('Age and gender requirements survive old links and reject character changes that contradict the account',()=>{
- for(const [id,allowed] of [['discrimination-gender',['public-4','public-2','public-6','public-7']],['discrimination-age',['public-9','public-3','public-6']]]){
+ for(const [id,allowed] of [['discrimination-gender',['public-4','public-2','public-6','public-7','public-10']],['discrimination-age',['public-9','public-3','public-6']]]){
   assert.deepEqual(charactersForSituation(id,'public').map(character=>character.id),allowed);
   const token=btoa(JSON.stringify({v:2,e:id,r:'public',p:[],a:[0,null],c:['public-1','garda-4']})).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
   const state=decodeState(token);assert.equal(state.cast.public,allowed[0]);assert.equal(state.answers.public,0);
   assert.equal(changeCharacter(state,'public-1'),state);
   const changed=changeCharacter(state,allowed[1]);assert.equal(changed.cast.public,allowed[1]);assert.deepEqual(changed.answers,state.answers);
   assert.deepEqual(decodeState(encodeState(changed)),changed);
+  if(id==='discrimination-gender'){
+   const nia=changeCharacter(state,'public-10');assert.equal(nia.cast.public,'public-10');
+   assert.deepEqual(nia.answers,state.answers);assert.deepEqual(decodeState(encodeState(nia)),nia);
+  }else assert.equal(changeCharacter(state,'public-10'),state,'The new adult character does not replace the stated older applicant');
  }
  const preferences=createCharacterPreferences();preferences.choose('public','public-1');
  startEncounter('discrimination-age','public',{cast:preferences.value});
  assert.equal(preferences.value.public,'public-1','A situation-specific cast does not overwrite the global preference');
- for(const id of Object.keys(discriminationEncounters).filter(id=>id.startsWith('discrimination-colleague-')))assert.equal(charactersForSituation(id,'public').length,9);
+ for(const id of Object.keys(discriminationEncounters).filter(id=>id.startsWith('discrimination-colleague-')))assert.equal(charactersForSituation(id,'public').length,10);
 });
 
 test('Companions, the child and stage-specific participants follow the written account',()=>{
@@ -76,7 +80,7 @@ test('Companions, the child and stage-specific participants follow the written a
  assert.equal(child.characterId,'support-child');assert.equal(child.character.age,7);
  assert.ok(!characters.public.some(person=>person.id===child.characterId),'A child uses dedicated child artwork');
  for(const id of ['discrimination-sexual-orientation','discrimination-colleague-sexual-orientation'])assert.ok(people(id).some(person=>person.key==='partner'));
- for(const [id,partners] of [['public-1',['public-5','public-8','public-9']],['public-4',['public-7','public-2','public-6']],['public-3',['public-9']]]){
+ for(const [id,partners] of [['public-1',['public-5','public-8','public-9']],['public-4',['public-7','public-2','public-6','public-10']],['public-10',['public-4','public-7','public-2','public-6']],['public-3',['public-9']]]){
   const pair=situationParticipants('discrimination-sexual-orientation',{...cast,public:id});
   assert.ok(partners.includes(pair.find(person=>person.key==='partner').characterId));
   assert.equal(pair.find(person=>person.key==='public').characterId,id,'The same-sex couple follows the player’s selected character');

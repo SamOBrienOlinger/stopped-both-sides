@@ -1,10 +1,10 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {characterFor} from '../../encounters/characters.mjs';
+import {characterFor} from '../../encounters/characters.mjs?v=nia-public-20261123';
 import {languages} from '../../locales/languages.mjs';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
-import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=link-audit-20261123';
-import {progressStorageKey} from '../../encounters/progress.mjs?v=link-audit-20261123';
+import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {progressStorageKey} from '../../encounters/progress.mjs?v=nia-public-20261123';
 import {expectControlsFit} from './control-layout.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));

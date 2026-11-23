@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs?v=situation-locations-20261122';
 import {encounters,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {characters,characterFor,castForSituation} from '../encounters/characters.mjs';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=link-audit-20261123';
-import {startEncounter} from '../encounters/engine.mjs?v=link-audit-20261123';
-test('every scene and all 81 casts retain matching caption and actor identities',()=>{
+import {characters,characterFor,castForSituation} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=nia-public-20261123';
+import {startEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
+test('every scene and all 90 casts retain matching caption and actor identities',()=>{
  let count=0;
  for(const [id,e] of Object.entries(encounters))for(const nodeId of Object.keys(e.nodes)){
   const d=sceneDirections[id][nodeId];assert.ok(d);
@@ -22,7 +22,7 @@ test('every scene and all 81 casts retain matching caption and actor identities'
    assert.ok(!/<div class="scene-stage[^>]*aria-hidden/.test(html));count++;
   }
  }
- assert.equal(count,stageCount*81);
+ assert.equal(count,stageCount*90);
 });
 test('scene layout preserves shared/solo anchors and rejects mismatched artwork',()=>{
  for(const place of Object.keys(SCENE_LAYOUTS)){

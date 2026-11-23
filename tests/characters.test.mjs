@@ -1,35 +1,56 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {characters,createCast,defaultCast,changeCharacter,createCharacterPreferences,CHARACTER_STORAGE_KEY} from '../encounters/characters.mjs';
-import {startEncounter,answer,switchRole,continueEncounter,revisit,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {emptyProgress,recordProgress,packProgress,unpackProgress,runScores} from '../encounters/progress.mjs?v=link-audit-20261123';
+import {characters,characterFor,createCast,defaultCast,changeCharacter,createCharacterPreferences,CHARACTER_STORAGE_KEY} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {startEncounter,answer,switchRole,continueEncounter,revisit,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {emptyProgress,recordProgress,packProgress,unpackProgress,runScores} from '../encounters/progress.mjs?v=nia-public-20261123';
 import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
 
-test('All 18 characters are distinct; random casting can select every opposing character',()=>{
- const all=Object.values(characters).flat();assert.equal(new Set(all.map(c=>c.id)).size,18);
+test('All 19 characters are distinct; random casting can select every opposing character',()=>{
+ assert.equal(characters.public.length,10);assert.equal(characters.garda.length,9);
+ const all=Object.values(characters).flat();assert.equal(new Set(all.map(c=>c.id)).size,19);
  assert.ok(characters.garda.every(character=>/^Garda (?:Sergeant )?\S+$/.test(character.name)));
  assert.ok(characters.garda.some(character=>character.name.startsWith('Garda Sergeant ')));
  assert.ok(characters.garda.some(character=>!character.name.startsWith('Garda Sergeant ')));
  assert.ok(characters.public.every(character=>!character.name.startsWith('Garda ')));
- assert.equal(new Set(all.map(c=>[c.column,c.row].join(','))).size,18);
+ assert.equal(new Set(all.map(c=>[c.column,c.row].join(','))).size,19);
  for(const role of ['public','garda']){
   const other=role==='public'?'garda':'public',id=characters[role][5].id;
-  characters[other].forEach((c,i)=>assert.deepEqual(createCast(role,id,()=>i/9),{[role]:id,[other]:c.id}));
-  assert.equal(createCast(role,id,()=>0.999999)[other],characters[other][8].id);
+  const count=characters[other].length;
+  characters[other].forEach((c,i)=>assert.deepEqual(createCast(role,id,()=>i/count),{[role]:id,[other]:c.id}));
+  assert.equal(createCast(role,id,()=>0.999999)[other],characters[other].at(-1).id);
  }
 });
 test('Cast remains stable through answers, stages, switching, revisiting and score transfer',()=>{
- let s=startEncounter('public-search','public',{characterId:'public-6',random:()=>0.8});const cast={...s.cast};
- s=answer(s,0);s=answer(switchRole(s),1);const scores=runScores(s);
- const changed=changeCharacter(s,'garda-9');assert.equal(changed.cast.public,cast.public);assert.equal(changed.cast.garda,'garda-9');
- assert.deepEqual(runScores(changed),scores);assert.deepEqual(changed.answers,s.answers);assert.deepEqual(changed.history,s.history);
- assert.equal(changeCharacter(changed,'public-1'),changed);assert.equal(changeCharacter(changed,'__proto__'),changed);
- s=continueEncounter(changed);assert.deepEqual(s.cast,changed.cast);assert.deepEqual(revisit(s).cast,changed.cast);
- assert.deepEqual(switchRole(s).cast,changed.cast);assert.deepEqual(decodeState(encodeState(s)),s);
- const p=recordProgress(emptyProgress(),s);assert.deepEqual(decodeState(unpackProgress(packProgress(p)).last),s);
- while(!s.complete)s=continueEncounter(answer(s,0));
- const completed=changeCharacter(s,'garda-3');assert.ok(completed.complete);assert.deepEqual(runScores(completed),runScores(s));
- assert.deepEqual(decodeState(encodeState(completed)),completed);
+ for(const characterId of ['public-6','public-10']){
+  let s=startEncounter('public-search','public',{characterId,random:()=>0.8});const cast={...s.cast};
+  s=answer(s,0);s=answer(switchRole(s),1);const scores=runScores(s);
+  const changed=changeCharacter(s,'garda-9');assert.equal(changed.cast.public,cast.public);assert.equal(changed.cast.garda,'garda-9');
+  assert.deepEqual(runScores(changed),scores);assert.deepEqual(changed.answers,s.answers);assert.deepEqual(changed.history,s.history);
+  assert.equal(changeCharacter(changed,'public-1'),changed);assert.equal(changeCharacter(changed,'__proto__'),changed);
+  s=continueEncounter(changed);assert.deepEqual(s.cast,changed.cast);assert.deepEqual(revisit(s).cast,changed.cast);
+  assert.deepEqual(switchRole(s).cast,changed.cast);assert.deepEqual(decodeState(encodeState(s)),s);
+  const p=recordProgress(emptyProgress(),s);assert.deepEqual(decodeState(unpackProgress(packProgress(p)).last),s);
+  while(!s.complete)s=continueEncounter(answer(s,0));
+  const completed=changeCharacter(s,'garda-3');assert.ok(completed.complete);assert.deepEqual(runScores(completed),runScores(s));
+  assert.deepEqual(decodeState(encodeState(completed)),completed);
+ }
+});
+test('Nia is appended without changing saved characters, defaults or original-practice transfers',()=>{
+ assert.deepEqual(characters.public.slice(0,9).map(({id,name})=>({id,name})),['Alex','Noor','Robin','Maya','Daniel','Jo','Erin','Hassan','Pat'].map((name,index)=>({id:'public-'+(index+1),name})));
+ assert.equal(characterFor('public','public-10').name,'Nia');
+ assert.equal(characterFor('garda','public-10'),null);
+ assert.deepEqual(defaultCast(),{public:'public-1',garda:'garda-1'});
+ const old={public:'public-8',garda:'garda-7'};
+ const memory=new Map([[CHARACTER_STORAGE_KEY,JSON.stringify(old)],['scores','keep']]);
+ const storage={getItem:key=>memory.get(key),setItem:(key,value)=>memory.set(key,value)};
+ const preferences=createCharacterPreferences(storage);assert.deepEqual(preferences.value,old);
+ preferences.choose('public','public-10');
+ const cast={public:'public-10',garda:'garda-7'};
+ assert.deepEqual(createCharacterPreferences(storage).value,cast);assert.equal(memory.get('scores'),'keep');
+ const original={scenarioId:'search',nodeId:'search-start',history:[],selected:0,complete:false};
+ const transferred=fromOriginal(original,'public','garda',cast);
+ assert.deepEqual(transferred.cast,cast);assert.equal(transferred.answers.public,0);
+ assert.deepEqual(decodeState(encodeState(transferred)),transferred);
 });
 test('Old links still open deterministically and invalid or cross-role character IDs are rejected',()=>{
  const old={v:1,e:'public-search',r:'public',p:[],a:[0,null]};const token=btoa(JSON.stringify(old));

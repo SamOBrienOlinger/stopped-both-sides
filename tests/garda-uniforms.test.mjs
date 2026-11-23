@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {characters,characterArtwork,createCast,changeCharacter} from '../encounters/characters.mjs';
-import {situationParticipants} from '../encounters/situation-cast.mjs?v=situation-locations-20261122';
+import {characters,characterArtwork,createCast,changeCharacter} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {situationParticipants} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {gardaAtlas} from '../encounters/garda-atlas.mjs';
 import {gardaArtwork} from '../encounters/garda-artwork.mjs';
-import {sceneCharacterArtwork} from '../encounters/scene-artwork.mjs';
+import {sceneCharacterArtwork} from '../encounters/scene-artwork.mjs?v=nia-public-20261123';
 import {encounters,roles} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=link-audit-20261123';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=link-audit-20261123';
+import {startEncounter,answer,continueEncounter,decodeState,encodeState,switchRole} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=nia-public-20261123';
 
 const asset=new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url);
 const names=['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'];
@@ -43,7 +43,7 @@ test('Final atlas is a real WebP and supplies nine preserved cast identities',()
  assert.match(sceneCharacterArtwork(characters.public[0]).src,/\/scenes\/contextual-cast\.webp/);
 });
 
-test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',()=>{
+test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',()=>{
  assert.equal(Object.keys(encounters).length,34);
  assert.deepEqual(Object.keys(sceneDirections).sort(),Object.keys(encounters).sort());
  let stageCount=0,pairRenderings=0;
@@ -57,9 +57,10 @@ test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',
     const html=renderScene(state);pairRenderings++;
     assert.match(html,new RegExp('data-scene-character="'+gardaCharacter.id+'"'));
     assert.match(html,new RegExp('data-scene-character="'+state.cast.public+'"'));
-    const people=situationParticipants(encounter.id,state.cast,{nodeId})||[{role:'public'},{role:'garda'}];
+    const people=situationParticipants(encounter.id,state.cast,{nodeId})||roles.map(role=>({role,characterId:state.cast[role]}));
     assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,people.filter(person=>person.role==='garda').length);
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,people.filter(person=>person.role==='public'&&!person.character?.sceneArtwork).length);
+    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,people.filter(person=>person.role==='public'&&person.characterId!=='public-10'&&!person.character?.sceneArtwork).length);
+    assert.equal((html.match(/characters\/nia-public-20261123\.png/g)||[]).length,people.filter(person=>person.characterId==='public-10').length);
     assert.equal((html.match(/characters\/discrimination-support-20261122.png/g)||[]).length,people.filter(person=>person.character?.sceneArtwork).length);
     assert.equal((html.match(/clip-path:inset\(/g)||[]).length,people.length);
     assert.ok(html.includes('data-scene-label-role="garda"'),'keep profile dialog buttons');
@@ -67,7 +68,7 @@ test('Every shared stage uses revised Garda artwork with each of 81 cast pairs',
   }
  }
  assert.equal(stageCount,99);
- assert.equal(pairRenderings,stageCount*81);
+ assert.equal(pairRenderings,stageCount*90);
 });
 
 test('Switching, answering, saving and recaps retain updated Garda characters',()=>{
@@ -92,9 +93,9 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
 });
 
 test('Scene anchors, approved backgrounds and name dialogs are retained',()=>{
- const source=readFileSync(new URL('../encounters/scenes.mjs?v=situation-locations-20261122',import.meta.url),'utf8');
+ const source=readFileSync(new URL('../encounters/scenes.mjs?v=nia-public-20261123',import.meta.url),'utf8');
  const css=readFileSync(new URL('../encounters/scenes.css',import.meta.url),'utf8');
- const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=situation-locations-20261122',import.meta.url),'utf8');
+ const caption=readFileSync(new URL('../encounters/scene-labels.mjs?v=nia-public-20261123',import.meta.url),'utf8');
  assert.match(source,/backgroundImage\(place\)/);
  assert.match(source,/sceneActorLayout\(place,role/);
  assert.match(source,/scene-character-label/);

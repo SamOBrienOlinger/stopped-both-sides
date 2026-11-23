@@ -1,13 +1,13 @@
 import {createSiteSearch} from "../search/site-search.mjs?v=link-audit-20261123";
 import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=link-audit-20261123';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=nia-public-20261123';
 import {createLayout} from '../accessibility/layout.mjs?v=portfolio-entrance-20261123';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=support-language-20261123';
-import {createMotion} from '../accessibility/motion.mjs?v=link-audit-20261123';
-import {createEncounterMode} from '../encounters/ui.mjs?v=link-audit-20261123';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=nia-public-20261123';
+import {createMotion} from '../accessibility/motion.mjs?v=nia-public-20261123';
+import {createEncounterMode} from '../encounters/ui.mjs?v=nia-public-20261123';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=link-audit-20261123';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=link-audit-20261123';
 const main=document.querySelector('#main');
