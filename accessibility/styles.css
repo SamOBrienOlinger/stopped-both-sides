@@ -9,3 +9,8 @@
 @media(max-width:380px){.role-scores{grid-template-columns:1fr}.home-intro h1,.paired-picker>h1{font-size:2rem}.card-top{gap:12px;flex-wrap:wrap}}
 
 .reading-spacious main h1,.reading-spacious main h2,.reading-spacious main h3{letter-spacing:.025em}.reading-spacious .choice,.reading-spacious .prompt p,.reading-spacious .feedback p{line-height:1.9}.source-card strong{text-decoration:underline;text-underline-offset:4px}
+
+/* Static headings receive programmatic focus for route announcements and reading
+   context. They are not controls: keep their text clear without drawing a box.
+   Links, buttons, disclosure summaries and feedback retain their focus styles. */
+#main :is(h1,h2,h3,h4,h5,h6)[tabindex="-1"]:focus{outline:none;box-shadow:none}

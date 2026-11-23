@@ -37,11 +37,13 @@ export function createLayout({main}){
    const value=Math.ceil(height)+'px';
    if(root.style.getPropertyValue('--navigation-height')!==value){
     root.style.setProperty('--navigation-height',value);
-    // A font swap or wrapped navigation can grow after a control is focused.
-    // Keep that control clear of the sticky header without changing focus.
+    // Preserve keyboard access when late fonts or wrapped navigation grow.
+    // Route headings retain focus while someone reads: they must never pull
+    // the page back merely because the header changes size afterwards.
     const focused=document.activeElement;
-    if(main.contains?.(focused))globalThis.requestAnimationFrame?.(()=>{
-     if(document.activeElement!==focused)return;
+    const isControl=element=>element?.tabIndex>=0||element?.matches?.('a[href],button,input,select,textarea,summary,[role="button"]');
+    if(main.contains?.(focused)&&isControl(focused))globalThis.requestAnimationFrame?.(()=>{
+     if(document.activeElement!==focused||!isControl(focused))return;
      const box=focused.getBoundingClientRect(),bottom=header.getBoundingClientRect().bottom;
      if(box.bottom>0&&box.top<bottom)focused.scrollIntoView?.({block:'nearest',behavior:'instant'});
     });

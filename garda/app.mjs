@@ -1,7 +1,7 @@
 import {createSiteSearch} from "../search/site-search.mjs?v=situation-locations-20261122";
 import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=header-clearance-20261123';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=situation-locations-20261122';
-import {createLayout} from '../accessibility/layout.mjs?v=header-clearance-20261123';
+import {createLayout} from '../accessibility/layout.mjs?v=sitewide-rendering-20261123';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
 import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
 import {hasOwn} from '../compatibility.mjs';
@@ -20,7 +20,7 @@ createSiteSearch({siteRole:"garda",getLanguage:()=>reading.language,getRole:()=>
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sourceLinks=ids=>`<details class="source-details"><summary>Evidence behind this explanation</summary><ul>${[...new Set(ids)].map(id=>`<li><a href="#evidence/${id}">${esc(sources[id].short)}</a><span class="citation-context">${esc(sources[id].kind)} · ${esc(sources[id].place)}</span></li>`).join('')}</ul></details>`;
 const returnToSession=()=>session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Return to your recap':'Return to your situation'} →</a></p>`:'';
-const focusMain=()=>focusPageStart(main);
+const focusMain=(focus=true)=>focusPageStart(main,{focus});
 function game(){
  if(session.complete)return summary();
  const s=scenarioById[session.scenarioId],node=currentNode(session),selected=session.selected,choice=selected===null?null:node.choices[selected],remaining=remainingSteps(session),total=session.history.length+remaining.max;
@@ -60,14 +60,14 @@ ${learningAbout()} <section class="info-block important"><h2>A learning companio
  <section class="info-block"><h2>Two perspectives on an encounter</h2><p>Created by Sam O’Brien-Olinger / Sam Tim Solutions as a companion to the human and civil rights learning resource. The scenarios are invented and do not reproduce participants’ experiences from any cited study.</p><a class="text-button" href="${PUBLIC_COMPANION}" target="_blank" rel="noopener noreferrer">Visit the public perspective ↗</a></section><a href="#encounters" class="primary">Choose a situation →</a><p class="contribution-link"><a href="https://samobrienolinger.github.io/SamOBrienOlinger/" target="_blank" rel="noopener noreferrer">Contact the project creator or contribute feedback ↗</a></p></div>`;
 }
 function notFound(){return '<div class="content-page"><h1>This page was not found.</h1><p>Choose a situation or explore the evidence library.</p><a class="primary" href="#play">All situations</a></div>';}
-function render(focus=true){
+function render(focus=true,{position=focus}={}){
  try{
   let hash=paired.referenceRoute(location.hash.slice(1)||'play');
- if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash);if(focus)focusMain();return;}
+ if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash);if(position)focusMain(focus);return;}
  if(paired.handles(hash)){
   main.innerHTML=paired.view(hash);
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===(hash.startsWith('progress')?'progress':'encounters'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  document.title='Explore | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(focus&&!paired.focusReturnedList())focusMain();return;
+  document.title='Explore | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(position&&(!focus||!paired.focusReturnedList()))focusMain(focus);return;
  }
  let view='play',target='';
   if(hash.startsWith('scenario/')){
@@ -75,7 +75,7 @@ function render(focus=true){
    if(!session){main.innerHTML=notFound();view='missing';}
    else{
     hash='scenario/'+session.scenarioId;
-    if(reading.language==='ga'){paired.transferOriginal(session,focus);return;}
+    if(reading.language==='ga'){paired.transferOriginal(session,focus);if(position&&!focus)focusMain(false);return;}
     view='encounters';main.innerHTML=game();
    }
   }else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
@@ -85,8 +85,8 @@ function render(focus=true){
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   document.title=`${view==='evidence'?'Evidence & sources':view==='about'?'About the Garda perspective':view==='missing'?'Page not found':hash.startsWith('scenario/')&&session?scenarioById[session.scenarioId].title:'Stopped: Both Sides'} | Stopped: Both Sides — Garda perspective`;
   paired.updateSiteLink(hash);reading.decorate(hash);
-  if(focus){if(target){const element=document.getElementById(target);element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain();}
- }catch(error){main.innerHTML='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read the <a href="https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf">Garda Decision Making Model</a>.</p></div>';reading.decorate('error');console.error(error);}
+  if(position){if(target){const element=document.getElementById(target);if(focus)element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain(focus);}
+ }catch(error){main.innerHTML='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read the <a href="https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf">Garda Decision Making Model</a>.</p></div>';reading.decorate('error');if(position)focusMain(focus);console.error(error);}
 }
 main.addEventListener('click',event=>{if(paired.handleClick(event))return;
  const button=event.target.closest('button[data-action]');if(!button)return;
@@ -103,7 +103,8 @@ main.addEventListener('click',event=>{if(paired.handleClick(event))return;
 document.querySelector('.skip')?.addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});focusPageStart(main,{focus:false});});
 window.addEventListener('hashchange',()=>render());
 await reading.ready;
-// Re-establish the route after the compact header and saved reading preferences settle.
+// Establish the refresh position without giving static headings keyboard focus.
+// User-initiated route changes still focus their heading through render().
 const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
-render(reloading);
+render(false,{position:reloading||location.hash.startsWith('#evidence/')});
 
