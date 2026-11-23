@@ -201,9 +201,9 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
     width:innerWidth,height:innerHeight,scrollY
    }));
   }finally{
-   // Removing an in-flight route can handle it before its released callback
-   // resumes. Complete this one request before unregistering the interceptor.
-   release();await continued;await page.unroute(matcher,delay);
+   // Keep the released interceptor until this isolated context is closed:
+   // disabling it while module dependencies start can strand their requests.
+   release();await continued;
   }
   await expect(page.locator('#main .initial,.error')).toHaveCount(0);
   await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
