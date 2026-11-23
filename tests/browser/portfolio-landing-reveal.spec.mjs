@@ -11,6 +11,10 @@ const invitation=[
  'Read a situation, choose a response, then find out why it matters.'
 ];
 const invitationText=':scope > :is(.encounter-hero-title,.landing-deck,.small-note)';
+async function captureLanding(page,path){
+ await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+ await page.screenshot({path,fullPage:true});
+}
 
 for(const path of paths){
  test(path+' landing invitation matches the portfolio staggered reveal and honours reduced motion',async({page},testInfo)=>{
@@ -41,13 +45,13 @@ for(const path of paths){
   await expect.poll(()=>lines.evaluateAll(children=>children
    .map(child=>getComputedStyle(child).opacity))).toEqual(Array(4).fill('1'));
   const label=path==='garda/'?'garda':'public';
-  await group.screenshot({path:testInfo.outputPath(label+'-landing-typography-desktop.png')});
+  await captureLanding(page,testInfo.outputPath(label+'-landing-typography-desktop.png'));
   await page.setViewportSize({width:390,height:844});
   await group.evaluate(async element=>{
    await Promise.all([...element.children].flatMap(child=>child.getAnimations())
     .map(animation=>animation.finished.catch(()=>{})));
   });
-  await group.screenshot({path:testInfo.outputPath(label+'-landing-typography-phone.png')});
+  await captureLanding(page,testInfo.outputPath(label+'-landing-typography-phone.png'));
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect.poll(()=>lines.evaluateAll(children=>children.map(child=>getComputedStyle(child).animationName))).toEqual(Array(4).fill('none'));
   await page.setViewportSize({width:320,height:568});
@@ -84,7 +88,7 @@ for(const path of paths){
   for(const width of [280,320,375,390,768,1366]){
    await page.setViewportSize({width,height:844});
    await expect.poll(fits,'headings, complete images and controls fit at '+width+'px').toEqual(expected);
-   if(width===375||width===1366)await group.screenshot({path:testInfo.outputPath(`${label}-landing-sequence-${width}.png`)});
+   if(width===375||width===1366)await captureLanding(page,testInfo.outputPath(`${label}-landing-sequence-${width}.png`));
   }
 
   // Reproduce the reported rectangle using a real keyboard-activated route return.
@@ -97,7 +101,11 @@ for(const path of paths){
   await expect(title).toBeFocused();
   await expect(title).toHaveCSS('outline-style','none');
   await expect(title).toHaveCSS('box-shadow','none');
-  await group.screenshot({path:testInfo.outputPath(`${label}-landing-return-focus-375.png`)});
+  await expect.poll(()=>title.evaluate(heading=>{
+   const box=heading.getBoundingClientRect(),header=document.querySelector('.header').getBoundingClientRect();
+   return {belowHeader:box.top>=header.bottom-1,withinViewport:box.bottom<=innerHeight};
+  }),'the actual Home return exposes the focused heading before any capture scroll').toEqual({belowHeader:true,withinViewport:true});
+  await captureLanding(page,testInfo.outputPath(`${label}-landing-return-focus-375.png`));
   await page.keyboard.press('Tab');
   const firstLink=group.locator('.perspective-card-link').first();
   await expect(firstLink).toBeFocused();

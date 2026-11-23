@@ -20,16 +20,17 @@ for(const {path,role} of cases){
   expect(colours.copyright).toBe(colours.foreground);
  });
 
- test(path+' footer links fit phones, desktop and enlarged right-to-left text',async({page})=>{
+ test(path+' compact footer keeps readable targets on phones, desktop and enlarged right-to-left text',async({page},testInfo)=>{
   const footer=page.locator('.footer');
   const settings=footer.locator('#language-settings-footer');
   for(const lang of ['en','ar']){
    await page.goto(path+'?lang='+lang+'#play');
+   await page.evaluate(()=>document.fonts.ready);
    if(lang==='ar'){
     await expect(page.locator('html')).toHaveAttribute('dir','rtl');
     await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    }
-   for(const width of [320,390,430,768,1366]){
+   for(const width of [320,375,390,430,768,1366]){
     await page.setViewportSize({width,height:844});
     await expect.poll(()=>footer.evaluate((element,compact)=>{
      const bounds=element.getBoundingClientRect();
@@ -48,6 +49,28 @@ for(const {path,role} of cases){
         box.bottom<=note.top && link.scrollWidth<=link.clientWidth+1;
       });
     },lang==='en' && width<=430)).toBe(true);
+    await expect.poll(()=>footer.evaluate(element=>[...element.querySelectorAll('a,button')].every(control=>{
+     const box=control.getBoundingClientRect();return box.width>=44&&box.height>=44;
+    })),'every footer action retains a full touch target').toBe(true);
+    if(lang==='en'){
+     const measure=()=>footer.evaluate(element=>({height:element.getBoundingClientRect().height,
+      fonts:[...element.querySelectorAll('a,button,p')].map(item=>getComputedStyle(item).fontSize)}));
+     const compact=await measure();
+     const stylesheet=page.locator('link[href*="navigation-footer.css"]');
+     await expect(stylesheet).toHaveCount(1);
+     await stylesheet.evaluate(link=>{link.disabled=true;});
+     const previous=await measure();
+     await stylesheet.evaluate(link=>{link.disabled=false;});
+     expect(previous.height-compact.height,'the footer saves space through layout and spacing').toBeGreaterThanOrEqual(10);
+     expect(compact.fonts,'footer text has not been shrunk').toEqual(previous.fonts);
+     if(width>=768){
+      const centres=await footer.locator('.footer-identity').evaluate(element=>[...element.children].map(child=>{
+       const box=child.getBoundingClientRect();return box.top+box.height/2;
+      }));
+      expect(Math.max(...centres)-Math.min(...centres),'desktop identity and copyright share one row').toBeLessThanOrEqual(1);
+     }
+     if(width===375||width===1366)await footer.screenshot({path:testInfo.outputPath(`${role}-compact-footer-${width}.png`)});
+    }
    }
   }
   await settings.focus();

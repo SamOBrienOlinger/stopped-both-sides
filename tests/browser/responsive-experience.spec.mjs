@@ -44,6 +44,73 @@ function expectGradualDisclosure(samples,before,opening){
 }
 
 for(const path of ['./','garda/']){
+ test(`${path} navigation fits every control and scrolls enlarged menus within the viewport`,async({page},testInfo)=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.setViewportSize({width:375,height:812});
+  await page.goto(path+'?lang=en#play');
+  await page.evaluate(()=>document.fonts.ready);
+  const nav=page.locator('#main-navigation'),toggle=page.locator('[data-nav-toggle]');
+  const controls=nav.locator(':scope > :is(a,button)');
+  await expect(controls).toHaveCount(8);
+  const before=await page.locator('#main').evaluate(element=>element.getBoundingClientRect().top+scrollY);
+  await openNavigation(page);
+  await expectControlsFit(page,'all eight navigation items on a regular phone');
+  await expect.poll(()=>nav.evaluate(element=>{
+   const box=element.getBoundingClientRect(),header=document.querySelector('.header').getBoundingClientRect();
+   const targets=[...element.querySelectorAll(':scope > :is(a,button)')];
+   return {withinViewport:box.top>=header.bottom&&box.bottom<=innerHeight,
+    allVisible:element.scrollHeight<=element.clientHeight+1&&targets.every(target=>{
+     const rect=target.getBoundingClientRect();
+     return rect.top>=box.top&&rect.bottom<=box.bottom&&rect.left>=box.left&&rect.right<=box.right;
+    }),generousTargets:targets.every(target=>target.getBoundingClientRect().height>=48)};
+  })).toEqual({withinViewport:true,allVisible:true,generousTargets:true});
+  expect(await page.locator('#main').evaluate(element=>element.getBoundingClientRect().top+scrollY),'opening the larger menu does not move the page').toBeCloseTo(before,0);
+  await page.screenshot({path:testInfo.outputPath((path==='garda/'?'garda':'public')+'-navigation-375.png')});
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  for(const width of [1366,1920]){
+   await page.setViewportSize({width,height:900});
+   await expect(toggle).toBeHidden();
+   await expect(nav).toBeVisible();
+   await expectControlsFit(page,'complete desktop navigation at '+width+'px');
+   await expect.poll(()=>page.locator('.header').evaluate(header=>{
+    const box=header.getBoundingClientRect();
+    return box.height<=128&&[...header.querySelectorAll('nav>:is(a,button)')].every(control=>{
+     const rect=control.getBoundingClientRect();
+     return rect.height>=48&&rect.left>=0&&rect.right<=innerWidth&&rect.top>=box.top&&rect.bottom<=box.bottom;
+    });
+   })).toBe(true);
+  }
+  for(const lang of ['en','ar']){
+   await page.setViewportSize({width:280,height:568});
+   await page.goto(path+'?lang='+lang+'#play');
+   await expect(page.locator('html')).toHaveAttribute('lang',lang==='en'?'en-IE':'ar');
+   await page.evaluate(async()=>{await document.fonts.ready;document.documentElement.style.setProperty('--reading-size','200%');});
+   await openNavigation(page);
+   await expect.poll(()=>nav.evaluate(element=>{
+    const box=element.getBoundingClientRect(),header=document.querySelector('.header').getBoundingClientRect();
+    return {withinViewport:box.top>=header.bottom-1&&box.bottom<=innerHeight+1,
+     scrolls:element.scrollHeight>element.clientHeight+1,horizontal:element.scrollWidth<=element.clientWidth+1};
+   })).toEqual({withinViewport:true,scrolls:true,horizontal:true});
+   await expectControlsFit(page,lang+' enlarged navigation keeps every label inside its control');
+   await toggle.focus();
+   for(const [index,control] of (await controls.all()).entries()){
+    await page.keyboard.press('Tab');
+    if(index===0&&await nav.evaluate(element=>document.activeElement===element))await page.keyboard.press('Tab');
+    await expect(control).toBeFocused();
+   }
+   const last=controls.last();
+   await expect(last).toHaveAttribute('id','language-settings-trigger');
+   await expect.poll(()=>last.evaluate(control=>{
+    const box=control.getBoundingClientRect(),panel=control.parentElement.getBoundingClientRect();
+    return control.parentElement.scrollTop>0&&box.top>=panel.top-1&&box.bottom<=panel.bottom+1&&box.bottom<=innerHeight+1;
+   }),'the final menu control can be reached and read in the scrolled panel').toBe(true);
+   await page.keyboard.press('Escape');
+   await expect(toggle).toBeFocused();
+   await expect(page.locator('#main')).not.toHaveAttribute('inert');
+  }
+ });
+
  test(`${path} compact navigation supports keyboard, settings, route changes and resizing`,async({page})=>{
   await page.setViewportSize({width:320,height:700});
   await page.goto(path);
