@@ -6,10 +6,7 @@ test.setTimeout(60000);
 test.use({viewport:{width:1366,height:768},reducedMotion:'no-preference',trace:'on'});
 
 const variants=[
- {id:'current',css:'',settle:false},
- {id:'details-containment-off',css:'#main details[data-heading-card]{container-type:normal!important}',settle:false},
- {id:'all-card-containment-off',css:'#main [data-heading-card]{container-type:normal!important}',settle:false},
- {id:'current-settled-street',css:'',settle:true}
+ {id:'summary-containment',css:'#main details[data-heading-card]{container-type:normal!important} #main details[data-heading-card]>summary{container-type:inline-size!important}',settle:false}
 ];
 
 async function installRecorder(page){
