@@ -178,7 +178,12 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   const matcher=url=>url.pathname===appPath;
   let release,requested;const blocked=new Promise(resolve=>{release=resolve;});
   const seen=new Promise(resolve=>{requested=resolve;});
-  const delay=async route=>{requested();await blocked;await route.continue();};
+  let continued=Promise.resolve();
+  const delay=route=>{
+   requested();
+   continued=(async()=>{await blocked;await route.continue();})();
+   return continued;
+  };
   await page.route(matcher,delay);
   let loading;
   try{
@@ -194,7 +199,11 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
     width:innerWidth,height:innerHeight,scrollY
    }));
    await page.screenshot({path:testInfo.outputPath('compact-loading-header.png')});
-  }finally{release();await page.unroute(matcher,delay);}
+  }finally{
+   // Removing an in-flight route can handle it before its released callback
+   // resumes. Complete this one request before unregistering the interceptor.
+   release();await continued;await page.unroute(matcher,delay);
+  }
   await expect(page.locator('#main .initial,.error')).toHaveCount(0);
   await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
   const ready=await page.locator('.header').evaluate(header=>header.getBoundingClientRect().toJSON());
