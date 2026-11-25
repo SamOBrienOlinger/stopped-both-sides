@@ -270,10 +270,14 @@ for(const path of paths){
 
   // Reproduce the reported rectangle using a real keyboard-activated route return.
   await page.setViewportSize({width:375,height:812});
+  // Wait for the desktop-to-compact transition before opening the menu for keyboard navigation.
+  // WebKit can resize the viewport before it dispatches the media-query change.
+  await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
   await page.goto(path+'?lang=en#about');
   await expect(page.locator('.about-opening')).toBeVisible();
   await openNavigation(page);
   await page.locator('#main-navigation [data-nav="play"]').focus();
+  await expect(page.locator('#main-navigation [data-nav="play"]')).toBeFocused();
   await page.keyboard.press('Enter');
   const title=page.locator('#paired-title');
   await expect(title).toBeFocused();
