@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
-import {encounters,roles,references,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,currentStage,switchRole,answer,continueEncounter,revisit,changeAnswer,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=nia-public-20261123';
-import {emptyProgress,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,createProgressStore,STORAGE_KEY} from '../encounters/progress.mjs?v=nia-public-20261123';
-import publicData from '../encounters/original-public.mjs?v=pabi-privacy-20261122';
-import gardaData from '../encounters/original-garda.mjs?v=link-audit-20261123';
-import * as localData from '../data.mjs?v=pabi-privacy-20261122';
-import * as localGardaData from '../garda/data.mjs?v=link-audit-20261123';
+import {encounters,roles,references,stageCount} from '../encounters/catalog.mjs?v=site-repairs-20261125';
+import {startEncounter,currentStage,switchRole,answer,continueEncounter,revisit,changeAnswer,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {emptyProgress,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,createProgressStore,STORAGE_KEY} from '../encounters/progress.mjs?v=site-repairs-20261125';
+import publicData from '../encounters/original-public.mjs?v=site-repairs-20261125';
+import gardaData from '../encounters/original-garda.mjs?v=site-repairs-20261125';
+import * as localData from '../data.mjs?v=site-repairs-20261125';
+import * as localGardaData from '../garda/data.mjs?v=site-repairs-20261125';
 
 for(const e of Object.values(encounters)){
  test(`${e.id}: all role/choice routes finish; switching keeps the scene and answers`,()=>{

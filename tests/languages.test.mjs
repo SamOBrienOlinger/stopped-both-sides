@@ -1,14 +1,14 @@
 import {storyCharacter} from '../encounters/story-cast.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
+import {messages} from '../locales/messages.mjs?v=site-repairs-20261125';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=final-touches-20261125';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=site-repairs-20261125';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=site-repairs-20261125';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
 import {personalizeText,storyIdentity} from '../encounters/narrative.mjs?v=nia-public-20261123';
-import {progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';
+import {progressStorageKey} from '../encounters/progress.mjs?v=site-repairs-20261125';
 import {siteRole,siteBase} from './site-fixture.mjs';
 
 const added=languages.filter(language=>!['en','ga'].includes(language.id));
@@ -44,7 +44,7 @@ for(const {id} of added){
  });
  test(`${id}: all original shared stages and both roles have translated learning content`,()=>{
   let stages=0,choices=0;
-  for(const encounter of Object.values(encounters).filter(item=>!item.language))for(const node of Object.values(encounter.nodes)){
+  for(const encounter of Object.values(encounters).filter(item=>item.originalId))for(const node of Object.values(encounter.nodes)){
    stages++;
    const text=[node.scene,...roles.flatMap(role=>{const view=node.views[role];choices+=view.choices.length;return [view.prompt,view.lesson,...view.choices.flatMap(choice=>[choice.text,choice.feedback])];})];
    for(const source of text){assert.ok(messages.includes(source),source);assert.notEqual(translateText(source,id),source,`${id}: ${source}`);}
@@ -155,7 +155,7 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
     assert.notEqual(caption,source);
     assert.ok(main.innerHTML.includes('<div class="scene-setting">'+escapeHTML(caption)+'</div>'));
    }
-   if(e.language)assert.ok(main.innerHTML.includes(`<p class="story-text"><span lang="${e.language}" dir="ltr" data-no-translate>${escapeHTML(node.scene)}</span></p>`));
+   assert.notEqual(translated,node.scene,`${language.id}/${e.id}/${node.id} scene must be translated`);
    assert.deepEqual(current().cast,base.cast);
    for(const role of roles){
     const shown=storyCharacter(base,role);

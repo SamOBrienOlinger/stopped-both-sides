@@ -25,3 +25,5 @@
  .site-search-result :is(strong,span){color:CanvasText}
  .site-search :is(input,.site-search-result):focus-visible{outline-color:Highlight}
 }
+
+.site-search #site-search-more[hidden]{display:none}

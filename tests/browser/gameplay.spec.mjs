@@ -1,7 +1,7 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {encounters,roles} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=site-repairs-20261125';
+import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {storyCharacter,fixedStoryCharacter} from '../../encounters/story-cast.mjs';
 import {storyIdentity} from '../../encounters/narrative.mjs?v=nia-public-20261123';
 

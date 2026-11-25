@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {characters,charactersForSituation,changeCharacter,createCharacterPreferences} from '../encounters/characters.mjs?v=nia-public-20261123';
-import {discriminationEncounters} from '../encounters/discrimination.mjs?v=situation-locations-20261122';
+import {discriminationEncounters} from '../encounters/discrimination.mjs?v=site-repairs-20261125';
 import {situationParticipants,participantLayout} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
-import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
-import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=nia-public-20261123';
+import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=site-repairs-20261125';
 import {supportingCharacters} from '../encounters/supporting-characters.mjs';
 import {existsSync} from 'node:fs';
 

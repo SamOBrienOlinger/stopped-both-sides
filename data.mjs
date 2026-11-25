@@ -23,7 +23,7 @@ export const sources = {
  inarReport:{title:'INAR / ICCL · Policing and Racial Discrimination in Ireland',url:'https://inar.ie/wp-content/uploads/2024/04/1.-POLICING-AND-RACIAL-DISCRIMINATION-1.pdf',note:'Community research and recommendations (PDF, 2024). It informs the resource’s approach; it is not an up-to-date statement of every legal power.'},
  inar:{title:'INAR · Racism and policing resources',url:'https://inar.ie/?s=Police',note:'The INAR resource search supplied for this project.'},
  ireport:{title:'INAR · iReport racism reporting system',url:'https://inar.ie/ireport-racism-reporting-system/',note:'Learn about confidential reporting of racism and its purpose. It is separate from a formal Garda-conduct complaint.'},
- iccl:{title:'ICCL · Know Your Rights: Criminal Justice & Garda Powers',url:'https://www.iccl.ie/resources/know-your-rights-criminal-justice-and-garda-powers-2nd-edition-june-2014/',note:'Background guide (2014). Some procedures and organisation names have changed; use current sources alongside it.'}
+ iccl:{title:'ICCL · Know Your Rights: Criminal Justice & Garda Powers',url:'https://www.iccl.ie/wp-content/uploads/2017/11/ICCL_KYR_Justice_2014_LR.pdf',note:'Background guide (2014). Some procedures and organisation names have changed; use current sources alongside it.'}
 };
 const c=(text,feedback,next,review=false)=>({text,feedback,next,review});
 const n=(title,story,prompt,lesson,phrase,refs,choices,quote='')=>({title,story,prompt,lesson,phrase,sources:refs,choices,quote});

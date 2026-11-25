@@ -1,22 +1,21 @@
-import {createSiteSearch} from "../search/site-search.mjs?v=final-touches-20261125";
+import {createSiteSearch} from "../search/site-search.mjs?v=site-repairs-20261125";
 import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=final-touches-20261125';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=site-repairs-20261125';
 import {createLayout} from '../accessibility/layout.mjs?v=poster-landing-20261125';
-import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=contributors-expanded-20261122';
+import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=site-repairs-20261125';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=final-touches-20261125';
-import {createMotion} from '../accessibility/motion.mjs?v=final-touches-20261125';
-import {createEncounterMode} from '../encounters/ui.mjs?v=final-touches-20261125';
-import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=link-audit-20261123';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=link-audit-20261123';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=site-repairs-20261125';
+import {createMotion} from '../accessibility/motion.mjs?v=site-repairs-20261125';
+import {createEncounterMode} from '../encounters/ui.mjs?v=site-repairs-20261125';
+import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=site-repairs-20261125';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=site-repairs-20261125';
 const main=document.querySelector('#main');
 let session=null;
 const paired=createEncounterMode({siteRole:'garda',main,practiceScenarios:scenarios,getLanguage:()=>reading.language,rerender:(focus=true)=>render(focus),getOriginalSession:()=>session,resetOriginalSession:()=>{session=null;},announce:message=>reading.announce(message)});
 const layout=createLayout({main});
 const motion=createMotion({main,getLegacyState:()=>session});
 const reading=createReadingTools({main,siteRole:'garda',rerender:(focus=true)=>render(focus),transformContent:(html,hash)=>paired.personalize(html,hash),onRender:hash=>{layout.update(hash);motion.update(hash);},onDialogOpen:dialog=>motion.openDialog(dialog)});
-createSiteSearch({siteRole:"garda",getLanguage:()=>reading.language,getRole:()=>perspectiveForRoute(location.hash,"garda"),startSituation:(id,role)=>paired.startSituation(id,role)});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sourceLinks=ids=>`<details class="source-details"><summary>Evidence behind this explanation</summary><ul>${[...new Set(ids)].map(id=>`<li><a href="#evidence/${id}">${esc(sources[id].short)}</a><span class="citation-context">${esc(sources[id].kind)} · ${esc(sources[id].place)}</span></li>`).join('')}</ul></details>`;
 const returnToSession=()=>session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Return to your recap':'Return to your situation'} →</a></p>`:'';
@@ -116,4 +115,4 @@ pageStart?.claim(()=>{
  const id=hash.startsWith('evidence/')?hash.slice(9):'';
  return id?document.getElementById(hasOwn(sources,id)?'source-'+id:id):null;
 });
-
+createSiteSearch({siteRole:"garda",getLanguage:()=>reading.language,getRole:()=>perspectiveForRoute(location.hash,"garda"),startSituation:(id,role)=>paired.startSituation(id,role)});

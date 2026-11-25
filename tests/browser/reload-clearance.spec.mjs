@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,answer,continueEncounter,decodeState,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
-import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=nia-public-20261123';
+import {startEncounter,answer,continueEncounter,decodeState,stateHash} from '../../encounters/engine.mjs?v=site-repairs-20261125';
+import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=site-repairs-20261125';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 import {openNavigation} from './navigation.mjs';
 

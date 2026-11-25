@@ -1,6 +1,6 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {expectControlsFit} from './control-layout.mjs';
 
 const sizes=[[320,568],[390,844],[568,320],[768,1024],[1024,768],[1366,768],[1920,1080],[2560,1440]];

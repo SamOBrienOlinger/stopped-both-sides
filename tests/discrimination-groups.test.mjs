@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
-import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {discriminationGrounds} from '../encounters/visuals.mjs?v=nia-public-20261123';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=final-touches-20261125';
+import {topicGroups} from '../encounters/presentation.mjs?v=site-repairs-20261125';
+import {encounters} from '../encounters/catalog.mjs?v=site-repairs-20261125';
+import {discriminationGrounds} from '../encounters/visuals.mjs?v=site-repairs-20261125';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
 
 const grounds=['gender','civil-status','family-status','sexual-orientation','age','religious-belief','traveller-community','race','disability','housing-assistance'];
 const topic=topicGroups.find(group=>group.id==='discrimination');
@@ -35,7 +35,7 @@ test('Returning to a situation reopens just its ground, while an ordinary list s
  assert.doesNotMatch(render(),/data-ground="[^"]+" open/);
 });
 
-test('Ground headings translate independently of the English scenarios and retain stable navigation identifiers',async()=>{
+test('Ground headings translate and retain stable navigation identifiers',async()=>{
  for(const language of ['ga','ar','pl']){
   await loadLanguage(language);
   const html=translateHTML(render(),language);

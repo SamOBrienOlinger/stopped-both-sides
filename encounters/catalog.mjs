@@ -1,7 +1,7 @@
-import publicData from './original-public.mjs?v=pabi-privacy-20261122';
-import gardaData from './original-garda.mjs?v=link-audit-20261123';
+import publicData from './original-public.mjs?v=site-repairs-20261125';
+import gardaData from './original-garda.mjs?v=site-repairs-20261125';
 import {counterparts} from './counterparts.mjs?v=learning-language-20261120';
-import {discriminationEncounters,discriminationReferences} from './discrimination.mjs?v=situation-locations-20261122';
+import {discriminationEncounters,discriminationReferences} from './discrimination.mjs?v=site-repairs-20261125';
 export const roles=['public','garda'];
 export const roleLabels={public:'Member of the public',garda:'Garda'};
 export {sites} from '../site.mjs';

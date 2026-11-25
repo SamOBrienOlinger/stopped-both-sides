@@ -1,9 +1,9 @@
 import {test,expect} from '@playwright/test';
 import {characters} from '../../encounters/characters.mjs?v=nia-public-20261123';
-import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {encounters} from '../../encounters/catalog.mjs?v=site-repairs-20261125';
+import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {storyCharacter} from '../../encounters/story-cast.mjs';
-import {sceneDirections} from '../../encounters/scenes.mjs?v=nia-public-20261123';
+import {sceneDirections} from '../../encounters/scenes.mjs?v=site-repairs-20261125';
 
 const file=/\/assets\/characters\/garda-baseball-2026\.webp(?:\?|$)/;
 const stage='.paired-scene-lead>.encounter-scene';

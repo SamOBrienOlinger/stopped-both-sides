@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 import {characters} from '../encounters/characters.mjs?v=nia-public-20261123';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
-import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=nia-public-20261123';
-import {translateText} from '../locales/translate.mjs?v=final-touches-20261125';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=site-repairs-20261125';
+import {translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
 import {backgroundImage} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
 import {situationParticipants} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
 

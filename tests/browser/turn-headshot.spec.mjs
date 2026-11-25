@@ -1,9 +1,9 @@
 import {openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {encounters,roleLabels} from '../../encounters/catalog.mjs?v=link-audit-20261123';
+import {encounters,roleLabels} from '../../encounters/catalog.mjs?v=site-repairs-20261125';
 import {characterFor,characterArtwork} from '../../encounters/characters.mjs?v=nia-public-20261123';
 import {storyCharacter} from '../../encounters/story-cast.mjs';
-import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 
 const cast={public:'public-6',garda:'garda-2'}; // Rory is Garda #2
 const paths=['./','garda/'];

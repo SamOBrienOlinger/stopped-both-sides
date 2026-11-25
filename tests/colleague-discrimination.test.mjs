@@ -1,16 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {encounters,references,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {discriminationEncounters} from '../encounters/discrimination.mjs?v=situation-locations-20261122';
-import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
-import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
-import {emptyProgress,recordProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=nia-public-20261123';
-import {renderScene} from '../encounters/scenes.mjs?v=nia-public-20261123';
+import {encounters,references,roles,stageCount} from '../encounters/catalog.mjs?v=site-repairs-20261125';
+import {discriminationEncounters} from '../encounters/discrimination.mjs?v=site-repairs-20261125';
+import {topicGroups} from '../encounters/presentation.mjs?v=site-repairs-20261125';
+import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {emptyProgress,recordProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=site-repairs-20261125';
+import {renderScene} from '../encounters/scenes.mjs?v=site-repairs-20261125';
 import {storyIdentity,personalizeText} from '../encounters/narrative.mjs?v=nia-public-20261123';
-import {learningIcon,scenarioIcon} from '../encounters/visuals.mjs?v=nia-public-20261123';
-import {loadLanguage,translateText,translateHTML} from '../locales/translate.mjs?v=final-touches-20261125';
+import {learningIcon,scenarioIcon} from '../encounters/visuals.mjs?v=site-repairs-20261125';
+import {escapeHTML,loadLanguage,translateText,translateHTML} from '../locales/translate.mjs?v=site-repairs-20261125';
 import {languages} from '../locales/languages.mjs';
-import {scenarioCopy} from '../learning/play.mjs?v=nia-public-20261123';
+import {situationStory} from '../learning/play.mjs?v=site-repairs-20261125';
 
 const grounds=['gender','civil-status','family-status','sexual-orientation','age','religious-belief','traveller-community','race','disability','housing-assistance'];
 const witnessCases=Object.values(encounters).filter(e=>e.kind==='colleague-witness');
@@ -92,11 +92,36 @@ test('New witness routes retain both answers across role switches and do not rep
  }
 });
 
-test('Witness labels translate and the English teaching text stays explicitly identified in other languages',async()=>{
- const e=witnessCases[0],english=scenarioCopy(e.id,e.nodes.opening.scene);
+test('All discrimination stories, decisions and feedback are available in each non-English language',async()=>{
  for(const {id} of languages.filter(language=>language.id!=='en')){
   await loadLanguage(id);
   for(const label of ['Public witness','Witnessing Garda','Witnessing a colleague','Character information'])assert.notEqual(translateText(label,id),label);
-  assert.equal(translateHTML(english,id),english);
+  for(const encounter of Object.values(discriminationEncounters)){
+   const check=source=>{
+    const translated=translateText(source,id);
+    assert.ok(translated.trim(),`${id}/${encounter.id}: empty translation for ${source}`);
+    assert.notEqual(translated,source,`${id}/${encounter.id}: ${source}`);
+    return translated;
+   };
+   // Short ground names can be identical in two languages (e.g. "Race" in French).
+   if(encounter.kind==='colleague-witness')check(encounter.title);
+   check(encounter.description);
+   check(encounter.goal);
+   for(const stage of Object.values(encounter.nodes)){
+    check(stage.title);
+    const translatedScene=check(stage.scene);
+    assert.equal(translateHTML(situationStory(encounter.id,stage.id,stage.scene),id),'<p class="story-text">'+escapeHTML(translatedScene)+'</p>');
+    for(const role of roles){
+     const view=stage.views[role];
+     if(view.context)check(view.context);
+     check(view.prompt);
+     check(view.lesson);
+     for(const choice of view.choices){
+      check(choice.text);
+      check(choice.feedback);
+     }
+    }
+   }
+  }
  }
 });

@@ -1,5 +1,5 @@
 import {hasOwn} from '../compatibility.mjs';
-import {encounters, roles} from './catalog.mjs?v=link-audit-20261123';
+import {encounters, roles} from './catalog.mjs?v=site-repairs-20261125';
 import {createCast,defaultCast,validCast,castForSituation} from './characters.mjs?v=final-touches-20261125';
 
 export const otherRole = role => role === 'public' ? 'garda' : 'public';

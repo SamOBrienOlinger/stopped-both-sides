@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
-import {encounters,roles} from '../../encounters/catalog.mjs?v=link-audit-20261123';
+import {encounters,roles} from '../../encounters/catalog.mjs?v=site-repairs-20261125';
 import {characters} from '../../encounters/characters.mjs?v=nia-public-20261123';
-import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {startEncounter,answer,continueEncounter,switchRole,stateHash} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {expectControlsFit} from './control-layout.mjs';
 import {openCharacterPicker} from './navigation.mjs';
 

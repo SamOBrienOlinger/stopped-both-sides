@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {backgroundImage,approvedBackgrounds,interiorBackground} from '../encounters/backgrounds.mjs?v=public-enquiry-20261125';
-import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=nia-public-20261123';
-import {startEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
-import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=site-repairs-20261125';
+import {startEncounter} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {encounters} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 test('All five background illustrations match their recorded responsive assets',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../assets/dublin-approved/manifest.json',import.meta.url)));
  assert.equal(manifest.length,5);assert.equal(new Set(Object.values(approvedBackgrounds)).size,5);

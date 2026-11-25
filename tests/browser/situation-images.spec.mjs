@@ -1,15 +1,15 @@
 import {expect,test} from '@playwright/test';
-import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
+import {encounters} from '../../encounters/catalog.mjs?v=site-repairs-20261125';
 import {defaultCast} from '../../encounters/characters.mjs?v=nia-public-20261123';
-import {startEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
-import {topicGroups} from '../../encounters/presentation.mjs?v=link-audit-20261123';
-import {renderScene} from '../../encounters/scenes.mjs?v=nia-public-20261123';
+import {startEncounter} from '../../encounters/engine.mjs?v=site-repairs-20261125';
+import {topicGroups} from '../../encounters/presentation.mjs?v=site-repairs-20261125';
+import {renderScene} from '../../encounters/scenes.mjs?v=site-repairs-20261125';
 import {situationParticipants} from '../../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
 import {storyCharacter} from '../../encounters/story-cast.mjs';
 import {originalSceneDetails} from '../../encounters/original-scene-props.mjs';
-import {sceneDirections} from '../../encounters/scenes.mjs?v=nia-public-20261123';
+import {sceneDirections} from '../../encounters/scenes.mjs?v=site-repairs-20261125';
 const cast=defaultCast();
 function previewCast(id,authored){
  const group=situationParticipants(id,cast);

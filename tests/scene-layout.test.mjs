@@ -2,10 +2,10 @@ import {storyCharacter} from '../encounters/story-cast.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs?v=situation-locations-20261122';
-import {encounters,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
+import {encounters,stageCount} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 import {characters,castForSituation} from '../encounters/characters.mjs?v=nia-public-20261123';
-import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=nia-public-20261123';
-import {startEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=site-repairs-20261125';
+import {startEncounter} from '../encounters/engine.mjs?v=site-repairs-20261125';
 test('every scene and all 90 casts retain matching caption and actor identities',()=>{
  let count=0;
  for(const [id,e] of Object.entries(encounters))for(const nodeId of Object.keys(e.nodes)){

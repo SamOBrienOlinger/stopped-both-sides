@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {scenarios,sources} from '../data.mjs?v=pabi-privacy-20261122';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../engine.mjs?v=pabi-privacy-20261122';
+import {scenarios,sources} from '../data.mjs?v=site-repairs-20261125';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from '../engine.mjs?v=site-repairs-20261125';
 let allPaths=0;
 for(const scenario of scenarios){
  test(`${scenario.title}: every possible choice path reaches a sourced recap`,()=>{

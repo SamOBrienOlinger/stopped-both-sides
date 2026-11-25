@@ -1,15 +1,19 @@
-import {learningCopy} from './play-copy.mjs?v=final-touches-20261125';
-import {messages} from './messages.mjs?v=pabi-privacy-20261122';
+import {privacyNotices} from './privacy-notice.mjs?v=site-repairs-20261125';
+import {learningCopy} from './play-copy.mjs?v=site-repairs-20261125';
+import {discriminationLabels} from './discrimination-labels.mjs?v=site-repairs-20261125';
+import {discriminationIrish} from './discrimination-ga.mjs?v=site-repairs-20261125';
+import {messages} from './messages.mjs?v=site-repairs-20261125';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {gaContent} from './ga-content.mjs?v=human-civil-rights-20261122';
+import {encounters} from '../encounters/catalog.mjs?v=site-repairs-20261125';
+import {gaContent,gaPracticeCopy} from './ga-content.mjs?v=site-repairs-20261125';
+import {referenceIrish} from './reference-ga.mjs?v=site-repairs-20261125';
 import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
 export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
 for(const e of Object.values(encounters)){
- if(e.language)continue;
+ if(!gaContent[e.id])continue;
  const ga=gaContent[e.id];dictionary.set(e.title,ga.title);dictionary.set(e.description,ga.description);
  for(const node of Object.values(e.nodes)){
   const translated=ga.nodes[node.id];dictionary.set(node.title,translated.title);dictionary.set(node.scene,translated.scene);
@@ -106,7 +110,7 @@ const ui={
 Object.assign(ui,{
  'On the street':'Ar an tsráid','At the bus stop':'Ag stad an bhus','At the station':'Ag an stáisiún','Time to reflect':'Am le machnamh','Reviewing the encounter':'Ag athbhreithniú na teagmhála','In the community':'Sa phobal','Private advice · separate perspectives':'Comhairle phríobháideach · dearcthaí ar leith','Separate reflections':'Machnamh ar leith','Same facts · compare the written scenarios':'Na fíricí céanna · cuir na cásanna scríofa i gcomparáid','Your chosen response':'An freagra a roghnaigh tú','The scene':'An radharc'
 });
-Object.assign(ui,refinementIrish);
+Object.assign(ui,refinementIrish,referenceIrish,gaPracticeCopy);
 ui['member of the public']=ui['Member of the public'];
 ui['Garda member']=ui['Member of An Garda Síochána'];
 ui['Human and Civil Rights']=ui['Human and Civil Rights resources'];
@@ -116,6 +120,8 @@ Object.entries(ui).forEach(([a,b])=>dictionary.set(a,b));
 function translateIrishText(text,lang='en'){
  if(lang!=='ga')return text;
  const s=String(text).trim();if(dictionary.has(s))return dictionary.get(s);
+ const message=matchMessage(s);
+ if(message && referenceIrish[message.template])return referenceIrish[message.template].replace('{count}',message.values.count);
  let m;
  if((m=s.match(/^(\d+) years old$/)))return m[1]+' bliain d’aois';
  if((m=s.match(/^Stage (\d+)$/)))return 'Céim '+m[1];
@@ -153,7 +159,7 @@ function translateIrishHTML(html,lang='en'){
   const preserve=skip||/\bdata-no-translate\b|\bdata-english-practice\b/.test(part);
   if(/\bdata-english-practice\b/.test(part))part=part.replace(/>$/, ' lang="en-IE">');
   if(!/^<(?:br|hr|img|input|meta|link|wbr|source)\b/i.test(part)&&!part.endsWith('/>')){stack.push(skip);skip=preserve;}
-  return preserve?part:part.replace(/((?:aria-label|title)=")([^"]*)"/g,(_,a,b)=>a+escapeHTML(translateText(decode(b),lang))+'"');
+  return preserve?part:part.replace(/((?:aria-label|aria-description|aria-valuetext|title|alt|placeholder)=")([^"]*)"/g,(_,a,b)=>a+escapeHTML(translateText(decode(b),lang))+'"');
  }).join('');
 }
 export {gaContent};
@@ -162,13 +168,13 @@ export {gaContent};
 // Each pack is hosted with the resource and loaded only when selected. Translation
 // never sends answers, saved characters or progress to an external service.
 const loaders={
- pt:retry=>import('./pt-content.mjs?v=pabi-privacy-20261122'+retry),
- ar:retry=>import('./ar-content.mjs?v=pabi-privacy-20261122'+retry),
- pl:retry=>import('./pl-content.mjs?v=pabi-privacy-20261122'+retry),
- ro:retry=>import('./ro-content.mjs?v=pabi-privacy-20261122'+retry),
- fr:retry=>import('./fr-content.mjs?v=pabi-privacy-20261122'+retry),
- es:retry=>import('./es-content.mjs?v=pabi-privacy-20261122'+retry),
- 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=pabi-privacy-20261122'+retry)
+ pt:retry=>import('./pt-content.mjs?v=site-repairs-20261125'+retry),
+ ar:retry=>import('./ar-content.mjs?v=site-repairs-20261125'+retry),
+ pl:retry=>import('./pl-content.mjs?v=site-repairs-20261125'+retry),
+ ro:retry=>import('./ro-content.mjs?v=site-repairs-20261125'+retry),
+ fr:retry=>import('./fr-content.mjs?v=site-repairs-20261125'+retry),
+ es:retry=>import('./es-content.mjs?v=site-repairs-20261125'+retry),
+ 'zh-Hans':retry=>import('./zh-Hans-content.mjs?v=site-repairs-20261125'+retry)
 };
 const packs=new Map(),pending=new Map(),attempts=new Map();
 const sourceIds=new Map(messages.map((text,index)=>[text,'m'+String(index).padStart(4,'0')]));
@@ -554,9 +560,13 @@ export function loadLanguage(value){
 }
 export function translateText(text,lang='en'){
  const source=String(text).trim();
- const revised=learningCopy(source,lang)||revisedSiteCopy[source]?.[lang];
+ if(source==='Privacy & local storage'&&privacyNotices[lang])return privacyNotices[lang].linkTitle;
+ if(source==='Back to Top'&&privacyNotices[lang])return privacyNotices[lang].top;
+ if(lang!=='en'&&source.startsWith('← '))return '← '+translateText(source.slice(2),lang);
+ if(lang!=='en'&&source.startsWith('Play this situation: '))return translateText('Play this situation',lang)+': '+translateText(source.slice('Play this situation: '.length),lang);
+ const revised=learningCopy(source,lang)||discriminationLabels[source]?.[lang]||revisedSiteCopy[source]?.[lang];
  if(revised)return revised;
- if(lang==='ga')return translateIrishText(text,lang);
+ if(lang==='ga')return discriminationIrish[sourceIds.get(source)]||translateIrishText(text,lang);
  if(lang==='en'||!packs.has(lang))return text;
  const original=String(text),s=original.trim(),pack=packs.get(lang);
  // The compact perspective CTA is translated directly without changing the

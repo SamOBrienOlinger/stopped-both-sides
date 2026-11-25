@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=final-touches-20261125';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=site-repairs-20261125';
 
 const entrypoints=['./','garda/'];
 const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};

@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
-import {decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 
 for(const [path,role] of [['./','public'],['garda/','garda']]){
  test(`${role}: keyword search opens from the requested navbar position, handles no results and preserves an answered game`,async({page})=>{
@@ -79,3 +79,134 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   }
  });
 }
+
+for(const role of ['public','garda']){
+ test(`${role}: a search activated before startup opens once and works on the privacy notice`,async({page})=>{
+  const path=role==='garda'?'garda/':'./';
+  await page.setViewportSize({width:1440,height:900});
+  let release;
+  const hold=new Promise(resolve=>{release=resolve;});
+  await page.route(/\/app\.mjs(?:\?|$)/,async route=>{await hold;await route.continue();});
+  await page.goto(path+'?lang=fr#play',{waitUntil:'commit'});
+  const trigger=page.locator('#site-search-trigger');
+  try{
+   await trigger.click();
+   await expect(page.locator('html')).toHaveAttribute('data-search-pending','');
+  }finally{release();}
+  const input=page.locator('#site-search-input');
+  await expect(input).toBeFocused();
+  await input.fill('Privacy & local storage');
+  await page.locator('.site-search-result[href*="privacy.html"]').click();
+  await expect(page).toHaveURL(new RegExp('privacy\\.html\\?perspective='+role+'&lang=fr'));
+  await trigger.click();
+  await expect(input).toBeFocused();
+  await expect(page.locator('#site-search-dialog')).toHaveAttribute('lang','fr');
+  await input.fill('legitimate interest in responding');
+  await expect(page.locator('.site-search-result[href*="privacy.html"]')).toBeVisible();
+  await input.fill('Am I attending voluntarily, and can I leave?');
+  await page.locator('.site-search-result[href*="#scenario/street"]').first().click();
+  await expect(page).toHaveURL(/\?lang=fr#scenario\/street$/);
+  await expect(page.locator('html')).toHaveAttribute('lang','fr');
+ });
+}
+
+test('Search exposes all results and opens the matching support card across perspectives',async({page})=>{
+ await page.goto('garda/?lang=en#play');
+ await openNavigation(page);
+ await page.locator('#site-search-trigger').click();
+ const input=page.locator('#site-search-input');
+ await input.fill('Garda');
+ const list=page.locator('#site-search-results');
+ await expect(list.locator('li')).toHaveCount(20);
+ const more=page.locator('#site-search-more');
+ await more.click();
+ await expect(list.locator('li')).toHaveCount(40);
+ await expect(list.locator('.site-search-result').nth(20)).toBeFocused();
+ await input.fill('FLAC');
+ await expect(more).toBeHidden();
+ await list.locator('a[href*="#rights/support/advice"]').click();
+ const card=page.locator('.support-card[data-support="advice"]');
+ await expect(card).toBeInViewport();
+ await expect(card).toBeFocused();
+});
+
+test('The complete privacy notice, links and site search follow all nine languages from both perspectives',async({page})=>{
+ test.setTimeout(150000);
+ const {privacyNotices}=await import('../../locales/privacy-notice.mjs');
+ await page.setViewportSize({width:390,height:844});
+ for(const role of ['public','garda'])for(const language of ['en',...Object.keys(privacyNotices)]){
+  await page.goto('privacy.html?perspective='+role+'&lang='+language);
+  await expect(page.locator('#site-search-trigger')).not.toHaveAttribute('onclick',/./);
+  await expect(page.locator('html')).toHaveAttribute('lang',language==='en'?'en-IE':language);
+  await expect(page.locator('html')).toHaveAttribute('dir',language==='ar'?'rtl':'ltr');
+  const copy=await page.locator('[data-privacy-copy]').evaluateAll(elements=>Object.fromEntries(elements.map(el=>[el.dataset.privacyCopy,el.textContent])));
+  expect(Object.keys(copy)).toHaveLength(17);
+  const notice=privacyNotices[language];
+  if(notice){
+   for(const [key,text] of Object.entries(copy))expect(text).toBe(notice[key].replaceAll('[[','').replaceAll(']]',''));
+   await expect(page.locator('[data-back-to-top]')).toHaveText(notice.top);
+   await expect(page).toHaveTitle(notice.privacy+' | Stopped: Both Sides');
+  }
+  const fits=await page.evaluate(()=>{
+   document.documentElement.style.fontSize='200%';
+   const fits=document.documentElement.scrollWidth<=document.documentElement.clientWidth+2;
+   document.documentElement.style.removeProperty('font-size');
+   return fits;
+  });
+  expect(fits,role+' '+language+' privacy at 200%').toBe(true);
+  const destinations=await page.locator('main a').evaluateAll(links=>links.map(link=>link.href));
+  expect(destinations.filter(href=>new URL(href).searchParams.get('lang')===language)).toHaveLength(6);
+  expect(destinations).toContain('mailto:samobrienolinger@gmail.com');
+  expect(destinations).toContain('https://www.dataprotection.ie/');
+  expect(destinations).toContain('https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement');
+  await page.locator('#site-search-trigger').click();
+  await page.locator('#site-search-input').fill(copy.transfer.slice(0,70));
+  await expect(page.locator('.site-search-result[href*="privacy.html"]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.locator('[data-privacy-copy="returnLinks"] a').nth(role==='public'?0:1).click();
+  await expect(page.locator('html')).toHaveAttribute('data-perspective',role);
+  await expect(page).toHaveURL(new RegExp('lang='+language));
+  if(notice)await expect(page.locator('[data-privacy-link]')).toHaveText(notice.linkTitle);
+ }
+});
+
+test('A first click on the loading privacy notice opens search after the requested language is ready',async({page})=>{
+ let release;
+ const hold=new Promise(resolve=>{release=resolve;});
+ await page.route(/\/privacy-search\.mjs(?:\?|$)/,async route=>{await hold;await route.continue();});
+ await page.goto('privacy.html?lang=ar&perspective=garda',{waitUntil:'commit'});
+ try{
+  await page.locator('#site-search-trigger').click();
+  await expect(page.locator('html')).toHaveAttribute('data-search-pending','');
+ }finally{release();}
+ await expect(page.locator('#site-search-input')).toBeFocused();
+ await expect(page.locator('#site-search-dialog')).toHaveAttribute('dir','rtl');
+ await expect(page.locator('main h1')).toHaveText('تعلّمك ومعلوماتك');
+});
+
+test.describe('Privacy without JavaScript',()=>{
+ test.use({javaScriptEnabled:false});
+ test('the original English notice and its contact, progress and regulator links remain available',async({page})=>{
+  await page.goto('privacy.html?lang=ar&perspective=garda');
+  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
+  await expect(page.locator('main h1')).toHaveText('Your learning and your information');
+  await expect(page.locator('main h2')).toHaveCount(4);
+  await expect(page.locator('main a[href="garda/#progress"]')).toBeVisible();
+  await expect(page.locator('main a[href="https://www.dataprotection.ie/"]')).toBeVisible();
+ });
+});
+
+test('Changing the reading language keeps the rebuilt search button and privacy link usable',async({page})=>{
+ await page.goto('?lang=en#play');
+ await openNavigation(page);
+ await page.locator('#language-settings-trigger').click();
+ await page.locator('#reading-language').selectOption('fr');
+ await page.locator('#reading-form [type="submit"]').click();
+ await expect(page.locator('html')).toHaveAttribute('lang','fr');
+ await openNavigation(page);
+ await page.locator('#site-search-trigger').click();
+ await expect(page.locator('#site-search-input')).toBeFocused();
+ await page.locator('#site-search-input').fill('Confidentialité et stockage local');
+ await page.locator('.site-search-result[href*="privacy.html"]').click();
+ await expect(page.locator('main h1')).toHaveText('Votre apprentissage et vos informations');
+});

@@ -47,7 +47,12 @@ for(const path of ['./','garda/']){
     })).toBe(true);
    }
    await page.goto(path+'?lang='+lang+'#about');
-   await expect(page.locator('.about-opening .about-overview p')).toHaveCount(3);
+   const paragraphs=page.locator('.about-opening .about-overview p');
+   await expect(paragraphs).toHaveCount(3);
+   if(lang!=='en'){
+    for(const [index,english] of overview.entries())await expect(paragraphs.nth(index)).not.toHaveText(english);
+    await expect.poll(()=>paragraphs.first().evaluate(p=>p.closest('[lang]').lang)).toBe(lang);
+   }
    await page.setViewportSize({width:320,height:800});
    await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);
   }

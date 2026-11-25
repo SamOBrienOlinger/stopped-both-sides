@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {decodeState,startEncounter,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {decodeState,startEncounter,stateHash} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 const cast={public:'public-6',garda:'garda-9'};
 for(const role of ['public','garda'])test(`${role}: the poster loads the approved GPO background at mobile and desktop sizes`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});

@@ -1,8 +1,8 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
 import {expectStaticHeadings} from './static-headings.mjs';
-import {startEncounter,answer,continueEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
-import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=nia-public-20261123';
+import {startEncounter,answer,continueEncounter} from '../../encounters/engine.mjs?v=site-repairs-20261125';
+import {emptyProgress,recordProgress,packProgress,progressStorageKey} from '../../encounters/progress.mjs?v=site-repairs-20261125';
 
 const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 const cast={public:'public-2',garda:'garda-5'};

@@ -1,22 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {siteRole,siteBase} from './site-fixture.mjs';
-import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=final-touches-20261125';
+import {encounters} from '../encounters/catalog.mjs?v=site-repairs-20261125';
+import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
-import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
-import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=site-repairs-20261125';
 
 test('Irish content covers every stage of the original shared situations and both roles without altering choice order or route identifiers',()=>{
  let stages=0;
- const original=Object.values(encounters).filter(encounter=>!encounter.language);
+ const original=Object.values(encounters).filter(encounter=>encounter.originalId);
  assert.deepEqual(Object.keys(gaContent),original.map(encounter=>encounter.id));
  for(const e of original){
   const ga=gaContent[e.id];assert.ok(ga.title&&ga.description);assert.deepEqual(Object.keys(ga.nodes),Object.keys(e.nodes));
   for(const node of Object.values(e.nodes)){stages++;const translated=ga.nodes[node.id];assert.ok(translated.title&&translated.scene);
    assert.notEqual(translateText(node.scene,'ga'),node.scene);
    for(const role of ['public','garda']){const v=node.views[role],a=translated[role];assert.equal(a.length,2+2*v.choices.length);assert.ok(a.every(s=>typeof s==='string'&&s.trim().length>5));
-    for(const s of [v.prompt,v.lesson,...v.choices.flatMap(c=>[c.text,c.feedback])])assert.notEqual(translateText(s,'ga'),s,`${e.id}/${node.id}: ${s}`);
+    for(const s of [v.prompt,v.lesson,v.context,v.phrase,...v.choices.flatMap(c=>[c.text,c.feedback])].filter(Boolean))assert.notEqual(translateText(s,'ga'),s,`${e.id}/${node.id}: ${s}`);
    }
   }
  }
@@ -66,6 +66,25 @@ test('Applying Irish in a live situation retains both answers, stage, role and s
 test('Choosing Irish during original play transfers the exact active choice into the matching shared situation',()=>{
  settings('en');route('#scenario/street');action('choose',{index:'1'});settings('ga');const s=current();assert.equal(s.id,role+'-street');assert.equal(s.role,role);assert.equal(document.documentElement.attrs['data-perspective'],role);assert.equal(s.nodeId,'street-start');assert.equal(s.answers[role],1);assert.match(main.innerHTML,/SCÉAL ROINNTE/);
 });
-test('Irish reference navigation marks English content and returns without losing the shared state; progress and clear controls translate',()=>{
- const before=current(),hash=location.hash;route(role==='public'?'#rights':'#evidence');assert.equal(main.attrs.lang,'en-IE');assert.match(main.innerHTML,/lang="ga"/);route(hash);assert.equal(document.documentElement.attrs['data-perspective'],before.role);assert.deepEqual(current(),before);route('#progress');assert.match(main.innerHTML,/Scóir agus dul chun cinn/);action('paired-clear');assert.match(main.innerHTML,/Coinnigh dul chun cinn/);assert.equal(focused.at(-1),'[data-action="paired-clear-confirm"]');action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));route('#accessibility');assert.match(main.innerHTML,/WCAG 2.2 Level AA/);assert.match(main.innerHTML,/Manual browser zoom and reflow checks/);
+test('Irish reference navigation translates learning text, preserves citations and returns to the saved situation',()=>{
+ const before=current(),hash=location.hash;
+ route(role==='public'?'#rights':'#evidence');
+ assert.equal(main.attrs.lang,'ga');
+ assert.match(main.innerHTML,role==='public'?/Comhairle, gearáin agus maoirsiú póilíneachta/:/Ábhar an athbhreithnithe/);
+ assert.match(main.innerHTML,/lang="en-IE" data-no-translate/);
+ route('#about');
+ assert.match(main.innerHTML,role==='public'?/Foghlaim trí chásanna\./:/Scrúdaigh an cinneadh\./);
+ route('#accessibility');
+ assert.match(main.innerHTML,/Leibhéal AA de WCAG 2.2/);
+ assert.match(main.innerHTML,/Ní dhearnadh iniúchadh neamhspleách inrochtaineachta/);
+ route(hash);
+ assert.equal(document.documentElement.attrs['data-perspective'],before.role);
+ assert.deepEqual(current(),before);
+ route('#progress');
+ assert.match(main.innerHTML,/Scóir agus dul chun cinn/);
+ action('paired-clear');
+ assert.match(main.innerHTML,/Coinnigh dul chun cinn/);
+ assert.equal(focused.at(-1),'[data-action="paired-clear-confirm"]');
+ action('paired-clear-cancel');
+ assert.ok(memory.has(siteStorageKey));
 });

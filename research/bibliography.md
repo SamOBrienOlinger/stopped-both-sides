@@ -18,7 +18,7 @@
 
 ## Irish and European community experience
 
-- **European Union Agency for Fundamental Rights (2024).** [Addressing racism in policing](https://fra.europa.eu/en/publication/2024/addressing-racism-policing). *FRA report*. Institutional research; European Union. Review access: Official overview reviewed. Source key: `fraRacism`.
+- **European Union Agency for Fundamental Rights (2024).** [Addressing racism in policing](https://fra.europa.eu/sites/default/files/fra_uploads/fra-2024-addressing-racism-in-policing_en.pdf). *FRA report*. Institutional research; European Union. Review access: Official overview reviewed. Source key: `fraRacism`.
 
 - **Lucy Michael, Shane O Curry, Rodrigo Souza Silva, Nedson N’goma, Maria Elena Costa Sa, Daniel Reynolds (2025).** [Experiences of Policing amongst Brazilians and People of African Descent in Ireland](https://www.policingauthority.ie/assets/uploads/documents/Policing_of_Africans_and_Brazilians_in_Ireland_Mar25.pdf). *Research report*. Community research; Republic of Ireland. Review access: Executive summary, methodology and selected findings reviewed. Source key: `pabi`.
 
@@ -26,9 +26,9 @@
 
 - **Sam O’Brien-Olinger (2016).** [Police, Race and Culture in the ‘New Ireland’: An Ethnography](https://link.springer.com/book/10.1057/9781137490452). *Palgrave Macmillan*. Academic book; Republic of Ireland. Review access: Publisher description and bibliographic record; full book not reviewed. Source key: `obrien`.
 
-- **Aogán Mulcahy (2012).** [“Alright in their own place”: Policing and the spatial regulation of Irish Travellers](https://journals.sagepub.com/doi/10.1177/1748895811431849). *Criminology & Criminal Justice*. Academic article; Republic of Ireland. Review access: Publisher abstract reviewed. Source key: `mulcahy`.
+- **Aogán Mulcahy (2012).** [“Alright in their own place”: Policing and the spatial regulation of Irish Travellers](https://www.researchgate.net/publication/254084298_%27Alright_in_their_own_place%27_Policing_and_the_spatial_regulation_of_Irish_Travellers). *Criminology & Criminal Justice*. Academic article; Republic of Ireland. Review access: Publisher abstract reviewed. Source key: `mulcahy`.
 
-- **Sindy Joyce, Olive O’Reilly, Margaret O’Brien, David Joyce, Jennifer Schweppe and Amanda Haynes (2022).** [Irish Travellers’ Access to Justice](https://researchrepository.ul.ie/entities/publication/1e855367-4690-4aba-a684-43fa71281b79). *University of Limerick research report*. Community research; Republic of Ireland. Review access: Repository and university project account reviewed. Source key: `travellerJustice`.
+- **Sindy Joyce, Olive O’Reilly, Margaret O’Brien, David Joyce, Jennifer Schweppe and Amanda Haynes (2022).** [Irish Travellers’ Access to Justice](https://www.drugsandalcohol.ie/36509/). *University of Limerick research report*. Community research; Republic of Ireland. Review access: Repository and university project account reviewed. Source key: `travellerJustice`.
 
 - **Leo Curran, Dan Allen and Julie Feather (2024 online / 2025 issue).** [Bridging divides to build connections: A scoping review of police practices, behaviours and actions with Roma and Traveller communities](https://research.edgehill.ac.uk/en/publications/bridging-divides-to-build-connections-a-scoping-review-of-police-). *The Police Journal*. Academic review; European contexts. Review access: Repository abstract and publication record reviewed. Source key: `curran`.
 
@@ -46,17 +46,17 @@
 
 - **Raymond S. Nickerson (1998).** [Confirmation Bias: A Ubiquitous Phenomenon in Many Guises](https://pages.ucsd.edu/~mckenzie/nickersonConfirmationBias.pdf). *Review of General Psychology*. Academic review; General psychological research. Review access: Review abstract and opening discussion reviewed. Source key: `nickerson`.
 
-- **Phillip Atiba Goff, Matthew Christian Jackson, Brooke Allison Lewis Di Leone, Carmen Marie Culotta and Natalie Ann DiTomasso (2014).** [The essence of innocence: Consequences of dehumanizing Black children](https://pubmed.ncbi.nlm.nih.gov/24564373/). *Journal of Personality and Social Psychology*. Academic article; United States. Review access: Primary abstract reviewed. Source key: `goff`.
+- **Phillip Atiba Goff, Matthew Christian Jackson, Brooke Allison Lewis Di Leone, Carmen Marie Culotta and Natalie Ann DiTomasso (2014).** [The essence of innocence: Consequences of dehumanizing Black children](https://europepmc.org/article/MED/24564373). *Journal of Personality and Social Psychology*. Academic article; United States. Review access: Primary abstract reviewed. Source key: `goff`.
 
 - **Laura Crane, Katie L. Maras, Tara Hawken, Siobhan Mulcahy and Amina Memon (2016).** [Experiences of Autism Spectrum Disorder and Policing in England and Wales: Surveying Police and the Autism Community](https://openaccess.city.ac.uk/id/eprint/13406/). *Journal of Autism and Developmental Disorders*. Academic article; England and Wales. Review access: University-repository abstract reviewed. Source key: `crane`.
 
 ## Patterns, outcomes and measurement
 
-- **Aline Ara Santos Carvalho, Táhcita Medrado Mizael and Angelo A. S. Sampaio (2021 online / 2022 issue).** [Racial Prejudice and Police Stops: A Systematic Review of the Empirical Literature](https://pmc.ncbi.nlm.nih.gov/articles/PMC9744975/). *Behavior Analysis in Practice*. Academic review; United States, England, Wales and Netherlands. Review access: Full-text abstract and scope reviewed. Source key: `carvalho`.
+- **Aline Ara Santos Carvalho, Táhcita Medrado Mizael and Angelo A. S. Sampaio (2021 online / 2022 issue).** [Racial Prejudice and Police Stops: A Systematic Review of the Empirical Literature](https://europepmc.org/articles/PMC9744975). *Behavior Analysis in Practice*. Academic review; United States, England, Wales and Netherlands. Review access: Full-text abstract and scope reviewed. Source key: `carvalho`.
 
 - **Winifred Agnew-Pauley, Caitlin E. Hughes and Alex Stevens (2025).** [A realist review on the police use of stop and search powers](https://eprints.whiterose.ac.uk/id/eprint/222320/1/agnew-pauley-et-al-2025-a-realist-review-on-the-police-use-of-stop-and-search-powers.pdf). *European Journal of Criminology*. Academic review; 21 countries. Review access: Methods, synthesis and limitations reviewed. Source key: `agnew`.
 
-- **Kevin Petersen, David Weisburd, Sydney Fay, Elizabeth Eggins and Lorraine Mazerolle (2023).** [Police stops to reduce crime: A systematic review and meta-analysis](https://onlinelibrary.wiley.com/doi/10.1002/cl2.1302). *Campbell Systematic Reviews*. Academic review; Predominantly United States. Review access: Primary abstract and review scope consulted. Source key: `petersen`.
+- **Kevin Petersen, David Weisburd, Sydney Fay, Elizabeth Eggins and Lorraine Mazerolle (2023).** [Police stops to reduce crime: A systematic review and meta-analysis](https://europepmc.org/articles/PMC9831287). *Campbell Systematic Reviews*. Academic review; Predominantly United States. Review access: Primary abstract and review scope consulted. Source key: `petersen`.
 
 - **Lara Vomfell and Neil Stewart (2021).** [Officer bias, over-patrolling and ethnic disparities in stop and search](https://wrap.warwick.ac.uk/id/eprint/145451/). *Nature Human Behaviour*. Academic article; One English police force. Review access: Author-repository abstract reviewed. Source key: `vomfell`.
 
@@ -64,23 +64,23 @@
 
 - **Dean Knox, Will Lowe and Jonathan Mummolo (2020).** [Administrative Records Mask Racially Biased Policing](https://jmummolo.scholar.princeton.edu/publications/bias-built-how-administrative-records-mask-racially-biased-policing). *American Political Science Review*. Academic article; Causal methods / United States. Review access: Author’s publication summary reviewed. Source key: `knox`.
 
-- **Greg Tansill and Justice Tankebe (2026).** [Procedural justice in police stop and search encounters: A comparative analysis of crime contexts and police versus public assessments](https://journals.sagepub.com/doi/10.1177/17488958261443410). *Criminology & Criminal Justice*. Academic article; England. Review access: Publisher abstract and introduction reviewed. Source key: `tansill`.
+- **Greg Tansill and Justice Tankebe (2026).** [Procedural justice in police stop and search encounters: A comparative analysis of crime contexts and police versus public assessments](https://www.repository.cam.ac.uk/handle/1810/406460). *Criminology & Criminal Justice*. Academic article; England. Review access: Publisher abstract and introduction reviewed. Source key: `tansill`.
 
 ## What training can and cannot change
 
 - **Joel Miller, Paul Quinton, Banos Alexandrou and Daniel Packham (2020).** [Can police training reduce ethnic/racial disparities in stop and search? Evidence from a multisite UK trial](https://www.researchwithrutgers.org/en/publications/can-police-training-reduce-ethnicracial-disparities-in-stop-and-s/). *Criminology & Public Policy*. Academic trial; Six agencies in England. Review access: University-repository abstract reviewed. Source key: `miller`.
 
-- **Robert E. Worden and colleagues (2024).** [Implicit bias training for police: Evaluating impacts on enforcement disparities](https://pubmed.ncbi.nlm.nih.gov/39133609/). *Law and Human Behavior*. Academic trial; New York City, United States. Review access: Primary abstract reviewed; manuscript access restricted. Source key: `worden`.
+- **Robert E. Worden and colleagues (2024).** [Implicit bias training for police: Evaluating impacts on enforcement disparities](https://scholarsarchive.library.albany.edu/psychology_fac_scholar/50/). *Law and Human Behavior*. Academic trial; New York City, United States. Review access: Primary abstract reviewed. Source key: `worden`.
 
-- **Calvin K. Lai and Jaclyn A. Lisnek (2023).** [The Impact of Implicit-Bias-Oriented Diversity Training on Police Officers’ Beliefs, Motivations, and Actions](https://journals.sagepub.com/doi/10.1177/09567976221150617). *Psychological Science*. Academic article; United States police. Review access: Publisher abstract reviewed. Source key: `lai`.
+- **Calvin K. Lai and Jaclyn A. Lisnek (2023).** [The Impact of Implicit-Bias-Oriented Diversity Training on Police Officers’ Beliefs, Motivations, and Actions](https://www.psychologicalscience.org/journals/psychological-science/09567976221150617/). *Psychological Science*. Academic article; United States police. Review access: Publisher abstract reviewed. Source key: `lai`.
 
 - **Jack Glaser (2024).** [Disrupting the Effects of Implicit Bias: The Case of Discretion & Policing](https://www.amacad.org/publication/daedalus/disrupting-effects-implicit-bias-case-discretion-policing). *Dædalus*. Academic synthesis; Predominantly United States. Review access: Synthesis and discretion discussion reviewed. Source key: `glaser`.
 
-- **Patrick S. Forscher and colleagues (2019).** [A meta-analysis of procedures to change implicit measures](https://pubmed.ncbi.nlm.nih.gov/31192631/). *Journal of Personality and Social Psychology*. Academic review; General psychological research. Review access: Primary abstract reviewed. Source key: `forscher`.
+- **Patrick S. Forscher and colleagues (2019).** [A meta-analysis of procedures to change implicit measures](https://devinelab.psych.wisc.edu/wp-content/uploads/sites/1383/2020/04/A-Meta-Analysis-of-Procedures-to-Change-Implicit-Measures-1.pdf). *Journal of Personality and Social Psychology*. Academic review; General psychological research. Review access: Primary abstract reviewed. Source key: `forscher`.
 
-- **David Weisburd, Cody W. Telep, Heather Vovak, Taryn Zastrow, Anthony A. Braga and Brandon S. Turchan (2022).** [Reforming the police through procedural justice training: A multicity randomized trial at crime hot spots](https://www.pnas.org/doi/10.1073/pnas.2118780119). *Proceedings of the National Academy of Sciences*. Academic trial; Three United States cities. Review access: Primary abstract and research-team summary reviewed. Source key: `weisburd`.
+- **David Weisburd, Cody W. Telep, Heather Vovak, Taryn Zastrow, Anthony A. Braga and Brandon S. Turchan (2022).** [Reforming the police through procedural justice training: A multicity randomized trial at crime hot spots](https://crimejusticelab.org/publication/reforming-the-police-through-procedural-justice-training-a-multicity-randomized-trial-at-crime-hot-spots/). *Proceedings of the National Academy of Sciences*. Academic trial; Three United States cities. Review access: Primary abstract and research-team summary reviewed. Source key: `weisburd`.
 
-- **Isabela Merla, Fiona Gabbert and Adrian J. Scott (2025).** [Interventions to Reduce Implicit Bias in High-Stakes Professional Judgements: A Systematic Review](https://pubmed.ncbi.nlm.nih.gov/41301393/). *Behavioral Sciences*. Academic review; Multiple professions and jurisdictions. Review access: Primary abstract reviewed. Source key: `merla`.
+- **Isabela Merla, Fiona Gabbert and Adrian J. Scott (2025).** [Interventions to Reduce Implicit Bias in High-Stakes Professional Judgements: A Systematic Review](https://www.mdpi.com/2076-328X/15/11/1592). *Behavioral Sciences*. Academic review; Multiple professions and jurisdictions. Review access: Primary abstract reviewed. Source key: `merla`.
 
 - **Pieter Wouters, Christof van Nimwegen, Herre van Oostendorp and Erik D. van der Spek (2013).** [A meta-analysis of the cognitive and motivational effects of serious games](https://research.tue.nl/en/publications/a-meta-analysis-of-the-cognitive-and-motivational-effects-of-seri/). *Journal of Educational Psychology*. Academic review; Multiple educational settings. Review access: University-repository abstract and results reviewed. Source key: `wouters`.
 

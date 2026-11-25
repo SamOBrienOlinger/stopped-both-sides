@@ -1,5 +1,5 @@
-import {encounters,roles} from './catalog.mjs?v=link-audit-20261123';
-import {discriminationEncounters} from './discrimination.mjs?v=situation-locations-20261122';
+import {encounters,roles} from './catalog.mjs?v=site-repairs-20261125';
+import {discriminationEncounters} from './discrimination.mjs?v=site-repairs-20261125';
 
 // Explicit teaching transitions: these are variations, not consequences of a choice.
 export const variations={

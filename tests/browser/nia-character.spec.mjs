@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {openNavigation} from './navigation.mjs';
 
 const imageSource=/\/assets\/characters\/nia-public-20261123\.png(?:\?|$)/;

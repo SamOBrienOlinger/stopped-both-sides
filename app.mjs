@@ -1,22 +1,22 @@
-import {communitySources,communitySourceIds} from "./learning/community-resources.mjs?v=community-resources-20261122";
-import {createSiteSearch} from "./search/site-search.mjs?v=final-touches-20261125";
+import {sourceTopics,rightsTopics} from './learning/rights-topics.mjs?v=site-repairs-20261125';
+import {communitySources} from "./learning/community-resources.mjs?v=site-repairs-20261125";
+import {createSiteSearch} from "./search/site-search.mjs?v=site-repairs-20261125";
 import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=mobile-flow-20261123b';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=final-touches-20261125';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=site-repairs-20261125';
 import {createLayout} from './accessibility/layout.mjs?v=poster-landing-20261125';
-import {supportSection,supportRecap} from './learning/support.mjs?v=human-civil-rights-20261122';
-import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=contributors-expanded-20261122';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=final-touches-20261125';
-import {createMotion} from './accessibility/motion.mjs?v=final-touches-20261125';
-import {createEncounterMode} from './encounters/ui.mjs?v=final-touches-20261125';
-import {scenarios,scenarioById,sources} from './data.mjs?v=pabi-privacy-20261122';
-import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=pabi-privacy-20261122';
+import {supportSection,supportRecap} from './learning/support.mjs?v=site-repairs-20261125';
+import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=site-repairs-20261125';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=site-repairs-20261125';
+import {createMotion} from './accessibility/motion.mjs?v=site-repairs-20261125';
+import {createEncounterMode} from './encounters/ui.mjs?v=site-repairs-20261125';
+import {scenarios,scenarioById,sources} from './data.mjs?v=site-repairs-20261125';
+import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=site-repairs-20261125';
 const main=document.querySelector('#main');
 let session=null;
 const paired=createEncounterMode({siteRole:'public',main,practiceScenarios:scenarios,getLanguage:()=>reading.language,rerender:(focus=true)=>render(focus),getOriginalSession:()=>session,resetOriginalSession:()=>{session=null;},announce:message=>reading.announce(message)});
 const layout=createLayout({main});
 const motion=createMotion({main,getLegacyState:()=>session});
 const reading=createReadingTools({main,siteRole:'public',rerender:(focus=true)=>render(focus),transformContent:(html,hash)=>paired.personalize(html,hash),onRender:hash=>{layout.update(hash);motion.update(hash);},onDialogOpen:dialog=>motion.openDialog(dialog)});
-createSiteSearch({siteRole:"public",getLanguage:()=>reading.language,getRole:()=>perspectiveForRoute(location.hash,"public"),startSituation:(id,role)=>paired.startSituation(id,role)});
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sourceLinks=ids=>`<details class="source-details"><summary>Read the sources</summary><ul lang="en-IE" data-no-translate>${[...new Set(ids)].map(id=>`<li><a href="${esc(sources[id].url)}" target="_blank" rel="noopener noreferrer">${esc(sources[id].title)} ↗</a></li>`).join('')}</ul></details>`;
 const focusMain=(focus=true)=>focusPageStart(main,{focus});
@@ -29,15 +29,13 @@ function game(){
     </div><details class="lesson"><summary>Why this matters</summary><p>${esc(node.lesson)}</p></details><div class="phrase"><span>${s.id==='fair-treatment'?'SOMETHING TO REMEMBER':'WORDS YOU COULD USE'}</span>${esc(node.phrase)}</div>${sourceLinks(node.sources)}</section>`:''}${termsInDecision('public-'+s.id)}</section></div>${paired.legacyPanel(session)}<div class="topline game-note">${session.history.length?'<button class="text-button" data-action="back">← Revisit the previous decision</button>':'<span>No timer. Take the time you need.</span>'}<a href="#rights">Human and Civil Rights & sources</a></div>`;
 }
 function summary(){const s=scenarioById[session.scenarioId],items=recap(session),review=items.filter(x=>x.choice.review).length;return `<div class="topline flow-topline">${paired.returnLink(null,'practice',session)}<span>${esc(s.title)}</span></div><div class="summary-heading"><div class="summary-icon" aria-hidden="true">✓</div><p class="eyebrow">YOUR LEARNING RECAP</p><h1>More informed.<br>More questions you can ask.</h1><p>You explored ${items.length} decisions with ${esc(s.person.split(',')[0])}.${review?` There ${review===1?'is 1 point':`are ${review} points`} to revisit below.`:' Here are the key points from your path.'}</p><p class="small-note">This is a record of learning, not a prediction of police conduct or a judgment on someone’s response under pressure.</p></div><div class="flow-recap-actions">${paired.returnLink('Choose another situation','practice',session)}</div>${paired.legacyBar(session)}${recapPractice('public-'+s.id,'public',items.at(-1).choice.text,'practice')}${supportRecap()}<div class="summary-grid"><ol class="summary-list">${items.map(({node,choice},i)=>`<li class="summary-item">${paired.legacyScene(session,i)}${choice.review?'<span class="badge">Worth revisiting</span>':''}<h2>${i+1}. ${esc(node.title)}</h2><p class="chosen">You chose: ${esc(choice.text)}</p><p>${esc(node.lesson)}</p>${sourceLinks(node.sources)}</li>`).join('')}</ol><aside class="summary-aside"><h2>Keep exploring</h2><p>A different choice can raise a different question. Revisit this situation or meet another character.</p><button class="primary secondary" data-action="start" data-id="${s.id}">Revisit this situation</button><a href="#rights" class="primary secondary">Human and Civil Rights & sources</a>${discussionLink('public-'+s.id,'public')}<p class="small-note">For a real incident, use current sources and speak with a solicitor about your circumstances.</p></aside></div>`;}
-const sourceTopics=[
- {id:'street',title:'Street stops and questions',ids:['questioning','publicOrder','iccl'],situation:'public-street'},
- {id:'search',title:'Searches',ids:['drugs','obstruction'],situation:'public-search'},
- {id:'custody',title:'Arrest and custody',ids:['legalAid','arrest','silence','interviews','custody','statements','dpp','eu'],situation:'public-custody'},
- {id:'young',title:'Under 18s',ids:['youth','childInterview','childSolicitor'],situation:'public-young-person'},
- {id:'complaints',title:'Complaints',ids:['fiosru','ireport'],situation:'public-fair-treatment'},
- {id:'community',title:'Community experiences',ids:['inarReport','pabi',...communitySourceIds],situation:'public-fair-treatment'}
-];
-const rightsTopics=[{id:'support',title:'Advice &amp; support'},...sourceTopics];
+function rightsTarget(hash){
+ if(!hash.startsWith('rights/'))return null;
+ const path=hash.slice(7);
+ if(rightsTopics.some(topic=>topic.id===path))return document.getElementById('rights-'+path);
+ if(path.startsWith('support/'))return document.getElementById('rights-support-'+path.slice(8));
+ return null;
+}
 function sourceTopicsHTML(){return `${sourceTopics.map(t=>`<section class="source-topic" id="rights-${t.id}" tabindex="-1"><h2>${t.title}</h2><div class="sources-grid">${t.ids.map(id=>{const s=sources[id]||communitySources[id];return `<a class="source-card" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer"><strong lang="en-IE" data-no-translate>${esc(s.title)} ↗</strong><span>${esc(s.note)}</span></a>`;}).join('')}</div><button class="primary secondary" data-action="paired-start" data-id="${t.situation}" data-role="public">Practise a related situation</button></section>`).join('')}`;}
 function rights(){return `<div class="content-page"><p class="eyebrow">READ. CHECK. ASK FOR ADVICE.</p><h1>Human and Civil Rights & sources</h1><p class="page-lead">The source behind a learning point is part of the resource. Use these resources to check the detail and find appropriate support.</p>${paired.resumeLink()}<nav class="source-topic-nav" aria-label="Human and Civil Rights topics">${rightsTopics.map(t=>`<a href="#rights/${t.id}">${t.title}</a>`).join('')}</nav>${session?`<p><a class="primary secondary" href="#scenario/${session.scenarioId}">${session.complete?'Back to your recap':'Return to your situation'} →</a></p>`:''}${supportSection()}<section class="info-block important"><h2>Start with the right question</h2><ul><li><strong>During an encounter:</strong> “Why am I being stopped? Am I free to leave?”</li><li><strong>If a requirement is unclear:</strong> “What legal power applies, and what do I have to provide?”</li><li><strong>At a station:</strong> “I want a solicitor. Please explain my rights and the help available.”</li></ul><p>These are learning prompts, not a script guaranteed to produce a particular result.</p></section>${sourceTopicsHTML()}</div>`;}
 function about(){return `<div class="content-page">${paired.aboutIntroduction({eyebrow:'ABOUT THE PROJECT',taglineLines:['Learn through situations.','Make room for lived experience.']})}<section class="info-block"><h2>How it works</h2><p>Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the human and civil rights, police powers and responsibilities involved.</p>${firstTimeGuide()}</section>${learningAbout()}${prototypeInput()}<details class="info-block privacy-disclosure"><summary>Information and privacy</summary><p>This is general educational information, not legal advice. The prototype has not been signed off by a practising solicitor. Laws, guidance and procedures can change.</p><p>The resource has no account form, analytics or complaint collection. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. You can review or clear local records under Scores & progress. Separate browsers do not automatically sync. Hosting providers may keep standard access logs; external sources have their own privacy arrangements.</p></details><a href="#encounters" class="primary">Choose a situation →</a><p class="contribution-link"><a href="https://samobrienolinger.github.io/SamOBrienOlinger/" target="_blank" rel="noopener noreferrer">Contact the project creator or contribute feedback ↗</a></p></div>`;}
@@ -56,7 +54,7 @@ function render(focus=true,{position=focus}={}){try{let hash=paired.referenceRou
     if(reading.language==='ga'){paired.transferOriginal(session,focus);if(position&&!focus)focusMain(false);return;}
     view='encounters';main.innerHTML=game();
    }
-  }else if(hash==='rights'||hash.startsWith('rights/')){view='rights';main.innerHTML=rights();}else if(hash==='about'){view='about';main.innerHTML=about();}else{main.innerHTML=paired.landing();}document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});document.title=hash.startsWith('scenario/')?`${scenarioById[session.scenarioId].title} | Stopped: Both Sides`:`${view==='play'?'Stopped: Both Sides':view==='rights'?'Human and Civil Rights & sources':'About the project'} | Stopped: Both Sides — public perspective`;paired.updateSiteLink(hash);reading.decorate(hash);if(position){const topic=hash.startsWith('rights/')&&rightsTopics.find(t=>t.id===hash.slice(7));if(topic){const element=document.getElementById('rights-'+topic.id);if(focus)element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain(focus);}}catch(error){main.innerHTML='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read <a href="https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/">Citizens Information’s guidance</a>.</p></div>';reading.decorate('error');if(position)focusMain(focus);console.error(error);}}
+  }else if(hash==='rights'||hash.startsWith('rights/')){view='rights';main.innerHTML=rights();}else if(hash==='about'){view='about';main.innerHTML=about();}else{main.innerHTML=paired.landing();}document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});document.title=hash.startsWith('scenario/')?`${scenarioById[session.scenarioId].title} | Stopped: Both Sides`:`${view==='play'?'Stopped: Both Sides':view==='rights'?'Human and Civil Rights & sources':'About the project'} | Stopped: Both Sides — public perspective`;paired.updateSiteLink(hash);reading.decorate(hash);if(position){const element=rightsTarget(hash);if(element){if(focus)element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain(focus);}}catch(error){main.innerHTML='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read <a href="https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/">Citizens Information’s guidance</a>.</p></div>';reading.decorate('error');if(position)focusMain(focus);console.error(error);}}
 main.addEventListener('click',event=>{if(paired.handleClick(event))return;const button=event.target.closest('button[data-action]');if(!button)return;switch(button.dataset.action){case 'start':paired.beginPractice(button.dataset.id);session=startSession(button.dataset.id);if(location.hash===`#scenario/${session.scenarioId}`)render();else location.hash=`scenario/${session.scenarioId}`;break;case 'choose':{const next=choose(session,Number(button.dataset.index));if(next===session)return;session=next;render(false);focusControl(document.querySelector('#feedback'));break;}case 'change':{
    if(!session||session.complete||session.selected===null)return;
    session={...session,selected:null};render(false);focusControl(document.querySelector('#choice-title'));break;
@@ -74,7 +72,6 @@ render(!reloading&&sourceLink,{position:refreshPosition||(!reloading&&sourceLink
 // Re-resolve source targets after each layout change; rendering replaces nodes.
 pageStart?.claim(()=>{
  const hash=location.hash.slice(1).split('~')[0];
- const topic=hash.startsWith('rights/')&&rightsTopics.find(item=>item.id===hash.slice(7));
- return topic?document.getElementById('rights-'+topic.id):null;
+ return rightsTarget(hash);
 });
-
+createSiteSearch({siteRole:"public",getLanguage:()=>reading.language,getRole:()=>perspectiveForRoute(location.hash,"public"),startSituation:(id,role)=>paired.startSituation(id,role)});

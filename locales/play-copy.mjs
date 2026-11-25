@@ -53,15 +53,15 @@ const labels = [
   'Explora las mismas situaciones desde la perspectiva del público y de la Garda. Elige una respuesta, lee la explicación y continúa hasta el resumen. Puedes volver a decisiones anteriores y repetir un recorrido.',
   '从公众和爱尔兰警察的视角了解相同的情境。选择回应、阅读解释并继续到回顾环节。你可以返回先前的决定并重新体验。'
  ]],
- ['Irish covers the original shared learning activity. Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese also cover individual practice and reference pages.', [
-  'Tá an bunleagan den chluiche roinnte ar fáil i nGaeilge. Tá cleachtadh aonair agus na leathanaigh thagartha ar fáil freisin i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe.',
-  'O irlandês está disponível no jogo partilhado original. O português, o árabe, o polaco, o romeno, o francês, o espanhol e o chinês simplificado também abrangem a prática individual e as páginas de referência.',
-  'تتوفر الأيرلندية في اللعبة الأصلية المشتركة. وتشمل البرتغالية والعربية والبولندية والرومانية والفرنسية والإسبانية والصينية المبسطة التدريب الفردي وصفحات المراجع أيضًا.',
-  'Język irlandzki jest dostępny w pierwotnych sytuacjach wspólnych. Portugalski, arabski, polski, rumuński, francuski, hiszpański i chiński uproszczony obejmują również ćwiczenia indywidualne i materiały źródłowe.',
-  'Irlandeza acoperă jocul comun original. Portugheza, araba, polona, româna, franceza, spaniola și chineza simplificată acoperă și exercițiile individuale și paginile de referință.',
-  'L’irlandais est disponible dans le jeu partagé d’origine. Le portugais, l’arabe, le polonais, le roumain, le français, l’espagnol et le chinois simplifié couvrent aussi les exercices individuels et les pages de référence.',
-  'El irlandés está disponible en el juego compartido original. El portugués, el árabe, el polaco, el rumano, el francés, el español y el chino simplificado también abarcan las prácticas individuales y las páginas de referencia.',
-  '爱尔兰语适用于原有的双视角情境。葡萄牙语、阿拉伯语、波兰语、罗马尼亚语、法语、西班牙语和简体中文还适用于单角色练习及参考页面。'
+ ['All nine languages cover shared situations and reference pages. Individual practice is also available in Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese.', [
+  "Tá na cásanna roinnte agus na leathanaigh thagartha ar fáil sna naoi dteanga. Tá cleachtadh aonair ar fáil freisin i bPortaingéilis, Araibis, Polainnis, Rómáinis, Fraincis, Spáinnis agus Sínis shimplithe.",
+  "As situações partilhadas e as páginas de referência estão disponíveis nas nove línguas. A prática individual também está disponível em português, árabe, polaco, romeno, francês, espanhol e chinês simplificado.",
+  "تتوفر المواقف المشتركة وصفحات المراجع باللغات التسع جميعها. ويتوفر التدريب الفردي أيضًا بالبرتغالية والعربية والبولندية والرومانية والفرنسية والإسبانية والصينية المبسطة.",
+  "Wspólne sytuacje i strony z materiałami są dostępne we wszystkich dziewięciu językach. Ćwiczenia indywidualne są także dostępne po portugalsku, arabsku, polsku, rumuńsku, francusku, hiszpańsku i w uproszczonym chińskim.",
+  "Situațiile comune și paginile de referință sunt disponibile în toate cele nouă limbi. Exercițiile individuale sunt disponibile și în portugheză, arabă, polonă, română, franceză, spaniolă și chineză simplificată.",
+  "Les situations partagées et les pages de référence sont disponibles dans les neuf langues. La pratique individuelle est aussi proposée en portugais, arabe, polonais, roumain, français, espagnol et chinois simplifié.",
+  "Las situaciones compartidas y las páginas de referencia están disponibles en los nueve idiomas. La práctica individual también está disponible en portugués, árabe, polaco, rumano, francés, español y chino simplificado.",
+  "所有九种语言均提供双视角情境和参考页面。单角色练习还支持葡萄牙语、阿拉伯语、波兰语、罗马尼亚语、法语、西班牙语和简体中文。"
  ]],
  ['Choosing Irish during individual practice opens the matching shared situation. Published source titles and authors retain their original form.', [
   'Má roghnaíonn tú Gaeilge le linn cleachtadh aonair, osclófar an cás roinnte comhfhreagrach. Coinnítear teidil agus údair na bhfoinsí foilsithe ina mbunfhoirm.',
@@ -693,15 +693,15 @@ const additionalContributorLabels = [
 const communityResourceCopy = [
  ['Complaints', ['Gearáin','Reclamações','الشكاوى','Skargi','Plângeri','Réclamations','Reclamaciones','投诉']],
  ['Community experiences', ['Eispéiris phobail','Experiências das comunidades','تجارب المجتمعات','Doświadczenia społeczności','Experiențele comunităților','Expériences des communautés','Experiencias de las comunidades','社区经历']],
- ['Academic article on Traveller-police relations, accommodation and the policing of public space. The publisher provides an abstract; full text may require access.', [
-  'Alt acadúil ar chaidreamh an Lucht Siúil leis na póilíní, ar chóiríocht agus ar phóilíneacht spásanna poiblí. Tá achoimre ar fáil ón bhfoilsitheoir; d’fhéadfadh rochtain ar leith a bheith ag teastáil don téacs iomlán.',
-  'Artigo académico sobre as relações entre Travellers e polícia, alojamento e policiamento do espaço público. A editora disponibiliza um resumo; o texto integral pode exigir acesso.',
-  'مقال أكاديمي عن علاقة مجتمع الترافيلر بالشرطة والسكن ومراقبة الأماكن العامة. يتيح الناشر ملخصًا؛ وقد يتطلب النص الكامل صلاحية وصول.',
-  'Artykuł naukowy o relacjach Travellers z policją, zakwaterowaniu i kontroli przestrzeni publicznej. Wydawca udostępnia streszczenie; pełny tekst może wymagać dostępu.',
-  'Articol academic despre relațiile comunității Traveller cu poliția, locuire și controlul spațiului public. Editura oferă un rezumat; textul integral poate necesita acces.',
-  'Article universitaire sur les relations entre Travellers et police, le logement et le contrôle de l’espace public. Un résumé est disponible ; le texte intégral peut nécessiter un accès.',
-  'Artículo académico sobre las relaciones entre Travellers y policía, el alojamiento y el control del espacio público. La editorial ofrece un resumen; el texto completo puede requerir acceso.',
-  '关于爱尔兰旅行者社群与警察的关系、住房和公共空间警务的学术文章。出版商提供摘要，阅读全文可能需要访问权限。'
+ ['Academic article on Traveller-police relations, accommodation and the policing of public space.', [
+  'Alt acadúil ar chaidreamh an Lucht Siúil leis na póilíní, ar chóiríocht agus ar phóilíneacht spásanna poiblí.',
+  'Artigo académico sobre as relações entre Travellers e polícia, alojamento e policiamento do espaço público.',
+  'مقال أكاديمي عن علاقة مجتمع الترافيلر بالشرطة والسكن ومراقبة الأماكن العامة.',
+  'Artykuł naukowy o relacjach Travellers z policją, zakwaterowaniu i kontroli przestrzeni publicznej.',
+  'Articol academic despre relațiile comunității Traveller cu poliția, locuire și controlul spațiului public.',
+  'Article universitaire sur les relations entre Travellers et police, le logement et le contrôle de l’espace public.',
+  'Artículo académico sobre las relaciones entre Travellers y policía, el alojamiento y el control del espacio público.',
+  '关于爱尔兰旅行者社群与警察的关系、住房和公共空间警务的学术文章。'
  ]],
  ['University research documenting Travellers’ accounts of Garda stops, searches, custody and access to justice in Ireland.', [
   'Taighde ollscoile a dhoiciméadaíonn cuntais an Lucht Siúil ar stopanna, cuardaigh, coimeád agus rochtain ar cheartas in Éirinn.',
@@ -902,7 +902,40 @@ const posterCopy = [
   'Începe să înveți alegând un rol', 'Commencez l’apprentissage dans un rôle', 'Empieza a aprender eligiendo un papel', '选择角色，开始学习'
  ]]
 ];
-const translations = new Map([...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy,...posterCopy]);
+const overviewAndControls = [
+ ['Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.', [
+  'Fiosraíonn Stopped: Both Sides cearta daonna agus sibhialta agus cumhachtaí na bpóilíní trí ghnáth-theagmhálacha a bhaineann le ceistiú, cuardaigh, gabháil, daoine óga agus ciníochas.',
+  'Stopped: Both Sides explora os direitos humanos e civis e os poderes policiais através de situações do dia a dia que envolvem perguntas, revistas, detenções, jovens e racismo.',
+  'يستكشف Stopped: Both Sides حقوق الإنسان والحقوق المدنية وصلاحيات الشرطة من خلال مواقف يومية تتناول الاستجواب والتفتيش والقبض على الأشخاص وقضايا الشباب والعنصرية.',
+  'Stopped: Both Sides omawia prawa człowieka, prawa obywatelskie i uprawnienia policji na przykładzie codziennych sytuacji związanych z zadawaniem pytań, przeszukaniami, zatrzymaniami, młodzieżą i rasizmem.',
+  'Stopped: Both Sides explorează drepturile omului, drepturile civile și atribuțiile poliției prin situații cotidiene legate de întrebări, percheziții, arestări, tineri și rasism.',
+  'Stopped: Both Sides explore les droits humains, les droits civils et les pouvoirs de la police à travers des situations du quotidien qui abordent les questions posées par la police, les fouilles, les arrestations, les jeunes et le racisme.',
+  'Stopped: Both Sides explora los derechos humanos y civiles y las facultades de la policía mediante situaciones cotidianas relacionadas con preguntas, registros, detenciones, jóvenes y racismo.',
+  'Stopped: Both Sides 通过涉及盘问、搜查、逮捕、青少年和种族歧视的日常警民接触，探讨人权、公民权利和警察的职权。'
+ ]],
+ ['It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.', [
+  'Cuidíonn sé le daoine den phobal a gcearta daonna agus sibhialta a thuiscint agus tacaíocht a fháil. Spreagann sé Gardaí chun machnamh a dhéanamh ar fhianaise, ar chlaonadh agus ar chumarsáid mheasúil.',
+  'Ajuda o público a compreender os seus direitos humanos e civis e a obter apoio. Incentiva também os agentes da Garda a refletir sobre as provas, os preconceitos e a comunicação respeitosa.',
+  'يساعد أفراد الجمهور على فهم حقوق الإنسان والحقوق المدنية التي يتمتعون بها والحصول على الدعم، ويشجّع أفراد الشرطة الأيرلندية على التفكير في الأدلة والتحيّز والتواصل باحترام.',
+  'Pomaga osobom z ogółu społeczeństwa zrozumieć przysługujące im prawa człowieka i prawa obywatelskie oraz uzyskać wsparcie. Zachęca też funkcjonariuszy Garda do refleksji nad dowodami, uprzedzeniami i komunikacją opartą na szacunku.',
+  'Îi ajută pe membrii publicului să își înțeleagă drepturile fundamentale și civile și să obțină sprijin. Totodată, îi încurajează pe membrii Garda să reflecteze asupra probelor, a prejudecăților și a comunicării respectuoase.',
+  'La ressource aide le public à comprendre ses droits humains et civils et à obtenir du soutien. Elle invite aussi les membres de la Garda à réfléchir aux éléments de preuve, aux préjugés et à une communication respectueuse.',
+  'Ayuda a las personas a comprender sus derechos humanos y civiles y a obtener apoyo. También anima a los agentes de la Garda a reflexionar sobre las pruebas, los prejuicios y la comunicación respetuosa.',
+  '本资源帮助公众了解自己享有的人权和公民权利并获得支持，也鼓励爱尔兰警员思考如何看待证据、识别偏见，以及如何在沟通中尊重他人。'
+ ]],
+ ['Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.', [
+  'Tríd an dá dhearcadh a scrúdú, is féidir le foghlaimeoirí a dtoimhdí a cheistiú agus a aithint go bhfuil freagracht ar leith ar Ghardaí a gcumhachtaí a fheidhmiú go cothrom.',
+  'Ao explorar as duas perspetivas, quem aprende pode questionar as suas ideias preconcebidas e reconhecer a responsabilidade especial dos agentes da Garda de exercerem os seus poderes de forma justa.',
+  'يدعو استكشاف المنظورين المتعلّمين إلى مراجعة افتراضاتهم، مع إدراك المسؤولية الخاصة التي تقع على أفراد الشرطة الأيرلندية في ممارسة صلاحياتهم بإنصاف.',
+  'Poznanie obu perspektyw zachęca do kwestionowania własnych założeń i dostrzeżenia szczególnej odpowiedzialności funkcjonariuszy Garda za sprawiedliwe korzystanie ze swoich uprawnień.',
+  'Explorarea ambelor perspective îi invită pe participanți să își pună la îndoială presupunerile și să recunoască responsabilitatea deosebită a membrilor Garda de a-și exercita atribuțiile în mod echitabil.',
+  'Explorer les deux points de vue invite à remettre en question ses présupposés et à reconnaître la responsabilité particulière des membres de la Garda dans l’exercice équitable de leurs pouvoirs.',
+  'Explorar ambas perspectivas invita a cuestionar los propios supuestos y a reconocer la responsabilidad especial de los agentes de la Garda de ejercer sus facultades de manera justa.',
+  '从双方的角度审视同一情境，有助于学习者反思自己的预设，同时认识到爱尔兰警员有责任公正行使职权。'
+ ]],
+ ['Play this situation', ['Bain triail as an gcás seo','Explorar esta situação','جرّب هذا الموقف','Rozegraj tę sytuację','Încearcă această situație','Jouer cette situation','Explorar esta situación','体验这个情境']]
+];
+const translations = new Map([...overviewAndControls,...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy,...posterCopy]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }

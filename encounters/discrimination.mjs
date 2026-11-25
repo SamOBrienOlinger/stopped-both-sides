@@ -306,5 +306,5 @@ export const discriminationEncounters=Object.fromEntries(allCases.map(({ground,t
   }));
   return [nodeId,{...item,id:nodeId,views}];
  }));
- return [id,{id,ground,title,description,goal,place,nodes,start:'opening',origin:'shared',language:'en-IE',...(kind?{kind}:{}),people:kind==='colleague-witness'?{public:'Public witness',garda:'Witnessing Garda'}:{public:'',garda:''},minutes:'3–4 minutes'}];
+ return [id,{id,ground,title,description,goal,place,nodes,start:'opening',origin:'shared',...(kind?{kind}:{}),people:kind==='colleague-witness'?{public:'Public witness',garda:'Witnessing Garda'}:{public:'',garda:''},minutes:'3–4 minutes'}];
 }));

@@ -3,10 +3,10 @@ import {originalSceneDetails} from './original-scene-props.mjs';
 import {renderGroupAction} from './group-staging.mjs';
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
 import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=final-touches-20261125';
-import {encounters,roles,roleLabels} from './catalog.mjs?v=link-audit-20261123';
+import {encounters,roles,roleLabels} from './catalog.mjs?v=site-repairs-20261125';
 import {characterFor,defaultCast} from './characters.mjs?v=final-touches-20261125';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=nia-public-20261123';
-import {discriminationEncounters} from './discrimination.mjs?v=situation-locations-20261122';
+import {discriminationEncounters} from './discrimination.mjs?v=site-repairs-20261125';
 import {situationParticipants,participantLayout} from './situation-cast.mjs?v=final-touches-20261125';
 
 // Selected characters share a setting only while the written encounter places
@@ -130,7 +130,7 @@ function sceneActor(role,id,anchor,lazy,{key=role,number=null,character=characte
 
 function locationArt(place,art,actors,{className,sizes,lazy}){
  const artwork=art?` ${art.group?'data-group-art':'data-approved-art'}="${art.name}"`:'';
- return `<div class="scene-location ${className}" data-scene-place="${place}"${artwork} aria-hidden="true">${backdrop(place,art,{sizes,lazy})}${actors}</div>`;
+ return `<div class="scene-location ${className}" data-scene-place="${place}" data-location-label="${esc(places[place])}"${artwork} aria-hidden="true">${backdrop(place,art,{sizes,lazy})}${actors}</div>`;
 }
 
 export function renderScenePreview(id,{cast=defaultCast(),authored=false}={}){
@@ -165,11 +165,14 @@ function renderSituationScene(state,m,compact){
  const cards=participants.map(participant=>{
   const {key,role,label,character,number,playable}=participant;
   const badge='<span class="scene-roster-number" aria-hidden="true">'+number+'</span>';
-  if(!playable)return '<div class="scene-supporting-person" data-scene-participant="'+key+'" data-character-id="'+character.id+'" lang="en-IE" dir="ltr" data-no-translate>'+badge+'<div><strong>'+esc(label)+'</strong><span>'+esc(key==='child'?'Supporting character':character.name+' · Supporting character')+'</span></div></div>';
+  if(!playable){
+   const name=character.id==='support-race-adult'?'<span>'+esc(character.name)+'</span>':'<bdi data-no-translate>'+esc(character.name)+'</bdi>';
+   return '<div class="scene-supporting-person" data-scene-participant="'+key+'" data-character-id="'+character.id+'">'+badge+'<div><strong>'+esc(label)+'</strong><span>'+(key==='child'?'':name+' · ')+'<span>Supporting character</span></span></div></div>';
+  }
   const witness=encounters[state.id].kind==='colleague-witness';
   const purpose=witness?'<span class="sr-only">Character information</span> ':'';
   const description=witness?(role==='public'?'You witness the Garda’s behaviour towards the affected person. You are not the person being targeted.':'You witness a colleague’s discriminatory behaviour. You are not the Garda whose conduct is being challenged.'):(role==='public'?'You are the person affected in this situation. The other people are identified separately in the scene.':'You are the Garda responding to the situation. The other people are identified separately in the scene.');
-  return '<button type="button" class="scene-character-label" data-role-tone="'+role+'" data-scene-participant="'+key+'" data-scene-label-role="'+role+'" data-scene-character-id="'+character.id+'" data-scene-profile-role="'+esc(label)+'" data-scene-profile-description="'+esc(description)+'" aria-haspopup="dialog" aria-controls="scene-character-dialog">'+badge+'<span class="scene-playable-person">'+purpose+'<strong><span'+(character.descriptive?'':' data-no-translate')+'>'+esc(character.name)+'</span></strong><span class="scene-character-role">'+(witness?esc(label):'<span lang="en-IE" dir="ltr" data-no-translate>'+esc(label)+'</span>')+'</span></span><span class="scene-character-info" aria-hidden="true">i</span></button>';
+  return '<button type="button" class="scene-character-label" data-role-tone="'+role+'" data-scene-participant="'+key+'" data-scene-label-role="'+role+'" data-scene-character-id="'+character.id+'" data-scene-profile-role="'+esc(label)+'" data-scene-profile-description="'+esc(description)+'" aria-haspopup="dialog" aria-controls="scene-character-dialog">'+badge+'<span class="scene-playable-person">'+purpose+'<strong><span'+(character.descriptive?'':' data-no-translate')+'>'+esc(character.name)+'</span></strong><span class="scene-character-role">'+esc(label)+'</span></span><span class="scene-character-info" aria-hidden="true">i</span></button>';
  }).join('');
  return '<figure class="encounter-scene '+(compact?'encounter-scene--compact':'')+'" data-caption-anchors data-cast-layout="group" data-scene-id="'+esc(state.id+'/'+m.nodeId)+'" data-scene-phase="'+m.phase+'" data-scene-mode="'+m.mode+'">'+(m.label?'<div class="scene-setting">'+esc(m.label)+'</div>':'')+'<div class="scene-stage"><figure class="scene-panel">'+image+'<figcaption class="scene-participant-list">'+cards+'</figcaption></figure></div></figure>';
 }

@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {learningAbout} from '../learning/about.mjs?v=learning-dropdown-20261122';
-import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
+import {learningAbout} from '../learning/about.mjs?v=site-repairs-20261125';
+import {messages} from '../locales/messages.mjs?v=site-repairs-20261125';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=final-touches-20261125';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
 
 test('About learning content has complete translations while retaining identifiable source metadata',async()=>{
  const html=learningAbout();
@@ -25,5 +25,18 @@ test('About learning content has complete translations while retaining identifia
   assert.deepEqual([...translated.matchAll(/href="([^"]+)"/g)].map(match=>match[1]),sourceLinks);
   assert.ok(translated.includes('A meta-analysis of the cognitive and motivational effects of serious games.'));
   assert.match(translated,/lang="en-IE" dir="ltr" data-no-translate/);
+ }
+});
+
+test('every inline study citation opens its listed original source and keeps the DOI available',()=>{
+ const html=learningAbout();
+ const citations=[...html.matchAll(/<a href="([^"]+)"[^>]+data-no-translate>[^<]+ \[(\d+)\]<\/a>/g)];
+ const records=[...html.matchAll(/<div class="learning-reference-links"><a href="([^"]+)"[^>]*>Original source<\/a> <a href="(https:\/\/doi\.org\/[^"]+)"/g)];
+ assert.equal(records.length,8);
+ assert.equal(citations.length,records.length);
+ for(const [,url,number] of citations){
+  const [,original,doi]=records[Number(number)-1];
+  assert.equal(url,original);
+  assert.notEqual(original,doi);
  }
 });

@@ -3,8 +3,8 @@
 export const communitySources = {
  travellerPlace:{
   title:'Mulcahy (2012) · “Alright in their own place”: Policing and the spatial regulation of Irish Travellers',
-  url:'https://journals.sagepub.com/doi/10.1177/1748895811431849',
-  note:'Academic article on Traveller-police relations, accommodation and the policing of public space. The publisher provides an abstract; full text may require access.'
+  url:'https://www.researchgate.net/publication/254084298_%27Alright_in_their_own_place%27_Policing_and_the_spatial_regulation_of_Irish_Travellers',
+  note:'Academic article on Traveller-police relations, accommodation and the policing of public space.'
  },
  travellerJustice:{
   title:'Joyce et al. (2022) · Irish Travellers’ Access to Justice',

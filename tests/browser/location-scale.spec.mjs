@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
-import {encounters,stageCount} from '../../encounters/catalog.mjs?v=link-audit-20261123';
+import {encounters,stageCount} from '../../encounters/catalog.mjs?v=site-repairs-20261125';
 import {defaultCast} from '../../encounters/characters.mjs?v=nia-public-20261123';
-import {startEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {startEncounter} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 import {measureLocations} from './location-measurements.mjs';
 

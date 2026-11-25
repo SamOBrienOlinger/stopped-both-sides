@@ -1,5 +1,5 @@
 const logoDirectory=new URL('../assets/organisations/',import.meta.url);
-const services=[
+export const services=[
  {
   id:'complaints',kind:'Complaints about Garda conduct',name:'Fiosrú',fullName:'Office of the Police Ombudsman',
   logo:{file:'fiosru.png',width:177,height:66},
@@ -25,7 +25,7 @@ const services=[
 export function supportSection(){
  return `<section class="support-section source-topic" id="rights-support" tabindex="-1" aria-labelledby="support-heading">
   <div class="support-heading"><h2 id="support-heading">Advice, complaints and policing oversight</h2><p>Different services can help with legal questions, complaints about Garda conduct, and the wider oversight of policing. Choose the service that matches what you need.</p></div>
-  <div class="support-grid">${services.map(service=>`<article class="support-card" data-support="${service.id}">
+  <div class="support-grid">${services.map(service=>`<article class="support-card" id="rights-support-${service.id}" tabindex="-1" data-support="${service.id}">
    <p class="support-kind">${service.kind}</p>
    <header class="support-organisation" dir="ltr">
     <div class="support-logo"><img src="${new URL(service.logo.file,logoDirectory).href}" width="${service.logo.width}" height="${service.logo.height}" alt="" decoding="async"></div>

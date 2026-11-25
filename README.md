@@ -134,7 +134,7 @@ Saved encounters and transfer links retain the pair. Older saved formats remain 
 | **Reading** | Larger text, high contrast, increased spacing and reduced motion. |
 | **Navigation** | Keyboard controls, visible focus, status announcements and written role labels alongside perspective colours. |
 
-Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the original shared situations, individual practice and the information pages. Arabic uses right-to-left text. Gaeilge covers the original shared situations. Selecting Irish during individual practice opens the matching shared situation. The Discrimination stories, choices and feedback are in English, with translated topic and ground labels.
+Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the original shared situations, individual practice and the information pages. Arabic uses right-to-left text. Gaeilge covers the shared situations and the information pages. Selecting Irish during individual practice opens the matching shared situation. All nine language settings cover the 20 discrimination situations, including both roles’ choices and feedback.
 
 Changing language keeps your stage, characters, answers, role and scores. Translations are learning aids awaiting independent language and legal review. The implementation targets **WCAG 2.2 AA**; automated checks are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary.
 

@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
-import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=final-touches-20261125';
+import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=site-repairs-20261125';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=site-repairs-20261125';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 await Promise.all(['ar','fr'].map(loadLanguage));
@@ -24,7 +24,7 @@ for(const {language,width,large} of [
  await page.goto('./?lang='+language+'#rights/support');
  const section=page.locator('#rights-support');
  await expect(section).toBeFocused();
- await expect(section.locator('h2')).toHaveText(translateText(title,language==='ga'?'en':language));
+ await expect(section.locator('h2')).toHaveText(translateText(title,language));
  await expect(section.locator('.support-card')).toHaveCount(3);
  await expect(page.locator('.source-topic-nav a[href="#rights/support"]')).toHaveAttribute('aria-current','location');
  expect(await section.locator('.support-link').evaluateAll(links=>links.map(link=>link.href))).toEqual(destinations);
@@ -38,7 +38,7 @@ for(const {language,width,large} of [
   await expect(page.locator('#reading-dialog')).not.toBeVisible();
  }
  if(language==='ar')await expect(section.locator('h3').first()).toHaveCSS('direction','ltr');
- if(language==='ga')await expect(page.locator('#main')).toHaveAttribute('lang','en-IE');
+ if(language==='ga')await expect(page.locator('#main')).toHaveAttribute('lang','ga');
  const logos=section.locator('.support-organisation img');
  await expect.poll(()=>logos.evaluateAll(images=>images.map(image=>{
   const {width,height}=image.getBoundingClientRect();

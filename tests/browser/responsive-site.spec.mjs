@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {startEncounter,answer,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {startEncounter,answer,stateHash,decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {expectControlsFit} from './control-layout.mjs';
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 
