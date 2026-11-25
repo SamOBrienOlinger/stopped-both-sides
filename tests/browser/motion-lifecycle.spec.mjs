@@ -52,15 +52,29 @@ function completedRoute(role){
 
 for(const role of ['public','garda']){
  for(const action of ['paired-transfer','change-character'])test(`${role}: ${action} retains the same scene and answer during a shared-mode transfer`,async({page})=>{
+  await page.addInitScript(cast=>localStorage.setItem('stopped-both-sides:characters:v1',JSON.stringify(cast)),cast);
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
   await page.locator('.single-mode .practice-content a').click();
-  await page.locator('.scenario-library .situation-topic>summary').first().click();
-  await page.locator('.scenario-library [data-action="start"]').first().click();
+  const topic=page.locator('.scenario-library .situation-topic').filter({has:page.locator('[data-action="start"][data-id="street"]')});
+  await topic.locator(':scope > summary').click();
+  await topic.locator('[data-action="start"][data-id="street"]').click();
   await page.locator('[data-action="choose"]').first().click();
   await expect(page.locator('#feedback')).toBeVisible();
+  if(action==='change-character'&&role==='public'){
+   const subject=page.locator('button[data-scene-label-role="public"]');
+   await expect(subject).toContainText('Alex');
+   await expect(page.locator('.turn-avatar')).toHaveAccessibleName('Your avatar · Noor');
+   await subject.click();
+   const profile=page.getByRole('dialog');
+   await expect(profile).toHaveAccessibleName('Alex');
+   await expect(profile.locator('.scene-profile-change')).toBeHidden();
+   await profile.getByRole('button',{name:'Close character details'}).click();
+   await expect(page.locator('#feedback')).toBeVisible();
+  }
   await reset(page);
-  if(action==='change-character')await openCharacterPicker(page,role);
+  if(action==='change-character'&&role==='public')await page.getByRole('button',{name:'Change your avatar'}).click();
+  else if(action==='change-character')await openCharacterPicker(page,role);
   else await page.locator('[data-action="paired-transfer"]').click();
   await expect(page.locator('.paired-game')).toBeVisible();
   await expect.poll(async()=>kinds(page)).toContain(action==='paired-transfer'?'perspective':'picker');
@@ -70,7 +84,35 @@ for(const role of ['public','garda']){
   expect(current(page).answers[role]).toBe(0);
   expect(current(page).history).toHaveLength(0);
   expect(current(page).role).toBe(action==='paired-transfer'?(role==='public'?'garda':'public'):role);
-  if(action==='change-character')await expect(page.locator('#character-picker-title')).toBeFocused();
+  if(action==='change-character'){
+   await expect(page.locator('#character-picker-title')).toBeFocused();
+   const before=current(page);
+   if(role==='public'){
+    await expect(page.locator('#character-picker [data-character="public-2"]')).toHaveAttribute('aria-pressed','true');
+    await page.locator('#character-picker [data-character="public-1"]').click();
+    await page.locator('[data-action="paired-character-close"]').click();
+    const change=page.getByRole('button',{name:'Change your avatar'});
+    await expect(change).toBeFocused();
+    await expect(page.locator('.turn-avatar')).toHaveAttribute('data-character-id','public-1');
+    await change.press('Enter');
+    await expect(page.locator('#character-picker [data-character="public-1"]')).toHaveAttribute('aria-pressed','true');
+   }
+   const option=role==='public'?page.locator('#character-picker [data-character="public-9"]'):page.locator('#character-picker [aria-pressed="false"][data-character]').first();
+   const id=await option.getAttribute('data-character');
+   await option.click();
+   await expect.poll(()=>current(page)).toEqual({...before,cast:{...before.cast,[role]:id}});
+   await page.locator('[data-action="paired-character-close"]').click();
+   if(role==='public'){
+    await expect(page.getByRole('button',{name:'Change your avatar'})).toBeFocused();
+    await expect(page.locator('.turn-avatar')).toHaveAccessibleName('Your avatar · Pat');
+    await expect(page.locator('.turn-avatar')).toHaveAttribute('data-character-id',id);
+    await expect(page.locator('button[data-scene-label-role="public"]')).toHaveAccessibleName('About Alex, Member of the public');
+    await expect(page.locator('.encounter-scene [data-scene-role="public"]')).toHaveAttribute('data-scene-character','public-1');
+    await expect(page.locator('#feedback')).toBeVisible();
+   }else await expect(page.locator('button[data-scene-label-role="garda"]')).toHaveAttribute('data-scene-character-id',id);
+   expect(await kinds(page)).not.toContain('stage');
+   expect(await kinds(page)).not.toContain('scene');
+  }
  });
 
  test(`${role}: topic filters and page changes keep reference subheadings static`,async({page})=>{

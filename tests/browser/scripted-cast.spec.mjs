@@ -15,7 +15,15 @@ test('The described person changes only at the variation, including profile, sav
   await expect(page.locator('.turn-avatar')).toHaveAccessibleName('Your avatar · Pat');
   await expect(page.locator('.turn-avatar')).toHaveAttribute('data-character-id','public-9');
   await expect(page.locator('[data-cast-role="public"]')).toContainText(name);
-  await scene.locator(publicLabel).click();
+  const caption=scene.locator(publicLabel);
+  if(i===2){
+   // After refresh the document holds its starting position until the reader
+   // scrolls. Use a genuine wheel gesture before clicking the lower caption.
+   const box=await caption.boundingBox();
+   await page.mouse.wheel(0,Math.round(box.y-page.viewportSize().height/2));
+   await expect(caption).toBeInViewport({ratio:1});
+  }
+  await caption.click();
   const profile=page.getByRole('dialog');
   await expect(profile).toHaveAccessibleName(name);
   await expect(profile.locator('img')).toHaveAttribute('src',new RegExp(id+'\\.webp$'));

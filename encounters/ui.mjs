@@ -9,7 +9,7 @@ import {
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
 import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=final-touches-20261125';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=link-audit-20261123';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=final-touches-20261125';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=final-touches-20261125';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=final-touches-20261125';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=final-touches-20261125';
 import {renderScene,renderScenePreview} from './scenes.mjs?v=final-touches-20261125';
@@ -109,24 +109,27 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<div class="encounter-cast" aria-label="Characters in this situation">${cards.join('')}</div>`;
  }
  function characterPicker(role,selected,inGame=false){
+  const avatar=inGame&&characterPickerTarget?.avatar;
+  if(avatar)selected=state.cast[role];
   const available=inGame?storyCastOptions(state?.id,role):characters[role];
   const requirement=state?.id==='garda-supervision'&&role==='garda'&&inGame?'<p class="scene-cast-requirement">Supervising sergeant</p>':available.length<characters[role].length?`<p class="scene-cast-requirement">${scenarioCopy(state.id,'These characters match the age or gender stated in this situation.')}</p>`:'';
-  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div>${requirement}<div class="character-options" role="group" aria-label="Available characters">${available.map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
+  return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${avatar?'Change your avatar':inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div>${requirement}<div class="character-options" role="group" aria-label="Available characters">${available.map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
  }
  function focusCharacterPicker(){focusControl(document.querySelector('#character-picker-title'));}
- function openCharacterPicker(event){
-  const button=event.target,role=button.dataset?.sceneLabelRole,route=location.hash.slice(1);
+ function openCharacterPicker(event,avatar=false){
+  const button=event.target,role=avatar?button.dataset.role:button.dataset?.sceneLabelRole,route=location.hash.slice(1);
   const original=route.startsWith('scenario/')?getOriginalSession():null;
   if(button.hasAttribute?.('data-story-fixed')||!roles.includes(role)||(!original&&(!route.startsWith('encounter/')||!state)))return;
-  characterPickerTarget={role,sceneId:button.closest('.encounter-scene')?.dataset.sceneId};
+  characterPickerTarget={role,avatar,sceneId:button.closest('.encounter-scene')?.dataset.sceneId};
   if(original){sharedReturn=practiceReturn;navigate(legacyState(original),true,false);}
   else rerender(false);
   focusCharacterPicker();
  }
  function closeCharacterPicker(){
   if(!characterPickerTarget)return;
-  const {role,sceneId}=characterPickerTarget;
+  const {role,sceneId,avatar}=characterPickerTarget;
   characterPickerTarget=null;rerender(false);
+  if(avatar){focusControl(document.querySelector('[data-action="paired-avatar-change"]'));return;}
   const captions=[...document.querySelectorAll('[data-scene-label-role="'+role+'"]')];
   const trigger=captions.find(button=>button.closest('.encounter-scene')?.dataset.sceneId===sceneId)||captions[0];
   focusControl(trigger);
@@ -143,24 +146,25 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return {...fromOriginal(original,siteRole,targetRole,legacyCasts.get(key)),authored:true};
  }
  function turnAvatar(s){
-  if(s.complete)return {credit:'',portrait:''};
+  if(s.complete)return {credit:'',portrait:'',control:''};
   const learner=characterFor(s.role,s.cast[s.role]);
   const subject=storyCharacter(s,s.role);
   const differs=learner.id!==subject.id;
   const credit=differs?`<span id="turn-avatar-credit"><span>Your avatar</span> · <bdi data-no-translate>${esc(learner.name)}</bdi></span>`:'';
   const accessible=differs?'aria-labelledby="turn-avatar-credit"':`aria-label="${esc(learner.name)}, your current ${esc(roleLabels[s.role])} character"`;
   const portrait=`<span class="turn-avatar" role="img" ${accessible} data-role="${s.role}" data-character-id="${learner.id}">${characterImage(s.role,learner.id,learner)}</span>`;
-  return {credit,portrait};
+  const control=fixedStoryCharacter(s.id,s.role,s.nodeId,s.authored)?`<button class="text-button learner-avatar-change" type="button" data-action="paired-avatar-change" data-role="${s.role}" aria-expanded="${!!characterPickerTarget?.avatar}">Change your avatar</button>`:'';
+  return {credit,portrait,control};
  }
  function roleBar(s){
   const targetRole=otherRole(s.role);
   const playing=s.role==='garda'?'Exploring the Garda perspective':'Exploring the public perspective';
   const switchLabel=targetRole==='garda'?'Switch to the Garda perspective':'Switch to the public perspective';
-  const {credit,portrait}=turnAvatar(s);
+  const {credit,portrait,control}=turnAvatar(s);
   return `<div class="flow-role-controls"><div class="flow-role-bar">
    <div class="perspective-status">
     ${perspectiveIcon(s.role)}
-    <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionPosition(s.history.length+1,remainingDecisions(s))}</span>${credit}</div>
+    <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionPosition(s.history.length+1,remainingDecisions(s))}</span>${credit}${control}</div>
     ${portrait}
    </div>
   </div>
@@ -388,11 +392,11 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  function missing(message='This page was not found.'){return `<div class="content-page"><h1>Unable to open this situation</h1><p>${esc(message)}</p><div class="action-group"><a class="primary" href="#encounters">Choose a situation</a><a class="primary secondary" href="#progress">Saved progress</a></div></div>`;}
  function legacyBar(original,remaining){
-  const s=legacyState(original),{credit,portrait}=turnAvatar(s);
+  const s=legacyState(original),{credit,portrait,control}=turnAvatar(s);
   if(!original.complete)reopenedPractice=false;
   store.save(recordProgress(store.value,s,{mode:'practice',returnTo:practiceReturn,opened:reopenedPractice}));
   return `<div class="flow-role-bar legacy-perspective">
-   <div class="perspective-status">${perspectiveIcon(siteRole)}<div><strong>${siteRole==='garda'?'Exploring the Garda perspective':'Exploring the public perspective'}</strong><span>${original.complete?'Learning recap':decisionPosition(original.history.length+1,remaining)}</span>${credit}</div>${credit?portrait:''}</div>
+   <div class="perspective-status">${perspectiveIcon(siteRole)}<div><strong>${siteRole==='garda'?'Exploring the Garda perspective':'Exploring the public perspective'}</strong><span>${original.complete?'Learning recap':decisionPosition(original.history.length+1,remaining)}</span>${credit}${control}</div>${credit||control?portrait:''}</div>
    <button class="text-button perspective-toggle" data-action="paired-transfer">Open the two-role version</button>
   </div>`;
  }
@@ -469,6 +473,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   if(action==='paired-start'||action==='paired-quick-start'){
    return startSituation(button.dataset.id,role);
   }
+  if(action==='paired-avatar-change'){openCharacterPicker({target:button},true);return true;}
   if(action==='paired-transfer'){characterPickerTarget=null;transferOriginal(getOriginalSession(),true,otherRole(siteRole),false);return true;}
   if(action==='paired-setup-characters'){setupCharacterOpen=!setupCharacterOpen;rerender(false);if(setupCharacterOpen)focusCharacterPicker();else document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
   if(action==='paired-setup-done'){setupCharacterOpen=false;rerender(false);document.querySelector('[data-action="paired-setup-characters"]')?.focus({preventScroll:true});return true;}
@@ -480,9 +485,21 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   if(action==='paired-character-close'){closeCharacterPicker();return true;}
   if(action==='paired-character-choose'){
    const target=characterPickerTarget?.role;
-   if(!target||fixedStoryCharacter(state.id,target,state.nodeId,state.authored)||!storyCastOptions(state.id,target).some(person=>person.id===button.dataset.character))return true;
+   if(!target||(!characterPickerTarget.avatar&&fixedStoryCharacter(state.id,target,state.nodeId,state.authored))||!storyCastOptions(state.id,target).some(person=>person.id===button.dataset.character))return true;
    const next=changeCharacter(state,button.dataset.character,target);
-   if(next!==state){characterPreferences.choose(target,button.dataset.character);navigate(next,true,false);}
+   if(next!==state){
+    characterPreferences.choose(target,button.dataset.character);
+    if(next.authored){
+     legacyCasts.set(next.id,next.cast);
+     const saved=store.value.saved.map(entry=>{
+      if(entry.mode!=='practice'||entry.id!==next.id||entry.complete)return entry;
+      const practice=practiceState(entry.token);
+      return practice?{...entry,token:encodeState({...practice,cast:{...practice.cast,[target]:next.cast[target]}})}:entry;
+     });
+     store.save({...store.value,saved});
+    }
+    navigate(next,true,false);
+   }
    document.querySelector('[data-character="'+state.cast[target]+'"]')?.focus({preventScroll:true});
    announce('Character changed. Your progress is unchanged.');return true;
   }

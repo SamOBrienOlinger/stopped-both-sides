@@ -29,9 +29,9 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
 
       for (const [perspective, name] of Object.entries(actors)) {
         const actor = hero.locator('.hero-' + perspective);
-        await expect(actor).toHaveAttribute('src', new RegExp('/characters/poster-' + name + '\\.webp$'));
+        await expect.poll(() => actor.evaluate(image => new URL(image.src).pathname)).toMatch(new RegExp('/assets/characters/poster-' + name + '\\.webp$'));
         await expect(actor).toHaveAttribute('alt', '');
-        await expect.poll(() => actor.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+        await expect.poll(() => actor.evaluate(image => image.complete ? image.naturalWidth : 0)).toBeGreaterThanOrEqual(perspective === 'public' ? 800 : 648);
         const hrefPattern = new RegExp('#encounters/' + perspective + '$');
         const panel = poster.locator('.perspective-card').filter({hasText: perspective + ' perspective'});
         await expect(panel).toHaveAttribute('href', hrefPattern);
