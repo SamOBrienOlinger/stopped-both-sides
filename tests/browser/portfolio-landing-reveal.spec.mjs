@@ -210,7 +210,10 @@ for(const path of paths){
      await expect(group.locator('.landing-role-actions')).toHaveCSS('opacity','1');
      await expect(group.locator('.landing-role-actions')).toHaveCSS('transform','none');
      await page.emulateMedia({reducedMotion:'reduce'});
+     // Media-query styles settle before the controller receives its change event.
+     await expect(group.locator('[data-landing-reveal]')).toHaveCount(0);
      await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
+     await frames(page);
      const before=await page.evaluate(()=>window.__landingStarts);
      await held.release();
      await expect.poll(()=>image.evaluate(element=>element.complete&&element.naturalWidth>0)).toBe(true);
