@@ -17,10 +17,10 @@ test('The described person changes only at the variation, including profile, sav
   await expect(page.locator('[data-cast-role="public"]')).toContainText(name);
   const caption=scene.locator(publicLabel);
   if(i===2){
-   // After refresh the document holds its starting position until the reader
-   // scrolls. Use a genuine wheel gesture before clicking the lower caption.
-   const box=await caption.boundingBox();
-   await page.mouse.wheel(0,Math.round(box.y-page.viewportSize().height/2));
+   // Start navigating after the reload so the reader owns the scroll position.
+   await page.keyboard.press('Tab');
+   await expect(page.locator('html')).not.toHaveAttribute('data-start-position','');
+   await caption.scrollIntoViewIfNeeded();
    await expect(caption).toBeInViewport({ratio:1});
   }
   await caption.click();
