@@ -18,8 +18,12 @@ async function captureLanding(page,path){
 
 const heroSelectors=['#paired-title','#perspectives-title','.hero-public','.hero-garda','.landing-deck','.landing-role-actions'];
 const heroItems='[data-poster-reveal]';
-const settledStyles=elements=>elements.map(element=>({opacity:getComputedStyle(element).opacity,
- transform:getComputedStyle(element).transform,animation:getComputedStyle(element).animationName}));
+const settledStyles=elements=>elements.map(element=>{
+ const style=getComputedStyle(element);
+ // WebKit can serialize a cancelled translateY(0) as its identity matrix.
+ const transform=style.transform==='none'||new DOMMatrixReadOnly(style.transform).isIdentity?'none':style.transform;
+ return {opacity:style.opacity,transform,animation:style.animationName};
+});
 const visibleStyles=Array(heroSelectors.length).fill({opacity:'1',transform:'none',animation:'none'});
 const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 
@@ -264,6 +268,7 @@ for(const path of paths){
   // Reproduce the reported rectangle using a real keyboard-activated route return.
   await page.setViewportSize({width:375,height:812});
   await page.goto(path+'?lang=en#about');
+  await expect(page.locator('.about-opening')).toBeVisible();
   await openNavigation(page);
   await page.locator('#main-navigation [data-nav="play"]').focus();
   await page.keyboard.press('Enter');

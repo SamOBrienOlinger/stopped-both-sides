@@ -71,7 +71,13 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
       await expect(heading).toBeVisible();
       await expect(subtitle).toBeVisible();
       await expect(question).toBeVisible();
-      for (const link of await poster.locator('.perspective-card-link').all()) await expect(link).toBeVisible();
+      for (const link of await poster.getByRole('link').all()) {
+        await expect(link).toBeVisible();
+        const target = await link.boundingBox();
+        const label = await link.innerText();
+        expect(target.width, label + ' target width').toBeGreaterThanOrEqual(44);
+        expect(target.height, label + ' target height').toBeGreaterThanOrEqual(44);
+      }
       await page.locator('html').evaluate(element => element.classList.remove('contrast-high'));
     }
   });
