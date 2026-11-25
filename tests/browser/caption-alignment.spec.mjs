@@ -240,12 +240,14 @@ for(const path of ['./','garda/'])test(path+' character buttons open profiles an
     expect(await control.evaluate(element=>element.scrollWidth-element.clientWidth)).toBeLessThanOrEqual(1);
    }
    await expect(dialog.getByRole('heading',{name,exact:true})).toBeVisible();
-   await expect(dialog.locator('.scene-profile-role')).toHaveText(role==='public'?'Member of the public':'Garda');
-   await expect(dialog.locator('.scene-profile-body')).toContainText('in this encounter');
-    await expect(dialog.locator('.scene-profile-body')).not.toContainText('in the fictional encounter');
+   await expect(dialog).toHaveAttribute('lang','ar');
+   await expect(dialog.locator('.scene-profile-role')).toHaveText(role==='public'?'فرد من الجمهور':'Garda');
+   await expect(dialog.locator('.scene-profile-body')).toHaveText(role==='public'
+    ?'هذا هو الفرد من الجمهور في هذا الموقف. استكشف الأسئلة التي يمكنه طرحها والخيارات المتاحة له والحقوق التي تنطبق عليه.'
+    :'هذا هو عنصر الغاردا في هذا الموقف. استكشف كيف ينبغي للصلاحيات القانونية والأدلة والتواصل والإنصاف أن توجّه قراراته.');
    await expect(dialog.locator('.scene-profile-portrait img')).toHaveJSProperty('complete',true);
    if(role==='public')await page.keyboard.press('Escape');
-   else await dialog.getByRole('button',{name:'Close character details'}).click();
+   else await dialog.getByRole('button',{name:'إغلاق تفاصيل الشخصية'}).click();
    await expect(dialog).toBeHidden();
    await expect(button).toBeFocused();
   }
