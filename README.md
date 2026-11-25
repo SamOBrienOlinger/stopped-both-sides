@@ -5,7 +5,7 @@
 <h1 align="center">Stopped: Both Sides</h1>
 
 <p align="center">
-  <strong>One encounter. Two perspectives. Learn why a choice matters.</strong><br>
+  <strong>One situation. Two perspectives.</strong><br>
   An interactive learning resource about human and civil rights and Garda decisions in the Republic of Ireland.
 </p>
 
@@ -17,21 +17,18 @@
 
 <p align="center">
   <a href="https://samobrienolinger.github.io/stopped-both-sides/">
-    <img src="assets/heroes/public-hi-vis-960.webp" width="340" alt="Explore the public perspective: a fictional character speaks with a Garda on an Irish street">
-  </a>
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">
-    <img src="assets/heroes/garda-hi-vis-960.jpg" width="340" alt="Explore the Garda perspective: the same street encounter viewed from the other side">
+    <img src="docs/user-guide/live-landing.webp" width="800" alt="Alex and Garda Aisling outside the GPO on O’Connell Street. The landing page asks, ‘What would you do?’">
   </a>
 </p>
 
 <p align="center">
-  <strong>34 shared situations</strong> &nbsp; · &nbsp; <strong>99 stages</strong> &nbsp; · &nbsp; <strong>18 characters</strong><br>
-  Explore in your browser · No sign-up · No timer
+  <strong>34 shared situations</strong> &nbsp; · &nbsp; <strong>99 decision stages</strong> &nbsp; · &nbsp; <strong>19 selectable characters</strong> &nbsp; · &nbsp; <strong>9 languages</strong>
 </p>
 
 <p align="center">
   <a href="#how-it-works">How it works</a> ·
   <a href="#user-flow-infographic">Visual guide</a> ·
+  <a href="#finding-situations-and-sources">Search &amp; sources</a> ·
   <a href="#characters-and-switching-sides">Characters</a> ·
   <a href="#accessibility-and-language">Language &amp; reading</a> ·
   <a href="#entity-relationship-diagrams">Data model</a> ·
@@ -50,33 +47,37 @@ Explore a fictional encounter with An Garda Síochána, choose a response and re
 
 ## How it works
 
-**Read a fictional situation → choose a response → learn why it matters.**
+The home page asks **What would you do?** Select it to start with the role shown, or use the **Public perspective** and **Garda perspective** cards to choose a side. The four illustrated steps show how to choose a perspective, read the situation, choose a response and compare perspectives.
 
-These steps describe the main **Explore both perspectives** learning activity. Start with either role: a member of the public or a Garda. You can finish a situation using just one role. The guide shows the English button names.
+1. **Choose a perspective.** Open the [public setup](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [Garda setup](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is ready to use. To pick another, select **Choose a different character**, pick a portrait and select **Done**.
+2. **Start a situation.** Select **Start this situation** for the suggested story. The public side opens with *Stopped on the street* and the Garda side with *A hunch on the street*. To pick a different story, open **Browse all situations**, choose a topic and select **Explore this situation** on a card.
+3. **Read and choose.** Read the scene and question, then choose what you would say or do.
+4. **Read the explanation.** Open **Why this matters** for the learning point or **Read the sources for this decision** for the references. **Try another answer** lets you reconsider. **Compare the other side** keeps your first answer and shows the same moment from the other role.
+5. **Follow the decision.** Select **Next decision** to follow the branch for your active role’s answer. If you switch to a role that hasn’t answered yet, choose a response before continuing. Select **View recap** after the final decision.
+6. **Review the encounter.** Revisit a decision, try the other role or select **Choose another situation**. When you come back, **Resume your situation** reopens an unfinished encounter and **Open recap** reopens a completed one if it was saved in this browser.
 
-1. **Choose a perspective.** Select [**Explore the public perspective**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [**Explore the Garda perspective**](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is already chosen. To change them before starting, select **Choose a different character**, choose one, then select **Done**.
-2. **Start a situation.** Select **Start this situation** to try the suggested story. To pick another story, open **Browse all situations**, choose from 34 situations by topic, then select **Explore this situation** on its card.
-3. **Read, then choose.** Read the fictional scene and question, then select one of the answer buttons.
-4. **Read the explanation.** After every answer, you see an explanation. Open **Why this matters** for more detail, or **Read the sources for this decision** for the supporting information.
-5. **Continue or finish.** The main button changes as you explore. When there is another decision, select **Next decision**, read the next scene and choose again. After your final answer, the button becomes **View recap**: select it to open a summary of your choices. A **New variation** notice means the facts have changed, so read the new scene carefully. When you continue, the answer for your current role decides what happens next.
-6. **Review what you learned.** The recap shows your choices and the explanations. You can revisit a decision, try the other role or select **Choose another situation**.
+To focus on one role, open **Practise one role at a time** on the home page or **Practise one role** in the situation browser. During a shared encounter, **Scores, sources and help** explains the scoring and links to your progress.
 
-Choose **Discrimination** under **Browse all situations** to explore **20 situations across the ten [protected grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds)**. Each ground has the existing situation and a new colleague-behaviour variation. Each situation has two decisions, with responses and feedback from both perspectives. In the new variations, the playable Garda and member of the public are witnesses; the colleague acting discriminatorily and the person being mistreated are separate people. The Garda response addresses intervention, respectful service and appropriate reporting; the public response supports safe, voluntary assistance, accurate witness accounts and complaint information. Housing assistance remains specific to accommodation, with any Garda-conduct concern treated separately.
+### Finding situations and sources
 
-> [!TIP]
-> **Optional, before you move on:** select **Try another answer** to choose a new answer for your current role. Select **Compare the other side** to explore the other person’s perspective at the same point in the story; your first answer is kept. If you have not answered in that role yet, choose a response before continuing. Answers from both roles are kept when you switch. You can also use **Switch to the Garda perspective** or **Switch to the public perspective** during a situation.
+Open **Search** in the navigation, or open **Menu** first on a narrow screen. Search is also available on the privacy page. Enter a situation title, a phrase from a decision or the name of an organisation. For example, try **housing assistance** to find the accommodation scenarios. Results include shared situations, individual practice, information pages and external sources. English and the selected language are both searchable. **Show more results** expands a longer list.
 
-For individual practice, choose **Practise one role** under **Ways to explore** or open **Practise one role at a time** on the home page. When a saved situation is available, **Resume your situation** continues an unfinished situation and **Open recap** revisits a completed one.
+| To find… | Open… |
+| --- | --- |
+| Stories about street stops, searches, arrest and custody, young people, fair treatment or discrimination | [Explore](https://samobrienolinger.github.io/stopped-both-sides/#encounters) and **Browse all situations** |
+| Rights information, advice and organisations offering support | [Human and Civil Rights](https://samobrienolinger.github.io/stopped-both-sides/#rights) or [Advice & support](https://samobrienolinger.github.io/stopped-both-sides/#rights/support) |
+| Evidence and references for Garda decision-making | [Garda Guidance](https://samobrienolinger.github.io/stopped-both-sides/garda/#evidence) |
+| Saved situations, scores and completed routes | Open Progress on the [public side](https://samobrienolinger.github.io/stopped-both-sides/#progress) or [Garda side](https://samobrienolinger.github.io/stopped-both-sides/garda/#progress) |
 
-Find scores and supporting guidance under **Scores, sources and help**. There is no sign-up or time limit. Your progress is saved in this browser if your browser allows saving; it does not automatically appear on another device. See [privacy and saving](#privacy). All interactions run in your browser, with no AI service involved during a situation.
+**Discrimination** contains 20 two-decision situations, two for each of the [ten grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). In the colleague scenarios, you can explore the same incident as a Garda who witnesses a colleague’s conduct or as a member of the public who witnesses it. The housing assistance situations concern accommodation.
 
 ### User-flow infographic
 
-A guide to the six steps above, with larger text and a single column for reading on a phone. The PDF has three A4 pages: getting started, making choices, and continuing or finishing. Optional actions are marked separately. Garda Aisling and Daniel illustrate the character-choice step. The two perspective buttons in the PDF open the corresponding perspective setup; the other controls illustrate what to select in the resource.
+The illustrated guide follows a situation from the choice of role to the recap. The three-page A4 PDF links directly to both perspective setups.
 
 <p align="center">
   <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="440" alt="First-time guide to Explore both perspectives. 1. Choose the public or Garda role. A character is ready; optionally select Choose a different character, illustrated with Garda Aisling and Daniel, choose one, then Done. 2. Select Start this situation, or Browse all situations and then Explore this situation. 3. Read the fictional scene and choose a response. 4. Read the explanation and optional supporting details. Try another answer changes your current role's answer. Compare the other side switches roles at the same point and keeps your first answer; answer in that role before continuing if needed. 5. Select Next decision to read another scene, or View recap after your final answer. 6. Review choices and explanations, revisit a decision, try the other role or choose another situation. Your progress is saved in this browser.">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="440" alt="Illustrated version of the six steps above, showing character selection, a response, feedback, perspective switching and the recap.">
   </a>
 </p>
 
@@ -97,44 +98,38 @@ Both perspectives belong to the same learning resource. Choose either starting p
 | Street questions, a bag search, arrest, the station, a young person and concerns about racism. | Suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision. |
 | **[Explore the public perspective →](https://samobrienolinger.github.io/stopped-both-sides/)** | **[Explore the Garda perspective →](https://samobrienolinger.github.io/stopped-both-sides/garda/)** |
 
-Each shared situation offers branching choices, immediate explanations and links to supporting sources. Characters and answers stay with the encounter when you switch sides. Saved progress lets you revisit learning points and revisit routes.
+Each shared situation offers branching choices, immediate explanations and links to supporting sources. Characters and answers stay with the encounter when you switch sides. Saved progress lets you return to an unfinished situation or review a completed route.
 
 The guiding principles are clear information, evidence-based reasoning, dignity and reflection. **Perspective-taking does not imply equal legal powers or equal responsibility.** A member of the public is never scored as responsible for another person's misconduct, and cooperation is not presented as a guarantee of safety.
 
-The original single-role practice also remains available: six public situations with 26 decision nodes, and eight Garda situations. A stage in original practice can transfer into its matching shared situation.
+Single-role practice includes six original public situations or eight original Garda situations, alongside the 20 discrimination situations available to either role. You can move from an original practice decision into the matching stage of the shared situation.
 
 ## Characters and switching sides
 
-**18 fictional LEGO-style characters. Nine for each side.** You choose a character, not a personal identity profile. The cast includes men, women and characters with an ambiguous gender presentation.
+Choose from **10 public characters and 9 Garda characters**. The public roster includes Alex, Noor, Robin, Maya, Daniel, Jo, Erin, Hassan, Pat and Nia.
 
-<p align="center">
-  <img src="assets/characters/cast.webp" width="680" alt="The 18 selectable LEGO-style characters. In each row, the first three figures are public characters and the remaining three are Garda characters.">
-</p>
+**[Choose a public character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Choose a Garda character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda)**
 
-**[Choose a public character](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Choose a Garda character](https://samobrienolinger.github.io/stopped-both-sides/garda/#encounters/garda)**
-
-| When you… | The resource… |
+| When you… | What happens |
 | --- | --- |
-| **Start a shared situation** | Uses your selected character and randomly chooses the character opposite you. |
-| **Switch perspective** | Puts you in the existing opposite character's place, keeping both roles' answers and scores. |
-| **Change character** | Changes only your active character's name and picture. The stage, other character, answers and scores stay in place. Switch sides first to change the other character. |
-| **Continue, resume or replay** | Keeps the same pair, including in feedback and the recap. Starting a new situation chooses a new random counterpart. |
+| Start a shared situation | The site uses your selected character and picks a counterpart. Some stories specify a person or restrict the choice to characters who match the scene. |
+| Switch perspective | You see the same decision from the other role. The site keeps both roles’ answers and scores. |
+| Change a character | Select an editable character label in the scene. Either role’s editable figure can be changed at the current decision. When you play as a named person such as Amina or Jamie, use **Change your avatar** to choose your own avatar while the scene keeps its named character. |
+| Resume a situation | The saved encounter restores the cast and the decisions you have already made. |
 
-**Your character** and **Other character** labels show whose perspective you are exploring. You can change character during a scene, feedback or recap. Names update across supported languages; scenario ages, teaching facts, choices, legal responsibilities and scores remain fixed.
-
-Saved encounters and transfer links retain the pair. Older saved formats remain readable. In original practice, **Change character** opens the matching shared stage and preserves the selected answer. The [character guide](docs/CHARACTERS.md) explains persistence, compatibility and artwork.
+In the supervision situation, the Garda role is a sergeant. In some discrimination situations, the available portraits reflect the age or gender stated in the story. [Character guide](docs/CHARACTERS.md)
 
 ## Accessibility and language
 
-**Make the resource easier to read:** open **Language & reading** in the header or footer, adjust your preferences, then select **Apply preferences**.
+Open **Language & reading** in the header or footer, choose your settings and select **Apply preferences**.
 
 | Setting | Available options |
 | --- | --- |
 | **Language** | English, Gaeilge, Portuguese, Arabic, Polish, Romanian, French, Spanish and Mandarin Chinese in Simplified script. |
-| **Reading** | Larger text, high contrast, increased spacing and reduced motion. |
+| **Reading** | Text at 100%, 115%, 130% or 150%, high contrast, more reading space and reduced motion. |
 | **Navigation** | Keyboard controls, visible focus, status announcements and written role labels alongside perspective colours. |
 
-Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese cover the original shared situations, individual practice and the information pages. Arabic uses right-to-left text. Gaeilge covers the shared situations and the information pages. Selecting Irish during individual practice opens the matching shared situation. All nine language settings cover the 20 discrimination situations, including both roles’ choices and feedback.
+All nine languages cover the shared situations, including the 20 discrimination situations, and the reference pages. Arabic reads from right to left. Selecting Gaeilge during individual practice opens the matching shared situation in Irish. The other eight languages also support the original single-role practice. Source titles and authors keep their published wording.
 
 Changing language keeps your stage, characters, answers, role and scores. Translations are learning aids awaiting independent language and legal review. The implementation targets **WCAG 2.2 AA**; automated checks are not an accessibility certification. Real-device, screen-reader and disabled-user testing remain necessary.
 
@@ -148,7 +143,7 @@ Changing language keeps your stage, characters, answers, role and scores. Transl
 | --- | --- |
 | **Stage feedback** | 1 point for an appropriate response on the stated facts; 0 where the reasoning needs review. More than one response can earn a point. |
 | **Current route** | A completed role result requires an answer in that role at every stage on the finished route. |
-| **Saved learning progress** | Keeps the best point earned at each unique stage, up to 59 per role. Repeating a mastered stage does not add points. |
+| **Saved learning progress** | Keeps the best point earned at each unique stage, up to 99 per role across all shared situations. Repeating a mastered stage does not add points. |
 | **Replay** | Retains latest and best completed results. Revisiting a stage can improve learning progress. |
 
 There are no point penalties for taking time, switching perspective or requesting help. Scores do not measure personal bias, reward avoiding arrest, certify professional competence or establish that the resource changes behaviour.
@@ -177,7 +172,7 @@ Each saved record belongs to one encounter and one role. It keeps the latest and
 - **Switching sites carries progress in the resource link.** Each perspective keeps a separate record; the link carries and merges progress. Copying that link can share the learning record it contains.
 - **Clearing progress has limits.** Clearing one perspective does not clear the other's record or previously copied links. Character preferences are stored separately and are kept when progress is cleared.
 
-Hosting services may retain ordinary access logs. See [Persistence and transfer](docs/PERSPECTIVES-AND-SCORES.md#persistence-and-transfer) for storage limits and recovery behaviour.
+Hosting services may retain ordinary access logs. [Live privacy notice](https://samobrienolinger.github.io/stopped-both-sides/privacy.html) · [Persistence and transfer](docs/PERSPECTIVES-AND-SCORES.md#persistence-and-transfer)
 
 ---
 
@@ -231,7 +226,7 @@ Stopped: Both Sides' distinguishing proposition is **a public-facing Republic of
 
 #### Contribution within the wider learning portfolio
 
-Alongside [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/), which explores migration and settlement, and [Saggart & Citywest Together](https://samobrienolinger.github.io/saggart-and-citywest-together/), which connects local knowledge and community supports, this resource supplies the **encounter-based rights-and-responsibilities learning layer**. Together they offer a potentially useful combination of migration understanding, local belonging and rights literacy. They remain separate resources; this resource addresses public/Garda encounters generally, not migrants as a policing category.
+Alongside [Journeys to Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/), which explores migration and settlement, and [Saggart & Citywest Together](https://samobrienolinger.github.io/saggart-and-citywest-together/), which connects local knowledge and community supports, this resource supplies the **encounter-based rights-and-responsibilities learning layer**. Together they offer a potentially useful combination of migration understanding, local belonging and rights literacy. They remain separate resources; this resource addresses public/Garda encounters generally, not migrants as a policing category.
 
 Specialist legal review, input from communities and Garda educators, accessibility testing and learner evaluation are opportunities to establish accuracy, relevance and educational benefit. Improved conduct, reduced bias or accredited training effectiveness are not claimed as measured outcomes. The comparator description was checked against its official project page on **14 September 2026**; no affiliation, endorsement or exhaustive claim of uniqueness is implied.
 
@@ -523,7 +518,7 @@ Ready to explore? Use the [public perspective](https://samobrienolinger.github.i
 
 ### Run locally
 
-To run locally, use **Git, Python 3 and a modern browser**. To run the checks, also install **Node.js 20 or later and npm**. The application has no package dependencies: no `npm install`, build step, API keys or environment variables are needed.
+To run locally, use **Git, Python 3 and a modern browser**. To run the checks, also install **Node.js 20 or later and npm**. The local website runs directly from the repository. Install the development dependencies if you want to run the Playwright browser suite.
 
 ```bash
 git clone https://github.com/SamOBrienOlinger/stopped-both-sides.git
@@ -537,7 +532,7 @@ Serve the repository over HTTP rather than double-clicking `index.html`, so Java
 
 ### Checks and review
 
-Run checks from the repository root:
+Run the following checks from the repository root.
 
 ```bash
 npm run check
@@ -552,15 +547,9 @@ npm test
 | `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
 | `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
 
-The Node test configuration covers 594 original public-mode routes, 630 original Garda-mode routes and mixed-role routes, plus all 455 role-specific choices at 99 stages on both entrypoints, scores, selected names in English and Irish, character changes, random casting, saved-character transfer, older-link compatibility, translation coverage and GitHub Pages asset paths. Generate fresh results for the revision you are reviewing.
+The Node suites exercise the decision routes, scoring, character and avatar changes, translations, search and saved progress. Playwright runs through the shared situations on both entry points and checks keyboard controls, mobile layouts, scene artwork, search results and switching languages. The [browser workflow](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) includes checks against the published Pages site.
 
-The clearer-first-play implementation at commit [`5d8a9dd`](https://github.com/SamOBrienOlinger/stopped-both-sides/commit/5d8a9dd4fb4a487c701c1a68cb47bd93b91f4a1d) passed **88 Node checks locally** and [all 78 browser checks before publication](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/runs/34286947442): **26 each in Chromium, Firefox and WebKit**. These include recommended starts, keyboard catalogue access, character changes, retained counterparts, responsive layouts and enlarged Irish text. The [interface review](docs/UX-REVIEW.md) includes before/after captures and the limits of this verification.
-
-On `main`, the browser workflow waits for that commit's GitHub Pages publication and repeats the suite against the live site. [See browser runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) for deployment-specific results.
-
-The browser suite also completes all 34 situations from each site with both perspectives, verifies loaded character artwork, reloads completed recaps, and revisits earlier stages. A regression journey reproduces the Noor/Aisling mismatch and checks character changes, Irish text, cross-site resume and recap identity.
-
-The Node interaction checks use a minimal DOM adapter. A separate Playwright suite runs real browser engines, checks rendered layouts and plays through both perspectives. Install its development tools before running it:
+Install the Playwright development tools before running the browser suite.
 
 ```bash
 npm ci
@@ -592,9 +581,9 @@ See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full proces
 
 ### Interface and language implementation
 
-The two perspectives share a mobile-first layout and locally hosted fonts. Teal and mint distinguish the public view; muted blue distinguishes the Garda view. Written role labels and selected states supplement colour. The paired scene illustrations stay side by side in the resource, with perspective controls on a separate row on small screens. See the [button design notes](docs/button-design.md) and [hero design review](design-qa.md).
+Both entry points use the same responsive landing page. The opening illustration places Alex and Garda Aisling outside the GPO. Below it, the two perspective cards show the encounter from opposite viewpoints. Written labels identify each role alongside its colour.
 
-Character controls have translated labels, visible selected states and touch targets of at least 48px. Opening the character picker focuses its heading; **Done** returns focus to **Change character**. Headings and controls wrap on narrow screens, including with enlarged text. A character is already selected at setup; opening the picker is optional.
+Character controls have translated labels and visible selected states. On setup, a character is already selected. During a situation, the character picker and profile controls support keyboard navigation.
 
 Translations are locally hosted and include accessible descriptions; published source names retain their original form. Failed language downloads can be retried without losing progress, and cancelling a pending change prevents it from applying later. Reading settings also work when native dialog support is unavailable.
 
@@ -609,6 +598,7 @@ The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes
 | [data.mjs](data.mjs), [engine.mjs](engine.mjs) | Original public situations, sources and game state |
 | [garda/](garda/) | Garda page, original situations, source library and presentation |
 | [encounters/](encounters/) | Shared scenarios, role switching, branching, scores and progress |
+| [landing/](landing/), [search/](search/) | Landing page and site-wide search |
 | [accessibility/](accessibility/), [locales/](locales/) | Reading controls, perspective palettes and translations |
 | [site.mjs](site.mjs) | Resolves both entry-point addresses within one deployment |
 | [assets/](assets/) | Responsive hero images, character artwork, local fonts and third-party licence notices |
@@ -623,7 +613,7 @@ The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes
 | [Educational approach](#educational-approach-methodology-and-learning-outcomes) | Pedagogical examples, methodology, intended outcomes and research references |
 | [Garda learning](docs/GARDA-LEARNING.md) | Learning aims, situations and evidence boundaries |
 | [Clearer first play](docs/UX-REVIEW.md) | Before/after interface review, simpler onboarding and decision flow |
-| [Characters](docs/CHARACTERS.md) | Character selection, random casting, saved state and artwork |
+| [Characters](docs/CHARACTERS.md) | Character selection, saved state and artwork |
 | [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) | Shared play, scoring, transfer, privacy and maintenance |
 | [Accessibility and languages](docs/ACCESSIBILITY-AND-LANGUAGES.md) | Controls, nine language options, translation maintenance, regression checks and review needs |
 | [Browser compatibility](docs/BROWSER-COMPATIBILITY.md) | Mobile-first layout, browser coverage, touch tests and device-review limits |
@@ -658,9 +648,9 @@ Created by **Sam O’Brien-Olinger** / [Sam Tim Solutions](https://samobrienolin
 
 The visual language draws on [INAR’s website](https://inar.ie/): teal accents, white surfaces, rounded cards and Open Sans. This is not an INAR website and does not use its logo.
 
-The paired LEGO-style hero illustrations were generated with OpenAI image generation from the selected character concept. They are stored locally in three WebP sizes. Perspective labels are accessible, translated HTML links. They appear over the image on desktop and in a shared row above it on small screens, so larger labels cannot hide faces. No LEGO affiliation or endorsement is claimed. See the [hero design review](design-qa.md). The same selected cast is available in a locally hosted, text-free character sheet; [character documentation](docs/CHARACTERS.md) records its generation and use.
+The landing page uses locally hosted, LEGO-style artwork created with OpenAI image generation. Separate Alex and Garda Aisling figures appear against the O’Connell Street background. The GPO, Spire and harp banners are visible in the illustration. The site serves the backdrop at 480, 960 and 1600 pixels wide. The project is independent of LEGO. [Landing page implementation](landing/poster-landing.mjs)
 
-The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [A New Life in Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
+The choice-and-explanation approach builds on [Beaver v Otter](https://samobrienolinger.github.io/beaver-v-otter/) and [Journeys to Ireland](https://samobrienolinger.github.io/My-New-Life-in-Ireland/). The scoring approach draws on [AllyIndex](https://declan444.github.io/24-7-hackathon-team9/); its attribution and the original implementation here are documented in [the scoring guide](docs/PERSPECTIVES-AND-SCORES.md#scoring-rubric).
 
 Design acknowledgements are kept in this README and are not displayed in the resource interface. No endorsement by INAR, ICCL or An Garda Síochána is claimed. The creator's own policing research is identified in the bibliography alongside independent sources.
 

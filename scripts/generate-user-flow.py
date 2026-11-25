@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import subprocess
 
+from reportlab import rl_config
 from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader, simpleSplit
@@ -11,6 +12,8 @@ from PIL import Image
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
+
+rl_config.useA85 = False
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'docs/user-guide'
@@ -40,7 +43,6 @@ console.log(JSON.stringify({count:Object.keys(encounters).length, portraits:
 })}));
 '''], cwd=ROOT, check=True, text=True, capture_output=True)
 production = json.loads(result.stdout)
-assert production['count'] == 24
 assert [p['name'] for p in production['portraits']] == ['Garda Aisling', 'Daniel']
 
 
@@ -210,8 +212,9 @@ def draw(c, page):
 
         rect(16,439,368,82,ICE,12)
         text(30,448,'OPTIONAL: CHOOSE YOUR OWN STORY',10.1,True,BLUE)
-        text(30,470,'At the start, open Browse all situations.\nChoose from 24 situations by topic, then\nselect Explore this situation.',12.2,leading=16.5)
-        text(22,532,'Your progress is saved in this browser.',11.6,False,TEAL)
+        text(30,470,'At the start, open Browse all situations.\n'
+             f"Choose from {production['count']} situations by topic, then\n"
+             'select Explore this situation.',12.2,leading=16.5)
 
     line(22,551,378,551,BORDER,.6)
     text(378,555,f'{page+1} / 3',8.8,True,TEAL,width=30,centered=True)
