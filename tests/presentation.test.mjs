@@ -4,7 +4,7 @@ import {encounters,roles} from '../encounters/catalog.mjs?v=link-audit-20261123'
 import {startEncounter,answer,continueEncounter,switchRole} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {remainingDecisions,variations,topicGroups,learningStatus} from '../encounters/presentation.mjs?v=link-audit-20261123';
 import {recordProgress,emptyProgress} from '../encounters/progress.mjs?v=nia-public-20261123';
-import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
+import {translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 test('Remaining-decision ranges bound every possible continuation, including perspective changes',()=>{
  for(const e of Object.values(encounters)){

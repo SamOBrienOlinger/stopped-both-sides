@@ -1,9 +1,10 @@
+import {renderPosterLanding} from '../landing/poster-landing.mjs';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=nia-public-20261123';
+} from '../learning/play.mjs?v=poster-landing-20261125';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
 import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=nia-public-20261123';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=link-audit-20261123';
@@ -275,30 +276,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}${heading}<div class="info-block landing-overview about-overview" lang="en-IE"><p>Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
  }
  function perspectiveChoice(){
-  const links=roles.map(role=>{
-   // Both entrypoints use the same encounter setup at the public site root.
-   const href=new URL('#encounters/'+role,sites.public).href;
-   const label=role==='public'?'Explore the public perspective':'Explore the Garda perspective';
-   return `<a class="primary perspective-card-link" data-role-tone="${role}" href="${esc(href)}">${perspectiveIcon(role)}<span>${label}</span></a>`;
-  }).join('');
-  const heroImage=perspective=>{
-   const image=width=>new URL(perspective==='garda'
-    ?`../assets/heroes/garda-hi-vis-${width}.jpg?v=ciara-reference-label-20261120`
-    :`../assets/heroes/public-hi-vis-${width}.webp?v=hero-perspectives-20261122`,import.meta.url).href;
-   const srcset=[480,960,1600].map(width=>`${image(width)} ${width}w`).join(', ');
-   return `<img class="encounter-hero-art" data-hero-perspective="${perspective}" src="${image(960)}" srcset="${srcset}" sizes="(min-width: 46rem) 42rem, calc(100vw - 2rem)" width="1600" height="900" alt="" decoding="async"${perspective==='garda'?' fetchpriority="high"':''}>`;
-  };
-  return `<section class="paired-entry reference-landing encounter-hero" aria-labelledby="paired-title perspectives-title">
-   <div class="landing-instructions">
-    <h1 id="paired-title" class="encounter-hero-title">One situation.</h1>
-    ${heroImage('garda')}
-    <h2 id="perspectives-title" class="encounter-hero-title">Two perspectives.</h2>
-    ${heroImage('public')}
-    <p class="landing-deck">Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.</p>
-    <div class="landing-role-actions">${links}</div>
-    <p class="small-note">Read a situation, choose a response, then find out why it matters.</p>
-   </div>
-  </section>${homeActions()}`;
+  return renderPosterLanding({siteRole,perspectiveIcon})+homeActions();
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);

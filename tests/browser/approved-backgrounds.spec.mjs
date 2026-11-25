@@ -1,16 +1,19 @@
 import {test,expect} from '@playwright/test';
 import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
 const cast={public:'public-6',garda:'garda-9'};
-for(const role of ['public','garda'])test(`${role}: both landing images load without cropping at mobile and desktop sizes`,async({page},info)=>{
+for(const role of ['public','garda'])test(`${role}: the poster loads the approved GPO background at mobile and desktop sizes`,async({page},info)=>{
  await page.emulateMedia({reducedMotion:'reduce'});
  for(const width of [320,390,1366]){
   await page.setViewportSize({width,height:900});await page.goto((role==='garda'?'garda/':'./')+'?lang=en#play');
-  const images=page.locator('.encounter-hero-art');await expect(images).toHaveCount(2);
-  await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(i=>i.complete&&i.naturalWidth>0))).toBe(true);
-  const layouts=await images.evaluateAll(nodes=>nodes.map(i=>({src:i.currentSrc,fit:getComputedStyle(i).objectFit,ratio:i.clientWidth/i.clientHeight})));
-  expect(layouts[0].src).toContain('/heroes/garda-hi-vis-');
-  expect(layouts[1].src).toContain('/heroes/public-hi-vis-');
-  for(const layout of layouts){expect(layout.fit).toBe('contain');expect(layout.ratio).toBeCloseTo(16/9,1)}
+  const image=page.locator('.poster-hero .scene-backdrop img');
+  await expect(image).toBeVisible();
+  await expect.poll(()=>image.evaluate(i=>i.complete&&i.naturalWidth>0)).toBe(true);
+  const url=await image.evaluate(i=>i.currentSrc);
+  expect(new URL(url).pathname).toMatch(/\/assets\/dublin-approved\/gpo-city-(480|960|1600)\.webp$/);
+  const response=await page.request.get(url);
+  expect(response.ok()).toBe(true);
+  expect(response.headers()['content-type']).toContain('image/webp');
+  await expect(image).toHaveCSS('object-fit','cover');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
   await page.locator('.reference-landing').screenshot({path:info.outputPath(`landing-${role}-${width}.png`)});
  }

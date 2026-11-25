@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
 import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=poster-landing-20261125';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 await Promise.all(['ar','fr'].map(loadLanguage));

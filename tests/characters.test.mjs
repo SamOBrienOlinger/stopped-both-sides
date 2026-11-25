@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {characters,characterFor,createCast,defaultCast,changeCharacter,createCharacterPreferences,CHARACTER_STORAGE_KEY} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {startEncounter,answer,switchRole,continueEncounter,revisit,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {emptyProgress,recordProgress,packProgress,unpackProgress,runScores} from '../encounters/progress.mjs?v=nia-public-20261123';
-import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
+import {translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 test('All 19 characters are distinct; random casting can select every opposing character',()=>{
  assert.equal(characters.public.length,10);assert.equal(characters.garda.length,9);

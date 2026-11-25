@@ -163,13 +163,13 @@ for(const {path,role} of cases){
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const lang of ['en','ar']){
    await page.goto(path+'?lang='+lang);
-   await expect(page.locator('.landing-instructions')).toBeVisible();
+   await expect(page.locator('.reference-landing')).toBeVisible();
    await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    for(const [width,height] of [[320,568],[390,844],[768,1024],[1366,768]]){
     await page.setViewportSize({width,height});
     await expect.poll(()=>page.evaluate(()=>{
-     const section=document.querySelector('.landing-instructions');
-     const children=['#paired-title','[data-hero-perspective="garda"]','#perspectives-title','[data-hero-perspective="public"]','.landing-deck','.landing-role-actions','.small-note']
+     const section=document.querySelector('.reference-landing');
+     const children=['#paired-title','#perspectives-title','.hero-question','.poster-overview','.learning-steps','.landing-role-actions']
       .map(selector=>section.querySelector(selector)?.getBoundingClientRect());
      const root=document.documentElement;
      const box=section.getBoundingClientRect();

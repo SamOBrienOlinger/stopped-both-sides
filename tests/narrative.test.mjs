@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {encounters,roles} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {characters} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {personalizeText,personalizeHTML,storyIdentity,characterContext} from '../encounters/narrative.mjs?v=nia-public-20261123';
-import {translateText,translateHTML} from '../locales/translate.mjs?v=link-audit-20261123';
+import {translateText,translateHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 test('Noor and Aisling have one identity in the reported street situation',()=>{
  const e=encounters['garda-street'],cast={public:'public-2',garda:'garda-5'};

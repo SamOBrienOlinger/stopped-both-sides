@@ -2,7 +2,7 @@ import {characterArtwork,characterFor} from './characters.mjs?v=nia-public-20261
 import {roleLabels} from './catalog.mjs?v=link-audit-20261123';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
+import {translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',

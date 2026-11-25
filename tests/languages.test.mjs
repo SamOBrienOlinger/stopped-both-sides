@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
@@ -198,5 +198,33 @@ test('All venue-specific setting captions translate in every supported non-Engli
    assert.ok(caption.trim());
    assert.doesNotMatch(caption,/[<>]/);
   }
+ }
+});
+
+test('Poster headings, scene descriptions and example responses translate in every supported language', async () => {
+ route('#play');
+ const phrases = [
+  'Interactive learning prototype',
+  'Interactive learning about rights, choices and perspectives.',
+  'Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.',
+  'Four steps of the learning experience',
+  'Read the situation',
+  '“Can I have a word?”',
+  'Ask why you are being stopped and whether you are free to leave.',
+  'Compare perspectives',
+  'See the same situation from both sides.'
+ ];
+ for (const {id} of languages.filter(language => language.id !== 'en')) {
+  await loadLanguage(id);
+  settings(id);
+  const rendered = main.innerHTML;
+  for (const phrase of phrases) {
+   const translated = translateText(phrase, id);
+   assert.notEqual(translated, phrase, id + ': ' + phrase);
+   assert.ok(rendered.includes(escapeHTML(translated)), id + ': ' + phrase);
+  }
+  assert.ok(rendered.includes('Stopped: Both Sides'));
+  assert.ok(rendered.includes('#encounters/public"'));
+  assert.ok(rendered.includes('#encounters/garda"'));
  }
 });

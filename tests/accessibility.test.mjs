@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {siteRole,siteBase} from './site-fixture.mjs';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=link-audit-20261123';
+import {gaContent,translateHTML,translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
 import {defaults,createPreferences,normalisePreferences,PREFERENCES_KEY} from '../accessibility/preferences.mjs';
 import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {STORAGE_KEY,progressStorageKey} from '../encounters/progress.mjs?v=nia-public-20261123';

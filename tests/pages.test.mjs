@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
+import {renderPosterLanding} from '../landing/poster-landing.mjs';
 import {siteAddresses} from '../site.mjs';
 const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides/');
 import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=nia-public-20261123';
 import {createPreferences} from '../accessibility/preferences.mjs';
-import {translateText,translateHTML} from '../locales/translate.mjs?v=link-audit-20261123';
+import {translateText,translateHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));
@@ -14,7 +15,10 @@ test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const subtitle='An interactive learning resource for the public and Gardaí.';
  const shared=readFileSync(new URL('../encounters/ui.mjs?v=nia-public-20261123',import.meta.url),'utf8');
  assert.ok(shared.includes(subtitle));
-  assert.ok(shared.includes("Explore your human and civil rights and police powers through interactions between members of the public and Gardaí."));
+ const landing=renderPosterLanding({siteRole:'public',perspectiveIcon:()=>''});
+ assert.ok(landing.includes('Interactive learning about rights, choices and perspectives.'));
+ assert.ok(landing.includes('One situation. Two perspectives.'));
+ assert.match(landing,/<h1\b[^>]*data-no-translate[^>]*>Stopped: Both Sides<\/h1>/);
   assert.ok(shared.includes('Browse all situations'));
   assert.ok(shared.includes("Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism."));
   assert.ok(shared.includes("It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication."));

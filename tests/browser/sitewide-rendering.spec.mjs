@@ -290,7 +290,7 @@ async function historyAfterReload(page,role,path,browserName,testInfo){
   const started=performance.now();let previous=scrollY,stable=0;
   const sample=()=>{
    const header=document.querySelector('.header').getBoundingClientRect().bottom;
-   const moving=document.querySelector('.landing-instructions').getAnimations({subtree:true}).some(animation=>{
+   const moving=document.querySelector('.reference-landing').getAnimations({subtree:true}).some(animation=>{
     if(animation.playState==='finished'||animation.playState==='idle')return false;
     const box=animation.effect?.target?.getBoundingClientRect();
     return box&&box.bottom>header&&box.top<innerHeight;

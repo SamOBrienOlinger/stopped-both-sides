@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=poster-landing-20261125';
 
 const entrypoints=['./','garda/'];
 const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};
@@ -9,9 +9,15 @@ for(const path of entrypoints){
  for(const [role,title] of Object.entries(titles)){
   test(`${path} ${role} link opens the selected role by mouse and keyboard`,async({page},info)=>{
    const destination=new URL('#encounters/'+role,info.project.use.baseURL).href;
-   for(const input of ['mouse','keyboard']){
+   const entries=[
+    ['.perspective-card',role==='public'?'Public perspective':'Garda perspective','mouse'],
+    ['.role-picker__item',role==='public'?'Public':'Garda','keyboard'],
+    [roleLinks(role),title,'keyboard']
+   ];
+   if(role===(path==='./'?'public':'garda'))entries.push(['.hero-question','What would you do?','mouse']);
+   for(const [selector,label,input] of entries){
     await page.goto(path+'?lang=en#play');
-    const link=page.getByRole('link',{name:title,exact:true});
+    const link=page.locator('.reference-landing').locator(selector).and(page.getByRole('link',{name:label,exact:true}));
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute('href',destination);
     await expect(link.locator('a,button,input,[tabindex]')).toHaveCount(0);
@@ -38,8 +44,8 @@ for(const path of entrypoints){
     await page.setViewportSize({width,height});
     await page.goto(path+'?lang='+lang+'#play');
     await expect(page.locator('a.perspective-card-link')).toHaveCount(2);
-    await expect(page.locator('.encounter-hero-art')).toHaveCount(2);
-    await expect.poll(()=>page.locator('.encounter-hero-art').evaluateAll(images=>images.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
+    await expect(page.locator('.poster-hero img.hero-public, .poster-hero img.hero-garda')).toHaveCount(2);
+    await expect.poll(()=>page.locator('.poster-hero img.hero-public, .poster-hero img.hero-garda').evaluateAll(images=>images.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
     await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
     await expect.poll(()=>page.evaluate(()=>{
      const root=document.documentElement;

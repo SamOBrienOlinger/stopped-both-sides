@@ -830,7 +830,73 @@ const searchCopy = [
   '显示前20条结果。请添加关键词以缩小搜索范围。'
  ]]
 ];
-const translations = new Map([...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy]);
+const posterCopy = [
+ ['Interactive learning prototype', [
+  'Fréamhshamhail don fhoghlaim idirghníomhach',
+  'Protótipo de aprendizagem interativa',
+  'نموذج أولي للتعلّم التفاعلي',
+  'Prototyp do nauki interaktywnej',
+  'Prototip de învățare interactivă',
+  'Prototype d’apprentissage interactif',
+  'Prototipo de aprendizaje interactivo',
+  '互动学习原型'
+ ]],
+ ['One situation. Two perspectives.', [
+  'Cás amháin. Dhá dhearcadh.', 'Uma situação. Duas perspetivas.', 'موقف واحد. منظوران.', 'Jedna sytuacja. Dwie perspektywy.',
+  'O situație. Două perspective.', 'Une situation. Deux perspectives.', 'Una situación. Dos perspectivas.', '同一个情境。两种视角。'
+ ]],
+ ['Interactive learning about rights, choices and perspectives.', [
+  'Foghlaim idirghníomhach faoi chearta, roghanna agus dearcthaí.',
+  'Aprendizagem interativa sobre direitos, escolhas e perspetivas.',
+  'تعلّم تفاعلي حول الحقوق والخيارات ووجهات النظر.',
+  'Interaktywna nauka o prawach, wyborach i różnych perspektywach.',
+  'Învățare interactivă despre drepturi, alegeri și perspective.',
+  'Un apprentissage interactif sur les droits, les choix et les points de vue.',
+  'Aprendizaje interactivo sobre derechos, decisiones y puntos de vista.',
+  '通过互动学习了解权利、选择和不同的视角。'
+ ]],
+ ['Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.', [
+  'Glac páirt i gcás atá cosúil leis an bhfíorshaol, déan cinntí agus féach ar an gcuma a d’fhéadfadh a bheith ar an gcás céanna ó dhearcthaí éagsúla.',
+  'Entre num cenário inspirado na vida real, tome decisões e descubra como a mesma situação pode parecer diferente consoante o ponto de vista.',
+  'شارك في سيناريو يحاكي الحياة الواقعية، واتخذ قرارات، واكتشف كيف يبدو الموقف نفسه من وجهات نظر مختلفة.',
+  'Weź udział w realistycznym scenariuszu, podejmuj decyzje i zobacz, jak różnie można spojrzeć na tę samą sytuację.',
+  'Intră într-un scenariu inspirat din viața reală, ia decizii și descoperă cum poate fi văzută aceeași situație din perspective diferite.',
+  'Plongez dans un scénario inspiré de la vie réelle, prenez des décisions et découvrez comment une même situation peut être perçue de différents points de vue.',
+  'Participa en un escenario inspirado en la vida real, toma decisiones y descubre cómo cambia la percepción de una misma situación según el punto de vista.',
+  '走进贴近现实的情境，作出决定，看看从不同角度理解同一件事会有什么不同。'
+ ]],
+ ['Read the situation', [
+  'Léigh an cás', 'Leia a situação', 'اقرأ تفاصيل الموقف', 'Przeczytaj opis sytuacji',
+  'Citește descrierea situației', 'Lisez la situation', 'Lee la situación', '阅读情境'
+ ]],
+ ['See the same situation from both sides.', [
+  'Féach ar an gcás céanna ón dá thaobh.', 'Veja a mesma situação de ambos os lados.', 'انظر إلى الموقف نفسه من منظور الطرفين.', 'Spójrz na tę samą sytuację z obu stron.',
+  'Privește aceeași situație din ambele perspective.', 'Découvrez la même situation des deux points de vue.', 'Observa la misma situación desde ambos puntos de vista.', '从双方的角度看同一个情境。'
+ ]],
+ ['Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.', [
+  'Alex agus an Garda Aisling taobh amuigh d’Ard-Oifig an Phoist ar Shráid Uí Chonaill, Baile Átha Cliath.',
+  'Alex e a agente da Garda Aisling em frente à estação central dos correios na O’Connell Street, em Dublin.',
+  'Alex والشرطية الأيرلندية Aisling أمام مبنى البريد العام في شارع أوكونيل في دبلن.',
+  'Alex i funkcjonariuszka Garda Aisling przed gmachem Poczty Głównej przy O’Connell Street w Dublinie.',
+  'Alex și polițista Aisling de la Garda în fața Poștei Centrale de pe O’Connell Street, în Dublin.',
+  'Alex et Aisling, agente de la Garda, devant la poste centrale de Dublin, sur O’Connell Street.',
+  'Alex y Aisling, agente de la Garda, frente a la Oficina Central de Correos en O’Connell Street, Dublín.',
+  'Alex 和爱尔兰警员 Aisling 在都柏林奥康奈尔街的邮政总局门前。'
+ ]],
+ ['Four steps of the learning experience', [
+  'Ceithre chéim den fhoghlaim', 'Quatro etapas de aprendizagem', 'أربع خطوات للتعلّم', 'Cztery etapy nauki',
+  'Patru etape de învățare', 'Les quatre étapes de l’apprentissage', 'Cuatro pasos del aprendizaje', '四个学习步骤'
+ ]],
+ ['Example choices shown for illustration only', [
+  'Roghanna mar shampla amháin', 'Opções apresentadas apenas como exemplo', 'خيارات معروضة على سبيل المثال فقط', 'Przykładowe odpowiedzi pokazane wyłącznie dla ilustracji',
+  'Opțiuni prezentate doar ca exemplu', 'Choix présentés à titre d’exemple uniquement', 'Opciones que se muestran solo como ejemplo', '以下选项仅为示例'
+ ]],
+ ['Start learning with a role', [
+  'Tosaigh ag foghlaim i ról', 'Comece a aprender num dos papéis', 'ابدأ التعلّم باختيار دور', 'Rozpocznij naukę w wybranej roli',
+  'Începe să înveți alegând un rol', 'Commencez l’apprentissage dans un rôle', 'Empieza a aprender eligiendo un papel', '选择角色，开始学习'
+ ]]
+];
+const translations = new Map([...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy,...posterCopy]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }

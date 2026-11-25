@@ -5,7 +5,7 @@ import {sources as gardaSources} from '../garda/sources.mjs?v=link-audit-2026112
 import {encounters,references,roles} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {pabiReport} from '../learning/pabi.mjs?v=pabi-privacy-20261122';
 import {languages} from '../locales/languages.mjs';
-import {loadLanguage,translateText} from '../locales/translate.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 test('The distinct 2025 PABI report has shared bibliographic details and explicit limits',()=>{
  assert.equal(publicSources.pabi.url,pabiReport.url);

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {searchSite} from '../search/site-search.mjs?v=link-audit-20261123';
-import {loadLanguage} from '../locales/translate.mjs?v=link-audit-20261123';
+import {loadLanguage} from '../locales/translate.mjs?v=poster-landing-20261125';
 
 test('Keyword search finds every Discrimination ground, colleague variations and About contributors',()=>{
  const matches=searchSite('discrimination');

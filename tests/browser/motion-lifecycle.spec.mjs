@@ -141,7 +141,7 @@ for(const role of ['public','garda']){
   expect(focus,'a heading-bearing control is available before any focus settlement')
    .toEqual({focused:true,opacity:1,pending:false,cue:null});
   await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await page.reload();await revealsReady(page);
-  await expect(page.locator('.landing-instructions [data-landing-reveal="pending"]')).not.toHaveCount(0);
+  await expect(page.locator('.sbs-poster [data-landing-reveal="pending"]')).not.toHaveCount(0);
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect(page.locator('[data-reveal-pending],[data-motion],[data-landing-reveal]')).toHaveCount(0);
   await expectStaticHeadings(heading,'secondary heading with reduced motion');

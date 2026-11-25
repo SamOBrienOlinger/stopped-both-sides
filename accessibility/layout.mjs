@@ -218,7 +218,7 @@ export function createLayout({main}){
   // This is a tall invitation. Each item owns its viewport entrance, so later
   // text, imagery and actions do not spend their animation before being read.
   // Default CSS stays visible when JS, the observer or motion is unavailable.
-  const next=main.querySelector('.reference-landing .landing-instructions');
+  const next=main.querySelector('.sbs-poster');
   const preferences=[root.lang,root.dir,root.style.getPropertyValue('--reading-size'),
    ...['contrast-high','reading-spacious','motion-reduce'].map(name=>root.classList.contains(name))].join('|');
   const preferenceChange=lastLandingPreferences!==null&&preferences!==lastLandingPreferences;
@@ -245,7 +245,7 @@ export function createLayout({main}){
     revealLandingItem(item);
    }
   },{rootMargin:'0px 0px -15% 0px',threshold:0});
-  for(const item of next.querySelectorAll(':scope > :is(.encounter-hero-title,.encounter-hero-art,.landing-deck,.landing-role-actions,.small-note)')){
+  for(const item of next.querySelectorAll('[data-poster-reveal]')){
    // The caller restores route focus/scroll after update(). The observer
    // measures that new viewport, rather than the previous page's scroll.
    if(item.contains(document.activeElement))continue;

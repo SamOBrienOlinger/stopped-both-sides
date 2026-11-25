@@ -1,12 +1,12 @@
 import {test,expect} from '@playwright/test';
-const hero="Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.";
+const hero="Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.";
 const overview=["Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.","It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.","Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."];
 for(const path of ['./','garda/']){
  test(path+' home shows the revised invitation and both Browse labels',async({page})=>{
   await page.goto(path);
   await expect(page.locator('.landing-deck')).toHaveText(hero);
-  await expect(page.locator('#paired-title')).toHaveText('One situation.');
-  await expect(page.locator('#perspectives-title')).toHaveText('Two perspectives.');
+  await expect(page.locator('#paired-title')).toHaveText('Stopped: Both Sides');
+  await expect(page.locator('#perspectives-title')).toHaveText('One situation. Two perspectives.');
   await expect(page.locator('.perspective-card-link')).toHaveCount(2);
   await expect(page.locator('.about-opening')).toHaveCount(0);
   await expect(page.locator('.topic-explorer h2')).toHaveText('Browse all situations');
@@ -33,8 +33,8 @@ for(const path of ['./','garda/']){
    await expect(page.locator('.perspective-card-link')).toHaveCount(2);
    if(lang!=='en'){
     await expect(page.locator('.landing-deck')).not.toHaveText(hero);
-    await expect(page.locator('#paired-title')).not.toHaveText('One situation.');
-    await expect(page.locator('#perspectives-title')).not.toHaveText('Two perspectives.');
+    await expect(page.locator('#paired-title')).toHaveText('Stopped: Both Sides');
+    await expect(page.locator('#perspectives-title')).not.toHaveText('One situation. Two perspectives.');
    }
    await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    for(const [width,height] of [[320,568],[375,812],[390,844],[568,320],[768,1024],[1366,900]]){

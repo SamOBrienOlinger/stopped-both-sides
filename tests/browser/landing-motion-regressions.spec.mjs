@@ -91,7 +91,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await expect(title).not.toHaveAttribute('data-landing-reveal');
   await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');
   // The old page's deep scroll must not suppress the new hero's later lines.
-  const laterCopy=page.locator('.landing-instructions .small-note');
+  const laterCopy=page.locator('.sbs-poster .landing-role-actions');
   await expect(laterCopy).toHaveAttribute('data-landing-reveal','pending');
   await laterCopy.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
   await expect(laterCopy).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);

@@ -1,6 +1,6 @@
 import {openNavigation} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=link-audit-20261123';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=poster-landing-20261125';
 
 await Promise.all(['ar','fr','zh-Hans'].map(loadLanguage));
 const variants=[

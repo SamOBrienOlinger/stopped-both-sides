@@ -6,23 +6,21 @@ import {expectStaticHeadings} from './static-headings.mjs';
 const paths=['./','garda/'];
 const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'public-5',garda:'garda-6'}}));
 const invitation=[
- 'One situation.',
- 'Two perspectives.',
- 'Explore your human and civil rights and police powers through interactions between members of the public and Gardaí.',
- 'Read a situation, choose a response, then find out why it matters.'
+ 'Stopped: Both Sides',
+ 'One situation. Two perspectives.',
+ 'Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.'
 ];
-const invitationText=':scope > :is(.encounter-hero-title,.landing-deck,.small-note)';
+const invitationText='#paired-title, #perspectives-title, .landing-deck';
 async function captureLanding(page,path){
  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
  await page.screenshot({path,fullPage:true});
 }
 
-const heroSelectors=['#paired-title','[data-hero-perspective="garda"]','#perspectives-title',
- '[data-hero-perspective="public"]','.landing-deck','.landing-role-actions','.small-note'];
-const heroItems=':scope > :is(.encounter-hero-title,.encounter-hero-art,.landing-deck,.landing-role-actions,.small-note)';
+const heroSelectors=['#paired-title','#perspectives-title','.hero-public','.hero-garda','.landing-deck','.landing-role-actions'];
+const heroItems='[data-poster-reveal]';
 const settledStyles=elements=>elements.map(element=>({opacity:getComputedStyle(element).opacity,
  transform:getComputedStyle(element).transform,animation:getComputedStyle(element).animationName}));
-const visibleStyles=Array(7).fill({opacity:'1',transform:'none',animation:'none'});
+const visibleStyles=Array(heroSelectors.length).fill({opacity:'1',transform:'none',animation:'none'});
 const frames=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 
 async function recordEntrances(page){
@@ -34,8 +32,8 @@ async function recordEntrances(page){
   };
   document.addEventListener('animationstart',event=>{
    const item=event.target;
-   if(event.animationName!=='landing-portfolio-line-reveal'||!item.parentElement?.matches('.landing-instructions'))return;
-   const key=item.id||(item.dataset.heroPerspective?'image-'+item.dataset.heroPerspective:
+   if(event.animationName!=='landing-portfolio-line-reveal'||!item.matches('[data-poster-reveal]'))return;
+   const key=item.id||(item.matches('.hero-garda')?'image-garda':item.matches('.hero-public')?'image-public':
     item.matches('.landing-deck')?'deck':item.matches('.landing-role-actions')?'actions':'note');
    const style=getComputedStyle(item);
    window.__landingStarts.push({key,text:item.textContent,duration:style.animationDuration,
@@ -63,7 +61,7 @@ async function holdFirstHero(page,{fail=false}={}){
  let release,seen;
  const gate=new Promise(resolve=>{release=resolve;}),requested=new Promise(resolve=>{seen=resolve;});
  const pending=[];
- await page.route(url=>/\/assets\/heroes\/garda-hi-vis-\d+\.jpg$/.test(url.pathname),route=>{
+ await page.route(url=>url.pathname.endsWith('/assets/characters/poster-aisling.webp'),route=>{
   seen();
   const work=(async()=>{await gate;await (fail?route.abort('failed'):route.continue());})();
   pending.push(work);return work;
@@ -80,18 +78,18 @@ for(const path of paths){
   await page.setViewportSize({width:1366,height:768});
   await recordEntrances(page);
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.reference-landing .landing-instructions'),items=group.locator(heroItems);
-  await expect(group).toBeVisible();await expect(items).toHaveCount(7);
+  const group=page.locator('.sbs-poster'),items=group.locator(heroItems);
+  await expect(group).toBeVisible();await expect(items).toHaveCount(heroSelectors.length);
   const lines=group.locator(invitationText);
   await expect(lines).toHaveText(invitation);
   await page.evaluate(()=>document.fonts.ready);
-  const deck=group.locator('.landing-deck');
-  expect(await deck.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
-   'the later copy begins below the viewport in the two-image hero').toBeGreaterThan(0);
-  await expect(deck).toHaveAttribute('data-landing-reveal','pending');
-  await expect(deck).toHaveCSS('animation-name','none');
-  expect(await page.evaluate(()=>window.__landingStarts.some(item=>item.key==='deck')),
-   'offscreen copy has not already spent its entrance').toBe(false);
+  const actions=group.locator('.landing-role-actions');
+  expect(await actions.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
+   'the final role links begin below the viewport').toBeGreaterThan(0);
+  await expect(actions).toHaveAttribute('data-landing-reveal','pending');
+  await expect(actions).toHaveCSS('animation-name','none');
+  expect(await page.evaluate(()=>window.__landingStarts.some(item=>item.key==='actions')),
+   'offscreen links keep their entrance until they approach the viewport').toBe(false);
   await expectStaticHeadings(page.locator('#main h2:not(#perspectives-title)'),
    'subheadings outside the requested hero stay static');
   for(const selector of heroSelectors){
@@ -102,7 +100,7 @@ for(const path of paths){
   }
   await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
   const starts=await page.evaluate(()=>window.__landingStarts);
-  expect(starts.map(item=>item.key).sort()).toEqual(['paired-title','image-garda','perspectives-title','image-public','deck','actions','note'].sort());
+  expect(starts.map(item=>item.key).sort()).toEqual(['paired-title','image-garda','perspectives-title','image-public','deck','actions'].sort());
   for(const item of starts){
    expect(item.duration,item.key+' uses the reference duration').toBe('1s');
    expect(item.easing,item.key+' uses the reference easing').toBe('ease-out');
@@ -136,7 +134,7 @@ for(const path of paths){
   await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
   await page.setViewportSize({width:320,height:568});
   await expect.poll(()=>page.evaluate(()=>{
-   const root=document.documentElement,group=document.querySelector('.landing-instructions');
+   const root=document.documentElement,group=document.querySelector('.sbs-poster');
    const box=group.getBoundingClientRect();
    return root.scrollWidth<=root.clientWidth+2&&box.left>=-2&&box.right<=root.clientWidth+2;
   })).toBe(true);
@@ -146,9 +144,9 @@ for(const path of paths){
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.addInitScript(()=>{window.IntersectionObserver=undefined;});
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.landing-instructions');
+  const group=page.locator('.sbs-poster');
   await expect(group.locator(invitationText)).toHaveText(invitation);
-  await expect(group.locator(heroItems)).toHaveCount(7);
+  await expect(group.locator(heroItems)).toHaveCount(heroSelectors.length);
   await expect(page.locator('[data-landing-reveal]')).toHaveCount(0);
   expect(await group.locator(heroItems).evaluateAll(settledStyles)).toEqual(visibleStyles);
  });
@@ -160,13 +158,13 @@ for(const path of paths){
   const held=await holdFirstHero(page);
   try{
    await page.goto(path+'?lang=en#play',{waitUntil:'domcontentloaded'});await held.requested;
-   const group=page.locator('.landing-instructions'),image=group.locator('[data-hero-perspective="garda"]');
+   const group=page.locator('.sbs-poster'),image=group.locator('.hero-garda');
    const title=group.locator('#paired-title'),deck=group.locator('.landing-deck');
    await expect(title).toHaveAttribute('data-landing-reveal','complete');
    await expect(image).toHaveAttribute('data-landing-reveal','pending');
    const reserved=await image.evaluate(element=>({width:element.getBoundingClientRect().width,height:element.getBoundingClientRect().height}));
    expect(reserved.width).toBeGreaterThan(0);
-   expect(Math.abs(reserved.width/reserved.height-16/9)).toBeLessThan(.02);
+   expect(reserved.height).toBeGreaterThan(0);
    await deck.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
    await expect(deck).toHaveAttribute('data-landing-reveal','complete');
    expect(await image.evaluate(element=>element.complete),'copy finishes while the requested image is still pending').toBe(false);
@@ -196,12 +194,12 @@ for(const path of paths){
     const imageCase=failure?'failure':'cancel';
     await page.goto(path+'?lang=en&hero-image-case='+imageCase+'#play',{waitUntil:'domcontentloaded'});
     await held.requested;
-    const group=page.locator('.landing-instructions'),items=group.locator(heroItems);
-    const image=group.locator('[data-hero-perspective="garda"]');
+    const group=page.locator('.sbs-poster'),items=group.locator(heroItems);
+    const image=group.locator('.hero-garda');
     await expect(image).toHaveAttribute('data-landing-reveal','pending');
     if(!failure){
      // Focus a real keyboard destination while its action group is pending.
-     const link=group.locator('.perspective-card-link').first();
+     const link=group.locator('.landing-role-actions a').first();
      await expect(group.locator('.landing-role-actions')).toHaveAttribute('data-landing-reveal','pending');
      await link.focus();await expect(link).toBeFocused();
      await expect(group.locator('.landing-role-actions')).not.toHaveAttribute('data-landing-reveal');
@@ -231,28 +229,31 @@ for(const path of paths){
   }
  });
 
- test(path+' landing pairs each heading with its image and keeps route focus unframed',async({page},testInfo)=>{
+ test(path+' poster fits both figures, headings and controls and keeps route focus unframed',async({page},testInfo)=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.landing-instructions');
-  const images=group.locator('.encounter-hero-art');
+  const group=page.locator('.sbs-poster');
+  const images=group.locator('.hero-characters img');
   await expect(images).toHaveCount(2);
   await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
   await page.evaluate(()=>document.fonts.ready);
-  const fits=()=>group.evaluate(element=>{
-   const selectors=['#paired-title','[data-hero-perspective="garda"]','#perspectives-title','[data-hero-perspective="public"]','.landing-deck','.landing-role-actions','.small-note'];
-   const children=selectors.map(selector=>element.querySelector(selector));
-   const root=document.documentElement,box=element.getBoundingClientRect();
-   const rects=children.map(child=>child.getBoundingClientRect());
+  const fits=()=>group.evaluate(poster=>{
+   const root=document.documentElement,box=poster.getBoundingClientRect();
+   const children=[...poster.querySelectorAll('[data-poster-reveal], .hero-question, .perspective-card')];
+   const bounds=children.map(child=>child.getBoundingClientRect());
+   const hero=poster.querySelector('.poster-hero').getBoundingClientRect();
+   const scene=poster.querySelector('.hero-characters');
+   const clip=scene.getBoundingClientRect();
+   const [alex,aisling]=[...scene.querySelectorAll('img')].map(img=>img.getBoundingClientRect());
    return {
-    order:children.every((child,index)=>!index||!!(children[index-1].compareDocumentPosition(child)&Node.DOCUMENT_POSITION_FOLLOWING)),
-    vertical:rects.every((rect,index)=>!index||rects[index-1].bottom<=rect.top+1),
-    contained:rects.every(rect=>rect.left>=box.left-1&&rect.right<=box.right+1)&&box.left>=-1&&box.right<=root.clientWidth+1,
-    noOverflow:root.scrollWidth<=root.clientWidth+1&&children.every(child=>child.scrollWidth<=child.clientWidth+1),
-    proportions:children.filter(child=>child.tagName==='IMG').every(image=>Math.abs(image.clientWidth/image.clientHeight-16/9)<.02)
+    contained:bounds.every(rect=>rect.left>=box.left-1&&rect.right<=box.right+1)&&box.left>=-1&&box.right<=root.clientWidth+1,
+    noOverflow:root.scrollWidth<=root.clientWidth+1&&children.filter(child=>child.matches('h1,p')).every(child=>child.scrollWidth<=child.clientWidth+1),
+    figures:getComputedStyle(scene).overflow==='hidden'&&clip.top>=hero.top-1&&clip.bottom<=hero.bottom+1&&
+      [alex,aisling].every(rect=>rect.width>0&&Math.min(rect.bottom,clip.bottom)-Math.max(rect.top,clip.top)>0),
+    separated:alex.right<=aisling.left+1||aisling.right<=alex.left+1
    };
   });
-  const expected={order:true,vertical:true,contained:true,noOverflow:true,proportions:true};
+  const expected={contained:true,noOverflow:true,figures:true,separated:true};
   const label=path==='garda/'?'garda':'public';
   for(const width of [280,320,375,390,768,1366]){
    await page.setViewportSize({width,height:844});
@@ -276,7 +277,7 @@ for(const path of paths){
   }),'the actual Home return exposes the focused heading before any capture scroll').toEqual({belowHeader:true,withinViewport:true});
   await captureLanding(page,testInfo.outputPath(`${label}-landing-return-focus-375.png`));
   await page.keyboard.press('Tab');
-  const firstLink=group.locator('.perspective-card-link').first();
+  const firstLink=group.locator('.hero-question');
   await expect(firstLink).toBeFocused();
   await expect(firstLink).toHaveCSS('outline-style','solid');
   expect(await firstLink.evaluate(link=>parseFloat(getComputedStyle(link).outlineWidth))).toBeGreaterThanOrEqual(2);

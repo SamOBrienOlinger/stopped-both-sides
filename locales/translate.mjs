@@ -1,4 +1,4 @@
-import {learningCopy} from './play-copy.mjs?v=contributors-expanded-20261122';
+import {learningCopy} from './play-copy.mjs?v=poster-landing-20261125';
 import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';
@@ -22,6 +22,7 @@ for(const e of Object.values(encounters)){
 const ui={
  'Home':'Baile',
  'Choose this perspective':'Roghnaigh an taobh seo',
+ 'Compare perspectives':'Cuir na dearcthaí i gcomparáid',
  'Public':'An pobal',
  'LEARN THROUGH EVERYDAY SITUATIONS':'FOGHLAIM TRÍ CHÁSANNA LAETHÚLA',
  'Know your human and civil rights. Understand fair decisions.':'Bíodh do chearta daonna agus sibhialta ar eolas agat. Tuig cinntí córa.',

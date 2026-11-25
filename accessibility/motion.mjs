@@ -199,7 +199,7 @@ export function createMotion({main,getLegacyState=()=>null}){
   const pageChange=before&&next.mode==='content'&&before.page!==next.page&&!preferenceChange;
   // The landing's individual text entrances own its arrival. A whole-page
   // fade would dim those lines again, including the heading given route focus.
-  const landingEntry=main.querySelector('.reference-landing .landing-instructions');
+  const landingEntry=main.querySelector('.sbs-poster');
   if(pageChange&&allowed()&&!landingEntry)cue(main,'page',()=>{if(previous===next)observeReveals(next,false);});
   else afterFocus(main,'observe',()=>observeReveals(next,preferenceChange));
  }

@@ -30,7 +30,7 @@ async function settings(page){
 }
 async function checkHeroControls(page){
  await page.emulateMedia({reducedMotion:'reduce'});
- const hero=page.locator('.encounter-hero');
+ const hero=page.locator('.reference-landing');
  const links=hero.locator('.perspective-card-link');
  await expect(links).toHaveCount(2);
  const targets=await links.evaluateAll(controls=>controls.map(control=>{
@@ -39,55 +39,33 @@ async function checkHeroControls(page){
    clipped:control.scrollWidth>control.clientWidth+1||control.scrollHeight>control.clientHeight+1};
  }));
  const [first,second]=targets;
- expect(Math.abs(first.x-second.x),'stacked links align at the start').toBeLessThanOrEqual(1);
- expect(Math.abs(first.width-second.width),'both roles get equal-width controls').toBeLessThanOrEqual(1);
- expect(second.y,'the two links never overlap').toBeGreaterThan(first.bottom);
+ const overlap=Math.min(first.x+first.width,second.x+second.width)-Math.max(first.x,second.x);
+ expect(overlap<=1||second.y>=first.bottom-1,'the two links never overlap').toBe(true);
  for(const target of targets){
   expect(target.height,'touch target height').toBeGreaterThanOrEqual(48);
   expect(target.width,'touch target width').toBeGreaterThanOrEqual(44);
   expect(target.clipped,'translated control text must fit').toBe(false);
  }
- const images=hero.locator('.encounter-hero-art');
- await expect(images).toHaveCount(2);
+ const figures=hero.locator('img.hero-public, img.hero-garda');
+ await expect(figures).toHaveCount(2);
  await expect(hero.locator('#paired-title')).toBeVisible();
  await expect(hero.locator('#perspectives-title')).toBeVisible();
- if(await page.locator('html').evaluate(root=>root.classList.contains('contrast-high'))){
-  for(const art of await images.all())await expect(art).toBeHidden();
- }else{
-  for(const art of await images.all())await expect(art).toBeVisible();
-  await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
-  const layout=await hero.evaluate(element=>{
-   const copy=element.querySelector('.landing-instructions');
-   return {copyRect:copy.getBoundingClientRect().toJSON(),
-    title:copy.querySelector('#paired-title').getBoundingClientRect().toJSON(),
-    secondTitle:copy.querySelector('#perspectives-title').getBoundingClientRect().toJSON(),
-    deckTop:copy.querySelector('.landing-deck').getBoundingClientRect().top,
-    images:[...copy.querySelectorAll('.encounter-hero-art')].map(art=>({
-     rect:art.getBoundingClientRect().toJSON(),sourceRatio:art.naturalWidth/art.naturalHeight,fit:getComputedStyle(art).objectFit
-    }))};
-  });
-  const {copyRect,title,secondTitle,deckTop}=layout;
-  for(const {rect,sourceRatio,fit} of layout.images){
-   expect(fit,'the full scene is visible').toBe('contain');
-   expect(Math.abs(rect.width/rect.height-sourceRatio),'each image keeps its source proportions').toBeLessThan(.01);
-   expect(rect.left,'each image stays within the invitation').toBeGreaterThanOrEqual(copyRect.left-1);
-   expect(rect.right,'each image stays within the invitation').toBeLessThanOrEqual(copyRect.right+1);
-   expect(Math.abs(rect.width-copyRect.width),'each complete view fills the available column').toBeLessThanOrEqual(1);
+ const highContrast=await page.locator('html').evaluate(root=>root.classList.contains('contrast-high'));
+ for(const figure of await figures.all()){
+  if(highContrast)await expect(figure).toBeHidden();
+  else {
+   await expect(figure).toBeVisible();
+   await expect.poll(()=>figure.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
   }
-  const [first,second]=layout.images.map(image=>image.rect);
-  expect(Math.abs(first.width-second.width),'both views receive equal space').toBeLessThanOrEqual(1);
-  expect(first.top,'the first illustration follows One situation.').toBeGreaterThan(title.bottom);
-  expect(secondTitle.top,'Two perspectives. follows the first illustration').toBeGreaterThan(first.bottom);
-  expect(second.top,'the reverse illustration follows Two perspectives.').toBeGreaterThan(secondTitle.bottom);
-  expect(second.bottom,'the introduction follows both illustrations').toBeLessThan(deckTop);
-  expect(Math.abs(first.left-second.left),'the views stay aligned at every width').toBeLessThanOrEqual(1);
  }
+ await expect(hero.locator('.hero-question')).toBeVisible();
+ for(const label of await hero.locator('.perspective-label').all())await expect(label).toBeVisible();
  await expect(page.locator('.brick-cloud')).toHaveCount(0);
 }
 async function captureHero(page,role,width,state,testInfo){
  if(![320,390,768,1366].includes(width))return;
  await testInfo.attach(`hero-${role}-${width}-${state}`,{
-  body:await page.locator('.encounter-hero').screenshot({animations:'disabled'}),
+  body:await page.locator('.reference-landing').screenshot({animations:'disabled'}),
   contentType:'image/png'
  });
 }
@@ -247,7 +225,7 @@ for(const role of ['public','garda']){
   try{
    await page.goto(paths[role]);await ready(page);
    await checkHeroControls(page);
-   await page.locator(`.paired-entry a.perspective-card-link[data-role-tone="${role}"]`).tap();
+   await page.locator(`.reference-landing a.perspective-card-link[data-role-tone="${role}"]`).tap();
    await expect(page.locator('.encounter-card')).toHaveCount(34);
    await page.locator('[data-action="paired-quick-start"]').tap();
    await expect(page.locator('.paired-game')).toBeVisible();

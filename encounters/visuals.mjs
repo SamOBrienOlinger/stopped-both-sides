@@ -1,7 +1,7 @@
 import {encounters} from './catalog.mjs?v=link-audit-20261123';
 import {renderScenePreview} from './scenes.mjs?v=nia-public-20261123';
 import {topicGroups} from './presentation.mjs?v=link-audit-20261123';
-import {practiceGoal} from '../learning/play.mjs?v=nia-public-20261123';
+import {practiceGoal} from '../learning/play.mjs?v=poster-landing-20261125';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){

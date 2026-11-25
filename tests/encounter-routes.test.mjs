@@ -65,28 +65,16 @@ test('PABI can be found in each perspective’s reference page alongside the exi
 
 test('Both roles can start every situation; the shared facts and role controls remain present',()=>{
  route('#play');
- const title=main.innerHTML.match(/<h1\b[^>]*id="paired-title"[^>]*>One situation\.<\/h1>/);
- const secondTitle=main.innerHTML.match(/<h2\b[^>]*id="perspectives-title"[^>]*>Two perspectives\.<\/h2>/);
- assert.ok(title);assert.ok(secondTitle);
- const matches=[...main.innerHTML.matchAll(/<img\b[^>]*class="encounter-hero-art"[^>]*>/g)];
- const heroImages=matches.map(match=>match[0]);
- assert.equal(heroImages.length,2);
- assert.ok(title.index<matches[0].index&&matches[0].index<secondTitle.index&&secondTitle.index<matches[1].index,
-  'each heading is followed by its corresponding view in reading order');
- assert.ok(matches[1].index<main.innerHTML.indexOf('class="landing-deck"'));
- assert.match(heroImages[0],/data-hero-perspective="garda"[^>]*garda-hi-vis-960\.jpg/);
- assert.match(heroImages[1],/data-hero-perspective="public"[^>]*public-hi-vis-960\.webp/);
- for(const image of heroImages){
-  assert.match(image,/480w[^>]*960w[^>]*1600w/);
-  assert.match(image,/width="1600" height="900" alt=""/);
- }
- const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};
+ assert.match(main.innerHTML,/<h1\b[^>]*id="paired-title"[^>]*>Stopped: Both Sides<\/h1>/);
+ assert.match(main.innerHTML,/<p\b[^>]*id="perspectives-title"[^>]*>One situation\. Two perspectives\.<\/p>/);
+ assert.match(main.innerHTML,/assets\/dublin-approved\/gpo-city-1600\.webp/);
+ const links=[...main.innerHTML.matchAll(/<a\b([^>]+)>([\s\S]*?)<\/a>/g)];
  for(const role of roles){
   const href=new URL('#encounters/'+role,sites.public).href;
-  const opening=`<a class="primary perspective-card-link" data-role-tone="${role}" href="${href}">`;
-  const link=main.innerHTML.split(opening)[1]?.split('</a>')[0];
-  assert.ok(link,'the '+role+' role link uses the public-root encounter URL');
-  assert.ok(link.endsWith(`<span>${titles[role]}</span>`));
+  const link=links.find(([,attributes])=>attributes.includes('perspective-card-link')&&attributes.includes(`data-role-tone="${role}"`));
+  assert.ok(link,'a primary link is provided for '+role);
+  assert.ok(link[1].includes(`href="${href}"`),'the role link opens the shared encounter setup');
+  assert.ok(link[2].includes(role==='public'?'Explore the public perspective':'Explore the Garda perspective'));
  }
  for(const role of roles){route('#encounters/'+role);assert.equal((main.innerHTML.match(/data-action="paired-start"/g)||[]).length,situationCount);
   const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];

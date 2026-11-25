@@ -5,7 +5,7 @@ import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audi
 import {characters} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=nia-public-20261123';
-import {translateText} from '../locales/translate.mjs?v=link-audit-20261123';
+import {translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
 import {backgroundImage} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
 import {situationParticipants} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
 
