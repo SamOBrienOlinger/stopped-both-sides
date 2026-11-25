@@ -1,6 +1,6 @@
-import {escapeHTML as esc} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {escapeHTML as esc} from '../locales/translate.mjs?v=final-touches-20261125';
 import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=final-touches-20261125';
 import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,

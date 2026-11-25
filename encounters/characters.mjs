@@ -14,6 +14,7 @@ export const characterFor=(role,id)=>characters[role]?.find(character=>character
 // Dedicated artwork is resolved before the legacy sheets. Existing character
 // IDs, preferences and atlas coordinates remain unchanged as the roster grows.
 export function characterArtwork(character,pose='portrait'){
+ if(character.sceneArtwork)return character.sceneArtwork;
  const updated=publicArtwork(character)||gardaArtwork(character);
  if(updated)return updated;
  const {column,row}=character;

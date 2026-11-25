@@ -1,8 +1,9 @@
+import {storyCharacter} from '../encounters/story-cast.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=pabi-privacy-20261122';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=final-touches-20261125';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
@@ -155,7 +156,11 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
     assert.ok(main.innerHTML.includes('<div class="scene-setting">'+escapeHTML(caption)+'</div>'));
    }
    if(e.language)assert.ok(main.innerHTML.includes(`<p class="story-text"><span lang="${e.language}" dir="ltr" data-no-translate>${escapeHTML(node.scene)}</span></p>`));
-   assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.public+'"'));assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.garda+'"'));
+   assert.deepEqual(current().cast,base.cast);
+   for(const role of roles){
+    const shown=storyCharacter(base,role);
+    assert.ok(main.innerHTML.includes('data-character-id="'+shown.id+'" data-cast-role="'+role+'"'));
+   }
    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"/);
    assert.doesNotMatch(main.innerHTML,/[←→]/);
    for(const role of roles)for(let index=0;index<node.views[role].choices.length;index++)queue.push(continueEncounter(answer(switchRole(base,role),index)));

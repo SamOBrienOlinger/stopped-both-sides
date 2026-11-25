@@ -1,19 +1,20 @@
+import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs';
 import {renderPosterLanding} from '../landing/poster-landing.mjs';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, scenarioCopy, situationStory, termsInDecision
-} from '../learning/play.mjs?v=poster-landing-20261125';
+} from '../learning/play.mjs?v=final-touches-20261125';
 import {supportRecap} from '../learning/support.mjs?v=human-civil-rights-20261122';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=nia-public-20261123';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=final-touches-20261125';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=link-audit-20261123';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=nia-public-20261123';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=nia-public-20261123';
-import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences,charactersForSituation} from './characters.mjs?v=nia-public-20261123';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=nia-public-20261123';
-import {situationRoleLabel} from './situation-cast.mjs?v=nia-public-20261123';
-import {characterContext,personalizeHTML} from './narrative.mjs?v=nia-public-20261123';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,stateHash,fromOriginal} from './engine.mjs?v=final-touches-20261125';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=final-touches-20261125';
+import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=final-touches-20261125';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=final-touches-20261125';
+import {situationRoleLabel} from './situation-cast.mjs?v=final-touches-20261125';
+import {characterContext,personalizeHTML} from './narrative.mjs?v=final-touches-20261125';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=link-audit-20261123';
 import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=link-audit-20261123';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=situation-locations-20261122';
@@ -92,28 +93,31 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const scores=runScores(s);
   return `<div class="role-scores ${compact?'compact':''}" aria-label="Scores on this route">${roles.map(role=>`<div class="role-score ${s.role===role?'active':''}" data-role-tone="${role}"><span>${roleLabels[role]}</span><strong>${scores[role].points} / ${scores[role].answered} <small>points</small></strong><span>${scores[role].answered?`${scores[role].answered} decision${scores[role].answered===1?'':'s'} answered`:'No answers yet'}</span></div>`).join('')}</div>`;
  }
- function characterImage(role,id){
-  const art=characterArtwork(characterFor(role,id));
+ function characterImage(role,id,character=characterFor(role,id)){
+  const art=characterArtwork(character);
   return `<span class="character-image" aria-hidden="true"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async" style="${art.style}"></span>`;
  }
  function castDisplay(s){
   const e=encounters[s.id],stage=s.complete?e.nodes[s.history.at(-1).nodeId]:currentStage(s);
   const cards=[s.role,otherRole(s.role)].map(role=>{
+   const person=storyCharacter(s,role,stage.id);
    const context=situationRoleLabel(s.id,role)||characterContext(e,stage,role);
-   return `<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${s.cast[role]}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,s.cast[role])}<div><span class="cast-label">${role===s.role?'Your character':'Other character'}</span><strong data-no-translate>${esc(characterFor(role,s.cast[role]).name)}</strong>${context?`<span class="scenario-person">${esc(context)}</span>`:''}</div></div>`;
+   const scripted=fixedStoryCharacter(s.id,role,stage.id,s.authored)||s.id==='garda-supervision'&&role==='garda';
+   const label=scripted?roleLabels[role]:role===s.role?'Your character':'Other character';
+   return `<div class="cast-character ${role===s.role?'is-you':''}" data-character-id="${person.id}" data-cast-role="${role}" data-role-tone="${role}">${characterImage(role,person.id,person)}<div><span class="cast-label">${label}</span><strong${person.descriptive?'':' data-no-translate'}>${esc(person.name)}</strong>${context&&context!==person.name?`<span class="scenario-person">${esc(context)}</span>`:''}</div></div>`;
   });
   return `<div class="encounter-cast" aria-label="Characters in this situation">${cards.join('')}</div>`;
  }
  function characterPicker(role,selected,inGame=false){
-  const available=inGame?charactersForSituation(state?.id,role):characters[role];
-  const requirement=available.length<characters[role].length?`<p class="scene-cast-requirement">${scenarioCopy(state.id,'These characters match the age or gender stated in this situation.')}</p>`:'';
+  const available=inGame?storyCastOptions(state?.id,role):characters[role];
+  const requirement=state?.id==='garda-supervision'&&role==='garda'&&inGame?'<p class="scene-cast-requirement">Supervising sergeant</p>':available.length<characters[role].length?`<p class="scene-cast-requirement">${scenarioCopy(state.id,'These characters match the age or gender stated in this situation.')}</p>`:'';
   return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div>${requirement}<div class="character-options" role="group" aria-label="Available characters">${available.map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
  }
  function focusCharacterPicker(){focusControl(document.querySelector('#character-picker-title'));}
  function openCharacterPicker(event){
   const button=event.target,role=button.dataset?.sceneLabelRole,route=location.hash.slice(1);
   const original=route.startsWith('scenario/')?getOriginalSession():null;
-  if(!roles.includes(role)||(!original&&(!route.startsWith('encounter/')||!state)))return;
+  if(button.hasAttribute?.('data-story-fixed')||!roles.includes(role)||(!original&&(!route.startsWith('encounter/')||!state)))return;
   characterPickerTarget={role,sceneId:button.closest('.encounter-scene')?.dataset.sceneId};
   if(original){sharedReturn=practiceReturn;navigate(legacyState(original),true,false);}
   else rerender(false);
@@ -136,18 +140,27 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    const previous=decodeState(saved?.token||store.value.last);
    legacyCasts.set(key,previous?.id===key?previous.cast:createCast(siteRole,characterPreferences.value[siteRole]));
   }
-  return fromOriginal(original,siteRole,targetRole,legacyCasts.get(key));
+  return {...fromOriginal(original,siteRole,targetRole,legacyCasts.get(key)),authored:true};
+ }
+ function turnAvatar(s){
+  if(s.complete)return {credit:'',portrait:''};
+  const learner=characterFor(s.role,s.cast[s.role]);
+  const subject=storyCharacter(s,s.role);
+  const differs=learner.id!==subject.id;
+  const credit=differs?`<span id="turn-avatar-credit"><span>Your avatar</span> · <bdi data-no-translate>${esc(learner.name)}</bdi></span>`:'';
+  const accessible=differs?'aria-labelledby="turn-avatar-credit"':`aria-label="${esc(learner.name)}, your current ${esc(roleLabels[s.role])} character"`;
+  const portrait=`<span class="turn-avatar" role="img" ${accessible} data-role="${s.role}" data-character-id="${learner.id}">${characterImage(s.role,learner.id,learner)}</span>`;
+  return {credit,portrait};
  }
  function roleBar(s){
   const targetRole=otherRole(s.role);
   const playing=s.role==='garda'?'Exploring the Garda perspective':'Exploring the public perspective';
   const switchLabel=targetRole==='garda'?'Switch to the Garda perspective':'Switch to the public perspective';
-  const character=characterFor(s.role,s.cast[s.role]);
-  const portrait=s.complete?'':`<span class="turn-avatar" role="img" aria-label="${esc(character.name)}, your current ${esc(roleLabels[s.role])} character" data-role="${s.role}" data-character-id="${character.id}">${characterImage(s.role,character.id)}</span>`;
+  const {credit,portrait}=turnAvatar(s);
   return `<div class="flow-role-controls"><div class="flow-role-bar">
    <div class="perspective-status">
     ${perspectiveIcon(s.role)}
-    <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionPosition(s.history.length+1,remainingDecisions(s))}</span></div>
+    <div><strong>${playing}</strong><span>${s.complete?'Learning recap':decisionPosition(s.history.length+1,remainingDecisions(s))}</span>${credit}</div>
     ${portrait}
    </div>
   </div>
@@ -158,7 +171,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const open=main.querySelector?.('details.scene-explorer')?.open??true;
   return `<details class="scene-explorer" ${open||characterPickerTarget?'open':''}>
    <summary>Scene and characters</summary>
-   ${characterPickerTarget?characterPicker(characterPickerTarget.role,s.cast[characterPickerTarget.role],true):''}
+   ${characterPickerTarget?characterPicker(characterPickerTarget.role,storyCharacter(s,characterPickerTarget.role).id,true):''}
    ${castDisplay(s)}
    <div class="${legacy?'legacy-illustration':'paired-scene-lead'}">${renderScene(s,{compact:legacy})}</div>
   </details>`;
@@ -177,7 +190,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
        <div class="catalogue-visual" aria-hidden="true">${scenarioIcon(e.id)}</div>
        ${e.kind==='colleague-witness'?'<p class="eyebrow situation-kind">Witnessing a colleague</p>':''}
        <${heading}>${titleHTML(e)}</${heading}>
-       ${renderScenePreview(e.id)}
+       ${renderScenePreview(e.id,{cast:characterPreferences.value})}
        <p>${scenarioCopy(e.id,e.description)}</p>
        <p class="scenario-goal">${practiceGoal(e.id)}</p>
        <p class="small-note"><span>${esc(e.minutes)}</span> · <span>${roleLabels[role]}</span></p>
@@ -287,7 +300,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    </details>`;
  }
  function playHelp(){
-  return `<details class="play-help"><summary>Scores, sources and help</summary>${scoreStrip(state,true)}<p>One point means the response supports an appropriate resolution. Your human and civil rights never depend on your score.</p><p>Your chosen characters stay with the situation. Changing a character updates their name and picture throughout the story.</p><p>Switch sides to compare the same moment. Your active answer decides what happens at the next step.</p><p>Read the explanation after each choice. Its source links show where the information comes from.</p>${storageNote()}<a class="text-button" href="#progress">My scores & progress</a></details>`;
+  return `<details class="play-help"><summary>Scores, sources and help</summary>${scoreStrip(state,true)}<p>One point means the response supports an appropriate resolution. Your human and civil rights never depend on your score.</p><p>${fixedStoryCharacter(state.id,'public',state.nodeId,state.authored)||state.id==='garda-supervision'?'Your avatar represents your role. The scene keeps its own names and facts.':'Your chosen characters stay with the situation. Changing a character updates their name and picture throughout the story.'}</p><p>Switch sides to compare the same moment. Your active answer decides what happens at the next step.</p><p>Read the explanation after each choice. Its source links show where the information comes from.</p>${storageNote()}<a class="text-button" href="#progress">My scores & progress</a></details>`;
  }
  function game(){
   if(state.complete)return recap();
@@ -339,7 +352,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const last=state.history.at(-1);
   const lastAnswer=e.nodes[last.nodeId].views[last.continuedAs].choices[last.answers[last.continuedAs]].text;
   const highlights=[...new Set([0,Math.floor((state.history.length-1)/2),state.history.length-1])].map(i=>e.nodes[state.history[i].nodeId].views[state.role].lesson);
-  return `<div class="topline flow-topline">${returnLink()}<a href="#progress" class="text-button">Saved progress</a></div>${roleBar(state)}${characterPickerTarget?characterPicker(characterPickerTarget.role,state.cast[characterPickerTarget.role],true):''}<div class="summary-heading"><p class="eyebrow">YOUR LEARNING RECAP</p><h1>One situation.<br>What did each side reveal?</h1><p>${titleHTML(e)} · ${state.history.length} stages on this route.</p><div class="flow-recap-actions">${returnLink('Choose another situation')}</div></div><details class="scene-explorer recap-characters"><summary>Characters in this situation</summary>${castDisplay(state)}</details><section class="recap-takeaways info-block"><h2>What to take with you</h2><ul>${highlights.map(lesson=>`<li>${scenarioCopy(e.id,lesson)}</li>`).join('')}</ul><div class="recap-next"><button class="primary" data-action="paired-replay-role" data-role="${other}">${other==='garda'?'Try the Garda perspective':'Try the public perspective'}</button>${returnLink('Choose another situation','shared',null,true)}</div></section>${recapPractice(e.id,state.role,lastAnswer)}${supportRecap(siteRole)}<details class="recap-scores"><summary>Scores and role completion</summary>${scoreStrip(state)}<div class="role-results">${roles.map(role=>{const saved=store.value.records[state.id+'/'+role];return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2><p>${scores[role].complete?'Route completed in this role.':`${scores[role].answered} of ${state.history.length} stages answered in this role. Answer each stage to complete this role’s route.`}</p><p><strong>Best completed route:</strong> ${resultText(saved?.best)}</p><button class="text-button" data-action="paired-replay-role" data-role="${role}">Explore the ${role==='garda'?'Garda':'public'} perspective</button></section>`;}).join('')}</div>${scoreExplanation}</details><h2 class="recap-review-title">Review each decision</h2><ol class="summary-list paired-recap">${state.history.map((step,i)=>{
+  return `<div class="topline flow-topline">${returnLink()}<a href="#progress" class="text-button">Saved progress</a></div>${roleBar(state)}${characterPickerTarget?characterPicker(characterPickerTarget.role,storyCharacter(state,characterPickerTarget.role).id,true):''}<div class="summary-heading"><p class="eyebrow">YOUR LEARNING RECAP</p><h1>One situation.<br>What did each side reveal?</h1><p>${titleHTML(e)} · ${state.history.length} stages on this route.</p><div class="flow-recap-actions">${returnLink('Choose another situation')}</div></div><details class="scene-explorer recap-characters"><summary>Characters in this situation</summary>${castDisplay(state)}</details><section class="recap-takeaways info-block"><h2>What to take with you</h2><ul>${highlights.map(lesson=>`<li>${scenarioCopy(e.id,lesson)}</li>`).join('')}</ul><div class="recap-next"><button class="primary" data-action="paired-replay-role" data-role="${other}">${other==='garda'?'Try the Garda perspective':'Try the public perspective'}</button>${returnLink('Choose another situation','shared',null,true)}</div></section>${recapPractice(e.id,state.role,lastAnswer)}${supportRecap(siteRole)}<details class="recap-scores"><summary>Scores and role completion</summary>${scoreStrip(state)}<div class="role-results">${roles.map(role=>{const saved=store.value.records[state.id+'/'+role];return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2><p>${scores[role].complete?'Route completed in this role.':`${scores[role].answered} of ${state.history.length} stages answered in this role. Answer each stage to complete this role’s route.`}</p><p><strong>Best completed route:</strong> ${resultText(saved?.best)}</p><button class="text-button" data-action="paired-replay-role" data-role="${role}">Explore the ${role==='garda'?'Garda':'public'} perspective</button></section>`;}).join('')}</div>${scoreExplanation}</details><h2 class="recap-review-title">Review each decision</h2><ol class="summary-list paired-recap">${state.history.map((step,i)=>{
    const stage=e.nodes[step.nodeId],variation=variationFor(e.id,stage.id);return `<li class="summary-item"><div class="recap-overview">${renderScene(state,{step,compact:true})}<div>${variation?`<p class="eyebrow">${variation.label}</p>`:''}<h2>${i+1}. ${scenarioCopy(e.id,stage.title)}</h2><p>${scenarioCopy(e.id,stage.views[state.role].lesson)}</p></div></div><details class="recap-detail"><summary>Compare answers and sources</summary><p>${scenarioCopy(e.id,stage.scene)}</p><div class="recap-comparison">${roles.map(role=>{const index=step.answers[role],v=stage.views[role],c=index===null?null:v.choices[index];return `<section class="recap-role ${state.role===role?'active':''}" data-role-tone="${role}"><h3>${roleLabels[role]}${step.continuedAs===role?' · continued this stage':''}</h3>${c?`<p class="chosen">${scenarioCopy(e.id,c.text)}</p><p>${scenarioCopy(e.id,c.feedback)}</p>`:'<p>You did not answer this stage in this role.</p>'}<p>${scenarioCopy(e.id,v.lesson)}</p>${sourceLinks(v.refs)}</section>`;}).join('')}</div></details><button class="text-button" data-action="paired-revisit" data-index="${i}">Revisit this decision from the ${state.role==='garda'?'Garda':'public'} perspective</button></li>`;
   }).join('')}</ol><details class="facilitator-note"><summary>Discuss this situation together</summary>${discussionLink(e.id,state.role)}</details><div class="paired-stage-footer"><a class="primary secondary" href="#progress">View all progress</a></div>${storageNote()}`;
  }
@@ -375,11 +388,11 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  }
  function missing(message='This page was not found.'){return `<div class="content-page"><h1>Unable to open this situation</h1><p>${esc(message)}</p><div class="action-group"><a class="primary" href="#encounters">Choose a situation</a><a class="primary secondary" href="#progress">Saved progress</a></div></div>`;}
  function legacyBar(original,remaining){
-  const s=legacyState(original);
+  const s=legacyState(original),{credit,portrait}=turnAvatar(s);
   if(!original.complete)reopenedPractice=false;
   store.save(recordProgress(store.value,s,{mode:'practice',returnTo:practiceReturn,opened:reopenedPractice}));
   return `<div class="flow-role-bar legacy-perspective">
-   <div class="perspective-status">${perspectiveIcon(siteRole)}<div><strong>${siteRole==='garda'?'Exploring the Garda perspective':'Exploring the public perspective'}</strong><span>${original.complete?'Learning recap':decisionPosition(original.history.length+1,remaining)}</span></div></div>
+   <div class="perspective-status">${perspectiveIcon(siteRole)}<div><strong>${siteRole==='garda'?'Exploring the Garda perspective':'Exploring the public perspective'}</strong><span>${original.complete?'Learning recap':decisionPosition(original.history.length+1,remaining)}</span>${credit}</div>${credit?portrait:''}</div>
    <button class="text-button perspective-toggle" data-action="paired-transfer">Open the two-role version</button>
   </div>`;
  }
@@ -421,7 +434,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  function personalize(html,hash){
   const route=hash.split('~')[0];
   const s=route.startsWith('encounter/')?decodeState(route.slice(10)):route.startsWith('scenario/')&&getOriginalSession()?.scenarioId===route.slice(9)?legacyState(getOriginalSession()):null;
-  return s?personalizeHTML(html,encounters[s.id],s.cast):html;
+  return s&&!s.authored?personalizeHTML(html,encounters[s.id],s.cast):html;
  }
  function updateSiteLink(){
   const anchor=document.querySelector('[data-site-switch]');if(!anchor)return;
@@ -467,7 +480,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   if(action==='paired-character-close'){closeCharacterPicker();return true;}
   if(action==='paired-character-choose'){
    const target=characterPickerTarget?.role;
-   if(!target)return true;
+   if(!target||fixedStoryCharacter(state.id,target,state.nodeId,state.authored)||!storyCastOptions(state.id,target).some(person=>person.id===button.dataset.character))return true;
    const next=changeCharacter(state,button.dataset.character,target);
    if(next!==state){characterPreferences.choose(target,button.dataset.character);navigate(next,true,false);}
    document.querySelector('[data-character="'+state.cast[target]+'"]')?.focus({preventScroll:true});
@@ -486,7 +499,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   else if(action==='paired-back')navigate(revisit(state));
   else if(action==='paired-revisit')navigate(revisit(state,Number(button.dataset.index)));
   else if(action==='paired-change'){navigate(changeAnswer(state),true,false);focusControl(document.querySelector('#choice-title'));}
-  else if(action==='paired-replay-role'){characterPickerTarget=null;navigate(startEncounter(state.id,role,{cast:state.cast}));}
+  else if(action==='paired-replay-role'){characterPickerTarget=null;navigate(startEncounter(state.id,role,{cast:state.cast,authored:state.authored}));}
   return true;
  }
  return {handles,view,startSituation,personalize,introduction,aboutIntroduction,perspectiveChoice,landing,resumeLink,referenceRoute,legacyBar,beginPractice,practiceSession,returnLink,focusReturnedList,legacyPanel:original=>scenePanel(legacyState(original),true),legacyScene:(original,index)=>{const s=legacyState(original);return renderScene(s,{step:s.history[index],compact:true});},updateSiteLink,handleClick,transferOriginal};

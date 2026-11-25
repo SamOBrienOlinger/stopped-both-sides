@@ -2,6 +2,7 @@
 const languages = ['ga','pt','ar','pl','ro','fr','es','zh-Hans'];
 
 const labels = [
+ ['Your avatar', ['D’avatár','O teu avatar','صورتك الرمزية','Twój awatar','Avatarul tău','Votre avatar','Tu avatar','你的头像']],
  ['Character information', ['Eolas faoin gcarachtar','Informações sobre a personagem','معلومات الشخصية','Informacje o postaci','Informații despre personaj','Informations sur le personnage','Información sobre el personaje','角色信息']],
  ['Public witness', ['Finné ón bpobal','Testemunha do público','شاهد من الجمهور','Świadek z grona osób postronnych','Martor din rândul publicului','Témoin membre du public','Testigo del público','公众目击者']],
  ['Witnessing Garda', ['Garda atá ina fhinné','Garda que testemunha a situação','عنصر الغاردا الشاهد','Funkcjonariusz Garda będący świadkiem','Membru Garda martor','Garda témoin','Garda que presencia la situación','目击事件的警员']],
@@ -831,6 +832,10 @@ const searchCopy = [
  ]]
 ];
 const posterCopy = [
+ ['Example responses', [
+  'Samplaí d’fhreagraí', 'Exemplos de respostas', 'أمثلة على الردود', 'Przykładowe odpowiedzi',
+  'Exemple de răspunsuri', 'Exemples de réponses', 'Ejemplos de respuestas', '回答示例'
+ ]],
  ['Interactive learning prototype', [
   'Fréamhshamhail don fhoghlaim idirghníomhach',
   'Protótipo de aprendizagem interativa',

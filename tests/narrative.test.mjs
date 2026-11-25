@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {encounters,roles} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {characters} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {personalizeText,personalizeHTML,storyIdentity,characterContext} from '../encounters/narrative.mjs?v=nia-public-20261123';
-import {translateText,translateHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {fixedStoryCharacter} from '../encounters/story-cast.mjs';
+import {translateText,translateHTML} from '../locales/translate.mjs?v=final-touches-20261125';
 
 test('Noor and Aisling have one identity in the reported street situation',()=>{
  const e=encounters['garda-street'],cast={public:'public-2',garda:'garda-5'};
@@ -21,7 +22,7 @@ test('Both youth situations display the age that matters to the decision',()=>{
  }
 });
 
-test('Every named scene, prompt, choice, explanation and lesson uses each selected identity in both languages',()=>{
+test('Every named scene, prompt, choice, explanation and lesson preserves its scripted or selected identity in both languages',()=>{
  const before=JSON.stringify(encounters);
  let checked=0;
  for(const e of Object.values(encounters))for(const node of Object.values(e.nodes)){
@@ -30,7 +31,8 @@ test('Every named scene, prompt, choice, explanation and lesson uses each select
   for(const lang of ['en','ga'])for(const character of characters.public)for(const source of texts){
    const translated=translateText(source,lang),cast={public:character.id,garda:'garda-5'};
    const text=personalizeText(translated,e,cast);
-   if(identity&&translated.includes(identity.name)){
+   if(fixedStoryCharacter(e.id,'public',node.id))assert.equal(text,translated,'Scripted identities retain the original named narrative');
+   else if(identity&&translated.includes(identity.name)){
     assert.ok(text.includes(character.name),`${e.id}/${node.id}/${lang}/${character.name}`);
     if(character.name!==identity.name)assert.ok(!text.includes(identity.name),text);
    }else assert.equal(text,translated);

@@ -140,6 +140,10 @@
  font-size:1.25rem;
  font-weight:700;
 }
+/* Enclose the taller Arabic glyphs in the clickable summary at large text sizes. */
+:lang(ar):is(.privacy-disclosure,.input-disclosure,.learning-disclosure)>summary {
+ padding-block:.5em;
+}
 .privacy-disclosure>summary:focus-visible,
 .input-disclosure>summary:focus-visible,
 .learning-disclosure>summary:focus-visible {

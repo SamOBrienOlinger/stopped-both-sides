@@ -1,3 +1,4 @@
+@import url('./original-scene-props.css');
 /* Each figure belongs to its own location panel. Relative sizing keeps the
    complete character, wheelchair or cane grounded as the illustration resizes. */
 .encounter-scene{margin:0 0 24px;overflow:hidden;border:1px solid var(--line,#b3c8c3);border-radius:1rem;background:var(--paper,#fff);color:var(--ink,#183c3c)}
@@ -53,3 +54,38 @@
 .scene-cast-requirement{padding:.75rem 1rem;border-inline-start:3px solid var(--deep);background:var(--pale);line-height:1.6}
 [dir=rtl] .encounter-scene[data-cast-layout="group"] .scene-character-label{direction:rtl}
 @media(forced-colors:active){.scene-supporting-person,.scene-person-number,.scene-roster-number{border:1px solid CanvasText;background:Canvas;color:CanvasText}.scene-supporting-person strong,.scene-supporting-person>div>span{color:CanvasText}}
+
+/* The square uses the same physical mark and foot baseline as the holder's
+   sprite. The ticket projects from the registered grip towards the reader. */
+.scene-exchange-object{
+ position:absolute;left:var(--holder-x);bottom:var(--holder-bottom);width:var(--holder-width);
+ aspect-ratio:1;transform:translateX(-50%);z-index:3;pointer-events:none;
+}
+.scene-exchange-object>i{
+ position:absolute;left:var(--grip-x);top:var(--grip-y);width:23%;height:12%;
+ transform:translate(-14%,-80%) rotate(-19deg);transform-origin:12% 80%;
+ border-radius:8%;box-sizing:border-box;border:1px solid #987741;
+ background:linear-gradient(140deg,#fff6ce,#f4d18a);
+ box-shadow:0 1px 2px #231a1480;
+}
+.scene-exchange-object[data-scene-object="ticket"]>i{
+ background:linear-gradient(90deg,transparent 66%,#326d66 66% 75%,transparent 75%),
+ linear-gradient(160deg,#fff6cb 25%,#e9c375);
+}
+.scene-exchange-object[data-scene-object="ticket"]>i::before{
+ content:"";position:absolute;left:10%;top:23%;width:42%;height:50%;
+ background:repeating-linear-gradient(90deg,#364643 0 10%,transparent 10% 18%,#364643 18% 23%,transparent 23% 35%);
+}
+.scene-exchange-object[data-scene-object="paper"]>i{
+ width:21%;height:18%;border-color:#9b957f;
+ background:linear-gradient(#fdfbf2 0 29%,#8d9eaa 29% 35%,#fdfbf2 35% 49%,#a0a7a7 49% 54%,#faf2dd 54% 100%);
+}
+.scene-exchange-object[data-scene-object="phone"]>i{
+ width:14%;height:22%;border:2px solid #263743;
+ background:linear-gradient(150deg,#c0e3e9 0 48%,#81a7ba 49% 87%,#263743 88%);border-radius:14%;
+}
+:is(.scene-location--group,.situation-image) .scene-actor::before{
+ left:19%;bottom:.4%;width:63%;height:7%;opacity:.85;
+ background:radial-gradient(ellipse at 48% 54%,#3128218c 0%,#3128215c 28%,#31282120 54%,transparent 73%);
+}
+@media(forced-colors:active){.scene-exchange-object{forced-color-adjust:none}}

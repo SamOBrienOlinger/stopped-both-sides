@@ -19,14 +19,19 @@ function checkGeometry(locations){
    const label=location.id+'/'+actor.role;
    expect(actor.overflow,label+' retains the complete sprite').toBeLessThanOrEqual(.1);
    expect(actor.distortion,label+' preserves the sprite aspect ratio').toBeLessThan(.01);
-   expect(actor.cropped,label+' isolates the correct atlas cell').toBe(true);
+   if(/^characters\/story-(?:amina|jamie|jamie-comparison|other-person)\.webp$/.test(actor.source)){
+    expect(actor.crop,label+' displays the whole standalone figure').toBe('none');
+    expect(actor.scale,label+' fits its calibrated square frame').toBeCloseTo(1,2);
+   }else expect(actor.crop,label+' isolates the correct atlas cell').toMatch(/^inset\(/);
    // Group members may stand farther back; a child is intentionally smaller.
    // These broad visible-floor/legibility bounds catch vanishing figures,
    // floating people and foreground giants without enforcing one size everywhere.
    expect(actor.height,label+' remains legible').toBeGreaterThan(actor.role==='child' ? .18 : .23);
    expect(actor.height,label+' remains proportionate to the setting').toBeLessThan(.67);
    expect(actor.floor,label+' has a visible floor margin').toBeGreaterThanOrEqual(.005);
-   expect(actor.floor,label+' stands on the foreground floor').toBeLessThanOrEqual(.35);
+   if(location.id==='garda-colleague/colleague-specific'&&actor.role==='customer'){
+    expect(actor.floor,label+' stands at the shop entrance').toBeCloseTo(.37,2);
+   }else expect(actor.floor,label+' stands on the foreground floor').toBeLessThanOrEqual(.35);
   }
  }
 }

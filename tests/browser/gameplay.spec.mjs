@@ -1,35 +1,35 @@
 import {openNavigation,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
-import {characterFor} from '../../encounters/characters.mjs?v=nia-public-20261123';
 import {encounters,roles} from '../../encounters/catalog.mjs?v=link-audit-20261123';
 import {startEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {storyCharacter,fixedStoryCharacter} from '../../encounters/story-cast.mjs';
 import {storyIdentity} from '../../encounters/narrative.mjs?v=nia-public-20261123';
 
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const cast={public:'public-2',garda:'garda-5'};
-const gardaName=characterFor('garda',cast.garda).name;
 
 for(const entry of ['public','garda'])for(const e of Object.values(encounters))test(`${entry} site: ${e.id} completes with consistent characters and both perspectives`,async({page})=>{
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  const initial=startEncounter(e.id,entry,{cast}),selectedCast=initial.cast;
- const publicName=characterFor('public',selectedCast.public).name;
  await page.goto((entry==='garda'?'garda/':'./')+stateHash(initial));
  for(let step=0;step<10&&!current(page).complete;step++){
   await expect(page.locator('.paired-game')).toBeVisible();
   const base=current(page),node=e.nodes[base.nodeId],identity=storyIdentity(e);
+  const publicName=storyCharacter(base,'public').name;
+  expect(base.cast).toEqual(selectedCast);
   await expect(page.locator('[data-cast-role="public"] strong')).toHaveText(publicName);
-  await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText(gardaName);
+  await expect(page.locator('[data-cast-role="garda"] strong')).toHaveText(storyCharacter(base,'garda').name);
   await expect.poll(()=>page.locator('.paired-scene-lead img').evaluateAll(images=>images.length>0&&images.every(img=>img.complete&&img.naturalWidth>0))).toBe(true);
   if(identity&&node.scene.includes(identity.name)){
    await expect.poll(async()=>(await page.locator('.story-text').allTextContents()).join(' ')).toContain(publicName);
-   expect((await page.locator('.story-text').allTextContents()).join(' ')).not.toContain(identity.name);
+   if(identity.name!==publicName)expect((await page.locator('.story-text').allTextContents()).join(' ')).not.toContain(identity.name);
   }
   for(const role of [base.role,base.role==='public'?'garda':'public']){
    if(current(page).role!==role)await page.locator('[data-action="paired-switch"]').click();
    const index=node.views[role].choices.findIndex(choice=>choice.points===1);
    await page.locator('[data-action="paired-answer"]').nth(index).click();
    await expect(page.locator('#feedback')).toBeVisible();
-   if(identity)await expect(page.locator('.decision-choices')).not.toContainText(identity.name);
+   if(identity&&!fixedStoryCharacter(e.id,'public',node.id))await expect(page.locator('.decision-choices')).not.toContainText(identity.name);
    expect(current(page).answers[role]).toBe(index);
   }
   const answered=current(page),next=node.views[answered.role].choices[answered.answers[answered.role]].next;
@@ -39,7 +39,12 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
  const complete=current(page);expect(complete.complete).toBe(true);
  await expect(page.locator('.paired-recap .encounter-scene')).toHaveCount(complete.history.length);
  for(const role of roles)expect(complete.history.every(step=>step.answers[role]!==null)).toBe(true);
- if(storyIdentity(e))await expect(page.locator('.paired-recap')).not.toContainText(storyIdentity(e).name);
+ const narrativeIdentity=storyIdentity(e);
+ if(narrativeIdentity){
+  const recap=page.locator('.paired-recap');
+  if(fixedStoryCharacter(e.id,'public',e.start))await expect(recap).toContainText(narrativeIdentity.name);
+  else await expect(recap).not.toContainText(narrativeIdentity.name);
+ }
  await page.reload();await expect(page.locator('.paired-recap')).toBeVisible();expect(current(page)).toEqual(complete);
  // Fresh reader input precedes Playwright's implicit scroll to the recap action.
  await page.keyboard.press('Escape');

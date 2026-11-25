@@ -1,7 +1,7 @@
 import {encounters} from './catalog.mjs?v=link-audit-20261123';
-import {renderScenePreview} from './scenes.mjs?v=nia-public-20261123';
+import {renderScenePreview} from './scenes.mjs?v=final-touches-20261125';
 import {topicGroups} from './presentation.mjs?v=link-audit-20261123';
-import {practiceGoal} from '../learning/play.mjs?v=poster-landing-20261125';
+import {practiceGoal} from '../learning/play.mjs?v=final-touches-20261125';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Decorative visualisations mirror existing text; they never score the learner.
 export function learningIcon(kind){
@@ -78,7 +78,7 @@ export function practiceCards(scenarios,role){
  const cards=scenarios.map(scenario=>`<article class="scenario">
   <span class="scene-icon">${scenarioIcon(role+'-'+scenario.id)}</span>
   <h2>${esc(scenario.title)}</h2>
-  ${renderScenePreview(role+'-'+scenario.id)}
+  ${renderScenePreview(role+'-'+scenario.id,{authored:true})}
   <p class="person">${esc(scenario.person)}</p>
   <p class="description">${esc(scenario.description)}</p>
   <p class="scenario-goal">${practiceGoal(role+'-'+scenario.id)}</p>

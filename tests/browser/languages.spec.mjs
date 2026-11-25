@@ -2,7 +2,7 @@ import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './na
 import {test,expect} from '@playwright/test';
 import {characterFor} from '../../encounters/characters.mjs?v=nia-public-20261123';
 import {languages} from '../../locales/languages.mjs';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=poster-landing-20261125';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=final-touches-20261125';
 import {startEncounter,answer,switchRole,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=nia-public-20261123';
 import {progressStorageKey} from '../../encounters/progress.mjs?v=nia-public-20261123';
 import {expectControlsFit} from './control-layout.mjs';

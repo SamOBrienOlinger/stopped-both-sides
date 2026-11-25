@@ -5,9 +5,12 @@ import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=link-audi
 import {characters} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {startEncounter,answer,switchRole,continueEncounter,encodeState,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {sceneDirections,sceneModel,renderScene,sceneAssets} from '../encounters/scenes.mjs?v=nia-public-20261123';
-import {translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {translateText} from '../locales/translate.mjs?v=final-touches-20261125';
 import {backgroundImage} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
 import {situationParticipants} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
+
+import {storyCharacter} from '../encounters/story-cast.mjs';
+import {originalSceneDetails} from '../encounters/original-scene-props.mjs';
 
 test('Every stage and all 90 character pairs have a complete illustration',()=>{
  let covered=0,pairRenderings=0;
@@ -20,17 +23,24 @@ test('Every stage and all 90 character pairs have a complete illustration',()=>{
     const state={...startEncounter(e.id,'public',{cast:{public:p.id,garda:g.id}}),nodeId};
     const html=renderScene(state),model=sceneModel(state);pairRenderings++;
     assert.ok(sceneAssets.includes(model.place));assert.ok(sceneAssets.includes(model.otherPlace));
-    assert.match(html,new RegExp(`data-scene-character="${state.cast.public}"`));
-    assert.match(html,new RegExp(`data-scene-character="${state.cast.garda}"`));
-    const participants=situationParticipants(e.id,state.cast,{nodeId})||roles.map(role=>({role,characterId:state.cast[role]}));
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,participants.filter(person=>person.role==='public'&&person.characterId!=='public-10'&&!person.character?.sceneArtwork).length);
-    assert.equal((html.match(/characters\/nia-public-20261123\.png/g)||[]).length,participants.filter(person=>person.characterId==='public-10').length);
-    assert.equal((html.match(/characters\/discrimination-support-20261122.png/g)||[]).length,participants.filter(person=>person.character?.sceneArtwork).length);
-    assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,participants.filter(person=>person.role==='garda').length);
-    assert.equal((html.match(/clip-path:inset\(/g)||[]).length,participants.length,'each character is isolated from neighbouring figures');
-    assert.doesNotMatch(html,/Separate reflections|scene-portraits/);
-    assert.doesNotMatch(html,/undefined|NaN|data-pose|scene-pose|reflecting-clean|speaking-clean|listening-clean/);
-    assert.doesNotMatch(html,/scene-prop|props\.webp/,`${e.id}/${nodeId} must not place loose objects on the floor`);
+    const people=Object.fromEntries(roles.map(role=>[role,storyCharacter(state,role,nodeId)]));
+    const group=situationParticipants(e.id,state.cast,{nodeId});
+    const {supporting}=originalSceneDetails(e.id,nodeId,model.place,people,{members:model.separate?['public']:roles});
+    const participants=group?group.map(p=>({role:p.role,key:p.key,character:p.character})):
+     [...roles.map(role=>({role,key:role,character:people[role]})),...supporting];
+    const actors=new Map([...html.matchAll(/data-scene-character="([^"]+)" data-scene-role="([^"]+)"[^>]*><div class="scene-sprite"><img src="([^"]+)"/g)]
+     .map(([,id,key,src])=>[key,{id,src}]));
+    assert.equal(actors.size,participants.length);
+    for(const {role,key,character} of participants){
+     const actor=actors.get(key);
+     assert.equal(actor?.id,character.id,e.id+'/'+nodeId+' '+key);
+     const asset=character.sceneArtwork?new URL(character.sceneArtwork.src).pathname.split('/assets/')[1]:
+      role==='garda'?'characters/garda-baseball-2026.webp':
+      character.id==='public-10'?'characters/nia-public-20261123.png':'scenes/contextual-cast.webp';
+     assert.ok(actor.src.includes('/assets/'+asset),e.id+'/'+nodeId+' '+key+' uses '+asset);
+    }
+    assert.doesNotMatch(html,/Separate reflections|scene-portraits|undefined|NaN/);
+    if(model.separate)assert.doesNotMatch(html,/data-story-prop=/,e.id+'/'+nodeId+' keeps the two locations independent');
    }
   }
  }
@@ -38,20 +48,19 @@ test('Every stage and all 90 character pairs have a complete illustration',()=>{
  assert.equal(pairRenderings,stageCount*90);
 });
 
-test('Answers update the phase while illustrated characters retain their neutral stance',()=>{
+test('Answers update the phase while the illustrated story identities stay consistent',()=>{
  for(const e of Object.values(encounters))for(const stage of Object.values(e.nodes))for(const role of roles){
   const state={...startEncounter(e.id,role,{cast:{public:'public-6',garda:'garda-9'}}),nodeId:stage.id};
   const before=JSON.stringify(state),initial=sceneModel(state);
   stage.views[role].choices.forEach((choice,index)=>{
    const next=answer(state,index),model=sceneModel(next);
    assert.equal(initial.phase,'decision');
-   assert.doesNotMatch(renderScene(next),/data-pose|scenes\/(?:listening|speaking|reflecting)-clean/);
-   assert.match(renderScene(next),/scenes\/contextual-cast.webp/);
+   assert.ok(renderScene(next).includes('data-scene-character="'+storyCharacter(next,'public',stage.id).id+'"'));
    assert.match(renderScene(next),/characters\/garda-baseball-2026.webp/);
    assert.equal(model.phase,'response');assert.equal(model.choice,choice);
    assert.deepEqual(next.cast,state.cast);assert.equal(model.stage,stage);
    const switched=switchRole(next);assert.deepEqual(switched.cast,state.cast);
-   assert.match(renderScene(switched),/data-scene-character="public-6"/);
+   assert.ok(renderScene(switched).includes('data-scene-character="'+storyCharacter(switched,'public',stage.id).id+'"'));
   });
   assert.equal(JSON.stringify(state),before);
  }
@@ -77,7 +86,7 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
   while(!state.complete){state=continueEncounter(answer(state,0));state=decodeState(encodeState(state));assert.deepEqual(state.cast,cast);}
   for(const step of state.history){
    const html=renderScene(state,{step,compact:true});
-   assert.match(html,new RegExp('data-scene-character="'+cast.public+'"'));assert.match(html,new RegExp('data-scene-character="'+cast.garda+'"'));
+   for(const role of roles)assert.ok(html.includes('data-scene-character="'+storyCharacter(state,role,step.nodeId).id+'"'));
    assert.equal(sceneModel(state,{step}).nodeId,step.nodeId);
   }
   assert.deepEqual(startEncounter(state.id,role,{cast:state.cast}).cast,cast);

@@ -1,4 +1,5 @@
-import {characterFor} from './characters.mjs?v=nia-public-20261123';
+import {characterFor} from './characters.mjs?v=final-touches-20261125';
+import {fixedStoryCharacter} from './story-cast.mjs';
 
 // The catalogue keeps stable teaching text and translation keys. Resolve its
 // story identity against the saved cast only when displaying a running game.
@@ -14,7 +15,7 @@ export function characterContext(encounter,stage,role){
 }
 export function personalizeText(text,encounter,cast){
  const identity=storyIdentity(encounter),selected=characterFor('public',cast.public);
- if(!identity||!selected||identity.name===selected.name)return text;
+ if(!identity||!selected||identity.name===selected.name||fixedStoryCharacter(encounter.id,'public',encounter.start))return text;
  // Latin name boundaries also work when Chinese or Arabic text touches a name.
  const pattern=new RegExp(`(^|[^\\p{Script=Latin}\\p{N}_])${identity.name}(?=$|[^\\p{Script=Latin}\\p{N}_])`,'gu');
  return text.replace(pattern,(_,prefix)=>prefix+selected.name);

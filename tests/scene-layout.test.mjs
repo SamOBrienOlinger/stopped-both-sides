@@ -1,8 +1,9 @@
+import {storyCharacter} from '../encounters/story-cast.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sceneActorLayout,SCENE_LAYOUTS,checkSceneArtwork} from '../encounters/scene-layout.mjs?v=situation-locations-20261122';
 import {encounters,stageCount} from '../encounters/catalog.mjs?v=link-audit-20261123';
-import {characters,characterFor,castForSituation} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {characters,castForSituation} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=nia-public-20261123';
 import {startEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
 test('every scene and all 90 casts retain matching caption and actor identities',()=>{
@@ -11,12 +12,13 @@ test('every scene and all 90 casts retain matching caption and actor identities'
   const d=sceneDirections[id][nodeId];assert.ok(d);
   for(const place of [d.place,d.otherPlace])assert.ok(SCENE_LAYOUTS[place]);
   for(const p of characters.public)for(const g of characters.garda){
-   const html=renderScene({...startEncounter(id),nodeId,cast:{public:p.id,garda:g.id}});
-   const cast=castForSituation(id,{public:p.id,garda:g.id});
+   const chosen={public:p.id,garda:g.id};
+   const state={...startEncounter(id,'public',{cast:chosen}),nodeId},html=renderScene(state);
+   assert.deepEqual(state.cast,castForSituation(id,chosen));
    for(const role of ['public','garda']){
-    const c=characterFor(role,cast[role]);
+    const c=storyCharacter(state,role);
     assert.ok(html.includes('data-scene-character="'+c.id+'"'));
-    assert.ok(html.includes('data-scene-label-role="'+role+'"'));
+    assert.ok(html.includes('data-scene-label-role="'+role+'" data-scene-character-id="'+c.id+'"'));
     assert.ok(html.includes(c.name));
    }
    assert.ok(!/<div class="scene-stage[^>]*aria-hidden/.test(html));count++;

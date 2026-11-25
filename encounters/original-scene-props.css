@@ -1,0 +1,13 @@
+/* Place each object on its owner's floor or hand within the same scene crop. */
+.scene-location > .scene-story-prop {
+ position: absolute;
+ z-index: 2;
+ display: block;
+ height: auto;
+ max-width: none;
+ transform: translateX(-50%);
+ pointer-events: none;
+}
+.scene-story-prop:not([data-story-prop="phone"]) {
+ filter: drop-shadow(0 1px 1px rgb(35 30 24 / 28%));
+}

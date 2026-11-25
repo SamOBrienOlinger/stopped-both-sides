@@ -13,11 +13,19 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
       const hero = poster.locator('.poster-hero');
       const heading = hero.getByRole('heading', {level: 1, name: 'Stopped: Both Sides'});
       const subtitle = hero.getByText('One situation. Two perspectives.', {exact: true});
-      const question = hero.getByRole('link', {name: 'What would you do?'});
+      const entryLabel = role === 'public' ? 'Public perspective' : 'Garda perspective';
+      const question = hero.getByRole('link', {name: 'What would you do? ' + entryLabel, exact: true});
       await expect(heading).toBeVisible();
       await expect(subtitle).toBeVisible();
       await expect(question).toHaveAttribute('href', new RegExp('#encounters/' + role + '$'));
       await expect(hero.getByRole('img', {name: /Alex and Garda Aisling.*GPO/})).toBeVisible();
+
+      if (width === 390) {
+        // The two full labels must be equally discoverable in the initial phone view.
+        for (const label of await poster.locator('.perspective-label').all()) {
+          await expect(label).toBeInViewport({ratio: 1});
+        }
+      }
 
       for (const [perspective, name] of Object.entries(actors)) {
         const actor = hero.locator('.hero-' + perspective);
@@ -43,7 +51,8 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
       }
 
       await expect(poster.locator('.learning-card h3 > span:last-child')).toHaveText(steps);
-      const examples = poster.locator('.response-picker');
+      await expect(poster.getByText('Example responses', {exact: true})).toBeVisible();
+      const examples = poster.getByRole('list', {name: 'Example responses'});
       await expect(examples.getByRole('listitem')).toHaveCount(2);
       await expect(examples.locator('a, button, [tabindex]')).toHaveCount(0);
       await page.evaluate(() => document.fonts.ready);

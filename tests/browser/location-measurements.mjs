@@ -13,7 +13,8 @@ export function measureLocations(elements){
     floor:(panel.bottom-box.bottom)/panel.height,
     overflow:Math.max(panel.left-box.left,box.right-panel.right,panel.top-box.top,box.bottom-panel.bottom),
     distortion:Math.abs(art.width/art.height-sprite.naturalWidth/sprite.naturalHeight),
-    cropped:getComputedStyle(sprite).clipPath.startsWith('inset(')
+    source:new URL(sprite.src).pathname.split('/assets/')[1],
+    crop:getComputedStyle(sprite).clipPath,scale:art.width/box.width
    };
   });
   return {id:preview?.dataset.reviewPreview||figure.dataset.sceneId,preview:!!preview,

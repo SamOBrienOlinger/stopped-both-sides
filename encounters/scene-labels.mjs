@@ -1,8 +1,9 @@
-import {characterArtwork,characterFor} from './characters.mjs?v=nia-public-20261123';
+import {storyCharacterById} from './story-cast.mjs';
+import {characterArtwork,characterFor} from './characters.mjs?v=final-touches-20261125';
 import {roleLabels} from './catalog.mjs?v=link-audit-20261123';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {translateText} from '../locales/translate.mjs?v=final-touches-20261125';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',
@@ -87,13 +88,14 @@ export function installSceneCaptionLayout(root){
  function onCaptionClick(event){
   const button=event.target.closest?.('button[data-scene-character-id][data-scene-label-role]');
   if(!button||!root.contains(button))return;
-  const role=button.dataset.sceneLabelRole,character=characterFor(role,button.dataset.sceneCharacterId);
+  const role=button.dataset.sceneLabelRole,character=storyCharacterById(button.dataset.sceneCharacterId)||characterFor(role,button.dataset.sceneCharacterId);
   if(!character)return;
   const modal=ensureDialog(),art=characterArtwork(character),image=modal.querySelector('.scene-profile-portrait img');
   modal.setAttribute('data-role-tone',role);
-  modal.querySelector('#scene-character-dialog-name').textContent=character.name;
+  modal.querySelector('#scene-character-dialog-name').textContent=character.descriptive?translateText(character.name,normaliseLanguage(doc.documentElement.lang)):character.name;
   modal.querySelector('.scene-profile-role').textContent=button.dataset.sceneProfileRole||roleLabels[role];
   const change=modal.querySelector('.scene-profile-change');
+  change.hidden=button.hasAttribute('data-story-fixed');
   change.lang=doc.documentElement.lang||'en-IE';
   change.textContent=translateText('Change character',normaliseLanguage(change.lang));
   modal.querySelector('.scene-profile-body').textContent=button.dataset.sceneProfileDescription||roleDescriptions[role];

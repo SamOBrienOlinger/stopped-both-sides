@@ -7,9 +7,19 @@ import {renderScene} from '../../encounters/scenes.mjs?v=nia-public-20261123';
 import {situationParticipants} from '../../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
-const situations=Object.values(encounters);
+import {storyCharacter} from '../../encounters/story-cast.mjs';
+import {originalSceneDetails} from '../../encounters/original-scene-props.mjs';
+import {sceneDirections} from '../../encounters/scenes.mjs?v=nia-public-20261123';
 const cast=defaultCast();
-const previewCast=id=>situationParticipants(id,cast)?.map(person=>({role:person.key,id:person.characterId,visible:true}))||Object.entries(cast).map(([role,id])=>({role,id,visible:true}));
+function previewCast(id,authored){
+ const group=situationParticipants(id,cast);
+ if(group)return group.map(p=>({role:p.key,id:p.characterId,visible:true}));
+ const nodeId=encounters[id].start;
+ const selected=Object.fromEntries(Object.keys(cast).map(role=>[role,storyCharacter({id,nodeId,cast,authored},role)]));
+ const extras=originalSceneDetails(id,nodeId,sceneDirections[id][nodeId].place,selected).supporting;
+ return [...Object.entries(selected).map(([role,c])=>({role,id:c.id,visible:true})),
+  ...extras.map(({key,character})=>({role:key,id:character.id,visible:true}))];
+}
 
 function responsiveAsset(source){
  const {pathname,search}=new URL(source);
@@ -22,7 +32,7 @@ function openingImage(id){
  return responsiveAsset(src);
 }
 
-async function checkScenes(cards,heading,ids){
+async function checkScenes(cards,heading,ids,authored=false){
  await expect(cards).toHaveCount(ids.length);
  const previews=cards.locator(`:scope > ${heading} + .situation-image`);
  await expect(previews).toHaveCount(ids.length);
@@ -30,8 +40,8 @@ async function checkScenes(cards,heading,ids){
   await preview.scrollIntoViewIfNeeded();
   await expect.poll(()=>preview.evaluate((scene,count)=>{
    const images=[...scene.querySelectorAll('img')];
-   return images.length===count+1&&images.every(img=>img.complete&&img.naturalWidth>0);
-  },previewCast(ids[index]).length)).toBe(true);
+   return scene.querySelectorAll('.scene-sprite img').length===count&&images.every(img=>img.complete&&img.naturalWidth>0);
+  },previewCast(ids[index],authored).length)).toBe(true);
  }
  const scenes=await previews.evaluateAll(elements=>elements.map(scene=>{
   const img=scene.querySelector('.scene-backdrop');
@@ -40,11 +50,14 @@ async function checkScenes(cards,heading,ids){
   const heading=scene.previousElementSibling.getBoundingClientRect();
   const actors=[...scene.querySelectorAll('.scene-actor')].map(actor=>{
    const frame=actor.getBoundingClientRect();
+   const image=actor.querySelector('img');
+   const isolated=getComputedStyle(image).clipPath.startsWith('inset(')||
+    (new URL(image.src).pathname.includes('/story-')&&image.naturalWidth===image.naturalHeight);
    return {
     role:actor.dataset.sceneRole,id:actor.dataset.sceneCharacter,
     visible:frame.width>0&&frame.height>0&&frame.left>=bounds.left&&frame.right<=bounds.right&&
      frame.top>=bounds.top&&frame.bottom<=bounds.bottom&&
-     getComputedStyle(actor.querySelector('img')).clipPath.startsWith('inset(')
+     isolated
    };
   });
   return {
@@ -58,7 +71,7 @@ async function checkScenes(cards,heading,ids){
  }));
  expect(scenes.map(scene=>({...scene,asset:responsiveAsset(scene.asset)}))).toEqual(ids.map(id=>({
   asset:openingImage(id),fits:true,decorative:true,
-  actors:previewCast(id)
+  actors:previewCast(id,authored)
  })));
  expect(await previews.evaluateAll(discriminationSpacingErrors,ids),'Preview figure spacing').toEqual([]);
 }
@@ -91,7 +104,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']])for(const viewpor
    for(const summary of await page.locator('.scenario-library .situation-topic>summary').all())await summary.press('Enter');
    for(const summary of await page.locator('.scenario-library .discrimination-ground>summary').all())await summary.press('Enter');
    await checkScenes(page.locator('.scenario-library .practice-content .scenario'),'h2',
-    topicGroups.flatMap(topic=>topic.encounters).filter(id=>encounters[id].origin===role));
+    topicGroups.flatMap(topic=>topic.encounters).filter(id=>encounters[id].origin===role),true);
   expect([...rendererURLs], 'All pages should import the same cached scene renderer URL').toHaveLength(1);
  });
 }

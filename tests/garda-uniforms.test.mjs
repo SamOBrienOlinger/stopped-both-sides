@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {characters,characterArtwork,createCast,changeCharacter} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {characters,characterArtwork,castForSituation} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {storyCharacter} from '../encounters/story-cast.mjs';
+import {originalSceneDetails} from '../encounters/original-scene-props.mjs';
 import {situationParticipants} from '../encounters/situation-cast.mjs?v=nia-public-20261123';
 import {gardaAtlas} from '../encounters/garda-atlas.mjs';
 import {gardaArtwork} from '../encounters/garda-artwork.mjs';
@@ -55,14 +57,35 @@ test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',
     const cast={public:publicCharacter.id,garda:gardaCharacter.id};
     const state={...startEncounter(encounter.id,'public',{cast}),nodeId};
     const html=renderScene(state);pairRenderings++;
-    assert.match(html,new RegExp('data-scene-character="'+gardaCharacter.id+'"'));
-    assert.match(html,new RegExp('data-scene-character="'+state.cast.public+'"'));
-    const people=situationParticipants(encounter.id,state.cast,{nodeId})||roles.map(role=>({role,characterId:state.cast[role]}));
-    assert.equal((html.match(/characters\/garda-baseball-2026.webp/g)||[]).length,people.filter(person=>person.role==='garda').length);
-    assert.equal((html.match(/scenes\/contextual-cast.webp/g)||[]).length,people.filter(person=>person.role==='public'&&person.characterId!=='public-10'&&!person.character?.sceneArtwork).length);
-    assert.equal((html.match(/characters\/nia-public-20261123\.png/g)||[]).length,people.filter(person=>person.characterId==='public-10').length);
-    assert.equal((html.match(/characters\/discrimination-support-20261122.png/g)||[]).length,people.filter(person=>person.character?.sceneArtwork).length);
-    assert.equal((html.match(/clip-path:inset\(/g)||[]).length,people.length);
+    assert.deepEqual(state.cast,castForSituation(encounter.id,cast));
+    const displayed=Object.fromEntries(roles.map(role=>[role,storyCharacter(state,role)]));
+    const group=situationParticipants(encounter.id,state.cast,{nodeId});
+    const {place,mode}=sceneDirections[encounter.id][nodeId];
+    const extras=(group||['separate','private'].includes(mode))?[]:originalSceneDetails(encounter.id,nodeId,place,displayed).supporting;
+    const people=group||[...roles.map(role=>({role,key:role,character:displayed[role]})),...extras];
+    const actors=[...html.matchAll(/class="scene-actor scene-actor--([^"]+)" data-scene-character="([^"]+)" data-scene-role="([^"]+)"[^>]*><div class="scene-sprite"><img ([^>]+)>/g)];
+    assert.equal(actors.length,people.length,encounter.id+'/'+nodeId);
+    for(const {role,key,character} of people){
+     const actor=actors.find(match=>match[1]===role&&match[2]===character.id&&match[3]===key);
+     assert.ok(actor,encounter.id+'/'+nodeId+'/'+key);
+     let asset;
+     if(role==='garda'&&group&&key==='acting-garda'&&nodeId==='opening'){
+      const column=['garda-1','garda-2'].indexOf(character.id);
+      assert.ok(column>=0,'The alternate uniform sheet contains Ciara and Rory');
+      asset='/characters/group-speaking-gardai.webp';
+      const crop=`left:${-column*100}%;top:0%;width:200%;height:100%;clip-path:inset(0% ${(1-column)*50}% 0% ${column*50}%)`;
+      assert.ok(actor[4].includes('style="'+crop+'"'),character.id+' uses its own alternate uniform');
+     }else if(role==='garda'){
+      asset='/characters/garda-baseball-2026.webp';
+      assert.ok(actor[4].includes('style="'+gardaArtwork(character).style+'"'),character.id+' uses its own uniform');
+     }
+     else if(character.id==='public-10')asset='/characters/nia-public-20261123.png';
+     else if(character.id.startsWith('support-'))asset='/characters/discrimination-support-20261122.png';
+     else if(character.id.startsWith('story-')&&character.sceneArtwork)asset='/characters/'+character.id+'.webp';
+     else asset=group||extras.some(person=>person.key===key)?'/scenes/group-public-gestures.webp':'/scenes/contextual-cast.webp';
+     assert.ok(actor[4].includes(asset),character.id+' should use '+asset);
+     assert.equal(actor[4].includes('clip-path:inset('),!asset.startsWith('/characters/story-'));
+    }
     assert.ok(html.includes('data-scene-label-role="garda"'),'keep profile dialog buttons');
    }
   }
@@ -86,7 +109,9 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
   for(const step of state.history){
    const html=renderScene(state,{step,compact:true});
    assert.match(html,/characters\/garda-baseball-2026.webp/);
-   assert.match(html,new RegExp('data-scene-character="'+g.id+'"'));
+   const shown=storyCharacter(state,'garda',step.nodeId);
+   assert.ok(html.includes('data-scene-character="'+shown.id+'" data-scene-role="garda"'));
+   assert.equal(state.cast.garda,g.id);
   }
   assert.deepEqual(switchRole(state).cast,savedCast);
  }

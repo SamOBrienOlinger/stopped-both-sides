@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {topicGroups} from '../encounters/presentation.mjs?v=link-audit-20261123';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
 import {discriminationGrounds} from '../encounters/visuals.mjs?v=nia-public-20261123';
-import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {loadLanguage,translateHTML,translateText} from '../locales/translate.mjs?v=final-touches-20261125';
 
 const grounds=['gender','civil-status','family-status','sexual-orientation','age','religious-belief','traveller-community','race','disability','housing-assistance'];
 const topic=topicGroups.find(group=>group.id==='discrimination');

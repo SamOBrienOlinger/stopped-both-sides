@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {loadLanguage,translateText} from '../../locales/translate.mjs?v=poster-landing-20261125';
+import {loadLanguage,translateText} from '../../locales/translate.mjs?v=final-touches-20261125';
 
 const entrypoints=['./','garda/'];
 const titles={public:'Explore the public perspective',garda:'Explore the Garda perspective'};
@@ -8,13 +8,13 @@ const roleLinks=role=>`a.perspective-card-link[data-role-tone="${role}"]`;
 for(const path of entrypoints){
  for(const [role,title] of Object.entries(titles)){
   test(`${path} ${role} link opens the selected role by mouse and keyboard`,async({page},info)=>{
-   const destination=new URL('#encounters/'+role,info.project.use.baseURL).href;
+   const destination=new URL('?lang=en#encounters/'+role,info.project.use.baseURL).href;
    const entries=[
     ['.perspective-card',role==='public'?'Public perspective':'Garda perspective','mouse'],
     ['.role-picker__item',role==='public'?'Public':'Garda','keyboard'],
     [roleLinks(role),title,'keyboard']
    ];
-   if(role===(path==='./'?'public':'garda'))entries.push(['.hero-question','What would you do?','mouse']);
+   if(role===(path==='./'?'public':'garda'))entries.push(['.hero-question','What would you do? '+(role==='public'?'Public perspective':'Garda perspective'),'mouse']);
    for(const [selector,label,input] of entries){
     await page.goto(path+'?lang=en#play');
     const link=page.locator('.reference-landing').locator(selector).and(page.getByRole('link',{name:label,exact:true}));
@@ -28,12 +28,28 @@ for(const path of entrypoints){
      await page.keyboard.press('Enter');
     }
     await expect(page).toHaveURL(destination);
+    await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
     const start=page.locator('[data-action="paired-quick-start"]');
     await expect(start).toBeVisible();
     await expect(start).toHaveAttribute('data-role',role);
    }
   });
  }
+
+ test(`${path} first-visit and saved site languages stay with the selected role`,async({page},info)=>{
+  await page.goto(path+'?lang=ar#play');
+  await expect(page.locator('html')).toHaveAttribute('dir','rtl');
+  const choices=page.locator('.sbs-poster a');
+  await expect(choices).toHaveCount(7);
+  for(const link of await choices.all())await expect(link).toHaveAttribute('href',/\?lang=ar#encounters\/(?:public|garda)$/);
+  // The destination can have a different saved language from this explicit link.
+  await page.evaluate(()=>localStorage.setItem('garda-encounter-reading-v1:public',JSON.stringify({language:'fr'})));
+  await page.locator('.perspective-card').last().click();
+  await expect(page).toHaveURL(new URL('?lang=ar#encounters/garda',info.project.use.baseURL).href);
+  await expect(page.locator('.paired-picker')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang','ar');
+  await expect(page.locator('#main')).toHaveAttribute('dir','rtl');
+ });
 
  test(`${path} both role links stay accessible at mobile, 200% text and Arabic RTL`,async({page},info)=>{
   test.setTimeout(90000);
@@ -58,7 +74,7 @@ for(const path of entrypoints){
     })).toBe(true);
     for(const [role,title] of Object.entries(titles)){
      const link=page.locator(roleLinks(role));
-     await expect(link).toHaveAttribute('href',new URL('#encounters/'+role,info.project.use.baseURL).href);
+     await expect(link).toHaveAttribute('href',new URL('?lang='+lang+'#encounters/'+role,info.project.use.baseURL).href);
      await expect(link).toHaveAccessibleName(translateText(title,lang));
     }
    }

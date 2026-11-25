@@ -1,6 +1,6 @@
 import {hasOwn} from '../compatibility.mjs';
 import {encounters, roles} from './catalog.mjs?v=link-audit-20261123';
-import {createCast,defaultCast,validCast,castForSituation} from './characters.mjs?v=nia-public-20261123';
+import {createCast,defaultCast,validCast,castForSituation} from './characters.mjs?v=final-touches-20261125';
 
 export const otherRole = role => role === 'public' ? 'garda' : 'public';
 const validRole = role => roles.includes(role);
@@ -8,7 +8,7 @@ const answers = () => ({public:null,garda:null});
 export function startEncounter(id,role='public',options={}) {
   if (!hasOwn(encounters,id) || !validRole(role)) throw new Error('Unknown encounter or role');
   const cast=castForSituation(id,validCast(options.cast)?options.cast:createCast(role,options.characterId,options.random));
-  return {id,role,nodeId:encounters[id].start,history:[],answers:answers(),complete:false,cast};
+  return {id,role,nodeId:encounters[id].start,history:[],answers:answers(),complete:false,cast,...(options.authored?{authored:true}:{})};
 }
 export const currentStage = state => state && !state.complete ? encounters[state.id].nodes[state.nodeId] : null;
 export function switchRole(state,role=otherRole(state.role)) {
@@ -37,6 +37,7 @@ export function changeAnswer(state) {
 // Rebuild the route from validated decisions rather than trusting submitted node IDs.
 export function encodeState(state) {
   const data={v:2,e:state.id,r:state.role,p:state.history.map(h=>[h.answers.public,h.answers.garda,roles.indexOf(h.continuedAs)]),a:[state.answers.public,state.answers.garda],c:[state.cast.public,state.cast.garda]};
+  if(state.authored)data.authored=true;
   return btoa(JSON.stringify(data)).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
 }
 export function decodeState(token) {
@@ -47,7 +48,7 @@ export function decodeState(token) {
     const cast=d.v===1?defaultCast():Array.isArray(d.c)&&d.c.length===2?{public:d.c[0],garda:d.c[1]}:null;
     if(!validCast(cast))return null;
     // Decoding is deterministic, including older links without a cast.
-    let state=startEncounter(d.e,d.r,{cast});
+    let state=startEncounter(d.e,d.r,{cast,authored:d.authored===true});
     const apply=(values)=>{
       for (let i=0;i<2;i++) {
         const index=values[i];

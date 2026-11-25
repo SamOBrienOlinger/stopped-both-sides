@@ -1,23 +1,29 @@
 import {openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {encounters,roleLabels} from '../../encounters/catalog.mjs?v=link-audit-20261123';
-import {characters} from '../../encounters/characters.mjs?v=nia-public-20261123';
+import {characterFor,characterArtwork} from '../../encounters/characters.mjs?v=nia-public-20261123';
+import {storyCharacter} from '../../encounters/story-cast.mjs';
 import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=nia-public-20261123';
 
 const cast={public:'public-6',garda:'garda-2'}; // Rory is Garda #2
 const paths=['./','garda/'];
 const avatarSelector='.paired-game .flow-role-bar .turn-avatar';
 
-async function expectPortrait(page,role,id){
+async function expectPortrait(page,role,id,{separateSubject=false}={}){
  const portrait=page.locator(avatarSelector);
- const character=characters[role].find(c=>c.id===id);
+ const character=characterFor(role,id);
  await expect(portrait).toBeVisible();
  await expect(portrait).toHaveAttribute('data-character-id',id);
  await expect(portrait).toHaveAttribute('data-role',role);
  await expect(portrait).toHaveAttribute('role','img');
- await expect(portrait).toHaveAttribute('aria-label',character.name+', your current '+roleLabels[role]+' character');
+ if(separateSubject){
+  await expect(portrait).toHaveAttribute('aria-labelledby','turn-avatar-credit');
+  await expect(page.locator('#turn-avatar-credit')).toBeVisible();
+  await expect(portrait).toHaveAccessibleName('Your avatar · '+character.name);
+ }else await expect(portrait).toHaveAttribute('aria-label',character.name+', your current '+roleLabels[role]+' character');
  const img=portrait.locator('.character-image img');
- await expect(img).toHaveAttribute('src',role==='garda'?/characters\/garda-baseball-2026\.webp/:/characters\/cast\.webp/);
+ const expectedPath=new URL(characterArtwork(character).src).pathname.split('/assets/')[1];
+ expect(new URL(await img.getAttribute('src')).pathname.split('/assets/')[1]).toBe(expectedPath);
  await expect.poll(()=>img.evaluate(el=>el.complete&&el.naturalWidth>0)).toBe(true);
 }
 
@@ -57,9 +63,14 @@ for(const path of paths){
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const role of ['public','garda']){
    for(const id of Object.keys(encounters)){
-    await page.goto(path+stateHash(startEncounter(id,role,{cast})),{waitUntil:'domcontentloaded'});
+    const state=startEncounter(id,role,{cast});
+    await page.goto(path+stateHash(state),{waitUntil:'domcontentloaded'});
     await expect(page.locator('.flow-role-bar .perspective-status strong')).toHaveText(role==='garda'?'Exploring the Garda perspective':'Exploring the public perspective');
-    await expectPortrait(page,role,cast[role]);
+    const subject=storyCharacter(state,role);
+    await expectPortrait(page,role,state.cast[role],{separateSubject:subject.id!==state.cast[role]});
+    const caption=page.locator('.paired-scene-lead [data-scene-label-role="'+role+'"]');
+    await expect(caption).toHaveAttribute('data-scene-character-id',subject.id);
+    await expect(caption.locator('[data-no-translate]').first()).toHaveText(subject.name);
    }
   }
  });

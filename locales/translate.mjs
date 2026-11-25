@@ -1,4 +1,4 @@
-import {learningCopy} from './play-copy.mjs?v=poster-landing-20261125';
+import {learningCopy} from './play-copy.mjs?v=final-touches-20261125';
 import {messages} from './messages.mjs?v=pabi-privacy-20261122';
 import {matchMessage,untranslatedNames} from './patterns.mjs';
 import {normaliseLanguage} from './languages.mjs';

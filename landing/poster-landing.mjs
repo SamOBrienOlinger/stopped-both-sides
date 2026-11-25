@@ -3,7 +3,7 @@ import {sites} from '../site.mjs';
 const assets = new URL('../assets/', import.meta.url);
 const gpo = width => new URL(`dublin-approved/gpo-city-${width}.webp`, assets).href;
 const figures = {
-  public: new URL('characters/poster-alex.webp', assets).href,
+  public: new URL('characters/poster-alex.webp?v=final-touches-20261125', assets).href,
   garda: new URL('characters/poster-aisling.webp', assets).href,
   publicBack: new URL('characters/poster-alex-back.webp', assets).href,
   gardaBack: new URL('characters/poster-aisling-back.webp', assets).href
@@ -41,7 +41,8 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
     <img class="panel-backdrop" src="${gpo(480)}" width="480" height="270" alt="" loading="lazy">
     ${figure('public', 'panel-public')}${figure('garda', 'panel-garda')}</div>
     <figcaption>“Can I have a word?”</figcaption></figure>`;
-  const choices = `<ul class="response-picker" aria-label="Example choices shown for illustration only">
+  const choices = `<p id="poster-example-label" class="example-label">Example responses</p>
+    <ul class="response-picker" aria-labelledby="poster-example-label">
     <li><b aria-hidden="true">A</b><span>Explain your whole evening straight away.</span></li>
     <li><b aria-hidden="true">B</b><span>Ask why you are being stopped and whether you are free to leave.</span></li></ul>`;
   const compare = `<div class="compare-illustration" aria-hidden="true">${roles.map(role =>
@@ -63,7 +64,9 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
       <div class="hero-characters" role="img" aria-label="Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.">
         ${figure('public', 'hero-public', true)}${figure('garda', 'hero-garda', true)}
       </div>
-      <a class="hero-question" href="${roleHref(siteRole)}">What would you do?</a>
+      <a class="hero-question" href="${roleHref(siteRole)}">
+        <span>What would you do?</span><span class="hero-question-role">${labels[siteRole]}</span>
+      </a>
     </section>
     <section class="poster-overview" aria-labelledby="overview-title">
       <div class="poster-overview__text">

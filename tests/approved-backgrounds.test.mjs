@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
-import {backgroundImage,approvedBackgrounds} from '../encounters/backgrounds.mjs?v=situation-locations-20261122';
+import {backgroundImage,approvedBackgrounds,interiorBackground} from '../encounters/backgrounds.mjs?v=public-enquiry-20261125';
 import {renderScene,renderScenePreview,sceneDirections} from '../encounters/scenes.mjs?v=nia-public-20261123';
 import {startEncounter} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {encounters} from '../encounters/catalog.mjs?v=link-audit-20261123';
@@ -29,11 +29,27 @@ test('Exterior art keeps selected roles and narrative state unchanged',()=>{
  for(const id of ['public-street','public-search','public-fair-treatment','garda-colleague','garda-new-evidence']){
   const state=startEncounter(id,'public',{cast:{public:'public-6',garda:'garda-9'}}),before=JSON.stringify(state),html=renderScene(state);
   assert.match(html,/data-approved-art=/);assert.match(html,/srcset=/);
-  assert.match(html,/data-scene-character="public-6"/);assert.match(html,/data-scene-character="garda-9"/);
+  assert.equal(state.cast.public,'public-6');
+  const expectedPublic=id==='public-fair-treatment'?'story-amina':'public-6';
+  assert.ok(html.includes('data-scene-character="'+expectedPublic+'"'));assert.match(html,/data-scene-character="garda-9"/);
   assert.equal(JSON.stringify(state),before);
  }
- const indoor=renderScene(startEncounter('public-custody'));
- assert.doesNotMatch(indoor,/data-approved-art/);assert.match(indoor,/assets\/scenes\/station.webp/);
+});
+
+test('The enquiry desk uses responsive station art in play and previews with the indoor layout',()=>{
+ const station=interiorBackground('station');
+ for(const html of [renderScene(startEncounter('public-custody')),renderScenePreview('public-custody')]){
+  assert.doesNotMatch(html,/data-approved-art|scene-stage--outdoor-split/);
+  assert.ok(html.includes(station.src));assert.ok(html.includes(station.srcset));
+ }
+ for(const width of [480,960,1600]){
+  const url=new URL(station.src.replace('station-960','station-'+width));
+  assert.ok(station.srcset.includes(url.href+' '+width+'w'));
+  const bytes=readFileSync(url);
+  assert.equal(bytes.toString('ascii',8,16),'WEBPVP8 ');
+  assert.equal(bytes.readUInt16LE(26)&0x3fff,width);
+  assert.equal(bytes.readUInt16LE(28)&0x3fff,width*9/16);
+ }
 });
 
 test('Outdoor discrimination scenes use the same clear foreground in play and previews',()=>{

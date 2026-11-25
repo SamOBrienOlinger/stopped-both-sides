@@ -1,5 +1,5 @@
 import {encounters,roles} from './catalog.mjs?v=link-audit-20261123';
-import {decodeState,encodeState} from './engine.mjs?v=nia-public-20261123';
+import {decodeState,encodeState} from './engine.mjs?v=final-touches-20261125';
 import {hasOwn} from '../compatibility.mjs';
 import {playLocation} from './play-navigation.mjs?v=link-audit-20261123';
 // This validated storage schema contains only JSON values; never requires structuredClone.

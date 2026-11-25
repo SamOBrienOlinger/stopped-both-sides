@@ -8,7 +8,7 @@ import {emptyProgress,recordProgress,packProgress,unpackProgress} from '../encou
 import {renderScene} from '../encounters/scenes.mjs?v=nia-public-20261123';
 import {storyIdentity,personalizeText} from '../encounters/narrative.mjs?v=nia-public-20261123';
 import {learningIcon,scenarioIcon} from '../encounters/visuals.mjs?v=nia-public-20261123';
-import {loadLanguage,translateText,translateHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {loadLanguage,translateText,translateHTML} from '../locales/translate.mjs?v=final-touches-20261125';
 import {languages} from '../locales/languages.mjs';
 import {scenarioCopy} from '../learning/play.mjs?v=nia-public-20261123';
 

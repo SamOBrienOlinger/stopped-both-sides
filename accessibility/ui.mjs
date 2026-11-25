@@ -1,7 +1,7 @@
-import {decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
+import {decodeState} from '../encounters/engine.mjs?v=final-touches-20261125';
 import {createPreferences,defaults} from './preferences.mjs?v=learning-language-20261120';
 import {createDialogController} from './dialog.mjs?v=learning-language-20261120';
-import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=final-touches-20261125';
 import {languages,languageInfo,normaliseLanguage} from '../locales/languages.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 const languageHelp='Irish covers the original shared learning activity. Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese also cover individual practice and reference pages.';
@@ -47,7 +47,7 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   // different saved preference. A failed initial load retains the fallback.
   const language=initialLoadFailed?activeLanguage:preferences.value.language;
   const anchor=document.querySelector('[data-site-switch]');
-  const links=[...(anchor?[anchor]:[]),...document.querySelectorAll('[data-support-crosslink]')];
+  const links=[...(anchor?[anchor]:[]),...document.querySelectorAll('[data-support-crosslink], .sbs-poster a[href*="#encounters/"]')];
   for(const link of links){try{const url=new URL(link.href);url.searchParams.set('lang',language);link.href=url.href;}catch{}}
  }
  function applyDisplay(){

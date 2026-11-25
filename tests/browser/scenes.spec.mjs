@@ -12,7 +12,7 @@ for(const role of ['public','garda'])test(`${role}: illustrated decisions remain
  for(const width of [320,390,768,1366,1920]){
   await page.setViewportSize({width,height:900});
   const scene=page.locator('.paired-scene-lead>.encounter-scene');await scene.scrollIntoViewIfNeeded();await loaded(scene);
-  await expect(scene.locator('.scene-prop')).toHaveCount(0);
+  await expect(scene.locator('[data-story-prop="travel-bag"][data-prop-owner="public"]')).toHaveCount(1);
   await expect(scene.locator('[data-scene-character="public-6"]')).toHaveCount(1);
   await expect(scene.locator('[data-scene-character="garda-9"]')).toHaveCount(1);
   const layout=await scene.evaluate(el=>{
@@ -101,9 +101,14 @@ function reachStage(id,nodeId,cast){
 async function characterGeometry(scene){
  const result=await scene.locator('.scene-sprite').evaluateAll(frames=>frames.map(frame=>{
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
-  const isGarda=image.src.includes('garda-baseball-2026.webp');
-  const columns=isGarda?1254/426:1774/320;
-  return {scale:art.width/bounds.width,columns,isGarda,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
+  const name=new URL(image.src).pathname.split('/').pop();
+  const calibration={
+   'garda-baseball-2026.webp':1254/426,'contextual-cast.webp':1774/320,
+   'group-public-gestures.webp':9,'nia-public-20261123.png':1254/1300,
+   'discrimination-support-20261122.png':2
+  };
+  const columns=name.startsWith('story-')?1:calibration[name];
+  return {scale:art.width/bounds.width,columns,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
  }));
  for(const portrait of result){
   expect(portrait.scale,'the sprite sheet retains the calibrated scale inside the crop').toBeCloseTo(portrait.columns,1);
@@ -111,7 +116,7 @@ async function characterGeometry(scene){
  }
  const actors=await scene.locator('.scene-actor').evaluateAll(nodes=>nodes.map(actor=>{
   const pane=actor.closest('.scene-location'),bounds=pane.getBoundingClientRect(),box=actor.getBoundingClientRect();
-  return {outdoor:!!pane.dataset.approvedArt,character:actor.dataset.sceneCharacter,overflow:Math.max(bounds.left-box.left,box.right-bounds.right,bounds.top-box.top,box.bottom-bounds.bottom),floorGap:(bounds.bottom-box.bottom)/bounds.height,height:box.height/bounds.height};
+  return {role:actor.dataset.sceneRole,character:actor.dataset.sceneCharacter,overflow:Math.max(bounds.left-box.left,box.right-bounds.right,bounds.top-box.top,box.bottom-bounds.bottom),floorGap:(bounds.bottom-box.bottom)/bounds.height,height:box.height/bounds.height};
  }));
  for(const actor of actors){
   expect(actor.overflow,`${actor.character} stays inside its background`).toBeLessThanOrEqual(.05);
@@ -119,7 +124,8 @@ async function characterGeometry(scene){
   // all-situation test also checks viewport and preview/stage consistency.
   expect(actor.floorGap,'feet retain a visible foreground margin').toBeGreaterThan(.005);
   expect(actor.floorGap,'figures stand on the visible foreground floor').toBeLessThan(.35);
-  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(.35);
+  const backgroundPerson=['passerby','customer','friendA','friendB','colleague','cleaner'].includes(actor.role);
+  expect(actor.height,'the whole figure is legible within the scene').toBeGreaterThan(backgroundPerson?.24:.35);
   expect(actor.height,'the figure remains proportionate to doors and furniture').toBeLessThan(.6);
  }
  await expect(scene).not.toContainText('Separate reflections');
@@ -133,7 +139,8 @@ test('Visual review: all characters, locations and separate perspectives',async(
   await page.goto('./'+stateHash(reachStage(id,nodeId,cast)));
   const scene=page.locator('.paired-scene-lead>.encounter-scene');
   await scene.scrollIntoViewIfNeeded();await loaded(scene);await characterGeometry(scene);
-  await expect(scene.locator('.scene-sprite img')).toHaveCount(2);
+  await expect(scene.locator('[data-scene-role="public"] .scene-sprite img')).toHaveCount(1);
+  await expect(scene.locator('[data-scene-role="garda"] .scene-sprite img')).toHaveCount(1);
   await scene.screenshot({path:testInfo.outputPath(`review-${String(i+1).padStart(2,'0')}-${nodeId}.png`)});
   await page.setViewportSize({width:320,height:900});
   await scene.scrollIntoViewIfNeeded();await characterGeometry(scene);

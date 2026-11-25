@@ -1,5 +1,6 @@
-import {characters,characterFor,castForSituation} from './characters.mjs?v=nia-public-20261123';
+import {characters,characterFor,castForSituation} from './characters.mjs?v=final-touches-20261125';
 import {supportingCharacters} from './supporting-characters.mjs?v=cast-audit-20261122';
+import {stageGroup,groupMark} from './group-staging.mjs';
 import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
 
 // These are author-selected portraits for fictional roles, not assumptions
@@ -95,12 +96,13 @@ export function situationParticipants(id,requestedCast,{nodeId='opening'}={}){
   return {...participant,characterId,character:characterFor(participant.role,characterId)||supportingCharacters[characterId],playable:false};
  }).filter(participant=>!participant.stages||participant.stages.includes(nodeId));
  const playable=['public','garda'].map(role=>({key:role,role,label:situationRoleLabel(id,role),characterId:cast[role],character:characterFor(role,cast[role]),playable:true,scale:1}));
- return [...(colleague?supporting:[playable[0],...supporting]),...(colleague?playable:[playable[1]])].map((participant,index)=>({...participant,number:index+1}));
+ const roster=[...(colleague?supporting:[playable[0],...supporting]),...(colleague?playable:[playable[1]])];
+ return stageGroup(id,nodeId,roster.map((participant,index)=>({...participant,number:index+1})));
 }
 
 export function participantLayout(place,participants,index){
  const {scale=1}=participants[index];
- const position=sceneGroupLayout(place,participants.length,index);
+ const position=groupMark(place,sceneGroupLayout(place,participants.length,index),participants[index]);
  // Keep the child's smaller scale at the same foot baseline as their parent.
  // Wheelchairs already occupy a full calibrated sprite and are not miniaturised.
  return {...position,width:position.width*scale,labelSpace:100};

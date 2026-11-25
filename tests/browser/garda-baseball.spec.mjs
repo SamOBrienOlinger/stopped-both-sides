@@ -2,6 +2,7 @@ import {test,expect} from '@playwright/test';
 import {characters} from '../../encounters/characters.mjs?v=nia-public-20261123';
 import {encounters} from '../../encounters/catalog.mjs?v=link-audit-20261123';
 import {startEncounter,stateHash,answer,continueEncounter} from '../../encounters/engine.mjs?v=nia-public-20261123';
+import {storyCharacter} from '../../encounters/story-cast.mjs';
 import {sceneDirections} from '../../encounters/scenes.mjs?v=nia-public-20261123';
 
 const file=/\/assets\/characters\/garda-baseball-2026\.webp(?:\?|$)/;
@@ -53,8 +54,9 @@ for(const [path,role] of entrypoints){
   await page.emulateMedia({reducedMotion:'reduce'});
   for(const [i,encounter] of Object.values(encounters).entries()){
    const g=characters.garda[i%9];
-   await page.goto(path+stateHash(startEncounter(encounter.id,role,{cast:{public:'public-6',garda:g.id}})),{waitUntil:'domcontentloaded'});
-   await visibleActor(page,g.id);
+   const state=startEncounter(encounter.id,role,{cast:{public:'public-6',garda:g.id}});
+   await page.goto(path+stateHash(state),{waitUntil:'domcontentloaded'});
+   await visibleActor(page,storyCharacter(state,'garda').id);
    await expect(page.locator(stage+' .scene-panel')).toHaveCount(1);
    const location=page.locator(stage+' .scene-location');
    await expect(location).toHaveAttribute('data-scene-place',sceneDirections[encounter.id][encounter.start].place);

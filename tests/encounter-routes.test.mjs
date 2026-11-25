@@ -1,3 +1,4 @@
+import {storyCharacter} from '../encounters/story-cast.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -22,7 +23,7 @@ globalThis.window={scrollTo(){},addEventListener(type,fn){callbacks[type]=fn;}};
 const assertLoaded=()=>assert.doesNotMatch(main.innerHTML,/The resource could not load/);
 function route(hash){location.hash=hash;callbacks.hashchange();assertLoaded();}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest(){return {dataset:{action:name,...extra}};}}});if(assignments!==n)callbacks.hashchange();assertLoaded();}
-function openCharacterPicker(role){callbacks['scene-character-change']({target:{dataset:{sceneLabelRole:role},closest(){return null;}}});assertLoaded();}
+function openCharacterPicker(role){callbacks['scene-character-change']({target:{dataset:{sceneLabelRole:role},hasAttribute(attr){return attr==='data-story-fixed'&&new RegExp('data-scene-label-role="'+role+'"[^>]*data-story-fixed').test(main.innerHTML);},closest(){return null;}}});assertLoaded();}
 const state=()=>decodeState(location.hash.slice(11).split('~')[0]);
 
 test('About keeps information and privacy in a closed native disclosure, with PABI available separately',()=>{
@@ -158,12 +159,16 @@ test('Original mode transfers a live selection into the same stage and records i
  assert.doesNotMatch(main.innerHTML,/Fictional situation · Republic of Ireland/);
  action('paired-transfer');assert.equal(state().id,siteRole+'-'+e.id);assert.equal(state().nodeId,e.start);assert.equal(state().answers[siteRole],1);assert.notEqual(state().role,siteRole);
 });
-test('Original practice can change character while carrying its stage and answer into shared play',()=>{
+test('Original practice retains its scripted public character and can change the Garda while carrying its stage and answer into shared play',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
  assert.match(main.innerHTML,/data-scene-label-role=/);
- openCharacterPicker(siteRole);assert.equal(state().role,siteRole);assert.equal(state().answers[siteRole],1);
- assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);action('paired-character-choose',{character:siteRole+'-7'});
- assert.equal(state().cast[siteRole],siteRole+'-7');assert.equal(state().answers[siteRole],1);
+ openCharacterPicker('public');assert.equal(location.hash,'#scenario/'+e.id);
+ assert.doesNotMatch(main.innerHTML,/id="character-picker-title"/);
+ openCharacterPicker('garda');
+ const before=state();assert.equal(before.authored,true);assert.equal(before.role,siteRole);assert.equal(before.answers[siteRole],1);
+ assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);action('paired-character-choose',{character:'garda-7'});
+ assert.equal(state().cast.garda,'garda-7');assert.equal(state().cast.public,before.cast.public);
+ assert.deepEqual(state().answers,before.answers);assert.equal(state().nodeId,e.start);
 });
 test('Unknown routes and corrupted progress show a recovery view while saved records remain available',()=>{
  const before=memory.get(siteStorageKey);
@@ -185,12 +190,20 @@ test('Every stage and every choice render the selected cast and preserve the nex
    const node=e.nodes[base.nodeId],identity=storyIdentity(e);
    for(const role of roles)for(const [index,choice] of node.views[role].choices.entries()){
     const active=switchRole(base,role);route(stateHash(active));action('paired-character-close');
-    assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.public+'"'));assert.match(main.innerHTML,new RegExp('data-character-id="'+base.cast.garda+'"'));
+    for(const characterRole of roles){
+     const shown=storyCharacter(base,characterRole);
+     assert.ok(main.innerHTML.includes('data-character-id="'+shown.id+'" data-cast-role="'+characterRole+'"'));
+    }
+    assert.deepEqual(state().cast,base.cast);
     assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
     assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to situations/);
     assert.doesNotMatch(main.innerHTML,/[←→]/);
     const story=main.innerHTML.match(/<p class="story-text">([\s\S]*?)<\/p>/)[1];
-    if(identity&&node.scene.includes(identity.name)){assert.ok(story.includes('Noor'));assert.ok(!story.includes(identity.name));}
+    if(identity&&node.scene.includes(identity.name)){
+     const shown=storyCharacter(base,'public');
+     assert.ok(story.includes(shown.name));
+     if(shown.name!==identity.name)assert.ok(!story.includes(identity.name));
+    }
     action('paired-answer',{index:String(index)});choices++;
     assert.equal(state().answers[role],index);assert.match(main.innerHTML,/id="feedback"/);
     assert.match(main.innerHTML,/target="_blank" rel="noopener noreferrer">[^<]+ <img class="tap-icon"/);
@@ -215,12 +228,14 @@ test('Original practice uses its pictured character in every named scene and com
   assert.doesNotMatch(main.innerHTML,/[←→]/);
   const encounter=encounters[siteRole+'-'+original.id],identity=storyIdentity(encounter);
   const selected=main.innerHTML.match(/data-cast-role="public"[\s\S]*?<strong data-no-translate>([^<]+)<\/strong>/)[1];
-  let count=0;
+  let nodeId=original.start,count=0;
   while(main.innerHTML.includes('class="story-text"')){
-   assert.ok(++count<12);
+   const written=original.nodes[nodeId];
+   assert.ok(written&&++count<12);
    assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
    const story=main.innerHTML.match(/<p class="story-text">([\s\S]*?)<\/p>/)[1];
-   if(identity&&selected!==identity.name)assert.ok(!story.includes(identity.name));
+   if(identity&&written.story.includes(identity.name))assert.ok(story.includes(identity.name));
+   nodeId=written.choices[0].next;
    action('choose',{index:'0'});action('next');
   }
   assert.match(main.innerHTML,/RECAP/);assert.ok(main.innerHTML.includes(selected));

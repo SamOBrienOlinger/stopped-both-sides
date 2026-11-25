@@ -7,7 +7,7 @@ const sites=siteAddresses('https://samobrienolinger.github.io/stopped-both-sides
 import {startEncounter,answer,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=nia-public-20261123';
 import {createProgressStore,emptyProgress,recordProgress,mergeProgress,packProgress,unpackProgress} from '../encounters/progress.mjs?v=nia-public-20261123';
 import {createPreferences} from '../accessibility/preferences.mjs';
-import {translateText,translateHTML} from '../locales/translate.mjs?v=poster-landing-20261125';
+import {translateText,translateHTML} from '../locales/translate.mjs?v=final-touches-20261125';
 
 test('The repository and both entrypoints use the agreed Stopped branding',()=>{
  const pkg=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));
