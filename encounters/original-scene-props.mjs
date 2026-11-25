@@ -37,14 +37,16 @@ const part=(key,x,width,bottom)=>({key,anchor:position(x,width,bottom)});
 const youthGroup=[part('friendA',23,20,3),part('friendB',58,19,13),part('colleague',90.5,16.5,19)];
 const caseColleague=part('colleague',66,18,25);
 const quayColleague=part('colleague',81,23,2);
+// The pavement is deeper on the shop side of the quay. Keep distant passersby off the river wall.
+const quayPasserby=part('passerby',19,17,18);
 const supportingAt={
  'public-young-person':{'youth-solicitor':[part('parent',18,24,19)]},
  'garda-young-person':{'young-start':youthGroup,'young-contact':youthGroup,'young-review':youthGroup},
  'garda-colleague':{'colleague-start':[caseColleague],'colleague-pressure':[caseColleague],
   'colleague-specific':[caseColleague,part('customer',78,15,37)]},
  'garda-communication':{'communication-start':[quayColleague],'communication-repair':[quayColleague],'communication-clarify':[quayColleague]},
- 'garda-description':{'description-start':[part('passerby',79,16,14)],'description-repair':[quayColleague]},
- 'public-fair-treatment':{'fair-start':[part('passerby',19,17,18)]},
+ 'garda-description':{'description-start':[quayPasserby],'description-repair':[quayColleague]},
+ 'public-fair-treatment':{'fair-start':[quayPasserby]},
  'garda-new-evidence':{'update-repair':[caseColleague]},
  'garda-search':{'search-result':[part('colleague',90,18,18)]},
  'garda-street':{'street-information':[part('cleaner',86,20,22)]}
