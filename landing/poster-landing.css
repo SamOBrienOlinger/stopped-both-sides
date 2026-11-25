@@ -159,6 +159,8 @@ html[data-perspective] .sbs-poster.reference-landing {
 }
 html.reading-spacious .sbs-poster :is(.poster-lead,.response-picker li,.compare-caption) { line-height: 1.85; }
 @media (prefers-reduced-motion: no-preference) {
+  /* Native Back should anchor to stationary content even while a nearby line is rising. */
+  .sbs-poster [data-poster-reveal] { overflow-anchor: none; }
   html:not(.motion-reduce):not(.contrast-high) .sbs-poster [data-landing-reveal="pending"] { opacity: 0; }
   html:not(.motion-reduce):not(.contrast-high) .sbs-poster [data-landing-reveal="active"] {
     animation: landing-portfolio-line-reveal 1s ease-out var(--landing-reveal-delay,0s) both;
