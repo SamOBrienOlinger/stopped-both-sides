@@ -10,26 +10,26 @@
     "outputs": [
       {
         "file": "gpo-city-480.webp",
-        "bytes": 38792,
-        "sha256": "588ebc87f70f47d2420f64f840cadb11572a284e12af9ff5473f8d63bedaaf0e"
+        "bytes": 51808,
+        "sha256": "2de0eb885209b0f25acc86cffe8da14e82b14f2ebb1c841fd7ec5ec55d04ea51"
       },
       {
         "file": "gpo-city-960.webp",
-        "bytes": 117412,
-        "sha256": "4c11d0fba982bdbc6c301c0997aaa6eef0f1d3b02893958281fc4b349e5a31d3"
+        "bytes": 155666,
+        "sha256": "3eece94257c92bcd9d6e05ce3fe9dbf84961c6be6778d1186404226a08356800"
       },
       {
         "file": "gpo-city-1600.webp",
-        "bytes": 233274,
-        "sha256": "b6620d43a170b1b698c25b7e9f03791ff31ea4f9515d7a36d8890ac6650629ff"
+        "bytes": 273198,
+        "sha256": "97c0945268cde51a2bebb4d32e0682cb95a93f55b7899c3cfc10c72a20d6095e"
       }
     ],
     "revision": {
       "source_dimensions": [
-        1672,
-        941
+        1600,
+        900
       ],
-      "source_rgb_sha256": "522d8c774fb8d4e0c051734b725cd799b77befec3ab5e752ba3e4e29e7c40b67"
+      "source_rgb_sha256": "b5e6bbf8aa3e6643e028abd13206e2bd719d5c735c79240b52b735d99165504a"
     }
   },
   {

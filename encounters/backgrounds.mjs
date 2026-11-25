@@ -19,6 +19,7 @@ export function backgroundImage(key,{group=false}={}){
  const sharedExterior=['street','bus-stop','square'].includes(key);
  const groupScene=footballGround||(group&&(situationLocation||sharedExterior));
  const directory=situationLocation?'scenes/locations':footballGround||sharedExterior?'scenes/groups':'dublin-approved';
- const revision=situationLocation||key==='bus-stop'?'situation-locations-20261122':footballGround||sharedExterior?'group-spacing-20261122':'quayside-lamps-1';
+ const homepageRevision=key==='garda'?'gpo-flags-20261125':'quayside-lamps-1';
+ const revision=situationLocation||key==='bus-stop'?'situation-locations-20261122':footballGround||sharedExterior?'group-spacing-20261122':homepageRevision;
  return {name,group:groupScene,...responsiveBackground(directory,name,revision)};
 }

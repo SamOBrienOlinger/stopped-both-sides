@@ -2,7 +2,7 @@ import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs';
 import {originalSceneDetails} from './original-scene-props.mjs';
 import {renderGroupAction} from './group-staging.mjs';
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
-import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=final-touches-20261125';
+import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=gpo-flags-20261125';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=site-repairs-20261125';
 import {characterFor,defaultCast} from './characters.mjs?v=final-touches-20261125';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=nia-public-20261123';

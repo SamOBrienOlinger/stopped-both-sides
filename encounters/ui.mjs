@@ -1,5 +1,5 @@
 import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs';
-import {renderPosterLanding} from '../landing/poster-landing.mjs';
+import {renderPosterLanding} from '../landing/poster-landing.mjs?v=gpo-flags-20261125';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {
@@ -7,12 +7,12 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, situationStory, termsInDecision
 } from '../learning/play.mjs?v=site-repairs-20261125';
 import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=site-repairs-20261125';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=gpo-flags-20261125';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=site-repairs-20261125';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=site-repairs-20261125';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=site-repairs-20261125';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=final-touches-20261125';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=site-repairs-20261125';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=gpo-flags-20261125';
 import {situationRoleLabel} from './situation-cast.mjs?v=final-touches-20261125';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=final-touches-20261125';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=site-repairs-20261125';

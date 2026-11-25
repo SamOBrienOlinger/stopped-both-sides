@@ -505,7 +505,7 @@ html[data-perspective="garda"] .reference-landing::after{
 html[data-perspective="garda"] .reference-landing.paired-entry::after{
  background:
   linear-gradient(180deg,rgba(249,252,255,.74) 0%,rgba(249,252,255,.82) 42%,rgba(249,252,255,.95) 100%),
-  url('../dublin-approved/gpo-city-960.webp?v=dublin-accuracy-1') center 35% / cover no-repeat;
+  url('../dublin-approved/gpo-city-960.webp?v=gpo-flags-20261125') center 35% / cover no-repeat;
 }
 /* The original LEGO character artwork stays over the new outdoor backdrops. */
 .scene-location>.scene-backdrop{object-fit:cover}
