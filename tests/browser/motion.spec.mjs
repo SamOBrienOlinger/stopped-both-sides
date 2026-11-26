@@ -1,6 +1,9 @@
 import {openNavigation,expectSettingsFocusReturn,openCharacterPicker} from './navigation.mjs';
 import {test,expect} from '@playwright/test';
 import {expectStaticHeadings} from './static-headings.mjs';
+import {sourceTopics} from '../../learning/rights-topics.mjs';
+import {communitySources} from '../../learning/community-resources.mjs';
+import {sources} from '../../data.mjs';
 import {startEncounter,answer,continueEncounter,stateHash,decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
@@ -57,15 +60,34 @@ test('Pre-opened evidence details are not treated as a new disclosure interactio
  expect(await cues(page)).not.toContain('disclosure');
 });
 
-test('The rights topic indicator follows the selected source section',async({page})=>{
- await page.goto('./#rights');
- const topic=page.locator('.source-topic-nav a').nth(1);
- const href=await topic.getAttribute('href');
- await topic.click();
- await expect(page.locator('.source-topic-nav a[aria-current="location"]')).toHaveCount(1);
- await expect(page.locator('.source-topic-nav a[aria-current="location"]')).toHaveAttribute('href',href);
- await openNavigation(page);await page.locator('.header [data-nav="rights"]').click();
- await expect(page.locator('.source-topic-nav a[aria-current]')).toHaveCount(0);
+test('The community deep link opens its sources and the topic summaries work independently by keyboard',async({page})=>{
+ await page.goto('./?lang=en#rights/community');
+ const community=page.locator('details#rights-community');
+ const complaints=page.locator('details#rights-complaints');
+ const groups=page.locator('#main details[id^="rights-"]');
+ await expect(groups).toHaveCount(7);
+ await expect(groups.locator(':scope > summary')).toHaveText([
+  'Advice & support','Street stops and questions','Searches','Arrest and custody','Under 18s','Complaints','Community experiences'
+ ]);
+ await expect(page.locator('#main details[open][id^="rights-"]')).toHaveCount(1);
+ await expect(community).toBeFocused();
+ for(const topic of sourceTopics){
+  const group=page.locator('details#rights-'+topic.id);
+  const destinations=topic.ids.map(id=>(sources[id]||communitySources[id]).url);
+  expect(await group.locator('a.source-card').evaluateAll(links=>links.map(link=>link.getAttribute('href')))).toEqual(destinations);
+  await expect(group.locator('button[data-action="paired-start"]')).toHaveAttribute('data-id',topic.situation);
+ }
+ const report=community.locator('.community-publication > summary').filter({hasText:/Experiences of Policing amongst Brazilians/});
+ await expect(report).toBeVisible();
+ const summary=complaints.locator(':scope > summary');
+ await summary.focus();
+ await summary.press('Enter');
+ await expect(complaints.locator('a.source-card').first()).toBeVisible();
+ await expect(report).toBeVisible();
+ await summary.press('Space');
+ await expect(complaints.locator('a.source-card').first()).toBeHidden();
+ await expect(summary).toBeFocused();
+ await expect(report).toBeVisible();
 });
 async function noStageReplay(page){
  await frames(page);

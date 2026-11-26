@@ -160,3 +160,77 @@
  .support-section .support-checked,.support-recap :is(h2,p){color:#000}
  .support-link,.support-link:hover{background:#fff;color:#000;border-color:#777}
 }
+
+.rights-topics {
+ display: grid;
+ gap: .65rem;
+ margin-block: 1.5rem;
+}
+.rights-topics > .rights-topic {
+ margin: 0;
+ border: 1px solid var(--line);
+ border-radius: .875rem;
+ background: var(--paper, white);
+}
+.rights-topic > summary {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 1rem;
+ min-block-size: 3rem;
+ padding: .85rem 1.1rem;
+ border-radius: inherit;
+ background: var(--pale);
+ color: var(--deep);
+ cursor: pointer;
+ list-style: none;
+}
+.rights-topic > summary::-webkit-details-marker { display: none; }
+.rights-topic > summary h2 {
+ margin: 0;
+ font-size: 1.125rem;
+ line-height: 1.4;
+ overflow-wrap: anywhere;
+}
+.rights-topic > summary::after {
+ content: '';
+ flex: none;
+ inline-size: .6rem;
+ block-size: .6rem;
+ border: solid currentColor;
+ border-width: 0 2px 2px 0;
+ transform: rotate(45deg);
+}
+.rights-topic[open] > summary::after { transform: rotate(225deg); }
+.rights-topic > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.rights-topic-body { padding: clamp(.85rem, 2.5vw, 1.5rem); }
+.rights-topic-body > .support-section { margin-block: 0; }
+.rights-topic-body > .primary { margin-block-start: 1rem; }
+
+.community-publication { border-block-end: 1px solid var(--line); }
+.community-publication > summary {
+ display: list-item;
+ min-block-size: 44px;
+ padding: .8rem .4rem;
+ color: var(--deep);
+ line-height: 1.5;
+ font-weight: 700;
+ cursor: pointer;
+}
+.community-publication > summary::marker { color: var(--deep); }
+.community-publication > summary:focus-visible { outline: 3px solid var(--focus); }
+.publication-body { padding: 0 .75rem .9rem; }
+.publication-body p { margin: 0 0 .45rem; max-inline-size: 65ch; }
+.publication-body > .source-card {
+ display: inline-flex;
+ align-items: center;
+ gap: .4em;
+ min-block-size: 44px;
+ padding: .35rem 0;
+ color: var(--deep);
+ text-decoration: underline;
+ text-underline-offset: .2em;
+ background: transparent;
+ border: 0;
+ box-shadow: none;
+}

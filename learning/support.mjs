@@ -23,7 +23,7 @@ export const services=[
 ];
 
 export function supportSection(){
- return `<section class="support-section source-topic" id="rights-support" tabindex="-1" aria-labelledby="support-heading">
+ return `<section class="support-section" aria-labelledby="support-heading">
   <div class="support-heading"><h2 id="support-heading">Advice, complaints and policing oversight</h2><p>Different services can help with legal questions, complaints about Garda conduct, and the wider oversight of policing. Choose the service that matches what you need.</p></div>
   <div class="support-grid">${services.map(service=>`<article class="support-card" id="rights-support-${service.id}" tabindex="-1" data-support="${service.id}">
    <p class="support-kind">${service.kind}</p>

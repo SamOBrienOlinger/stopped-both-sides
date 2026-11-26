@@ -2,6 +2,9 @@ import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
 import {startEncounter,currentStage,answer,continueEncounter,stateHash} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {loadLanguage,translateText} from '../../locales/translate.mjs?v=site-repairs-20261125';
+import {sourceTopics} from '../../learning/rights-topics.mjs';
+import {communitySources} from '../../learning/community-resources.mjs';
+import {sources} from '../../data.mjs';
 import {preferencesStorageKey} from '../../accessibility/preferences.mjs';
 
 await Promise.all(['ar','fr'].map(loadLanguage));
@@ -24,9 +27,10 @@ for(const {language,width,large} of [
  await page.goto('./?lang='+language+'#rights/support');
  const section=page.locator('#rights-support');
  await expect(section).toBeFocused();
- await expect(section.locator('h2')).toHaveText(translateText(title,language));
+ await expect(section.locator('#support-heading')).toHaveText(translateText(title,language));
  await expect(section.locator('.support-card')).toHaveCount(3);
- await expect(page.locator('.source-topic-nav a[href="#rights/support"]')).toHaveAttribute('aria-current','location');
+ await expect(section).toHaveJSProperty('open',true);
+ await expect(section.locator(':scope > summary')).toHaveText(translateText('Advice & support',language));
  expect(await section.locator('.support-link').evaluateAll(links=>links.map(link=>link.href))).toEqual(destinations);
  if(large){
   await openNavigation(page);await page.locator('#language-settings-trigger').click();
@@ -59,6 +63,34 @@ for(const {language,width,large} of [
  for(const link of layout.links){expect(link.height).toBeGreaterThanOrEqual(44);expect(link.target).toBe('_blank');expect(link.rel).toContain('noopener');}
  await section.screenshot({path:testInfo.outputPath(`support-${language}-${width}.png`)});
  expect(errors).toEqual([]);
+});
+
+for(const language of ['en','fr'])test('Community publication menus retain their titles, notes and destinations in '+language,async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('./?lang='+language+'#rights/community');
+ const topic=page.locator('details#rights-community');
+ const rows=topic.locator('details.community-publication');
+ const ids=sourceTopics.find(group=>group.id==='community').ids;
+ await expect(topic).toBeFocused();
+ await expect(rows).toHaveCount(ids.length);
+ await expect(topic.locator('.community-publication[open]')).toHaveCount(0);
+ for(const [index,id] of ids.entries()){
+  const source=sources[id]||communitySources[id];
+  const row=rows.nth(index),summary=row.locator(':scope > summary');
+  await expect(summary).toContainText(source.title);
+  const link=row.locator('a.source-card');
+  await expect(link).toBeHidden();
+  await summary.focus();
+  await summary.press('Enter');
+  await expect(row.getByText(translateText(source.note,language),{exact:true})).toBeVisible();
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute('href',source.url);
+  await expect(link).toHaveAttribute('target','_blank');
+  await summary.press('Space');
+  await expect(link).toBeHidden();
+  await expect(topic).toHaveJSProperty('open',true);
+ }
 });
 
 for(const entry of ['public','garda'])test(`${entry}: footer and completed recap reach support with the selected language`,async({page})=>{
