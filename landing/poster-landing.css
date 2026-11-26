@@ -151,7 +151,7 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
   min-height: 48px; color: #fff; background: var(--sea); line-height: 1.35; font-weight: 750;
 }
 .sbs-poster .poster-landing-action .perspective-icon { flex: none; width: 2em; height: 2em; }
-.sbs-poster :is(.hero-question,.poster-landing-action):hover { background: #043f43; }
+.sbs-poster .poster-landing-action:hover { background: #043f43; }
 .sbs-poster :is(.perspective-card,.role-picker__item):hover { border-color: var(--sea); }
 
 @container (min-width: 52rem) {
