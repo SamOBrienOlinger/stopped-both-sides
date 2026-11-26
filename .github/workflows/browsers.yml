@@ -1,4 +1,4 @@
-name: Shipping browser paint checks
+name: Native Safari capture audit
 
 on:
   push:
@@ -9,36 +9,10 @@ permissions:
   contents: read
 
 jobs:
-  windows-browsers:
-    name: Installed ${{ matrix.browser }} on Windows
-    runs-on: windows-latest
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chrome, msedge]
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
-      - name: Audit installed browser
-        run: node scripts/hosted-browser-audit.mjs --browser ${{ matrix.browser }} --perf-runs 0 --output audit-results/${{ matrix.browser }}
-      - name: Upload browser evidence
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: installed-browser-audit-${{ matrix.browser }}
-          path: audit-results/${{ matrix.browser }}
-          retention-days: 7
-          if-no-files-found: warn
-
-  safari:
-    name: Installed Safari on macOS
+  safari-capture:
+    name: Native Safari screen and WebDriver comparison
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v7
@@ -46,15 +20,20 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - name: Enable Safari automation
+      - name: Enable the existing Safari WebDriver interface
         run: sudo /usr/bin/safaridriver --enable
-      - name: Audit installed Safari
-        run: node scripts/hosted-browser-audit.mjs --browser safari --perf-runs 0 --output audit-results/safari
-      - name: Upload browser evidence
+      # No Screen Recording, Accessibility or TCC preferences are changed.
+      # screencapture failures remain explicit in the artifact and job result.
+      - name: Compare native screen and WebDriver captures
+        run: >-
+          node scripts/hosted-browser-audit.mjs --browser safari
+          --profiles desktop,landscape --perf-runs 0 --capture-native
+          --output audit-results/safari-capture
+      - name: Upload captures and diagnostics
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: installed-browser-audit-safari
-          path: audit-results/safari
+          name: native-safari-capture-comparison
+          path: audit-results/safari-capture
           retention-days: 7
           if-no-files-found: warn

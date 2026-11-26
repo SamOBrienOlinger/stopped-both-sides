@@ -8,12 +8,15 @@ import {resolve,join} from 'node:path';
 import {createRequire} from 'node:module';
 import {parseArgs} from 'node:util';
 
-const {values}=parseArgs({options:{browser:{type:'string'},output:{type:'string',default:'audit-results'},'base-url':{type:'string'},'perf-runs':{type:'string',default:'3'}}});
+const {values}=parseArgs({options:{browser:{type:'string'},output:{type:'string',default:'audit-results'},'base-url':{type:'string'},'perf-runs':{type:'string',default:'3'},profiles:{type:'string',default:'desktop,portrait,landscape'},'capture-native':{type:'boolean',default:false}}});
 const browserName=values.browser,root=process.cwd(),output=resolve(values.output);
 if(!['safari','chrome','msedge'].includes(browserName))throw Error('Use --browser safari, chrome or msedge');
 const baseURL=values['base-url']||'http://127.0.0.1:4173/stopped-both-sides/';
 const perfRuns=Math.max(0,Math.min(5,Number(values['perf-runs'])||0));
-const profiles=[{name:'desktop',width:1366,height:900},{name:'portrait',width:768,height:1024},{name:'landscape',width:1024,height:600}];
+const requestedProfiles=new Set(values.profiles.split(','));
+const profiles=[{name:'desktop',width:1366,height:900},{name:'portrait',width:768,height:1024},{name:'landscape',width:1024,height:600}].filter(profile=>requestedProfiles.has(profile.name));
+if(profiles.length!==requestedProfiles.size)throw Error('Unknown profile; use desktop, portrait or landscape');
+if(values['capture-native']&&(browserName!=='safari'||process.platform!=='darwin'))throw Error('--capture-native is only for native Safari on a macOS hosted runner');
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 await mkdir(output,{recursive:true});
 const report={browser:browserName,commit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),platform:process.platform,runnerOS:process.env.RUNNER_OS||null,baseURL,startedAt:new Date().toISOString(),profiles,cases:[],performance:[],notes:[
@@ -120,7 +123,8 @@ async function safari(){
  report.version=session.capabilities.browserVersion;
  report.mode='Native Safari desktop, safaridriver/W3C WebDriver';
  const adapter={
-  resize:size=>command('POST',prefix+'/window/rect',{width:size.width,height:size.height}),
+  resize:size=>command('POST',prefix+'/window/rect',{x:0,y:0,width:size.width,height:size.height}),
+  windowRect:()=>command('GET',prefix+'/window/rect'),
   goto:url=>command('POST',prefix+'/url',{url}),
   reload:()=>command('POST',prefix+'/refresh',{}),
   url:()=>command('GET',prefix+'/url'),
@@ -132,6 +136,11 @@ async function safari(){
    return command('POST',prefix+'/element/'+element['element-6066-11e4-a52e-4f735466cecf']+'/click',{});
   },
   screenshot:async filename=>writeFile(filename,Buffer.from(await command('GET',prefix+'/screenshot'),'base64')),
+  screenshotElement:async(selector,filename)=>{
+   const element=await command('POST',prefix+'/element',{using:'css selector',value:selector});
+   const png=await command('GET',prefix+'/element/'+element['element-6066-11e4-a52e-4f735466cecf']+'/screenshot');
+   await writeFile(filename,Buffer.from(png,'base64'));
+  },
   close:()=>command('DELETE',prefix)
  };
  return adapter;
@@ -197,6 +206,25 @@ try{
    const painted=await until(async()=>{const value=await driver.evaluate(goalPaint);record.measurements.goalPaint=value;return value.painted&&value;},'learning goals paint and hit testing');
    check(record,'learning goals paint and are hit-testable in the viewport',painted.painted,painted);
    await pause(250); // Capture after the paint observation, not at the scroll-trigger boundary.
+   if(values['capture-native']){
+    // Activation changes no privacy/permission preferences on this ephemeral runner.
+    execFileSync('/usr/bin/open',['-a','Safari'],{timeout:10000});
+    await driver.activate();await pause(300);
+    record.captures={windowRect:await driver.windowRect(),paint:await driver.evaluate(goalPaint),geometry:await driver.evaluate(()=>{
+     const bounds=document.querySelector('.learning-goals').getBoundingClientRect();
+     return{screen:{width:screen.width,height:screen.height,availWidth:screen.availWidth,availHeight:screen.availHeight},window:{screenX,screenY,outerWidth,outerHeight,innerWidth,innerHeight,devicePixelRatio},goals:{x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height},url:location.href};
+    })};
+    const nativePath=join(output,entry+'-'+profile.name+'-native-screen.png');
+    try{
+     execFileSync('/usr/sbin/screencapture',['-x','-m',nativePath],{timeout:15000,stdio:'pipe'});
+     record.captures.nativeScreen={ok:true,file:entry+'-'+profile.name+'-native-screen.png',bytes:(await readFile(nativePath)).length};
+    }catch(error){record.captures.nativeScreen={ok:false,error:error.message,stderr:error.stderr?.toString()};}
+    try{
+     const name=entry+'-'+profile.name+'-webdriver-element.png';
+     await driver.screenshotElement('.learning-goals',join(output,name));
+     record.captures.webdriverElement={ok:true,file:name};
+    }catch(error){record.captures.webdriverElement={ok:false,error:error.message};}
+   }
    await driver.screenshot(join(output,entry+'-'+profile.name+'-goals.png'));
    await navigateFromMenu(entry==='garda'?'evidence':'rights');await ensureLayout(record,'reference');
    const expectedTopics=entry==='garda'?5:7;
@@ -234,7 +262,8 @@ finally{
  webdriverProcess?.kill();server?.kill();
  report.finishedAt=new Date().toISOString();
  report.summary={cases:report.cases.length,passed:report.cases.filter(c=>c.status==='passed').length,failed:report.cases.filter(c=>c.status==='failed').length,checks:report.cases.reduce((n,c)=>n+c.checks.length,0),passedChecks:report.cases.reduce((n,c)=>n+c.checks.filter(x=>x.pass).length,0),performanceSamples:report.performance.length,fatal:Boolean(report.fatal)};
+ if(values['capture-native'])report.summary.nativeScreenCaptured=report.cases.filter(c=>c.captures?.nativeScreen?.ok).length;
  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
  console.log(JSON.stringify({browser:browserName,version:report.version,...report.summary}));
- if(report.fatal||report.summary.failed||report.runtimeErrors?.length)process.exitCode=1;
+ if(report.fatal||report.summary.failed||report.runtimeErrors?.length||values['capture-native']&&report.summary.nativeScreenCaptured!==report.cases.length)process.exitCode=1;
 }
