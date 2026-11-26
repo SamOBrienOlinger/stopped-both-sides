@@ -296,7 +296,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}${heading}<div class="info-block landing-overview about-overview"><p>Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
  }
  function perspectiveChoice(){
-  return renderPosterLanding({siteRole,perspectiveIcon,discussionLink:discussionLink('garda-supervision',siteRole)})+homeActions();
+  return renderPosterLanding({siteRole,perspectiveIcon})+homeActions();
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);
