@@ -67,12 +67,8 @@ html[data-perspective] .sbs-poster.reference-landing {
   font-style: normal;
 }
 .sbs-poster .brand-subtitle::after {
-  content: '';
-  display: block;
-  inline-size: 2.4em;
-  block-size: 3px;
-  margin: .26em auto 0;
-  background: linear-gradient(to right, #146a68 48%, transparent 48% 52%, #34597a 52%);
+  content: none;
+  display: none;
 }
 .sbs-poster .hero-characters {
   direction: ltr; display: flex; justify-content: center; align-items: end;
