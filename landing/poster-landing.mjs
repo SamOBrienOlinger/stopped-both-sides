@@ -64,9 +64,9 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
       <div class="hero-characters" role="img" aria-label="Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.">
         ${figure('public', 'hero-public', true)}${figure('garda', 'hero-garda', true)}
       </div>
-      <a class="hero-question" href="${roleHref(siteRole)}">
-        <span>What would you do?</span><span class="hero-question-role">${labels[siteRole]}</span>
-      </a>
+      <div class="hero-question">
+        <span>What would you do?</span>
+      </div>
     </section>
     <section class="poster-overview" aria-labelledby="overview-title">
       <div class="poster-overview__text">
