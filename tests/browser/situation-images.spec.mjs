@@ -16,7 +16,7 @@ function previewCast(id,authored){
  if(group)return group.map(p=>({role:p.key,id:p.characterId,visible:true}));
  const nodeId=encounters[id].start;
  const selected=Object.fromEntries(Object.keys(cast).map(role=>[role,storyCharacter({id,nodeId,cast,authored},role)]));
- const extras=originalSceneDetails(id,nodeId,sceneDirections[id][nodeId].place,selected).supporting;
+ const extras=originalSceneDetails(id,nodeId,sceneDirections[id][nodeId].place,selected,{reservedCast:cast}).supporting;
  return [...Object.entries(selected).map(([role,c])=>({role,id:c.id,visible:true})),
   ...extras.map(({key,character})=>({role:key,id:character.id,visible:true}))];
 }
@@ -51,8 +51,10 @@ async function checkScenes(cards,heading,ids,authored=false){
   const actors=[...scene.querySelectorAll('.scene-actor')].map(actor=>{
    const frame=actor.getBoundingClientRect();
    const image=actor.querySelector('img');
-   const isolated=getComputedStyle(image).clipPath.startsWith('inset(')||
-    (new URL(image.src).pathname.includes('/story-')&&image.naturalWidth===image.naturalHeight);
+   const standalone=(actor.dataset.sceneCharacter.startsWith('story-')||actor.dataset.sceneCharacter==='support-ticket-steward')&&
+    image.naturalWidth===image.naturalHeight&&image.style.width==='100%'&&image.style.height==='100%'&&
+    parseFloat(image.style.left)===0&&parseFloat(image.style.top)===0;
+   const isolated=getComputedStyle(image).clipPath.startsWith('inset(')||standalone;
    return {
     role:actor.dataset.sceneRole,id:actor.dataset.sceneCharacter,
     visible:frame.width>0&&frame.height>0&&frame.left>=bounds.left&&frame.right<=bounds.right&&

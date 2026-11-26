@@ -14,7 +14,13 @@ export function discriminationSpacingErrors(elements,ids){
    const context=canvas.getContext('2d',{willReadFrequently:true});
    const x=(box.left-frame.left)/frame.width*320,y=(box.top-frame.top)/frame.height*320;
    const width=box.width/frame.width*320,height=box.height/frame.height*320;
-   const values=clip.match(/inset\(([^)]+)\)/)?.[1].trim().split(/\s+/).map(value=>parseFloat(value)/100);
+   // Dedicated square figures declare a full-frame source rather than an atlas
+   // crop. Measure their painted alpha exactly like a zero-inset atlas cell.
+   const standalone=(actor.dataset.sceneCharacter.startsWith('story-')||actor.dataset.sceneCharacter==='support-ticket-steward')&&
+    image.naturalWidth===image.naturalHeight&&image.style.width==='100%'&&image.style.height==='100%'&&
+    parseFloat(image.style.left)===0&&parseFloat(image.style.top)===0;
+   const values=clip==='none'&&standalone?[0]:
+    clip.match(/inset\(([^)]+)\)/)?.[1].trim().split(/\s+/).map(value=>parseFloat(value)/100);
    if(!values||!values.length||values.length>4)throw Error('Missing measured sprite crop');
    const [top,right=top,bottom=top,left=right]=values;
    context.beginPath();context.rect(x+width*left,y+height*top,width*(1-left-right),height*(1-top-bottom));context.clip();
