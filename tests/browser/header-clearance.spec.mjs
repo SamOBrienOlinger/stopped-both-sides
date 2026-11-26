@@ -204,6 +204,7 @@ for(const [site,path] of [['public','./'],['garda','garda/']])for(const profile 
   await nav(page,testInfo,'Explore to reference page',reference);
   await deepScroll(page);
   await nav(page,testInfo,'Reference page to Progress','progress',{context:'.progress-page > .eyebrow'});
+  await page.locator('.saved-situations > .progress-disclosure > summary').first().click();
   const progressGeometry=await savedCardGeometry(page,testInfo,'Progress Race resume card','.saved-situations .flow-save');
 
   await nav(page,testInfo,'Progress to About','about',{context:'.about-opening'});

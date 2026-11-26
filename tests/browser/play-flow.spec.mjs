@@ -128,6 +128,9 @@ test('a practice recap and an unfinished shared situation stay independently acc
  await expect(page.getByRole('link',{name:'Resume your situation',exact:true})).toHaveCount(0);
  await expect(page.getByRole('link',{name:'Open recap',exact:true})).toBeVisible();
  await page.goto('./?lang=en#progress');
+ const savedSummaries=page.locator('.saved-situations > .progress-disclosure > summary');
+ await expect(savedSummaries).toHaveCount(2);
+ for(const summary of await savedSummaries.all())await summary.click();
  await expect(page.getByRole('link',{name:'Resume your situation',exact:true})).toHaveAttribute('href',interrupted);
  await page.getByRole('link',{name:'Open recap',exact:true}).click();
  await page.reload();

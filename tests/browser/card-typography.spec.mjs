@@ -47,7 +47,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    {name:'about',hash:'#about',titles:'.info-block > h2,.learning-goal > h3,.learning-panel-title',capture:'.learning-goals'},
    {name:'browse',hash:'#encounters/'+role+'/street',titles:'.scenario > :is(h2,h3)',capture:'.scenario'},
    {name:'sources',hash:role==='public'?'#rights':'#evidence',titles:role==='public'?'.source-card > strong,.support-organisation > h3':'.evidence-title',capture:role==='public'?'.support-card':'.evidence-record'},
-   {name:'progress',hash:'#progress',titles:'.role-results .info-block > h2',capture:'.role-results'},
+   {name:'progress',hash:'#progress',titles:'.role-results .info-block > .progress-disclosure > summary > h2',capture:'.role-results'},
    {name:'encounter',hash:stateHash(startEncounter('public-street',role,{cast})),titles:'.decision-context > h1,.prompt > h2',capture:'.decision-context'},
    {name:'recap',hash:recapFor(role),titles:'.recap-overview h2,.recap-role > h3,.support-recap h2',capture:'.summary-item'}
   ];

@@ -215,6 +215,7 @@ for(const role of ['public','garda']){
   await expect.poll(async()=>kinds(page)).toContain('progress');
   const before=await page.locator('.progress-page progress').evaluateAll(elements=>elements.map(element=>element.value));
   await reset(page);
+  await page.locator('.progress-disclosure > summary').filter({hasText:'Manage your progress'}).click();
   await page.locator('[data-action="paired-clear"]').click();
   await expect(page.locator('[data-action="paired-clear-cancel"]')).toBeVisible();
   await page.locator('[data-action="paired-clear-cancel"]').click();

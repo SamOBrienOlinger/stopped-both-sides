@@ -673,3 +673,36 @@ summary.discrimination-ground-trigger {display:block;min-block-size:3.25rem;padd
 @media(max-width:28rem){.scenario-library{padding-inline:8px}}
 @media(hover:hover) and (pointer:fine){.discrimination-ground-trigger:hover{background:var(--pale)}}
 @media(forced-colors:active){.discrimination-ground,.discrimination-ground-trigger,.discrimination-ground[open]>.discrimination-ground-trigger{background:Canvas;color:CanvasText;border-color:CanvasText}}
+
+/* Progress headings open only their own learning record and controls. */
+.progress-page .role-results {align-items:start}
+.progress-page .progress-disclosure {min-inline-size:0}
+.progress-page .progress-disclosure > summary {
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:1rem;
+ min-block-size:48px;
+ padding:.5rem .375rem;
+ list-style:none;
+ cursor:pointer;
+}
+.progress-page .progress-disclosure > summary::-webkit-details-marker {display:none}
+.progress-page .progress-disclosure > summary h2 {
+ flex:1;
+ min-inline-size:0;
+ margin:0;
+ color:inherit;
+}
+.progress-page .progress-disclosure > summary::after {
+ content:"";
+ flex:none;
+ inline-size:.65rem;
+ block-size:.65rem;
+ margin-inline-end:.25rem;
+ border-inline-end:2px solid currentColor;
+ border-block-end:2px solid currentColor;
+ transform:rotate(45deg);
+}
+.progress-page .progress-disclosure[open] > summary::after {transform:rotate(225deg)}
+.progress-page .progress-disclosure-body {display:flow-root;min-inline-size:0;padding-block-start:1rem}

@@ -151,8 +151,8 @@ export function progressSkills(progress){
   const run=decodeState(entry.token);
   return run&&[run.answers,...run.history.map(step=>step.answers)].some(answer=>answer.public!==null&&answer.garda!==null);
  });
- return '<section class="info-block progress-skills"><h2>What you have practised</h2><ul>'+
+ return '<section class="info-block progress-skills"><details class="progress-disclosure"><summary><h2>What you have practised</h2></summary><div class="progress-disclosure-body"><ul>'+
   [...practised].map(id=>'<li>'+practiceGoal(id)+'</li>').join('')+
   (compared?'<li>Answered from both perspectives at the same decision</li>':'')+
- '</ul></section>';
+ '</ul></div></details></section>';
 }

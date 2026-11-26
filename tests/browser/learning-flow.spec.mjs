@@ -15,6 +15,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await page.goto(path+'?lang=en'+stateHash(startEncounter('public-search',role)));
   await page.locator('#choice-title').waitFor();
   await page.goto(path+'?lang=en#progress');
+  await page.locator('.saved-situations > .progress-disclosure > summary').first().click();
   const link=page.getByRole('link',{name:'Resume your situation',exact:true});
   const ratio=async()=>contrast(await link.evaluate(element=>{
    const style=getComputedStyle(element);
@@ -108,6 +109,7 @@ test('both recap links return to the same topic, role and scenario card',async({
  await expect(searchCard).toBeFocused();
  await page.goto('./?lang=en#progress');
  await expect(page.getByRole('heading',{name:'What you have practised'})).toBeVisible();
+ await page.locator('.progress-skills > .progress-disclosure > summary').click();
  await expect(page.getByText('Asking what a search is based on',{exact:true})).toBeVisible();
 });
 
