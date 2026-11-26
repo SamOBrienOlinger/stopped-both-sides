@@ -23,8 +23,31 @@
 .learning-status{border-block-start:1px solid var(--line);padding-block-start:1rem;margin-block-start:1.25rem;font-size:.875rem;color:var(--muted)}
 .learning-status strong,.learning-status span{display:block}
 .learning-status strong{color:var(--deep);margin-block-end:.25rem}
-.learning-goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border-block:1px solid var(--line)}
-.learning-goal{position:relative;background:#fff;padding:1.4rem var(--learning-space)}
+.learning-cycle-description{position:absolute;inline-size:1px;block-size:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.learning-section .learning-goals{
+ display:grid;
+ gap:0;
+ grid-template-columns:minmax(0,1fr) 3rem minmax(0,1fr);
+ grid-template-rows:auto 3rem auto;
+ grid-template-areas:"goal-01 link-01 goal-02" "link-04 . link-02" "goal-04 link-03 goal-03";
+ padding:var(--learning-space);background:var(--pale);border-block:1px solid var(--line);
+}
+.learning-goal{position:relative;background:#fff;padding:1.4rem var(--learning-space);border:1px solid var(--line);border-radius:14px}
+.learning-goal--01{grid-area:goal-01}
+.learning-goal--02{grid-area:goal-02}
+.learning-goal--03{grid-area:goal-03}
+.learning-goal--04{grid-area:goal-04}
+.learning-goal-link{display:grid;place-items:center;color:var(--deep);pointer-events:none}
+.learning-goal-link svg{display:block;inline-size:2.25rem;block-size:2.25rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.learning-goal-link--01{grid-area:link-01}
+.learning-goal-link--02{grid-area:link-02}
+.learning-goal-link--03{grid-area:link-03}
+.learning-goal-link--04{grid-area:link-04}
+.learning-goal-link--02 svg{transform:rotate(90deg)}
+.learning-goal-link--03 svg{transform:rotate(180deg)}
+.learning-goal-link--04 svg{transform:rotate(270deg)}
+[dir="rtl"] .learning-goal-link--01 svg{transform:rotate(180deg)}
+[dir="rtl"] .learning-goal-link--03 svg{transform:none}
 .learning-goal-number{display:block;color:var(--deep);font-size:.8125rem;font-weight:700;letter-spacing:.1em;margin-block-end:.5rem}
 .learning-goal h3{font-size:1.125rem;line-height:1.4;margin:0 0 .45rem}
 .learning-goal p{font-size:.9375rem;margin:0;color:var(--muted)}
@@ -111,8 +134,21 @@
 .learning-reference-links a:hover{background:var(--pale)}
 .reading-spacious .learning-section p,.reading-spacious .learning-section li,.reading-spacious .learning-section dd{line-height:1.9}
 @media(max-width:40rem){
- .learning-goals{grid-template-columns:minmax(0,1fr)}
+ .learning-section .learning-goals{
+  grid-template-columns:1.75rem minmax(0,1fr);
+  grid-template-rows:auto 2.5rem auto 2.5rem auto 2.5rem auto;
+  grid-template-areas:"link-04 goal-01" "link-04 link-01" "link-04 goal-02" "link-04 link-02" "link-04 goal-03" "link-04 link-03" "link-04 goal-04";
+  padding-inline:var(--learning-inset);
+ }
  .learning-goal{padding-block:1.125rem}
+ .learning-goal-link--01 svg,.learning-goal-link--03 svg,
+ [dir="rtl"] .learning-goal-link--01 svg,[dir="rtl"] .learning-goal-link--03 svg{transform:rotate(90deg)}
+ .learning-goal-link--04{position:relative;align-self:stretch;justify-self:stretch}
+ .learning-goal-link--04 svg{display:none}
+ .learning-goal-link--04::before{content:"";position:absolute;inset-block:2.25rem;inset-inline:.4rem 0;border:2px solid currentColor;border-inline-end:0;border-radius:8px 0 0 8px}
+ .learning-goal-link--04::after{content:"";position:absolute;inset-block-start:calc(2.25rem - .25rem + 1px);inset-inline-end:0;inline-size:.5rem;block-size:.5rem;border-block-start:2px solid currentColor;border-inline-end:2px solid currentColor;transform:rotate(45deg)}
+ [dir="rtl"] .learning-goal-link--04::before{border-radius:0 8px 8px 0}
+ [dir="rtl"] .learning-goal-link--04::after{transform:rotate(-45deg)}
  .learning-panel>summary{gap:.65rem;padding:.875rem}
  .learning-panel-number{inline-size:1.75rem;block-size:1.75rem;font-size:.6875rem}
  .learning-stages li{grid-template-columns:minmax(0,1fr);gap:.6rem}
@@ -121,7 +157,8 @@
 }
 @media(forced-colors:active){
  .learning-section,.learning-intro,.learning-goal,.learning-cycle,.learning-panel,.learning-panel>summary,.learning-panel[open]>summary,.learning-panel-number,.learning-time,.learning-assessment,.learning-note{background:Canvas;color:CanvasText;border-color:CanvasText}
- .learning-goals{background:CanvasText}
+ .learning-section .learning-goals{background:Canvas}
+ .learning-goal-link{color:CanvasText}
  .learning-reference-links a{color:LinkText;border-color:LinkText}
  .learning-toggle{color:ButtonText}
 }

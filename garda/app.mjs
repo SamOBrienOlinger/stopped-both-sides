@@ -3,7 +3,7 @@ import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-f
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=site-repairs-20261125';
 import {createLayout} from '../accessibility/layout.mjs?v=poster-landing-20261125';
 import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
-import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=site-repairs-20261125';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=learning-cycle-20261126';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=site-repairs-20261125';
 import {createMotion} from '../accessibility/motion.mjs?v=site-repairs-20261125';
@@ -41,11 +41,17 @@ function sourceCard(id,s,open){
 }
 function evidence(open=''){
  const academic=Object.values(sources).filter(s=>s.kind.startsWith('Academic')).length;
+ const activeGroup=hasOwn(sources,open)?sources[open].group:open.startsWith('group-')?open.slice(6):'';
+ const topics=Object.entries(groups).map(([group,label])=>`<details class="source-topic rights-topic" id="group-${group}" tabindex="-1"${activeGroup===group?' open':''}>
+  <summary><h2 id="heading-${group}">${esc(label)}</h2></summary>
+  <div class="rights-topic-body">${Object.entries(sources).filter(([,s])=>s.group===group).map(([id,s])=>sourceCard(id,s,open)).join('')}
+   <button class="primary secondary" data-action="paired-start" data-id="${({ireland:'garda-search',community:'public-fair-treatment',decisions:'garda-street',outcomes:'garda-supervision',learning:'garda-supervision'})[group]}" data-role="garda">Practise a related situation</button>
+  </div>
+ </details>`).join('');
  return `<div class="content-page evidence-page"><p class="eyebrow">CHECK THE EVIDENCE. KEEP ITS LIMITS IN VIEW.</p><h1>Evidence & sources</h1><p class="page-lead">A selected review of ${academic} academic publications, alongside Irish law, professional guidance and community research. Each source explains how it informed the resource.</p>${paired.resumeLink()}${returnToSession()}
+ <div class="rights-topics">${topics}</div>
  <section class="info-block important"><h2>What this review covers</h2><p>The reading spans suspicion, stereotyping, police culture, Traveller and minority experiences, procedural justice, search patterns and training. International findings inform reflection; Irish law governs the Irish examples.</p><p>This is a substantial, non-exhaustive evidence review, not a systematic review of all literature. Access ranges from selected full-text sections to abstracts and publisher descriptions, as labelled below. The resource has not been independently evaluated.</p></section>
- <nav class="evidence-nav" aria-label="Evidence topics">${Object.entries(groups).map(([id,label])=>`<a href="#evidence/group-${id}">${esc(label)}</a>`).join('')}</nav>
  <section class="info-block"><h2>Three distinctions worth keeping</h2><dl class="evidence-distinctions"><dt>A pattern and its cause</dt><dd>A disparity calls for careful inquiry. Counts alone cannot identify every mechanism or determine an individual case.</dd><dt>A fair explanation and a lawful power</dt><dd>Respectful communication matters alongside a valid basis for the action. One does not replace the other.</dd><dt>Learning and changed practice</dt><dd>Knowing more or completing a learning activity does not establish lasting changes in real encounters.</dd></dl><p class="small-note">These are design conclusions drawn from the sources below, including studies with mixed and null findings.</p>${sourceLinks(['carvalho','petersen','fraRacism'])}</section>
- ${Object.entries(groups).map(([group,label])=>`<section class="evidence-group" id="group-${group}" tabindex="-1" aria-labelledby="heading-${group}"><h2 id="heading-${group}">${esc(label)}</h2><p><button class="text-button" data-action="paired-start" data-id="${({ireland:'garda-search',community:'public-fair-treatment',decisions:'garda-street',outcomes:'garda-supervision',learning:'garda-supervision'})[group]}" data-role="garda">Practise a related situation</button></p>${Object.entries(sources).filter(([,s])=>s.group===group).map(([id,s])=>sourceCard(id,s,open)).join('')}</section>`).join('')}
  <section class="info-block"><h2>Keep the reading open</h2><p>This collection is a starting point for review and development. Important next steps include specialist case-law review, further non-English European literature, community-led additions and evaluation with Garda learners.</p><p>Source authors and organisations have not approved this interpretation or endorsed the resource.</p></section></div>`;
 }
 function about(){
