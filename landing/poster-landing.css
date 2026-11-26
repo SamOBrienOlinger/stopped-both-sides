@@ -246,8 +246,8 @@ html.reading-spacious .sbs-poster .learning-step-copy { line-height: 1.85; }
 html[data-perspective] .sbs-poster.poster-guide-section { padding: var(--inset); }
 .sbs-poster.poster-guide-section .poster-learning.how-to-play { padding: 0; }
 
-/* Match the landing progress and practice disclosures to the illustrated guide. */
-html[data-perspective] :is(.home-progress,.practice-panel) {
+/* Match landing progress, practice and situation-browser panels to the guide. */
+html[data-perspective] :is(.home-progress,.practice-panel,.topic-explorer) {
   --ink: #122939;
   --sea: #075e61;
   --edge: #c2dddf;
@@ -264,7 +264,7 @@ html[data-perspective] :is(.home-progress,.practice-panel) {
   box-shadow: none;
   overflow-wrap: anywhere;
 }
-:is(.home-progress,.practice-panel) > details {
+:is(.home-progress,.practice-panel,.topic-explorer) > details {
   min-inline-size: 0;
   max-inline-size: none;
   margin: 0;
@@ -274,12 +274,12 @@ html[data-perspective] :is(.home-progress,.practice-panel) {
   background: #ffffff85;
   box-shadow: none;
 }
-:is(.home-progress,.practice-panel) > details > .landing-disclosure-trigger {
+:is(.home-progress,.practice-panel,.topic-explorer) > details > .landing-disclosure-trigger {
   padding: 1rem;
   min-block-size: 3.5rem;
   border-block-end: 0;
 }
-:is(.home-progress,.practice-panel) > details > .landing-disclosure-trigger h2 {
+:is(.home-progress,.practice-panel,.topic-explorer) > details > .landing-disclosure-trigger h2 {
   margin: 0;
   font-size: clamp(1.35rem, 2.5vw, 1.85rem);
   color: var(--ink);
@@ -300,19 +300,25 @@ html[data-perspective] :is(.home-progress,.practice-panel) {
   margin-block: .75rem 1rem;
   padding: .75rem;
 }
-html.contrast-high[data-perspective] :is(.home-progress,.practice-panel) {
+html.contrast-high[data-perspective] :is(.home-progress,.practice-panel,.topic-explorer) {
   --sea: #fff; --ink: #fff; --edge: #fff; --paper: #10171b;
   color: white; background: #10171b;
 }
-.contrast-high :is(.home-progress,.practice-panel) > details,
+.contrast-high :is(.home-progress,.practice-panel,.topic-explorer) > details,
 .contrast-high .home-progress-content .flow-save {
   color: white; background: #10171b; border-color: white;
 }
 @media (forced-colors: active) {
-  html[data-perspective] :is(.home-progress,.practice-panel),
-  :is(.home-progress,.practice-panel) > details,
+  html[data-perspective] :is(.home-progress,.practice-panel,.topic-explorer),
+  :is(.home-progress,.practice-panel,.topic-explorer) > details,
   .home-progress-content .flow-save {
     background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none;
   }
-  :is(.home-progress,.practice-panel) > details > .landing-disclosure-trigger h2 { color: CanvasText; }
+  :is(.home-progress,.practice-panel,.topic-explorer) > details > .landing-disclosure-trigger h2 { color: CanvasText; }
+}
+
+.topic-explorer > .topic-disclosure > .topic-grid.situation-topics {
+  min-inline-size: 0;
+  padding: 1rem;
+  border-block-start: 1px solid var(--edge);
 }
