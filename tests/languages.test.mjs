@@ -146,7 +146,7 @@ for(const language of added)test(`${siteRole}/${language.id}: every scene render
   while(queue.length){
    const base=queue.shift();if(base.complete||seen.has(base.nodeId))continue;seen.add(base.nodeId);count++;
    route(stateHash(base));
-   const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast);
+   const node=e.nodes[base.nodeId],translated=personalizeText(translateText(node.scene,language.id),e,base.cast,node.id);
    assert.ok(main.innerHTML.includes(escapeHTML(translated)),`${language.id}/${e.id}/${node.id}`);
    if(locationCaptions[e.id]){
     const source=e.id==='garda-street'&&node.id==='street-identity'
@@ -233,3 +233,4 @@ test('Poster headings, scene descriptions and example responses translate in eve
   assert.ok(rendered.includes('#encounters/garda"'));
  }
 });
+
