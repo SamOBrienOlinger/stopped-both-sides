@@ -1,5 +1,5 @@
 import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=role-cast-20261126b';
-import {renderPosterLanding} from '../landing/poster-landing.mjs?v=combined-how-to-20261126';
+import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=combined-how-to-20261126';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {
@@ -313,7 +313,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    ${topicExplorer(topicGroups,siteRole,group=>topicCards(group,siteRole,'h3'))}
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
-    <div class="practice-content"><p>Make choices in one role and review what you learned.</p><a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>
+    <div class="practice-content"><p>Make choices in one role and review what you learned.</p>${renderPosterPerspectiveActions({perspectiveIcon})}<a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>
    </details>`;
  }
  function playHelp(){
