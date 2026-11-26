@@ -3,7 +3,7 @@ import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-f
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=site-repairs-20261125';
 import {createLayout} from '../accessibility/layout.mjs?v=poster-landing-20261125';
 import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
-import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=learning-cycle-20261126';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=learning-cycle-20261126b';
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=site-repairs-20261125';
 import {createMotion} from '../accessibility/motion.mjs?v=site-repairs-20261125';
