@@ -371,15 +371,15 @@ const revisedSiteCopy={
   "es": "Escena y personajes",
   "zh-Hans": "场景和角色"
  },
- "Back to practice": {
-  "ga": "Ar ais chuig an gcleachtadh",
-  "pt": "Voltar à prática",
-  "ar": "العودة إلى التدريب",
-  "pl": "Wróć do ćwiczeń",
-  "ro": "Înapoi la exerciții",
-  "fr": "Retour aux exercices",
-  "es": "Volver a la práctica",
-  "zh-Hans": "返回练习"
+ "Back to browsing situations": {
+   "ga": "Ar ais chuig brabhsáil na gcásanna",
+   "pt": "Voltar à lista de situações",
+   "ar": "العودة إلى تصفح المواقف",
+   "pl": "Wróć do przeglądania sytuacji",
+   "ro": "Înapoi la răsfoirea situațiilor",
+   "fr": "Retour à la liste des situations",
+   "es": "Volver a explorar situaciones",
+   "zh-Hans": "返回浏览情境"
  },
  "Back to situations": {
   "ga": "Ar ais chuig na cásanna",

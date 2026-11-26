@@ -126,7 +126,7 @@ export function discussionGuide(encounter,role){
  const questions=encounter.id==='garda-supervision'?reviewQuestions:discussionQuestions;
  const otherRole=role==='public'?'garda':'public';
  return '<div class="content-page discussion-guide">'+
-  '<a class="text-button" href="#encounters/'+role+'/'+topicFor(encounter.id).id+'">Back to situations</a>'+
+  '<a class="text-button" href="#encounters/'+role+'/'+topicFor(encounter.id).id+'">Back to browsing situations</a>'+
   '<h1>Explore and discuss this situation</h1>'+
   '<h2>'+esc(encounter.title)+'</h2>'+
   '<p class="small-note">Allow about 15 minutes.</p>'+

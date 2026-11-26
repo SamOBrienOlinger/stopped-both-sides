@@ -77,7 +77,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const list=playLocation(href,role);
   const target=list?listHref(list.mode,list.role,list.topic):href;
   const cardId=list?.mode==='practice'?(encounters[id].originalId||id):id;
-  return `<a class="${label?`primary${secondary?' secondary':''}`:'text-button'}" data-return-to-play="${esc(cardId)}" href="${esc(target)}">${label||`← ${list?.mode==='practice'?'Back to practice':'Back to situations'}`}</a>`;
+  return `<a class="${label?`primary${secondary?' secondary':''}`:'text-button'}" data-return-to-play="${esc(cardId)}" href="${esc(target)}">${label||`← Back to browsing situations`}</a>`;
  }
  function focusReturnedList(){
   const returned=returnFocus;
@@ -182,7 +182,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  function modeOptions(mode,role,topic){
   const modes=[
    ['shared','Explore both perspectives','Switch roles to explore the same moment from both sides.'],
-   ['practice','Practise one role','Make choices in one role and review what you learned.']
+   ['practice','Practise one role at a time','Make choices in one role and review what you learned.']
   ];
   return `<nav class="play-modes" aria-label="Ways to explore">${modes.map(([id,title,description])=>
    `<a href="${esc(listHref(id,role,topic))}" ${mode===id?'aria-current="page"':''}><strong>${title}</strong><span>${description}</span></a>`
@@ -259,7 +259,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<div class="info-block ${primary?'session-return':'saved-recap'} flow-save" data-save-mode="${entry.mode}">
    <div class="flow-save-copy">
     <strong>${encounter.kind==='colleague-witness'?esc(encounter.title):esc(description)}</strong>
-    <span><span>${roleLabels[entry.role]}</span> · <span>${entry.mode==='practice'?'Individual practice':'Explore both perspectives'}</span>${entry.complete?'':` · ${decisionNumber(game.history.length+1)}`}</span>
+    <span><span>${roleLabels[entry.role]}</span> · <span>${entry.mode==='practice'?'Practise one role at a time':'Explore both perspectives'}</span>${entry.complete?'':` · ${decisionNumber(game.history.length+1)}`}</span>
    </div>
    <a class="${primary?'text-button':'primary secondary'} saved-session-link" href="${esc(href)}">${entry.complete?'Open recap':'Resume your situation'}</a>
   </div>`;

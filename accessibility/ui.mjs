@@ -1,7 +1,7 @@
 import {decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
 import {createPreferences,defaults} from './preferences.mjs?v=learning-language-20261120';
 import {createDialogController} from './dialog.mjs?v=learning-language-20261120';
-import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=site-repairs-20261125';
+import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=practice-consistency-20261126';
 import {languages,languageInfo,normaliseLanguage} from '../locales/languages.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 const languageHelp='All nine languages cover shared situations and reference pages. Individual practice is also available in Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese.';

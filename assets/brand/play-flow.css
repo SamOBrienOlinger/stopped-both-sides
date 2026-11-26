@@ -241,6 +241,25 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  margin-block-end:.75rem;
 }
 .flow-topline>a.text-button {flex:0 1 auto;max-inline-size:100%}
+.practice-mode-topline {
+ flex-direction:column;
+ align-items:flex-start;
+ gap:.25rem;
+}
+.practice-mode-title {
+ margin:0;
+ color:var(--ink);
+ font-size:clamp(1.5rem,3vw,2.25rem);
+ font-weight:800;
+ line-height:1.25;
+ letter-spacing:-.025em;
+ overflow-wrap:anywhere;
+}
+.summary-heading>.practice-recap-title {
+ font-size:clamp(1.9rem,4vw,3rem);
+ font-weight:800;
+ letter-spacing:-.045em;
+}
 .game-grid.paired-game.flow-game {
  display:grid;
  grid-template-columns:minmax(0,1fr);
@@ -259,9 +278,10 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  color:var(--story-text);
  box-shadow:var(--play-shadow);
 }
-:is(.flow-game .decision-context,.game-grid>.story) h1 {
+:is(.flow-game .decision-context,.game-grid>.story) :is(h1,h2[id="scene-title"]) {
  margin-block-end:.7rem;
  color:#fff;
+ font-weight:800;
  font-size:clamp(1.5rem,3.2vw,2.65rem);
  line-height:1.14;
  text-wrap:balance;
@@ -482,7 +502,7 @@ button.role-switch-button:hover {background:var(--pale)}
  background:var(--story);
  color:var(--story-text);
 }
-.summary-heading h1 {color:#fff;text-wrap:balance}
+.summary-heading :is(h1,.practice-recap-title) {color:#fff;text-wrap:balance}
 .summary-heading :is(.eyebrow,p.small-note) {color:var(--story-label)}
 .summary-heading p:last-child {margin-block-end:0}
 .summary-heading .summary-icon {margin-inline:0}
@@ -560,7 +580,7 @@ button.role-switch-button:hover {background:var(--pale)}
  .encounter-hero-art {display:none}
  .reference-landing.encounter-hero .landing-instructions>:is(#paired-title,#perspectives-title,.landing-deck,.small-note),
  .home-start-role,.flow-game .decision-context :is(h1,.eyebrow,.story-text,.search-figures caption),
- .summary-heading :is(h1,.eyebrow,p.small-note) {color:#000}
+ .summary-heading :is(h1,.practice-recap-title,.eyebrow,p.small-note) {color:#000}
 }
 
 /* Each topic is a native disclosure, in both situation browsers. */

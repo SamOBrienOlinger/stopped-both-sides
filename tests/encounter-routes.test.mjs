@@ -157,7 +157,7 @@ test('Every shared situation reaches a scored two-role recap and can revisit or 
 });
 test('Original mode transfers a live selection into the same stage and records its score',()=>{
  const e=scenarios[0];route('#play');action('start',{id:e.id});action('choose',{index:'1'});
- assert.match(main.innerHTML,/data-action="paired-transfer"/);assert.match(main.innerHTML,/Individual practice/);
+ assert.match(main.innerHTML,/data-action="paired-transfer"/);assert.match(main.innerHTML,/<h1 class="practice-mode-title">Practise one role at a time<\/h1>/);
  assert.doesNotMatch(main.innerHTML,/Fictional situation · Republic of Ireland/);
  action('paired-transfer');assert.equal(state().id,siteRole+'-'+e.id);assert.equal(state().nodeId,e.start);assert.equal(state().answers[siteRole],1);assert.notEqual(state().role,siteRole);
 });
@@ -198,7 +198,7 @@ test('Every stage and every choice render the selected cast and preserve the nex
     }
     assert.deepEqual(state().cast,base.cast);
     assert.doesNotMatch(main.innerHTML,/Garda involved in the encounter/);
-    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to situations/);
+    assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to browsing situations/);
     assert.doesNotMatch(main.innerHTML,/[←→]/);
     const story=main.innerHTML.match(/<p class="story-text">([\s\S]*?)<\/p>/)[1];
     if(identity&&node.scene.includes(identity.name)){
@@ -226,7 +226,7 @@ test('Every stage and every choice render the selected cast and preserve the nex
 test('Original practice uses its pictured character in every named scene and completed recap',()=>{
  for(const original of scenarios){
   route('#play');action('start',{id:original.id});
-  assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to practice/);
+  assert.match(main.innerHTML,/<img class="tap-icon"[^>]+alt="" aria-hidden="true"[^>]*> Back to browsing situations/);
   assert.doesNotMatch(main.innerHTML,/[←→]/);
   const encounter=encounters[siteRole+'-'+original.id],identity=storyIdentity(encounter);
   const selected=main.innerHTML.match(/data-cast-role="public"[\s\S]*?<strong data-no-translate>([^<]+)<\/strong>/)[1];
