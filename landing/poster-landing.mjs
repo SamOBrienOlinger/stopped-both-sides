@@ -64,7 +64,7 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
         ${figure('public', 'hero-public', true)}${figure('garda', 'hero-garda', true)}
       </div>
       <div class="hero-question">
-        <span>What would you do?</span>
+        <span>What will you do?</span>
       </div>
     </section>
     <section class="poster-overview" aria-labelledby="overview-title">
