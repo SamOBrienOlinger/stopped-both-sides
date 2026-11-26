@@ -1,4 +1,4 @@
-name: Native Safari capture audit
+name: Safari static and site comparison
 
 on:
   push:
@@ -9,8 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  safari-capture:
-    name: Native Safari screen and WebDriver comparison
+  safari-control:
+    name: Compare static control and site in Safari
     runs-on: macos-latest
     timeout-minutes: 10
     steps:
@@ -20,20 +20,15 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - name: Enable the existing Safari WebDriver interface
+      - name: Enable Safari automation
         run: sudo /usr/bin/safaridriver --enable
-      # No Screen Recording, Accessibility or TCC preferences are changed.
-      # screencapture failures remain explicit in the artifact and job result.
-      - name: Compare native screen and WebDriver captures
-        run: >-
-          node scripts/hosted-browser-audit.mjs --browser safari
-          --profiles desktop,landscape --perf-runs 0 --capture-native
-          --output audit-results/safari-capture
-      - name: Upload captures and diagnostics
+      - name: Compare static control, Home and About
+        run: node scripts/safari-control-compare.mjs --output audit-results/safari-control
+      - name: Upload comparison evidence
         if: always()
         uses: actions/upload-artifact@v5
         with:
-          name: native-safari-capture-comparison
-          path: audit-results/safari-capture
+          name: safari-static-home-about-comparison
+          path: audit-results/safari-control
           retention-days: 7
           if-no-files-found: warn
