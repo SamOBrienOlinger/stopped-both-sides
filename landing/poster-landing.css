@@ -245,3 +245,74 @@ html.reading-spacious .sbs-poster .learning-step-copy { line-height: 1.85; }
 
 html[data-perspective] .sbs-poster.poster-guide-section { padding: var(--inset); }
 .sbs-poster.poster-guide-section .poster-learning.how-to-play { padding: 0; }
+
+/* Match the landing progress and practice disclosures to the illustrated guide. */
+html[data-perspective] :is(.home-progress,.practice-panel) {
+  --ink: #122939;
+  --sea: #075e61;
+  --edge: #c2dddf;
+  --paper: #f3fbfb;
+  --inset: clamp(12px, 2.3vw, 32px);
+  min-inline-size: 0;
+  max-inline-size: none;
+  margin: 0 auto 1.5rem;
+  padding: var(--inset);
+  border: 1px solid var(--edge);
+  border-radius: 1.35rem;
+  background: linear-gradient(138deg, #d4efec, #f5fbfc 49%, #d9f1f1);
+  color: var(--ink);
+  box-shadow: none;
+  overflow-wrap: anywhere;
+}
+:is(.home-progress,.practice-panel) > details {
+  min-inline-size: 0;
+  max-inline-size: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--edge);
+  border-radius: 1rem;
+  background: #ffffff85;
+  box-shadow: none;
+}
+:is(.home-progress,.practice-panel) > details > .landing-disclosure-trigger {
+  padding: 1rem;
+  min-block-size: 3.5rem;
+  border-block-end: 0;
+}
+:is(.home-progress,.practice-panel) > details > .landing-disclosure-trigger h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  color: var(--ink);
+}
+.home-progress-content,
+.practice-panel > details > .practice-content {
+  min-inline-size: 0;
+  padding: 1rem;
+  border-block-start: 1px solid var(--edge);
+}
+.home-progress-content .flow-save {
+  border-color: #d4e6e8;
+  border-radius: 1rem;
+  background: #ffffffed;
+  box-shadow: 0 4px 10px #0b4d5c0a;
+}
+.practice-panel .poster-perspective-section {
+  margin-block: .75rem 1rem;
+  padding: .75rem;
+}
+html.contrast-high[data-perspective] :is(.home-progress,.practice-panel) {
+  --sea: #fff; --ink: #fff; --edge: #fff; --paper: #10171b;
+  color: white; background: #10171b;
+}
+.contrast-high :is(.home-progress,.practice-panel) > details,
+.contrast-high .home-progress-content .flow-save {
+  color: white; background: #10171b; border-color: white;
+}
+@media (forced-colors: active) {
+  html[data-perspective] :is(.home-progress,.practice-panel),
+  :is(.home-progress,.practice-panel) > details,
+  .home-progress-content .flow-save {
+    background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none;
+  }
+  :is(.home-progress,.practice-panel) > details > .landing-disclosure-trigger h2 { color: CanvasText; }
+}

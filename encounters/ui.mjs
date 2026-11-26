@@ -311,10 +311,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     </details>
    </section>
    ${topicExplorer(topicGroups,siteRole,group=>topicCards(group,siteRole,'h3'))}
+   <div class="practice-panel">
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
     <div class="practice-content"><p>Make choices in one role and review what you learned.</p>${renderPosterPerspectiveActions({perspectiveIcon})}<a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>
-   </details>`;
+   </details>
+   </div>`;
  }
  function playHelp(){
   return `<details class="play-help"><summary>Scores, sources and help</summary>${scoreStrip(state,true)}<p>One point means the response supports an appropriate resolution. Your human and civil rights never depend on your score.</p><p>${fixedStoryCharacter(state.id,'public',state.nodeId,state.authored)||state.id==='garda-supervision'?'Your avatar represents your role. The scene keeps its own names and facts.':'Your chosen characters stay with the situation. Changing a character updates their name and picture throughout the story.'}</p><p>Switch sides to compare the same moment. Your active answer decides what happens at the next step.</p><p>Read the explanation after each choice. Its source links show where the information comes from.</p>${storageNote()}<a class="text-button" href="#progress">My scores & progress</a></details>`;
