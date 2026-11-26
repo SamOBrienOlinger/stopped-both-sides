@@ -1,5 +1,5 @@
-import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs';
-import {originalSceneDetails} from './original-scene-props.mjs';
+import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=role-cast-20261126';
+import {originalSceneDetails} from './original-scene-props.mjs?v=role-cast-20261126';
 import {renderGroupAction} from './group-staging.mjs';
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
 import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=gpo-flags-20261125';
@@ -7,7 +7,7 @@ import {encounters,roles,roleLabels} from './catalog.mjs?v=site-repairs-20261125
 import {characterFor,defaultCast} from './characters.mjs?v=final-touches-20261125';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=nia-public-20261123';
 import {discriminationEncounters} from './discrimination.mjs?v=site-repairs-20261125';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=final-touches-20261125';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=role-cast-20261126';
 
 // Selected characters share a setting only while the written encounter places
 // them together. Later notes and confidential advice use independent panels.
@@ -143,7 +143,7 @@ export function renderScenePreview(id,{cast=defaultCast(),authored=false}={}){
   actors=participants.map((participant,index)=>sceneActor(participant.role,participant.characterId,participantLayout(place,participants,index),true,{key:participant.key,character:participant.character})).join('')+renderGroupAction(id,nodeId,participants,place);
  }else{
   const people=Object.fromEntries(roles.map(role=>[role,storyCharacter(state,role)]));
-  const details=originalSceneDetails(id,nodeId,place,people);
+  const details=originalSceneDetails(id,nodeId,place,people,{reservedCast:state.cast});
   actors=roles.map(role=>sceneActor(role,people[role].id,details.anchors[role]||sceneActorLayout(place,role),true,{character:people[role]})).join('')+supportingActors(details,true);
  }
  return locationArt(place,art,actors,{
@@ -167,7 +167,7 @@ function renderSituationScene(state,m,compact){
   const badge='<span class="scene-roster-number" aria-hidden="true">'+number+'</span>';
   if(!playable){
    const name=character.id==='support-race-adult'?'<span>'+esc(character.name)+'</span>':'<bdi data-no-translate>'+esc(character.name)+'</bdi>';
-   return '<div class="scene-supporting-person" data-scene-participant="'+key+'" data-character-id="'+character.id+'">'+badge+'<div><strong>'+esc(label)+'</strong><span>'+(key==='child'?'':name+' · ')+'<span>Supporting character</span></span></div></div>';
+   return '<div class="scene-supporting-person" data-scene-participant="'+key+'" data-character-id="'+character.id+'">'+badge+'<div><strong>'+esc(label)+'</strong><span>'+(key==='child'||character.labelOnly||character.name===label?'':name+' · ')+'<span>Supporting character</span></span></div></div>';
   }
   const witness=encounters[state.id].kind==='colleague-witness';
   const purpose=witness?'<span class="sr-only">Character information</span> ':'';
@@ -198,7 +198,7 @@ export function renderScene(state,options={}){
   const art=backgroundImage(place);
   checkSceneArtwork(place,art?.name||null);
   const people=Object.fromEntries(members.map(role=>[role,storyCharacter(state,role,m.nodeId)]));
-  const details=originalSceneDetails(state.id,m.nodeId,place,people,{members});
+  const details=originalSceneDetails(state.id,m.nodeId,place,people,{members,reservedCast:state.cast});
   const anchors=Object.fromEntries(members.map(role=>[role,details.anchors[role]||sceneActorLayout(place,role,{solo:members.length===1,wide:outdoorSplit})]));
   const names=members.map(role=>{
    const character=people[role];

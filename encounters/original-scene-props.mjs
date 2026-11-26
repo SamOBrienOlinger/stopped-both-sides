@@ -72,7 +72,7 @@ function storyObject(name,anchor){
  return '<img class="scene-story-prop" data-story-prop="'+name+'" data-prop-owner="public" src="'+src+'" alt="" aria-hidden="true" decoding="async" style="left:'+x.toFixed(2)+'%;bottom:'+bottom.toFixed(2)+'%;width:'+width.toFixed(2)+'%">';
 }
 
-export function originalSceneDetails(id,nodeId,place,cast,{members=['public','garda']}={}){
+export function originalSceneDetails(id,nodeId,place,cast,{members=['public','garda'],reservedCast={}}={}){
  const empty={anchors:{},supporting:[],props:''};
  if(members.length!==2||id.startsWith('discrimination-'))return empty;
  // The arrest moves indoors. The bicycle first appears with a different
@@ -81,7 +81,10 @@ export function originalSceneDetails(id,nodeId,place,cast,{members=['public','ga
  const anchors=nodeId==='description-power'&&id==='garda-description'
   ?pair(position(33,27,7),position(57,21,20))
   :(!openingPlace[id]||openingPlace[id]===place)?staging[id]||{}:{};
- const used=new Set(Object.values(cast).map(c=>c?.modelId||c?.id||c));
+ // A scripted figure can replace a stored avatar without freeing that avatar
+ // to become the parent, friend or other bystander in the same encounter.
+ const used=new Set([...Object.values(cast),...Object.values(reservedCast)].flatMap(person=>
+  typeof person==='string'?[person]:[person?.id,person?.modelId]).filter(Boolean));
  const supporting=(supportingAt[id]?.[nodeId]||[]).map(({key,anchor})=>{
   const {role,portraits}=castParts[key];
   const id=portraits.find(id=>!used.has(id));

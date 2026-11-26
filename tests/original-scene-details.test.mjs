@@ -6,6 +6,8 @@ import {renderScene,renderScenePreview} from '../encounters/scenes.mjs';
 
 const objectNames=html=>[...html.matchAll(/data-story-prop="([^"]+)"/g)].map(match=>match[1]);
 const roleNames=html=>[...html.matchAll(/data-scene-role="([^"]+)"/g)].map(match=>match[1]);
+const sceneActors=html=>[...html.matchAll(/data-scene-character="([^"]+)" data-scene-role="([^"]+)"/g)]
+ .map(([,id,role])=>({id,role}));
 
 test('Original scenario thumbnails distinguish every opening and include its supporting people',()=>{
  const originals=Object.values(encounters).filter(e=>!e.id.startsWith('discrimination-'));
@@ -36,4 +38,41 @@ test('Jamie’s parent appears when the story confirms arrival at the station',(
  assert.ok(!roleNames(sceneAt('youth-start')).includes('parent'));
  assert.ok(!roleNames(sceneAt('youth-adult')).includes('parent'));
  assert.ok(roleNames(sceneAt('youth-solicitor')).includes('parent'));
+});
+
+test('Scripted people never free the stored playable avatar to become a supporting actor',()=>{
+ const cases=[
+  ['public-young-person','youth-solicitor','public-5','parent'],
+  ['public-fair-treatment','fair-start','public-2','passerby'],
+  ['garda-description','description-start','public-2','passerby'],
+  ...['young-start','young-contact','young-review'].flatMap(nodeId=>[
+   ['garda-young-person',nodeId,'public-1','friendB'],
+   ['garda-young-person',nodeId,'public-7','friendA']
+  ]),
+  ['garda-street','street-information','public-8','cleaner'],
+  ['garda-colleague','colleague-specific','public-3','customer']
+ ];
+ for(const [id,nodeId,publicId,supportRole] of cases)for(const role of ['public','garda'])for(const authored of [false,true]){
+  const cast={public:publicId,garda:'garda-1'},state={...startEncounter(id,role,{cast,authored}),nodeId};
+  for(const options of [{},{compact:true,step:{nodeId,answers:state.answers,continuedAs:role}}]){
+   const actors=sceneActors(renderScene(state,options));
+   const supporting=actors.filter(actor=>!['public','garda'].includes(actor.role));
+   const context=`${id}/${nodeId}, ${role}, authored=${authored}, compact=${!!options.compact}`;
+   assert.ok(supporting.some(actor=>actor.role===supportRole),context+' retains the written supporting role');
+   assert.ok(supporting.every(actor=>!Object.values(cast).includes(actor.id)),context+' reserves both stored avatars');
+   assert.equal(new Set(actors.map(actor=>actor.id)).size,actors.length,context+' keeps each person distinct');
+  }
+ }
+});
+
+test('Opening previews reserve selected avatars when a fixed story person replaces them',()=>{
+ for(const [id,publicId] of [
+  ['public-fair-treatment','public-2'],['garda-description','public-2'],
+  ['garda-young-person','public-1'],['garda-young-person','public-7']
+ ])for(const authored of [false,true]){
+  const cast={public:publicId,garda:'garda-1'};
+  const supporting=sceneActors(renderScenePreview(id,{cast,authored})).filter(actor=>!['public','garda'].includes(actor.role));
+  assert.ok(supporting.length>0,id+' retains its supporting people');
+  assert.ok(supporting.every(actor=>!Object.values(cast).includes(actor.id)),id+' does not preview a selected avatar as a third party');
+ }
 });

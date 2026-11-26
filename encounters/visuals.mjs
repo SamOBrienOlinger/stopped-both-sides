@@ -1,5 +1,5 @@
 import {encounters} from './catalog.mjs?v=site-repairs-20261125';
-import {renderScenePreview} from './scenes.mjs?v=gpo-flags-20261125';
+import {renderScenePreview} from './scenes.mjs?v=role-cast-20261126';
 import {topicGroups} from './presentation.mjs?v=site-repairs-20261125';
 import {practiceGoal} from '../learning/play.mjs?v=site-repairs-20261125';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

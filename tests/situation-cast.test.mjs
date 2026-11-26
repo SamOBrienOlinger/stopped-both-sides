@@ -130,3 +130,65 @@ test('Affected identities and witnesses stay consistent through both answers, re
   for(const step of state.history)assert.ok(renderScene(state,{step,compact:true}).includes('data-cast-layout="group"'));
  }
 });
+
+
+test('The football ticket steward keeps dedicated staff artwork across saved casts, perspectives and recaps',()=>{
+ const id='discrimination-race',stewardId='support-ticket-steward';
+ const artwork=/\/assets\/characters\/support-ticket-steward-20261126\.png(?:\?|$)/;
+ assert.ok(!characters.public.some(character=>character.id===stewardId),'The steward is not a selectable public avatar');
+ const checkActor=html=>{
+  const actor=html.match(/<div class="scene-actor [^>]*data-scene-character="([^"]+)" data-scene-role="steward"[^>]*><div class="scene-sprite"><img src="([^"]+)"/);
+  assert.ok(actor,'The scene renders its ticket steward');
+  assert.equal(actor[1],stewardId);
+  assert.match(actor[2],artwork,'Gesture staging must retain the dedicated STAFF jacket artwork');
+ };
+ let stages=0,recaps=0;
+ for(const publicCharacter of characters.public)for(const gardaCharacter of characters.garda)for(const role of ['public','garda']){
+  const cast={public:publicCharacter.id,garda:gardaCharacter.id};
+  let state=startEncounter(id,role,{cast});
+  checkActor(renderScenePreview(id,{cast:state.cast}));
+  while(!state.complete){
+   const restored=decodeState(encodeState(state));
+   assert.deepEqual(restored,state,'An existing saved cast and decisions survive reload');
+   assert.deepEqual(restored.cast,cast,'The supporting steward does not replace a player-selected character');
+   const steward=situationParticipants(id,restored.cast,{nodeId:restored.nodeId}).find(person=>person.key==='steward');
+   assert.equal(steward.characterId,stewardId);
+   assert.equal(steward.playable,false);
+   assert.equal(steward.label,'Ticket steward');
+   assert.match(steward.character.sceneArtwork.src,artwork);
+   checkActor(renderScene(restored));
+   assert.deepEqual(state.cast,cast,'Rendering leaves the stored cast untouched');
+   state=continueEncounter(answer(restored,0));
+   stages++;
+  }
+  const completed=decodeState(encodeState(state));
+  assert.deepEqual(completed.cast,cast);
+  for(const step of completed.history){
+   checkActor(renderScene(completed,{step,compact:true}));
+   recaps++;
+  }
+ }
+ for(const [encounterId,label,stagesWithSteward] of [
+  ['discrimination-family-status','Steward who asks the Garda to help',['opening']],
+  ['discrimination-sexual-orientation','Gate steward',['opening','follow-up']]
+ ]){
+  for(const role of ['public','garda']){
+   let state=startEncounter(encounterId,role,{cast:{public:'public-6',garda:'garda-4'}});
+   while(!state.complete){
+    const steward=situationParticipants(encounterId,state.cast,{nodeId:state.nodeId}).find(person=>person.key==='steward');
+    if(stagesWithSteward.includes(state.nodeId)){
+     assert.ok(steward,'The event steward appears where the story places them');
+     assert.equal(steward.characterId,stewardId);
+     assert.equal(steward.playable,false);
+     assert.equal(steward.label,label,'Each event keeps its own steward role label');
+     assert.match(steward.character.sceneArtwork.src,artwork);
+     checkActor(renderScene(state));
+    }else assert.equal(steward,undefined,'The event steward leaves when the story says they are absent');
+    state=continueEncounter(answer(state,0));
+   }
+   assert.deepEqual(state.cast,{public:'public-6',garda:'garda-4'});
+  }
+ }
+ assert.equal(stages,characters.public.length*characters.garda.length*2*2);
+ assert.equal(recaps,stages);
+});

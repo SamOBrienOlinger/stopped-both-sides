@@ -1,5 +1,5 @@
 import {characters,characterFor,castForSituation} from './characters.mjs?v=final-touches-20261125';
-import {supportingCharacters} from './supporting-characters.mjs?v=cast-audit-20261122';
+import {supportingCharacters} from './supporting-characters.mjs?v=role-cast-20261126';
 import {stageGroup,groupMark} from './group-staging.mjs';
 import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
 
@@ -65,10 +65,10 @@ export function situationParticipants(id,requestedCast,{nodeId='opening'}={}){
    supports.push(part('companion','public','Second ticket holder'),part('attendant','public','Ticket attendant'));
    supports.push(only('follow-up',part('supervisor','public','Venue supervisor')));
   }
-  if(ground==='family-status')supports.push(part('organiser','public','Course organiser'),only('opening',part('steward','public','Steward who asks the Garda to help')));
+  if(ground==='family-status')supports.push(part('organiser','public','Course organiser'),only('opening',part('steward','public','Steward who asks the Garda to help',['support-ticket-steward'])));
   if(ground==='sexual-orientation'){
    const partners=women.includes(cast.public)?women:men.includes(cast.public)?men:['public-3','public-9'];
-   supports.push(part('partner','public','Their partner',partners),part('steward','public','Gate steward'));
+   supports.push(part('partner','public','Their partner',partners),part('steward','public','Gate steward',['support-ticket-steward']));
    supports.push(only('opening',part('colleague','public','Event colleague who calls the Garda')),only('follow-up',part('visitor','public','Visitor offering a witness account')));
   }
   if(ground==='age')supports.push(part('organiser','public','Course organiser'));
@@ -81,7 +81,7 @@ export function situationParticipants(id,requestedCast,{nodeId='opening'}={}){
    supports.push(only('follow-up',part('manager','public','Centre manager')));
   }
   if(ground==='race'){
-   supports.push(part('steward','public','Ticket steward'));
+   supports.push(part('steward','public','Ticket steward',['support-ticket-steward']));
    supports.push(only('follow-up',part('supervisor','public','Club supervisor')));
   }
   if(ground==='disability')supports.push(part('friend','public','Friend accompanying the Deaf person'));

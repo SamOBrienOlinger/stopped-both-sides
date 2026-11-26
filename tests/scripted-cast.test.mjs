@@ -3,12 +3,53 @@ import assert from 'node:assert/strict';
 import {existsSync} from 'node:fs';
 import {answer,continueEncounter,decodeState,encodeState,revisit,startEncounter,switchRole} from '../encounters/engine.mjs';
 import {runScores} from '../encounters/progress.mjs';
-import {storyCastOptions,storyCharacter} from '../encounters/story-cast.mjs';
+import {storyCastOptions,storyCharacter,storyCharacterById} from '../encounters/story-cast.mjs';
 import {renderScene,renderScenePreview} from '../encounters/scenes.mjs';
 
 const preferred={public:'public-9',garda:'garda-2'};
 const advance=(s,index=0)=>continueEncounter(answer(s,index));
 const oldToken=data=>Buffer.from(JSON.stringify(data)).toString('base64url');
+
+test('Alex comparison depicts both written identities only at its stage without changing a saved player cast',()=>{
+ for(const authored of [false,true])for(const role of ['public','garda']){
+  let state=startEncounter('garda-street',role,{cast:preferred,authored});
+  assert.ok(!renderScenePreview(state.id,{cast:preferred,authored}).includes('story-alex-comparison'));
+  while(state.nodeId!=='street-identity'){
+   assert.equal(storyCharacter(state,'public').id,authored?'public-1':preferred.public);
+   state=advance(state);
+  }
+  const saved=encodeState(state),snapshot=structuredClone(state);
+  const alex=storyCharacter(state,'public');
+  assert.equal(alex.id,'story-alex-comparison');
+  assert.equal(alex.name,'Alex');
+  assert.equal(storyCharacterById(alex.id),alex);
+  assert.match(alex.sceneArtwork.src,/\/assets\/characters\/story-alex-comparison-20261126\.png$/);
+  assert.equal(alex.sceneArtwork.width,alex.sceneArtwork.height);
+  const html=renderScene(switchRole(state));
+  assert.ok(html.includes('data-scene-character="story-alex-comparison" data-scene-role="public"'));
+  assert.ok(html.includes('data-scene-character-id="story-alex-comparison" data-story-fixed'));
+  assert.ok(html.includes('story-alex-comparison-20261126.png'));
+  assert.equal(storyCharacter(state,'garda').id,preferred.garda);
+  assert.deepEqual(state,snapshot);
+  assert.deepEqual(state.cast,preferred);
+  assert.deepEqual(decodeState(saved),state);
+  assert.equal(encodeState(decodeState(saved)),saved);
+  assert.equal(storyCharacter(decodeState(saved),'public').id,alex.id);
+  const completed=advance(state);
+  assert.equal(completed.complete,true);
+  assert.equal(storyCharacter(completed,'public').id,alex.id);
+  assert.ok(renderScene(completed,{step:completed.history.at(-1),compact:true}).includes(alex.sceneArtwork.src));
+  assert.ok(!renderScene(completed,{step:completed.history[0],compact:true}).includes('story-alex-comparison'));
+  assert.equal(storyCharacter(revisit(completed,0),'public').id,authored?'public-1':preferred.public);
+  assert.deepEqual(completed.cast,preferred);
+ }
+ const saved=oldToken({v:2,e:'garda-street',r:'garda',p:[[null,0,1],[null,0,1]],a:[null,null],c:Object.values(preferred)});
+ const oldState=decodeState(saved);
+ assert.equal(oldState.nodeId,'street-identity');
+ assert.equal(storyCharacter(oldState,'public').id,'story-alex-comparison');
+ assert.deepEqual(oldState.cast,preferred);
+ assert.equal(encodeState(oldState),saved);
+});
 
 test('Old description routes retain their chosen roster, answers and score while recaps follow the person in each scene',()=>{
  const saved=oldToken({v:2,e:'garda-description',r:'public',p:[[0,null,0],[0,null,0]],a:[null,1],c:Object.values(preferred)});
@@ -87,3 +128,4 @@ test('Supervision preserves a selected sergeant or depicts an eligible officer f
   assert.equal(runScores(state).garda.answered,2);
  }
 });
+

@@ -13,10 +13,11 @@ const alias=(id,name,modelId)=>({...characterFor('public',modelId),id,name,model
 const amina=figure('story-amina','Amina','story-amina.webp');
 const jamie=figure('story-jamie','Jamie','story-jamie.webp');
 const jamieComparison=figure('story-jamie-comparison','Jamie','story-jamie-comparison.webp');
+const alexComparison=figure('story-alex-comparison','Alex','story-alex-comparison-20261126.png');
 const differentPerson={...figure('story-other-person','Person matching the fuller description','story-other-person.webp'),descriptive:true};
 const niamh=alias('story-niamh','Niamh','public-7');
 const patrick=alias('story-patrick','Patrick','public-8');
-const authoredPeople=[amina,jamie,jamieComparison,differentPerson,niamh,patrick];
+const authoredPeople=[amina,jamie,jamieComparison,alexComparison,differentPerson,niamh,patrick];
 
 export const storyCharacterById=id=>authoredPeople.find(person=>person.id===id);
 
@@ -30,6 +31,7 @@ const namedPractice={
 
 export function fixedStoryCharacter(id,role,nodeId,authored=false){
  if(role!=='public')return null;
+ if(id==='garda-street'&&nodeId==='street-identity')return alexComparison;
  if(id==='garda-description')return nodeId==='description-power'?differentPerson:amina;
  if(id==='public-fair-treatment')return amina;
  if(id==='public-young-person'||id==='garda-young-person')return nodeId==='young-review'?jamieComparison:jamie;
