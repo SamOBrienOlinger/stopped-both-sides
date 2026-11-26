@@ -72,7 +72,7 @@ const contributorGroups = [
 export function prototypeInput(siteRole='public') {
  const summary=siteRole==='garda'?'Help shape a stronger version':'A prototype with space for input';
  return `<details class="info-block input-disclosure"><summary><span class="card-summary-title">${summary}<span class="contribution-intro">Community voices and independent expertise could help shape the next version.</span></span></summary>
-  <div class="contribution-status"><strong>An invitation for input</strong><span>These are potential contributions and future priorities. No partnership, endorsement or commitment is claimed. This work has not been commissioned or completed.</span></div>
+  <div class="contribution-status"><strong>Help shape what comes next</strong><span>Bring your experience, expertise or resources to the next stage of Stopped: Both Sides. We welcome community members, researchers, practitioners, organisations and funders to explore working together—reviewing the content, developing new situations, testing the resource with learners, or supporting its further development and evaluation. Get involved as a contributor, project partner or funder, and help turn this prototype into a stronger shared learning resource.</span></div>
   <div class="contribution-content">
    <div class="contribution-columns">
     <section aria-labelledby="contribution-help"><h3 id="contribution-help">How input could help</h3>
