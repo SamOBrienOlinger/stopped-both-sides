@@ -34,9 +34,9 @@ function step(number, title, body) {
 }
 
 export function renderPosterLanding({siteRole, perspectiveIcon}) {
-  const choose = roles.map(role => `<a class="role-picker__item" href="${roleHref(role)}">
+  const choose = roles.map(role => `<div class="role-picker__item">
     <span class="avatar">${figure(role, 'avatar-image')}</span><span>${role === 'public' ? 'Public' : 'Garda'}</span>
-  </a>`).join('');
+  </div>`).join('');
   const story = `<figure class="story-preview"><div class="story-preview__scene" aria-hidden="true">
     <img class="panel-backdrop" src="${gpo(480)}" width="480" height="270" alt="" loading="lazy">
     ${figure('public', 'panel-public')}${figure('garda', 'panel-garda')}</div>
