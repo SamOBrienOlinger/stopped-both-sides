@@ -156,7 +156,12 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  background:var(--deep);
  color:#fff;
 }
-.flow-save.session-return .saved-session-link:hover {text-decoration:underline}
+.flow-save.session-return .saved-session-link:hover {
+ background:var(--pale);
+ border-color:var(--deep);
+ color:var(--deep);
+ text-decoration:underline;
+}
 .flow-save.session-return .saved-session-link:active {box-shadow:inset 0 0 0 2px currentColor}
 .saved-situations {margin-block:1.5rem}
 .saved-situations .flow-save {margin-block:.5rem}
