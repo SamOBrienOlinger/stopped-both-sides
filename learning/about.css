@@ -215,7 +215,7 @@
 .input-disclosure .contribution-organisations ul>li::before{content:'•';color:var(--deep);padding-block:.25rem}
 .input-disclosure .contribution-organisations ul li+li{margin-block-start:.35rem}
 .input-disclosure .contribution-organisations a{display:block;max-inline-size:100%;min-block-size:44px;padding-block:.25rem;line-height:1.7;overflow-wrap:anywhere}
-.content-page .input-disclosure .contribution-status{max-inline-size:none;display:grid;gap:.35rem;margin:1.5rem 0 0;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--pale);color:var(--ink)}
+.content-page .input-disclosure .contribution-status{max-inline-size:none;display:grid;gap:.35rem;margin:1rem 0 0;padding:1rem;border:1px solid var(--line);border-radius:12px;background:var(--pale);color:var(--ink)}
 .input-disclosure .contribution-status strong{color:var(--deep)}
 
 /* A first-page preview opens the complete, three-page printable guide. */
