@@ -72,6 +72,7 @@ const contributorGroups = [
 export function prototypeInput(siteRole='public') {
  const summary=siteRole==='garda'?'Help shape a stronger version':'A prototype with space for input';
  return `<details class="info-block input-disclosure"><summary><span class="card-summary-title">${summary}<span class="contribution-intro">Community voices and independent expertise could help shape the next version.</span></span></summary>
+  <div class="contribution-status"><strong>An invitation for input</strong><span>These are potential contributions and future priorities. No partnership, endorsement or commitment is claimed. This work has not been commissioned or completed.</span></div>
   <div class="contribution-content">
    <div class="contribution-columns">
     <section aria-labelledby="contribution-help"><h3 id="contribution-help">How input could help</h3>
@@ -95,7 +96,6 @@ export function prototypeInput(siteRole='public') {
     <p>Examples of organisations and institutions to approach, alongside people with lived experience:</p>
     <ul class="contribution-organisations" role="list">${contributorGroups.map(([title,items])=>`<li><h4>${title}</h4><ul role="list">${items.map(item=>`<li>${item.startsWith('<a ')?item:`<span>${item}</span>`}</li>`).join('')}</ul></li>`).join('')}</ul>
    </section>
-   <p class="contribution-status"><strong>An invitation for input</strong><span>These are potential contributions and future priorities. No partnership, endorsement or commitment is claimed. This work has not been commissioned or completed.</span></p>
   </div>
  </details>`;
 }
