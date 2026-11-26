@@ -16,7 +16,7 @@ import {renderScene,renderScenePreview} from './scenes.mjs?v=role-cast-20261126b
 import {situationRoleLabel} from './situation-cast.mjs?v=role-cast-20261126b';
 import {characterContext,personalizeHTML} from './narrative.mjs?v=role-cast-20261126b';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=site-repairs-20261125';
-import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=site-repairs-20261125';
+import {playHash,playLocation,topicsForPlay,topicForSituation,availableInPractice} from './play-navigation.mjs?v=site-repairs-20261125';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=site-repairs-20261125';
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const resultText=r=>r?`${r[0]} / ${r[1]} · ${Math.round(r[0]/r[1]*100)}%`:'No completed route yet';
@@ -76,7 +76,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const href=(mode==='shared'?sharedReturn:practiceReturn)||defaultList(mode,id,role);
   const list=playLocation(href,role);
   const target=list?listHref(list.mode,list.role,list.topic):href;
-  const cardId=list?.mode==='practice'?(encounters[id].originalId||id):id;
+  const cardId=list?.mode==='practice'&&encounters[id].origin===role?(encounters[id].originalId||id):id;
   return `<a class="${label?`primary${secondary?' secondary':''}`:'text-button'}" data-return-to-play="${esc(cardId)}" href="${esc(target)}">${label||`← Back to browsing situations`}</a>`;
  }
  function focusReturnedList(){
@@ -218,8 +218,8 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const selectedTopic=topicGroups.find(group=>group.id===topic);
   const practice=mode==='practice';
   const localPractice=practice&&role===siteRole;
-  const groups=topicGroups.filter(group=>(!selectedTopic||group.id===topic)&&(!practice||group.encounters.some(id=>encounters[id].origin===role||encounters[id].origin==='shared')))
-   .map(group=>practice?{...group,encounters:group.encounters.filter(id=>encounters[id].origin===role||encounters[id].origin==='shared')}:group);
+  const groups=topicGroups.filter(group=>(!selectedTopic||group.id===topic)&&(!practice||group.encounters.some(id=>availableInPractice(encounters[id],role))))
+   .map(group=>practice?{...group,encounters:group.encounters.filter(id=>availableInPractice(encounters[id],role))}:group);
   const openTopic=selectedTopic?.id||topicForSituation(practice&&returnFocus&&!encounters[returnFocus]?role+'-'+returnFocus:returnFocus)||'';
   const heading=selectedTopic?.title||(practice?'Practise one role at a time':returning?'Choose your next situation.':'Try your first situation.');
   return `<section class="paired-picker simple-setup ${selectedTopic?'topic-selected':''}">
@@ -244,7 +244,12 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <details class="scenario-library" ${practice||browse?'open':''}>
      <summary id="situations-title">Browse all situations</summary>
      <div class="topic-filters" role="group" aria-label="Situation topics">${topicsForPlay(mode,role).map(t=>`<button class="topic-filter" data-action="paired-topic" data-topic="${t.id}" aria-pressed="${topic===t.id}">${t.title}</button>`).join('')}</div>
-     <div class="situation-topics">${practice?situationTopics(groups,group=>group.id==='discrimination'?topicCards(group,role):practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role),{openTopic}):`
+     <div class="situation-topics">${practice?situationTopics(groups,group=>{
+       if(group.id==='discrimination')return topicCards(group,role);
+       const originals=practiceCards(practiceScenarios.filter(s=>group.encounters.includes(role+'-'+s.id)),role);
+       const counterparts=group.encounters.filter(id=>encounters[id].origin!==role&&encounters[id].origin!=='shared');
+       return originals+(counterparts.length?situationCards(counterparts.map(id=>encounters[id]),role):'');
+      },{openTopic}):`
       ${situationTopics(groups,group=>topicCards(group,role),{openTopic})}`}</div>
     </details>`}
   </section>`;
