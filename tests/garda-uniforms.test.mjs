@@ -61,7 +61,7 @@ test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',
     const displayed=Object.fromEntries(roles.map(role=>[role,storyCharacter(state,role)]));
     const group=situationParticipants(encounter.id,state.cast,{nodeId});
     const {place,mode}=sceneDirections[encounter.id][nodeId];
-    const extras=(group||['separate','private'].includes(mode))?[]:originalSceneDetails(encounter.id,nodeId,place,displayed).supporting;
+    const extras=(group||['separate','private'].includes(mode))?[]:originalSceneDetails(encounter.id,nodeId,place,displayed,{reservedCast:state.cast}).supporting;
     const people=group||[...roles.map(role=>({role,key:role,character:displayed[role]})),...extras];
     const actors=[...html.matchAll(/class="scene-actor scene-actor--([^"]+)" data-scene-character="([^"]+)" data-scene-role="([^"]+)"[^>]*><div class="scene-sprite"><img ([^>]+)>/g)];
     assert.equal(actors.length,people.length,encounter.id+'/'+nodeId);
@@ -80,11 +80,11 @@ test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',
       assert.ok(actor[4].includes('style="'+gardaArtwork(character).style+'"'),character.id+' uses its own uniform');
      }
      else if(character.id==='public-10')asset='/characters/nia-public-20261123.png';
-     else if(character.id.startsWith('support-'))asset='/characters/discrimination-support-20261122.png';
-     else if(character.id.startsWith('story-')&&character.sceneArtwork)asset='/characters/'+character.id+'.webp';
+     else if(character.sceneArtwork&&(character.id.startsWith('support-')||character.id.startsWith('story-')))
+      asset='/assets/'+new URL(character.sceneArtwork.src).pathname.split('/assets/')[1];
      else asset=group||extras.some(person=>person.key===key)?'/scenes/group-public-gestures.webp':'/scenes/contextual-cast.webp';
      assert.ok(actor[4].includes(asset),character.id+' should use '+asset);
-     assert.equal(actor[4].includes('clip-path:inset('),!asset.startsWith('/characters/story-'));
+     assert.equal(actor[4].includes('clip-path:inset('),character.sceneArtwork?character.sceneArtwork.style.includes('clip-path:inset('):true);
     }
     assert.ok(html.includes('data-scene-label-role="garda"'),'keep profile dialog buttons');
    }

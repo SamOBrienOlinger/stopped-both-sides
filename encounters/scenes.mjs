@@ -1,5 +1,5 @@
-import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=role-cast-20261126';
-import {originalSceneDetails} from './original-scene-props.mjs?v=role-cast-20261126';
+import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=role-cast-20261126b';
+import {originalSceneDetails} from './original-scene-props.mjs?v=role-cast-20261126b';
 import {renderGroupAction} from './group-staging.mjs';
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
 import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=gpo-flags-20261125';
@@ -7,7 +7,7 @@ import {encounters,roles,roleLabels} from './catalog.mjs?v=site-repairs-20261125
 import {characterFor,defaultCast} from './characters.mjs?v=final-touches-20261125';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=nia-public-20261123';
 import {discriminationEncounters} from './discrimination.mjs?v=site-repairs-20261125';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=role-cast-20261126';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=role-cast-20261126b';
 
 // Selected characters share a setting only while the written encounter places
 // them together. Later notes and confidential advice use independent panels.

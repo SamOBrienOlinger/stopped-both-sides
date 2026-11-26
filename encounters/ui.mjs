@@ -1,4 +1,4 @@
-import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=role-cast-20261126';
+import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=role-cast-20261126b';
 import {renderPosterLanding} from '../landing/poster-landing.mjs?v=gpo-flags-20261125';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
@@ -7,14 +7,14 @@ import {
  practiceGoal, progressSkills, recapPractice, reviewExploration, situationStory, termsInDecision
 } from '../learning/play.mjs?v=site-repairs-20261125';
 import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=role-cast-20261126';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=role-cast-20261126b';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=site-repairs-20261125';
 import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=site-repairs-20261125';
 import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=site-repairs-20261125';
 import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=final-touches-20261125';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=role-cast-20261126';
-import {situationRoleLabel} from './situation-cast.mjs?v=role-cast-20261126';
-import {characterContext,personalizeHTML} from './narrative.mjs?v=role-cast-20261126';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=role-cast-20261126b';
+import {situationRoleLabel} from './situation-cast.mjs?v=role-cast-20261126b';
+import {characterContext,personalizeHTML} from './narrative.mjs?v=role-cast-20261126b';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=site-repairs-20261125';
 import {playHash,playLocation,topicsForPlay,topicForSituation} from './play-navigation.mjs?v=site-repairs-20261125';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=site-repairs-20261125';
@@ -356,7 +356,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const lastAnswer=e.nodes[last.nodeId].views[last.continuedAs].choices[last.answers[last.continuedAs]].text;
   const highlights=[...new Set([0,Math.floor((state.history.length-1)/2),state.history.length-1])].map(i=>e.nodes[state.history[i].nodeId].views[state.role].lesson);
   return `<div class="topline flow-topline">${returnLink()}<a href="#progress" class="text-button">Saved progress</a></div>${roleBar(state)}${characterPickerTarget?characterPicker(characterPickerTarget.role,storyCharacter(state,characterPickerTarget.role).id,true):''}<div class="summary-heading"><p class="eyebrow">YOUR LEARNING RECAP</p><h1>One situation.<br>What did each side reveal?</h1><p>${esc(e.title)} · ${state.history.length} stages on this route.</p><div class="flow-recap-actions">${returnLink('Choose another situation')}</div></div><details class="scene-explorer recap-characters"><summary>Characters in this situation</summary>${castDisplay(state)}</details><section class="recap-takeaways info-block"><h2>What to take with you</h2><ul>${highlights.map(lesson=>`<li>${esc(lesson)}</li>`).join('')}</ul><div class="recap-next"><button class="primary" data-action="paired-replay-role" data-role="${other}">${other==='garda'?'Try the Garda perspective':'Try the public perspective'}</button>${returnLink('Choose another situation','shared',null,true)}</div></section>${recapPractice(e.id,state.role,lastAnswer)}${supportRecap(siteRole)}<details class="recap-scores"><summary>Scores and role completion</summary>${scoreStrip(state)}<div class="role-results">${roles.map(role=>{const saved=store.value.records[state.id+'/'+role];return `<section class="info-block" data-role-tone="${role}"><h2>${roleLabels[role]}</h2><p>${scores[role].complete?'Route completed in this role.':`${scores[role].answered} of ${state.history.length} stages answered in this role. Answer each stage to complete this role’s route.`}</p><p><strong>Best completed route:</strong> ${resultText(saved?.best)}</p><button class="text-button" data-action="paired-replay-role" data-role="${role}">Explore the ${role==='garda'?'Garda':'public'} perspective</button></section>`;}).join('')}</div>${scoreExplanation}</details><h2 class="recap-review-title">Review each decision</h2><ol class="summary-list paired-recap">${state.history.map((step,i)=>{
-   const stage=e.nodes[step.nodeId],variation=variationFor(e.id,stage.id);return `<li class="summary-item"><div class="recap-overview">${renderScene(state,{step,compact:true})}<div>${variation?`<p class="eyebrow">${variation.label}</p>`:''}<h2>${i+1}. ${esc(stage.title)}</h2><p>${esc(stage.views[state.role].lesson)}</p></div></div><details class="recap-detail"><summary>Compare answers and sources</summary><p>${esc(stage.scene)}</p><div class="recap-comparison">${roles.map(role=>{const index=step.answers[role],v=stage.views[role],c=index===null?null:v.choices[index];return `<section class="recap-role ${state.role===role?'active':''}" data-role-tone="${role}"><h3>${roleLabels[role]}${step.continuedAs===role?' · continued this stage':''}</h3>${c?`<p class="chosen">${esc(c.text)}</p><p>${esc(c.feedback)}</p>`:'<p>You did not answer this stage in this role.</p>'}<p>${esc(v.lesson)}</p>${sourceLinks(v.refs)}</section>`;}).join('')}</div></details><button class="text-button" data-action="paired-revisit" data-index="${i}">Revisit this decision from the ${state.role==='garda'?'Garda':'public'} perspective</button></li>`;
+   const stage=e.nodes[step.nodeId],variation=variationFor(e.id,stage.id);return `<li class="summary-item" data-narrative-node="${step.nodeId}"><div class="recap-overview">${renderScene(state,{step,compact:true})}<div>${variation?`<p class="eyebrow">${variation.label}</p>`:''}<h2>${i+1}. ${esc(stage.title)}</h2><p>${esc(stage.views[state.role].lesson)}</p></div></div><details class="recap-detail"><summary>Compare answers and sources</summary><p>${esc(stage.scene)}</p><div class="recap-comparison">${roles.map(role=>{const index=step.answers[role],v=stage.views[role],c=index===null?null:v.choices[index];return `<section class="recap-role ${state.role===role?'active':''}" data-role-tone="${role}"><h3>${roleLabels[role]}${step.continuedAs===role?' · continued this stage':''}</h3>${c?`<p class="chosen">${esc(c.text)}</p><p>${esc(c.feedback)}</p>`:'<p>You did not answer this stage in this role.</p>'}<p>${esc(v.lesson)}</p>${sourceLinks(v.refs)}</section>`;}).join('')}</div></details><button class="text-button" data-action="paired-revisit" data-index="${i}">Revisit this decision from the ${state.role==='garda'?'Garda':'public'} perspective</button></li>`;
   }).join('')}</ol><details class="facilitator-note"><summary>Discuss this situation together</summary>${discussionLink(e.id,state.role)}</details><div class="paired-stage-footer"><a class="primary secondary" href="#progress">View all progress</a></div>${storageNote()}`;
  }
  function storageNote(){return store.available?'':'<p class="storage-note">Browser saving is unavailable. Your progress is kept for this visit.</p>';}
@@ -437,7 +437,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
  function personalize(html,hash){
   const route=hash.split('~')[0];
   const s=route.startsWith('encounter/')?decodeState(route.slice(10)):route.startsWith('scenario/')&&getOriginalSession()?.scenarioId===route.slice(9)?legacyState(getOriginalSession()):null;
-  return s&&!s.authored?personalizeHTML(html,encounters[s.id],s.cast):html;
+  return s&&!s.authored?personalizeHTML(html,encounters[s.id],s.cast,s.complete?s.history.at(-1)?.nodeId:s.nodeId):html;
  }
  function updateSiteLink(){
   const anchor=document.querySelector('[data-site-switch]');if(!anchor)return;

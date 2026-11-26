@@ -25,7 +25,7 @@ test('Every stage and all 90 character pairs have a complete illustration',()=>{
     assert.ok(sceneAssets.includes(model.place));assert.ok(sceneAssets.includes(model.otherPlace));
     const people=Object.fromEntries(roles.map(role=>[role,storyCharacter(state,role,nodeId)]));
     const group=situationParticipants(e.id,state.cast,{nodeId});
-    const {supporting}=originalSceneDetails(e.id,nodeId,model.place,people,{members:model.separate?['public']:roles});
+    const {supporting}=originalSceneDetails(e.id,nodeId,model.place,people,{members:model.separate?['public']:roles,reservedCast:state.cast});
     const participants=group?group.map(p=>({role:p.role,key:p.key,character:p.character})):
      [...roles.map(role=>({role,key:role,character:people[role]})),...supporting];
     const actors=new Map([...html.matchAll(/data-scene-character="([^"]+)" data-scene-role="([^"]+)"[^>]*><div class="scene-sprite"><img src="([^"]+)"/g)]

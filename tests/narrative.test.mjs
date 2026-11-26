@@ -30,7 +30,7 @@ test('Every named scene, prompt, choice, explanation and lesson preserves its sc
   const texts=[node.title,node.scene,...roles.flatMap(role=>{const v=node.views[role];return [v.prompt,v.lesson,...v.choices.flatMap(c=>[c.text,c.feedback])];})];
   for(const lang of ['en','ga'])for(const character of characters.public)for(const source of texts){
    const translated=translateText(source,lang),cast={public:character.id,garda:'garda-5'};
-   const text=personalizeText(translated,e,cast);
+   const text=personalizeText(translated,e,cast,node.id);
    if(fixedStoryCharacter(e.id,'public',node.id))assert.equal(text,translated,'Scripted identities retain the original named narrative');
    else if(identity&&translated.includes(identity.name)){
     assert.ok(text.includes(character.name),`${e.id}/${node.id}/${lang}/${character.name}`);
@@ -41,6 +41,25 @@ test('Every named scene, prompt, choice, explanation and lesson preserves its sc
   }
  }
  assert.ok(checked>10000);assert.equal(JSON.stringify(encounters),before,'Canonical facts and translations remain reusable');
+});
+
+test('Alex stays scripted at the identity comparison while earlier recap stages retain the selected name in both languages',()=>{
+ const e=encounters['garda-street'],cast={public:'public-2',garda:'garda-5'};
+ for(const lang of ['en','ga']){
+  const opening=translateText(e.nodes[e.start].scene,lang);
+  const comparison=translateText(e.nodes['street-identity'].scene,lang);
+  assert.ok(personalizeText(opening,e,cast,e.start).includes('Noor'));
+  assert.equal(personalizeText(comparison,e,cast,'street-identity'),comparison);
+  const current=personalizeHTML('<p>'+comparison+'</p>',e,cast,'street-identity');
+  assert.ok(current.includes('Alex'));assert.ok(!current.includes('Noor'));
+  const recap='<ol><li data-narrative-node="'+e.start+'" title="Alex"><div><p>'+opening+'</p><span data-no-translate>Alex</span></div></li><li data-narrative-node="street-identity" title="Alex"><p>'+comparison+'</p></li></ol><p title="Alex">'+comparison+'</p>';
+  const out=personalizeHTML(recap,e,cast,'street-identity');
+  const parts=[...out.matchAll(/<li\b[^>]*>[\s\S]*?<\/li>/g)].map(match=>match[0]);
+  assert.match(parts[0],/title="Noor"/);assert.ok(parts[0].includes('Noor'));
+  assert.ok(parts[0].includes('<span data-no-translate>Alex</span>'));
+  assert.match(parts[1],/title="Alex"/);assert.ok(parts[1].includes(comparison));assert.ok(!parts[1].includes('Noor'));
+  assert.ok(out.endsWith('<p title="Alex">'+comparison+'</p>'),'Stage scope returns to the current decision after recap entries');
+ }
 });
 
 test('Names do not corrupt picker choices, source publications, routes, HTML or unrelated words',()=>{
@@ -57,3 +76,4 @@ test('Names do not corrupt picker choices, source publications, routes, HTML or 
  const irish=personalizeHTML(translateHTML(scene,'ga'),e,cast);
  assert.ok(irish.includes('Noor'));assert.ok(!irish.includes('Alex'));assert.ok(!irish.includes('walking home'));
 });
+

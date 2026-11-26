@@ -1,5 +1,5 @@
 import {characters,characterFor,castForSituation} from './characters.mjs?v=final-touches-20261125';
-import {supportingCharacters} from './supporting-characters.mjs?v=role-cast-20261126';
+import {supportingCharacters} from './supporting-characters.mjs?v=role-cast-20261126b';
 import {stageGroup,groupMark} from './group-staging.mjs';
 import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
 
