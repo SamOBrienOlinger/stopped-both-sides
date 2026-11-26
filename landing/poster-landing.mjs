@@ -49,15 +49,20 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
     `<span class="compare-bubble">${perspectiveIcon(role)}</span>`).join('')}</div>
     <p class="compare-caption">See the same situation from both sides.</p>`;
 
-  return `<article class="reference-landing sbs-poster" aria-labelledby="paired-title">
-    <section class="poster-hero" aria-labelledby="paired-title">
+  return `<article class="reference-landing sbs-poster" aria-labelledby="game-title">
+    <section class="poster-hero" aria-labelledby="game-title">
       <picture class="scene-backdrop" aria-hidden="true">
         <img src="${gpo(960)}" srcset="${gpo(480)} 480w, ${gpo(960)} 960w, ${gpo(1600)} 1600w"
           sizes="(min-width: 75rem) 72rem, 100vw" width="1600" height="900" fetchpriority="high" alt="">
       </picture>
       <header class="poster-brand">
-        <p class="brand-eyebrow"><img src="${new URL('brand/profiles-hexagon.webp', assets).href}" alt="" width="56" height="56"></p>
-        <h1 id="paired-title" lang="en-IE" dir="ltr" data-no-translate data-poster-reveal>Stopped: Both Sides</h1>
+        <section class="home-intro clear-intro brand-intro" aria-labelledby="game-title">
+          <img class="brand-profiles" src="${new URL('brand/profiles-hexagon.webp', assets).href}" width="512" height="512" alt="" decoding="async" data-poster-reveal>
+          <div>
+            <h1 id="game-title" lang="en-IE" data-no-translate tabindex="-1" data-poster-reveal>Stopped: Both Sides</h1>
+            <p data-poster-reveal>An interactive learning resource for the public and Gardaí.</p>
+          </div>
+        </section>
         <p class="brand-subtitle" id="perspectives-title" data-poster-reveal>One situation. Two perspectives.</p>
       </header>
       <div class="hero-characters" role="img" aria-label="Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.">
