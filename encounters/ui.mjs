@@ -282,7 +282,6 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
     <button class="primary" data-action="paired-quick-start" data-id="${first.id}" data-role="${siteRole}" aria-describedby="home-start-role"><span>Start:</span><span>${esc(first.title)}</span></button>
     <span class="home-start-role" id="home-start-role"><span>${siteRole==='garda'?'Garda perspective':'Public perspective'}</span> · <span>${esc(first.minutes)}</span></span>
    </div>`}
-   <a class="primary secondary" href="${listHref('shared',siteRole)}">Browse situations</a>
   </div>`;
  }
  function introduction({secondary=false}={}){
