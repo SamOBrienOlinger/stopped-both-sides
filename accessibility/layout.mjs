@@ -245,7 +245,7 @@ export function createLayout({main}){
     revealLandingItem(item);
    }
   },{rootMargin:'0px 0px -15% 0px',threshold:0});
-  for(const item of next.querySelectorAll('[data-poster-reveal]')){
+  for(const item of main.querySelectorAll('.sbs-poster [data-poster-reveal]')){
    // The caller restores route focus/scroll after update(). The observer
    // measures that new viewport, rather than the previous page's scroll.
    if(item.contains(document.activeElement))continue;

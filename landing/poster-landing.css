@@ -1,5 +1,6 @@
 /* The poster is normal page content. Its text rows expand independently of the artwork. */
-html[data-perspective] .sbs-poster.reference-landing {
+html[data-perspective] .sbs-poster.reference-landing,
+html[data-perspective] .sbs-poster.poster-perspective-section {
   --ink: #122939;
   --sea: #075e61;
   --edge: #c2dddf;
@@ -15,6 +16,8 @@ html[data-perspective] .sbs-poster.reference-landing {
   color: var(--ink);
   overflow-wrap: anywhere;
 }
+html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--inset); }
+.sbs-poster.poster-perspective-section .poster-landing-actions { margin: 0; }
 .sbs-poster.reference-landing::after { content: none; display: none; animation: none; }
 .sbs-poster *, .sbs-poster *::before, .sbs-poster *::after { box-sizing: border-box; }
 .sbs-poster :is(a, img) { max-inline-size: 100%; }
@@ -185,7 +188,8 @@ html.reading-spacious .sbs-poster :is(.poster-lead,.response-picker li,.compare-
   }
   .sbs-poster .landing-role-actions { --landing-reveal-rise: 0px; }
 }
-html.contrast-high[data-perspective] .sbs-poster.reference-landing { --sea: #fff; --ink: #fff; color: white; background: #10171b !important; }
+html.contrast-high[data-perspective] .sbs-poster.reference-landing,
+html.contrast-high[data-perspective] .sbs-poster.poster-perspective-section { --sea: #fff; --ink: #fff; color: white; background: #10171b !important; }
 .contrast-high .sbs-poster :is(.scene-backdrop,.hero-characters,.perspective-scene,.avatar,.story-preview__scene,.compare-illustration) { display: none; }
 .contrast-high .sbs-poster .poster-hero::before,
 .contrast-high .sbs-poster .brand-subtitle::after { content: none; }

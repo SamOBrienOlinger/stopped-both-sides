@@ -82,10 +82,12 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
         ${step(3, 'Choose a response', choices)}
         ${step(4, 'Compare perspectives', compare)}
       </ol>
+    </section>
+  </article>
+  <section class="sbs-poster poster-perspective-section" aria-label="Explore a perspective">
       <nav class="poster-landing-actions landing-role-actions" data-poster-reveal aria-label="Start learning with a role">
         ${roles.map(role => `<a class="poster-landing-action perspective-card-link" data-role-tone="${role}" href="${roleHref(role)}">
           ${perspectiveIcon(role)}<span>${role === 'public' ? 'Explore the public perspective' : 'Explore the Garda perspective'}</span></a>`).join('')}
       </nav>
-    </section>
-  </article>`;
+  </section>`;
 }
