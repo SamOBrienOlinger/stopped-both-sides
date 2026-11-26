@@ -28,12 +28,12 @@ function panel(role) {
   </a>`;
 }
 
-function step(number, title, body) {
+function step(number, title, description, body) {
   return `<li class="learning-card"><h3><span class="step-number" aria-hidden="true">${number}</span>
-    <span>${title}</span></h3>${body}</li>`;
+    <span>${title}</span></h3><p class="learning-step-copy">${description}</p><div class="learning-step-visual">${body}</div></li>`;
 }
 
-export function renderPosterLanding({siteRole, perspectiveIcon}) {
+export function renderPosterLanding({siteRole, perspectiveIcon, discussionLink = ''}) {
   const choose = roles.map(role => `<div class="role-picker__item">
     <span class="avatar">${figure(role, 'avatar-image')}</span><span>${role === 'public' ? 'Public' : 'Garda'}</span>
   </div>`).join('');
@@ -74,13 +74,17 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
       </div>
       <div class="perspective-grid">${roles.map(panel).join('')}</div>
     </section>
-    <section class="poster-learning" aria-label="Four steps of the learning experience" id="learning-flow">
-      <ol class="learning-steps" role="list">
-        ${step(1, 'Choose a perspective', `<div class="role-picker">${choose}</div>`)}
-        ${step(2, 'Read the situation', story)}
-        ${step(3, 'Choose a response', choices)}
-        ${step(4, 'Compare perspectives', compare)}
-      </ol>
+    <section class="poster-learning how-to-play" aria-labelledby="how-to-title" id="learning-flow">
+      <details class="how-to-disclosure" open>
+        <summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
+        <ol class="learning-steps" role="list">
+          ${step(1, 'Choose a perspective', 'Start as a member of the public or a Garda.', `<div class="role-picker">${choose}</div>`)}
+          ${step(2, 'Understand the situation you are in', 'Interact with a member of the public and/or with a Garda.', story)}
+          ${step(3, 'Choose a response', 'Try what you would say or do.', choices)}
+          ${step(4, 'Learn why it matters', 'Get an explanation, then try the other side.', compare)}
+        </ol>
+        <div class="workshop-entry">${discussionLink}</div>
+      </details>
     </section>
   </article>
   <div class="sbs-poster poster-perspective-section">

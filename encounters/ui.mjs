@@ -1,5 +1,5 @@
 import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=role-cast-20261126b';
-import {renderPosterLanding} from '../landing/poster-landing.mjs?v=gpo-flags-20261125';
+import {renderPosterLanding} from '../landing/poster-landing.mjs?v=combined-how-to-20261126';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {
@@ -297,11 +297,11 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   return `<section class="about-opening" aria-label="About Stopped: Both Sides">${introduction()}${heading}<div class="info-block landing-overview about-overview"><p>Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.</p><p>It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.</p><p>Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly.</p></div></section>`;
  }
  function perspectiveChoice(){
-  return renderPosterLanding({siteRole,perspectiveIcon})+homeActions();
+  return renderPosterLanding({siteRole,perspectiveIcon,discussionLink:discussionLink('garda-supervision',siteRole)})+homeActions();
  }
  function landing(){
   const completed=store.value.saved.find(entry=>entry.complete);
-  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole,group=>topicCards(group,siteRole,'h3'))}<section class="how-to-play" aria-labelledby="how-to-title"><details class="how-to-disclosure"><summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary><ol class="how-steps" role="list"><li class="how-step"><span class="how-step-number" aria-hidden="true">1</span>${learningIcon('read')}<div class="how-step-copy"><strong>Understand the situation you are in</strong><span>Interact with a member of the public and/or with a Garda</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">2</span>${learningIcon('choose')}<div class="how-step-copy"><strong>Choose a response</strong><span>Try what you would say or do.</span></div></li><li class="how-step"><span class="how-step-number" aria-hidden="true">3</span>${learningIcon('reflect')}<div class="how-step-copy"><strong>Learn why it matters</strong><span>Get an explanation, then try the other side.</span></div></li></ol><div class="workshop-entry">${discussionLink('garda-supervision',siteRole)}</div></details></section>
+  return `${perspectiveChoice()}${completed?savedCard(completed,false):''}${topicExplorer(topicGroups,siteRole,group=>topicCards(group,siteRole,'h3'))}
    <details class="single-mode practice-shortcut">
     <summary class="landing-disclosure-trigger"><h2>Practise one role at a time<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
     <div class="practice-content"><p>Make choices in one role and review what you learned.</p><a class="primary secondary" href="${listHref('practice',siteRole)}">Browse situations</a></div>

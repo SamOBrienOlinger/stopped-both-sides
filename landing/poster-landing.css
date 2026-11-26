@@ -203,3 +203,40 @@ html.contrast-high[data-perspective] .sbs-poster.poster-perspective-section { --
   .sbs-poster .hero-question { margin-block-start: .5em; }
   .sbs-poster :is(a,.learning-card,.response-picker li) { border: 2px solid CanvasText; }
 }
+
+/* One illustrated guide replaces the separate landing instructions. */
+.sbs-poster .poster-learning.how-to-play {
+  max-inline-size: none; margin: 0; padding: 0 var(--inset) var(--inset);
+  border: 0; border-radius: 0; background: transparent;
+}
+.sbs-poster .poster-learning > details {
+  min-inline-size: 0; border: 1px solid var(--edge); border-radius: 1rem;
+  background: #ffffff85;
+}
+.sbs-poster .poster-learning .landing-disclosure-trigger {
+  padding: 1rem; min-block-size: 3.5rem;
+}
+.sbs-poster .poster-learning .landing-disclosure-trigger h2 {
+  margin: 0; font-size: clamp(1.35rem, 2.5vw, 1.85rem); color: var(--ink);
+}
+.sbs-poster .poster-learning .learning-steps {
+  padding: 1rem; border-block-start: 1px solid var(--edge); align-items: stretch;
+}
+.sbs-poster .poster-learning .learning-card {
+  display: flex; flex-direction: column; gap: .75rem;
+}
+.sbs-poster .poster-learning .learning-card h3 { margin: 0; align-items: start; }
+.sbs-poster .learning-step-copy {
+  margin: 0; font-size: .95rem; line-height: 1.55; color: var(--ink);
+}
+.sbs-poster .learning-step-visual { margin-block-start: auto; min-inline-size: 0; }
+.sbs-poster .learning-step-visual .role-picker { margin: 0; }
+.sbs-poster .poster-learning .workshop-entry { margin: 0; padding: 0 1rem 1rem; }
+.sbs-poster .poster-learning .workshop-entry a { color: var(--sea); text-decoration: underline; }
+.sbs-poster .poster-learning details:not([open]) > :is(.learning-steps,.workshop-entry) { display: none; }
+html.reading-spacious .sbs-poster .learning-step-copy { line-height: 1.85; }
+.contrast-high .sbs-poster .poster-learning > details { background: #10171b; border-color: white; }
+@media (forced-colors: active) {
+  .sbs-poster .poster-learning > details { background: Canvas; border-color: CanvasText; }
+  .sbs-poster .learning-step-copy,.sbs-poster .poster-learning .landing-disclosure-trigger h2 { color: CanvasText; }
+}
