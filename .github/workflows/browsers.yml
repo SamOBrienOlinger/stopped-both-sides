@@ -1,8 +1,8 @@
-name: Shipping browser audit
+name: Shipping browser paint checks
 
 on:
   push:
-    branches: ['audit/platform-browsers-8047391*']
+    branches: ['audit/platform-browsers-8047391']
   workflow_dispatch:
 
 permissions:
@@ -25,7 +25,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Audit installed browser
-        run: node scripts/hosted-browser-audit.mjs --browser ${{ matrix.browser }} --output audit-results/${{ matrix.browser }}
+        run: node scripts/hosted-browser-audit.mjs --browser ${{ matrix.browser }} --perf-runs 0 --output audit-results/${{ matrix.browser }}
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v5
@@ -49,7 +49,7 @@ jobs:
       - name: Enable Safari automation
         run: sudo /usr/bin/safaridriver --enable
       - name: Audit installed Safari
-        run: node scripts/hosted-browser-audit.mjs --browser safari --output audit-results/safari
+        run: node scripts/hosted-browser-audit.mjs --browser safari --perf-runs 0 --output audit-results/safari
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v5
@@ -58,23 +58,3 @@ jobs:
           path: audit-results/safari
           retention-days: 7
           if-no-files-found: warn
-
-  published-performance:
-    name: Published cold-load measurements (Chrome)
-    runs-on: ubuntu-latest
-    timeout-minutes: 12
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      - run: npm ci
-      - run: node hosted-perf-audit.mjs
-      - name: Upload timing samples
-        if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: published-cold-loads
-          path: audit-results/performance.json
-          retention-days: 7

@@ -76,6 +76,26 @@ const layout=()=>{
  };
  return{viewport:{width:innerWidth,height:innerHeight},overflow:root.scrollWidth-root.clientWidth,h1:h1?.textContent.trim(),heading:h1&&rect(h1),header:header&&rect(header),menuVisible:visible(document.querySelector('#main-navigation')),clipped:[...document.querySelectorAll('#main h1,#main h2,#main h3,#main p,#main summary,#main button')].filter(e=>visible(e)&&e.scrollWidth>e.clientWidth+2).map(e=>e.textContent.trim().slice(0,90))};
 };
+const goalPaint=()=>{
+ const header=document.querySelector('.header'),headerStyle=header&&getComputedStyle(header);
+ const readingTop=header&&/^(sticky|fixed)$/.test(headerStyle.position)?header.getBoundingClientRect().bottom:0;
+ const cards=[...document.querySelectorAll('.learning-goal h3')].map(element=>{
+  const rect=element.getBoundingClientRect();let opacity=1,hidden=false;
+  const ancestors=[];
+  for(let current=element;current;current=current.parentElement){
+   const style=getComputedStyle(current);opacity*=Number(style.opacity);
+   hidden ||= style.visibility!=='visible'||style.display==='none'||style.contentVisibility==='hidden';
+   if(Number(style.opacity)<1||current.hasAttribute('data-motion')||current.hasAttribute('data-reveal'))
+    ancestors.push({tag:current.tagName,className:current.className,opacity:style.opacity,motion:current.getAttribute('data-motion'),reveal:current.getAttribute('data-reveal')});
+  }
+  const top=Math.max(rect.top,readingTop),bottom=Math.min(rect.bottom,innerHeight);
+  const left=Math.max(0,rect.left),right=Math.min(rect.right,innerWidth);
+  const inViewport=bottom-top>2&&right-left>2;
+  const hit=inViewport&&document.elementFromPoint((left+right)/2,(top+bottom)/2);
+  return{text:element.textContent.trim(),opacity,hidden,inViewport,hit:Boolean(hit&&(hit===element||element.contains(hit))),ancestors};
+ });
+ return{painted:cards.length===4&&cards.every(c=>!c.hidden&&c.opacity>=.99&&c.inViewport&&c.hit),focused:document.hasFocus(),scrollY,viewport:{width:innerWidth,height:innerHeight},cards};
+};
 async function ensureLayout(record,name){
  const value=await driver.evaluate(layout);record.measurements[name]=value;
  check(record,name+' horizontal reflow',value.overflow<=2&&value.clipped.length===0,value);
@@ -104,6 +124,8 @@ async function safari(){
   goto:url=>command('POST',prefix+'/url',{url}),
   reload:()=>command('POST',prefix+'/refresh',{}),
   url:()=>command('GET',prefix+'/url'),
+  activate:async()=>command('POST',prefix+'/window',{handle:await command('GET',prefix+'/window')}),
+  pressEscape:()=>command('POST',prefix+'/actions',{actions:[{type:'key',id:'audit-keyboard',actions:[{type:'keyDown',value:'\uE00C'},{type:'keyUp',value:'\uE00C'}]}]}),
   evaluate:(fn,arg)=>command('POST',prefix+'/execute/sync',{script:'return ('+fn.toString()+')(arguments[0]);',args:[arg??null]}),
   click:async selector=>{
    const element=await until(()=>command('POST',prefix+'/element',{using:'css selector',value:selector}),'find '+selector);
@@ -122,7 +144,7 @@ async function chromiumChannel(){
  const page=await context.newPage();page.setDefaultTimeout(15000);
  report.version=browser.version();report.mode='Installed shipping '+browserName+' channel, headless desktop';
  report.runtimeErrors=[];page.on('pageerror',error=>report.runtimeErrors.push(error.message));
- const adapter={resize:size=>page.setViewportSize({width:size.width,height:size.height}),goto:url=>page.goto(url,{waitUntil:'load'}),reload:()=>page.reload({waitUntil:'load'}),url:async()=>page.url(),evaluate:(fn,arg)=>page.evaluate(fn,arg),click:selector=>page.locator(selector).first().click(),screenshot:filename=>page.screenshot({path:filename,fullPage:false}),close:()=>browser.close()};
+ const adapter={resize:size=>page.setViewportSize({width:size.width,height:size.height}),goto:url=>page.goto(url,{waitUntil:'load'}),reload:()=>page.reload({waitUntil:'load'}),url:async()=>page.url(),activate:()=>page.bringToFront(),pressEscape:()=>page.keyboard.press('Escape'),evaluate:(fn,arg)=>page.evaluate(fn,arg),click:selector=>page.locator(selector).first().click(),screenshot:filename=>page.screenshot({path:filename,fullPage:false}),close:()=>browser.close()};
  adapter.performance=async()=>{
   for(const entry of ['public','garda'])for(let run=1;run<=perfRuns;run++){
    const fresh=await browser.newContext({viewport:{width:1366,height:900},reducedMotion:'no-preference'});
@@ -169,7 +191,12 @@ try{
    await navigateFromMenu('about');await ensureLayout(record,'about');
    const goals=await driver.evaluate(()=>({count:document.querySelectorAll('.learning-goal').length,arrows:document.querySelectorAll('.learning-goal-link').length,items:document.querySelectorAll('.learning-goals [role="listitem"]').length,description:document.querySelector('#learning-cycle-description')?.textContent,boxes:[...document.querySelectorAll('.learning-goal')].map(e=>({width:e.clientWidth,height:e.clientHeight,clipped:e.scrollWidth>e.clientWidth+2}))}));
    check(record,'four learning goals and cycle connectors',goals.count===4&&goals.arrows===4&&goals.items===4&&goals.boxes.every(b=>b.width>0&&b.height>0&&!b.clipped),goals);
-   await driver.evaluate(()=>document.querySelector('.learning-goals').scrollIntoView({block:'center'}));
+   await driver.activate();await driver.pressEscape();
+   await driver.evaluate(()=>document.querySelector('.learning-goals').scrollIntoView({block:'center',behavior:'instant'}));
+   record.measurements.goalPaintBeforeWait=await driver.evaluate(goalPaint);
+   const painted=await until(async()=>{const value=await driver.evaluate(goalPaint);record.measurements.goalPaint=value;return value.painted&&value;},'learning goals paint and hit testing');
+   check(record,'learning goals paint and are hit-testable in the viewport',painted.painted,painted);
+   await pause(250); // Capture after the paint observation, not at the scroll-trigger boundary.
    await driver.screenshot(join(output,entry+'-'+profile.name+'-goals.png'));
    await navigateFromMenu(entry==='garda'?'evidence':'rights');await ensureLayout(record,'reference');
    const expectedTopics=entry==='garda'?5:7;
