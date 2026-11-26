@@ -33,7 +33,7 @@ function step(number, title, description, body) {
     <span>${title}</span></h3><p class="learning-step-copy">${description}</p><div class="learning-step-visual">${body}</div></li>`;
 }
 
-export function renderPosterLanding({siteRole, perspectiveIcon, discussionLink = ''}) {
+export function renderPosterLanding({siteRole, perspectiveIcon}) {
   const choose = roles.map(role => `<div class="role-picker__item">
     <span class="avatar">${figure(role, 'avatar-image')}</span><span>${role === 'public' ? 'Public' : 'Garda'}</span>
   </div>`).join('');
@@ -83,7 +83,6 @@ export function renderPosterLanding({siteRole, perspectiveIcon, discussionLink =
           ${step(3, 'Choose a response', 'Try what you would say or do.', choices)}
           ${step(4, 'Learn why it matters', 'Get an explanation, then try the other side.', compare)}
         </ol>
-        <div class="workshop-entry">${discussionLink}</div>
       </details>
     </section>
   </article>
