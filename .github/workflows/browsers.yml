@@ -1,236 +1,61 @@
-name: Browser compatibility
-
+name: Mobile Safari keyboard audit
 on:
   push:
-    branches-ignore: [main]
-  pull_request:
-    branches: [main]
+    branches: ['audit/ios-keyboard-8047391*']
   workflow_dispatch:
-  workflow_run:
-    workflows: [Check the games]
-    types: [completed]
-
 permissions:
   contents: read
-  actions: read
-
-# A branch push and its PR update describe the same candidate. Keep only
-# the newest branch run; retain each main publication's live verification.
-concurrency:
-  group: browsers-${{ github.event.workflow_run.head_sha || github.head_ref || github.ref_name }}
-  cancel-in-progress: ${{ github.event_name != 'workflow_run' }}
-
 jobs:
-  browser:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
-    name: ${{ matrix.browser }} layouts and play (${{ matrix.shard }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    env:
-      BROWSER_SUITE: general
-      TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - browser: chromium
-            shard: 1/3
-            artifact: chromium-1
-          - browser: chromium
-            shard: 2/3
-            artifact: chromium-2
-          - browser: chromium
-            shard: 3/3
-            artifact: chromium-3
-          - browser: firefox
-            shard: 1/3
-            artifact: firefox-1
-          - browser: firefox
-            shard: 2/3
-            artifact: firefox-2
-          - browser: firefox
-            shard: 3/3
-            artifact: firefox-3
-          - browser: webkit
-            shard: 1/3
-            artifact: webkit-1
-          - browser: webkit
-            shard: 2/3
-            artifact: webkit-2
-          - browser: webkit
-            shard: 3/3
-            artifact: webkit-3
+  simulator:
+    runs-on: macos-latest
+    timeout-minutes: 23
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-      - name: Assert exact code revision under test
-        env:
-          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+          ref: 8047391c7921768c139d5a1443761983b481dce0
+          path: pinned-site
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Prepare iPhone Simulator and Appium
         run: |
-          echo "Testing integration commit $EXPECTED_SHA"
-          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      # Verify served bytes against this revision before testing production.
-      - name: Wait for this Pages publication
-        if: github.event_name == 'workflow_run'
-        run: node tests/browser/wait-for-pages.mjs
-        env:
-          PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
-      - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-      # Partition the general suite to stay within each job's
-      # 30-minute budget. A failure must not cancel other verification/evidence.
-      - run: npm run test:browser -- --project=${{ matrix.browser }} --shard=${{ matrix.shard }}
-      - uses: actions/upload-artifact@v5
-        if: ${{ !cancelled() }}
-        with:
-          name: browser-report-${{ matrix.artifact }}
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7
-
-  mobile-rendering:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
-    name: ${{ matrix.browser }} mobile refresh and first paint
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chromium, firefox, webkit]
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-      - name: Assert exact code revision under test
-        env:
-          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+          mkdir -p audit-results/ios
+          xcodebuild -version
+          xcrun simctl list devices available --json > audit-results/ios/devices.json
+          info=$(node -e '
+            const {devices}=require("./audit-results/ios/devices.json");
+            const options=Object.entries(devices).filter(([r])=>r.includes("SimRuntime.iOS-"))
+              .flatMap(([r,ds])=>ds.filter(d=>d.name.startsWith("iPhone")).map(d=>({d,r})));
+            const rank=name=>/iPhone SE|mini/i.test(name)?0:/Plus|Max|Air/i.test(name)?2:1;
+            options.sort((a,b)=>rank(a.d.name)-rank(b.d.name)||b.r.localeCompare(a.r,undefined,{numeric:true})||a.d.name.localeCompare(b.d.name));
+            if(!options.length)throw Error("No installed iPhone simulator available");
+            console.log(options[0].d.udid);')
+          echo "IOS_UDID=$info" >> "$GITHUB_ENV"
+          xcrun simctl bootstatus "$info" -b
+          npm install --prefix "$RUNNER_TEMP/ios-appium" appium@4.0.1
+          export APPIUM_HOME="$RUNNER_TEMP/ios-appium-home"
+          "$RUNNER_TEMP/ios-appium/node_modules/.bin/appium" driver install xcuitest@13.8.0
+          "$RUNNER_TEMP/ios-appium/node_modules/.bin/appium" driver list --installed
+      - name: Measure Search in Mobile Safari
+        timeout-minutes: 13
         run: |
-          echo "Testing integration commit $EXPECTED_SHA"
-          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      - name: Wait for this Pages publication
-        if: github.event_name == 'workflow_run'
-        run: node tests/browser/wait-for-pages.mjs
-        env:
-          PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
-      - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-      # Run first-paint and refresh coverage immediately, without waiting for
-      # unrelated browser cases. The general shards exclude these same files.
-      - name: Check mobile rendering and refresh
-        run: npm run test:browser -- --project=${{ matrix.browser }} refresh-settlement.spec.mjs sitewide-rendering.spec.mjs
-      - name: Repeat Firefox parser-time refresh at enlarged text
-        if: matrix.browser == 'firefox'
-        run: >-
-          npm run test:browser -- --project=firefox --repeat-each=3
-          --output=test-results/firefox-parser-repeat --reporter=list
-          sitewide-rendering.spec.mjs
-          --grep "garda small phone with enlarged text every page opening survives mobile refresh"
+          export APPIUM_HOME="$RUNNER_TEMP/ios-appium-home"
+          "$RUNNER_TEMP/ios-appium/node_modules/.bin/appium" --address 127.0.0.1 --port 4723 --log-level info > audit-results/ios/appium.log 2>&1 &
+          appium_pid=$!
+          node pinned-site/tests/browser/server.mjs --port 4173 > audit-results/ios/server.log 2>&1 &
+          site_pid=$!
+          trap 'kill "$appium_pid" "$site_pid" 2>/dev/null || true' EXIT
+          for _ in {1..30}; do
+            if curl -fsS http://127.0.0.1:4723/status >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4173/stopped-both-sides/ >/dev/null
+          node scripts/ios-safari-audit.mjs
       - uses: actions/upload-artifact@v5
-        if: ${{ !cancelled() }}
+        if: always()
         with:
-          name: browser-report-mobile-${{ matrix.browser }}
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7
-
-  landing-image-recovery:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
-    name: ${{ matrix.browser }} landing image recovery and controls
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chromium, firefox]
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-      - name: Assert exact code revision under test
-        env:
-          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      - name: Wait for this Pages publication
-        if: github.event_name == 'workflow_run'
-        run: node tests/browser/wait-for-pages.mjs
-        env:
-          PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
-      - run: npm ci
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-      # These engines can treat repeated hash-URL visits as same-document.
-      # Exercise fresh cancellation/failure documents and both navigation
-      # controls promptly; WebKit repeats the same cases in its landing job.
-      - name: Repeat image recovery and navigation controls
-        run: >-
-          npm run test:browser -- --project=${{ matrix.browser }} --repeat-each=3
-          portfolio-landing-reveal.spec.mjs remaining-controls.spec.mjs support.spec.mjs
-          --grep "pending image cancellation and failure|previous-stage control|Back to Top|pending initial language"
-      - uses: actions/upload-artifact@v5
-        if: ${{ !cancelled() }}
-        with:
-          name: browser-report-image-recovery-${{ matrix.browser }}
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7
-
-  landing-interactions:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
-    name: Repeat landing interactions (WebKit)
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-      - name: Assert exact code revision under test
-        env:
-          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
-        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      - name: Wait for this Pages publication
-        if: github.event_name == 'workflow_run'
-        run: node tests/browser/wait-for-pages.mjs
-        env:
-          PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
-      - run: npm ci
-      - run: npx playwright install --with-deps webkit
-      # Repeated real interactions cover a race that only appeared after the
-      # previous release. Main repeats them against the verified live files.
-      - name: Repeat landing, saved-card and disclosure interactions
-        run: >-
-          npm run test:browser -- --project=webkit --repeat-each=3
-          landing-motion-regressions.spec.mjs disclosure-pointer.spec.mjs
-          portfolio-landing-reveal.spec.mjs refinements.spec.mjs remaining-controls.spec.mjs support.spec.mjs
-      - uses: actions/upload-artifact@v5
-        if: ${{ !cancelled() }}
-        with:
-          name: browser-report-landing-interactions
-          path: |
-            playwright-report/
-            test-results/
+          name: mobile-safari-simulator
+          path: audit-results/ios/
           retention-days: 7
