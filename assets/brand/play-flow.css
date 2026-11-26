@@ -711,3 +711,31 @@ summary.discrimination-ground-trigger {display:block;min-block-size:3.25rem;padd
 }
 .progress-page .progress-disclosure[open] > summary::after {transform:rotate(225deg)}
 .progress-page .progress-disclosure-body {display:flow-root;min-inline-size:0;padding-block-start:1rem}
+
+/* Keep the saved situation and latest recap together below the role actions. */
+.home-progress {
+ max-inline-size:68rem;
+ margin:1.5rem auto;
+ border:1px solid var(--line);
+ border-radius:1.25rem;
+ background:var(--paper,#fff);
+ box-shadow:var(--play-shadow);
+ min-inline-size:0;
+}
+.home-progress-disclosure {min-inline-size:0;border-radius:inherit}
+.home-progress-disclosure[open] > summary {border-block-end:1px solid var(--line)}
+.home-progress-content {
+ display:grid;
+ gap:1rem;
+ padding:clamp(.75rem,2.5vw,1.5rem);
+ min-inline-size:0;
+}
+.home-progress-content > .home-play {
+ margin:0;padding:0;border:0;min-inline-size:0;
+}
+.home-progress-content .flow-save {margin:0}
+.home-progress-content .home-start {inline-size:100%}
+.home-progress-disclosure:not([open]) > .home-progress-content {display:none}
+@media(forced-colors:active) {
+ .home-progress {background:Canvas;border-color:CanvasText;box-shadow:none}
+}
