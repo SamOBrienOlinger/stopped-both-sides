@@ -1,4 +1,4 @@
-import {createSiteSearch} from "../search/site-search.mjs?v=gpo-flags-20261125";
+import {createSiteSearch} from "../search/site-search.mjs?v=practice-consistency-20261126";
 import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=site-repairs-20261125';
 import {createLayout} from '../accessibility/layout.mjs?v=poster-landing-20261125';

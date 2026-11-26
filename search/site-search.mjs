@@ -1,8 +1,8 @@
 import {encounters,references} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 import {topicGroups} from '../encounters/presentation.mjs?v=site-repairs-20261125';
-import {accessibilityPage} from '../accessibility/ui.mjs?v=site-repairs-20261125';
+import {accessibilityPage} from '../accessibility/ui.mjs?v=practice-consistency-20261126';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
-import {translateText,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=site-repairs-20261125';
+import {translateText,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=practice-consistency-20261126';
 import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=site-repairs-20261125';
 import {communitySources} from '../learning/community-resources.mjs?v=site-repairs-20261125';
 
@@ -145,7 +145,7 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
  },'#site-search-input');
  function close(restore=true){restoreOnClose=restore;modal.close();}
  function resultHTML(entry){
-  const kind=entry.kind==='situation'?'Situation':entry.kind==='page'?'Page':entry.kind==='practice'?'Individual practice':'Source';
+  const kind=entry.kind==='situation'?'Situation':entry.kind==='page'?'Page':entry.kind==='practice'?'Practise one role at a time':'Source';
   const title=entry.kind==='source'||entry.originalLanguage
    ?`<strong lang="${entry.originalLanguage||'en-IE'}" dir="ltr" data-no-translate>${esc(entry.title)}</strong>`
    :`<strong>${esc(t(entry.title))}</strong>`;

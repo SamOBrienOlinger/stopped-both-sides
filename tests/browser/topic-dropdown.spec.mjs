@@ -116,7 +116,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(page.locator('#feedback .source-details a').first()).toHaveAttribute('href','https://www.ihrec.ie/your-rights/housing-assistance-payment/housing');
   await page.locator('[data-action="paired-switch"]').click();
   await expect(storyParagraphs).toHaveText(story);
-  await page.getByRole('link',{name:'Back to situations'}).click();
+  await page.getByRole('link',{name:'Back to browsing situations'}).click();
   await expect(page.locator('[data-action="paired-start"][data-id="discrimination-housing-assistance"]')).toBeFocused();
   await page.goto(path+'?lang=ar#encounters/'+role+'/discrimination');
   await expect(page.getByRole('heading',{name:'التمييز',exact:true})).toBeVisible();

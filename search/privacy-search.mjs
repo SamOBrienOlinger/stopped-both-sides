@@ -1,9 +1,9 @@
-import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=site-repairs-20261125';
+import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=practice-consistency-20261126';
 import {sites} from '../site.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
 import {createCharacterPreferences} from '../encounters/characters.mjs?v=final-touches-20261125';
 import {startEncounter,stateHash} from '../encounters/engine.mjs?v=site-repairs-20261125';
-import {loadLanguage,translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
+import {loadLanguage,translateText} from '../locales/translate.mjs?v=practice-consistency-20261126';
 import {languageInfo} from '../locales/languages.mjs';
 import {privacyNotices} from '../locales/privacy-notice.mjs?v=site-repairs-20261125';
 

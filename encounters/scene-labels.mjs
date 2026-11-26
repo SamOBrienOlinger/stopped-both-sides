@@ -3,7 +3,7 @@ import {characterArtwork,characterFor} from './characters.mjs?v=final-touches-20
 import {roleLabels} from './catalog.mjs?v=site-repairs-20261125';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
+import {translateText} from '../locales/translate.mjs?v=practice-consistency-20261126';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',
