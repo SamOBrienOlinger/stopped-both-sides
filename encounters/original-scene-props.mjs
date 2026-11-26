@@ -58,7 +58,7 @@ const floorProps={
  'garda-description':{'description-power':'red-bicycle'}
 };
 const objects={
- 'travel-bag':{width:0.29,offset:-0.40},toolbox:{width:0.36,offset:-0.44},
+ 'travel-bag':{width:0.29,offset:-0.40},toolbox:{width:0.36,offset:0.44},
  'red-bicycle':{width:0.86,offset:-0.59},phone:{width:0.073,offset:0.27}
 };
 function storyObject(name,anchor){
