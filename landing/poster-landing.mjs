@@ -70,7 +70,7 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
     <section class="poster-overview" aria-labelledby="overview-title">
       <div class="poster-overview__text">
         <h2 id="overview-title">Interactive learning about rights, choices and perspectives.</h2>
-        <p class="poster-lead landing-deck" data-poster-reveal>Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.</p>
+        <p class="poster-lead landing-deck" data-poster-reveal>Explore realistic situations, choose how to respond, and see how the same encounter can be experienced differently by members of the public and Gardaí.</p>
       </div>
       <div class="perspective-grid">${roles.map(panel).join('')}</div>
     </section>
