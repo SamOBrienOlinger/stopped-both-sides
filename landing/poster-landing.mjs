@@ -1,7 +1,7 @@
 import {sites} from '../site.mjs';
 
 const assets = new URL('../assets/', import.meta.url);
-const gpo = width => new URL(`dublin-approved/gpo-city-${width}.webp?v=gpo-flags-20261125`, assets).href;
+const gpo = width => new URL(`dublin-approved/gpo-city-${width}.webp?v=gpo-no-flag-lamps-20261126`, assets).href;
 const figures = {
   public: new URL('characters/poster-alex.webp?v=final-touches-20261125', assets).href,
   garda: new URL('characters/poster-aisling.webp', assets).href,
