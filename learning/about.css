@@ -198,7 +198,7 @@
 
 /* Community input: short lists, then grouped links to potential contributors. */
 .input-disclosure .contribution-content{min-inline-size:0;padding-block-start:1.2rem}
-.input-disclosure .contribution-intro{font-size:1.125rem;color:var(--ink);margin-block-end:1.25rem}
+.input-disclosure .contribution-intro{display:block;font-size:1.125rem;font-weight:400;line-height:1.5;letter-spacing:normal;color:var(--ink);margin-block:.5rem 0}
 .input-disclosure .contribution-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:1.25rem}
 .input-disclosure .contribution-columns>section{padding:clamp(8px,2vw,1.25rem);background:var(--pale);border:1px solid var(--line);border-radius:14px}
 .input-disclosure .contribution-content :is(h3,h4,p,li){overflow-wrap:anywhere}
