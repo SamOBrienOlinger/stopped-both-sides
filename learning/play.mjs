@@ -129,7 +129,7 @@ export function discussionGuide(encounter,role){
   '<a class="text-button" href="#encounters/'+role+'/'+topicFor(encounter.id).id+'">Back to browsing situations</a>'+
   '<h1>Explore and discuss this situation</h1>'+
   '<h2>'+esc(encounter.title)+'</h2>'+
-  '<p class="small-note">Allow about 15 minutes.</p>'+
+  ''+
   '<p>'+esc(encounter.description)+'</p>'+
   '<ol><li>Choose a participant. Other people can follow along as observers.</li>'+
   '<li>Pause after a decision and compare what each person had to consider.</li>'+
@@ -137,7 +137,7 @@ export function discussionGuide(encounter,role){
   '<div class="action-group"><button class="primary" data-action="paired-start" data-id="'+encounter.id+'" data-role="'+role+'">Explore this situation</button>'+
   '<a class="text-button" href="#discussion/'+otherRole+'/'+encounter.id+'">'+
   (role==='garda'?'Switch to the public perspective':'Switch to the Garda perspective')+'</a></div>'+
-  '<p class="small-note"><span>Starting role</span> · <span>'+esc(roleLabels[role])+'</span></p>'+
+  ''+
  '</div>';
 }
 

@@ -196,7 +196,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
        ${renderScenePreview(e.id,{cast:characterPreferences.value})}
        <p>${esc(e.description)}</p>
        <p class="scenario-goal">${practiceGoal(e.id)}</p>
-       <p class="small-note"><span>${esc(e.minutes)}</span> · <span>${roleLabels[role]}</span></p>
+       
        <p class="catalogue-status">${roles.map(r=>`<span><span>${r==='public'?'Public':'Garda'}</span>: <span>${learningStatus(store.value,e.id,r)}</span></span>`).join('')}</p>
        <button class="primary secondary" data-action="paired-start" data-id="${e.id}" data-role="${role}" aria-label="Explore this situation: ${esc(e.title)} — ${roleLabels[role]}">Explore this situation</button>
       </article>`).join('')}</div>`;
@@ -235,7 +235,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
    ${!practice&&!browse?`<div class="start-panel">
     <section class="recommended-situation" aria-labelledby="first-situation-title"><h2 id="first-situation-title">${esc(first.title)}</h2><p>${goal}</p>
      <button class="primary" data-action="paired-quick-start" data-id="${first.id}" data-role="${role}">Start this situation</button>
-     <p class="small-note">No timer. You can change character or switch sides as you explore.</p>
+     
     </section>
     <div class="setup-character" data-role-tone="${role}">${characterImage(role,selected)}<div><span class="cast-label">Your character</span><strong data-no-translate>${esc(characterFor(role,selected).name)}</strong><button class="text-button" data-action="paired-setup-characters" aria-expanded="${setupCharacterOpen}" aria-controls="setup-characters">Choose a different character</button></div></div>
     ${setupCharacterOpen?`<div id="setup-characters"><div class="picker-done"><button class="primary secondary" data-action="paired-setup-done">Done</button></div>${characterPicker(role,selected)}</div>`:'<div id="setup-characters" hidden></div>'}
@@ -340,7 +340,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
       <div class="flow-feedback-actions">
        <button class="primary" data-action="paired-next">${choice.next==='end'?'View recap':'Next decision'}</button>
        <div class="flow-secondary-actions"><button class="text-button" data-action="paired-compare">Compare the other side</button><button class="text-button" data-action="paired-change">Try another answer</button></div>
-       <p class="small-note">Your answer is kept when you switch perspectives.</p>
+       
       </div>
       ${view.phrase?`<div class="phrase"><span>${state.role==='garda'?'A QUESTION TO CARRY FORWARD':encounter.originalId==='fair-treatment'?'SOMETHING TO REMEMBER':'WORDS YOU COULD USE'}</span>${esc(view.phrase)}</div>`:''}
       <details class="lesson"><summary>Why this matters</summary><p>${esc(view.lesson)}</p></details>

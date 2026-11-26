@@ -82,7 +82,7 @@ export function practiceCards(scenarios,role){
   <p class="person">${esc(scenario.person)}</p>
   <p class="description">${esc(scenario.description)}</p>
   <p class="scenario-goal">${practiceGoal(role+'-'+scenario.id)}</p>
-  <p class="small-note">${esc(scenario.minutes)}</p>
+  
   <button class="primary secondary scenario-action" data-action="start" data-id="${scenario.id}" aria-label="Play this situation: ${esc(scenario.title)}">Play this situation</button>
  </article>`).join('');
  return `<div class="practice-content">

@@ -111,7 +111,7 @@ export function firstTimeGuide() {
     <span class="guide-preview"><img src="${preview}" width="1400" height="5943" alt="Preview of the first-time user guide" loading="lazy" decoding="async"></span>
     <span class="guide-open">Open the full PDF</span>
    </a>
-   <div class="guide-introduction"><p>Learn how to choose a role, explore a situation, compare perspectives and review your decisions.</p><p class="small-note"><span>English PDF</span> · <span>3 pages</span></p></div>
+   <div class="guide-introduction"><p>Learn how to choose a role, explore a situation, compare perspectives and review your decisions.</p></div>
   </div>
  </section>`;
 }

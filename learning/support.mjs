@@ -34,7 +34,7 @@ export function supportSection(){
    <p class="support-description">${service.description}</p>
    <a class="support-link" href="${service.url}" target="_blank" rel="noopener noreferrer"><span>${service.action}</span><span aria-hidden="true">↗</span></a>
   </article>`).join('')}</div>
-  <p class="support-checked small-note">Opening a link does not submit a complaint or request advice.</p>
+  
  </section>`;
 }
 
