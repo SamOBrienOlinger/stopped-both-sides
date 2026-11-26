@@ -71,9 +71,8 @@ const contributorGroups = [
 
 export function prototypeInput(siteRole='public') {
  const summary=siteRole==='garda'?'Help shape a stronger version':'A prototype with space for input';
- return `<details class="info-block input-disclosure"><summary>${summary}</summary>
+ return `<details class="info-block input-disclosure"><summary><span class="card-summary-title">${summary}<span class="contribution-intro">Community voices and independent expertise could help shape the next version.</span></span></summary>
   <div class="contribution-content">
-   <p class="contribution-intro">Community voices and independent expertise could help shape the next version.</p>
    <div class="contribution-columns">
     <section aria-labelledby="contribution-help"><h3 id="contribution-help">How input could help</h3>
      <ul class="contribution-points">
