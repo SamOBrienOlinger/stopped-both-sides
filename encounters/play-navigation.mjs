@@ -3,9 +3,15 @@ import {topicGroups} from './presentation.mjs?v=site-repairs-20261125';
 
 const playTopics=[{id:'all',title:'All topics'},...topicGroups];
 
+// Custody situations were authored on the public side but include Garda choices.
+export function availableInPractice(encounter,role){
+ return encounter.origin===role||encounter.origin==='shared'||
+  (role==='garda'&&['public-arrest','public-custody'].includes(encounter.id));
+}
+
 export function topicsForPlay(mode,role){
  if(mode!=='practice')return playTopics;
- return playTopics.filter(topic=>topic.id==='all'||topic.encounters.some(id=>encounters[id].origin===role||encounters[id].origin==='shared'));
+ return playTopics.filter(topic=>topic.id==='all'||topic.encounters.some(id=>availableInPractice(encounters[id],role)));
 }
 
 function availableTopic(mode,role,topic){
