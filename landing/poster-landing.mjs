@@ -74,6 +74,8 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
       </div>
       <div class="perspective-grid">${roles.map(panel).join('')}</div>
     </section>
+  </article>
+  <div class="sbs-poster poster-guide-section">
     <section class="poster-learning how-to-play" aria-labelledby="how-to-title" id="learning-flow">
       <details class="how-to-disclosure" open>
         <summary class="how-to-disclosure-trigger landing-disclosure-trigger"><h2 id="how-to-title">How it works<span class="landing-disclosure-caret" aria-hidden="true"></span></h2></summary>
@@ -85,7 +87,7 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
         </ol>
       </details>
     </section>
-  </article>`;
+  </div>`;
 }
 
 export function renderPosterPerspectiveActions({perspectiveIcon}) {
