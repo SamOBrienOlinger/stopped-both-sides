@@ -152,7 +152,7 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 }
 .sbs-poster .poster-landing-action .perspective-icon { flex: none; width: 2em; height: 2em; }
 .sbs-poster .poster-landing-action:hover { background: #043f43; }
-.sbs-poster :is(.perspective-card,.role-picker__item):hover { border-color: var(--sea); }
+.sbs-poster .perspective-card:hover { border-color: var(--sea); }
 
 @container (min-width: 52rem) {
   .sbs-poster .hero-garda { position: relative; left: 5%; }
