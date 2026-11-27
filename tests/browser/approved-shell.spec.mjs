@@ -22,7 +22,24 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
       if (width === 390) {
         await poster.locator('.perspective-grid').scrollIntoViewIfNeeded();
         for (const label of await poster.locator('.perspective-label').all()) {
-          await expect(label).toBeInViewport({ratio: 1});
+          // Fractional image tracks can leave a subpixel caption edge outside
+          // WebKit's intersection rectangle. Check the edges and actual text
+          // instead of requiring an exactly 1.0 background-area ratio.
+          await expect.poll(() => label.evaluate(element => new Promise(resolve => {
+            const observer = new IntersectionObserver(([entry]) => {
+              observer.disconnect();
+              const bounds = entry.boundingClientRect, visible = entry.intersectionRect;
+              const edgeLoss = Math.max(visible.left - bounds.left, bounds.right - visible.right,
+                visible.top - bounds.top, bounds.bottom - visible.bottom);
+              const range = document.createRange();
+              range.selectNodeContents(element);
+              const text = [...range.getClientRects()].filter(rect => rect.width > 0 && rect.height > 0);
+              resolve(entry.isIntersecting && edgeLoss <= 1 && text.length > 0 && text.every(rect =>
+                rect.left >= visible.left && rect.right <= visible.right &&
+                rect.top >= visible.top && rect.bottom <= visible.bottom));
+            });
+            observer.observe(element);
+          })), {message: 'each perspective caption and every word remain in view'}).toBe(true);
         }
       }
 
