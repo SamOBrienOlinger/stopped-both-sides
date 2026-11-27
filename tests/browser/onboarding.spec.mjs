@@ -29,11 +29,10 @@ for(const role of ['public','garda'])test(`${role} can start immediately or brow
  const currentIcon=page.locator('.perspective-status>.perspective-icon');
  const switchButton=page.locator('[data-action="paired-switch"]');
  const switchIcon=switchButton.locator('.perspective-icon');
- const brandLogo=await page.locator('.nav-profiles').evaluate(image=>image.src);
  for(const currentRole of [role,otherRole(role)]){
   expect(state(page).role).toBe(currentRole);
-  await expect(currentIcon).toHaveAttribute('src',brandLogo);
-  await expect(switchIcon).toHaveAttribute('src',brandLogo);
+  await expect(currentIcon).toHaveAttribute('src',new RegExp('/assets/brand/'+currentRole+'-perspective\\.webp(?:\\?.*)?$'));
+  await expect(switchIcon).toHaveAttribute('src',new RegExp('/assets/brand/'+otherRole(currentRole)+'-perspective\\.webp(?:\\?.*)?$'));
   await expect.poll(()=>currentIcon.evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
   await expect.poll(()=>switchIcon.evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
   await switchButton.click();

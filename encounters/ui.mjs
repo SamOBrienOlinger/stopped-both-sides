@@ -28,9 +28,9 @@ function decisionPosition(number,{min,max}){
 }
 const scoreExplanation='<p class="score-explanation">1 point for a choice that supports an appropriate resolution on these facts; 0 when the reasoning needs review. This measures learning, not personal bias or responsibility for someone else’s conduct.</p>';
 
-function perspectiveIcon(){
- const src=new URL('../assets/brand/profiles-hexagon.webp?v=all-logos-transparent-20261127',import.meta.url).href;
- return `<img class="perspective-icon" src="${src}" width="512" height="512" alt="" decoding="async">`;
+function perspectiveIcon(role){
+ const src=new URL(`../assets/brand/${role}-perspective.webp?v=mobile-roles-20261127`,import.meta.url).href;
+ return `<img class="perspective-icon" src="${src}" width="256" height="256" alt="" decoding="async">`;
 }
 
 export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[],getOriginalSession,resetOriginalSession,getLanguage=()=> 'en',announce=()=>{}}){

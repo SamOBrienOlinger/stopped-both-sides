@@ -108,7 +108,7 @@ def draw(c, page):
     def role_button(top, role, label, fill, color):
         x, width, height = 30, 340, 40
         rect(x,top,width,height,fill,7)
-        c.drawImage(str(ROOT/'assets/brand/stopped-both-sides-transparent.png'),
+        c.drawImage(str(ROOT/f'assets/brand/{role}-perspective.webp'),
                     34,H-top-37,width=34,height=34,mask='auto',preserveAspectRatio=True)
         text(80,top+(3 if '\n' in label else 11),label,13.5,True,color,
              width=278,leading=17)

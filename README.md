@@ -76,14 +76,14 @@ Open **Search** in the navigation, or open **Menu** first on a narrow screen. Se
 The illustrated guide follows a situation from the choice of role to the recap. The three-page A4 PDF links directly to both perspective setups.
 
 <p align="center">
-  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=all-logos-transparent-20261127">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png?v=all-logos-transparent-20261127" width="440" alt="Illustrated version of the six steps above, showing character selection, a response, feedback, perspective switching and the recap.">
+  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=mobile-roles-20261127">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png?v=mobile-roles-20261127" width="440" alt="Illustrated version of the six steps above, showing character selection, a response, feedback, perspective switching and the recap.">
   </a>
 </p>
 
 <p align="center">
-  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=all-logos-transparent-20261127"><strong>Open full-size PNG</strong></a> ·
-  <a href="docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true&v=all-logos-transparent-20261127"><strong>Download printable PDF</strong></a>
+  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=mobile-roles-20261127"><strong>Open full-size PNG</strong></a> ·
+  <a href="docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true&v=mobile-roles-20261127"><strong>Download printable PDF</strong></a>
 </p>
 
 ## Purpose and audience

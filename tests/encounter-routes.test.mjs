@@ -83,7 +83,7 @@ test('Both roles can start every situation; the shared facts and role controls r
   const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];
   for(const choice of roles){
    const link=rolePicker.match(new RegExp('href="#encounters/'+choice+'"[^>]*>([\\s\\S]*?)</a>'))[1];
-   assert.match(link,/\/profiles-hexagon\.webp\?v=all-logos-transparent-20261127"/);
+   assert.match(link,new RegExp('/'+choice+'-perspective\\.webp(?:\\?[^"]*)?"'));
    assert.match(link,/alt=""/);
   }
   for(const e of Object.values(encounters)){

@@ -165,15 +165,50 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 }
 @container (max-width: 34rem) {
   .sbs-poster .brand-eyebrow { font-size: .75rem; letter-spacing: .08em; }
+  .sbs-poster .brand-subtitle {
+    max-inline-size: 24ch;
+    margin: .5em auto .65em;
+    font-family: inherit;
+    font-size: 1.0625rem;
+    font-style: normal;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
   .sbs-poster .hero-question::before, .sbs-poster .hero-question::after { display: none; }
   .sbs-poster .hero-characters { gap: 4%; }
   .sbs-poster .hero-characters img { width: 46%; height: 143%; }
   .sbs-poster .poster-overview__text { display: block; }
   .sbs-poster .perspective-grid { order: -1; }
-  .sbs-poster .perspective-card { aspect-ratio: 1.5; }
-  .sbs-poster .perspective-label { min-inline-size: 0; width: 100%; }
+  /* Captions grow below the scene, so wrapping never covers the characters. */
+  .sbs-poster .perspective-card {
+    grid-template-rows: auto 1fr;
+    align-items: stretch;
+    aspect-ratio: auto;
+    padding: 0;
+    border-radius: .9rem;
+    background: #fff;
+  }
+  .sbs-poster .perspective-scene {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    inline-size: 100%;
+    aspect-ratio: 1.5;
+    overflow: hidden;
+  }
+  .sbs-poster .perspective-label {
+    display: grid;
+    place-items: center;
+    min-inline-size: 0;
+    min-block-size: 44px;
+    width: 100%;
+    padding: .4em .45em;
+    border-radius: 0;
+    font-size: .875rem;
+    line-height: 1.35;
+  }
   .sbs-poster .learning-steps { grid-template-columns: 1fr; }
-  .sbs-poster .perspective-label { font-size: .95rem; }
   .sbs-poster .poster-landing-action { width: 100%; }
 }
 @container (max-width: 18rem) {
