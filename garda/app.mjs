@@ -1,5 +1,5 @@
 import {createSiteSearch} from "../search/site-search.mjs?v=responsive-fixes-20261127";
-import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
+import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=responsive-fixes-20261127';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=responsive-fixes-20261127';
 import {createLayout} from '../accessibility/layout.mjs?v=responsive-fixes-20261127';
 import {supportRecap} from '../learning/support.mjs?v=rights-topics-20261126';

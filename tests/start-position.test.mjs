@@ -29,7 +29,7 @@ function browser(type='reload',offset=480,{perspective='public',preferences={}}=
  const parserObservers=new Set();
  const styleProperties=new Map();
  const root={setAttribute:name=>attributes.add(name),removeAttribute:name=>attributes.delete(name),
-  dataset:{perspective},style:{setProperty:(key,value)=>styleProperties.set(key,value),
+  dataset:{perspective},classList:new Set(),style:{setProperty:(key,value)=>styleProperties.set(key,value),
    getPropertyValue:key=>styleProperties.get(key)||''},
   hasAttribute:name=>attributes.has(name),
   getBoundingClientRect(){
@@ -69,11 +69,13 @@ function browser(type='reload',offset=480,{perspective='public',preferences={}}=
  };
 }
 
-test('the initial layout uses the saved text size for its own edition',()=>{
- const preferences={'garda-encounter-reading-v1:public':'{"size":150}','garda-encounter-reading-v1:garda':'{"size":115}'};
+test('the initial layout uses the saved display preferences for its own edition',()=>{
+ const preferences={'garda-encounter-reading-v1:public':'{"size":150,"contrast":"high","spacing":true,"motion":true}',
+  'garda-encounter-reading-v1:garda':'{"size":115,"contrast":"standard","spacing":false,"motion":false}'};
  for(const [perspective,expected] of [['public','150%'],['garda','115%']]){
   const {root}=browser('navigate',0,{perspective,preferences});
   assert.equal(root.style.getPropertyValue('--reading-size'),expected);
+  assert.deepEqual([...root.classList],perspective==='public'?['contrast-high','reading-spacious','motion-reduce']:[]);
  }
  for(const value of ['{"size":999}','unreadable',null]){
   const {root}=browser('navigate',0,{preferences:{'garda-encounter-reading-v1:public':value}});

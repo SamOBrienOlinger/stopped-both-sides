@@ -2,7 +2,7 @@
 // citations, game state and language-pack lookup keys stay intact.
 import {decorateCardHeadings} from './card-headings.mjs?v=responsive-fixes-20261127';
 import {syncLandingReveal} from '../landing/reveal.mjs';
-import {focusPageStart} from './focus.mjs?v=mobile-flow-20261123b';
+import {focusPageStart} from './focus.mjs?v=responsive-fixes-20261127';
 export function paragraphChunks(text,language='en'){
  const authored=text.split(/\r?\n[ \t]*\r?\n/).map(paragraph=>paragraph.trim()).filter(Boolean);
  if(authored.length>1)return authored;

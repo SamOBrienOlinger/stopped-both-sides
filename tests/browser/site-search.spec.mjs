@@ -25,14 +25,18 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await openNavigation(page);await page.locator('#site-search-trigger').click();
   const input=page.locator('#site-search-input');
   await expect(input).toBeFocused();
-  await page.setViewportSize({width:568,height:240});
-  await input.pressSequentially('Garda');
-  await expect(page.locator('.site-search-result').first()).toBeAttached();
-  await expect.poll(()=>input.evaluate(field=>{
-   const box=field.getBoundingClientRect(),dialog=field.closest('dialog').getBoundingClientRect();
-   return field===document.activeElement&&box.top>=dialog.top-1&&box.bottom<=dialog.bottom+1&&
-    document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)===field;
-  })).toBe(true);
+  for(const [height,query] of [[240,'Garda'],[126,'Gardaí']]){
+   await page.setViewportSize({width:568,height});
+   await input.fill(query);
+   await expect(page.locator('.site-search-result').first()).toBeAttached();
+   await expect.poll(()=>input.evaluate(field=>{
+    const box=field.getBoundingClientRect(),dialog=field.closest('dialog').getBoundingClientRect();
+    const {offsetTop,height}=window.visualViewport;
+    return field===document.activeElement&&box.top>=Math.max(dialog.top,offsetTop)-1&&
+     box.bottom<=Math.min(dialog.bottom,offsetTop+height)+1&&
+     document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)===field;
+   })).toBe(true);
+  }
   await page.keyboard.press('ArrowDown');
   await expect(page.locator('.site-search-result').first()).toBeFocused();
  });
