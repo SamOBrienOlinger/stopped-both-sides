@@ -1,6 +1,6 @@
 import {rightsTopics} from './learning/rights-topics.mjs?v=site-repairs-20261125';
 import {communitySources} from "./learning/community-resources.mjs?v=site-repairs-20261125";
-import {createSiteSearch} from "./search/site-search.mjs?v=responsive-fixes-20261127";
+import {createSiteSearch} from "./search/site-search.mjs?v=transparent-logo-20261127";
 import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=responsive-fixes-20261127';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=responsive-fixes-20261127';
 import {createLayout} from './accessibility/layout.mjs?v=responsive-fixes-20261127';
@@ -8,7 +8,7 @@ import {supportSection,supportRecap} from './learning/support.mjs?v=rights-topic
 import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=responsive-fixes-20261127';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=responsive-fixes-20261127';
 import {createMotion} from './accessibility/motion.mjs?v=responsive-fixes-20261127';
-import {createEncounterMode} from './encounters/ui.mjs?v=responsive-fixes-20261127';
+import {createEncounterMode} from './encounters/ui.mjs?v=transparent-logo-20261127';
 import {scenarios,scenarioById,sources} from './data.mjs?v=site-repairs-20261125';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=site-repairs-20261125';
 const main=document.querySelector('#main');

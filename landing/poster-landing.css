@@ -51,7 +51,7 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
   margin: 0 auto; max-inline-size: none; color: #094d4e; letter-spacing: .14em; font-size: .82rem;
   font-weight: 800; line-height: 1.3; text-transform: uppercase;
 }
-.sbs-poster .brand-eyebrow img { inline-size: clamp(32px, 4.4vw, 60px); block-size: auto; mix-blend-mode: multiply; }
+.sbs-poster .brand-eyebrow img { inline-size: clamp(32px, 4.4vw, 60px); block-size: auto; }
 .sbs-poster #paired-title {
   color: #091b2a; margin: .02em 0; max-inline-size: none; font-weight: 800;
   font-size: clamp(2.25rem, 5.5vw, 4.8rem); letter-spacing: -.055em; line-height: 1.04;

@@ -10,7 +10,7 @@ import {privacyNotices} from '../locales/privacy-notice.mjs?v=site-repairs-20261
 import {sourceTopics} from '../learning/rights-topics.mjs?v=site-repairs-20261125';
 import {services} from '../learning/support.mjs?v=rights-topics-20261126';
 import {practiceGoals} from '../learning/play-content.mjs?v=learning-language-20261120';
-import {renderPosterLanding} from '../landing/poster-landing.mjs?v=responsive-fixes-20261127';
+import {renderPosterLanding} from '../landing/poster-landing.mjs?v=transparent-logo-20261127';
 import {groups as evidenceGroups} from '../garda/sources.mjs?v=site-repairs-20261125';
 
 const fold=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase().replace(/ł/g,'l').replace(/[^\p{L}\p{N}]+/gu,' ').trim();

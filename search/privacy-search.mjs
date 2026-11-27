@@ -1,4 +1,4 @@
-import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=responsive-fixes-20261127';
+import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=transparent-logo-20261127';
 import {sites} from '../site.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
 import {createCharacterPreferences} from '../encounters/characters.mjs?v=responsive-fixes-20261127';

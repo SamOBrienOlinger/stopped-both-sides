@@ -20,7 +20,7 @@ export function renderPosterHero() {
           sizes="(min-width: 75rem) 72rem, 100vw" width="1600" height="900" fetchpriority="high" alt="">
       </picture>
       <header class="poster-brand">
-        <p class="brand-eyebrow"><img src="${new URL('brand/profiles-hexagon.webp', assets).href}" alt="" width="56" height="56"></p>
+        <p class="brand-eyebrow"><img src="${new URL('brand/profiles-hexagon.webp?v=transparent-logo-20261127', assets).href}" alt="" width="56" height="56"></p>
         <h1 id="paired-title" lang="en-IE" dir="ltr" data-no-translate data-poster-reveal>Stopped: Both Sides</h1>
         <p class="brand-subtitle" id="perspectives-title" data-poster-reveal>One situation. Two perspectives.</p>
       </header>

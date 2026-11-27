@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/profiles-hexagon.webp" width="80" alt="Two profiles facing opposite directions, in teal and blue">
+  <img src="assets/brand/profiles-hexagon.webp?v=transparent-logo-20261127" width="80" alt="Two profiles facing opposite directions, in teal and blue">
 </p>
 
 <h1 align="center">Stopped: Both Sides</h1>

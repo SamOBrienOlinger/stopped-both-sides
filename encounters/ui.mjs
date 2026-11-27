@@ -1,5 +1,5 @@
 import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=responsive-fixes-20261127';
-import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=responsive-fixes-20261127';
+import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=transparent-logo-20261127';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=responsive-fixes-20261127';
 import {
@@ -285,7 +285,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   </div>`;
  }
  function introduction({secondary=false}={}){
-  const logo=new URL('../assets/brand/profiles-hexagon.webp',import.meta.url).href;
+  const logo=new URL('../assets/brand/profiles-hexagon.webp?v=transparent-logo-20261127',import.meta.url).href;
   const title=secondary?'<h2 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h2>':'<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h1>';
   return `<section class="home-intro clear-intro brand-intro" aria-labelledby="game-title"><img class="brand-profiles" src="${logo}" width="512" height="512" alt=""><div>${title}<p>An interactive learning resource for the public and Gardaí.</p></div></section>`;
  }
