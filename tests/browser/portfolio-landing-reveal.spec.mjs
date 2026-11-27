@@ -190,6 +190,19 @@ for(const path of paths){
   test.setTimeout(90000);
   await page.setViewportSize({width:390,height:844});
   await recordEntrances(page);
+  await page.addInitScript(()=>{
+   // Keep references to the actual browser animation objects, even when a
+   // CSS rule disappears and getAnimations() stops returning them.
+   window.__landingPacedTracks=[];
+   const play=Animation.prototype.play;
+   Animation.prototype.play=function(...args){
+    const result=play.apply(this,args);
+    if(this.animationName==='landing-portfolio-line-reveal')window.__landingPacedTracks.push(this);
+    return result;
+   };
+  });
+  const tracksReleased=()=>page.evaluate(()=>window.__landingPacedTracks.every(animation=>
+   animation.playState==='idle'&&!animation.pending&&animation.currentTime===null));
   for(const failure of [false,true]){
    await page.emulateMedia({reducedMotion:'no-preference'});
    const held=await holdFirstHero(page,{fail:failure});
@@ -212,10 +225,13 @@ for(const path of paths){
      await expect(group.locator('.landing-role-actions')).not.toHaveAttribute('data-landing-reveal');
      await expect(group.locator('.landing-role-actions')).toHaveCSS('opacity','1');
      await expect(group.locator('.landing-role-actions')).toHaveCSS('transform','none');
+     await expect.poll(()=>page.evaluate(()=>window.__landingPacedTracks.length),
+      'the test exercises the real frame-paced entrance').toBeGreaterThan(0);
      await page.emulateMedia({reducedMotion:'reduce'});
      // Media-query styles settle before the controller receives its change event.
      await expect(group.locator('[data-landing-reveal]')).toHaveCount(0);
      await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
+     await expect.poll(tracksReleased,'cancelled browser effects must be released, not just hidden by CSS').toBe(true);
      await frames(page);
      const before=await page.evaluate(()=>window.__landingStarts);
      await held.release();
@@ -223,6 +239,8 @@ for(const path of paths){
      await page.emulateMedia({reducedMotion:'no-preference'});
      await image.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));await frames(page);
      await expect.poll(()=>items.evaluateAll(settledStyles)).toEqual(visibleStyles);
+     await expect.poll(tracksReleased,'restoring motion must not revive detached effects').toBe(true);
+     await expect(group.locator('[data-landing-reveal]')).toHaveCount(0);
      expect(await page.evaluate(()=>window.__landingStarts),'a late image completion cannot restart cancelled entrances').toEqual(before);
     }else{
      await held.release();
