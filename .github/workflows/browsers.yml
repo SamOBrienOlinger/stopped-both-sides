@@ -98,7 +98,7 @@ jobs:
     # Pages publishes independently of the core checks. Always exercise the
     # published mobile entrypoints, even if a separate core assertion failed.
     if: github.event_name != 'workflow_run' || github.event.workflow_run.head_branch == 'main'
-    name: ${{ matrix.browser }} mobile refresh and first paint
+    name: ${{ matrix.browser }} mobile layout, refresh and first paint
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -128,10 +128,10 @@ jobs:
           PAGES_COMMIT: ${{ github.event.workflow_run.head_sha }}
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      # Run first-paint and refresh coverage immediately, without waiting for
+      # Run mobile layout, first-paint and refresh checks without waiting for
       # unrelated browser cases. The general shards exclude these same files.
-      - name: Check mobile rendering and refresh
-        run: npm run test:browser -- --project=${{ matrix.browser }} refresh-settlement.spec.mjs sitewide-rendering.spec.mjs
+      - name: Check mobile layout, rendering and refresh
+        run: npm run test:browser -- --project=${{ matrix.browser }} mobile-landing.spec.mjs refresh-settlement.spec.mjs sitewide-rendering.spec.mjs
       - name: Repeat Firefox parser-time refresh at enlarged text
         if: matrix.browser == 'firefox'
         run: >-
