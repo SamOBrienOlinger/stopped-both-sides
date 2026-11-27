@@ -1,6 +1,6 @@
 import {privacyNotices} from './privacy-notice.mjs?v=site-repairs-20261125';
 import {learningCopy} from './play-copy.mjs?v=responsive-fixes-20261127';
-import {discriminationLabels} from './discrimination-labels.mjs?v=site-repairs-20261125';
+import {discriminationLabels} from './discrimination-labels.mjs?v=casting-logos-20261127';
 import {discriminationIrish} from './discrimination-ga.mjs?v=site-repairs-20261125';
 import {messages} from './messages.mjs?v=site-repairs-20261125';
 import {matchMessage,untranslatedNames} from './patterns.mjs';

@@ -1,9 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {characters,characterFor,createCast,defaultCast,changeCharacter,createCharacterPreferences,CHARACTER_STORAGE_KEY} from '../encounters/characters.mjs?v=nia-public-20261123';
+import {characters,characterFor,charactersForSituation,castForSituation,createCast,defaultCast,changeCharacter,createCharacterPreferences,CHARACTER_STORAGE_KEY} from '../encounters/characters.mjs?v=nia-public-20261123';
 import {startEncounter,answer,switchRole,continueEncounter,revisit,encodeState,decodeState,fromOriginal} from '../encounters/engine.mjs?v=site-repairs-20261125';
 import {emptyProgress,recordProgress,packProgress,unpackProgress,runScores} from '../encounters/progress.mjs?v=site-repairs-20261125';
 import {translateText} from '../locales/translate.mjs?v=site-repairs-20261125';
+import {encounters} from '../encounters/catalog.mjs';
+import {storyCastOptions} from '../encounters/story-cast.mjs';
+
+const racialisedSituations=[
+ 'public-fair-treatment','garda-street','garda-description','garda-young-person','garda-colleague',
+ 'discrimination-race','discrimination-colleague-race',
+ 'discrimination-traveller-community','discrimination-colleague-traveller-community',
+ 'discrimination-colleague-religious-belief'
+];
+const whiteGarda=['garda-2','garda-3','garda-8'];
 
 test('All 19 characters are distinct; random casting can select every opposing character',()=>{
  assert.equal(characters.public.length,10);assert.equal(characters.garda.length,9);
@@ -67,6 +77,81 @@ test('Character preferences survive reload without affecting progress and work w
  p.choose('public','garda-9');assert.equal(p.value.public,'public-9');
  memory.set(CHARACTER_STORAGE_KEY,'{"public":"evil","garda":"garda-1"}');assert.deepEqual(createCharacterPreferences(storage).value,defaultCast());
  const blocked=createCharacterPreferences({getItem(){throw Error();},setItem(){throw Error();}});blocked.choose('garda','garda-9');assert.equal(blocked.value.garda,'garda-9');
+});
+test('Racialised situations use the authored White Garda roster for new casts, remembered choices and character controls',()=>{
+ const remembered={public:'public-8',garda:'garda-6'};
+ const memory=new Map([[CHARACTER_STORAGE_KEY,JSON.stringify(remembered)]]);
+ const preferences=createCharacterPreferences({getItem:key=>memory.get(key),setItem:(key,value)=>memory.set(key,value)});
+ for(const id of racialisedSituations){
+  assert.deepEqual(charactersForSituation(id,'garda').map(character=>character.id),whiteGarda,id);
+  assert.deepEqual(storyCastOptions(id,'garda').map(character=>character.id),whiteGarda,id+' chooser');
+  assert.deepEqual(charactersForSituation(id,'public'),characters.public,'Nationality, religion and Traveller membership do not restrict appearance');
+  assert.equal(startEncounter(id,'public',{random:()=>0}).cast.garda,'garda-2');
+  assert.equal(startEncounter(id,'garda').cast.garda,'garda-2');
+  assert.deepEqual(startEncounter(id,'public',{cast:preferences.value}).cast,{...remembered,garda:'garda-2'});
+  for(const officer of characters.garda)for(const role of ['public','garda']){
+   const cast={public:'public-8',garda:officer.id};
+   const expected={...cast,garda:whiteGarda.includes(officer.id)?officer.id:'garda-2'};
+   assert.deepEqual(castForSituation(id,cast),expected,id);
+   let state=startEncounter(id,role,{cast});
+   assert.deepEqual(state.cast,expected,id);
+   state=answer(state,0);
+   for(const choice of characters.garda){
+    const changed=changeCharacter(state,choice.id,'garda');
+    if(!whiteGarda.includes(choice.id))assert.equal(changed,state,'An incompatible chooser request is rejected');
+    else{
+     assert.equal(changed.cast.garda,choice.id);
+     assert.equal(changed.cast.public,state.cast.public);
+     assert.deepEqual(changed.answers,state.answers);
+     assert.deepEqual(changed.history,state.history);
+     assert.deepEqual(runScores(changed),runScores(state));
+     assert.deepEqual(decodeState(encodeState(changed)),changed);
+    }
+   }
+  }
+ }
+ assert.deepEqual(preferences.value,remembered);
+ assert.equal(memory.get(CHARACTER_STORAGE_KEY),JSON.stringify(remembered),'Situation casting does not overwrite the stored preference');
+ for(const id of Object.keys(encounters).filter(id=>!racialisedSituations.includes(id))){
+  assert.deepEqual(charactersForSituation(id,'garda'),characters.garda,id+' retains its original roster');
+  assert.equal(startEncounter(id,'public',{cast:preferences.value}).cast.garda,remembered.garda);
+ }
+ assert.deepEqual(storyCastOptions('garda-supervision','garda').map(character=>character.id),['garda-1','garda-6','garda-9']);
+});
+test('Older racialised links and original-practice transfers correct the cast while preserving decisions and progress',()=>{
+ for(const id of racialisedSituations)for(const role of ['public','garda'])for(const authored of [false,true]){
+  let state=startEncounter(id,role,{cast:{public:'public-8',garda:'garda-3'},authored});
+  state=answer(state,0);state=answer(switchRole(state),1);
+  state=continueEncounter(switchRole(state,role));
+  state=answer(state,1);
+  const legacy={...state,cast:{...state.cast,garda:'garda-6'}};
+  const restored=decodeState(encodeState(legacy));
+  assert.deepEqual(restored,{...state,cast:{...state.cast,garda:'garda-2'}},id);
+  assert.deepEqual(runScores(restored),runScores(state));
+  assert.deepEqual(decodeState(encodeState(restored)),restored);
+  assert.deepEqual(revisit(restored).cast,restored.cast);
+  const progress=recordProgress(emptyProgress(),restored);
+  assert.deepEqual(decodeState(unpackProgress(packProgress(progress)).last),restored);
+  let completed=restored;
+  while(!completed.complete)completed=continueEncounter(answer(completed,0));
+  const legacyRecap={...completed,cast:legacy.cast};
+  assert.deepEqual(decodeState(encodeState(legacyRecap)),completed,'Completed legacy links keep their full history');
+  const v1={v:1,e:id,r:role,p:[],a:[0,null]};
+  const oldest=decodeState(Buffer.from(JSON.stringify(v1)).toString('base64url'));
+  assert.deepEqual(oldest.cast,{public:'public-1',garda:'garda-2'});
+  assert.equal(oldest.answers.public,0);
+ }
+ for(const id of racialisedSituations.filter(id=>!id.startsWith('discrimination-'))){
+  const origin=id.startsWith('public-')?'public':'garda';
+  const original={scenarioId:id.slice(origin.length+1),nodeId:encounters[id].start,history:[],selected:0,complete:false};
+  for(const role of ['public','garda']){
+   const transferred=fromOriginal(original,origin,role,{public:'public-8',garda:'garda-6'});
+   assert.deepEqual(transferred.cast,{public:'public-8',garda:'garda-2'});
+   assert.equal(transferred.answers[origin],0);
+   assert.equal(transferred.role,role);
+   assert.deepEqual(decodeState(encodeState(transferred)),transferred);
+  }
+ }
 });
 test('Character controls and status messages translate while chosen names stay intact',()=>{
  for(const text of ['Choose your character','Change character','Available characters','You','Other side','Done','Character selected.','Character changed. Your progress is unchanged.'])assert.notEqual(translateText(text,'ga'),text);

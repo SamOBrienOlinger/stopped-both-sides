@@ -1,5 +1,5 @@
 import {sites} from '../site.mjs';
-import {gpo,figure,renderPosterHero} from './poster-hero.mjs?v=transparent-logo-20261127';
+import {gpo,figure,renderPosterHero} from './poster-hero.mjs?v=casting-logos-20261127';
 
 const roles = ['public', 'garda'];
 const labels = {public: 'Public perspective', garda: 'Garda perspective'};

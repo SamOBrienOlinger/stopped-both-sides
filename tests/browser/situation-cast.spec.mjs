@@ -5,7 +5,8 @@ import {situationParticipants} from '../../encounters/situation-cast.mjs?v=nia-p
 import {openCharacterPicker} from './navigation.mjs';
 import {discriminationSpacingErrors} from './scene-spacing.mjs';
 
-const suppliedToken='eyJ2IjoyLCJlIjoiZGlzY3JpbWluYXRpb24tY29sbGVhZ3VlLXJhY2UiLCJyIjoiZ2FyZGEiLCJwIjpbXSwiYSI6W251bGwsbnVsbF0sImMiOlsicHVibGljLTYiLCJnYXJkYS00Il19';
+const suppliedToken='eyJ2IjoyLCJlIjoiZGlzY3JpbWluYXRpb24tY29sbGVhZ3VlLXJhY2UiLCJyIjoicHVibGljIiwicCI6W10sImEiOltudWxsLG51bGxdLCJjIjpbInB1YmxpYy04IiwiZ2FyZGEtNiJdfQ';
+const eligibleGarda=['garda-2','garda-3','garda-8'];
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 const sceneSelector='.paired-scene-lead>.encounter-scene';
 
@@ -13,8 +14,11 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
  test(`${role}: the reported race scene separates the Black adult, colleague and both playable witnesses`,async({page},info)=>{
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});
-  const initial={...decodeState(suppliedToken),role};
-  await page.goto(path+'?lang=en'+stateHash(initial));
+  // Load the unnormalised reported token so this exercises the browser's old-link
+  // repair, rather than repairing the cast in the Node test runner beforehand.
+  const raw=JSON.parse(Buffer.from(suppliedToken,'base64url').toString('utf8'));
+  const token=role==='public'?suppliedToken:Buffer.from(JSON.stringify({...raw,r:role})).toString('base64url');
+  await page.goto(path+'?lang=en#encounter/'+token);
   const scene=page.locator(sceneSelector);await expect(scene).toBeVisible();
   await expect(scene.locator('.scene-actor')).toHaveCount(4);
   await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','support-race-adult');
@@ -23,10 +27,23 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(scene.locator('[data-scene-participant="acting-garda"]')).toContainText('Garda whose conduct is being challenged');
   await expect(scene.locator('[data-scene-label-role="public"]')).toContainText('Public witness');
   await expect(scene.locator('[data-scene-label-role="garda"]')).toContainText('Witnessing Garda');
+  const witness=scene.locator('[data-scene-role="garda"]');
+  const acting=scene.locator('[data-scene-role="acting-garda"]');
+  await expect(witness).toHaveAttribute('data-scene-character','garda-2');
+  await expect(acting).toHaveAttribute('data-scene-character','garda-3');
+  await expect(scene.locator('[data-scene-role="public"]')).toHaveAttribute('data-scene-character','public-8');
   await expect.poll(()=>scene.locator('img').evaluateAll(images=>images.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
   await scene.screenshot({path:info.outputPath('race-cast-phone.png')});
   await page.locator('[data-action="paired-answer"]').first().click();
   const answered=current(page);
+  await openCharacterPicker(page,'garda');
+  await expect(page.locator('.scene-cast-requirement')).toContainText('match the details');
+  expect(await page.locator('.character-option').evaluateAll(options=>options.map(option=>option.dataset.character))).toEqual(eligibleGarda);
+  await page.locator('[data-character="garda-8"]').click();
+  await page.locator('[data-action="paired-character-close"]').click();
+  await expect(witness).toHaveAttribute('data-scene-character','garda-8');
+  await expect(acting).toHaveAttribute('data-scene-character','garda-2');
+  expect(current(page).answers).toEqual(answered.answers);
   const caption=await openCharacterPicker(page,'public');
   await expect(page.locator('.character-option')).toHaveCount(10);
   await page.locator('[data-character="public-5"]').click();
@@ -36,6 +53,9 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await expect(scene.locator('[data-scene-role="affected"]')).toHaveAttribute('data-scene-character','support-race-adult');
   await page.reload();await expect(scene).toBeVisible();
   expect(current(page).cast.public).toBe('public-5');
+  expect(current(page).cast.garda).toBe('garda-8');
+  await expect(witness).toHaveAttribute('data-scene-character','garda-8');
+  await expect(acting).toHaveAttribute('data-scene-character','garda-2');
   // Fresh reader input precedes Playwright's implicit scroll to the scene labels.
   await page.keyboard.press('Escape');
   for(const target of ['public','garda']){
@@ -54,7 +74,7 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
    await openCharacterPicker(page,'public');
    await expect(page.locator('.character-option')).toHaveCount(count);
    if(count<10){
-    await expect(page.locator('.scene-cast-requirement')).toContainText('match the age or gender');
+    await expect(page.locator('.scene-cast-requirement')).toContainText('match the details');
     await expect(page.locator('[data-character="public-1"]')).toHaveCount(0);
    }
    const next=page.locator('.character-option').nth(1),nextId=await next.getAttribute('data-character');

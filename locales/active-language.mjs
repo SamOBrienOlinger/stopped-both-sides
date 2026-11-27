@@ -18,7 +18,7 @@ export async function loadLanguage(value){
   if(!loading){
    const attempt=attempts++;
    const retry=attempt?'&retry='+attempt:'';
-   loading=import('./translate.mjs?v=responsive-fixes-20261127'+retry)
+   loading=import('./translate.mjs?v=casting-logos-20261127'+retry)
     .then(module=>{translator=module;})
     .finally(()=>{loading=undefined;});
   }

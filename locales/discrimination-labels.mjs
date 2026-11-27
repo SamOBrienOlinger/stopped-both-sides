@@ -440,15 +440,15 @@ export const discriminationLabels = {
     "es": "Persona adulta en la parada de autobús",
     "zh-Hans": "公交站的成年人"
   },
-  "These characters match the age or gender stated in this situation.": {
-    "ga": "Tá aois nó inscne na gcarachtar seo ag teacht lena luaitear sa chás seo.",
-    "pt": "Estas personagens correspondem à idade ou ao género indicado nesta situação.",
-    "ar": "تطابق هذه الشخصيات العمر أو النوع الاجتماعي المذكور في هذا الموقف.",
-    "pl": "Wiek lub płeć tych postaci odpowiadają opisowi tej sytuacji.",
-    "ro": "Vârsta sau genul acestor personaje corespunde situației descrise.",
-    "fr": "L’âge ou le genre de ces personnages correspond aux indications données dans cette situation.",
-    "es": "La edad o el género de estos personajes coincide con lo que indica la situación.",
-    "zh-Hans": "这些角色符合情境中设定的年龄或性别。"
+  "These characters match the details of this situation.": {
+    "ga": "Oireann na carachtair seo do shonraí an cháis seo.",
+    "pt": "Estas personagens correspondem aos detalhes desta situação.",
+    "ar": "تتوافق هذه الشخصيات مع تفاصيل هذا الموقف.",
+    "pl": "Te postacie odpowiadają szczegółom tej sytuacji.",
+    "ro": "Aceste personaje corespund detaliilor acestei situații.",
+    "fr": "Ces personnages correspondent aux détails de cette situation.",
+    "es": "Estos personajes coinciden con los detalles de esta situación.",
+    "zh-Hans": "这些角色符合此情境中的描述。"
   },
   "Close character details": {
     "ga": "Dún sonraí an charachtair",

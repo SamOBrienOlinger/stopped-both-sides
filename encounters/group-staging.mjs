@@ -40,9 +40,9 @@ export function publicGestureArtwork(character,gesture,facingLeft){
   style:`left:0%;top:${-row*100}%;width:100%;height:400%;clip-path:inset(${row*25}% 0% ${(3-row)*25}% 0%)`};
 }
 
-// The supporting officer can only be Ciara or Rory: the roster reserves the
-// player's officer and picks the first available uniform. Both alternate poses
-// retain the approved clothing and read left-to-right on the chest patch.
+// Ciara and Rory have dedicated alternate speaking poses. Other cast members
+// retain their own uniform artwork. Both alternate poses retain the approved
+// clothing and read left-to-right on the chest patch.
 function speakingOfficer(character){
  const column=['garda-1','garda-2'].indexOf(character.id);
  if(column<0)return null;

@@ -29,8 +29,18 @@ const situationPortraits={
  'discrimination-gender':['public-4','public-2','public-6','public-7','public-10'],
  'discrimination-age':['public-9','public-3','public-6']
 };
+// Author-selected existing White Garda portraits for the racialised encounters.
+// Other situations retain the complete roster and the learner's preferences.
+const whiteGardaPortraits=['garda-2','garda-3','garda-8'];
+const whiteGardaSituations=new Set([
+ 'public-fair-treatment','garda-street','garda-description','garda-young-person','garda-colleague',
+ 'discrimination-race','discrimination-colleague-race',
+ 'discrimination-traveller-community','discrimination-colleague-traveller-community',
+ 'discrimination-colleague-religious-belief'
+]);
 export function charactersForSituation(id,role){
- const allowed=role==='public'?situationPortraits[id]:null;
+ const allowed=role==='public'?situationPortraits[id]:
+  role==='garda'&&whiteGardaSituations.has(id)?whiteGardaPortraits:null;
  return allowed?allowed.map(characterId=>characterFor(role,characterId)):characters[role]||[];
 }
 export function castForSituation(id,cast){

@@ -138,7 +138,7 @@ for(const role of ['public','garda']){
    await captureControls(page,role,width,'large-irish',testInfo,[['navbar','.header'],['character-actions','.flow-role-bar'],['feedback-actions','.flow-feedback-actions'],['footer','.footer']]);
    const caption=await openCharacterPicker(page);
    await expect(page.locator('#character-picker-title')).toBeFocused();
-   await expect(page.locator('.character-option')).toHaveCount(role==='public'?10:9);await fits(page,'large Irish character picker');
+   await expect(page.locator('.character-option')).toHaveCount(role==='public'?10:3);await fits(page,'large Irish character picker');
    await captureControls(page,role,width,'large-irish',testInfo,[['character-picker','.character-picker']]);
    await page.locator('[data-action="paired-character-close"]').click();
    await expect(caption).toBeFocused();

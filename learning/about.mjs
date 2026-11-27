@@ -139,8 +139,8 @@ export function prototypeInput(siteRole='public') {
 }
 
 export function firstTimeGuide() {
- const pdf=new URL('../docs/user-guide/stopped-both-sides-user-flow.pdf',import.meta.url).href;
- const preview=new URL('../docs/user-guide/stopped-both-sides-user-flow.png',import.meta.url).href;
+ const pdf=new URL('../docs/user-guide/stopped-both-sides-user-flow.pdf?v=all-logos-transparent-20261127',import.meta.url).href;
+ const preview=new URL('../docs/user-guide/stopped-both-sides-user-flow.png?v=all-logos-transparent-20261127',import.meta.url).href;
  return `<section class="info-block first-time-guide" aria-labelledby="first-time-guide-heading">
   <h2 id="first-time-guide-heading">First-time user guide</h2>
   <div class="guide-layout">

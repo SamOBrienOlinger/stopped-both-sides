@@ -31,7 +31,9 @@ test('Exterior art keeps selected roles and narrative state unchanged',()=>{
   assert.match(html,/data-approved-art=/);assert.match(html,/srcset=/);
   assert.equal(state.cast.public,'public-6');
   const expectedPublic=id==='public-fair-treatment'?'story-amina':'public-6';
-  assert.ok(html.includes('data-scene-character="'+expectedPublic+'"'));assert.match(html,/data-scene-character="garda-9"/);
+  const expectedGarda=['public-fair-treatment','garda-colleague'].includes(id)?'garda-2':'garda-9';
+  assert.equal(state.cast.garda,expectedGarda);
+  assert.ok(html.includes('data-scene-character="'+expectedPublic+'"'));assert.ok(html.includes('data-scene-character="'+expectedGarda+'"'));
   assert.equal(JSON.stringify(state),before);
  }
 });
@@ -75,7 +77,7 @@ test('Only the local match uses the stadium; the colleague race situation stays 
   assert.match(html,/data-scene-place="football-ground"/);
   assert.match(html,/>Outside the football ground</);
   assert.match(html,/data-scene-character="public-8"/);
-  assert.match(html,/data-scene-character="garda-9"/);
+  assert.match(html,/data-scene-character="garda-2"/);
   assert.equal(sceneDirections[witness][nodeId].place,'bus-stop');
  }
 });

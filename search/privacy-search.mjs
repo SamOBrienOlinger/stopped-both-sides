@@ -1,9 +1,9 @@
-import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=transparent-logo-20261127';
+import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=casting-logos-20261127';
 import {sites} from '../site.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
-import {createCharacterPreferences} from '../encounters/characters.mjs?v=responsive-fixes-20261127';
-import {startEncounter,stateHash} from '../encounters/engine.mjs?v=responsive-fixes-20261127';
-import {loadLanguage,translateText} from '../locales/active-language.mjs';
+import {createCharacterPreferences} from '../encounters/characters.mjs?v=casting-logos-20261127';
+import {startEncounter,stateHash} from '../encounters/engine.mjs?v=casting-logos-20261127';
+import {loadLanguage,translateText} from '../locales/active-language.mjs?v=casting-logos-20261127';
 import {languageInfo} from '../locales/languages.mjs';
 import {privacyNotices} from '../locales/privacy-notice.mjs?v=site-repairs-20261125';
 

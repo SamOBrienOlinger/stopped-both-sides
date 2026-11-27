@@ -6,13 +6,15 @@ import {situationParticipants,participantLayout} from '../encounters/situation-c
 import {startEncounter,answer,continueEncounter,switchRole,encodeState,decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
 import {renderScene,renderScenePreview} from '../encounters/scenes.mjs?v=site-repairs-20261125';
 import {supportingCharacters} from '../encounters/supporting-characters.mjs';
+import {encounters} from '../encounters/catalog.mjs';
+import {originalSceneDetails} from '../encounters/original-scene-props.mjs';
 import {existsSync} from 'node:fs';
 
 const suppliedToken='eyJ2IjoyLCJlIjoiZGlzY3JpbWluYXRpb24tY29sbGVhZ3VlLXJhY2UiLCJyIjoiZ2FyZGEiLCJwIjpbXSwiYSI6W251bGwsbnVsbF0sImMiOlsicHVibGljLTYiLCJnYXJkYS00Il19';
 test('The reported race link shows a distinct Black affected adult, discriminatory colleague and two witnesses',()=>{
  const state=decodeState(suppliedToken),people=situationParticipants(state.id,state.cast);
  assert.equal(state.cast.public,'public-6','The existing public witness is retained');
- assert.equal(state.cast.garda,'garda-4');
+ assert.equal(state.cast.garda,'garda-2','The old Garda choice is corrected to an eligible White Garda');
  assert.deepEqual(people.map(person=>person.key),['affected','acting-garda','public','garda']);
  assert.equal(people[0].characterId,'support-race-adult');
  assert.deepEqual(people[0].character.props,['backpack']);
@@ -21,6 +23,78 @@ test('The reported race link shows a distinct Black affected adult, discriminato
  assert.equal(people[2].label,'Public witness');assert.equal(people[3].label,'Witnessing Garda');
  for(const person of people)assert.ok(renderScene(state).includes('data-scene-role="'+person.key+'"'));
  assert.equal((renderScenePreview(state.id).match(/class="scene-actor /g)||[]).length,4);
+});
+
+test('The supplied public race-witness link corrects both Garda while retaining the public witness',()=>{
+ const token='eyJ2IjoyLCJlIjoiZGlzY3JpbWluYXRpb24tY29sbGVhZ3VlLXJhY2UiLCJyIjoicHVibGljIiwicCI6W10sImEiOltudWxsLG51bGxdLCJjIjpbInB1YmxpYy04IiwiZ2FyZGEtNiJdfQ';
+ const state=decodeState(token);
+ assert.equal(state.role,'public');assert.equal(state.nodeId,'opening');
+ assert.deepEqual(state.cast,{public:'public-8',garda:'garda-2'});
+ assert.deepEqual(state.answers,{public:null,garda:null});
+ const people=situationParticipants(state.id,state.cast);
+ assert.equal(people.find(person=>person.key==='affected').characterId,'support-race-adult');
+ assert.equal(people.find(person=>person.key==='acting-garda').characterId,'garda-3');
+ assert.equal(people.find(person=>person.key==='garda').characterId,'garda-2');
+ assert.equal(new Set(people.map(person=>person.characterId)).size,4);
+ assert.deepEqual(decodeState(encodeState(state)),state);
+});
+
+test('Every racialised scene, preview and recap uses distinct eligible Garda in both perspectives and practice modes',()=>{
+ const ids=[
+  'public-fair-treatment','garda-street','garda-description','garda-young-person','garda-colleague',
+  'discrimination-race','discrimination-colleague-race',
+  'discrimination-traveller-community','discrimination-colleague-traveller-community',
+  'discrimination-colleague-religious-belief'
+ ];
+ const allowed=['garda-2','garda-3','garda-8'];
+ const checkOfficers=(html,label)=>{
+  const officers=Array.from(html.matchAll(/class="scene-actor scene-actor--garda" data-scene-character="([^"]+)"/g),match=>match[1]);
+  assert.ok(officers.length,label+' contains a Garda');
+  assert.ok(officers.every(id=>allowed.includes(id)),label+': '+officers.join(', '));
+  assert.equal(new Set(officers).size,officers.length,label+' uses distinct Garda portraits');
+ };
+ let checked=0;
+ for(const id of ids)for(const role of ['public','garda'])for(const authored of [false,true])for(const officer of characters.garda){
+  const cast={public:'public-8',garda:officer.id};
+  checkOfficers(renderScenePreview(id,{cast,authored}),id+' preview');
+  const pending=[startEncounter(id,role,{cast,authored})],seen=new Set();
+  while(pending.length){
+   const state=pending.shift();
+   if(state.complete){
+    for(const step of state.history)checkOfficers(renderScene(state,{step,compact:true}),id+'/'+step.nodeId+' recap');
+    continue;
+   }
+   if(seen.has(state.nodeId))continue;
+   seen.add(state.nodeId);
+   checkOfficers(renderScene(state),id+'/'+state.nodeId);
+   const stale={...state,cast};
+   checkOfficers(renderScene(stale),id+'/'+state.nodeId+' legacy cast');
+   const stage=encounters[id].nodes[state.nodeId];
+   const nextNodes=new Set();
+   for(const perspective of ['public','garda'])for(const [index,choice] of stage.views[perspective].choices.entries()){
+    const answered=answer(switchRole(state,perspective),index);
+    checkOfficers(renderScene(answered),id+'/'+state.nodeId+' response');
+    const next=continueEncounter(answered);
+    if(!nextNodes.has(choice.next)){nextNodes.add(choice.next);pending.push(next);}
+   }
+   checked++;
+  }
+  assert.deepEqual([...seen].sort(),Object.keys(encounters[id].nodes).sort(),id+' reaches every scripted stage');
+ }
+ assert.equal(checked,30*2*2*characters.garda.length);
+});
+
+test('Original supporting colleagues respect the authored Garda roster even when visible and saved portraits differ',()=>{
+ const allowed=['garda-2','garda-3','garda-8'];
+ for(const [id,nodeId] of [['garda-colleague','colleague-start'],['garda-young-person','young-start'],['garda-description','description-repair']]){
+  for(const visible of allowed)for(const reserved of allowed.filter(id=>id!==visible)){
+   const details=originalSceneDetails(id,nodeId,'square',{public:'public-8',garda:visible},{reservedCast:{public:'public-8',garda:reserved}});
+   const colleague=details.supporting.find(person=>person.key==='colleague');
+   assert.equal(colleague.character.id,allowed.find(id=>id!==visible&&id!==reserved),id);
+  }
+ }
+ const unrelated=originalSceneDetails('garda-new-evidence','update-repair','street',{public:'public-8',garda:'garda-2'},{reservedCast:{garda:'garda-8'}});
+ assert.equal(unrelated.supporting.find(person=>person.key==='colleague').character.id,'garda-5','An unrelated encounter keeps its original supporting roster');
 });
 
 test('Every discrimination stage and requested cast has distinct, fully labelled people and two playable roles',()=>{
@@ -144,13 +218,13 @@ test('The football ticket steward keeps dedicated staff artwork across saved cas
  };
  let stages=0,recaps=0;
  for(const publicCharacter of characters.public)for(const gardaCharacter of characters.garda)for(const role of ['public','garda']){
-  const cast={public:publicCharacter.id,garda:gardaCharacter.id};
-  let state=startEncounter(id,role,{cast});
+  let state=startEncounter(id,role,{cast:{public:publicCharacter.id,garda:gardaCharacter.id}});
+  const cast=state.cast;
   checkActor(renderScenePreview(id,{cast:state.cast}));
   while(!state.complete){
    const restored=decodeState(encodeState(state));
    assert.deepEqual(restored,state,'An existing saved cast and decisions survive reload');
-   assert.deepEqual(restored.cast,cast,'The supporting steward does not replace a player-selected character');
+   assert.deepEqual(restored.cast,cast,'The supporting steward does not replace the situation-appropriate playable cast');
    const steward=situationParticipants(id,restored.cast,{nodeId:restored.nodeId}).find(person=>person.key==='steward');
    assert.equal(steward.characterId,stewardId);
    assert.equal(steward.playable,false);

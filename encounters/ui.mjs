@@ -1,20 +1,20 @@
-import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=responsive-fixes-20261127';
-import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=transparent-logo-20261127';
+import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=casting-logos-20261127';
+import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=casting-logos-20261127';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=responsive-fixes-20261127';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, situationStory, termsInDecision
-} from '../learning/play.mjs?v=responsive-fixes-20261127';
+} from '../learning/play.mjs?v=casting-logos-20261127';
 import {supportRecap} from '../learning/support.mjs?v=rights-topics-20261126';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=responsive-fixes-20261127';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=casting-logos-20261127';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=site-repairs-20261125';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=responsive-fixes-20261127';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=responsive-fixes-20261127';
-import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=responsive-fixes-20261127';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=responsive-fixes-20261127';
-import {situationRoleLabel} from './situation-cast.mjs?v=responsive-fixes-20261127';
-import {characterContext,personalizeHTML} from './narrative.mjs?v=responsive-fixes-20261127';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=casting-logos-20261127';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=casting-logos-20261127';
+import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=casting-logos-20261127';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=casting-logos-20261127';
+import {situationRoleLabel} from './situation-cast.mjs?v=casting-logos-20261127';
+import {characterContext,personalizeHTML} from './narrative.mjs?v=casting-logos-20261127';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=site-repairs-20261125';
 import {playHash,playLocation,topicsForPlay,topicForSituation,availableInPractice} from './play-navigation.mjs?v=site-repairs-20261125';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=site-repairs-20261125';
@@ -28,9 +28,9 @@ function decisionPosition(number,{min,max}){
 }
 const scoreExplanation='<p class="score-explanation">1 point for a choice that supports an appropriate resolution on these facts; 0 when the reasoning needs review. This measures learning, not personal bias or responsibility for someone else’s conduct.</p>';
 
-function perspectiveIcon(role){
- const src=new URL(`../assets/brand/${role}-perspective.webp`,import.meta.url).href;
- return `<img class="perspective-icon" src="${src}" width="256" height="256" alt="" decoding="async">`;
+function perspectiveIcon(){
+ const src=new URL('../assets/brand/profiles-hexagon.webp?v=all-logos-transparent-20261127',import.meta.url).href;
+ return `<img class="perspective-icon" src="${src}" width="512" height="512" alt="" decoding="async">`;
 }
 
 export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[],getOriginalSession,resetOriginalSession,getLanguage=()=> 'en',announce=()=>{}}){
@@ -111,7 +111,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   const avatar=inGame&&characterPickerTarget?.avatar;
   if(avatar)selected=state.cast[role];
   const available=inGame?storyCastOptions(state?.id,role):characters[role];
-  const requirement=state?.id==='garda-supervision'&&role==='garda'&&inGame?'<p class="scene-cast-requirement">Supervising sergeant</p>':available.length<characters[role].length?`<p class="scene-cast-requirement">${esc('These characters match the age or gender stated in this situation.')}</p>`:'';
+ const requirement=state?.id==='garda-supervision'&&role==='garda'&&inGame?'<p class="scene-cast-requirement">Supervising sergeant</p>':available.length<characters[role].length?`<p class="scene-cast-requirement">${esc('These characters match the details of this situation.')}</p>`:'';
   return `<section class="character-picker" id="character-picker" aria-labelledby="character-picker-title" data-role-tone="${role}"><div class="character-picker-heading"><div><h2 id="character-picker-title" tabindex="-1">${avatar?'Change your avatar':inGame?'Change character':'Choose your character'}</h2><p>${inGame?'Your stage, answers and scores stay in place.':'Choose your character. Their name and picture will follow the situation.'}</p></div>${inGame?'<button class="primary secondary" data-action="paired-character-close">Done</button>':''}</div>${requirement}<div class="character-options" role="group" aria-label="Available characters">${available.map(c=>`<button class="character-option" data-action="${inGame?'paired-character-choose':'paired-character-select'}" data-role="${role}" data-character="${c.id}" aria-pressed="${selected===c.id}" aria-label="Choose character: ${c.name}">${characterImage(role,c.id)}<strong data-no-translate>${esc(c.name)}</strong><span class="character-selected">${selected===c.id?'✓ <span>Selected</span>':'<span>Choose</span>'}</span></button>`).join('')}</div>${inGame?'':'<p class="character-help">The other character is chosen at random when you start. Both characters stay with the situation until you change them.</p>'}</section>`;
  }
  function focusCharacterPicker(){focusControl(document.querySelector('#character-picker-title'));}
@@ -285,7 +285,7 @@ export function createEncounterMode({siteRole,main,rerender,practiceScenarios=[]
   </div>`;
  }
  function introduction({secondary=false}={}){
-  const logo=new URL('../assets/brand/profiles-hexagon.webp?v=transparent-logo-20261127',import.meta.url).href;
+  const logo=new URL('../assets/brand/profiles-hexagon.webp?v=all-logos-transparent-20261127',import.meta.url).href;
   const title=secondary?'<h2 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h2>':'<h1 id="game-title" lang="en-IE" data-no-translate>Stopped: Both Sides</h1>';
   return `<section class="home-intro clear-intro brand-intro" aria-labelledby="game-title"><img class="brand-profiles" src="${logo}" width="512" height="512" alt=""><div>${title}<p>An interactive learning resource for the public and Gardaí.</p></div></section>`;
  }

@@ -1,4 +1,4 @@
-import {decodeState} from '../encounters/engine.mjs?v=responsive-fixes-20261127';
+import {decodeState} from '../encounters/engine.mjs?v=casting-logos-20261127';
 import {createDisclosures} from './disclosures.mjs?v=landing-render-20261123';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 import {secondaryHeadingSelector} from './card-headings.mjs?v=responsive-fixes-20261127';

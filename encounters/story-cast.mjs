@@ -1,4 +1,4 @@
-import {characterFor,characters,charactersForSituation} from './characters.mjs?v=responsive-fixes-20261127';
+import {characterFor,characters,charactersForSituation} from './characters.mjs?v=casting-logos-20261127';
 
 const figure=(id,name,asset)=>({
  id,name,sceneArtwork:{

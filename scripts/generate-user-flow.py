@@ -32,12 +32,11 @@ for name, weight in [('OpenSans', 400), ('OpenSansBold', 700)]:
 result = subprocess.run(['node', '--input-type=module', '-e', r'''
 import {fileURLToPath} from 'node:url';
 import {characterFor, characterArtwork} from './encounters/characters.mjs';
-import {gardaAtlas} from './encounters/garda-atlas.mjs';
 import {encounters} from './encounters/catalog.mjs';
 console.log(JSON.stringify({count:Object.keys(encounters).length, portraits:
  [['garda','garda-5'],['public','public-5']].map(([role,id])=>{
  const c=characterFor(role,id), art=characterArtwork(c);
- const box=role==='garda'?gardaAtlas.cells[4].slice(0,4):
+ const box=role==='garda'?[0,0,art.width,art.height]:
  [c.column*art.width/6,c.row*art.height/3,(c.column+1)*art.width/6,(c.row+1)*art.height/3];
  return {name:c.name,role,src:fileURLToPath(art.src),width:art.width,height:art.height,box};
 })}));
@@ -109,14 +108,8 @@ def draw(c, page):
     def role_button(top, role, label, fill, color):
         x, width, height = 30, 340, 40
         rect(x,top,width,height,fill,7)
-        rect(34,top+3,34,34,PAPER,5)
-        c.saveState()
-        clip=c.beginPath()
-        clip.roundRect(34,H-top-37,34,34,5)
-        c.clipPath(clip,fill=0,stroke=0)
-        c.drawImage(str(ROOT/f'docs/user-guide/{role}-perspective-logo.jpeg'),
-                    28,H-top-36,width=47,height=31.3333)
-        c.restoreState()
+        c.drawImage(str(ROOT/'assets/brand/stopped-both-sides-transparent.png'),
+                    34,H-top-37,width=34,height=34,mask='auto',preserveAspectRatio=True)
         text(80,top+(3 if '\n' in label else 11),label,13.5,True,color,
              width=278,leading=17)
         c.linkURL(GAME+f'#encounters/{role}',(x,H-top-height,x+width,H-top),relative=1)

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/profiles-hexagon.webp?v=transparent-logo-20261127" width="80" alt="Two profiles facing opposite directions, in teal and blue">
+  <img src="assets/brand/profiles-hexagon.webp?v=all-logos-transparent-20261127" width="80" alt="Two profiles facing opposite directions, in teal and blue">
 </p>
 
 <h1 align="center">Stopped: Both Sides</h1>
@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="https://samobrienolinger.github.io/stopped-both-sides/">
-    <img src="docs/user-guide/live-landing.webp" width="800" alt="Alex and Garda Aisling outside the GPO on O’Connell Street. The landing page asks, ‘What would you do?’">
+    <img src="docs/user-guide/live-landing.webp?v=all-logos-transparent-20261127" width="800" alt="Alex and Garda Aisling outside the GPO on O’Connell Street. The landing page asks, ‘What will you do?’">
   </a>
 </p>
 
@@ -47,7 +47,7 @@ Explore a fictional encounter with An Garda Síochána, choose a response and re
 
 ## How it works
 
-The home page asks **What would you do?** Select it to start with the role shown, or use the **Public perspective** and **Garda perspective** cards to choose a side. The four illustrated steps show how to choose a perspective, read the situation, choose a response and compare perspectives.
+The home page asks **What will you do?** Select it to start with the role shown, or use the **Public perspective** and **Garda perspective** cards to choose a side. The four illustrated steps show how to choose a perspective, read the situation, choose a response and compare perspectives.
 
 1. **Choose a perspective.** Open the [public setup](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public) or [Garda setup](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda). A character is ready to use. To pick another, select **Choose a different character**, pick a portrait and select **Done**.
 2. **Start a situation.** Select **Start this situation** for the suggested story. The public side opens with *Stopped on the street* and the Garda side with *A hunch on the street*. To pick a different story, open **Browse all situations**, choose a topic and select **Explore this situation** on a card.
@@ -76,14 +76,14 @@ Open **Search** in the navigation, or open **Menu** first on a narrow screen. Se
 The illustrated guide follows a situation from the choice of role to the recap. The three-page A4 PDF links directly to both perspective setups.
 
 <p align="center">
-  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png" width="440" alt="Illustrated version of the six steps above, showing character selection, a response, feedback, perspective switching and the recap.">
+  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=all-logos-transparent-20261127">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png?v=all-logos-transparent-20261127" width="440" alt="Illustrated version of the six steps above, showing character selection, a response, feedback, perspective switching and the recap.">
   </a>
 </p>
 
 <p align="center">
-  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true"><strong>Open full-size PNG</strong></a> ·
-  <a href="docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true"><strong>Download printable PDF</strong></a>
+  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=all-logos-transparent-20261127"><strong>Open full-size PNG</strong></a> ·
+  <a href="docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true&v=all-logos-transparent-20261127"><strong>Download printable PDF</strong></a>
 </p>
 
 ## Purpose and audience

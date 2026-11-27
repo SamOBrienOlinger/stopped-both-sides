@@ -49,8 +49,9 @@ for(const [id,art,positions] of outdoorOpenings)test(`${art}: the pictured peopl
   await page.locator('.paired-scene-lead>.encounter-scene').screenshot({path:info.outputPath(`${art}-${width}.png`)});
   await page.locator('[data-action="paired-switch"]').click();
   const publicId=id==='public-fair-treatment'?'story-amina':'public-6';
+  const gardaId=id==='public-fair-treatment'?'garda-2':'garda-9';
   await expect(page.locator('.paired-scene-lead [data-scene-role="public"]')).toHaveAttribute('data-scene-character',publicId);
-  await expect(page.locator('.paired-scene-lead [data-scene-role="garda"]')).toHaveAttribute('data-scene-character','garda-9');
-  expect(decodeState(new URL(page.url()).hash.slice(11)).cast).toEqual(cast);
+  await expect(page.locator('.paired-scene-lead [data-scene-role="garda"]')).toHaveAttribute('data-scene-character',gardaId);
+  expect(decodeState(new URL(page.url()).hash.slice(11)).cast).toEqual({...cast,garda:gardaId});
  }
 });

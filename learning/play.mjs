@@ -1,6 +1,6 @@
 import {escapeHTML as esc} from '../locales/html.mjs';
 import {encounters, roles, roleLabels} from '../encounters/catalog.mjs?v=site-repairs-20261125';
-import {decodeState} from '../encounters/engine.mjs?v=responsive-fixes-20261127';
+import {decodeState} from '../encounters/engine.mjs?v=casting-logos-20261127';
 import {topicGroups} from '../encounters/presentation.mjs?v=site-repairs-20261125';
 import {
  discussionQuestions, evidenceTasks, openingPerspectives, practiceGoals, reviewBackground,

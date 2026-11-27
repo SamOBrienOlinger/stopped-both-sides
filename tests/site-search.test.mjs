@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {searchSite} from '../search/site-search.mjs?v=site-repairs-20261125';
-import {loadLanguage} from '../locales/active-language.mjs';
+import {loadLanguage} from '../locales/active-language.mjs?v=casting-logos-20261127';
 
 test('Keyword search finds every Discrimination ground, colleague variations and About contributors',()=>{
  const matches=searchSite('discrimination');
@@ -34,7 +34,7 @@ test('Search uses translated keywords and each entrypoint’s reference routes',
 
 test('Search finds printed page and citation titles, support services, authors and all single-role practice phrases from both sites',async()=>{
  const {encounters,references}=await import('../encounters/catalog.mjs?v=site-repairs-20261125');
- const {translateText}=await import('../locales/active-language.mjs');
+ const {translateText}=await import('../locales/active-language.mjs?v=casting-logos-20261127');
  const {privacyNotices}=await import('../locales/privacy-notice.mjs');
  const {communitySources}=await import('../learning/community-resources.mjs?v=site-repairs-20261125');
  for(const language of ['en','ga','pt','ar','pl','ro','fr','es','zh-Hans']){

@@ -46,7 +46,7 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
         await expect(link).toBeVisible();
         await expect(link).toHaveAttribute('href', hrefPattern);
         const logo = link.locator('img.perspective-icon');
-        await expect(logo).toHaveAttribute('src', new RegExp('/assets/brand/' + perspective + '-perspective\\.webp$'));
+        await expect(logo).toHaveAttribute('src', await page.locator('.nav-profiles').evaluate(image => image.src));
         await expect(logo).toHaveAttribute('alt', '');
         await expect.poll(() => logo.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
       }

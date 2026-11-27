@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/active-language.mjs',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/active-language.mjs?v=casting-logos-20261127',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -167,7 +167,7 @@ for(const role of ['public','garda'])test(`${role}: original mode and completed 
  }
  await page.locator('[data-action="paired-revisit"]').first().click();
  await expect(page.locator('.paired-game')).toBeVisible();
- expect(current(page).cast).toEqual(cast);expect(current(page).complete).toBe(false);
+ expect(current(page).cast).toEqual(complete.cast);expect(current(page).complete).toBe(false);
 });
 
 for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${language}: layout, text spacing and targets at ${width}px`,async({page},testInfo)=>{
@@ -369,7 +369,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/active-language.mjs',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/active-language.mjs?v=casting-logos-20261127',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);

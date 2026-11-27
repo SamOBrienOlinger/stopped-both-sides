@@ -2,7 +2,7 @@
 
 The main README embeds `stopped-both-sides-user-flow.png` and links to the matching three-page A4 PDF. Both describe the six-step **Explore both perspectives** learning activity using the current English button labels.
 
-The guide uses the public and Garda logos supplied by the project owner. Their original JPEG files are retained unchanged. The two perspective buttons in the PDF link to the corresponding setup; all other pictured controls illustrate the website controls. The PNG is a static preview.
+The guide uses the shared transparent Stopped: Both Sides logo from `assets/brand/stopped-both-sides-transparent.png` for both perspectives. Its alpha channel is preserved when it is placed on the coloured role buttons. The two perspective buttons in the PDF link to the corresponding setup; all other pictured controls illustrate the website controls. The PNG is a static preview.
 
 The main route is to choose a perspective, start the suggested situation, select an answer button, read the explanation, continue and review. Character changes are marked as optional before starting. Supporting details, trying another answer, comparing perspectives and choosing a different situation are grouped separately. The diagram is an illustration of an answer button.
 

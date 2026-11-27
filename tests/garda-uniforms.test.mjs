@@ -70,7 +70,7 @@ test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',
      const actor=actors.find(match=>match[1]===role&&match[2]===character.id&&match[3]===key);
      assert.ok(actor,encounter.id+'/'+nodeId+'/'+key);
      let asset;
-     if(role==='garda'&&group&&key==='acting-garda'&&nodeId==='opening'){
+     if(role==='garda'&&group&&key==='acting-garda'&&nodeId==='opening'&&['garda-1','garda-2'].includes(character.id)){
       const column=['garda-1','garda-2'].indexOf(character.id);
       assert.ok(column>=0,'The alternate uniform sheet contains Ciara and Rory');
       asset='/characters/group-speaking-gardai.webp';
@@ -112,7 +112,7 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
    assert.ok(html.includes(imagePart(storyCharacter(state,'garda',step.nodeId).id)));
    const shown=storyCharacter(state,'garda',step.nodeId);
    assert.ok(html.includes('data-scene-character="'+shown.id+'" data-scene-role="garda"'));
-   assert.equal(state.cast.garda,g.id);
+   assert.equal(state.cast.garda,savedCast.garda);
   }
   assert.deepEqual(switchRole(state).cast,savedCast);
  }

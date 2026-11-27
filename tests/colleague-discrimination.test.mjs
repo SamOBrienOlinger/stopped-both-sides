@@ -84,7 +84,8 @@ test('New witness routes retain both answers across role switches and do not rep
  for(const e of witnessCases){
   const state=completed(e.id);
   assert.equal(state.history.length,2);
-  assert.deepEqual(state.cast,{public:'public-2',garda:'garda-5'});
+  const expectedOfficer=['race','traveller-community','religious-belief'].includes(e.ground)?'garda-2':'garda-5';
+  assert.deepEqual(state.cast,{public:'public-2',garda:expectedOfficer});
   for(const step of state.history)assert.deepEqual(step.answers,{public:0,garda:0});
   progress=unpackProgress(packProgress(recordProgress(progress,state)));
   for(const [key,value] of Object.entries(original))assert.deepEqual(progress.records[key],value);

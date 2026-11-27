@@ -1,5 +1,5 @@
 import {publicGestureArtwork} from './group-staging.mjs?v=responsive-fixes-20261127';
-import {characterFor} from './characters.mjs?v=responsive-fixes-20261127';
+import {characterFor,charactersForSituation} from './characters.mjs?v=casting-logos-20261127';
 import {sceneActorLayout} from './scene-layout.mjs?v=situation-locations-20261122';
 
 const position=(x,width,bottom)=>({x,width,bottom,labelSpace:2*Math.min(x,100-x)});
@@ -87,9 +87,13 @@ export function originalSceneDetails(id,nodeId,place,cast,{members=['public','ga
   typeof person==='string'?[person]:[person?.id,person?.modelId]).filter(Boolean));
  const supporting=(supportingAt[id]?.[nodeId]||[]).map(({key,anchor})=>{
   const {role,portraits}=castParts[key];
-  const id=portraits.find(id=>!used.has(id));
-  used.add(id);
-  const person=characterFor(role,id);
+  // Apply the same authored Garda requirement to the colleague, including
+  // when a visible story character and a saved avatar reserve different IDs.
+  const eligible=role==='garda'?charactersForSituation(id,'garda').map(character=>character.id):portraits;
+  const candidates=portraits.every(portrait=>eligible.includes(portrait))?portraits:eligible;
+  const characterId=candidates.find(characterId=>!used.has(characterId));
+  used.add(characterId);
+  const person=characterFor(role,characterId);
   const art=role==='public'&&publicGestureArtwork(person,'listen',anchor.x>(anchors.public?.x??50));
   return {key,role,anchor,character:art?{...person,sceneArtwork:art}:person};
  });

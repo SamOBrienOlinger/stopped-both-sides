@@ -1,4 +1,4 @@
-import {characters,characterFor,castForSituation} from './characters.mjs?v=responsive-fixes-20261127';
+import {characters,characterFor,charactersForSituation,castForSituation} from './characters.mjs?v=casting-logos-20261127';
 import {supportingCharacters} from './supporting-characters.mjs?v=responsive-fixes-20261127';
 import {stageGroup,groupMark} from './group-staging.mjs?v=responsive-fixes-20261127';
 import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
@@ -9,7 +9,6 @@ const women=['public-4','public-7','public-2','public-6','public-10'];
 const men=['public-5','public-8','public-1','public-9'];
 const older=['public-9','public-3','public-6'];
 const adults=characters.public.map(character=>character.id);
-const officers=characters.garda.map(character=>character.id);
 const part=(key,role,label,portraits=adults,scale=1)=>({key,role,label,portraits,scale});
 const only=(stage,participant)=>({...participant,stages:[stage]});
 const originalRoles={
@@ -55,6 +54,7 @@ export function situationParticipants(id,requestedCast,{nodeId='opening'}={}){
   if(ground==='sexual-orientation')supports.push(part('partner','public','Her partner',women));
   if(ground==='family-status')supports.push(part('child','public','Child, 7 years old',['support-child'],.85));
   if(ground==='housing-assistance')supports.push(only('opening',part('agent','public','Letting agent')));
+  const officers=charactersForSituation(id,'garda').map(character=>character.id);
   supports.push(part('acting-garda','garda','Garda whose conduct is being challenged',officers));
  }else{
   if(ground==='gender'){

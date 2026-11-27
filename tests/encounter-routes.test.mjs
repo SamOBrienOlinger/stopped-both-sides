@@ -83,7 +83,7 @@ test('Both roles can start every situation; the shared facts and role controls r
   const rolePicker=main.innerHTML.match(/<div class="role-picker"[^>]*>([\s\S]*?)<\/div>/)[1];
   for(const choice of roles){
    const link=rolePicker.match(new RegExp('href="#encounters/'+choice+'"[^>]*>([\\s\\S]*?)</a>'))[1];
-   assert.match(link,new RegExp('/'+choice+'-perspective\\.webp"'));
+   assert.match(link,/\/profiles-hexagon\.webp\?v=all-logos-transparent-20261127"/);
    assert.match(link,/alt=""/);
   }
   for(const e of Object.values(encounters)){
@@ -168,8 +168,15 @@ test('Original practice retains its scripted public character and can change the
  assert.doesNotMatch(main.innerHTML,/id="character-picker-title"/);
  openCharacterPicker('garda');
  const before=state();assert.equal(before.authored,true);assert.equal(before.role,siteRole);assert.equal(before.answers[siteRole],1);
- assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);action('paired-character-choose',{character:'garda-7'});
- assert.equal(state().cast.garda,'garda-7');assert.equal(state().cast.public,before.cast.public);
+ assert.match(main.innerHTML,/id="character-picker-title"[^>]*>Change character/);
+ if(siteRole==='garda'){
+  for(const id of ['garda-2','garda-3','garda-8'])assert.ok(main.innerHTML.includes('data-character="'+id+'"'));
+  assert.doesNotMatch(main.innerHTML,/data-character="garda-7"/);
+  action('paired-character-choose',{character:'garda-7'});assert.deepEqual(state(),before);
+ }
+ const chosen=before.cast.garda==='garda-3'?'garda-2':'garda-3';
+ action('paired-character-choose',{character:chosen});
+ assert.equal(state().cast.garda,chosen);assert.equal(state().cast.public,before.cast.public);
  assert.deepEqual(state().answers,before.answers);assert.equal(state().nodeId,e.start);
 });
 test('Unknown routes and corrupted progress show a recovery view while saved records remain available',()=>{

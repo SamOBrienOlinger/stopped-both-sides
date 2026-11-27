@@ -22,17 +22,23 @@ for(const role of ['public','garda'])test(`${role} character choice, changes and
  await page.locator('[data-action="paired-setup-done"]').click();
  await page.locator('[data-action="paired-quick-start"]').click();
  await expect(page.locator('.paired-game')).toBeVisible();
- const initial=current(page);expect(initial.cast[role]).toBe(selectedId);expect(initial.cast[other]).toMatch(new RegExp('^'+other+'-'+(other==='public'?'(?:[1-9]|10)':'[1-9]')+'$'));
- await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',selectedId);
+ const initialId=role==='garda'?'garda-2':selectedId;
+ const initial=current(page);expect(initial.cast[role]).toBe(initialId);expect(initial.cast[other]).toMatch(new RegExp('^'+other+'-'+(other==='public'?'(?:[1-9]|10)':'[1-9]')+'$'));
+ await expect(page.locator('.cast-character.is-you')).toHaveAttribute('data-character-id',initialId);
  await page.locator('[data-action="paired-answer"]').first().click();await expect(page.locator('#feedback')).toBeVisible();
  const answered=current(page);
  const caption=await openCharacterPicker(page,role);await expect(page.locator('#character-picker-title')).toBeFocused();
- await page.locator(`[data-character="${role}-9"]`).click();
+ const changedId=role==='garda'?'garda-8':'public-9';
+ if(role==='garda'){
+  await expect(page.locator('.character-option')).toHaveCount(3);
+  await expect(page.locator('[data-character="garda-5"]')).toHaveCount(0);
+ }
+ await page.locator(`[data-character="${changedId}"]`).click();
  expect(current(page).answers).toEqual(answered.answers);expect(current(page).nodeId).toBe(answered.nodeId);
- expect(current(page).cast).toEqual({...initial.cast,[role]:role+'-9'});
+ expect(current(page).cast).toEqual({...initial.cast,[role]:changedId});
  await page.locator('[data-action="paired-character-close"]').click();await expect(caption).toBeFocused();
  await openCharacterPicker(page,other);await page.locator(`[data-character="${other}-4"]`).click();
- const cast={[role]:role+'-9',[other]:other+'-4'};expect(current(page).cast).toEqual(cast);
+ const cast={[role]:changedId,[other]:other+'-4'};expect(current(page).cast).toEqual(cast);
  expect(current(page).role).toBe(role);expect(current(page).answers).toEqual(answered.answers);
  await page.locator('[data-action="paired-character-close"]').click();
  await page.locator('.flow-role-bar + [data-action="paired-switch"]').click();

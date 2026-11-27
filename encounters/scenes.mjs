@@ -1,13 +1,13 @@
-import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=responsive-fixes-20261127';
-import {originalSceneDetails} from './original-scene-props.mjs?v=responsive-fixes-20261127';
+import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=casting-logos-20261127';
+import {originalSceneDetails} from './original-scene-props.mjs?v=casting-logos-20261127';
 import {renderGroupAction} from './group-staging.mjs?v=responsive-fixes-20261127';
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
 import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=gpo-flags-20261125';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=site-repairs-20261125';
-import {characterFor,defaultCast} from './characters.mjs?v=responsive-fixes-20261127';
+import {characterFor,defaultCast} from './characters.mjs?v=casting-logos-20261127';
 import {sceneCharacterArtwork} from './scene-artwork.mjs?v=responsive-fixes-20261127';
 import {discriminationEncounters} from './discrimination.mjs?v=site-repairs-20261125';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=responsive-fixes-20261127';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=casting-logos-20261127';
 
 // Selected characters share a setting only while the written encounter places
 // them together. Later notes and confidential advice use independent panels.
