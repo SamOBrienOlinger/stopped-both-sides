@@ -3,6 +3,11 @@
 (() => {
  const root=document.documentElement;
  root.setAttribute('data-scripted','');
+ // Use the saved text scale for the loading layout as soon as CSS arrives.
+ try{
+  const saved=JSON.parse(localStorage.getItem('garda-encounter-reading-v1:'+root.dataset.perspective));
+  if([115,130,150].includes(saved?.size))root.style.setProperty('--reading-size',saved.size+'%');
+ }catch{}
  const reloading=root.hasAttribute('data-start-position');
  const restoringHistory=performance.getEntriesByType('navigation')[0]?.type==='back_forward'||performance.navigation?.type===2;
  let active=reloading&&!restoringHistory,frame=0,target=()=>null;

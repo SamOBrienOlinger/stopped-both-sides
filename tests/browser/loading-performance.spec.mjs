@@ -3,7 +3,7 @@ import {startEncounter,stateHash} from '../../encounters/engine.mjs?v=site-repai
 
 for(const viewport of [{width:390,height:844},{width:1366,height:768}]){
  test.describe('Homepage loading at '+viewport.width+'px',()=>{
-  test.use({viewport});
+  test.use({viewport,reducedMotion:'no-preference'});
   for(const path of ['./','garda/']){
    test(path+' reserves the first viewport before the application starts',async({page})=>{
     const errors=[];
@@ -19,7 +19,14 @@ for(const viewport of [{width:390,height:844},{width:1366,height:768}]){
      const hero=page.locator('[data-initial-poster] .poster-hero');
      await expect(hero.locator('#paired-title')).toBeInViewport();
      await expect.poll(()=>hero.locator('.scene-backdrop img').evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
-     await hero.evaluate(element=>{window.__initialHero=element;});
+     await expect(hero.locator('#paired-title')).toHaveAttribute('data-landing-reveal','complete');
+     await hero.evaluate(element=>{
+      window.__initialHero=element;
+      window.__titleReplayed=false;
+      const title=element.querySelector('#paired-title');
+      new MutationObserver(()=>{if(title.dataset.landingReveal!=='complete')window.__titleReplayed=true;})
+       .observe(title,{attributes:true,attributeFilter:['data-landing-reveal']});
+     });
      await expect(page.locator('#loading')).toBeVisible();
      const footer=page.locator('footer');
      await expect(footer).toBeVisible();
@@ -30,11 +37,32 @@ for(const viewport of [{width:390,height:844},{width:1366,height:768}]){
     await expect(page.locator('#paired-title')).toBeVisible();
     expect(await page.locator('.poster-hero').evaluate(element=>element===window.__initialHero)).toBe(true);
     await expect(page.locator('.reference-landing .perspective-card')).toHaveCount(2);
+    expect(await page.evaluate(()=>window.__titleReplayed)).toBe(false);
     expect(errors).toEqual([]);
    });
   }
  });
 }
+
+test('The first home paint respects saved contrast and motion settings',async({page})=>{
+ await page.addInitScript(()=>{
+  localStorage.setItem('garda-encounter-reading-v1:public',JSON.stringify({contrast:'high',spacing:true,motion:true}));
+ });
+ let release;
+ const gate=new Promise(resolve=>{release=resolve;});
+ await page.route(url=>url.pathname.endsWith('/app.mjs'),async route=>{await gate;await route.continue();});
+ try{
+  await page.goto('./?lang=en#play',{waitUntil:'commit'});
+  await expect(page.locator('[data-initial-poster] #paired-title')).toBeInViewport();
+  await expect(page.locator('html')).toHaveClass(/contrast-high/);
+  await expect(page.locator('html')).toHaveClass(/reading-spacious/);
+  await expect(page.locator('html')).toHaveClass(/motion-reduce/);
+  await expect(page.locator('.poster-hero .scene-backdrop')).toBeHidden();
+  await expect(page.locator('.poster-hero [data-landing-reveal]')).toHaveCount(0);
+ }finally{release();}
+ await expect(page.locator('#loading')).toHaveCount(0);
+ await expect(page.locator('#paired-title')).toHaveCSS('opacity','1');
+});
 
 for(const [url,title] of [['./?lang=en#rights','Human and Civil Rights & sources'],['garda/?lang=en#evidence','Evidence & sources']]){
  test('Keyboard skip preserves the loading reference route '+url,async({page})=>{

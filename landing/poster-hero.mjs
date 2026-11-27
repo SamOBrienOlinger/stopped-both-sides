@@ -1,3 +1,5 @@
+import {syncLandingReveal} from './reveal.mjs';
+
 const assets = new URL('../assets/', import.meta.url);
 export const gpo = width => new URL(`dublin-approved/gpo-city-${width}.webp?v=gpo-bus-eleven-20261126`, assets).href;
 const figures = {
@@ -54,4 +56,5 @@ export async function showEarlyHero() {
   poster.setAttribute('data-initial-poster', '');
   poster.innerHTML = renderPosterHero();
   loading.parentElement.replaceWith(poster, loading);
+  syncLandingReveal(poster.parentElement);
 }

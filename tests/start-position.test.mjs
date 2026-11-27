@@ -23,11 +23,14 @@ function surface(){
 // Execute the production classic script against a small browser host. These
 // tests vary lifecycle/input ordering; browser tests cover real trusted input
 // and layout. No controller logic is reimplemented in the fixture.
-function browser(type='reload',offset=480){
+function browser(type='reload',offset=480,{perspective='public',preferences={}}={}){
  const attributes=new Set(type==='reload'?['data-start-position']:[]);
  let pendingOffset=null,initialShell=false;
  const parserObservers=new Set();
+ const styleProperties=new Map();
  const root={setAttribute:name=>attributes.add(name),removeAttribute:name=>attributes.delete(name),
+  dataset:{perspective},style:{setProperty:(key,value)=>styleProperties.set(key,value),
+   getPropertyValue:key=>styleProperties.get(key)||''},
   hasAttribute:name=>attributes.has(name),
   getBoundingClientRect(){
    // Native restoration may remain deferred until the first styled layout.
@@ -40,6 +43,7 @@ function browser(type='reload',offset=480){
   querySelector:selector=>selector==='#main .initial,#loading'&&initialShell?{}:null};
  const frames=new Map(),writes=[];let nextFrame=0;
  const host={...surface(),document,history:{scrollRestoration:type==='reload'?'manual':'auto'},
+  localStorage:{getItem:key=>preferences[key]??null},
   performance:{getEntriesByType:()=>[{type}]},innerHeight:800,scrollX:0,scrollY:offset,
   visualViewport:surface(),
   MutationObserver:class{
@@ -64,6 +68,18 @@ function browser(type='reload',offset=480){
   anchor(top){return {isConnected:true,getBoundingClientRect:()=>({top:top-host.scrollY})};}
  };
 }
+
+test('the initial layout uses the saved text size for its own edition',()=>{
+ const preferences={'garda-encounter-reading-v1:public':'{"size":150}','garda-encounter-reading-v1:garda':'{"size":115}'};
+ for(const [perspective,expected] of [['public','150%'],['garda','115%']]){
+  const {root}=browser('navigate',0,{perspective,preferences});
+  assert.equal(root.style.getPropertyValue('--reading-size'),expected);
+ }
+ for(const value of ['{"size":999}','unreadable',null]){
+  const {root}=browser('navigate',0,{preferences:{'garda-encounter-reading-v1:public':value}});
+  assert.equal(root.style.getPropertyValue('--reading-size'),'');
+ }
+});
 
 test('parser readiness corrects a restored offset synchronously before the next frame',()=>{
  const e=browser();e.restore(480,{emit:false});

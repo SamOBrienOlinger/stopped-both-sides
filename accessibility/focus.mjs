@@ -22,8 +22,10 @@ export function focusControl(element) {
 // flow, so scrolling a later heading is not a substitute for exposing it all.
 export function focusPageStart(main,{focus=true}={}) {
  if(!main)return false;
- if(focus)(main.querySelector?.('h1')||main).focus?.({preventScroll:true});
+ // Settle the new document position before moving focus. Firefox can
+ // otherwise restore an offset from the old page on the next paint.
  window.scrollTo?.({top:0,left:0,behavior:'instant'});
+ if(focus)(main.querySelector?.('h1')||main).focus?.({preventScroll:true});
  return true;
 }
 

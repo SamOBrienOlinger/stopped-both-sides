@@ -149,6 +149,8 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
   // Mobile keyboards can shrink the visual viewport while the layout
   // viewport (and the native dialog's containing block) keeps its height.
   const viewport=window.visualViewport;
+  const height=viewport?.height??window.innerHeight;
+  dialog.toggleAttribute('data-short-viewport',height<=200);
   if(viewport?.scale===1){
    dialog.style.setProperty('--search-viewport-top',viewport.offsetTop+'px');
    dialog.style.setProperty('--search-viewport-bottom',Math.max(0,document.documentElement.clientHeight-viewport.height-viewport.offsetTop)+'px');
@@ -159,7 +161,13 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
   const input=dialog.querySelector('#site-search-input');
   if(input!==document.activeElement)return;
   const field=input.getBoundingClientRect(),bounds=dialog.getBoundingClientRect();
-  if(field.top<bounds.top||field.bottom>bounds.bottom)input.scrollIntoView({block:'nearest',behavior:'instant'});
+  const visibleTop=viewport?.offsetTop??0;
+  const top=Math.max(visibleTop,bounds.top+dialog.clientTop)+2;
+  const bottom=Math.min(visibleTop+height,bounds.top+dialog.clientTop+dialog.clientHeight)-2;
+  // Scroll the dialog itself. scrollIntoView also pans the document on iOS
+  // and its text-size-dependent scroll margins can exceed the keyboard gap.
+  if(field.top<top)dialog.scrollTop+=field.top-top;
+  else if(field.bottom>bottom)dialog.scrollTop+=field.bottom-bottom;
  }
  window.addEventListener('resize',fitSearchViewport);
  window.visualViewport?.addEventListener('resize',fitSearchViewport);
