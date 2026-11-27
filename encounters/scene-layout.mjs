@@ -1,7 +1,7 @@
 /** Coordinates are physical panel percentages. x is the sprite-frame centre.
- * A frame includes transparent padding: public silhouettes occupy at most 67%
- * of its width and Garda silhouettes at most 57%. Transparent frames may
- * overlap; the visible figures and number badges must remain separated.
+ * A frame includes transparent padding whose extent varies with each pose,
+ * wheelchair and comparison illustration. Transparent frames may overlap;
+ * measure the painted silhouettes and number badges to check separation.
  */
 const anchor = (x, width, bottom) => Object.freeze({x, width, bottom});
 const row = (width, bottom, centres) => Object.freeze(centres.map(x => anchor(x, width, bottom)));

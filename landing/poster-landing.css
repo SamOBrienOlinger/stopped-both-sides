@@ -141,8 +141,9 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 }
 .sbs-poster :is(.perspective-scene,.story-preview__scene) {
   --public-ground: 10%; --garda-ground: 10%;
-  --public-shadow-x: calc(4% + 37.884% / var(--scene-ratio));
-  --garda-shadow-x: calc(97% - 39.36% / var(--scene-ratio));
+  --public-left: 4%; --garda-right: 13%;
+  --public-shadow-x: calc(var(--public-left) + 37.884% / var(--scene-ratio));
+  --garda-shadow-x: calc(100% - var(--garda-right) - 39.36% / var(--scene-ratio));
   isolation: isolate;
 }
 .sbs-poster .panel-backdrop { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -150,15 +151,13 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
   position: absolute; z-index: 2; height: 82%; width: auto; aspect-ratio: 1;
   object-fit: contain; object-position: center bottom;
 }
-.sbs-poster .panel-public { left: 4%; bottom: var(--public-ground); translate: 0 1.125%; }
-.sbs-poster .panel-garda { right: 3%; bottom: var(--garda-ground); translate: 0 3.55%; }
-.sbs-poster .perspective-scene--public { --garda-ground: 3%; --garda-shadow-x: calc(106% - 48% / var(--scene-ratio)); }
-.sbs-poster .perspective-scene--garda { --public-ground: 3%; --public-shadow-x: calc(-6% + 48% / var(--scene-ratio)); }
+.sbs-poster .panel-public { left: var(--public-left); bottom: var(--public-ground); translate: 0 1.125%; }
+.sbs-poster .panel-garda { right: var(--garda-right); bottom: var(--garda-ground); translate: 0 3.55%; }
+.sbs-poster .perspective-scene--public { --garda-ground: 3%; --garda-right: 6%; --garda-shadow-x: calc(100% - var(--garda-right) - 48% / var(--scene-ratio)); }
+.sbs-poster .perspective-scene--garda { --public-ground: 3%; --public-left: -4%; --public-shadow-x: calc(var(--public-left) + 48% / var(--scene-ratio)); }
 .sbs-poster .perspective-scene--public .panel-garda, .sbs-poster .perspective-scene--garda .panel-public {
   height: 96%; translate: 0 1.9%;
 }
-.sbs-poster .perspective-scene--public .panel-garda { right: -6%; }
-.sbs-poster .perspective-scene--garda .panel-public { left: -6%; }
 .sbs-poster :is(.perspective-scene,.story-preview__scene)::before,
 .sbs-poster :is(.perspective-scene,.story-preview__scene)::after {
   content: ''; position: absolute; z-index: 1; width: 28%; height: 5%;
@@ -238,6 +237,7 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
   }
   .sbs-poster .perspective-scene {
     --scene-ratio: 1.5;
+    --garda-right: 3%;
     position: relative;
     inset: auto;
     z-index: auto;
@@ -245,6 +245,8 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
     aspect-ratio: var(--scene-ratio);
     overflow: hidden;
   }
+  .sbs-poster .perspective-scene--public { --garda-right: 0%; }
+  .sbs-poster .perspective-scene--garda { --public-left: -6%; }
   .sbs-poster .perspective-label {
     display: grid;
     place-items: center;

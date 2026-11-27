@@ -1,5 +1,5 @@
 import {characterFor} from './characters.mjs?v=casting-logos-20261127';
-import {fixedStoryCharacter} from './story-cast.mjs?v=casting-logos-20261127';
+import {fixedStoryCharacter} from './story-cast.mjs?v=scene-grounding-20261127';
 
 // The catalogue keeps stable teaching text and translation keys. Resolve its
 // story identity against the saved cast only when displaying a running game.

@@ -1,7 +1,7 @@
 import {characters,characterFor,charactersForSituation,castForSituation} from './characters.mjs?v=casting-logos-20261127';
-import {supportingCharacters} from './supporting-characters.mjs?v=responsive-fixes-20261127';
-import {stageGroup,groupMark} from './group-staging.mjs?v=responsive-fixes-20261127';
-import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
+import {supportingCharacters} from './supporting-characters.mjs?v=scene-grounding-20261127';
+import {stageGroup,groupMark} from './group-staging.mjs?v=scene-grounding-20261127';
+import {sceneGroupLayout} from './scene-layout.mjs?v=scene-grounding-20261127';
 
 // These are author-selected portraits for fictional roles, not assumptions
 // about a real person's identity, beliefs, disability or civil status.

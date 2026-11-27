@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link id="landing-backdrop-preload" as="image" fetchpriority="high" imagesizes="(min-width: 75rem) 72rem, 100vw"
- imagesrcset="./assets/dublin-approved/gpo-city-480.webp?v=gpo-bus-eleven-20261126 480w, ./assets/dublin-approved/gpo-city-960.webp?v=gpo-bus-eleven-20261126 960w, ./assets/dublin-approved/gpo-city-1600.webp?v=gpo-bus-eleven-20261126 1600w">
+ imagesrcset="./assets/dublin-approved/gpo-city-clear-480.webp?v=scene-grounding-20261127 480w, ./assets/dublin-approved/gpo-city-clear-960.webp?v=scene-grounding-20261127 960w, ./assets/dublin-approved/gpo-city-clear-1600.webp?v=scene-grounding-20261127 1600w">
 <script>
 {
  // Hash routes share this document; only the landing page uses its hero.
  if(!location.hash||location.hash==='#play'){
   document.getElementById('landing-backdrop-preload').rel='preload';
-  import('./landing/poster-hero.mjs?v=casting-logos-20261127').then(module=>module.showEarlyHero()).catch(()=>{});
+  import('./landing/poster-hero.mjs?v=scene-grounding-20261127').then(module=>module.showEarlyHero()).catch(()=>{});
  }
  // Claim a refresh before the browser snapshots or restores its old offset.
  const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
@@ -25,15 +25,15 @@
 <link rel="icon" href="./assets/brand/favicon-hexagon.png?v=all-logos-transparent-20261127" type="image/png">
 <link rel="stylesheet" href="./styles.css?v=responsive-fixes-20261127">
 <link rel="stylesheet" href="./encounters/styles.css">
-<link rel="stylesheet" href="./encounters/scenes.css?v=final-touches-20261125">
+<link rel="stylesheet" href="./encounters/scenes.css?v=scene-grounding-20261127">
 <link rel="stylesheet" href="./accessibility/styles.css?v=sitewide-rendering-20261123">
 <link rel="stylesheet" href="./accessibility/perspectives.css">
 <link rel="stylesheet" href="./accessibility/responsive.css?v=responsive-fixes-20261127">
 <link rel="modulepreload" href="./landing/reveal.mjs">
 <link rel="modulepreload" href="./accessibility/animation-clock.mjs?v=learning-language-20261120">
 <link rel="modulepreload" href="./encounters/catalog.mjs?v=site-repairs-20261125">
-<link rel="modulepreload" href="./encounters/scenes.mjs?v=casting-logos-20261127">
-<script type="module" src="./app.mjs?v=mobile-grounded-20261127"></script>
+<link rel="modulepreload" href="./encounters/scenes.mjs?v=scene-grounding-20261127">
+<script type="module" src="./app.mjs?v=scene-grounding-20261127"></script>
 <link rel="stylesheet" href="./assets/brand/landing.css?v=landing-about-copy-1">
 <link rel="stylesheet" href="./assets/brand/buttons.css?v=learning-flow-2">
 <link rel="stylesheet" href="./encounters/refinements.css?v=scene-above-context-1">
@@ -47,11 +47,11 @@
 <link rel="stylesheet" href="./learning/support.css?v=rights-topics-20261126">
 <link rel="stylesheet" href="./assets/brand/uimproved.css?v=gpo-flags-20261125">
 <script type="module" src="./assets/brand/uimproved.mjs?v=human-civil-rights-20261122"></script>
-<link rel="stylesheet" href="./assets/brand/approved-backgrounds.css?v=quayside-lamps-1">
+<link rel="stylesheet" href="./assets/brand/approved-backgrounds.css?v=scene-grounding-20261127">
 <link rel="stylesheet" href="./encounters/scene-labels.css?v=caption-fit-20261122">
 <link rel="stylesheet" href="./encounters/turn-headshot.css?v=final-touches-20261125">
 <link rel="stylesheet" href="./assets/brand/site-polish.css?v=portfolio-entrance-20261123">
-<script type="module" src="./encounters/scene-labels.mjs?v=casting-logos-20261127"></script>
+<script type="module" src="./encounters/scene-labels.mjs?v=scene-grounding-20261127"></script>
 <link rel="stylesheet" href="./assets/brand/play-flow.css?v=mobile-layout-20261127e">
 <link rel="stylesheet" href="./assets/brand/back-to-top.css?v=responsive-layout-20261122">
 <script type="module" src="./assets/brand/back-to-top.mjs?v=footer-top-2"></script>
@@ -59,7 +59,7 @@
 <link rel="stylesheet" href="./assets/brand/card-headings.css?v=portfolio-entrance-20261123">
 <link rel="stylesheet" href="./assets/brand/typography.css?v=site-typography-20261123">
 <link rel="stylesheet" href="./assets/brand/navigation-footer.css?v=responsive-fixes-20261127">
-<link rel="stylesheet" href="./landing/poster-landing.css?v=mobile-grounded-20261127b">
+<link rel="stylesheet" href="./landing/poster-landing.css?v=scene-grounding-20261127">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the learning content</a>

@@ -9,7 +9,7 @@ for(const role of ['public','garda'])test(`${role}: the poster loads the approve
   await expect(image).toBeVisible();
   await expect.poll(()=>image.evaluate(i=>i.complete&&i.naturalWidth>0)).toBe(true);
   const url=await image.evaluate(i=>i.currentSrc);
-  expect(new URL(url).pathname).toMatch(/\/assets\/dublin-approved\/gpo-city-(480|960|1600)\.webp$/);
+  expect(new URL(url).pathname).toMatch(/\/assets\/dublin-approved\/gpo-city-clear-(480|960|1600)\.webp$/);
   const response=await page.request.get(url);
   expect(response.ok()).toBe(true);
   expect(response.headers()['content-type']).toContain('image/webp');

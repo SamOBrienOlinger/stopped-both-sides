@@ -70,7 +70,7 @@ test('Both roles can start every situation; the shared facts and role controls r
  route('#play');
  assert.match(main.innerHTML,/<h1\b[^>]*id="paired-title"[^>]*>Stopped: Both Sides<\/h1>/);
  assert.match(main.innerHTML,/<p\b[^>]*id="perspectives-title"[^>]*>One situation\. Two perspectives\.<\/p>/);
- assert.match(main.innerHTML,/assets\/dublin-approved\/gpo-city-1600\.webp/);
+ assert.match(main.innerHTML,/assets\/dublin-approved\/gpo-city-clear-1600\.webp/);
  const links=[...main.innerHTML.matchAll(/<a\b([^>]+)>([\s\S]*?)<\/a>/g)];
  for(const role of roles){
   const href=new URL('#encounters/'+role,sites.public).href;

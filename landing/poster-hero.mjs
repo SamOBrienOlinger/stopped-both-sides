@@ -1,7 +1,9 @@
 import {syncLandingReveal} from './reveal.mjs';
 
 const assets = new URL('../assets/', import.meta.url);
-export const gpo = width => new URL(`dublin-approved/gpo-city-${width}.webp?v=gpo-bus-eleven-20261126`, assets).href;
+// A clean background avoids conflicting scale between baked-in pedestrians
+// and the independently positioned foreground pair.
+export const gpo = width => new URL(`dublin-approved/gpo-city-clear-${width}.webp?v=scene-grounding-20261127`, assets).href;
 const figures = {
   public: new URL('characters/poster-alex.webp?v=final-touches-20261125', assets).href,
   garda: new URL('characters/poster-aisling.webp', assets).href,

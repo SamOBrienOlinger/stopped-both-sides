@@ -1,6 +1,6 @@
-import {publicGestureArtwork} from './group-staging.mjs?v=responsive-fixes-20261127';
+import {publicGestureArtwork} from './group-staging.mjs?v=scene-grounding-20261127';
 import {characterFor,charactersForSituation} from './characters.mjs?v=casting-logos-20261127';
-import {sceneActorLayout} from './scene-layout.mjs?v=situation-locations-20261122';
+import {sceneActorLayout} from './scene-layout.mjs?v=scene-grounding-20261127';
 
 const position=(x,width,bottom)=>({x,width,bottom,labelSpace:2*Math.min(x,100-x)});
 const pair=(publicPosition,gardaPosition)=>({public:publicPosition,garda:gardaPosition});
@@ -34,8 +34,8 @@ const castParts={
  cleaner:{role:'public',portraits:['public-8','public-5','public-2']}
 };
 const part=(key,x,width,bottom)=>({key,anchor:position(x,width,bottom)});
-const youthGroup=[part('friendA',23,20,3),part('friendB',58,19,13),part('colleague',90.5,16.5,19)];
-const caseColleague=part('colleague',66,18,25);
+const youthGroup=[part('friendA',23,23,5),part('friendB',58,19,13),part('colleague',90.5,16.5,19)];
+const caseColleague=part('colleague',62,18,25);
 const quayColleague=part('colleague',81,23,2);
 // The pavement is deeper on the shop side of the quay. Keep distant passersby off the river wall.
 const quayPasserby=part('passerby',19,17,18);
@@ -43,7 +43,7 @@ const supportingAt={
  'public-young-person':{'youth-solicitor':[part('parent',18,24,19)]},
  'garda-young-person':{'young-start':youthGroup,'young-contact':youthGroup,'young-review':youthGroup},
  'garda-colleague':{'colleague-start':[caseColleague],'colleague-pressure':[caseColleague],
-  'colleague-specific':[caseColleague,part('customer',78,15,37)]},
+  'colleague-specific':[caseColleague,part('customer',73,15,37)]},
  'garda-communication':{'communication-start':[quayColleague],'communication-repair':[quayColleague],'communication-clarify':[quayColleague]},
  'garda-description':{'description-start':[quayPasserby],'description-repair':[quayColleague]},
  'public-fair-treatment':{'fair-start':[quayPasserby]},
@@ -79,7 +79,7 @@ export function originalSceneDetails(id,nodeId,place,cast,{members=['public','ga
  // person on the residential street, after the initial quayside enquiry.
  const openingPlace={'public-arrest':'street','garda-description':'square'};
  const anchors=nodeId==='description-power'&&id==='garda-description'
-  ?pair(position(33,27,7),position(57,21,20))
+  ?pair(position(43,27,7),position(60,21,20))
   :(!openingPlace[id]||openingPlace[id]===place)?staging[id]||{}:{};
  // A scripted figure can replace a stored avatar without freeing that avatar
  // to become the parent, friend or other bystander in the same encounter.

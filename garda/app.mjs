@@ -1,4 +1,4 @@
-import {createSiteSearch} from "../search/site-search.mjs?v=mobile-grounded-20261127";
+import {createSiteSearch} from "../search/site-search.mjs?v=scene-grounding-20261127";
 import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=responsive-fixes-20261127';
 import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=casting-logos-20261127';
 import {createLayout} from '../accessibility/layout.mjs?v=responsive-fixes-20261127';
@@ -7,7 +7,7 @@ import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs
 import {hasOwn} from '../compatibility.mjs';
 import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=casting-logos-20261127';
 import {createMotion} from '../accessibility/motion.mjs?v=casting-logos-20261127';
-import {createEncounterMode} from '../encounters/ui.mjs?v=mobile-layout-20261127';
+import {createEncounterMode} from '../encounters/ui.mjs?v=scene-grounding-20261127';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=site-repairs-20261125';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=site-repairs-20261125';
 const main=document.querySelector('#main');

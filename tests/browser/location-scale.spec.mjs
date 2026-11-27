@@ -23,7 +23,7 @@ function checkGeometry(locations){
     (actor.character==='story-alex-comparison'&&actor.source==='characters/story-alex-comparison-20261126.webp')||
     (actor.character==='support-ticket-steward'&&actor.source==='characters/ticket-steward-768.webp');
    if(standalone){
-    expect(actor.crop,label+' displays the whole standalone figure').toBe('none');
+    expect(actor.crop,label+' displays the whole standalone figure').toMatch(/^inset\(0(?:px|%)(?: 0(?:px|%)){0,3}\)$/);
     expect(actor.scale,label+' fits its calibrated square frame').toBeCloseTo(1,2);
    }else expect(actor.crop,label+' isolates the correct atlas cell').toMatch(/^inset\(/);
    // Group members may stand farther back; a child is intentionally smaller.

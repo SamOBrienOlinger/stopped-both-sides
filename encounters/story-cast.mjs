@@ -1,20 +1,22 @@
 import {characterFor,characters,charactersForSituation} from './characters.mjs?v=casting-logos-20261127';
 
-const figure=(id,name,asset)=>({
+// Register the opaque sole row of each source on the shared 97.5% floor.
+// This moves only transparent canvas padding; each figure keeps its size.
+const figure=(id,name,asset,soles)=>({
  id,name,sceneArtwork:{
   src:new URL('../assets/characters/'+asset,import.meta.url).href,
-  width:512,height:512,style:'left:0;top:0;width:100%;height:100%'
+  width:512,height:512,style:`left:0;top:${(.975-soles)*100}%;width:100%;height:100%;clip-path:inset(0%)`
  }
 });
 const alias=(id,name,modelId)=>({...characterFor('public',modelId),id,name,modelId});
 
 // Authored roles are presentation identities. The player's stored roster IDs and
 // decision history remain valid even when the script specifies a different person.
-const amina=figure('story-amina','Amina','story-amina.webp');
-const jamie=figure('story-jamie','Jamie','story-jamie.webp');
-const jamieComparison=figure('story-jamie-comparison','Jamie','story-jamie-comparison.webp');
-const alexComparison=figure('story-alex-comparison','Alex','story-alex-comparison-20261126.webp');
-const differentPerson={...figure('story-other-person','Person matching the fuller description','story-other-person.webp'),descriptive:true};
+const amina=figure('story-amina','Amina','story-amina.webp',494/512);
+const jamie=figure('story-jamie','Jamie','story-jamie.webp',493/512);
+const jamieComparison=figure('story-jamie-comparison','Jamie','story-jamie-comparison.webp',493/512);
+const alexComparison=figure('story-alex-comparison','Alex','story-alex-comparison-20261126.webp',1178/1254);
+const differentPerson={...figure('story-other-person','Person matching the fuller description','story-other-person.webp',494/512),descriptive:true};
 const niamh=alias('story-niamh','Niamh','public-7');
 const patrick=alias('story-patrick','Patrick','public-8');
 const authoredPeople=[amina,jamie,jamieComparison,alexComparison,differentPerson,niamh,patrick];

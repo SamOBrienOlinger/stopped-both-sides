@@ -59,12 +59,12 @@
    sprite. The ticket projects from the registered grip towards the reader. */
 .scene-exchange-object{
  position:absolute;left:var(--holder-x);bottom:var(--holder-bottom);width:var(--holder-width);
- aspect-ratio:1;transform:translateX(-50%);z-index:3;pointer-events:none;
+ aspect-ratio:1;transform:translateX(-50%);z-index:3;pointer-events:none;container-type:inline-size;
 }
 .scene-exchange-object>i{
- position:absolute;left:var(--grip-x);top:var(--grip-y);width:23%;height:12%;
+ position:absolute;left:var(--grip-x);top:var(--grip-y);width:12%;height:6.5%;
  transform:translate(-14%,-80%) rotate(-19deg);transform-origin:12% 80%;
- border-radius:8%;box-sizing:border-box;border:1px solid #987741;
+ border-radius:8%;box-sizing:border-box;border:clamp(.4px,.7cqi,1px) solid #987741;
  background:linear-gradient(140deg,#fff6ce,#f4d18a);
  box-shadow:0 1px 2px #231a1480;
 }
@@ -77,15 +77,16 @@
  background:repeating-linear-gradient(90deg,#364643 0 10%,transparent 10% 18%,#364643 18% 23%,transparent 23% 35%);
 }
 .scene-exchange-object[data-scene-object="paper"]>i{
- width:21%;height:18%;border-color:#9b957f;
+ width:15%;height:20%;border-color:#9b957f;
  background:linear-gradient(#fdfbf2 0 29%,#8d9eaa 29% 35%,#fdfbf2 35% 49%,#a0a7a7 49% 54%,#faf2dd 54% 100%);
 }
 .scene-exchange-object[data-scene-object="phone"]>i{
- width:14%;height:22%;border:2px solid #263743;
+ width:7%;height:12%;border:clamp(.5px,.9cqi,1.5px) solid #263743;
  background:linear-gradient(150deg,#c0e3e9 0 48%,#81a7ba 49% 87%,#263743 88%);border-radius:14%;
 }
 :is(.scene-location--group,.situation-image) .scene-actor::before{
- left:19%;bottom:.4%;width:63%;height:7%;opacity:.85;
- background:radial-gradient(ellipse at 48% 54%,#3128218c 0%,#3128215c 28%,#31282120 54%,transparent 73%);
+ /* Sprite soles share the 97.5% line; the shadow centre must meet that line. */
+ left:19%;bottom:0;width:63%;height:5%;opacity:.85;
+ background:radial-gradient(ellipse at 48% 50%,#3128218c 0%,#3128215c 28%,#31282120 54%,transparent 73%);
 }
 @media(forced-colors:active){.scene-exchange-object{forced-color-adjust:none}}

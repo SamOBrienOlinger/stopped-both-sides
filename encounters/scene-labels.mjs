@@ -1,4 +1,4 @@
-import {storyCharacterById} from './story-cast.mjs?v=casting-logos-20261127';
+import {storyCharacterById} from './story-cast.mjs?v=scene-grounding-20261127';
 import {characterArtwork,characterFor} from './characters.mjs?v=casting-logos-20261127';
 import {roleLabels} from './catalog.mjs?v=site-repairs-20261125';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';

@@ -1,4 +1,4 @@
-/* Full approved scenes, with foreground actors anchored to pavement areas.
+/* Approved scenes, with foreground actors anchored to pavement areas.
    Physical coordinates intentionally do not mirror for RTL reading settings. */
 .reference-landing .overlapping-heroes .perspective-hero>img[data-approved-hero]{
  aspect-ratio:16/9;object-fit:contain;object-position:center;filter:none;
@@ -15,6 +15,12 @@
 /* Mixed reflections retain both locations without portrait crops. */
 .scene-stage--outdoor-split>.scene-location:not([data-approved-art])>.scene-actor{width:32%;left:34%;right:auto;bottom:6%}
 .scene-stage--outdoor-split>.scene-location[data-approved-art]>.scene-actor{bottom:6%}
+/* The quay's original right edge is the river wall. A closer view of the
+   left-hand promenade keeps the whole group on pavement while preserving
+   the bridge and the figures' relative sizes. The crop scales with its panel. */
+.scene-location[data-scene-place="square"]>.scene-backdrop{
+ object-fit:cover;transform:scale(1.35);transform-origin:left bottom;
+}
 @media(max-width:41.25rem){.scene-stage--outdoor-split{grid-template-columns:minmax(0,1fr);gap:.5rem}}
 @media(forced-colors:active){.scene-location[data-approved-art]{border:1px solid CanvasText}}
 @media print{.scene-location[data-approved-art]{break-inside:avoid}}

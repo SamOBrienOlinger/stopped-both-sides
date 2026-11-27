@@ -1,4 +1,4 @@
-import {sceneGroupLayout} from './scene-layout.mjs?v=situation-locations-20261122';
+import {sceneGroupLayout} from './scene-layout.mjs?v=scene-grounding-20261127';
 
 // These marks are the centres of complete sprite frames, in panel percentages.
 // Separate the exchange from its observers without detaching the numbered badge.
@@ -90,6 +90,6 @@ export function renderGroupAction(id,nodeId,participants,place){
  const position=groupMark(place,sceneGroupLayout(place,participants.length,participants.indexOf(holder)),holder);
  // The speaking sheet registers all raised grips on the right of the subject.
  // Nia and the dedicated support figures retain their own art and lower grip.
- const handX=holder.staging.gestureHand?79:73,handY=holder.staging.gestureHand?43:67;
+ const handX=holder.staging.gestureHand?77:73,handY=holder.staging.gestureHand?45:67;
  return `<span aria-hidden="true" class="scene-exchange-object" data-held-by="${holder.key}" data-scene-object="${type}" style="--holder-x:${position.x}%;--holder-bottom:${position.bottom}%;--holder-width:${position.width*holder.scale}%;--grip-x:${handX}%;--grip-y:${handY}%"><i></i></span>`;
 }
