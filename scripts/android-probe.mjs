@@ -23,15 +23,15 @@ function tryWelcome(){
  }catch(e){notes.push('Welcome inspection '+e.message.slice(0,140))}
  return false;
 }
-async function connect(){
+async function connect(wanted,handleWelcome=false){
  for(let attempt=0;attempt<10;attempt++){
-  if(mode==='chrome'&&attempt<6&&tryWelcome()){await wait(650);continue}
+  if(handleWelcome&&mode==='chrome'&&attempt<6&&tryWelcome()){await wait(650);continue}
   try{
    const socket=(adb('shell','cat','/proc/net/unix').match(/@(chrome_devtools_remote(?:_\d+)?|webview_devtools_remote_\d+)\s*$/gm)||[]).map(x=>x.trim().slice(1)).find(x=>x.startsWith(mode==='chrome'?'chrome_':'webview_'));
    if(!socket)throw Error('waiting for '+mode+' DevTools socket');
    adb('forward','tcp:9222','localabstract:'+socket);
    const tabs=await(await fetch('http://127.0.0.1:9222/json/list')).json();
-   const tab=tabs.find(x=>x.type==='page'&&x.url.includes('localhost:4173'))||tabs.find(x=>x.type==='page');
+   const tab=tabs.find(x=>x.type==='page'&&x.url===wanted)||tabs.find(x=>x.type==='page'&&x.url.includes('localhost:4173'))||tabs.find(x=>x.type==='page');
    if(!tab?.webSocketDebuggerUrl)throw Error('waiting for web page target');
    const ws=new WebSocket(tab.webSocketDebuggerUrl);await new Promise((yes,no)=>{ws.onopen=yes;ws.onerror=no});
    let id=0;const pending=new Map();
@@ -48,7 +48,7 @@ const report={mode,package:testPackage,build:adb('shell','getprop','ro.build.fin
 try{report.version=adb('shell','dumpsys','package',testPackage).match(/versionName=([^\s]+)/)?.[1]}catch{}
 const persist=()=>writeFileSync(folder+'/'+mode+'-results.json',JSON.stringify(report,null,2));
 let c;
-try{c=await connect()}catch(e){capture(mode+'-bootstrap-failure');notes.push(e.message);persist();console.error(e.message);process.exit(12)}
+try{c=await connect('http://localhost:4173/stopped-both-sides/',true);c.ws.close()}catch(e){capture(mode+'-bootstrap-failure');notes.push(e.message);persist();console.error(e.message);process.exit(12)}
 async function evaluate(expression){const v=await c.send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(v.exceptionDetails)throw Error(v.exceptionDetails.exception?.description||v.exceptionDetails.text);return v.result.value}
 async function until(expression,timeout=10000){
  const end=Date.now()+timeout;let last;
@@ -62,36 +62,63 @@ async function tap(selector){
 }
 function inputMethod(){
  const text=adb('shell','dumpsys','input_method');const evidence=text.split('\n').filter(l=>/mInputShown|mIsInputViewShown|mImeWindowVis|mShowRequested/.test(l));
- return {shown:/\bm(?:InputShown|IsInputViewShown)\s*=\s*true\b/.test(text)||/\bmImeWindowVis\s*=\s*0x(?:3|b)\b/i.test(text),evidence:evidence.slice(0,16).map(l=>l.trim())};
+ return {shown:/\bmInputShown\s*=/.test(text)?/\bmInputShown\s*=\s*true\b/.test(text):/\bmImeWindowVis\s*=\s*0x(?:3|b)\b/i.test(text),evidence:evidence.slice(0,16).map(l=>l.trim())};
 }
 const measure=`(()=>{const i=document.querySelector('#site-search-input'),d=document.querySelector('#site-search-dialog'),v=visualViewport,b=i?.getBoundingClientRect(),panel=d?.getBoundingClientRect(),x=b?.left+b?.width/2,y=b?.top+b?.height/2;
 return {width:innerWidth,height:innerHeight,orientation:screen.orientation.type,vh:v.height,vw:v.width,top:v.offsetTop,left:v.offsetLeft,dir:document.documentElement.dir,lang:document.documentElement.lang,font:getComputedStyle(document.documentElement).fontSize,focus:document.activeElement===i,open:!!d?.open,value:i?.value,count:d?.querySelectorAll('.site-search-result').length,field:b?.toJSON(),dialog:panel?.toJSON(),visible:!!b&&b.top>=v.offsetTop-1&&b.bottom<=v.offsetTop+v.height+1&&b.left>=v.offsetLeft-1&&b.right<=v.offsetLeft+v.width+1,hittable:!!i&&i.contains(document.elementFromPoint(x-v.offsetLeft,y-v.offsetTop))}})()`;
-try{
- await c.send('Page.enable');report.userAgent=await evaluate('navigator.userAgent');
- for(const orientation of ['portrait','landscape'])for(const role of ['public','garda'])for(const lang of ['en','ar']){
-  const key=[mode,role,lang,orientation].join('-');const record={key,orientation,role,lang};report.cases.push(record);
-  try{
-   adb('shell','settings','put','system','user_rotation',orientation==='portrait'?'0':'1');
-   const base='http://localhost:4173/stopped-both-sides/'+(role==='garda'?'garda/':'')+'?lang='+lang+'#play';
-   await c.send('Page.navigate',{url:base});
-   await until('location.href==='+JSON.stringify(base)+'&&!!document.querySelector(".navigation-ready")&&document.documentElement.lang==='+JSON.stringify(lang==='en'?'en-IE':'ar'));
-   await evaluate('localStorage.setItem('+JSON.stringify('garda-encounter-reading-v1:'+role)+','+JSON.stringify(JSON.stringify({language:lang,size:150,spacing:true,motion:true}))+')');
-   await c.send('Page.reload',{ignoreCache:true});
-   await until('!!document.querySelector(".navigation-ready") && getComputedStyle(document.documentElement).fontSize==="24px" && screen.orientation.type.startsWith('+JSON.stringify(orientation)+')');
-   if(inputMethod().shown){adb('shell','input','keyevent','4');await wait(350)}
-   record.before=await evaluate('({vh:visualViewport.height,vw:visualViewport.width,orientation:screen.orientation.type})');
-   if(await evaluate('document.querySelector("[data-nav-toggle]")?.getBoundingClientRect().width>0 && document.querySelector("[data-nav-toggle]").getAttribute("aria-expanded")!=="true"'))await tap('[data-nav-toggle]');
-   await tap('#site-search-trigger');await until('!!document.querySelector("#site-search-dialog[open] input")');
-   await tap('#site-search-input');await wait(700);
-   record.ime=inputMethod();
-   record.focused=await evaluate(measure);capture(key+'-focused');
-   if(!record.ime.shown)throw Error('Android software keyboard did not open');
-   adb('shell','input','text','Garda');await until('document.querySelector("#site-search-input")?.value.toLowerCase()==="garda"');
-   await wait(350);record.typed=await evaluate(measure);record.imeAfterText=inputMethod();capture(key+'-typed');
-   record.pass=record.imeAfterText.shown&&record.before.vh-record.typed.vh>50&&record.typed.focus&&record.typed.visible&&record.typed.hittable&&record.typed.count>0&&record.typed.dir===(lang==='ar'?'rtl':'ltr');
-   if(!record.pass)record.error='Viewport, focus, hit target, direction, results or native keyboard assertion failed';
-  }catch(e){record.error=e.message;record.pass=false;try{capture(key+'-error');record.last=await evaluate(measure)}catch{}}
-  finally{if(inputMethod().shown){adb('shell','input','keyevent','4');await wait(300)}persist();console.log('ANDROID_CASE',JSON.stringify(record))}
- }
-}finally{persist();c.ws.close()}
+function physicalBounds(){
+ adb('shell','uiautomator','dump','/sdcard/sbs-field.xml');
+ const xml=adb('shell','cat','/sdcard/sbs-field.xml');
+ const nodes=(xml.match(/<node\b[^>]*>/g)||[]).map(node=>{
+  const attrs=Object.fromEntries([...node.matchAll(/([\w-]+)="([^"]*)"/g)].map(m=>[m[1],m[2]]));
+  const [x,y,r,b]=(attrs.bounds?.match(/\d+/g)||[]).map(Number);
+  return {...attrs,x,y,r,b};
+ }).filter(n=>n.r>n.x&&n.b>n.y);
+ return {xml,web:nodes.find(n=>n.class==='android.webkit.WebView'),field:nodes.find(n=>n.class==='android.widget.EditText'&&n['resource-id']!=='com.android.chrome:id/url_bar'&&!n['resource-id']?.startsWith('com.android.chrome:id/'))};
+}
+async function nativeField(key){
+ const data=physicalBounds();writeFileSync(folder+'/'+key+'-tree.xml',data.xml);
+ let point;
+ if(data.field){point={x:(data.field.x+data.field.r)/2,y:(data.field.y+data.field.b)/2,source:'Android text field'}}
+ else if(data.web){
+  const css=await evaluate('(()=>{const b=document.querySelector("#site-search-input").getBoundingClientRect(),v=visualViewport;return {x:b.left+b.width/2-v.offsetLeft,y:b.top+b.height/2-v.offsetTop,s:devicePixelRatio*v.scale}})()');
+  point={x:data.web.x+css.x*css.s,y:data.web.y+css.y*css.s,source:'Android WebView and DOM'};
+ }else throw Error('Android UI hierarchy exposes neither a web view nor an editable field');
+ adb('shell','input','tap',String(Math.round(point.x)),String(Math.round(point.y)));return point;
+}
+async function keyboardReady(){
+ for(let n=0;n<18;n++){const ime=inputMethod();if(ime.shown&&await evaluate('document.activeElement?.id==="site-search-input"'))return ime;await wait(180)}
+ throw Error('Native keyboard or focused DOM input did not appear after native field tap');
+}
+for(const orientation of ['portrait','landscape'])for(const role of ['public','garda'])for(const lang of ['en','ar']){
+ const key=[mode,role,lang,orientation].join('-');const record={key,orientation,role,lang};report.cases.push(record);
+ try{
+  adb('shell','am','force-stop',testPackage);
+  adb('shell','settings','put','system','user_rotation',orientation==='portrait'?'0':'1');
+  // Hardware display orientation persists when each browser task restarts.
+  const base='http://localhost:4173/stopped-both-sides/'+(role==='garda'?'garda/':'')+'?lang='+lang+'#play';
+  if(mode==='chrome')adb('shell','am','start','-W','-a','android.intent.action.VIEW','-d',base,'--ez','create_new_tab','true','-p',testPackage);
+  else adb('shell','am','start','-W','-n','org.sbs.audit/.Browser');
+  await wait(550);c=await connect(base);await c.send('Page.enable');
+  await c.send('Page.bringToFront');await c.send('Page.navigate',{url:base});
+  await until('location.pathname==='+JSON.stringify(new URL(base).pathname)+'&&document.querySelector(".navigation-ready")&&document.documentElement.lang==='+JSON.stringify(lang==='en'?'en-IE':'ar'));
+  report.userAgent=await evaluate('navigator.userAgent');
+  await evaluate('localStorage.setItem('+JSON.stringify('garda-encounter-reading-v1:'+role)+','+JSON.stringify(JSON.stringify({language:lang,size:150,spacing:true,motion:true}))+')');
+  await c.send('Page.reload',{ignoreCache:true});
+  await until('!!document.querySelector(".navigation-ready") && getComputedStyle(document.documentElement).fontSize==="24px" && screen.orientation.type.startsWith('+JSON.stringify(orientation)+')');
+  record.before=await evaluate('({vh:visualViewport.height,vw:visualViewport.width,orientation:screen.orientation.type})');
+  await evaluate('(()=>{const m=document.querySelector("[data-nav-toggle]");if(m?.getBoundingClientRect().width>0&&m.getAttribute("aria-expanded")!=="true")m.click();document.querySelector("#site-search-trigger").click()})()');
+  await until('document.querySelector("#site-search-dialog[open] input")?.getBoundingClientRect()?.width>8');
+  await wait(250);
+  record.point=await nativeField(key);record.ime=await keyboardReady();
+  // Android can finish the keyboard animation after the input-method service reports it.
+  await until('visualViewport.height<'+(record.before.vh-50));await wait(300);
+  record.focused=await evaluate(measure);capture(key+'-focused');
+  adb('shell','input','text','Garda');await until('document.querySelector("#site-search-input")?.value.toLowerCase()==="garda"');
+  await wait(450);record.typed=await evaluate(measure);record.imeAfterText=inputMethod();capture(key+'-typed');
+  record.pass=record.imeAfterText.shown&&record.before.vh-record.typed.vh>50&&record.typed.focus&&record.typed.visible&&record.typed.hittable&&record.typed.count>0&&record.typed.dir===(lang==='ar'?'rtl':'ltr');
+  if(!record.pass)record.error='Viewport, focus, hit target, direction, results or native keyboard assertion failed';
+ }catch(e){record.error=e.message;record.pass=false;try{capture(key+'-error');record.last=await evaluate(measure);record.lastIME=inputMethod()}catch{}}
+ finally{try{c?.ws.close()}catch{}persist();console.log('ANDROID_CASE',JSON.stringify(record))}
+}
 if(report.cases.length!==8||report.cases.some(x=>!x.pass))process.exitCode=1;
