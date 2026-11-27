@@ -15,11 +15,11 @@ are preserved.
 | Right-hand characters in quayside groups could stand on the river-wall face. | Crop the backdrop from its bottom-left origin at 1.35×, preserving the group arrangement while bringing clear pavement beneath the right-hand feet. |
 | The supporting customer in the street colleague scene crossed the curb. | Move the customer and colleague left, keeping their separation and depth. |
 | The bicycle's left tyre crossed the garden-wall face. | Move the bicycle and its owner together onto the pavement, with the Garda adjusted to preserve space. Both tyre contact regions are checked separately. |
-| The nearest youth-group friend was too small for the shared foreground depth. | Increase that friend's frame and use the same ground baseline as Jamie. |
+| The nearest youth-group friend was too small and could cross the diagonal bus-stop curb. | Increase that friend's frame and move them onto the near pavement, checking every sole and wheelchair contact point while retaining separation from Jamie. |
 | Dedicated story/support artwork had inconsistent transparent padding beneath the soles. | Register the eight source variants to the same 97.5% sole line without stretching or replacing their artwork. |
 | Group/preview contact shadows did not consistently meet the opaque soles. | Centre the contact shadow on the registered sole line. |
 | Held phones and papers could look disproportionately large. | Reduce their dimensions, place the grip inside the hand, and scale borders with the prop container. Preserve the separate original-story props. |
-| Landing figures could cross a curb or planter as preview proportions changed. | Use floor-aware front/rear offsets and matched shadow positions for phone, desktop and story proportions. |
+| Landing figures could cross a curb, planter or bollard base as preview proportions changed. | Use floor-aware front/rear offsets and matched shadow positions for phone and desktop; bring the story pair forward together to clear the bollard after its wider cover crop. |
 | Small pedestrians already painted into the GPO backdrop conflicted with the scale and legs of the overlaid characters. | Use a people-free variant of that background for the four dynamic landing composites. Retain the original populated artwork. |
 
 The existing bags and toolbox were checked against their actual opaque bottom
@@ -66,7 +66,10 @@ their real CSS containers; the existing browser suite separately exercises live
 routes, choices, navigation, refresh and accessibility behaviour.
 
 The browser measures decoded image alpha, rather than treating transparent image
-boxes as the visible character. It maps the visible sole/wheel contacts through
+boxes as the visible character. Independently measured contact regions retain
+both boot soles, cane tips, every wheelchair/bicycle wheel and all four boots in
+the two-person comparison artwork, even where their source baselines differ.
+It maps the visible sole/wheel contacts through
 the rendered background's cover crop and transform into independently reviewed
 source-image ground polygons. Those polygons and obstacle footprints live in
 `tests/browser/fixtures/scene-ground-surfaces.mjs`; they are not derived from the

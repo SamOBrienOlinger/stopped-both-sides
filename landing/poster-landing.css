@@ -186,7 +186,9 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 .sbs-poster .avatar { display: block; aspect-ratio: 1.18; overflow: hidden; }
 .sbs-poster .avatar-image { width: 100%; height: 210%; object-fit: cover; object-position: center top; }
 .sbs-poster .story-preview { margin: 0; overflow: hidden; border: 1px solid var(--edge); border-radius: .75rem; background: #eff9fa; }
-.sbs-poster .story-preview__scene { --scene-ratio: 1.95; position: relative; aspect-ratio: var(--scene-ratio); overflow: hidden; }
+/* This wider cover crop brings the bollard base nearer the panel floor.
+   Place both foreground figures in front of it, with their shadows attached. */
+.sbs-poster .story-preview__scene { --scene-ratio: 1.95; --public-ground: 7%; --garda-ground: 7%; position: relative; aspect-ratio: var(--scene-ratio); overflow: hidden; }
 .sbs-poster .story-preview figcaption, .sbs-poster .compare-caption { margin: 0; padding: .4em; text-align: center; font-size: .9rem; line-height: 1.4; }
 .sbs-poster .example-label { margin: 0 0 .5em; color: var(--ink); font-size: .9rem; font-weight: 700; }
 .sbs-poster .response-picker { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }

@@ -59,7 +59,7 @@ export const SCENE_GROUND_SURFACES = {
     note: 'Open paved forecourt below the workshop equipment. Keep standing feet in front of the planter, workbench, bicycle repair stand, tent table and sign; those props supply the scene scale.'
   },
   'exhibition-entrance': {
-    polygons: [[[0, 0.727], [0.085, 0.727], [0.09, 0.715], [0.34, 0.715], [0.37, 0.702], [0.44, 0.679], [0.685, 0.679], [0.78, 0.701], [0.86, 0.70], [1, 0.725], [1, 1], [0, 1]]],
+    polygons: [[[0, 0.727], [0.085, 0.727], [0.09, 0.715], [0.34, 0.715], [0.37, 0.702], [0.44, 0.679], [0.685, 0.679], [0.78, 0.694], [0.876, 0.694], [1, 0.725], [1, 1], [0, 1]]],
     obstacles: [
       [[0.006, 0.615], [0.076, 0.615], [0.076, 0.722], [0.006, 0.722]],
       [[0.078, 0.57], [0.343, 0.57], [0.343, 0.708], [0.078, 0.708]],

@@ -155,15 +155,43 @@ export function measureSceneGrounding(elements,{surfaces,landing=false}={}){
   if(four.length!==4)throw Error('Invalid character crop: '+value);
   return four.map((token,index)=>token.endsWith('%')?parseFloat(token)/100:parseFloat(token)/(index%2?box.width:box.height));
  }
+ function contactPartitions(image,source){
+  const character=image.closest('.scene-actor')?.dataset.sceneCharacter;
+  const gesture=source.match(/^scenes\/public-gestures\/public-(\d+)\.webp$/);
+  const publicId=gesture?'public-'+gesture[1]:character;
+  const figure=Boolean(character)||image.matches('.hero-public,.hero-garda,.panel-public,.panel-garda');
+  if(source==='scenes/story/red-bicycle.webp')return {figure:false,cuts:[0,226/452,1]};
+  // Independently measured FRAME regions, after the production atlas crop.
+  // A higher wheel or cane-adjacent boot must not disappear merely because
+  // another contact is lower elsewhere in the same transparent image.
+  if(publicId==='public-6')return {figure:true,cuts:[0,.36,.67,1]};
+  if(publicId==='public-9'){
+   const listening=gesture&&parseFloat(image.style.top)<=-200;
+   const cuts=gesture?(listening?[107/320,159/320]:[94/320,155/320]):[92/320,160/320];
+   return {figure:true,cuts:[0,...cuts,1]};
+  }
+  if(source==='characters/story-alex-comparison-20261126.webp')return {figure:true,cuts:[0,87/320,.5,234/320,1]};
+  if(gesture){
+   // Reviewed inter-boot seams in the 320px-wide gesture strips. Row order is
+   // speak/right, speak/left, listen/right, listen/left. A central frame split
+   // can otherwise let the nearer boot hide the higher, farther boot's sole.
+   const seams={1:[152,168,166,154],2:[147,173,159,161],3:[148,172,161,159],4:[146,174,155,165],5:[150,170,160,160],7:[151,169,163,157],8:[148,172,159,161]};
+   const row=Math.round(-parseFloat(image.style.top)/100),seam=seams[gesture[1]]?.[row];
+   if(!Number.isFinite(seam))throw Error('Unreviewed gesture ground-contact regions: '+source+' row '+row);
+   return {figure:true,cuts:[0,seam/320,1]};
+  }
+  return {figure,cuts:figure?[0,.5,1]:[0,1]};
+ }
  function silhouette(image,frame){
   const paint=imagePaint(image),box=paint.box;
+  const source=sourceName(image),partitions=contactPartitions(image,source);
   // A source/crop may appear in a narrow hero image with object-fit:cover or in
   // a square atlas frame. Include normalized placement, not absolute page size.
   const geometry=[(paint.left-frame.left)/frame.width,(paint.top-frame.top)/frame.height,paint.width/frame.width,paint.height/frame.height,(box.left-frame.left)/frame.width,(box.top-frame.top)/frame.height,box.width/frame.width,box.height/frame.height].map(value=>Math.round(value*10000)/10000);
   // Include measured normalized geometry even for fill images: responsive CSS
   // can move or scale an image without changing its inline atlas crop. Reusing
   // that earlier mask would hide the very composition change being measured.
-  const key=(image.currentSrc||image.src)+'|'+image.getAttribute('style')+'|'+paint.style.clipPath+'|'+geometry.join(',');
+  const key=(image.currentSrc||image.src)+'|'+image.getAttribute('style')+'|'+paint.style.clipPath+'|'+geometry.join(',')+'|'+partitions.cuts.join(',');
   if(!cache.has(key)){
    const canvas=document.createElement('canvas');canvas.width=canvas.height=SIZE+2*PAD;
    const context=canvas.getContext('2d',{willReadFrequently:true});
@@ -188,19 +216,21 @@ export function measureSceneGrounding(elements,{surfaces,landing=false}={}){
     }
    }
    if(!Number.isFinite(minX))throw Error('Empty painted silhouette');
-   const contacts=[],source=sourceName(image);
+   const contacts=[],contactRegions=[];
    // The bicycle tyres have independent source baselines: the left ends at
    // y295/301, the right at299/301. Measuring only the globally lowest3px
    // would discard the left tyre and miss a crossing of the garden-wall edge.
-   const zones=source==='scenes/story/red-bicycle.webp'?[[0,SIZE*226/452],[SIZE*226/452,SIZE]]:[[0,SIZE]];
+   const zones=partitions.cuts.slice(0,-1).map((start,index)=>[start*SIZE,partitions.cuts[index+1]*SIZE]);
    for(const [start,end] of zones){
     let bottom=-1;
     for(let x=Math.ceil(start);x<end;x++)bottom=Math.max(bottom,bottoms[x]);
-    if(bottom<0)throw Error('Missing opaque ground contact in a reviewed tyre zone');
+    if(bottom<0||(partitions.figure&&bottom<SIZE*.85))throw Error('Missing opaque sole or wheel in a reviewed ground-contact region');
+    const first=contacts.length;
     for(let x=Math.ceil(start);x<end;x++)if(bottoms[x]>=bottom-3)contacts.push([(x+.5)/SIZE,bottoms[x]/SIZE]);
+    contactRegions.push({from:start/SIZE,to:end/SIZE,bottom:bottom/SIZE,pixels:contacts.length-first});
    }
    if(!contacts.length)throw Error('No opaque ground contacts in the character frame');
-   cache.set(key,{key,source,bounds:{left:minX/SIZE,top:minY/SIZE,right:maxX/SIZE,bottom:maxY/SIZE},rows,contacts});
+   cache.set(key,{key,source,bounds:{left:minX/SIZE,top:minY/SIZE,right:maxX/SIZE,bottom:maxY/SIZE},rows,contacts,contactRegions});
   }
   const alpha=cache.get(key),bounds=alpha.bounds;
   return {alpha,frame,ink:{left:frame.left+bounds.left*frame.width,top:frame.top+bounds.top*frame.height,right:frame.left+bounds.right*frame.width,bottom:frame.top+bounds.bottom*frame.height},contacts:alpha.contacts.map(([x,y])=>[frame.left+x*frame.width,frame.top+y*frame.height]),paint};
@@ -357,7 +387,7 @@ export function measureSceneGrounding(elements,{surfaces,landing=false}={}){
     actors:people.map(person=>({role:person.role,source:person.alpha.source,character:person.character,
      frame:[(person.frame.left-bounds.left)/bounds.width,(person.frame.top-bounds.top)/bounds.height,person.frame.width/bounds.width,person.frame.height/bounds.height].map(rounded),
      ink:[(person.ink.left-bounds.left)/bounds.width,(person.ink.top-bounds.top)/bounds.height,(person.ink.right-person.ink.left)/bounds.width,(person.ink.bottom-person.ink.top)/bounds.height].map(rounded),
-     contactSpan:person.ground?.span,foot:rounded(person.ground?.foot),artKey:person.alpha.key
+     contactSpan:person.ground?.span,contactRegions:person.alpha.contactRegions,foot:rounded(person.ground?.foot),artKey:person.alpha.key
     }))});
   }catch(error){problem('scene measurement failed',{error:error.message});}
  }
