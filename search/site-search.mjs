@@ -161,17 +161,27 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
   const input=dialog.querySelector('#site-search-input');
   if(input!==document.activeElement)return;
   const field=input.getBoundingClientRect(),bounds=dialog.getBoundingClientRect();
-  const visibleTop=viewport?.offsetTop??0;
-  const top=Math.max(visibleTop,bounds.top+dialog.clientTop)+2;
-  const bottom=Math.min(visibleTop+height,bounds.top+dialog.clientTop+dialog.clientHeight)-2;
+  // CSS positions the panel inside the visual viewport. Compare the two
+  // client rectangles directly: iOS may already report both relative to the
+  // visible area after it pans to the keyboard, even with a nonzero offsetTop.
+  const top=bounds.top+dialog.clientTop+2;
+  const bottom=bounds.top+dialog.clientTop+dialog.clientHeight-2;
   // Scroll the dialog itself. scrollIntoView also pans the document on iOS
   // and its text-size-dependent scroll margins can exceed the keyboard gap.
   if(field.top<top)dialog.scrollTop+=field.top-top;
   else if(field.bottom>bottom)dialog.scrollTop+=field.bottom-bottom;
  }
- window.addEventListener('resize',fitSearchViewport);
- window.visualViewport?.addEventListener('resize',fitSearchViewport);
- window.visualViewport?.addEventListener('scroll',fitSearchViewport);
+ let fitFrame=0;
+ function viewportChanged(){
+  if(!dialog.open)return;
+  fitSearchViewport();
+  // Native focus scrolling can finish after resize/scroll dispatch.
+  if(!fitFrame)fitFrame=requestAnimationFrame(()=>{fitFrame=0;fitSearchViewport();});
+ }
+ window.addEventListener('resize',viewportChanged);
+ window.visualViewport?.addEventListener('resize',viewportChanged);
+ window.visualViewport?.addEventListener('scroll',viewportChanged);
+ dialog.addEventListener('focusin',viewportChanged);
  function resultHTML(entry){
   const kind=entry.kind==='situation'?'Situation':entry.kind==='page'?'Page':entry.kind==='practice'?'Practise one role at a time':'Source';
   const title=entry.kind==='source'||entry.originalLanguage

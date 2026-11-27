@@ -13,6 +13,19 @@
  }catch{}
  const reloading=root.hasAttribute('data-start-position');
  const restoringHistory=performance.getEntriesByType('navigation')[0]?.type==='back_forward'||performance.navigation?.type===2;
+ // A cold Back can restore before the route has rendered. Give the loading
+ // document enough height for the browser's saved offset without scrolling it.
+ function historyRange(){
+  const entry=window.navigation?.currentEntry?.key;
+  return {key:'stopped-history-range:'+(entry||location.pathname),perEntry:!!entry};
+ }
+ if(restoringHistory){
+  try{
+   const {key,perEntry}=historyRange(),offset=Number(sessionStorage.getItem(key));
+   if(Number.isFinite(offset)&&offset>0)root.style.setProperty('--history-scroll-offset',offset+'px');
+   if(perEntry)sessionStorage.removeItem(key);
+  }catch{}
+ }
  let active=reloading&&!restoringHistory,frame=0,target=()=>null;
  const cleanup=[];
  const listen=(surface,type,handler,options)=>{
@@ -66,7 +79,19 @@
  addEventListener('pageswap',event=>{
   if(event.activation?.navigationType==='reload')nativeRestoration('manual');
  });
- addEventListener('pagehide',()=>release(false));
+ addEventListener('pagehide',()=>{
+  try{
+   const {key,perEntry}=historyRange(),offset=Math.ceil(scrollY);
+   // Older engines share one maximum per document path. The browser still
+   // chooses its own offset for each entry; no route or answers are stored.
+   const previous=Number(sessionStorage.getItem(key));
+   if(perEntry||!Number.isFinite(previous)||offset>previous){
+    if(offset>0)sessionStorage.setItem(key,String(offset));
+    else sessionStorage.removeItem(key);
+   }
+  }catch{}
+  release(false);
+ });
  addEventListener('pageshow',event=>{
   if(event.persisted){release();return;}
   schedule();
