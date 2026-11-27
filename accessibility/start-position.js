@@ -3,8 +3,29 @@
 (() => {
  const root=document.documentElement;
  root.setAttribute('data-scripted','');
+ // Honor the reader's display preferences as soon as CSS arrives.
+ try{
+  const saved=JSON.parse(localStorage.getItem('garda-encounter-reading-v1:'+root.dataset.perspective));
+  if([115,130,150].includes(saved?.size))root.style.setProperty('--reading-size',saved.size+'%');
+  if(saved?.contrast==='high')root.classList.add('contrast-high');
+  if(saved?.spacing===true)root.classList.add('reading-spacious');
+  if(saved?.motion===true)root.classList.add('motion-reduce');
+ }catch{}
  const reloading=root.hasAttribute('data-start-position');
  const restoringHistory=performance.getEntriesByType('navigation')[0]?.type==='back_forward'||performance.navigation?.type===2;
+ // A cold Back can restore before the route has rendered. Give the loading
+ // document enough height for the browser's saved offset without scrolling it.
+ function historyRange(){
+  const entry=window.navigation?.currentEntry?.key;
+  return {key:'stopped-history-range:'+(entry||location.pathname),perEntry:!!entry};
+ }
+ if(restoringHistory){
+  try{
+   const {key,perEntry}=historyRange(),offset=Number(sessionStorage.getItem(key));
+   if(Number.isFinite(offset)&&offset>0)root.style.setProperty('--history-scroll-offset',offset+'px');
+   if(perEntry)sessionStorage.removeItem(key);
+  }catch{}
+ }
  let active=reloading&&!restoringHistory,frame=0,target=()=>null;
  const cleanup=[];
  const listen=(surface,type,handler,options)=>{
@@ -58,7 +79,19 @@
  addEventListener('pageswap',event=>{
   if(event.activation?.navigationType==='reload')nativeRestoration('manual');
  });
- addEventListener('pagehide',()=>release(false));
+ addEventListener('pagehide',()=>{
+  try{
+   const {key,perEntry}=historyRange(),offset=Math.ceil(scrollY);
+   // Older engines share one maximum per document path. The browser still
+   // chooses its own offset for each entry; no route or answers are stored.
+   const previous=Number(sessionStorage.getItem(key));
+   if(perEntry||!Number.isFinite(previous)||offset>previous){
+    if(offset>0)sessionStorage.setItem(key,String(offset));
+    else sessionStorage.removeItem(key);
+   }
+  }catch{}
+  release(false);
+ });
  addEventListener('pageshow',event=>{
   if(event.persisted){release();return;}
   schedule();
@@ -70,6 +103,16 @@
  };
  addEventListener('error',failed,true);
  addEventListener('unhandledrejection',failed);
+ // A native #main jump would overwrite the pending hash route before the
+ // app can handle its skip link. Keep the intended route and focus the landmark.
+ document.addEventListener('click',event=>{
+  if(event.defaultPrevented||!event.target.closest?.('a.skip[href="#main"]'))return;
+  const main=document.querySelector('#main');
+  if(!main?.querySelector('#loading'))return;
+  event.preventDefault();
+  main.focus({preventScroll:true});
+  window.scrollTo({top:0,left:0,behavior:'instant'});
+ });
  if(!active)return;
  nativeRestoration('manual');
  // Native refresh, scroll anchoring and visual-viewport restoration emit
@@ -92,7 +135,7 @@
  let parserObserver=null;
  if(document.readyState==='loading'&&typeof MutationObserver==='function'){
   parserObserver=new MutationObserver(()=>{
-   if(active&&document.readyState==='loading'&&document.querySelector('#main .initial'))position();
+   if(active&&document.readyState==='loading'&&document.querySelector('#main .initial,#loading'))position();
   });
   parserObserver.observe(document,{childList:true,subtree:true});
   cleanup.push(()=>parserObserver?.disconnect());

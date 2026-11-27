@@ -41,9 +41,12 @@ for(const entry of ['public','garda'])for(const e of Object.values(encounters))t
  for(const role of roles)expect(complete.history.every(step=>step.answers[role]!==null)).toBe(true);
  const narrativeIdentity=storyIdentity(e);
  if(narrativeIdentity){
-  const recap=page.locator('.paired-recap');
-  if(fixedStoryCharacter(e.id,'public',e.start))await expect(recap).toContainText(narrativeIdentity.name);
-  else await expect(recap).not.toContainText(narrativeIdentity.name);
+  for(const {nodeId} of complete.history){
+   const description=page.locator(`.summary-item[data-narrative-node="${nodeId}"] .recap-detail > p`).first();
+   const displayed=storyCharacter(complete,'public',nodeId).name;
+   if(e.nodes[nodeId].scene.includes(narrativeIdentity.name))await expect(description).toContainText(displayed);
+   if(displayed!==narrativeIdentity.name)await expect(description).not.toContainText(narrativeIdentity.name);
+  }
  }
  await page.reload();await expect(page.locator('.paired-recap')).toBeVisible();expect(current(page)).toEqual(complete);
  // Fresh reader input precedes Playwright's implicit scroll to the recap action.
@@ -82,8 +85,12 @@ for(const entry of ['public','garda'])test(`${entry}: reported Noor/Aisling mism
   if(current(page).answers[current(page).role]===null)await page.locator('[data-action="paired-answer"]').first().click();
   await page.locator('[data-action="paired-next"]').click();
  }
- await expect(page.locator('.paired-recap')).toContainText('Robin');await expect(page.locator('.paired-recap')).not.toContainText('Alex');
+ const opening=page.locator('.summary-item[data-narrative-node="street-start"] .recap-detail > p').first();
+ const comparison=page.locator('.summary-item[data-narrative-node="street-identity"] .recap-detail > p').first();
+ await expect(opening).toContainText('Robin');await expect(opening).not.toContainText('Alex');
+ await expect(comparison).toContainText('Alex');await expect(comparison).not.toContainText('Robin');
  await openCharacterPicker(page);await page.locator('[data-character="public-4"]').click();await page.locator('[data-action="paired-character-close"]').click();
- await expect(page.locator('.paired-recap')).toContainText('Maya');await expect(page.locator('.paired-recap')).not.toContainText('Robin');
+ await expect(opening).toContainText('Maya');await expect(page.locator('.paired-recap')).not.toContainText('Robin');
+ await expect(comparison).toContainText('Alex');
  expect(current(page).complete).toBe(true);await page.reload();await expect(page.locator('.paired-recap')).toContainText('Maya');
 });

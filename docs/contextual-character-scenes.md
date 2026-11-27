@@ -23,7 +23,9 @@ longer rendered.
 ## Asset
 
 `assets/scenes/contextual-cast.webp` is a lossless, alpha-preserving WebP version
-of the atlas created with the built-in image-generation tool. It contains all
+of the atlas created with the built-in image-generation tool. Scenes load the smaller
+`assets/scenes/contextual-cast-1774.webp` export with the same dimensions and alpha mask.
+The source contains all
 18 characters in the established six-column, three-row order. Aisling's navy
 hijab is included in her original cast position. Existing portrait controls
 retain their original assets.

@@ -6,9 +6,10 @@ const unwanted=[
  'Take your time. You can revisit any choice. Your score reflects learning in the resource; your human and civil rights never depend on it.',
  'Choose any situation. Each one can be explored from both perspectives.'
 ];
-const headings=['Understand the situation you are in','Choose a response','Learn why it matters'];
+const headings=['Choose a perspective','Understand the situation you are in','Choose a response','Learn why it matters'];
 const details=[
- 'Interact with a member of the public and/or with a Garda',
+ 'Start as a member of the public or a Garda.',
+ 'Interact with a member of the public and/or with a Garda.',
  'Try what you would say or do.',
  'Get an explanation, then try the other side.'
 ];
@@ -28,7 +29,7 @@ for(const path of paths){
   for(const width of [390,1366]){
    await page.setViewportSize({width,height:900});
    await expect.poll(()=>page.locator('summary.landing-disclosure-trigger').evaluateAll(triggers=>{
-    if(triggers.length!==3)return false;
+    if(triggers.length!==4)return false;
     const first=triggers[0].getBoundingClientRect();
     return triggers.every(trigger=>{
      const bounds=trigger.getBoundingClientRect();
@@ -52,7 +53,8 @@ for(const path of paths){
   await expect(page.locator('#scene-title')).toBeVisible();
  });
 
- test(path+' landing removes redundant text while retaining the three learning steps',async({page})=>{
+ test(path+' landing removes redundant text while retaining the four learning steps',async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#play');
   await expect(page.locator('.perspective-card-link[data-role-tone="public"]')).toHaveText('Explore the public perspective');
   await expect(page.locator('.perspective-card-link[data-role-tone="garda"]')).toHaveText('Explore the Garda perspective');
@@ -61,18 +63,15 @@ for(const path of paths){
   const dropdown=guide.locator('details.how-to-disclosure');
   const toggle=dropdown.locator('summary.how-to-disclosure-trigger');
   await expect(toggle.getByRole('heading',{name:'How it works'})).toBeVisible();
-  await expect(dropdown).not.toHaveAttribute('open','');
-  await expect(guide.locator('ol.how-steps')).toHaveAttribute('role','list');
-  const cards=guide.locator('li.how-step');
-  await expect(cards.first()).toBeHidden();
-  await toggle.click();
   await expect(dropdown).toHaveAttribute('open','');
+  await expect(guide.locator('ol.learning-steps')).toHaveAttribute('role','list');
+  const cards=guide.locator('li.learning-card');
   await expect(cards.first()).toBeVisible();
-  await expect(cards).toHaveCount(3);
-  await expect(cards.locator('.how-step-number')).toHaveText(['1','2','3']);
-  await expect(cards.locator('.how-step-copy strong')).toHaveText(headings);
-  await expect(cards.locator('.how-step-copy>span')).toHaveText(details);
-  await expect(cards.locator('svg.learning-icon')).toHaveCount(3);
+  await expect(cards).toHaveCount(4);
+  await expect(cards.locator('.step-number')).toHaveText(['1','2','3','4']);
+  await expect(cards.locator('h3 > span:last-child')).toHaveText(headings);
+  await expect(cards.locator('.learning-step-copy')).toHaveText(details);
+  await expect(cards.locator('.learning-step-visual')).toHaveCount(4);
   await toggle.focus();
   await page.keyboard.press('Space');
   await expect(dropdown).not.toHaveAttribute('open','');
@@ -92,44 +91,43 @@ for(const path of paths){
    await page.goto(path+'?lang='+lang+'#play');
    const guide=page.locator('.how-to-play');
    const dropdown=guide.locator('details.how-to-disclosure');
-   await expect(dropdown).not.toHaveAttribute('open','');
-   await expect(guide.locator('li.how-step')).toHaveCount(3);
-   await dropdown.locator('summary').click();
+   await expect(guide.locator('li.learning-card')).toHaveCount(4);
    await expect(dropdown).toHaveAttribute('open','');
    await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    for(const width of [320,390,768,1366]){
     await page.setViewportSize({width,height:width<700?844:900});
     await expect.poll(()=>guide.evaluate(section=>{
      const rect=section.getBoundingClientRect(),root=document.documentElement;
-     const cards=[...section.querySelectorAll('li.how-step')];
+     const cards=[...section.querySelectorAll('li.learning-card')];
      return {
       noPageOverflow:root.scrollWidth<=root.clientWidth+2,
       sectionFits:rect.left>=-2&&rect.right<=root.clientWidth+2,
-      cardGrid:cards.length===3&&cards.every(card=>getComputedStyle(card).display==='grid'),
+      stepsVisible:cards.length===4&&cards.every(card=>card.getBoundingClientRect().height>0),
       cardsFit:cards.every(card=>{
        const bounds=card.getBoundingClientRect();
        return bounds.left>=rect.left-2&&bounds.right<=rect.right+2&&card.scrollWidth<=card.clientWidth+2;
       }),
       copyFits:cards.every(card=>{
-       const copy=card.querySelector('.how-step-copy');
+       const copy=card.querySelector('.learning-step-copy');
        return copy&&copy.scrollWidth<=copy.clientWidth+2;
       }),
       badgesClear:cards.every(card=>{
-       const number=card.querySelector('.how-step-number')?.getBoundingClientRect();
-       const icon=card.querySelector('.learning-icon')?.getBoundingClientRect();
+       const number=card.querySelector('.step-number')?.getBoundingClientRect();
+       const icon=card.querySelector('.learning-step-visual')?.getBoundingClientRect();
        if(!number||!icon)return false;
        const horizontal=Math.min(number.right,icon.right)-Math.max(number.left,icon.left);
        const vertical=Math.min(number.bottom,icon.bottom)-Math.max(number.top,icon.top);
        return horizontal<=0||vertical<=0;
       })
      };
-    })).toEqual({noPageOverflow:true,sectionFits:true,cardGrid:true,cardsFit:true,copyFits:true,badgesClear:true});
+    })).toEqual({noPageOverflow:true,sectionFits:true,stepsVisible:true,cardsFit:true,copyFits:true,badgesClear:true});
    }
   }
   await page.goto(path+'?lang=en#play');
   await page.emulateMedia({reducedMotion:'reduce'});
   const role=path==='garda/'?'garda':'public';
   const dropdown=page.locator('.how-to-play details.how-to-disclosure');
+  await dropdown.locator('summary').click();
   for(const width of [390,1366]){
    await page.setViewportSize({width,height:900});
    await expect(dropdown).not.toHaveAttribute('open','');

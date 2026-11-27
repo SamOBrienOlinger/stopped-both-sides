@@ -1,9 +1,9 @@
-import {storyCharacterById} from './story-cast.mjs?v=role-cast-20261126b';
-import {characterArtwork,characterFor} from './characters.mjs?v=final-touches-20261125';
+import {storyCharacterById} from './story-cast.mjs?v=responsive-fixes-20261127';
+import {characterArtwork,characterFor} from './characters.mjs?v=responsive-fixes-20261127';
 import {roleLabels} from './catalog.mjs?v=site-repairs-20261125';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {normaliseLanguage} from '../locales/languages.mjs';
-import {translateText} from '../locales/translate.mjs?v=practice-consistency-20261126';
+import {translateText} from '../locales/active-language.mjs';
 
 const roleDescriptions={
  public:'This is the member of the public in this encounter. Explore what they can ask, the choices available and the rights that apply.',

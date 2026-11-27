@@ -1,6 +1,6 @@
 import {expect, test} from '@playwright/test';
 
-const steps = ['Choose a perspective', 'Read the situation', 'Choose a response', 'Compare perspectives'];
+const steps = ['Choose a perspective', 'Understand the situation you are in', 'Choose a response', 'Learn why it matters'];
 const actors = {public: 'alex', garda: 'aisling'};
 
 for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
@@ -13,20 +13,21 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
       const hero = poster.locator('.poster-hero');
       const heading = hero.getByRole('heading', {level: 1, name: 'Stopped: Both Sides'});
       const subtitle = hero.getByText('One situation. Two perspectives.', {exact: true});
-      const entryLabel = role === 'public' ? 'Public perspective' : 'Garda perspective';
-      const question = hero.getByRole('link', {name: 'What would you do? ' + entryLabel, exact: true});
+      const question = hero.getByText('What will you do?', {exact: true});
       await expect(heading).toBeVisible();
       await expect(subtitle).toBeVisible();
-      await expect(question).toHaveAttribute('href', new RegExp('#encounters/' + role + '$'));
+      await expect(question).toBeVisible();
       await expect(hero.getByRole('img', {name: /Alex and Garda Aisling.*GPO/})).toBeVisible();
 
       if (width === 390) {
-        // The two full labels must be equally discoverable in the initial phone view.
+        await poster.locator('.perspective-grid').scrollIntoViewIfNeeded();
         for (const label of await poster.locator('.perspective-label').all()) {
           await expect(label).toBeInViewport({ratio: 1});
         }
       }
 
+      const practice = page.locator('.single-mode');
+      if (!await practice.evaluate(details => details.open)) await practice.locator('summary').click();
       for (const [perspective, name] of Object.entries(actors)) {
         const actor = hero.locator('.hero-' + perspective);
         await expect.poll(() => actor.evaluate(image => new URL(image.src).pathname)).toMatch(new RegExp('/assets/characters/poster-' + name + '\\.webp$'));
@@ -41,7 +42,7 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
         await expect(reverseActor).toHaveAttribute('src', new RegExp('/characters/poster-' + actors[other] + '-back\\.webp$'));
         await panel.scrollIntoViewIfNeeded();
         await expect.poll(() => reverseActor.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
-        const link = poster.locator('.perspective-card-link[data-role-tone="' + perspective + '"]');
+        const link = practice.locator('.perspective-card-link[data-role-tone="' + perspective + '"]');
         await expect(link).toBeVisible();
         await expect(link).toHaveAttribute('href', hrefPattern);
         const logo = link.locator('img.perspective-icon');
@@ -50,9 +51,10 @@ for (const [role, path] of [['public', './'], ['garda', 'garda/']]) {
         await expect.poll(() => logo.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
       }
 
-      await expect(poster.locator('.learning-card h3 > span:last-child')).toHaveText(steps);
-      await expect(poster.getByText('Example responses', {exact: true})).toBeVisible();
-      const examples = poster.getByRole('list', {name: 'Example responses'});
+      const guide = page.locator('.how-to-play');
+      await expect(guide.locator('.learning-card h3 > span:last-child')).toHaveText(steps);
+      await expect(guide.getByText('Example responses', {exact: true})).toBeVisible();
+      const examples = guide.getByRole('list', {name: 'Example responses'});
       await expect(examples.getByRole('listitem')).toHaveCount(2);
       await expect(examples.locator('a, button, [tabindex]')).toHaveCount(0);
       await page.evaluate(() => document.fonts.ready);

@@ -1,5 +1,5 @@
-import {publicGestureArtwork} from './group-staging.mjs';
-import {characterFor} from './characters.mjs?v=final-touches-20261125';
+import {publicGestureArtwork} from './group-staging.mjs?v=responsive-fixes-20261127';
+import {characterFor} from './characters.mjs?v=responsive-fixes-20261127';
 import {sceneActorLayout} from './scene-layout.mjs?v=situation-locations-20261122';
 
 const position=(x,width,bottom)=>({x,width,bottom,labelSpace:2*Math.min(x,100-x)});

@@ -123,7 +123,7 @@ async function prepare(page,role,profile){
       hit:!!element&&!!hit&&element.contains(hit)};
     })};
   };
-  const ready=()=>document.querySelector('#main h1')&&!document.querySelector('#main .initial');
+  const ready=()=>document.querySelector('#main h1')&&!document.querySelector('#main .initial,#loading');
   const capture=()=>{
    const header=document.querySelector('.header'),main=document.querySelector('#main');
    if(!ready()||!header||!main)return;
@@ -285,7 +285,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    // WebKit can pause animation-frame polling while the deferred app module
    // is held. This wait concerns DOM/CSS readiness, so use a bounded timer;
    // the rendered geometry and refresh assertions below stay unchanged.
-   await page.waitForFunction(()=>document.querySelector('#main .initial')&&
+   await page.waitForFunction(()=>document.querySelector('#loading')&&
     [...document.querySelectorAll('link[rel~="stylesheet"]')].every(link=>link.sheet),
     undefined,{polling:50,timeout:10000});
    // Some engines keep FontFaceSet.ready pending until deferred modules
@@ -293,7 +293,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    // neither fonts.ready nor screenshot's implicit font wait can run here.
    loading=await page.evaluate(()=>({
     header:document.querySelector('.header').getBoundingClientRect().toJSON(),
-    opening:document.querySelector('#main .initial').getBoundingClientRect().toJSON(),
+    opening:document.querySelector('#main').firstElementChild.getBoundingClientRect().toJSON(),
     navigationPanel:document.querySelector('#main-navigation').getBoundingClientRect().toJSON(),
     width:innerWidth,height:innerHeight,scrollY
    }));
@@ -303,7 +303,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
    // disabling it while module dependencies start can strand their requests.
    release();await continued;
   }
-  await expect(page.locator('#main .initial,.error')).toHaveCount(0);
+  await expect(page.locator('#loading,.error')).toHaveCount(0);
   await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded','false');
   const ready=await page.locator('.header').evaluate(header=>header.getBoundingClientRect().toJSON());
   await testInfo.attach('loading-header-geometry.json',{body:Buffer.from(JSON.stringify({loading,ready})),contentType:'application/json'});
@@ -338,11 +338,11 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await page.setViewportSize({width:profile.width,height:profile.height});
   await page.emulateMedia({reducedMotion:'reduce'});
   await prepare(page,role,profile);
-  await page.goto(path+'?lang=en#about');await expect(page.locator('#main .initial')).toHaveCount(0);
+  await page.goto(path+'?lang=en#about');await expect(page.locator('#loading')).toHaveCount(0);
   // Mobile WebKit has no mouse.wheel driver. PageDown is real browser input
   // in all three engines; the other engines also cover the wheel path.
   for(const input of browserName==='webkit'?['keydown']:['keydown','wheel']){
-   await page.reload();await expect(page.locator('#main .initial')).toHaveCount(0);
+   await page.reload();await expect(page.locator('#loading')).toHaveCount(0);
    await page.evaluate(()=>{document.documentElement.style.overflowAnchor='none';});
    if(input==='keydown')await page.keyboard.press('PageDown');
    else {await page.mouse.move(195,400);await page.mouse.wheel(0,480);}

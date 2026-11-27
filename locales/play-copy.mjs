@@ -851,6 +851,32 @@ const posterCopy = [
   'Cás amháin. Dhá dhearcadh.', 'Uma situação. Duas perspetivas.', 'موقف واحد. منظوران.', 'Jedna sytuacja. Dwie perspektywy.',
   'O situație. Două perspective.', 'Une situation. Deux perspectives.', 'Una situación. Dos perspectivas.', '同一个情境。两种视角。'
  ]],
+ ['What will you do?', [
+  'Cad a dhéanfaidh tú?', 'O que vai fazer?', 'ماذا ستفعل؟', 'Co zrobisz?',
+  'Ce vei face?', 'Que ferez-vous ?', '¿Qué harás?', '你会怎么做？'
+ ]],
+ ['Explore realistic situations, choose how to respond, and see how the same encounter can be experienced differently by members of the public and Gardaí.', [
+  'Fiosraigh cásanna réalaíocha, roghnaigh conas freagairt agus féach conas is féidir le baill den phobal agus le Gardaí taithí éagsúil a bheith acu ar an teagmháil chéanna.',
+  'Explore situações realistas, escolha como responder e descubra como os cidadãos e os agentes da Garda podem viver o mesmo encontro de formas diferentes.',
+  'استكشف مواقف واقعية، واختر كيف ترد، وتعرّف على كيف يمكن لأفراد الجمهور وأفراد الشرطة الأيرلندية أن يعيشوا اللقاء نفسه بطرق مختلفة.',
+  'Poznaj realistyczne sytuacje, wybierz sposób reakcji i zobacz, jak różnie to samo spotkanie mogą odbierać członkowie społeczeństwa i funkcjonariusze Garda.',
+  'Explorează situații realiste, alege cum să răspunzi și vezi cum membrii publicului și polițiștii irlandezi pot trăi diferit aceeași întâlnire.',
+  'Explorez des situations réalistes, choisissez comment réagir et découvrez comment un même échange peut être vécu différemment par le public et les agents de la Garda.',
+  'Explora situaciones realistas, elige cómo responder y descubre cómo la ciudadanía y los agentes de la Garda pueden vivir un mismo encuentro de maneras distintas.',
+  '探索贴近现实的情境，选择如何回应，并了解公众和爱尔兰警察在同一次接触中可能有哪些不同感受。'
+ ]],
+ ['Start as a member of the public or a Garda.', [
+  'Tosaigh mar bhall den phobal nó mar Gharda.', 'Comece como membro do público ou agente da Garda.',
+  'ابدأ بدور أحد أفراد الجمهور أو أحد أفراد الشرطة الأيرلندية.', 'Zacznij w roli osoby z ogółu społeczeństwa lub funkcjonariusza Garda.',
+  'Începe în rolul unui membru al publicului sau al unui polițist irlandez.', 'Commencez dans le rôle d’un membre du public ou d’un agent de la Garda.',
+  'Empieza como miembro del público o agente de la Garda.', '先选择扮演一名公众人士或一名爱尔兰警察。'
+ ]],
+ ['Interact with a member of the public and/or with a Garda.', [
+  'Bí ag plé le ball den phobal, le Garda nó leis an mbeirt acu.', 'Interaja com um membro do público, com um agente da Garda ou com ambos.',
+  'تفاعل مع أحد أفراد الجمهور أو أحد أفراد الشرطة الأيرلندية أو كليهما.', 'Wejdź w interakcję z osobą z ogółu społeczeństwa, funkcjonariuszem Garda lub z obiema osobami.',
+  'Interacționează cu un membru al publicului, cu un polițist irlandez sau cu amândoi.', 'Échangez avec un membre du public, un agent de la Garda ou les deux.',
+  'Interactúa con un miembro del público, con un agente de la Garda o con ambos.', '与一名公众人士、一名爱尔兰警察或双方互动。'
+ ]],
  ['Interactive learning about rights, choices and perspectives.', [
   'Foghlaim idirghníomhach faoi chearta, roghanna agus dearcthaí.',
   'Aprendizagem interativa sobre direitos, escolhas e perspetivas.',

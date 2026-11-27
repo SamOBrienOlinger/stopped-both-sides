@@ -14,7 +14,7 @@ import {sceneDirections,renderScene} from '../encounters/scenes.mjs?v=site-repai
 
 const asset=new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url);
 const names=['Ciara','Rory','Jamie','Lee','Aisling','Kai','Conor','Orla','Charlie'];
-const imagePart='/assets/characters/garda-baseball-2026.webp';
+const imagePart=id=>'/assets/characters/garda-uniforms/'+id+'.webp';
 
 test('Final atlas is a real WebP and supplies nine preserved cast identities',()=>{
  assert.ok(existsSync(asset),'production WebP should be committed, not only a reference image');
@@ -34,15 +34,16 @@ test('Final atlas is a real WebP and supplies nine preserved cast identities',()
   assert.ok(feet>top+350&&feet<=bottom);
   const a=gardaArtwork(character),b=characterArtwork(character),c=sceneCharacterArtwork(character);
   for(const d of [a,b,c]){
-   assert.ok(d.src.includes(imagePart),character.name);
+   assert.ok(d.src.endsWith(imagePart(character.id)),character.name);
+   assert.ok(existsSync(new URL(d.src)),character.name+' has a local uniform image');
    assert.ok(d.style.includes('clip-path:inset('));
-   assert.equal(d.width,1254);assert.equal(d.height,1254);
+   assert.equal(d.width,right-left);assert.equal(d.height,bottom-top);
   }
   assert.deepEqual(a,b);assert.deepEqual(a,c);
  }
  assert.equal(gardaArtwork(characters.public[0]),null);
  assert.match(characterArtwork(characters.public[0]).src,/\/characters\/cast\.webp/);
- assert.match(sceneCharacterArtwork(characters.public[0]).src,/\/scenes\/contextual-cast\.webp/);
+ assert.match(sceneCharacterArtwork(characters.public[0]).src,/\/scenes\/contextual-cast-1774\.webp/);
 });
 
 test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',()=>{
@@ -76,13 +77,13 @@ test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',
       const crop=`left:${-column*100}%;top:0%;width:200%;height:100%;clip-path:inset(0% ${(1-column)*50}% 0% ${column*50}%)`;
       assert.ok(actor[4].includes('style="'+crop+'"'),character.id+' uses its own alternate uniform');
      }else if(role==='garda'){
-      asset='/characters/garda-baseball-2026.webp';
+      asset=imagePart(character.id);
       assert.ok(actor[4].includes('style="'+gardaArtwork(character).style+'"'),character.id+' uses its own uniform');
      }
-     else if(character.id==='public-10')asset='/characters/nia-public-20261123.png';
+     else if(character.id==='public-10')asset='/characters/nia-public-20261123.webp';
      else if(character.sceneArtwork&&(character.id.startsWith('support-')||character.id.startsWith('story-')))
       asset='/assets/'+new URL(character.sceneArtwork.src).pathname.split('/assets/')[1];
-     else asset=group||extras.some(person=>person.key===key)?'/scenes/group-public-gestures.webp':'/scenes/contextual-cast.webp';
+     else asset=group||extras.some(person=>person.key===key)?'/scenes/public-gestures/'+character.id+'.webp':'/scenes/contextual-cast-1774.webp';
      assert.ok(actor[4].includes(asset),character.id+' should use '+asset);
      assert.equal(actor[4].includes('clip-path:inset('),character.sceneArtwork?character.sceneArtwork.style.includes('clip-path:inset('):true);
     }
@@ -100,7 +101,7 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
   const savedCast={...state.cast};
   for(let i=0;i<20&&!state.complete;i++){
    const markup=renderScene(state);
-   assert.match(markup,/characters\/garda-baseball-2026.webp/);
+   assert.ok(markup.includes(imagePart(storyCharacter(state,'garda').id)));
    state=continueEncounter(answer(state,0));
    state=decodeState(encodeState(state));
    assert.deepEqual(state.cast,savedCast);
@@ -108,7 +109,7 @@ test('Switching, answering, saving and recaps retain updated Garda characters',(
   assert.ok(state.complete,encounter.id+' / '+g.name);
   for(const step of state.history){
    const html=renderScene(state,{step,compact:true});
-   assert.match(html,/characters\/garda-baseball-2026.webp/);
+   assert.ok(html.includes(imagePart(storyCharacter(state,'garda',step.nodeId).id)));
    const shown=storyCharacter(state,'garda',step.nodeId);
    assert.ok(html.includes('data-scene-character="'+shown.id+'" data-scene-role="garda"'));
    assert.equal(state.cast.garda,g.id);

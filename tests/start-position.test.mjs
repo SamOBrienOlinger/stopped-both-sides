@@ -23,11 +23,14 @@ function surface(){
 // Execute the production classic script against a small browser host. These
 // tests vary lifecycle/input ordering; browser tests cover real trusted input
 // and layout. No controller logic is reimplemented in the fixture.
-function browser(type='reload',offset=480){
+function browser(type='reload',offset=480,{perspective='public',preferences={},sessionStorage,entryKey}={}){
  const attributes=new Set(type==='reload'?['data-start-position']:[]);
  let pendingOffset=null,initialShell=false;
  const parserObservers=new Set();
+ const styleProperties=new Map();
  const root={setAttribute:name=>attributes.add(name),removeAttribute:name=>attributes.delete(name),
+  dataset:{perspective},classList:new Set(),style:{setProperty:(key,value)=>styleProperties.set(key,value),
+   getPropertyValue:key=>styleProperties.get(key)||''},
   hasAttribute:name=>attributes.has(name),
   getBoundingClientRect(){
    // Native restoration may remain deferred until the first styled layout.
@@ -37,9 +40,12 @@ function browser(type='reload',offset=480){
  let finishFonts;
  const fonts={...surface(),ready:new Promise(resolve=>{finishFonts=resolve;})};
  const document={...surface(),documentElement:root,fonts,scrollingElement:{scrollHeight:4000},readyState:'loading',
-  querySelector:selector=>selector==='#main .initial'&&initialShell?{}:null};
+  querySelector:selector=>selector==='#main .initial,#loading'&&initialShell?{}:null};
  const frames=new Map(),writes=[];let nextFrame=0;
  const host={...surface(),document,history:{scrollRestoration:type==='reload'?'manual':'auto'},
+  localStorage:{getItem:key=>preferences[key]??null},sessionStorage,
+  location:{pathname:'/stopped-both-sides/',hash:'#encounter/choices'},
+  navigation:entryKey?{currentEntry:{key:entryKey}}:undefined,
   performance:{getEntriesByType:()=>[{type}]},innerHeight:800,scrollX:0,scrollY:offset,
   visualViewport:surface(),
   MutationObserver:class{
@@ -64,6 +70,20 @@ function browser(type='reload',offset=480){
   anchor(top){return {isConnected:true,getBoundingClientRect:()=>({top:top-host.scrollY})};}
  };
 }
+
+test('the initial layout uses the saved display preferences for its own edition',()=>{
+ const preferences={'garda-encounter-reading-v1:public':'{"size":150,"contrast":"high","spacing":true,"motion":true}',
+  'garda-encounter-reading-v1:garda':'{"size":115,"contrast":"standard","spacing":false,"motion":false}'};
+ for(const [perspective,expected] of [['public','150%'],['garda','115%']]){
+  const {root}=browser('navigate',0,{perspective,preferences});
+  assert.equal(root.style.getPropertyValue('--reading-size'),expected);
+  assert.deepEqual([...root.classList],perspective==='public'?['contrast-high','reading-spacious','motion-reduce']:[]);
+ }
+ for(const value of ['{"size":999}','unreadable',null]){
+  const {root}=browser('navigate',0,{preferences:{'garda-encounter-reading-v1:public':value}});
+  assert.equal(root.style.getPropertyValue('--reading-size'),'');
+ }
+});
 
 test('parser readiness corrects a restored offset synchronously before the next frame',()=>{
  const e=browser();e.restore(480,{emit:false});
@@ -154,6 +174,31 @@ test('ordinary navigation and cold Back retain native positioning through app re
   assert.equal(e.host.history.scrollRestoration,'auto',type);
   assert.equal(e.writes.length,0,type);
  }
+});
+
+test('only native history traversal reserves its recorded range, independent of browser scroll policy',()=>{
+ for(const entryKey of ['opaque-key',undefined]){
+  const hints=new Map(),options={entryKey,sessionStorage:{
+   getItem:key=>hints.get(key)??null,setItem:(key,value)=>hints.set(key,value),removeItem:key=>hints.delete(key)
+  }};
+  browser('navigate',500,options).host.emit('pagehide');
+  assert.deepEqual([...hints.entries()],[['stopped-history-range:'+(entryKey||'/stopped-both-sides/'),'500']]);
+  if(!entryKey)browser('navigate',90,options).host.emit('pagehide');
+  const reload=browser('reload',500,options);
+  assert.equal(reload.root.style.getPropertyValue('--history-scroll-offset'),'');
+  assert.equal(reload.host.scrollY,0);
+  const back=browser('back_forward',500,options);
+  assert.equal(back.root.style.getPropertyValue('--history-scroll-offset'),'500px');
+  assert.equal(back.host.history.scrollRestoration,'auto');
+  assert.equal(back.writes.length,0);
+  assert.equal(hints.size,entryKey?0:1,'per-entry hints are consumed and the path fallback stays available');
+ }
+ const blocked={sessionStorage:{getItem(){throw Error('Storage unavailable');}}};
+ const back=browser('back_forward',500,blocked);
+ back.host.emit('pagehide');
+ assert.equal(back.root.style.getPropertyValue('--history-scroll-offset'),'');
+ assert.equal(back.host.scrollY,500);
+ assert.equal(browser('reload',500,blocked).host.scrollY,0);
 });
 
 test('source positioning resolves replacement content and its current layout',()=>{

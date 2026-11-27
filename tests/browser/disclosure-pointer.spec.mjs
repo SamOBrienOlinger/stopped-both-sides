@@ -308,7 +308,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await page.setViewportSize({width:1366,height:768});
   await page.goto(entry+'?lang=en');
   await page.locator('.single-mode>summary').click();
-  await page.locator('.single-mode .practice-content a').click();
+  await page.locator('.single-mode').getByRole('link',{name:'Browse situations',exact:true}).click();
   await page.locator('.scenario-library .situation-topic>summary').first().click();
   await page.locator('.scenario-library [data-action="start"]').first().click();
   await expect(page.locator('#scene-title')).toBeVisible();

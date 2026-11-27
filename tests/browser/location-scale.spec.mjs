@@ -19,7 +19,10 @@ function checkGeometry(locations){
    const label=location.id+'/'+actor.role;
    expect(actor.overflow,label+' retains the complete sprite').toBeLessThanOrEqual(.1);
    expect(actor.distortion,label+' preserves the sprite aspect ratio').toBeLessThan(.01);
-   if(/^characters\/story-(?:amina|jamie|jamie-comparison|other-person)\.webp$/.test(actor.source)){
+   const standalone=/^characters\/story-(?:amina|jamie|jamie-comparison|other-person)\.webp$/.test(actor.source)||
+    (actor.character==='story-alex-comparison'&&actor.source==='characters/story-alex-comparison-20261126.webp')||
+    (actor.character==='support-ticket-steward'&&actor.source==='characters/ticket-steward-768.webp');
+   if(standalone){
     expect(actor.crop,label+' displays the whole standalone figure').toBe('none');
     expect(actor.scale,label+' fits its calibrated square frame').toBeCloseTo(1,2);
    }else expect(actor.crop,label+' isolates the correct atlas cell').toMatch(/^inset\(/);

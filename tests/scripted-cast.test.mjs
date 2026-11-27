@@ -23,12 +23,12 @@ test('Alex comparison depicts both written identities only at its stage without 
   assert.equal(alex.id,'story-alex-comparison');
   assert.equal(alex.name,'Alex');
   assert.equal(storyCharacterById(alex.id),alex);
-  assert.match(alex.sceneArtwork.src,/\/assets\/characters\/story-alex-comparison-20261126\.png$/);
+  assert.match(alex.sceneArtwork.src,/\/assets\/characters\/story-alex-comparison-20261126\.webp$/);
   assert.equal(alex.sceneArtwork.width,alex.sceneArtwork.height);
   const html=renderScene(switchRole(state));
   assert.ok(html.includes('data-scene-character="story-alex-comparison" data-scene-role="public"'));
   assert.ok(html.includes('data-scene-character-id="story-alex-comparison" data-story-fixed'));
-  assert.ok(html.includes('story-alex-comparison-20261126.png'));
+  assert.ok(html.includes('story-alex-comparison-20261126.webp'));
   assert.equal(storyCharacter(state,'garda').id,preferred.garda);
   assert.deepEqual(state,snapshot);
   assert.deepEqual(state.cast,preferred);

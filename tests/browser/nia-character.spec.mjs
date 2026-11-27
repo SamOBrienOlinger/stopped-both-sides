@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 import {openNavigation} from './navigation.mjs';
 
-const imageSource=/\/assets\/characters\/nia-public-20261123\.png(?:\?|$)/;
+const imageSource=/\/assets\/characters\/nia-public-20261123\.webp(?:\?|$)/;
 const sceneSelector='.paired-scene-lead>.encounter-scene';
 const current=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 

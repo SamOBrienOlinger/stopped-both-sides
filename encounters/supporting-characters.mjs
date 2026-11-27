@@ -1,6 +1,7 @@
 // Dedicated story participants stay separate from the selectable public
 // avatars. Both sprites share a transparent atlas and the same foot baseline.
-const src=new URL('../assets/characters/discrimination-support-20261122.png',import.meta.url).href;
+const src=new URL('../assets/characters/discrimination-support-20261122.webp',import.meta.url).href;
+const stewardSrc=size=>new URL('../assets/characters/ticket-steward-'+size+'.webp',import.meta.url).href;
 const artwork=(left,crop)=>({src,width:1774,height:887,
  style:`left:${left}%;top:0%;width:200%;height:100%;clip-path:inset(${crop})`});
 export const supportingCharacters={
@@ -8,8 +9,8 @@ export const supportingCharacters={
  // This identity and uniform must never be replaced by a selectable public avatar.
  'support-ticket-steward':{
   id:'support-ticket-steward',name:'Ticket steward',role:'public',adult:true,labelOnly:true,
-  sceneArtwork:{src:new URL('../assets/characters/support-ticket-steward-20261126.png',import.meta.url).href,
-   width:1254,height:1254,style:'left:0;top:0;width:100%;height:100%'}
+  sceneArtwork:{src:stewardSrc(768),srcset:stewardSrc(384)+' 384w, '+stewardSrc(768)+' 768w',
+   width:768,height:768,style:'left:0;top:0;width:100%;height:100%'}
  },
  'support-child':{
   id:'support-child',name:'Child',role:'public',age:7,

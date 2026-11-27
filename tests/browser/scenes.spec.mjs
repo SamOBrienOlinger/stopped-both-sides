@@ -103,11 +103,12 @@ async function characterGeometry(scene){
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
   const name=new URL(image.src).pathname.split('/').pop();
   const calibration={
-   'garda-baseball-2026.webp':1254/426,'contextual-cast.webp':1774/320,
-   'group-public-gestures.webp':9,'nia-public-20261123.png':1254/1300,
-   'discrimination-support-20261122.png':2
+   'contextual-cast-1774.webp':1774/320,
+   'nia-public-20261123.webp':1254/1300,
+   'discrimination-support-20261122.webp':2
   };
-  const columns=name.startsWith('story-')?1:calibration[name];
+  const columns=image.src.includes('/garda-uniforms/')?418/426:
+   image.src.includes('/public-gestures/')||name.startsWith('story-')?1:calibration[name];
   return {scale:art.width/bounds.width,columns,distortion:Math.abs(art.width/art.height-image.naturalWidth/image.naturalHeight)};
  }));
  for(const portrait of result){

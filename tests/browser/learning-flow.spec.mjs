@@ -26,7 +26,16 @@ for(const [path,role] of [['./','public'],['garda/','garda']]){
   await link.focus();
   expect(await ratio()).toBeGreaterThanOrEqual(4.5);
   await link.hover();
-  expect(await ratio()).toBeGreaterThanOrEqual(4.5);
+  const hoverColours=await link.evaluate(async element=>{
+   const samples=[],end=performance.now()+500;
+   do{
+    const style=getComputedStyle(element);
+    samples.push([style.color,style.backgroundColor]);
+    await new Promise(requestAnimationFrame);
+   }while(performance.now()<end);
+   return samples;
+  });
+  expect(Math.min(...hoverColours.map(contrast))).toBeGreaterThanOrEqual(4.5);
   await page.mouse.down();
   expect(await ratio()).toBeGreaterThanOrEqual(4.5);
   await page.mouse.up();
@@ -118,7 +127,7 @@ test('the workshop guide can be opened in Arabic with enlarged text',async({page
  await page.setViewportSize({width:320,height:800});
  await page.goto('./?lang=ar#discussion/garda/garda-supervision');
  await expect(page.getByRole('heading',{name:translateText('Explore and discuss this situation','ar'),exact:true})).toBeVisible();
- await expect(page.locator('.discussion-guide')).toContainText(translateText('Allow about 15 minutes.','ar'));
+ await expect(page.locator('.discussion-guide')).toContainText(translateText('Choose a participant. Other people can follow along as observers.','ar'));
  await expect(page.locator('.discussion-guide')).toContainText(translateText('What should the sergeant and the representative of a local community group look into together?','ar'));
  await expect(page.locator('html')).toHaveAttribute('dir','rtl');
  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));

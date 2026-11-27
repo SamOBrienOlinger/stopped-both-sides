@@ -9,6 +9,7 @@ for(const [entry,role] of [['./','public'],['garda/','garda']]){
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(entry+'?lang=en');
+  await page.locator('.home-progress-disclosure > summary').click();
   const start=page.locator('.home-play [data-action="paired-quick-start"]');
   await expect(start).toBeVisible();
   await start.scrollIntoViewIfNeeded();
@@ -136,6 +137,7 @@ test('a practice recap and an unfinished shared situation stay independently acc
  await page.reload();
  await expect(another).toBeVisible();
  await page.goto('./?lang=en#play');
+ await page.locator('.home-progress-disclosure > summary').click();
  const resume=page.locator('.home-play').getByRole('link',{name:'Resume your situation',exact:true});
  await expect(resume).toBeVisible();
  await resume.scrollIntoViewIfNeeded();

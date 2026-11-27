@@ -8,7 +8,7 @@ const arrest=stateHash(startEncounter('public-arrest','garda',{cast:{public:'pub
 const invitation=[
  'Stopped: Both Sides',
  'One situation. Two perspectives.',
- 'Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.'
+ 'Explore realistic situations, choose how to respond, and see how the same encounter can be experienced differently by members of the public and Gardaí.'
 ];
 const invitationText='#paired-title, #perspectives-title, .landing-deck';
 async function captureLanding(page,path){
@@ -82,12 +82,14 @@ for(const path of paths){
   await page.setViewportSize({width:1366,height:768});
   await recordEntrances(page);
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.sbs-poster'),items=group.locator(heroItems);
+  const group=page.locator('#main'),items=group.locator(heroItems);
   await expect(group).toBeVisible();await expect(items).toHaveCount(heroSelectors.length);
   const lines=group.locator(invitationText);
   await expect(lines).toHaveText(invitation);
   await page.evaluate(()=>document.fonts.ready);
   const actions=group.locator('.landing-role-actions');
+  // Open the practice panel without scrolling to it so this test can observe its entrance.
+  await page.locator('.single-mode > summary').evaluate(summary=>summary.click());
   expect(await actions.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
    'the final role links begin below the viewport').toBeGreaterThan(0);
   await expect(actions).toHaveAttribute('data-landing-reveal','pending');
@@ -148,7 +150,7 @@ for(const path of paths){
   await page.emulateMedia({reducedMotion:'no-preference'});
   await page.addInitScript(()=>{window.IntersectionObserver=undefined;});
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.sbs-poster');
+  const group=page.locator('#main');
   await expect(group.locator(invitationText)).toHaveText(invitation);
   await expect(group.locator(heroItems)).toHaveCount(heroSelectors.length);
   await expect(page.locator('[data-landing-reveal]')).toHaveCount(0);
@@ -162,7 +164,7 @@ for(const path of paths){
   const held=await holdFirstHero(page);
   try{
    await page.goto(path+'?lang=en#play',{waitUntil:'domcontentloaded'});await held.requested;
-   const group=page.locator('.sbs-poster'),image=group.locator('.hero-garda');
+   const group=page.locator('#main'),image=group.locator('.hero-garda');
    const title=group.locator('#paired-title'),deck=group.locator('.landing-deck');
    await expect(title).toHaveAttribute('data-landing-reveal','complete');
    await expect(image).toHaveAttribute('data-landing-reveal','pending');
@@ -198,11 +200,12 @@ for(const path of paths){
     const imageCase=failure?'failure':'cancel';
     await page.goto(path+'?lang=en&hero-image-case='+imageCase+'#play',{waitUntil:'domcontentloaded'});
     await held.requested;
-    const group=page.locator('.sbs-poster'),items=group.locator(heroItems);
+    const group=page.locator('#main'),items=group.locator(heroItems);
     const image=group.locator('.hero-garda');
     await expect(image).toHaveAttribute('data-landing-reveal','pending');
     if(!failure){
      // Focus a real keyboard destination while its action group is pending.
+     await page.locator('.single-mode > summary').evaluate(summary=>summary.click());
      const link=group.locator('.landing-role-actions a').first();
      await expect(group.locator('.landing-role-actions')).toHaveAttribute('data-landing-reveal','pending');
      await link.focus();await expect(link).toBeFocused();
@@ -239,12 +242,12 @@ for(const path of paths){
  test(path+' poster fits both figures, headings and controls and keeps route focus unframed',async({page},testInfo)=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#play');
-  const group=page.locator('.sbs-poster');
+  const group=page.locator('#main');
   const images=group.locator('.hero-characters img');
   await expect(images).toHaveCount(2);
   await expect.poll(()=>images.evaluateAll(nodes=>nodes.every(image=>image.complete&&image.naturalWidth>0))).toBe(true);
   await page.evaluate(()=>document.fonts.ready);
-  const fits=()=>group.evaluate(poster=>{
+  const fits=()=>page.locator('.reference-landing').evaluate(poster=>{
    const root=document.documentElement,box=poster.getBoundingClientRect();
    const children=[...poster.querySelectorAll('[data-poster-reveal], .hero-question, .perspective-card')];
    const bounds=children.map(child=>child.getBoundingClientRect());
@@ -289,7 +292,7 @@ for(const path of paths){
   }),'the actual Home return exposes the focused heading before any capture scroll').toEqual({belowHeader:true,withinViewport:true});
   await captureLanding(page,testInfo.outputPath(`${label}-landing-return-focus-375.png`));
   await page.keyboard.press('Tab');
-  const firstLink=group.locator('.hero-question');
+  const firstLink=group.locator('.reference-landing .perspective-card').first();
   await expect(firstLink).toBeFocused();
   await expect(firstLink).toHaveCSS('outline-style','solid');
   expect(await firstLink.evaluate(link=>parseFloat(getComputedStyle(link).outlineWidth))).toBeGreaterThanOrEqual(2);

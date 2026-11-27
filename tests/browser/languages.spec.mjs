@@ -55,7 +55,7 @@ async function holdInitialArabic(page){
  return {initial,async release(){
   const response=page.waitForResponse(response=>response.url().includes('/ar-content.mjs'));
   release();await response;
-  await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=poster-landing-20261125',document.baseURI));return module.languageLoaded('ar');});
+  await page.waitForFunction(async()=>{const module=await import(new URL('locales/active-language.mjs',document.baseURI));return module.languageLoaded('ar');});
  }};
 }
 
@@ -183,7 +183,7 @@ for(const language of ['ar','zh-Hans'])for(const width of [320,1366])test(`${lan
  await expect(page.locator('.about-opening .about-overview p')).toHaveCount(3);
  await fits(page,'about');
  await page.goto('./');
- await page.locator('.single-mode summary').click();await page.locator('.single-mode .practice-content a').click();await fits(page,'original cards');
+ await page.locator('.single-mode summary').click();await page.locator('.single-mode').getByRole('link',{name:translateText('Browse situations',language),exact:true}).click();await fits(page,'original cards');
  await openNavigation(page);await page.locator('.header [data-nav="encounters"]').click();
  await expect(page.locator('.paired-picker')).toBeVisible();
  await page.locator('.scenario-library>summary').click();await fits(page,'catalogue');
@@ -369,7 +369,7 @@ for(const fallback of [false,true])test(`Closing settings cancels a pending lang
  await page.keyboard.press('Escape');await expect(page.locator('#reading-dialog')).not.toBeVisible();
  const loaded=page.waitForResponse(response=>response.url().includes('/fr-content.mjs'));release();await loaded;
  // Wait for the caught import promise and its cancellation guard to settle.
- await page.waitForFunction(async()=>{const module=await import(new URL('locales/translate.mjs?v=poster-landing-20261125',document.baseURI));return module.languageLoaded('fr');});
+ await page.waitForFunction(async()=>{const module=await import(new URL('locales/active-language.mjs',document.baseURI));return module.languageLoaded('fr');});
  await expect(page.locator('html')).toHaveAttribute('lang','en-IE');
  await expectSettingsFocusReturn(page);
  expect(current(page)).toEqual(before);expect(await saved(page,'public')).toEqual(record);

@@ -14,6 +14,7 @@ const families=[
  ['recap-role','.recap-role',':scope > h3','compact'],
  ['comparison','.decision-comparison-role',':scope > h3','compact'],
  ['recommended','.recommended-situation',':scope > h2','card'],
+ ['progress','.progress-disclosure',':scope > summary > h2','card'],
  ['saved','.flow-save',':scope > .flow-save-copy > strong','compact'],
  ['topics','.topic-explorer',':scope > .topic-disclosure > summary > h2','card'],
  ['topic','.situation-topic',':scope > summary > .catalogue-summary-content > strong','compact'],

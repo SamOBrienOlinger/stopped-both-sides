@@ -10,18 +10,18 @@
     "outputs": [
       {
         "file": "gpo-city-480.webp",
-        "bytes": 51808,
-        "sha256": "2de0eb885209b0f25acc86cffe8da14e82b14f2ebb1c841fd7ec5ec55d04ea51"
+        "bytes": 40220,
+        "sha256": "3ea0ed9bd235f15a27e12f9607f63d12423160c9c3454371c5fc437857d4c09a"
       },
       {
         "file": "gpo-city-960.webp",
-        "bytes": 155666,
-        "sha256": "3eece94257c92bcd9d6e05ce3fe9dbf84961c6be6778d1186404226a08356800"
+        "bytes": 112708,
+        "sha256": "734abacad3028b342c8ecd0738d4b8d45170114855998e2c205117e7370842ca"
       },
       {
         "file": "gpo-city-1600.webp",
-        "bytes": 273198,
-        "sha256": "97c0945268cde51a2bebb4d32e0682cb95a93f55b7899c3cfc10c72a20d6095e"
+        "bytes": 207384,
+        "sha256": "f061c47054873959f735d63eec3e973c15aa6e7a0166974ff803c6b92883dcff"
       }
     ],
     "revision": {

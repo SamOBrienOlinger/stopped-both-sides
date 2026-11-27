@@ -1,20 +1,20 @@
-import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=role-cast-20261126b';
-import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=combined-how-to-20261126';
+import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=responsive-fixes-20261127';
+import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=responsive-fixes-20261127';
 import {hasOwn} from '../compatibility.mjs';
-import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
+import {focusControl,focusContext} from '../accessibility/focus.mjs?v=responsive-fixes-20261127';
 import {
  checkEvidenceResponse, decisionComparison, discussionGuide, discussionLink, evidenceCheck,
  practiceGoal, progressSkills, recapPractice, reviewExploration, situationStory, termsInDecision
-} from '../learning/play.mjs?v=site-repairs-20261125';
-import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
-import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=role-cast-20261126b';
+} from '../learning/play.mjs?v=responsive-fixes-20261127';
+import {supportRecap} from '../learning/support.mjs?v=rights-topics-20261126';
+import {learningIcon,scenarioIcon,routeTrail,completionMap,practiceCards,topicExplorer,situationTopics,discriminationGrounds} from './visuals.mjs?v=responsive-fixes-20261127';
 import {encounters,roles,roleLabels,sites,references} from './catalog.mjs?v=site-repairs-20261125';
-import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=site-repairs-20261125';
-import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=site-repairs-20261125';
-import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=final-touches-20261125';
-import {renderScene,renderScenePreview} from './scenes.mjs?v=role-cast-20261126b';
-import {situationRoleLabel} from './situation-cast.mjs?v=role-cast-20261126b';
-import {characterContext,personalizeHTML} from './narrative.mjs?v=role-cast-20261126b';
+import {startEncounter,currentStage,switchRole,otherRole,answer,continueEncounter,revisit,changeAnswer,decodeState,encodeState,stateHash,fromOriginal} from './engine.mjs?v=responsive-fixes-20261127';
+import {createProgressStore,recordProgress,runScores,progressTotals,packProgress,unpackProgress,mergeProgress,practiceState} from './progress.mjs?v=responsive-fixes-20261127';
+import {characters,characterFor,characterArtwork,createCast,changeCharacter,createCharacterPreferences} from './characters.mjs?v=responsive-fixes-20261127';
+import {renderScene,renderScenePreview} from './scenes.mjs?v=responsive-fixes-20261127';
+import {situationRoleLabel} from './situation-cast.mjs?v=responsive-fixes-20261127';
+import {characterContext,personalizeHTML} from './narrative.mjs?v=responsive-fixes-20261127';
 import {variationFor,learningStatus,remainingDecisions,topicGroups} from './presentation.mjs?v=site-repairs-20261125';
 import {playHash,playLocation,topicsForPlay,topicForSituation,availableInPractice} from './play-navigation.mjs?v=site-repairs-20261125';
 import {ihrecGroundsUrl} from './discrimination.mjs?v=site-repairs-20261125';

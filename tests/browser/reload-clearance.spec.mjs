@@ -165,17 +165,8 @@ async function reloadAndInspect(page,testInfo,site,profile,label,context,positio
  expect.soft(record.issues,label).toEqual([]);
 }
 
-async function checkNativeHistory(page,site,browserName){
- await page.evaluate(key=>sessionStorage.removeItem(key),caseKey);
- await openNavigation(page);
- await page.locator('#main-navigation [data-nav="play"]').click();
- await expect(page.locator('#paired-title')).toBeVisible();
- await page.evaluate(()=>document.fonts.ready);
- await page.mouse.move(600,400);await page.mouse.wheel(0,500);
- await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
- // Native wheel distance can include scroll anchoring. Record the actual
- // settled reading position after the visible text entrances have finished.
- const readingPosition=await page.evaluate(()=>new Promise((resolve,reject)=>{
+async function settledReadingPosition(page){
+ return page.evaluate(()=>new Promise((resolve,reject)=>{
   const started=performance.now();let previous=scrollY,stable=0;
   const sample=()=>{
    const header=document.querySelector('.header').getBoundingClientRect().bottom;
@@ -191,47 +182,57 @@ async function checkNativeHistory(page,site,browserName){
   };
   requestAnimationFrame(sample);
  }));
+}
+
+async function checkNativeHistory(page,site,browserName){
+ await page.evaluate(key=>sessionStorage.removeItem(key),caseKey);
+ await openNavigation(page);
+ await page.locator('#main-navigation [data-nav="play"]').click();
+ await expect(page.locator('#paired-title')).toBeVisible();
+ await page.evaluate(()=>document.fonts.ready);
+ await page.mouse.move(600,400);await page.mouse.wheel(0,500);
+ await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(300);
+ // Native wheel distance can include scroll anchoring. Record the actual
+ // settled reading position after the visible text entrances have finished.
+ const readingPosition=await settledReadingPosition(page);
  const keys={progressKey:progressStorageKey(site),preferenceKey:preferencesStorageKey(site)};
  const storage=()=>page.evaluate(({progressKey,preferenceKey})=>({
   progress:localStorage.getItem(progressKey),preferences:localStorage.getItem(preferenceKey)
  }),keys);
  const before={url:page.url(),scrollY:readingPosition,stored:await storage()};
- const label=browserName==='webkit'?'WebKit cold-Back compatibility':'native Back after reload';
+ const label='Native Back after reload';
  const record={label:site+' '+label,before};reports.get(page).push(record);
  await page.goto('privacy.html');
  await expect(page).toHaveURL(/\/privacy\.html$/);
  await test.step(label,async()=>{
-  try{
-   await page.goBack();
-   await expect(page).toHaveURL(before.url);
-   await expect(page.locator('#paired-title')).toBeAttached();
-   await page.evaluate(()=>document.fonts.ready);
-   if(browserName==='webkit'){
-    // Playwright disables BFCache: https://playwright.dev/docs/api/class-page#page-go-back
-    // Unchanged baseline f80027a has cold-Back 500/499 -> 0 in WebKit.
-    // Check that existing behavior and native policy, not reading-position preservation.
-    await expect.poll(()=>page.evaluate(()=>Math.abs(scrollY)),
-     'WebKit cold Back retains its baseline document-top position').toBeLessThanOrEqual(2);
-   }else{
-    await expect.poll(()=>page.evaluate(old=>Math.abs(scrollY-old),before.scrollY),
-     'Back after a reload restores the reader\'s position in the previous document').toBeLessThanOrEqual(2);
+  await page.goBack();
+  await expect(page).toHaveURL(before.url);
+  await expect(page.locator('#paired-title')).toBeAttached();
+  await expect(page.locator('#loading')).toHaveCount(0);
+  await page.evaluate(()=>document.fonts.ready);
+  await settledReadingPosition(page);
+  record.after=await page.evaluate(()=>{
+   const box=selector=>{const r=document.querySelector(selector)?.getBoundingClientRect();return r&&{top:r.top,bottom:r.bottom};};
+   return {url:location.href,scrollY,restoration:history.scrollRestoration,
+    navigationType:performance.getEntriesByType('navigation')[0]?.type,pageshow:window.__reloadClearancePageShow,
+    header:box('.header'),opening:box('.reference-landing'),heading:box('#paired-title'),viewport:innerHeight};
+  });
+  record.after.stored=await storage();
+  const {navigationType,pageshow,scrollY,restoration,stored,opening,heading,header,viewport}=record.after;
+  expect(pageshow,'the history entry was shown').toBeDefined();
+  expect(pageshow.persisted||navigationType==='back_forward','a restored document or a cold Back navigation').toBe(true);
+  expect(restoration,'history traversal returns control to the browser').toBe('auto');
+  expect(stored,'Back preserves saved progress and reading preferences').toEqual(before.stored);
+  // On a cold traversal WebKit can restore the recorded wheel position or
+  // present the document at its top. A native reload is checked separately.
+  const coldWebKitAtTop=browserName==='webkit'&&!pageshow.persisted&&Math.abs(scrollY)<=2;
+  if(coldWebKitAtTop){
+   for(const box of [opening,heading]){
+    expect(box.top,'Home starts below navigation on a document-top return').toBeGreaterThanOrEqual(header.bottom-1);
+    expect(box.top,'Home is in the viewport on a document-top return').toBeLessThan(viewport);
    }
-  }finally{
-   record.after=await page.evaluate(()=>{
-    const box=selector=>{const r=document.querySelector(selector)?.getBoundingClientRect();return r&&{top:r.top,bottom:r.bottom};};
-    return {url:location.href,scrollY,restoration:history.scrollRestoration,
-     navigationType:performance.getEntriesByType('navigation')[0]?.type,pageshow:window.__reloadClearancePageShow,
-     header:box('.header'),opening:box('.reference-landing'),heading:box('#paired-title'),viewport:innerHeight};
-   });
-   record.after.stored=await storage();
-  }
-  if(browserName==='webkit'){
-   expect(record.after.restoration,'cold Back returns control to native restoration').toBe('auto');
-   expect(record.after.stored,'cold Back preserves saved progress and reading preferences').toEqual(before.stored);
-   for(const box of [record.after.opening,record.after.heading]){
-    expect(box.top,'Home starts below navigation after cold Back').toBeGreaterThanOrEqual(record.after.header.bottom-1);
-    expect(box.top,'Home remains in the viewport after cold Back').toBeLessThan(record.after.viewport);
-   }
+  }else{
+   expect(Math.abs(scrollY-before.scrollY),'Back restores the actual reading offset from before departure').toBeLessThanOrEqual(2);
   }
  });
  await page.goForward();

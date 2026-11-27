@@ -1,5 +1,5 @@
-import {characterFor} from './characters.mjs?v=final-touches-20261125';
-import {fixedStoryCharacter} from './story-cast.mjs?v=role-cast-20261126b';
+import {characterFor} from './characters.mjs?v=responsive-fixes-20261127';
+import {fixedStoryCharacter} from './story-cast.mjs?v=responsive-fixes-20261127';
 
 // The catalogue keeps stable teaching text and translation keys. Resolve its
 // story identity against the saved cast only when displaying a running game.

@@ -1,5 +1,5 @@
-import {gardaArtwork} from './garda-artwork.mjs?v=learning-language-20261120';
-import {publicArtwork} from './public-artwork.mjs?v=nia-public-20261123';
+import {gardaArtwork} from './garda-artwork.mjs?v=responsive-fixes-20261127';
+import {publicArtwork} from './public-artwork.mjs?v=responsive-fixes-20261127';
 
 // Measured source-cell boundaries preserve full feet and wheels even where the
 // generated atlas does not follow an exact equal-height grid. Crop the source
@@ -12,7 +12,7 @@ export function sceneCharacterArtwork(character){
  if(updated)return updated;
  const [left,top,right,bottom,centre,feet]=cells[character.row*6+character.column];
  return {
-  src:new URL('../assets/scenes/contextual-cast.webp?v=context-scenes-1',import.meta.url).href,
+  src:new URL('../assets/scenes/contextual-cast-1774.webp',import.meta.url).href,
   width,height,
   style:`left:${-(centre-frame/2)/frame*100}%;top:${-(feet-foot)/frame*100}%;width:${width/frame*100}%;height:${height/frame*100}%;clip-path:inset(${top/height*100}% ${(width-right)/width*100}% ${(height-bottom)/height*100}% ${left/width*100}%)`
  };

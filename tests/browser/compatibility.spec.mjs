@@ -31,12 +31,12 @@ async function settings(page){
 async function checkHeroControls(page){
  await page.emulateMedia({reducedMotion:'reduce'});
  const hero=page.locator('.reference-landing');
- const links=hero.locator('.perspective-card-link');
+ const links=hero.locator('a.perspective-card');
  await expect(links).toHaveCount(2);
  const targets=await links.evaluateAll(controls=>controls.map(control=>{
   const {x,y,bottom,width,height}=control.getBoundingClientRect();
   return {x,y,bottom,width,height,
-   clipped:control.scrollWidth>control.clientWidth+1||control.scrollHeight>control.clientHeight+1};
+   clipped:[...control.querySelectorAll('.perspective-label')].some(label=>label.scrollWidth>label.clientWidth+1||label.scrollHeight>label.clientHeight+1)};
  }));
  const [first,second]=targets;
  const overlap=Math.min(first.x+first.width,second.x+second.width)-Math.max(first.x,second.x);
@@ -117,7 +117,7 @@ for(const role of ['public','garda']){
    await page.goto(paths[role]);await ready(page);await fits(page,'home');await checkHeroControls(page);
    await captureHero(page,role,width,'standard',testInfo);
    await captureControls(page,role,width,'standard',testInfo,[['navbar','.header'],['how-it-works','.how-to-play'],['footer','.footer']]);
-   await page.locator('.single-mode summary').click();await page.locator('.single-mode .practice-content a').click();await fits(page,'original situations');
+   await page.locator('.single-mode summary').click();await page.locator('.single-mode').getByRole('link',{name:'Browse situations',exact:true}).click();await fits(page,'original situations');
    await page.locator('.scenario-library .situation-topic>summary').first().click();
   await page.locator('.scenario-library [data-action="start"]').first().click();
    await expect(page.locator('.story')).toBeVisible();
@@ -225,7 +225,7 @@ for(const role of ['public','garda']){
   try{
    await page.goto(paths[role]);await ready(page);
    await checkHeroControls(page);
-   await page.locator(`.reference-landing a.perspective-card-link[data-role-tone="${role}"]`).tap();
+   await page.locator(`.reference-landing a.perspective-card[href$="#encounters/${role}"]`).tap();
    await expect(page.locator('.encounter-card')).toHaveCount(34);
    await page.locator('[data-action="paired-quick-start"]').tap();
    await expect(page.locator('.paired-game')).toBeVisible();

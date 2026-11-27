@@ -51,22 +51,22 @@ globalThis.window={scrollTo(){},addEventListener(k,v){callbacks[k]=v;}};
  await import(new URL('app.mjs?v=nia-public-20261123',siteBase));
 function route(hash){location.hash=hash;callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
 function action(name,extra={}){const n=assignments;callbacks.click({target:{closest:()=>({dataset:{action:name,...extra}})}});if(n!==assignments)callbacks.hashchange();assert.doesNotMatch(main.innerHTML,/The resource could not load/);}
-function settings(language='ga'){
+async function settings(language='ga'){
  callbacks['document-click']({target:{closest:()=>openButton}});assert.ok(dialog.open);assert.match(dialog.innerHTML,/id="reading-language"/);
- dialogCallbacks.submit({preventDefault(){},target:{elements:{language:{value:language},size:{value:'150'},contrast:{value:'high'},spacing:{checked:true},motion:{checked:true}}}});
+ await dialogCallbacks.submit({preventDefault(){},target:{elements:{language:{value:language},size:{value:'150'},contrast:{value:'high'},spacing:{checked:true},motion:{checked:true}}}});
  assert.equal(dialog.open,false);assert.equal(focused.at(-1),'settings');assert.ok(classes.has('contrast-high'));assert.ok(classes.has('reading-spacious'));
 }
 const current=()=>decodeState(location.hash.slice(11).split('~')[0]);
-test('Applying Irish in a live situation retains both answers, stage, role and saved scores; companion links carry language',()=>{
+test('Applying Irish in a live situation retains both answers, stage, role and saved scores; companion links carry language',async()=>{
  route('#encounters/public');action('paired-character-select',{role:'public',character:'public-2'});assert.equal(document.documentElement.attrs['data-perspective'],'public');action('paired-start',{id:'public-search',role:'public'});action('paired-answer',{index:'0'});assert.equal(focused.at(-1),'#feedback');
  action('paired-switch');assert.equal(document.documentElement.attrs['data-perspective'],'garda');assert.equal(focused.at(-1),'#choice-title');action('paired-answer',{index:'1'});
- const before=current(),saved=memory.get(siteStorageKey);settings('ga');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.equal(document.documentElement.lang,'ga');assert.equal(main.attrs.lang,'ga');const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];assert.match(story,/Noor/);assert.doesNotMatch(story,/Niamh/);assert.match(main.innerHTML,/Athraigh go dearcadh an phobail/);assert.match(main.innerHTML,/Roghnaithe/);assert.equal(new URL(siteLink.href).searchParams.get('lang'),'ga');
- settings('en');assert.equal(document.documentElement.attrs['data-perspective'],'garda');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.match(main.innerHTML,/Your answer is recorded/);
+ const before=current(),saved=memory.get(siteStorageKey);await settings('ga');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.equal(document.documentElement.lang,'ga');assert.equal(main.attrs.lang,'ga');const story=main.innerHTML.match(/<p class="story-text">([^<]+)<\/p>/)[1];assert.match(story,/Noor/);assert.doesNotMatch(story,/Niamh/);assert.match(main.innerHTML,/Athraigh go dearcadh an phobail/);assert.match(main.innerHTML,/Roghnaithe/);assert.equal(new URL(siteLink.href).searchParams.get('lang'),'ga');
+ await settings('en');assert.equal(document.documentElement.attrs['data-perspective'],'garda');assert.deepEqual(current(),before);assert.equal(memory.get(siteStorageKey),saved);assert.match(main.innerHTML,/Your answer is recorded/);
 });
-test('Choosing Irish during original play transfers the exact active choice into the matching shared situation',()=>{
- settings('en');route('#scenario/street');action('choose',{index:'1'});settings('ga');const s=current();assert.equal(s.id,role+'-street');assert.equal(s.role,role);assert.equal(document.documentElement.attrs['data-perspective'],role);assert.equal(s.nodeId,'street-start');assert.equal(s.answers[role],1);assert.match(main.innerHTML,/SCÉAL ROINNTE/);
+test('Choosing Irish during original play transfers the exact active choice into the matching shared situation',async()=>{
+ await settings('en');route('#scenario/street');action('choose',{index:'1'});await settings('ga');const s=current();assert.equal(s.id,role+'-street');assert.equal(s.role,role);assert.equal(document.documentElement.attrs['data-perspective'],role);assert.equal(s.nodeId,'street-start');assert.equal(s.answers[role],1);assert.match(main.innerHTML,/SCÉAL ROINNTE/);
 });
-test('Irish reference navigation translates learning text, preserves citations and returns to the saved situation',()=>{
+test('Irish reference navigation translates learning text, preserves citations and returns to the saved situation',async()=>{
  const before=current(),hash=location.hash;
  route(role==='public'?'#rights':'#evidence');
  assert.equal(main.attrs.lang,'ga');

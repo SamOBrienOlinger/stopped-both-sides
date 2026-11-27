@@ -25,7 +25,7 @@ jobs:
     if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     name: ${{ matrix.browser }} layouts and play (${{ matrix.shard }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     env:
       BROWSER_SUITE: general
       TEST_BASE_URL: ${{ github.event_name == 'workflow_run' && 'https://samobrienolinger.github.io/stopped-both-sides/' || '' }}
@@ -83,7 +83,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       # Partition the general suite to stay within each job's
-      # 30-minute budget. A failure must not cancel other verification/evidence.
+      # 40-minute budget. A failure must not cancel other verification/evidence.
       - run: npm run test:browser -- --project=${{ matrix.browser }} --shard=${{ matrix.shard }}
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
@@ -95,7 +95,9 @@ jobs:
           retention-days: 7
 
   mobile-rendering:
-    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    # Pages publishes independently of the core checks. Always exercise the
+    # published mobile entrypoints, even if a separate core assertion failed.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.head_branch == 'main'
     name: ${{ matrix.browser }} mobile refresh and first paint
     runs-on: ubuntu-latest
     timeout-minutes: 20

@@ -150,6 +150,8 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  max-inline-size:100%;
  margin:0;
  font-size:1rem;
+ /* The hover palette reverses foreground and background. Change them together. */
+ transition-property:border-color,box-shadow;
 }
 .flow-save.session-return .saved-session-link,
 .flow-save.session-return .saved-session-link:is(:hover,:active,:focus-visible) {

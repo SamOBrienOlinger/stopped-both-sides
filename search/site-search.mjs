@@ -1,16 +1,16 @@
 import {encounters,references} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 import {topicGroups} from '../encounters/presentation.mjs?v=site-repairs-20261125';
-import {accessibilityPage} from '../accessibility/ui.mjs?v=practice-consistency-20261126';
+import {accessibilityPage} from '../accessibility/ui.mjs?v=responsive-fixes-20261127';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
-import {translateText,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=practice-consistency-20261126';
-import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=site-repairs-20261125';
+import {translateText,languageLoaded,escapeHTML as esc} from '../locales/active-language.mjs';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=responsive-fixes-20261127';
 import {communitySources} from '../learning/community-resources.mjs?v=site-repairs-20261125';
 
 import {privacyNotices} from '../locales/privacy-notice.mjs?v=site-repairs-20261125';
 import {sourceTopics} from '../learning/rights-topics.mjs?v=site-repairs-20261125';
-import {services} from '../learning/support.mjs?v=site-repairs-20261125';
+import {services} from '../learning/support.mjs?v=rights-topics-20261126';
 import {practiceGoals} from '../learning/play-content.mjs?v=learning-language-20261120';
-import {renderPosterLanding} from '../landing/poster-landing.mjs?v=gpo-flags-20261125';
+import {renderPosterLanding} from '../landing/poster-landing.mjs?v=responsive-fixes-20261127';
 import {groups as evidenceGroups} from '../garda/sources.mjs?v=site-repairs-20261125';
 
 const fold=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase().replace(/ł/g,'l').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
@@ -144,6 +144,44 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
   (compact?document.querySelector('[data-nav-toggle]'):trigger)?.focus({preventScroll:true});
  },'#site-search-input');
  function close(restore=true){restoreOnClose=restore;modal.close();}
+ function fitSearchViewport(){
+  if(!dialog.open)return;
+  // Mobile keyboards can shrink the visual viewport while the layout
+  // viewport (and the native dialog's containing block) keeps its height.
+  const viewport=window.visualViewport;
+  const height=viewport?.height??window.innerHeight;
+  dialog.toggleAttribute('data-short-viewport',height<=200);
+  if(viewport?.scale===1){
+   dialog.style.setProperty('--search-viewport-top',viewport.offsetTop+'px');
+   dialog.style.setProperty('--search-viewport-bottom',Math.max(0,document.documentElement.clientHeight-viewport.height-viewport.offsetTop)+'px');
+   dialog.style.setProperty('--search-viewport-height',viewport.height+'px');
+  }else{
+   for(const edge of ['top','bottom','height'])dialog.style.removeProperty('--search-viewport-'+edge);
+  }
+  const input=dialog.querySelector('#site-search-input');
+  if(input!==document.activeElement)return;
+  const field=input.getBoundingClientRect(),bounds=dialog.getBoundingClientRect();
+  // CSS positions the panel inside the visual viewport. Compare the two
+  // client rectangles directly: iOS may already report both relative to the
+  // visible area after it pans to the keyboard, even with a nonzero offsetTop.
+  const top=bounds.top+dialog.clientTop+2;
+  const bottom=bounds.top+dialog.clientTop+dialog.clientHeight-2;
+  // Scroll the dialog itself. scrollIntoView also pans the document on iOS
+  // and its text-size-dependent scroll margins can exceed the keyboard gap.
+  if(field.top<top)dialog.scrollTop+=field.top-top;
+  else if(field.bottom>bottom)dialog.scrollTop+=field.bottom-bottom;
+ }
+ let fitFrame=0;
+ function viewportChanged(){
+  if(!dialog.open)return;
+  fitSearchViewport();
+  // Native focus scrolling can finish after resize/scroll dispatch.
+  if(!fitFrame)fitFrame=requestAnimationFrame(()=>{fitFrame=0;fitSearchViewport();});
+ }
+ window.addEventListener('resize',viewportChanged);
+ window.visualViewport?.addEventListener('resize',viewportChanged);
+ window.visualViewport?.addEventListener('scroll',viewportChanged);
+ dialog.addEventListener('focusin',viewportChanged);
  function resultHTML(entry){
   const kind=entry.kind==='situation'?'Situation':entry.kind==='page'?'Page':entry.kind==='practice'?'Practise one role at a time':'Source';
   const title=entry.kind==='source'||entry.originalLanguage
@@ -172,6 +210,7 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
   shown=0;
   dialog.querySelector('#site-search-results').replaceChildren();
   showMore();
+  fitSearchViewport();
  }
  function open(){
   restoreOnClose=true;
@@ -185,6 +224,7 @@ export function createSiteSearch({siteRole,getLanguage,getRole,startSituation,re
    <ol id="site-search-results" class="site-search-results"></ol><button type="button" id="site-search-more" class="text-button" aria-controls="site-search-results" hidden>${esc(moreLabels[language]||moreLabels.en)}</button>
   </div>`;
   modal.open();
+  fitSearchViewport();
   indexPrivacyNotice().then(()=>{
    const input=dialog.querySelector('#site-search-input');
    if(dialog.open&&input?.value&&input===document.activeElement)update();

@@ -27,9 +27,10 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   const cards=page.locator('#main .flow-save'),titles=cards.locator('.flow-save-copy > strong');
   await expect(cards).toHaveCount(2);
   await expect(titles).toHaveText(['Stopped on the street','Stopped on the street']);
+  await expect(cards.first()).toBeHidden();
+  await page.locator('.home-progress-disclosure > summary').click();
+  await expect(cards.first()).toBeVisible();
   await page.evaluate(()=>document.fonts.ready);await frames(page);
-  for(const card of await cards.all())expect(await card.evaluate(element=>element.getBoundingClientRect().top-innerHeight),
-   'both saved records begin beyond the observer preload margin').toBeGreaterThan(80);
   await expect(cards.locator('[data-heading-pending],[data-heading-motion]')).toHaveCount(0);
   await expectStaticHeadings(titles,'offscreen saved titles');
   for(const card of await cards.all()){
@@ -91,8 +92,9 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await expect(title).not.toHaveAttribute('data-landing-reveal');
   await expect(page.locator('#main')).not.toHaveAttribute('data-motion','page');
   // The old page's deep scroll must not suppress the new hero's later lines.
-  const laterCopy=page.locator('.sbs-poster .landing-role-actions');
+  const laterCopy=page.locator('.landing-role-actions');
   await expect(laterCopy).toHaveAttribute('data-landing-reveal','pending');
+  await page.locator('.single-mode > summary').click();
   await laterCopy.evaluate(element=>element.scrollIntoView({block:'center',behavior:'instant'}));
   await expect(laterCopy).toHaveAttribute('data-landing-reveal',/^(active|complete)$/);
   await expect(laterCopy).toHaveAttribute('data-landing-reveal','complete');

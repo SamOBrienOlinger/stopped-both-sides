@@ -1,5 +1,5 @@
-import {gardaArtwork} from './garda-artwork.mjs?v=learning-language-20261120';
-import {publicArtwork} from './public-artwork.mjs?v=nia-public-20261123';
+import {gardaArtwork} from './garda-artwork.mjs?v=responsive-fixes-20261127';
+import {publicArtwork} from './public-artwork.mjs?v=responsive-fixes-20261127';
 
 // Most situations allow any portrait. A stated age or gender must also match
 // the public character in the few situations where that person is the target.

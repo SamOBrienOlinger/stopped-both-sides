@@ -134,7 +134,7 @@ test('Affected identities and witnesses stay consistent through both answers, re
 
 test('The football ticket steward keeps dedicated staff artwork across saved casts, perspectives and recaps',()=>{
  const id='discrimination-race',stewardId='support-ticket-steward';
- const artwork=/\/assets\/characters\/support-ticket-steward-20261126\.png(?:\?|$)/;
+ const artwork=/\/assets\/characters\/ticket-steward-768\.webp(?:\?|$)/;
  assert.ok(!characters.public.some(character=>character.id===stewardId),'The steward is not a selectable public avatar');
  const checkActor=html=>{
   const actor=html.match(/<div class="scene-actor [^>]*data-scene-character="([^"]+)" data-scene-role="steward"[^>]*><div class="scene-sprite"><img src="([^"]+)"/);

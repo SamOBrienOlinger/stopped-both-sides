@@ -1,14 +1,14 @@
 import {rightsTopics} from './learning/rights-topics.mjs?v=site-repairs-20261125';
 import {communitySources} from "./learning/community-resources.mjs?v=site-repairs-20261125";
-import {createSiteSearch} from "./search/site-search.mjs?v=practice-consistency-20261126";
-import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=mobile-flow-20261123b';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=site-repairs-20261125';
-import {createLayout} from './accessibility/layout.mjs?v=poster-landing-20261125';
+import {createSiteSearch} from "./search/site-search.mjs?v=responsive-fixes-20261127";
+import {focusControl,focusPageStart} from './accessibility/focus.mjs?v=responsive-fixes-20261127';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision} from './learning/play.mjs?v=responsive-fixes-20261127';
+import {createLayout} from './accessibility/layout.mjs?v=responsive-fixes-20261127';
 import {supportSection,supportRecap} from './learning/support.mjs?v=rights-topics-20261126';
-import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=learning-cycle-20261126b';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=practice-consistency-20261126';
-import {createMotion} from './accessibility/motion.mjs?v=site-repairs-20261125';
-import {createEncounterMode} from './encounters/ui.mjs?v=combined-how-to-20261126';
+import {learningAbout,prototypeInput,firstTimeGuide} from './learning/about.mjs?v=responsive-fixes-20261127';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from './accessibility/ui.mjs?v=responsive-fixes-20261127';
+import {createMotion} from './accessibility/motion.mjs?v=responsive-fixes-20261127';
+import {createEncounterMode} from './encounters/ui.mjs?v=responsive-fixes-20261127';
 import {scenarios,scenarioById,sources} from './data.mjs?v=site-repairs-20261125';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=site-repairs-20261125';
 const main=document.querySelector('#main');
@@ -63,22 +63,24 @@ function rights(hash){
   <section class="info-block important"><h2>Start with the right question</h2><ul><li><strong>During an encounter:</strong> “Why am I being stopped? Am I free to leave?”</li><li><strong>If a requirement is unclear:</strong> “What legal power applies, and what do I have to provide?”</li><li><strong>At a station:</strong> “I want a solicitor. Please explain my rights and the help available.”</li></ul><p>These are learning prompts, not a script guaranteed to produce a particular result.</p></section></div>`;
 }
 function about(){return `<div class="content-page">${paired.aboutIntroduction({eyebrow:'ABOUT THE PROJECT',taglineLines:['Learn through situations.','Make room for lived experience.']})}<section class="info-block"><h2>How it works</h2><p>Explore fictional situations involving members of the public and Gardaí. Choose a response, then reflect on the human and civil rights, police powers and responsibilities involved.</p>${firstTimeGuide()}</section>${learningAbout()}${prototypeInput()}<details class="info-block privacy-disclosure"><summary>Information and privacy</summary><p>This is general educational information, not legal advice. The prototype has not been signed off by a practising solicitor. Laws, guidance and procedures can change.</p><p>The resource has no account form, analytics or complaint collection. Fictional choices, scores and a resume point are saved in this browser. The resource-site link carries this learning record to the companion site in the link. You can review or clear local records under Scores & progress. Separate browsers do not automatically sync. Hosting providers may keep standard access logs; external sources have their own privacy arrangements.</p></details><a href="#encounters" class="primary">Choose a situation →</a><p class="contribution-link"><a href="https://samobrienolinger.github.io/SamOBrienOlinger/" target="_blank" rel="noopener noreferrer">Contact the project creator or contribute feedback ↗</a></p></div>`;}
-function render(focus=true,{position=focus}={}){try{let hash=paired.referenceRoute(location.hash.slice(1)||'play');
- if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash);if(position)focusMain(focus);return;}
+function render(focus=true,{position=focus}={}){
+ let html;
+try{let hash=paired.referenceRoute(location.hash.slice(1)||'play');
+ if(hash==='accessibility'){html=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash,html);if(position)focusMain(focus);return;}
  if(paired.handles(hash)){
-  main.innerHTML=paired.view(hash);
+  html=paired.view(hash);
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===(hash.startsWith('progress')?'progress':'encounters'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  document.title='Explore | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(position&&(!focus||!paired.focusReturnedList()))focusMain(focus);return;
+  document.title='Explore | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash,html);if(position&&(!focus||!paired.focusReturnedList()))focusMain(focus);return;
  }
  let view='play';if(hash.startsWith('scenario/')){
    session=paired.practiceSession(hash,session,startSession);
-   if(!session){main.innerHTML='<div class="content-page"><h1>Situation not found</h1><a class="primary" href="#practice">Browse situations</a></div>';view='missing';}
+   if(!session){html='<div class="content-page"><h1>Situation not found</h1><a class="primary" href="#practice">Browse situations</a></div>';view='missing';}
    else{
     hash='scenario/'+session.scenarioId;
     if(reading.language==='ga'){paired.transferOriginal(session,focus);if(position&&!focus)focusMain(false);return;}
-    view='encounters';main.innerHTML=game();
+    view='encounters';html=game();
    }
-  }else if(hash==='rights'||hash.startsWith('rights/')){view='rights';main.innerHTML=rights(hash);}else if(hash==='about'){view='about';main.innerHTML=about();}else{main.innerHTML=paired.landing();}document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});document.title=hash.startsWith('scenario/')?`${scenarioById[session.scenarioId].title} | Stopped: Both Sides`:`${view==='play'?'Stopped: Both Sides':view==='rights'?'Human and Civil Rights & sources':'About the project'} | Stopped: Both Sides — public perspective`;paired.updateSiteLink(hash);reading.decorate(hash);if(position){const element=rightsTarget(hash);if(element){if(focus)element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain(focus);}}catch(error){main.innerHTML='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read <a href="https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/">Citizens Information’s guidance</a>.</p></div>';reading.decorate('error');if(position)focusMain(focus);console.error(error);}}
+  }else if(hash==='rights'||hash.startsWith('rights/')){view='rights';html=rights(hash);}else if(hash==='about'){view='about';html=about();}else{html=paired.landing();}document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});document.title=hash.startsWith('scenario/')?`${scenarioById[session.scenarioId].title} | Stopped: Both Sides`:`${view==='play'?'Stopped: Both Sides':view==='rights'?'Human and Civil Rights & sources':'About the project'} | Stopped: Both Sides — public perspective`;paired.updateSiteLink(hash);reading.decorate(hash,html);if(position){const element=rightsTarget(hash);if(element){if(focus)element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain(focus);}}catch(error){html='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read <a href="https://www.citizensinformation.ie/en/justice/arrests/questioning-and-surveillance/">Citizens Information’s guidance</a>.</p></div>';reading.decorate('error',html);if(position)focusMain(focus);console.error(error);}}
 main.addEventListener('click',event=>{if(paired.handleClick(event))return;const button=event.target.closest('button[data-action]');if(!button)return;switch(button.dataset.action){case 'start':paired.beginPractice(button.dataset.id);session=startSession(button.dataset.id);if(location.hash===`#scenario/${session.scenarioId}`)render();else location.hash=`scenario/${session.scenarioId}`;break;case 'choose':{const next=choose(session,Number(button.dataset.index));if(next===session)return;session=next;render(false);focusControl(document.querySelector('#feedback'));break;}case 'change':{
    if(!session||session.complete||session.selected===null)return;
    session={...session,selected:null};render(false);focusControl(document.querySelector('#choice-title'));break;

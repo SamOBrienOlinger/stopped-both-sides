@@ -2,7 +2,73 @@ import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
 import {decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 
+const phoneTest=test.extend({
+ hasTouch:true,deviceScaleFactor:2,
+ isMobile:async({browserName},use)=>use(browserName!=='firefox')
+});
+
 for(const [path,role] of [['./','public'],['garda/','garda']]){
+ phoneTest(`${role}: enlarged navigation leaves reading space and Search keeps its focused field visible on resize`,async({page})=>{
+  await page.setViewportSize({width:280,height:653});
+  await page.goto(path+'?lang=ar#'+(role==='public'?'rights':'evidence'));
+  await expect(page.locator('html')).toHaveAttribute('lang','ar');
+  await page.evaluate(async()=>{
+   document.documentElement.style.setProperty('--reading-size','200%');
+   await document.fonts.ready;
+  });
+  await expect.poll(()=>page.locator('.header').evaluate(header=>header.getBoundingClientRect().height/innerHeight)).toBeLessThan(.25);
+  await page.setViewportSize({width:568,height:320});
+  await page.evaluate(()=>{
+   document.documentElement.style.setProperty('--reading-size','150%');
+   document.documentElement.classList.add('reading-spacious');
+  });
+  await openNavigation(page);await page.locator('#site-search-trigger').click();
+  const input=page.locator('#site-search-input');
+  await expect(input).toBeFocused();
+  for(const [height,query] of [[240,'Garda'],[126,'Gardaí']]){
+   await page.setViewportSize({width:568,height});
+   await input.fill(query);
+   await expect(page.locator('.site-search-result').first()).toBeAttached();
+   await expect.poll(()=>input.evaluate(field=>{
+    const box=field.getBoundingClientRect(),dialog=field.closest('dialog').getBoundingClientRect();
+    const {offsetTop,height}=window.visualViewport;
+    return field===document.activeElement&&box.top>=Math.max(dialog.top,offsetTop)-1&&
+     box.bottom<=Math.min(dialog.bottom,offsetTop+height)+1&&
+     document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)===field;
+   })).toBe(true);
+  }
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('.site-search-result').first()).toBeFocused();
+ });
+ phoneTest(`${role}: Search keeps the untyped field visible when iOS pans its keyboard viewport`,async({page})=>{
+  await page.setViewportSize({width:874,height:402});
+  await page.goto(path+'?lang=ar#play');
+  await expect(page.locator('html')).toHaveAttribute('lang','ar');
+  await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','150%'));
+  await openNavigation(page);
+  await page.locator('#site-search-trigger').click();
+  const input=page.locator('#site-search-input');
+  await expect(input).toBeFocused();
+  // WKWebView reports the panned visual viewport's layout offset (206px)
+  // while its top-layer panel and hit-test coordinates start at the screen top.
+  await page.addStyleTag({content:'.site-search[open]{inset-block:0 auto!important;margin-block:0!important}'});
+  await page.evaluate(()=>{
+   const viewport=window.visualViewport;
+   Object.defineProperties(viewport,{height:{configurable:true,value:126},offsetTop:{configurable:true,value:206}});
+   document.querySelector('#site-search-dialog').scrollTop=0;
+   viewport.dispatchEvent(new Event('resize'));
+  });
+  const insidePanel=()=>input.evaluate(field=>{
+   const box=field.getBoundingClientRect(),panel=field.closest('dialog').getBoundingClientRect();
+   return field===document.activeElement&&box.top>=Math.max(0,panel.top)-1&&
+    box.bottom<=Math.min(126,panel.bottom)+1&&
+    document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)===field;
+  });
+  await expect.poll(insidePanel).toBe(true);
+  await input.pressSequentially('Garda');
+  await expect(page.locator('.site-search-result').first()).toBeAttached();
+  await expect.poll(insidePanel).toBe(true);
+ });
  test(`${role}: keyword search opens from the requested navbar position, handles no results and preserves an answered game`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});

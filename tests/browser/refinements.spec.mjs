@@ -62,5 +62,7 @@ test('Topics, source navigation and returning-player actions are usable with enl
  await expect(page.locator('[data-action="paired-compare"]')).toHaveText('Déan comparáid leis an taobh eile');expect(current(page)).toEqual(saved);
  for(const width of [320,390,844]){await page.setViewportSize({width,height:width===844?390:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);}
  await page.setViewportSize({width:390,height:844});await page.screenshot({path:testInfo.outputPath('irish-large-text.png'),fullPage:true});
- await openNavigation(page);await page.locator('.header [data-nav="play"]').click();await expect(page.locator('.session-return a')).toBeVisible();
+ await openNavigation(page);await page.locator('.header [data-nav="play"]').click();
+ await page.locator('.home-progress-disclosure > summary').click();
+ await expect(page.locator('.home-play .saved-session-link')).toBeVisible();
 });

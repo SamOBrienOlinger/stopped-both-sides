@@ -23,6 +23,9 @@ export function focusControl(element) {
 export function focusPageStart(main,{focus=true}={}) {
  if(!main)return false;
  if(focus)(main.querySelector?.('h1')||main).focus?.({preventScroll:true});
+ // Flush the new route's layout before scrolling. Firefox can otherwise
+ // apply a pending scroll anchor adjustment on the following paint.
+ main.getBoundingClientRect?.();
  window.scrollTo?.({top:0,left:0,behavior:'instant'});
  return true;
 }
