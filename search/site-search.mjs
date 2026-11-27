@@ -3,7 +3,7 @@ import {topicGroups} from '../encounters/presentation.mjs?v=site-repairs-2026112
 import {accessibilityPage} from '../accessibility/ui.mjs?v=casting-logos-20261127';
 import {createDialogController} from '../accessibility/dialog.mjs?v=learning-language-20261120';
 import {translateText,languageLoaded,escapeHTML as esc} from '../locales/active-language.mjs?v=casting-logos-20261127';
-import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=mobile-layout-20261127';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=mobile-grounded-20261127';
 import {communitySources} from '../learning/community-resources.mjs?v=site-repairs-20261125';
 
 import {privacyNotices} from '../locales/privacy-notice.mjs?v=site-repairs-20261125';

@@ -1,4 +1,4 @@
-import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=mobile-layout-20261127';
+import {createSiteSearch,indexPrivacyNotice} from './site-search.mjs?v=mobile-grounded-20261127';
 import {sites} from '../site.mjs';
 import {createPreferences} from '../accessibility/preferences.mjs';
 import {createCharacterPreferences} from '../encounters/characters.mjs?v=casting-logos-20261127';

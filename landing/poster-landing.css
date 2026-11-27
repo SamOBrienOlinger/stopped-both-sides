@@ -75,17 +75,30 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
   display: none;
 }
 .sbs-poster .hero-characters {
+  position: relative; isolation: isolate;
   direction: ltr; display: flex; justify-content: center; align-items: end;
-  gap: clamp(24px, 7vw, 110px); width: 100%; height: clamp(155px, 21vw, 282px);
+  gap: 0; width: 100%; max-inline-size: 640px;
+  height: min(clamp(180px, 50vw, 340px), 70cqw);
+  padding-block-end: 10px;
   overflow: hidden; pointer-events: none;
-  mask-image: linear-gradient(to bottom, #000 94%, transparent);
 }
 .sbs-poster .hero-characters img {
-  display: block; height: 165%; width: min(42%, 390px); object-fit: cover; object-position: center top;
-  align-self: start; filter: drop-shadow(2px 5px 3px #10302c38);
+  position: relative; z-index: 1;
+  display: block; height: 100%; width: 50%; min-inline-size: 0;
+  /* The portrait-shaped boxes trim only transparent side space, never feet. */
+  object-fit: cover; object-position: center bottom;
 }
+/* Offset the small transparent canvas margins below the actual feet. */
+.sbs-poster .hero-public { translate: 0 1.125%; }
+.sbs-poster .hero-garda { translate: 0 3.55%; }
+.sbs-poster .hero-characters::before, .sbs-poster .hero-characters::after {
+  content: ''; position: absolute; z-index: 0; bottom: 6px; left: 25%;
+  width: 24%; height: 9px; border-radius: 50%; transform: translateX(-50%);
+  background: radial-gradient(ellipse, #102c3152 0, #102c3126 40%, transparent 72%);
+}
+.sbs-poster .hero-characters::after { left: 75%; }
 .sbs-poster .hero-question {
-  display: grid; align-items: center; min-block-size: 48px; position: relative; justify-self: center; margin-block: -.25em .12em; max-inline-size: 100%;
+  display: grid; align-items: center; min-block-size: 48px; position: relative; justify-self: center; margin-block: .25rem .2rem; max-inline-size: 100%;
   padding: .15em .8em .2em; border: 3px solid white; border-radius: 2em;
   background: linear-gradient(#127d78, #064f54); box-shadow: 0 4px 10px #17333040; color: white;
   font-weight: 800; line-height: 1.15; font-size: clamp(1.55rem, 3.4vw, 3rem); letter-spacing: -.035em;
@@ -107,21 +120,50 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 .sbs-poster .poster-lead { margin: 0; max-inline-size: 52ch; padding-inline-start: .7em; border-inline-start: .24em solid #359d98; color: var(--ink); font-size: 1rem; line-height: 1.5; }
 .sbs-poster .perspective-grid, .sbs-poster .role-picker { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .65rem; }
 .sbs-poster .perspective-card {
-  display: grid; position: relative; isolation: isolate; align-items: end; justify-items: center;
-  min-block-size: 5.5rem; padding: .55rem; aspect-ratio: 1.76;
-  overflow: hidden; border: 2px solid white; border-radius: 1.2rem; background: #b8d8e6;
+  display: grid; position: relative; isolation: isolate; grid-template-rows: auto 1fr; align-items: stretch;
+  min-block-size: 5.5rem; padding: 0;
+  overflow: hidden; border: 2px solid white; border-radius: 1.2rem; background: white;
 }
-.sbs-poster .perspective-scene { position: absolute; inset: 0; z-index: -1; direction: ltr; }
-.sbs-poster .panel-backdrop { width: 100%; height: 100%; object-fit: cover; }
-.sbs-poster :is(.panel-public,.panel-garda) { position: absolute; height: 130%; width: 49%; object-fit: contain; object-position: center top; top: 18%; }
-.sbs-poster .panel-public { left: 4%; }
-.sbs-poster .panel-garda { right: 3%; }
-.sbs-poster .perspective-scene--public .panel-garda, .sbs-poster .perspective-scene--garda .panel-public { height: 170%; width: 57%; top: 10%; }
+.sbs-poster .perspective-scene {
+  --scene-ratio: 1.76;
+  display: block; position: relative; inline-size: 100%; aspect-ratio: var(--scene-ratio);
+  overflow: hidden; direction: ltr;
+}
+.sbs-poster :is(.perspective-scene,.story-preview__scene) {
+  --public-ground: 10%; --garda-ground: 10%;
+  --public-shadow-x: calc(4% + 37.884% / var(--scene-ratio));
+  --garda-shadow-x: calc(97% - 39.36% / var(--scene-ratio));
+  isolation: isolate;
+}
+.sbs-poster .panel-backdrop { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sbs-poster :is(.panel-public,.panel-garda) {
+  position: absolute; z-index: 2; height: 82%; width: auto; aspect-ratio: 1;
+  object-fit: contain; object-position: center bottom;
+}
+.sbs-poster .panel-public { left: 4%; bottom: var(--public-ground); translate: 0 1.125%; }
+.sbs-poster .panel-garda { right: 3%; bottom: var(--garda-ground); translate: 0 3.55%; }
+.sbs-poster .perspective-scene--public { --garda-ground: 3%; --garda-shadow-x: calc(106% - 48% / var(--scene-ratio)); }
+.sbs-poster .perspective-scene--garda { --public-ground: 3%; --public-shadow-x: calc(-6% + 48% / var(--scene-ratio)); }
+.sbs-poster .perspective-scene--public .panel-garda, .sbs-poster .perspective-scene--garda .panel-public {
+  height: 96%; translate: 0 1.9%;
+}
 .sbs-poster .perspective-scene--public .panel-garda { right: -6%; }
 .sbs-poster .perspective-scene--garda .panel-public { left: -6%; }
+.sbs-poster :is(.perspective-scene,.story-preview__scene)::before,
+.sbs-poster :is(.perspective-scene,.story-preview__scene)::after {
+  content: ''; position: absolute; z-index: 1; width: 28%; height: 5%;
+  border-radius: 50%; transform: translateX(-50%);
+  background: radial-gradient(ellipse, #102c3166 0, #102c312e 40%, transparent 72%);
+}
+.sbs-poster :is(.perspective-scene,.story-preview__scene)::before {
+  left: var(--public-shadow-x); bottom: calc(var(--public-ground) - 2.5%);
+}
+.sbs-poster :is(.perspective-scene,.story-preview__scene)::after {
+  left: var(--garda-shadow-x); bottom: calc(var(--garda-ground) - 2.5%);
+}
 .sbs-poster .perspective-label {
-  min-inline-size: 65%; max-inline-size: 100%; padding: .3em .65em; border-radius: 2em;
-  background: white; font-size: 1rem; font-weight: 750; line-height: 1.25; text-align: center;
+  display: grid; place-items: center; min-inline-size: 0; min-block-size: 44px; width: 100%; max-inline-size: 100%;
+  padding: .4em .65em; background: white; font-size: 1rem; font-weight: 750; line-height: 1.35; text-align: center;
 }
 .sbs-poster .poster-learning { padding: 0 var(--inset) var(--inset); }
 .sbs-poster .learning-steps {
@@ -135,7 +177,7 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 .sbs-poster .avatar { display: block; aspect-ratio: 1.18; overflow: hidden; }
 .sbs-poster .avatar-image { width: 100%; height: 210%; object-fit: cover; object-position: center top; }
 .sbs-poster .story-preview { margin: 0; overflow: hidden; border: 1px solid var(--edge); border-radius: .75rem; background: #eff9fa; }
-.sbs-poster .story-preview__scene { position: relative; aspect-ratio: 1.95; overflow: hidden; }
+.sbs-poster .story-preview__scene { --scene-ratio: 1.95; position: relative; aspect-ratio: var(--scene-ratio); overflow: hidden; }
 .sbs-poster .story-preview figcaption, .sbs-poster .compare-caption { margin: 0; padding: .4em; text-align: center; font-size: .9rem; line-height: 1.4; }
 .sbs-poster .example-label { margin: 0 0 .5em; color: var(--ink); font-size: .9rem; font-weight: 700; }
 .sbs-poster .response-picker { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
@@ -155,9 +197,6 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
 .sbs-poster .poster-landing-action:hover { background: #043f43; }
 .sbs-poster .perspective-card:hover { border-color: var(--sea); }
 
-@container (min-width: 52rem) {
-  .sbs-poster .hero-garda { position: relative; left: 5%; }
-}
 @container (max-width: 52rem) {
   .sbs-poster .poster-overview { grid-template-columns: 1fr; }
   .sbs-poster .poster-overview__text { display: grid; grid-template-columns: 1fr 1.3fr; gap: 1rem; align-items: center; }
@@ -176,8 +215,6 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
     letter-spacing: 0;
   }
   .sbs-poster .hero-question::before, .sbs-poster .hero-question::after { display: none; }
-  .sbs-poster .hero-characters { gap: 4%; }
-  .sbs-poster .hero-characters img { width: 46%; height: 143%; }
   .sbs-poster .poster-overview__text { display: block; }
   .sbs-poster .perspective-grid { order: -1; }
   /* Captions grow below the scene, so wrapping never covers the characters. */
@@ -190,11 +227,12 @@ html[data-perspective] .sbs-poster.poster-perspective-section { padding: var(--i
     background: #fff;
   }
   .sbs-poster .perspective-scene {
+    --scene-ratio: 1.5;
     position: relative;
     inset: auto;
     z-index: auto;
     inline-size: 100%;
-    aspect-ratio: 1.5;
+    aspect-ratio: var(--scene-ratio);
     overflow: hidden;
   }
   .sbs-poster .perspective-label {

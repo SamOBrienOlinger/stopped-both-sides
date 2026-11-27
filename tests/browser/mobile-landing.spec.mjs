@@ -55,6 +55,13 @@ function mobileLayout(view){
   Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>tolerance;
  const withinWidth=(inner,outer)=>inner.left>=outer.left-tolerance&&inner.right<=outer.right+tolerance;
  const withinHeight=(inner,outer)=>inner.top>=outer.top-tolerance&&inner.bottom<=outer.bottom+tolerance;
+ const overflowDetails=(inner,outer,x=true,y=true)=>{
+  const sides=[];
+  if(x)sides.push(['left (horizontal)',outer.left-inner.left],['right (horizontal)',inner.right-outer.right]);
+  if(y)sides.push(['top (vertical)',outer.top-inner.top],['bottom (vertical)',inner.bottom-outer.bottom]);
+  return sides.filter(([,deficit])=>deficit>tolerance)
+   .map(([side,deficit])=>side+': '+deficit+'px').join(', ');
+ };
  const readable=(element,label,{vertical=false}={})=>{
   if(!element||!visible(element)){errors.push(label+': missing text');return [];}
   const bounds=box(element),walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
@@ -78,9 +85,12 @@ function mobileLayout(view){
     // Font ascent/descent can exceed an uncropped heading's line-height.
     // Keep text inside controls/captions and every actual clipping ancestor,
     // while allowing ordinary document content to continue below the viewport.
-    if(!withinWidth(rect,bounds)||(vertical&&!withinHeight(rect,bounds)))errors.push(label+': text leaves its label');
+    if(!withinWidth(rect,bounds)||(vertical&&!withinHeight(rect,bounds))){
+     errors.push(label+': text leaves its label ('+overflowDetails(rect,bounds,true,vertical)+')');
+    }
     if(clipping.some(clip=>(clip.x&&!withinWidth(rect,clip.bounds))||(clip.y&&!withinHeight(rect,clip.bounds)))){
-     errors.push(label+': text is clipped');
+     const details=clipping.map(clip=>overflowDetails(rect,clip.bounds,clip.x,clip.y)).filter(Boolean).join('; ');
+     errors.push(label+': text is clipped ('+details+')');
     }
    }
   }
@@ -89,6 +99,7 @@ function mobileLayout(view){
  };
  const control=(element,label)=>{
   if(!visible(element))return;
+  if(element.tagName==='A')label+=' [href="'+element.getAttribute('href')+'"]';
   const bounds=box(element);
   if(bounds.width<43.5||bounds.height<43.5)errors.push(label+': target smaller than 44px');
   if(bounds.left<-tolerance||bounds.right>root.clientWidth+tolerance)errors.push(label+': outside page width');

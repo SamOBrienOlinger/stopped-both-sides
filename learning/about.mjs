@@ -76,7 +76,7 @@ export function prototypeInput(siteRole='public') {
   <p>Help develop an independent, research-informed learning resource for human and civil rights, equality and fair policing in Ireland.</p>
   <p>The prototype is available to explore now. The next step is to develop and evaluate it with communities, educators, legal specialists, practitioners and research partners.</p>
   <p>We welcome expertise, community participation, pilot partnerships and funding. No partnership or endorsement is claimed.</p>
-  <a class="primary" href="https://samobrienolinger.github.io/SamOBrienOlinger/#contact" target="_blank" rel="noopener noreferrer">Discuss partnership or funding</a>
+  <a class="primary" href="https://samobrienolinger.github.io/SamOBrienOlinger/#top" target="_blank" rel="noopener noreferrer">Discuss partnership or funding</a>
  </section>
  <details class="info-block input-disclosure"><summary><span class="card-summary-title">${summary}<span class="contribution-intro">Community voices and independent expertise could help shape the next version.</span></span></summary>
   <div class="contribution-status"><strong>Help shape what comes next</strong><span>Bring your experience, expertise or resources to the next stage of Stopped: Both Sides. Community organisations, researchers, practitioners, and funders are welcome to collaborate on reviewing the content, developing new situations, testing the resource with learners to support its further development and evaluation. Get involved as a contributor, project partner or funder, and help turn this prototype into a stronger shared learning resource that empowers and protects members of An Garda Síochána and the public.</span></div>

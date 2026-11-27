@@ -215,8 +215,8 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  .simple-setup .setup-role summary {min-block-size:44px;padding-block:.25rem;font-size:.875rem}
  .simple-setup .play-modes {gap:.5rem;margin-block:.65rem .85rem}
  .simple-setup .play-modes a {gap:.15rem;padding:.65rem .75rem;border-radius:.75rem;min-block-size:44px}
- .simple-setup .play-modes a strong {font-size:1rem}
- .simple-setup .play-modes a span {font-size:.875rem;line-height:1.5}
+ .simple-setup .play-modes a strong {font-size:1rem;line-height:var(--ui-control-line)}
+ .simple-setup .play-modes a span {font-size:.875rem;line-height:var(--ui-control-line)}
  .simple-setup .start-panel {gap:.85rem;border-radius:1rem}
  #main .simple-setup .recommended-situation h2 {font-size:1.25rem;line-height:1.3;margin-block-end:.45rem}
  #main .simple-setup .recommended-situation p {font-size:.9375rem;margin-block-end:.75rem}

@@ -10,7 +10,7 @@ for(const path of ['./','garda/'])for(const language of ['en','ar','ga','zh-Hans
   const overview=page.locator('.partnership-overview');
   await expect(overview.getByRole('heading',{name:translateText('Partnership and collaboration',language)})).toBeVisible();
   const contact=overview.getByRole('link',{name:translateText('Discuss partnership or funding',language)});
-  await expect(contact).toHaveAttribute('href','https://samobrienolinger.github.io/SamOBrienOlinger/#contact');
+  await expect(contact).toHaveAttribute('href','https://samobrienolinger.github.io/SamOBrienOlinger/#top');
   const disclosure=page.locator('.input-disclosure');
   await expect(disclosure).not.toHaveAttribute('open','');
   await disclosure.locator(':scope > summary').click();
