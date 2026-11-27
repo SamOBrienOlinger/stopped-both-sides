@@ -53,28 +53,46 @@ function mobileLayout(view){
   inner.top>=outer.top-tolerance&&inner.bottom<=outer.bottom+tolerance;
  const overlaps=(a,b)=>Math.min(a.right,b.right)-Math.max(a.left,b.left)>tolerance&&
   Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>tolerance;
- const readable=(element,label)=>{
-  if(!element||!visible(element)){errors.push(label+': missing text');return;}
+ const withinWidth=(inner,outer)=>inner.left>=outer.left-tolerance&&inner.right<=outer.right+tolerance;
+ const withinHeight=(inner,outer)=>inner.top>=outer.top-tolerance&&inner.bottom<=outer.bottom+tolerance;
+ const readable=(element,label,{vertical=false}={})=>{
+  if(!element||!visible(element)){errors.push(label+': missing text');return [];}
   const bounds=box(element),walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
-  let count=0;
+  const textRects=[];
   for(let node=walker.nextNode();node;node=walker.nextNode()){
    const start=node.textContent.search(/\S/);
    if(start<0||!visible(node.parentElement))continue;
+   const clipping=[];
+   for(let parent=node.parentElement;parent&&parent!==root&&parent!==document.body;parent=parent.parentElement){
+    const style=getComputedStyle(parent);
+    const x=['hidden','clip'].includes(style.overflowX),y=['hidden','clip'].includes(style.overflowY);
+    if(x||y){
+     const parentBox=box(parent),left=parentBox.left+parent.clientLeft,top=parentBox.top+parent.clientTop;
+     clipping.push({x,y,bounds:{left,top,right:left+parent.clientWidth,bottom:top+parent.clientHeight}});
+    }
+   }
    const range=document.createRange();
    range.setStart(node,start);range.setEnd(node,node.textContent.trimEnd().length);
    for(const rect of range.getClientRects())if(rect.width>0&&rect.height>0){
-    count++;
-    if(!inside(rect,bounds))errors.push(label+': text leaves its label');
+    textRects.push(rect);
+    // Font ascent/descent can exceed an uncropped heading's line-height.
+    // Keep text inside controls/captions and every actual clipping ancestor,
+    // while allowing ordinary document content to continue below the viewport.
+    if(!withinWidth(rect,bounds)||(vertical&&!withinHeight(rect,bounds)))errors.push(label+': text leaves its label');
+    if(clipping.some(clip=>(clip.x&&!withinWidth(rect,clip.bounds))||(clip.y&&!withinHeight(rect,clip.bounds)))){
+     errors.push(label+': text is clipped');
+    }
    }
   }
-  if(!count)errors.push(label+': empty label');
+  if(!textRects.length)errors.push(label+': empty label');
+  return textRects;
  };
  const control=(element,label)=>{
   if(!visible(element))return;
   const bounds=box(element);
   if(bounds.width<43.5||bounds.height<43.5)errors.push(label+': target smaller than 44px');
   if(bounds.left<-tolerance||bounds.right>root.clientWidth+tolerance)errors.push(label+': outside page width');
-  readable(element,label);
+  readable(element,label,{vertical:true});
  };
  if(root.scrollWidth>root.clientWidth+tolerance)errors.push('horizontal page overflow');
  if(view==='home'){
@@ -93,7 +111,7 @@ function mobileLayout(view){
    if(captionBox.height<43.5)errors.push('perspective '+index+': caption target smaller than 44px');
    if(captionBox.top<sceneBox.bottom-tolerance)errors.push('perspective '+index+': caption covers artwork');
    if(!inside(sceneBox,cardBox)||!inside(captionBox,cardBox))errors.push('perspective '+index+': art or caption leaves card');
-   readable(caption,'perspective '+index+' caption');
+   readable(caption,'perspective '+index+' caption',{vertical:true});
    control(card,'perspective '+index+' link');
   });
  }else{
@@ -107,7 +125,11 @@ function mobileLayout(view){
    if(!inside(portraitBox,box(panel)))errors.push('selected portrait leaves its panel');
    if(overlaps(portraitBox,box(copy)))errors.push('character labels cover the selected portrait');
   }
-  const selectors=['.simple-setup>h1','.setup-role>strong>span','.play-modes a strong',
+  const headingRects=readable(document.querySelector('.simple-setup>h1'),'setup heading');
+  const role=document.querySelector('.setup-role');
+  if(!role||!visible(role))errors.push('starting role is missing');
+  else if(headingRects.some(rect=>overlaps(rect,box(role))))errors.push('setup heading covers the starting role');
+  const selectors=['.setup-role>strong>span','.play-modes a strong',
    '.play-modes a span','.recommended-situation>h2','.recommended-situation>p','.setup-character>div'];
   for(const selector of selectors){
    const nodes=[...document.querySelectorAll(selector)];
