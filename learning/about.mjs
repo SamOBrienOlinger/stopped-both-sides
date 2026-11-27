@@ -71,7 +71,14 @@ const contributorGroups = [
 
 export function prototypeInput(siteRole='public') {
  const summary=siteRole==='garda'?'Help shape a stronger version':'A prototype with space for input';
- return `<details class="info-block input-disclosure"><summary><span class="card-summary-title">${summary}<span class="contribution-intro">Community voices and independent expertise could help shape the next version.</span></span></summary>
+ return `<section class="info-block important partnership-overview" aria-labelledby="partnership-heading">
+  <h2 id="partnership-heading">Partnership and collaboration</h2>
+  <p>Help develop an independent, research-informed learning resource for human and civil rights, equality and fair policing in Ireland.</p>
+  <p>The prototype is available to explore now. The next step is to develop and evaluate it with communities, educators, legal specialists, practitioners and research partners.</p>
+  <p>We welcome expertise, community participation, pilot partnerships and funding. No partnership or endorsement is claimed.</p>
+  <a class="primary" href="https://samobrienolinger.github.io/SamOBrienOlinger/#contact" target="_blank" rel="noopener noreferrer">Discuss partnership or funding</a>
+ </section>
+ <details class="info-block input-disclosure"><summary><span class="card-summary-title">${summary}<span class="contribution-intro">Community voices and independent expertise could help shape the next version.</span></span></summary>
   <div class="contribution-status"><strong>Help shape what comes next</strong><span>Bring your experience, expertise or resources to the next stage of Stopped: Both Sides. Community organisations, researchers, practitioners, and funders are welcome to collaborate on reviewing the content, developing new situations, testing the resource with learners to support its further development and evaluation. Get involved as a contributor, project partner or funder, and help turn this prototype into a stronger shared learning resource that empowers and protects members of An Garda Síochána and the public.</span></div>
   <div class="contribution-content">
    <div class="contribution-columns">
@@ -92,6 +99,37 @@ export function prototypeInput(siteRole='public') {
      </ul>
     </section>
    </div>
+   <section class="contribution-contributors partnership-detail" aria-labelledby="partnership-pilot" lang="en-IE" dir="ltr" data-no-translate>
+    <h3 id="partnership-pilot">What a partnership could deliver</h3>
+    <p>The following work is proposed, not commissioned or completed. Scope, costs and responsibilities would be agreed with partners.</p>
+    <ol class="partnership-deliverables">
+     <li><strong>Community-led design and independent review.</strong> Work with rights holders and community organisations to identify learning needs, review representation and develop realistic fictional scenarios. Legal specialists would review wording, powers and sources. A review record would document decisions and revisions.</li>
+     <li><strong>Accessible educational materials and a pilot.</strong> Develop reviewed translations, accessible scenarios and facilitator resources for community education. With appropriate partners, adapt a separate professional learning activity for Gardaí. Invite feedback on relevance, safety and usability without requiring disclosure of personal encounters.</li>
+     <li><strong>Independent evaluation and sustainable development.</strong> Test whether learners can identify relevant rights and sources, distinguish evidence from assumptions, explain choices and apply principles to unfamiliar situations. Use baseline, follow-up and delayed assessments where feasible. Publish findings and limitations, and agree a plan for maintaining legal references and accessible content.</li>
+    </ol>
+    <p>Funding could support community participation and appropriate expenses, independent legal and accessibility review, translation, development, facilitation and evaluation. Research involving participants would require suitable ethics, safeguarding and data protection arrangements.</p>
+    <p>Better learning scores would not by themselves demonstrate less discrimination, improved police conduct or greater community trust. The resource is not legal advice or official Garda training.</p>
+   </section>
+   <section class="contribution-contributors partnership-detail" aria-labelledby="partnership-evidence" lang="en-IE" dir="ltr" data-no-translate>
+    <h3 id="partnership-evidence">Why community participation and evaluation matter</h3>
+    <p>A systematic review of police-led interventions found benefits for satisfaction, confidence and perceived procedural fairness; the pooled legitimacy estimate remained uncertain. A later meta-analysis found that the relationship between procedural justice and legitimacy varies across social contexts and groups. These findings support attention to fair treatment, listening and community experience, not a claim that this prototype has achieved these outcomes.</p>
+    <ul class="partnership-sources" role="list">
+     <li>${external('https://consensus.app/papers/details/w:3484c66a-b6b2-4650-a464-7171b7c79188/?utm_source=chatgpt','Mazerolle et al. (2013) — Legitimacy in Policing: A Systematic Review')}</li>
+     <li>${external('https://consensus.app/papers/details/w:6952f0a3-9eff-48b0-b49b-3b042649c47d/?utm_source=chatgpt','Chan, Bradford &amp; Stott (2023) — systematic review and meta-analysis')}</li>
+    </ul>
+    <p>The educational approach and its separate proposed assessment framework are described on this page. Community-led review and independent evaluation would help determine whether the approach is useful in Ireland.</p>
+   </section>
+   <section class="contribution-contributors partnership-detail" aria-labelledby="partnership-funding" lang="en-IE" dir="ltr" data-no-translate>
+    <h3 id="partnership-funding">Potential funding and research pathways</h3>
+    <p>These are examples of relevant programmes or funders to explore with eligible partners, not confirmed funding, current open calls or endorsements. Eligibility and programme priorities would need to be checked before any application.</p>
+    <ul class="partnership-deliverables partnership-funding-list">
+     <li><strong>${external('https://www.researchireland.ie/funding/new-foundations/','Research Ireland — New Foundations')}</strong><p>community-engaged research and knowledge exchange with eligible academic researchers. Previous calls have included a policing and community safety strand in partnership with the Policing and Community Safety Authority.</p></li>
+     <li><strong>${external('https://www.gov.ie/en/department-of-justice-home-affairs-and-migration/campaigns/ireland-against-racism-fund/','Ireland Against Racism Fund')}</strong><p>potential fit for anti-racism education and community participation through an eligible NGO or community organisation.</p></li>
+     <li><strong>${external('https://rethinkireland.ie/our-funds/','Rethink Ireland')}</strong><p>potential fit for a nonprofit-led social innovation project focused on equality or education, subject to the particular fund criteria. Standalone research projects and for-profit applicants are not eligible under its general criteria.</p></li>
+     <li><strong>${external('https://www.communityfoundation.ie/apply-for-funding/','Community Foundation Ireland')}</strong><p>possible support for community-led equality and inclusion activity, depending on the grant round or donor priorities.</p></li>
+    </ul>
+    <p>Potential partners can help identify an appropriate lead organisation, funding route, governance arrangements and an achievable pilot.</p>
+   </section>
    <section class="contribution-contributors" aria-labelledby="contribution-contributors"><h3 id="contribution-contributors">Potential contributors</h3>
     <p>Examples of organisations and institutions to approach, alongside people with lived experience:</p>
     <ul class="contribution-organisations" role="list">${contributorGroups.map(([title,items])=>`<li><h4>${title}</h4><ul role="list">${items.map(item=>`<li>${item.startsWith('<a ')?item:`<span>${item}</span>`}</li>`).join('')}</ul></li>`).join('')}</ul>

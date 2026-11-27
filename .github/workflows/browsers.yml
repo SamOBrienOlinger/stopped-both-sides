@@ -186,6 +186,15 @@ jobs:
           npm run test:browser -- --project=${{ matrix.browser }} --repeat-each=3
           portfolio-landing-reveal.spec.mjs remaining-controls.spec.mjs support.spec.mjs
           --grep "pending image cancellation and failure|previous-stage control|Back to Top|pending initial language"
+      # The detached-animation failure was intermittent in Chromium. Stress
+      # the exact regression independently of the general three repeats.
+      - name: Stress interrupted landing animation cancellation (Chromium)
+        if: matrix.browser == 'chromium'
+        run: >-
+          npm run test:browser -- --project=chromium --repeat-each=10
+          --output=test-results/chromium-reveal-cancellation-repeat --reporter=list
+          portfolio-landing-reveal.spec.mjs
+          --grep "pending image cancellation and failure"
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:

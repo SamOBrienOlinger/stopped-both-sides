@@ -14,19 +14,31 @@ function createController(main){
  const landingMotionAllowed=()=>!reduced.matches&&!forced.matches&&!root.classList.contains('motion-reduce')&&!root.classList.contains('contrast-high');
  let landingObserver=null,observedLanding=null,lastLandingPreferences=null;
  const landingItems=new Map();
+ const landingAnimations=item=>(item.getAnimations?.()||[]).filter(animation=>
+  animation.animationName==='landing-portfolio-line-reveal');
  function settleLandingItem(item,complete=false){
   const state=landingItems.get(item);
-  state?.stop?.();clearTimeout(state?.timer);
-  state?.cancelReadiness?.();
+  // A CSS animation can be detached when its media query ceases to match,
+  // yet the JS-controlled animation object can retain its sampled effect.
+  // Retain the original objects, even if getAnimations() no longer lists
+  // them. Stop their frame clock before explicitly cancelling the effects.
+  const animations=new Set(state?.animations||[]);
+  if(state?.status==='active')for(const animation of landingAnimations(item))animations.add(animation);
+  if(state){
+   state.status=complete?'complete':'cancelled';
+   state.animations=[];
+   if(!complete)landingItems.delete(item);
+   state.stop?.();state.stop=null;
+   clearTimeout(state.timer);state.timer=0;
+   state.cancelReadiness?.();
+  }
   landingObserver?.unobserve(item);
   item.style.removeProperty('--landing-reveal-delay');
-  if(complete&&state){
-   state.stop=null;state.timer=0;state.status='complete';
-   item.setAttribute('data-landing-reveal','complete');
-  }else{
-   landingItems.delete(item);
-   item.removeAttribute('data-landing-reveal');
-  }
+  if(complete&&state)item.setAttribute('data-landing-reveal','complete');
+  else item.removeAttribute('data-landing-reveal');
+  // Drop the CSS trigger first so cancel() cannot restart a matching rule.
+  // Only cancel animations owned by this entrance, not hover or other cues.
+  for(const animation of animations){try{animation.cancel();}catch{}}
  }
  function clearLandingReveal(){
   landingObserver?.disconnect();landingObserver=null;
@@ -41,9 +53,10 @@ function createController(main){
   landingObserver?.unobserve(item);
   item.style.setProperty('--landing-reveal-delay',state.delay+'ms');
   state.status='active';item.setAttribute('data-landing-reveal','active');
-  const animations=(item.getAnimations?.()||[]).filter(animation=>
-   animation.animationName==='landing-portfolio-line-reveal');
-  const complete=()=>{if(landingItems.get(item)===state)settleLandingItem(item,true);};
+  const animations=state.animations=landingAnimations(item);
+  const complete=()=>{
+   if(landingItems.get(item)===state&&state.status==='active')settleLandingItem(item,true);
+  };
   if(animations.length)state.stop=paceAnimations(animations,complete);
   else state.timer=setTimeout(complete,2000);
  }
@@ -84,7 +97,7 @@ function createController(main){
    // The caller restores route focus/scroll after update(). The observer
    // measures that new viewport, rather than the previous page's scroll.
    if(landingItems.has(item)||item.contains(document.activeElement))continue;
-   const state={status:'pending',stop:null,timer:0,ready:item.tagName!=='IMG',visible:false,delay:0,cancelReadiness:null};
+   const state={status:'pending',stop:null,timer:0,animations:[],ready:item.tagName!=='IMG',visible:false,delay:0,cancelReadiness:null};
    landingItems.set(item,state);
    item.setAttribute('data-landing-reveal','pending');landingObserver.observe(item);
    if(!state.ready)prepareLandingImage(item,state);

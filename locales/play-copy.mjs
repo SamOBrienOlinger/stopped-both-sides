@@ -961,7 +961,74 @@ const overviewAndControls = [
  ]],
  ['Play this situation', ['Bain triail as an gcás seo','Explorar esta situação','جرّب هذا الموقف','Rozegraj tę sytuację','Încearcă această situație','Jouer cette situation','Explorar esta situación','体验这个情境']]
 ];
-const translations = new Map([...overviewAndControls,...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy,...posterCopy]);
+const partnershipCopy = [
+ [
+  "Partnership and collaboration",
+  [
+   "Comhpháirtíocht agus comhoibriú",
+   "Parceria e colaboração",
+   "الشراكة والتعاون",
+   "Partnerstwo i współpraca",
+   "Parteneriat și colaborare",
+   "Partenariat et collaboration",
+   "Alianzas y colaboración",
+   "合作伙伴关系与协作"
+  ]
+ ],
+ [
+  "Help develop an independent, research-informed learning resource for human and civil rights, equality and fair policing in Ireland.",
+  [
+   "Cabhraigh le hacmhainn foghlama neamhspleách atá bunaithe ar thaighde a fhorbairt maidir le cearta daonna agus sibhialta, comhionannas agus póilíneacht chóir in Éirinn.",
+   "Ajude a desenvolver um recurso de aprendizagem independente, fundamentado na investigação, sobre direitos humanos e civis, igualdade e policiamento justo na Irlanda.",
+   "ساهم في تطوير مورد تعليمي مستقل يستند إلى البحث حول حقوق الإنسان والحقوق المدنية والمساواة والعمل الشرطي المنصف في أيرلندا.",
+   "Pomóż rozwijać niezależny, oparty na badaniach materiał edukacyjny dotyczący praw człowieka i praw obywatelskich, równości oraz sprawiedliwego działania policji w Irlandii.",
+   "Ajută la dezvoltarea unei resurse educaționale independente, fundamentate pe cercetare, despre drepturile omului și drepturile civile, egalitate și activitate polițienească echitabilă în Irlanda.",
+   "Contribuez au développement d’une ressource pédagogique indépendante, éclairée par la recherche, sur les droits humains et civils, l’égalité et des pratiques policières équitables en Irlande.",
+   "Ayuda a desarrollar un recurso educativo independiente, basado en la investigación, sobre derechos humanos y civiles, igualdad y actuación policial justa en Irlanda.",
+   "帮助开发一项独立、以研究为依据的学习资源，关注爱尔兰的人权、公民权利、平等和公正执法。"
+  ]
+ ],
+ [
+  "The prototype is available to explore now. The next step is to develop and evaluate it with communities, educators, legal specialists, practitioners and research partners.",
+  [
+   "Tá an fhréamhshamhail ar fáil anois lena scrúdú. Is é an chéad chéim eile í a fhorbairt agus a mheas le pobail, oideachasóirí, saineolaithe dlí, cleachtóirí agus comhpháirtithe taighde.",
+   "Já é possível explorar o protótipo. O próximo passo é desenvolvê-lo e avaliá-lo com comunidades, educadores, especialistas jurídicos, profissionais e parceiros de investigação.",
+   "يمكن استكشاف النموذج الأولي الآن. والخطوة التالية هي تطويره وتقييمه بالتعاون مع المجتمعات والمربين والمتخصصين القانونيين والممارسين وشركاء البحث.",
+   "Prototyp jest już dostępny. Kolejnym krokiem jest jego rozwój i ocena wspólnie ze społecznościami, edukatorami, specjalistami prawa, praktykami i partnerami badawczymi.",
+   "Prototipul poate fi explorat acum. Următorul pas este dezvoltarea și evaluarea sa împreună cu comunități, educatori, specialiști în drept, practicieni și parteneri de cercetare.",
+   "Le prototype est déjà accessible. La prochaine étape consiste à le développer et à l’évaluer avec les communautés, les éducateurs, les spécialistes du droit, les praticiens et les partenaires de recherche.",
+   "El prototipo ya se puede explorar. El siguiente paso es desarrollarlo y evaluarlo con comunidades, educadores, especialistas jurídicos, profesionales y socios de investigación.",
+   "现在即可体验这一原型。下一步是与社区、教育工作者、法律专家、从业人员和研究伙伴共同开发和评估。"
+  ]
+ ],
+ [
+  "We welcome expertise, community participation, pilot partnerships and funding. No partnership or endorsement is claimed.",
+  [
+   "Cuirimid fáilte roimh shaineolas, rannpháirtíocht pobail, comhpháirtíochtaí píolótacha agus maoiniú. Ní mhaítear go bhfuil aon chomhpháirtíocht ná formhuiniú ann.",
+   "Acolhemos contributos especializados, participação comunitária, parcerias para projetos-piloto e financiamento. Não se afirma a existência de qualquer parceria ou apoio institucional.",
+   "نرحب بالخبرات والمشاركة المجتمعية والشراكات التجريبية والتمويل. ولا ندّعي وجود أي شراكة أو تأييد.",
+   "Zapraszamy do współpracy ekspertów i społeczności, partnerstw pilotażowych oraz wsparcia finansowego. Nie deklarujemy żadnego partnerstwa ani poparcia instytucjonalnego.",
+   "Încurajăm contribuțiile specialiștilor, participarea comunităților, parteneriatele pentru proiecte-pilot și finanțarea. Nu afirmăm existența vreunui parteneriat sau a vreunei susțineri oficiale.",
+   "Les contributions d’experts, la participation des communautés, les partenariats pilotes et le financement sont les bienvenus. Aucun partenariat ni soutien officiel n’est revendiqué.",
+   "Acogemos aportaciones de especialistas, participación comunitaria, colaboraciones piloto y financiación. No se afirma que exista ninguna alianza ni respaldo institucional.",
+   "欢迎专业支持、社区参与、试点合作和资助。我们不声称已获得任何合作伙伴关系或背书。"
+  ]
+ ],
+ [
+  "Discuss partnership or funding",
+  [
+   "Pléigh comhpháirtíocht nó maoiniú",
+   "Conversar sobre parceria ou financiamento",
+   "ناقش الشراكة أو التمويل",
+   "Porozmawiaj o partnerstwie lub finansowaniu",
+   "Discută despre parteneriat sau finanțare",
+   "Discuter d’un partenariat ou d’un financement",
+   "Hablar sobre colaboración o financiación",
+   "洽谈合作或资助"
+  ]
+ ]
+];
+const translations = new Map([...partnershipCopy,...overviewAndControls,...labels,...content,...terminology,...communityResearch,...contributionCopy,...additionalContributorLabels,...communityResourceCopy,...searchCopy,...posterCopy]);
 export function learningCopy(text,language){
  return translations.get(text)?.[languages.indexOf(language)];
 }

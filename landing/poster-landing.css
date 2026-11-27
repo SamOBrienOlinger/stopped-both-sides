@@ -189,6 +189,19 @@ html.reading-spacious .sbs-poster :is(.poster-lead,.response-picker li,.compare-
   }
   .sbs-poster .landing-role-actions { --landing-reveal-rise: 0px; }
 }
+/* Accessibility is a visible-state guarantee, including during the gap
+   between a media query update and the controller's cancellation callback.
+   Match authored targets rather than transient data-landing-reveal markers. */
+@media (prefers-reduced-motion: reduce), (forced-colors: active), print {
+  .sbs-poster [data-poster-reveal] {
+    animation: none !important; transition: none !important;
+    opacity: 1 !important; transform: none !important;
+  }
+}
+html:is(.motion-reduce,.contrast-high) .sbs-poster [data-poster-reveal] {
+  animation: none !important; transition: none !important;
+  opacity: 1 !important; transform: none !important;
+}
 html.contrast-high[data-perspective] .sbs-poster.reference-landing,
 html.contrast-high[data-perspective] .sbs-poster.poster-perspective-section,
 html.contrast-high[data-perspective] .sbs-poster.poster-guide-section { --sea: #fff; --ink: #fff; color: white; background: #10171b !important; }
