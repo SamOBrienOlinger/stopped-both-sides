@@ -12,7 +12,8 @@ function tryWelcome(){
   adb('shell','uiautomator','dump','/sdcard/sbs-audit.xml');
   const source=adb('shell','cat','/sdcard/sbs-audit.xml');
   writeFileSync(folder+'/browser-onboarding.xml',source);
-  const labels=['Use without an account','Accept &amp; continue','Accept and continue','No thanks','Continue without an account','Not now','Skip','Got it','Don’t allow'];
+  const alert=source.match(/text="([^"]*(?:responding|stopped)[^"]*)"/i)?.[1];
+  const labels=[...(alert?['Close app','Wait']:[]),'Use without an account','Accept &amp; continue','Accept and continue','No thanks','Continue without an account','Not now','Skip','Got it','Don’t allow'];
   for(const label of labels){
    const node=(source.match(/<node\b[^>]*>/g)||[]).find(node=>node.includes('text="'+label+'"')||node.includes('content-desc="'+label+'"'));
    const box=node?.match(/bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/);
@@ -25,7 +26,7 @@ function tryWelcome(){
 }
 async function connect(wanted,handleWelcome=false){
  for(let attempt=0;attempt<10;attempt++){
-  if(handleWelcome&&mode==='chrome'&&attempt<6&&tryWelcome()){await wait(650);continue}
+  if(handleWelcome&&mode==='chrome'&&attempt<8&&tryWelcome()){await wait(650);continue}
   try{
    const socket=(adb('shell','cat','/proc/net/unix').match(/@(chrome_devtools_remote(?:_\d+)?|webview_devtools_remote_\d+)\s*$/gm)||[]).map(x=>x.trim().slice(1)).find(x=>x.startsWith(mode==='chrome'?'chrome_':'webview_'));
    if(!socket)throw Error('waiting for '+mode+' DevTools socket');
@@ -76,8 +77,18 @@ function physicalBounds(){
  }).filter(n=>n.r>n.x&&n.b>n.y);
  return {xml,web:nodes.find(n=>n.class==='android.webkit.WebView'),field:nodes.find(n=>n.class==='android.widget.EditText'&&n['resource-id']!=='com.android.chrome:id/url_bar'&&!n['resource-id']?.startsWith('com.android.chrome:id/'))};
 }
+async function foreground(){
+ let data;
+ for(let n=0;n<8;n++){
+  if(tryWelcome()){await wait(400);continue}
+  data=physicalBounds();
+  if(data.web)return data;
+  await wait(350);
+ }
+ throw Error('Foreground Android window is not a web page. '+(data?.xml||'').match(/text="[^"]+"/g)?.slice(0,10));
+}
 async function nativeField(key){
- const data=physicalBounds();writeFileSync(folder+'/'+key+'-tree.xml',data.xml);
+ const data=await foreground();writeFileSync(folder+'/'+key+'-tree.xml',data.xml);
  let point;
  if(data.field){point={x:(data.field.x+data.field.r)/2,y:(data.field.y+data.field.b)/2,source:'Android text field'}}
  else if(data.web){
@@ -99,7 +110,10 @@ for(const orientation of ['portrait','landscape'])for(const role of ['public','g
   const base='http://localhost:4173/stopped-both-sides/'+(role==='garda'?'garda/':'')+'?lang='+lang+'#play';
   if(mode==='chrome')adb('shell','am','start','-W','-a','android.intent.action.VIEW','-d',base,'--ez','create_new_tab','true','-p',testPackage);
   else adb('shell','am','start','-W','-n','org.sbs.audit/.Browser');
-  await wait(550);c=await connect(base);await c.send('Page.enable');
+  await wait(700);c=await connect(base);await c.send('Page.enable');
+  await foreground();
+  adb('shell','wm','user-rotation','lock',orientation==='portrait'?'0':'1');
+  adb('shell','settings','put','system','user_rotation',orientation==='portrait'?'0':'1');
   await c.send('Page.bringToFront');await c.send('Page.navigate',{url:base});
   await until('location.pathname==='+JSON.stringify(new URL(base).pathname)+'&&document.querySelector(".navigation-ready")&&document.documentElement.lang==='+JSON.stringify(lang==='en'?'en-IE':'ar'));
   report.userAgent=await evaluate('navigator.userAgent');

@@ -5,6 +5,13 @@ adb shell settings put secure show_ime_with_hard_keyboard 1
 adb shell settings put system accelerometer_rotation 0
 adb shell input keyevent 224
 adb shell wm dismiss-keyguard
+adb shell settings put global hide_error_dialogs 1
+adb shell settings put secure anr_show_background 0
+adb shell settings put global show_first_crash_dialog 0
+adb shell wm fixed-to-user-rotation enabled || true
+adb shell settings put global window_animation_scale 0
+adb shell settings put global transition_animation_scale 0
+adb shell settings put global animator_duration_scale 0
 adb shell wm size > android-results/display.txt
 adb shell wm density >> android-results/display.txt
 adb shell getprop ro.build.fingerprint > android-results/build.txt
