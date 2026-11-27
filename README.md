@@ -1,51 +1,91 @@
+<a name="top"></a>
+
 <p align="center">
-  <img src="assets/brand/profiles-hexagon.webp?v=all-logos-transparent-20261127" width="80" alt="Two profiles facing opposite directions, in teal and blue">
+  <img src="assets/brand/profiles-hexagon.webp?v=all-logos-transparent-20261127" width="64" height="64" alt="Two profiles facing opposite directions, in teal and blue">
 </p>
 
 <h1 align="center">Stopped: Both Sides</h1>
 
 <p align="center">
   <strong>One situation. Two perspectives.</strong><br>
-  An interactive learning resource about human and civil rights and Garda decisions in the Republic of Ireland.
+  Explore human and civil rights and Garda decision-making through the same fictional encounter in the Republic of Ireland.
 </p>
 
 <p align="center">
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/"><strong>Explore the public perspective</strong></a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/"><strong>Explore the public perspective →</strong></a>
   &nbsp; · &nbsp;
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/"><strong>Explore the Garda perspective</strong></a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/"><strong>Explore the Garda perspective →</strong></a>
 </p>
 
 <p align="center">
   <a href="https://samobrienolinger.github.io/stopped-both-sides/">
-    <img src="docs/user-guide/live-landing.webp?v=all-logos-transparent-20261127" width="800" alt="Alex and Garda Aisling outside the GPO on O’Connell Street. The landing page asks, ‘What will you do?’">
+    <img src="docs/user-guide/live-landing.webp?v=all-logos-transparent-20261127" width="960" alt="The illustrated landing page: Alex and Garda Aisling outside the GPO on O’Connell Street, with the invitation ‘What will you do?’">
   </a>
 </p>
 
 <p align="center">
-  <strong>34 shared situations</strong> &nbsp; · &nbsp; <strong>99 decision stages</strong> &nbsp; · &nbsp; <strong>19 selectable characters</strong> &nbsp; · &nbsp; <strong>9 languages</strong>
+  <strong>34 shared situations</strong> &nbsp; · &nbsp; <strong>99 decision stages</strong><br>
+  <strong>19 selectable characters</strong> &nbsp; · &nbsp; <strong>9 languages</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/checks.yml"><img src="https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/checks.yml/badge.svg?branch=main" alt="Game checks on main"></a>
+  <a href="https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml"><img src="https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml/badge.svg?branch=main" alt="Browser checks on main"></a>
 </p>
 
 <p align="center">
   <a href="#how-it-works">How it works</a> ·
-  <a href="#user-flow-infographic">Visual guide</a> ·
-  <a href="#finding-situations-and-sources">Search &amp; sources</a> ·
-  <a href="#characters-and-switching-sides">Characters</a> ·
-  <a href="#accessibility-and-language">Language &amp; reading</a> ·
-  <a href="#entity-relationship-diagrams">Data model</a> ·
+  <a href="#getting-started">Quick start</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#accessibility-and-language">Accessibility</a> ·
   <a href="#evidence-and-content-review">Evidence</a> ·
-  <a href="#educational-approach-methodology-and-learning-outcomes">Learning approach</a> ·
-  <a href="#getting-started">Developers</a> ·
-  <a href="#contributing-and-support">Help &amp; contribute</a>
+  <a href="#documentation-and-repository-guide">Documentation</a> ·
+  <a href="#contributing-and-support">Contribute</a>
 </p>
 
 ---
 
-Explore a fictional encounter with An Garda Síochána, choose a response and read the explanation. Switch perspectives to consider the same moment from the other side, with both sets of answers kept for comparison.
-
 > [!NOTE]
 > **An independent educational prototype.** This resource provides general learning about the **Republic of Ireland**, not legal advice or accredited Garda training. Northern Ireland has different laws. Specialist legal, community and language review remain opportunities for further development.
 
+## Purpose and audience
+
+**Make a choice, understand the reasoning, then explore the same moment from the other side.** Stopped: Both Sides brings public rights education and reflective Garda decision-making into one branching experience. Learners can compare both roles without losing the scene, characters or either set of answers.
+
+| Feature | What it makes possible |
+| --- | --- |
+| **Two perspectives, one encounter** | Compare what each person knows, the choices available and their different powers and responsibilities. |
+| **Explanations with sources** | Follow a decision to its learning point and the legal, professional, academic or community sources behind it. |
+| **Language and reading controls** | Explore in nine languages, including right-to-left Arabic, with adjustable text, contrast, spacing and motion. |
+| **Progress without an account** | Resume a situation, revisit decisions and review separate scores for each role using browser storage. |
+
+The resource supports independent exploration and suggested facilitated learning activities. **Perspective-taking does not imply equal legal powers or equal responsibility.** A member of the public is never scored as responsible for another person's misconduct, and cooperation is not presented as a guarantee of safety.
+
 ## How it works
+
+1. **Choose a role and situation.** Start as a member of the public or a Garda. A character is ready to use; change it if you wish.
+2. **Make a decision.** Read the scene, choose a response and open the explanation and sources.
+3. **Compare the other side.** Switch roles at the same moment. Both answers are kept; the active role's answer determines the next branch.
+4. **Reflect and return.** Review the paired recap, try another answer or resume a saved situation later.
+
+**[Start as a member of the public](https://samobrienolinger.github.io/stopped-both-sides/#encounters/public)** · **[Start as a Garda](https://samobrienolinger.github.io/stopped-both-sides/#encounters/garda)** · **[Printable guide (PDF)](docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true&v=mobile-roles-20261127)**
+
+<details>
+<summary><strong>Full walkthrough, situation search, characters and scoring</strong></summary>
+
+### What you can explore
+
+Both perspectives belong to the same learning resource. Choose either starting point and switch when you want to compare the reasoning.
+
+| Start with the public perspective | Start with the Garda perspective |
+| --- | --- |
+| Explore human and civil rights, responsibilities and access to support. | Explore evidence, professional judgement and fair treatment. |
+| Street questions, a bag search, arrest, the station, a young person and concerns about racism. | Suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision. |
+| **[Explore the public perspective →](https://samobrienolinger.github.io/stopped-both-sides/)** | **[Explore the Garda perspective →](https://samobrienolinger.github.io/stopped-both-sides/garda/)** |
+
+Single-role practice includes six original public situations or eight original Garda situations, alongside the 20 discrimination situations available to either role. You can move from an original practice decision into the matching stage of the shared situation.
+
+### Step-by-step walkthrough
 
 The home page asks **What will you do?** Select it to start with the role shown, or use the **Public perspective** and **Garda perspective** cards to choose a side. The four illustrated steps show how to choose a perspective, read the situation, choose a response and compare perspectives.
 
@@ -71,40 +111,7 @@ Open **Search** in the navigation, or open **Menu** first on a narrow screen. Se
 
 **Discrimination** contains 20 two-decision situations, two for each of the [ten grounds listed by IHREC](https://www.ihrec.ie/your-rights/protected-grounds). In the colleague scenarios, you can explore the same incident as a Garda who witnesses a colleague’s conduct or as a member of the public who witnesses it. The housing assistance situations concern accommodation.
 
-### User-flow infographic
-
-The illustrated guide follows a situation from the choice of role to the recap. The three-page A4 PDF links directly to both perspective setups.
-
-<p align="center">
-  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=mobile-roles-20261127">
-    <img src="docs/user-guide/stopped-both-sides-user-flow.png?v=mobile-roles-20261127" width="440" alt="Illustrated version of the six steps above, showing character selection, a response, feedback, perspective switching and the recap.">
-  </a>
-</p>
-
-<p align="center">
-  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=mobile-roles-20261127"><strong>Open full-size PNG</strong></a> ·
-  <a href="docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true&v=mobile-roles-20261127"><strong>Download printable PDF</strong></a>
-</p>
-
-## Purpose and audience
-
-### What you can explore
-
-Both perspectives belong to the same learning resource. Choose either starting point and switch when you want to compare the reasoning.
-
-| Start with the public perspective | Start with the Garda perspective |
-| --- | --- |
-| Explore human and civil rights, responsibilities and access to support. | Explore evidence, professional judgement and fair treatment. |
-| Street questions, a bag search, arrest, the station, a young person and concerns about racism. | Suspicion, descriptions, search grounds, communication, assumptions about age, colleague pressure, new evidence and supervision. |
-| **[Explore the public perspective →](https://samobrienolinger.github.io/stopped-both-sides/)** | **[Explore the Garda perspective →](https://samobrienolinger.github.io/stopped-both-sides/garda/)** |
-
-Each shared situation offers branching choices, immediate explanations and links to supporting sources. Characters and answers stay with the encounter when you switch sides. Saved progress lets you return to an unfinished situation or review a completed route.
-
-The guiding principles are clear information, evidence-based reasoning, dignity and reflection. **Perspective-taking does not imply equal legal powers or equal responsibility.** A member of the public is never scored as responsible for another person's misconduct, and cooperation is not presented as a guarantee of safety.
-
-Single-role practice includes six original public situations or eight original Garda situations, alongside the 20 discrimination situations available to either role. You can move from an original practice decision into the matching stage of the shared situation.
-
-## Characters and switching sides
+### Characters and switching sides
 
 Choose from **10 public characters and 9 Garda characters**. The public roster includes Alex, Noor, Robin, Maya, Daniel, Jo, Erin, Hassan, Pat and Nia.
 
@@ -118,6 +125,187 @@ Choose from **10 public characters and 9 Garda characters**. The public roster i
 | Resume a situation | The saved encounter restores the cast and the decisions you have already made. |
 
 In the supervision situation, the Garda role is a sergeant. In some discrimination situations, the available portraits reflect the age or gender stated in the story. [Character guide](docs/CHARACTERS.md)
+
+### Scores and progress
+
+**Use scores to revisit the reasoning behind a choice.** Each perspective has its own score.
+
+| Result | How it works |
+| --- | --- |
+| **Stage feedback** | 1 point for an appropriate response on the stated facts; 0 where the reasoning needs review. More than one response can earn a point. |
+| **Current route** | A completed role result requires an answer in that role at every stage on the finished route. |
+| **Saved learning progress** | Keeps the best point earned at each unique stage, up to 99 per role across all shared situations. Repeating a mastered stage does not add points. |
+| **Replay** | Retains latest and best completed results. Revisiting a stage can improve learning progress. |
+
+There are no point penalties for taking time, switching perspective or requesting help. Scores do not measure personal bias, reward avoiding arrest, certify professional competence or establish that the resource changes behaviour.
+
+The approach adapts running points, feedback and saved best results from **AllyIndex**. See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) for the rubric, branching, storage and attribution.
+
+</details>
+
+<details>
+<summary><strong>Illustrated user-flow guide and downloads</strong></summary>
+
+### User-flow infographic
+
+The illustrated guide follows a situation from the choice of role to the recap. The three-page A4 PDF links directly to both perspective setups.
+
+<p align="center">
+  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=mobile-roles-20261127">
+    <img src="docs/user-guide/stopped-both-sides-user-flow.png?v=mobile-roles-20261127" width="440" alt="Illustrated six-step walkthrough showing character selection, a response, feedback, perspective switching and the recap.">
+  </a>
+</p>
+
+<p align="center">
+  <a href="docs/user-guide/stopped-both-sides-user-flow.png?raw=true&v=mobile-roles-20261127"><strong>Open full-size PNG</strong></a> ·
+  <a href="docs/user-guide/stopped-both-sides-user-flow.pdf?raw=true&v=mobile-roles-20261127"><strong>Download printable PDF</strong></a>
+</p>
+
+</details>
+
+## Getting started
+
+**HTML, CSS and native JavaScript modules, served directly from the repository.** There is no build step, backend, API key or application environment configuration. Interactive play needs JavaScript enabled in a modern browser.
+
+### Run locally
+
+With **Git and Node.js 20 or later** installed:
+
+```bash
+git clone https://github.com/SamOBrienOlinger/stopped-both-sides.git
+cd stopped-both-sides
+npm run dev
+```
+
+Open the [public perspective at 127.0.0.1:4173](http://127.0.0.1:4173/) or the [Garda perspective at 127.0.0.1:4173/garda/](http://127.0.0.1:4173/garda/). **No dependency installation is needed for the local server or Node checks.** Stop the server with `Ctrl+C`.
+
+Serve the files over HTTP so JavaScript module imports resolve correctly. Any static HTTP server can serve the repository.
+
+<details>
+<summary><strong>Alternative: serve with Python 3</strong></summary>
+
+After cloning the repository and opening its directory:
+
+```bash
+python3 -m http.server 8000 --bind 127.0.0.1 --directory .
+```
+
+Open [localhost:8000](http://localhost:8000/) or [localhost:8000/garda/](http://localhost:8000/garda/). Node.js is still needed to run the development checks below.
+
+</details>
+
+## Checks and review
+
+Run the core checks from the repository root:
+
+```bash
+npm run check
+npm test
+```
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Serve both perspectives locally on port 4173. |
+| `npm run check` | Check JavaScript syntax across both games, tests and maintenance scripts. |
+| `npm test` | Run the Node suites for routes, scoring, characters, translations, search and saved progress. |
+| `npm run test:browser` | Run Playwright browser, layout and touch checks after installing the development tools below. |
+| `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations. **Writes documentation.** |
+
+<details>
+<summary><strong>Install and run the browser checks</strong></summary>
+
+```bash
+npm ci
+npx playwright install --with-deps chromium firefox webkit
+npm run test:browser
+```
+
+Playwright is a development dependency; the live site does not load it. The suite exercises both entry points across Chromium, Firefox and WebKit, including mobile and desktop layouts, keyboard controls, touch input, scene artwork, search and language switching. The [browser workflow](.github/workflows/browsers.yml) also verifies the published Pages site against the corresponding revision.
+
+Automated coverage does not certify every browser, physical device or assistive technology. Physical-device, browser-zoom, screen-reader and disabled-user reviews remain necessary, alongside specialist review of legal correctness, operational suitability and learning effectiveness.
+
+</details>
+
+**[Core check runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/checks.yml)** · **[Browser check runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml)** · **[Coverage and review limits](docs/BROWSER-COMPATIBILITY.md)**
+
+## Architecture
+
+Two entry points share the encounter engine, landing experience, search, accessibility controls and translations. The source files are the deployed site; there is no generated application bundle.
+
+| Design choice | Implementation and reason |
+| --- | --- |
+| **Shared decisions, distinct roles** | [The encounter catalogue](encounters/catalog.mjs) assembles the situations; [the engine](encounters/engine.mjs) keeps both roles' answers while following the active role's branch. |
+| **Separate state and presentation** | [Progress records](encounters/progress.mjs) track learning independently of the public and Garda page renderers. |
+| **Portable static hosting** | [Entry-point resolution](site.mjs) and hash navigation support a Pages project path, a domain root or a local server without server-side route rewrites. |
+| **Local assets and preferences** | Fonts, artwork and translation packs are hosted with the site. Reading choices and learning progress use browser storage when available. |
+
+<details>
+<summary><strong>Repository map and interface implementation</strong></summary>
+
+### Repository map
+
+| Path | Responsibility |
+| --- | --- |
+| [index.html](index.html), [app.mjs](app.mjs), [styles.css](styles.css) | Public page, rendering and theme |
+| [data.mjs](data.mjs), [engine.mjs](engine.mjs) | Original public situations, sources and game state |
+| [garda/](garda/) | Garda page, original situations, source library and presentation |
+| [encounters/](encounters/) | Shared scenarios, role switching, branching, scores and progress |
+| [landing/](landing/), [search/](search/) | Landing page and site-wide search |
+| [accessibility/](accessibility/), [locales/](locales/) | Reading controls, perspective palettes and translations |
+| [site.mjs](site.mjs) | Resolves both entry-point addresses within one deployment |
+| [assets/](assets/) | Responsive hero images, character artwork, local fonts and third-party licence notices |
+| [tests/](tests/), [scripts/](scripts/), [package.json](package.json) | Automated checks and content-maintenance commands |
+
+### Interface and language implementation
+
+Both entry points use the same responsive landing page. The opening illustration places Alex and Garda Aisling outside the GPO. Below it, the two perspective cards show the encounter from opposite viewpoints. Written labels identify each role alongside its colour.
+
+Character controls have translated labels and visible selected states. On setup, a character is already selected. During a situation, the character picker and profile controls support keyboard navigation.
+
+Translations are locally hosted and include accessible descriptions; published source names retain their original form. Failed language downloads can be retried without losing progress, and cancelling a pending change prevents it from applying later. Reading settings also work when native dialog support is unavailable.
+
+Browser checks include narrow screens, landscape layouts, touch input and desktop views, with checks repeated against the live site after Pages publication. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md) for the review limits and [the current Playwright configuration](tests/browser/playwright.config.mjs) for the executable setup.
+
+</details>
+
+## Entity relationship diagrams
+
+The data model connects encounters, stages, role-specific choices and source references. Learning records separately track progress for each encounter and role.
+
+<details>
+<summary><strong>View the encounter and progress diagrams</strong></summary>
+
+### Encounters and perspectives
+
+Each encounter contains a set of stages. A stage presents the same scene through exactly two views, one public and one Garda. Each view offers choices that lead to another stage in that encounter or end the route. Source references are attached to the views. [Encounter catalogue](encounters/catalog.mjs) · [Branching and role switching](encounters/engine.mjs)
+
+[![Each encounter contains stages. Each stage has a public and a Garda view, and each view has choices with feedback and a next stage or an ending.](docs/diagrams/shared-encounters-and-role-specific-decisions.svg)](docs/diagrams/shared-encounters-and-role-specific-decisions.svg)
+
+### Saved learning progress
+
+Each saved record belongs to one encounter and one role. It keeps the latest and best points earned at answered stages, plus the latest and best completed result where available. Local storage and share links carry these records. [Progress records and transfer format](encounters/progress.mjs)
+
+[![Each record tracks a single encounter and perspective. It holds scores for the stages that were answered in that perspective.](docs/diagrams/learning-progress-by-encounter-and-role.svg)](docs/diagrams/learning-progress-by-encounter-and-role.svg)
+
+</details>
+
+## Deployment
+
+Both perspectives use **GitHub Pages branch publishing**. The repository’s [publishing guide](docs/GITHUB-PAGES.md) records these settings:
+
+| GitHub setting | Value |
+| --- | --- |
+| **Settings → Pages → Source** | Deploy from a branch |
+| **Branch** | `main` |
+| **Folder** | `/(root)` |
+| **Public entry point** | [index.html](index.html) |
+| **Garda entry point** | [garda/index.html](garda/index.html) |
+
+The root [.nojekyll](.nojekyll) file skips Jekyll processing. GitHub publishes updates when changes reach `main`; its built-in **pages build and deployment** workflow appears under Actions.
+
+The separate [game-checks workflow](.github/workflows/checks.yml) runs on pushes and pull requests and **does not block branch publication**. Run the local checks before pushing, then confirm the publication succeeds in [Actions](https://github.com/SamOBrienOlinger/stopped-both-sides/actions).
+
+See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full process. Relative asset paths and hash navigation allow the same files to run at the Pages project address, a domain root or a local server.
 
 ## Accessibility and language
 
@@ -135,35 +323,6 @@ Changing language keeps your stage, characters, answers, role and scores. Transl
 
 [Accessibility and language guide →](docs/ACCESSIBILITY-AND-LANGUAGES.md) · [Browser coverage and limits →](docs/BROWSER-COMPATIBILITY.md)
 
-## Scores and progress
-
-**Use scores to revisit the reasoning behind a choice.** Each perspective has its own score.
-
-| Result | How it works |
-| --- | --- |
-| **Stage feedback** | 1 point for an appropriate response on the stated facts; 0 where the reasoning needs review. More than one response can earn a point. |
-| **Current route** | A completed role result requires an answer in that role at every stage on the finished route. |
-| **Saved learning progress** | Keeps the best point earned at each unique stage, up to 99 per role across all shared situations. Repeating a mastered stage does not add points. |
-| **Replay** | Retains latest and best completed results. Revisiting a stage can improve learning progress. |
-
-There are no point penalties for taking time, switching perspective or requesting help. Scores do not measure personal bias, reward avoiding arrest, certify professional competence or establish that the resource changes behaviour.
-
-The approach adapts running points, feedback and saved best results from **AllyIndex**. See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md) for the rubric, branching, storage and attribution.
-
-## Entity relationship diagrams
-
-### Encounters and perspectives
-
-Each encounter contains a set of stages. A stage presents the same scene through exactly two views, one public and one Garda. Each view offers choices that lead to another stage in that encounter or end the route. Source references are attached to the views. [Encounter catalogue](encounters/catalog.mjs) · [Branching and role switching](encounters/engine.mjs)
-
-[![Each encounter contains stages. Each stage has a public and a Garda view, and each view has choices with feedback and a next stage or an ending.](docs/diagrams/shared-encounters-and-role-specific-decisions.svg)](docs/diagrams/shared-encounters-and-role-specific-decisions.svg)
-
-### Saved learning progress
-
-Each saved record belongs to one encounter and one role. It keeps the latest and best points earned at answered stages, plus the latest and best completed result where available. Local storage and share links carry these records. [Progress records and transfer format](encounters/progress.mjs)
-
-[![Each record tracks a single encounter and perspective. It holds scores for the stages that were answered in that perspective.](docs/diagrams/learning-progress-by-encounter-and-role.svg)](docs/diagrams/learning-progress-by-encounter-and-role.svg)
-
 ## Privacy
 
 **No accounts, analytics, tracking scripts or forms for real incidents.** Choices, scores, character selections, reading preferences and a resume point are saved in browser storage when it is available.
@@ -173,8 +332,6 @@ Each saved record belongs to one encounter and one role. It keeps the latest and
 - **Clearing progress has limits.** Clearing one perspective does not clear the other's record or previously copied links. Character preferences are stored separately and are kept when progress is cleared.
 
 Hosting services may retain ordinary access logs. [Live privacy notice](https://samobrienolinger.github.io/stopped-both-sides/privacy.html) · [Persistence and transfer](docs/PERSPECTIVES-AND-SCORES.md#persistence-and-transfer)
-
----
 
 ## Evidence and content review
 
@@ -242,6 +399,9 @@ The approach draws on research into educational games, explanatory feedback, per
 
 **[Teaching examples](#research-and-teaching-examples)** · **[Learning methodology](#learning-methodology)** · **[Learning outcomes](#intended-learning-outcomes)** · **[Evaluation](#evaluating-the-learning)** · **[Research references](#pedagogical-references)**
 
+<details>
+<summary><strong>Teaching guide, evaluation plan and eight research references</strong></summary>
+
 ### Learning approach at a glance
 
 | Approach | What it means for the learner | How the resource supports it |
@@ -261,9 +421,6 @@ The **99 stages are spread across 34 shared situations**, with a playthrough fol
 ### Research and teaching examples
 
 The situations named below already exist in the resource. **The worksheets, learner-written explanations, facilitated discussions and new-case assessments are suggested teaching activities**, not features that the website automatically administers.
-
-<details>
-<summary><strong>Explore six research-supported teaching activities and two educational comparators</strong></summary>
 
 #### A. Practise decisions in context
 
@@ -369,7 +526,6 @@ The published [Garda Decision Making Model](https://www.garda.ie/en/about-us/pub
 
 These examples support examining the **quality of learners' explanations** as an outcome in its own right. Findings from another game, age group or policing jurisdiction cannot establish the effectiveness of Stopped: Both Sides.
 
-</details>
 
 ### Learning methodology
 
@@ -420,9 +576,6 @@ The website records selected answers and learning scores. Written justifications
 
 **Proposed research question:** Does using Stopped: Both Sides improve learners' ability to explain and apply relevant principles in unfamiliar fictional encounters, and are those improvements retained?
 
-<details>
-<summary><strong>Read the proposed evaluation approach and evidence boundaries</strong></summary>
-
 #### Assess understanding, transfer and retention
 
 Use a short baseline task, an immediate assessment with a different but comparable case and a delayed follow-up. Include an explanation of the answer so that recognising a preferred option and understanding its basis can be assessed separately.
@@ -453,7 +606,6 @@ Collect feedback on unclear wording, misleading assumptions, access barriers and
 
 The current points system supports learning progress. It has not been validated as a measure of personal bias, professional competence or real-world conduct. See [Perspectives and scores](docs/PERSPECTIVES-AND-SCORES.md).
 
-</details>
 
 ### Educational rationale
 
@@ -466,9 +618,6 @@ The current points system supports learning progress. It has not been validated 
 ### Pedagogical references
 
 Studies were identified through Consensus and checked against original papers or publisher, author and university records. This focused pedagogical review was completed on **23 October 2026**. It complements the [scenario evidence library](research/bibliography.md) and does not replace the separate [content-review record](docs/CONTENT-REVIEW.md). Full text was not available or reviewed for every study; some findings were checked through primary abstracts and bibliographic records.
-
-<details>
-<summary><strong>Open all eight research references, Consensus records and DOIs</strong></summary>
 
 #### Pedagogy reference 1
 
@@ -502,107 +651,8 @@ Studies were identified through Consensus and checked against original papers or
 
 **Hilliard, L. J., Buckingham, M. H., Geldhof, G. J., et al. (2018).** [Perspective taking and decision-making in educational game play: A mixed-methods study](https://consensus.app/papers/perspective-taking-and-decisionmaking-in-educational-hilliard-buckingham/5d99c756eccb5453859eeb661504defe/?utm_source=chatgpt). *Applied Developmental Science, 22*(1), 1–13. [DOI: 10.1080/10888691.2016.1204918](https://doi.org/10.1080/10888691.2016.1204918). [Research article (PDF)](https://sites.bc.edu/devtech/wp-content/uploads/sites/181/2018/02/gameplay.pdf).
 
-</details>
 
 [Back to the educational approach](#educational-approach-methodology-and-learning-outcomes)
-
-
-## Getting started
-
-**For developers and contributors.** The site uses **HTML, CSS and JavaScript modules**, served through **GitHub Pages**. There are no application dependencies, build step, API keys or environment variables needed to play or run it locally.
-
-Ready to explore? Use the [public perspective](https://samobrienolinger.github.io/stopped-both-sides/) or [Garda perspective](https://samobrienolinger.github.io/stopped-both-sides/garda/). To work on the project, expand the setup guide below.
-
-<details>
-<summary><strong>Open local setup, checks, deployment and repository map</strong></summary>
-
-### Run locally
-
-To run locally, use **Git, Python 3 and a modern browser**. To run the checks, also install **Node.js 20 or later and npm**. The local website runs directly from the repository. Install the development dependencies if you want to run the Playwright browser suite.
-
-```bash
-git clone https://github.com/SamOBrienOlinger/stopped-both-sides.git
-cd stopped-both-sides
-python3 -m http.server 8000 --bind 127.0.0.1 --directory .
-```
-
-Open the [public perspective at localhost:8000](http://localhost:8000/) or the [Garda perspective at localhost:8000/garda/](http://localhost:8000/garda/).
-
-Serve the repository over HTTP rather than double-clicking `index.html`, so JavaScript module imports resolve correctly. Any static HTTP server can serve the same files.
-
-### Checks and review
-
-Run the following checks from the repository root.
-
-```bash
-npm run check
-npm test
-```
-
-| Command | Purpose |
-| --- | --- |
-| `npm run check` | Check JavaScript syntax across both games, tests and maintenance scripts |
-| `npm run dev` | Serve the static site locally on port 4173 without a build step |
-| `npm test` | Run the Node test suites for both perspectives |
-| `npm run test:browser` | Run browser, responsive-layout and touch checks; requires the development-tool setup below |
-| `npm run research:index` | Regenerate the bibliography and scenario evidence map after changing source metadata or citations; this writes documentation |
-
-The Node suites exercise the decision routes, scoring, character and avatar changes, translations, search and saved progress. Playwright runs through the shared situations on both entry points and checks keyboard controls, mobile layouts, scene artwork, search results and switching languages. The [browser workflow](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/browsers.yml) includes checks against the published Pages site.
-
-Install the Playwright development tools before running the browser suite.
-
-```bash
-npm ci
-npx playwright install --with-deps chromium firefox webkit
-npm run test:browser
-```
-
-These tools are not loaded by the live site. Physical-device, browser-zoom and screen-reader reviews remain necessary, alongside specialist review of legal correctness, operational suitability and learning effectiveness.
-
-[View automated check runs](https://github.com/SamOBrienOlinger/stopped-both-sides/actions/workflows/checks.yml).
-
-### Deployment
-
-Both perspectives are published together through **GitHub Pages branch publishing**:
-
-| GitHub setting | Value |
-| --- | --- |
-| **Settings → Pages → Source** | Deploy from a branch |
-| **Branch** | `main` |
-| **Folder** | `/(root)` |
-| **Public entry point** | [index.html](index.html) |
-| **Garda entry point** | [garda/index.html](garda/index.html) |
-
-The root [.nojekyll](.nojekyll) file skips Jekyll processing. GitHub publishes updates when changes reach `main`; its built-in **pages build and deployment** workflow appears under Actions.
-
-The separate [game-checks workflow](.github/workflows/checks.yml) runs on pushes and pull requests and **does not block branch publication**. Run the local checks before pushing, then confirm the publication succeeds in [Actions](https://github.com/SamOBrienOlinger/stopped-both-sides/actions).
-
-See [GitHub Pages setup and migration](docs/GITHUB-PAGES.md) for the full process. Relative asset paths and hash navigation allow the same files to run at the Pages project address, a domain root or a local server.
-
-### Interface and language implementation
-
-Both entry points use the same responsive landing page. The opening illustration places Alex and Garda Aisling outside the GPO. Below it, the two perspective cards show the encounter from opposite viewpoints. Written labels identify each role alongside its colour.
-
-Character controls have translated labels and visible selected states. On setup, a character is already selected. During a situation, the character picker and profile controls support keyboard navigation.
-
-Translations are locally hosted and include accessible descriptions; published source names retain their original form. Failed language downloads can be retried without losing progress, and cancelling a pending change prevents it from applying later. Reading settings also work when native dialog support is unavailable.
-
-The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes from 320px phones to 2560px desktops, landscape and touch input, with checks repeated against the live site after Pages publication. This describes the suite's coverage, not certification of every browser version or physical device. See [browser compatibility and tested coverage](docs/BROWSER-COMPATIBILITY.md).
-
-
-### Repository map
-
-| Path | Responsibility |
-| --- | --- |
-| [index.html](index.html), [app.mjs](app.mjs), [styles.css](styles.css) | Public page, rendering and theme |
-| [data.mjs](data.mjs), [engine.mjs](engine.mjs) | Original public situations, sources and game state |
-| [garda/](garda/) | Garda page, original situations, source library and presentation |
-| [encounters/](encounters/) | Shared scenarios, role switching, branching, scores and progress |
-| [landing/](landing/), [search/](search/) | Landing page and site-wide search |
-| [accessibility/](accessibility/), [locales/](locales/) | Reading controls, perspective palettes and translations |
-| [site.mjs](site.mjs) | Resolves both entry-point addresses within one deployment |
-| [assets/](assets/) | Responsive hero images, character artwork, local fonts and third-party licence notices |
-| [tests/](tests/), [scripts/](scripts/), [package.json](package.json) | Automated checks and content-maintenance commands |
 
 </details>
 
@@ -610,6 +660,8 @@ The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes
 
 | Guide | What it covers |
 | --- | --- |
+| [User-flow guide](docs/user-guide/README.md) | Illustrated walkthrough, printable PDF and guide maintenance |
+| [Architecture](#architecture) | Shared modules, repository map and data diagrams |
 | [Educational approach](#educational-approach-methodology-and-learning-outcomes) | Pedagogical examples, methodology, intended outcomes and research references |
 | [Garda learning](docs/GARDA-LEARNING.md) | Learning aims, situations and evidence boundaries |
 | [Clearer first play](docs/UX-REVIEW.md) | Before/after interface review, simpler onboarding and decision flow |
@@ -633,7 +685,9 @@ The documented browser checks cover Chromium, Firefox and WebKit, viewport sizes
 
 Keep reports focused on the fictional exercise; real incident details are not needed.
 
-For content changes, edit public material in [data.mjs](data.mjs), or Garda material in [garda/data.mjs](garda/data.mjs) and [garda/sources.mjs](garda/sources.mjs). Keep the matching shared scene in [encounters/counterparts.mjs](encounters/counterparts.mjs) and its Irish translation aligned, then run the checks. Each decision needs a setting, question, choices, feedback, learning point and valid source references.
+For original practice content, edit public material in [data.mjs](data.mjs), or Garda material in [garda/data.mjs](garda/data.mjs) and [garda/sources.mjs](garda/sources.mjs). Keep the matching shared scene in [encounters/counterparts.mjs](encounters/counterparts.mjs) aligned. For discrimination situations, use [encounters/discrimination.mjs](encounters/discrimination.mjs) or [encounters/colleague-discrimination.mjs](encounters/colleague-discrimination.mjs).
+
+Follow the [translation-maintenance guide](docs/ACCESSIBILITY-AND-LANGUAGES.md#maintaining-translations) to keep all supported languages aligned, then run the checks. Each decision needs a setting, question, choices, feedback, learning point and valid source references.
 
 Distinguish legal duties from practical advice. Do not imply that identity determines guilt, cooperation guarantees safety or a choice prevents discrimination. Wider legal settings, such as traffic, immigration and border checks, need their own reviewed scenarios.
 
@@ -670,7 +724,7 @@ For other copying, adaptation, redistribution, rehosting or commercial reuse of 
 
 <p align="center">
   <strong>Explore the same encounter from another perspective.</strong><br>
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/">Explore the public perspective</a> ·
-  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">Explore the Garda perspective</a> ·
-  <a href="#stopped-both-sides">Back to top ↑</a>
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/">Public perspective</a> ·
+  <a href="https://samobrienolinger.github.io/stopped-both-sides/garda/">Garda perspective</a> ·
+  <a href="#top">Back to top ↑</a>
 </p>
