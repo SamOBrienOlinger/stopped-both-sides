@@ -44,8 +44,10 @@ background and rendering surface. Equivalent renders are measured once and
 their input-to-composition mapping is saved in the CI coverage artifact.
 
 The current matrix contains 4,427 distinct full compositions, 4,427 compact
-compositions and 2,142 previews: **10,996 distinct compositions per browser**.
-The exhaustive pass uses a 390 × 844 viewport. The responsive pass selects all
+compositions and 2,142 previews: **10,996 distinct compositions**. Every one is
+measured at both 390 × 844 and 1366 × 900 in each browser engine: 21,992 rendered
+compositions per engine across the two exhaustive viewport sweeps. The
+responsive pass selects all
 187 structural layouts plus each of the 65 artwork/crop variants in its smallest
 and largest frame, producing 276 representative compositions. It runs through
 both entrypoints at these viewports:

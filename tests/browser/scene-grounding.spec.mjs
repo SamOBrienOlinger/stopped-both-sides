@@ -71,22 +71,22 @@ function errorSummary(errors){
 
 // Separate surfaces keep one failing geometry category from preventing the
 // other exhaustive sweeps. Each raw request is accounted for before dedupe.
-for(const surface of ['stage','compact','preview'])test(`390px ${surface}: every requested cast, authored mode and reachable scene has grounded artwork`,async({page},info)=>{
+for(const device of [devices[0],devices[4]])for(const surface of ['stage','compact','preview'])test(`${device.width}px ${surface}: every requested cast, authored mode and reachable scene has grounded artwork`,async({page},info)=>{
  test.setTimeout(600000);
  const matrix=buildSceneGroundingMatrix();
  expect(matrix.stages).toHaveLength(99);expect(matrix.pairs).toHaveLength(90);
  expect(matrix.stageInputs).toHaveLength(99*90*2);
  expect(matrix.previewInputs).toHaveLength(34*90*2);
  const cases=matrix.cases.filter(item=>item.surface===surface),errors=[],measurements=[];
- await page.setViewportSize(devices[0]);await ready(page);
+ await page.setViewportSize(device);await ready(page);
  let measured=0,cacheEntries=0;
  for(let start=0;start<cases.length;start+=batchSize){
   const batch=cases.slice(start,start+batchSize),result=await inspect(page,batch);
   errors.push(...result.errors);measurements.push(...result.measurements);cacheEntries=result.alphaCacheEntries;measured+=batch.length;
  }
  expect(measured).toBe(cases.length);
- if(surface==='stage')await artifact(info,'scene-grounding-input-coverage.json',groundingCoverage(matrix));
- await artifact(info,'scene-grounding-'+surface+'.json',{browser:info.project.name,viewport:devices[0],surface,logicalInputs:surface==='preview'?matrix.previewInputs.length:matrix.stageInputs.length,uniqueCompositions:measured,alphaCacheEntries:cacheEntries,errors,measurements});
+ if(surface==='stage'&&device.width===390)await artifact(info,'scene-grounding-input-coverage.json',groundingCoverage(matrix));
+ await artifact(info,'scene-grounding-'+surface+'-'+device.width+'.json',{browser:info.project.name,viewport:device,surface,logicalInputs:surface==='preview'?matrix.previewInputs.length:matrix.stageInputs.length,uniqueCompositions:measured,alphaCacheEntries:cacheEntries,errors,measurements});
  expect(errorSummary(errors),'Opaque feet/wheels, visible figures and props must fit the independently reviewed setting').toEqual({total:0,distinct:[]});
 });
 
