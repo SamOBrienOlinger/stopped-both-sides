@@ -32,16 +32,24 @@ jobs:
           echo "IOS_UDID=$udid" >> "$GITHUB_ENV"
           defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false
           defaults write com.apple.iphonesimulator DevicePreferences -dict-add "$udid" '{ConnectHardwareKeyboard = 0;}'
-          xcrun simctl bootstatus "$udid" -b
       - name: Exercise the site with the iOS software keyboard
         timeout-minutes: 22
         run: |
           node tests/browser/server.mjs --port 4173 > audit-results/ios/server.log 2>&1 &
           http_pid=$!
           trap 'kill "$http_pid" 2>/dev/null || true' EXIT
-          curl --retry 10 --retry-delay 1 --retry-connrefused -sf http://127.0.0.1:4173/stopped-both-sides/ >/dev/null
+          ready=false
+          for attempt in {1..90}; do
+            if curl --max-time 3 -sf http://127.0.0.1:4173/stopped-both-sides/ >/dev/null; then ready=true; break; fi
+            if ! kill -0 "$http_pid" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          cat audit-results/ios/server.log
+          if ! "$ready"; then echo "Local HTTP server did not start" >&2; exit 1; fi
+          xcrun simctl bootstatus "$IOS_UDID" -b
+          curl --max-time 20 -fsS http://127.0.0.1:4173/stopped-both-sides/ >/dev/null
           set -o pipefail
-          xcodebuild -quiet test -project tools/ios-native-audit/KeyboardAudit.xcodeproj -scheme KeyboardAudit \
+          xcodebuild test -project tools/ios-native-audit/KeyboardAudit.xcodeproj -scheme KeyboardAudit \
             -destination "platform=iOS Simulator,id=$IOS_UDID" -parallel-testing-enabled NO \
             -derivedDataPath "$RUNNER_TEMP/KeyboardAudit" \
             -resultBundlePath "$GITHUB_WORKSPACE/audit-results/ios/Keyboard.xcresult" 2>&1 | tee audit-results/ios/test.log
