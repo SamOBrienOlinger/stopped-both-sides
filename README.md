@@ -397,10 +397,10 @@ Stopped: Both Sides uses **scenario-based learning** to help people explore huma
 
 The approach draws on research into educational games, explanatory feedback, perspective-taking, reflective review and practice. The studies below support these design principles; **the learning effects of this particular resource remain to be evaluated**. This is a focused pedagogical review, not a systematic review of every relevant study.
 
-**[Teaching examples](#research-and-teaching-examples)** · **[Learning methodology](#learning-methodology)** · **[Learning outcomes](#intended-learning-outcomes)** · **[Evaluation](#evaluating-the-learning)** · **[Research references](#pedagogical-references)**
-
 <details>
 <summary><strong>Teaching guide, evaluation plan and eight research references</strong></summary>
+
+**[Teaching examples](#research-and-teaching-examples)** · **[Learning methodology](#learning-methodology)** · **[Learning outcomes](#intended-learning-outcomes)** · **[Evaluation](#evaluating-the-learning)** · **[Research references](#pedagogical-references)**
 
 ### Learning approach at a glance
 
