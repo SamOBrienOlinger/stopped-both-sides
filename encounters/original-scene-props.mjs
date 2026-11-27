@@ -10,7 +10,7 @@ const pair=(publicPosition,gardaPosition)=>({public:publicPosition,garda:gardaPo
 const staging={
  'public-street':pair(position(24,28,4),position(51,23,14)),
  'public-arrest':pair(position(33,26,8),position(55,22,17)),
- 'garda-new-evidence':pair(position(20,27,4),position(45,25,11)),
+ 'garda-new-evidence':pair(position(21.5,27,4),position(45,25,11)),
  'garda-colleague':pair(position(24,27,5),position(49,23,15)),
  'public-search':pair(position(60,26,6),position(84,24,9)),
  'garda-search':pair(position(52,27,5),position(75,24,12)),
@@ -45,7 +45,7 @@ const supportingAt={
  'public-young-person':{'youth-solicitor':[part('parent',18,24,19)]},
  'garda-young-person':{'young-start':youthGroup,'young-contact':youthGroup,'young-review':youthGroup},
  'garda-colleague':{'colleague-start':[caseColleague],'colleague-pressure':[caseColleague],
-  'colleague-specific':[caseColleague,part('customer',73,15,37)]},
+  'colleague-specific':[caseColleague,part('customer',72,15,37)]},
  'garda-communication':{'communication-start':[quayColleague],'communication-repair':[quayColleague],'communication-clarify':[quayColleague]},
  'garda-description':{'description-start':[quayPasserby],'description-repair':[quayColleague]},
  'public-fair-treatment':{'fair-start':[quayPasserby]},

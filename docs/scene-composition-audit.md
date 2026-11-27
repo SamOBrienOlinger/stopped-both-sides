@@ -13,7 +13,7 @@ are preserved.
 | Finding | Correction |
 | --- | --- |
 | Right-hand characters in quayside groups could stand on the river-wall face. | Crop the backdrop from its bottom-left origin at 1.35×, preserving the group arrangement while bringing clear pavement beneath the right-hand feet. |
-| The supporting customer in the street colleague scene crossed the curb. | Move the customer and colleague left, keeping their separation and depth. |
+| The supporting customer in the street colleague scene crossed the curb; a wheelchair wheel in the new-evidence scene reached the garden-wall edge. | Move the customer and colleague left, and move the new-evidence public figure slightly right. Check every wheel, sole and cane contact while preserving separation and depth. |
 | The bicycle's left tyre crossed the garden-wall face. | Move the bicycle and its owner together onto the pavement, with the Garda adjusted to preserve space. Both tyre contact regions are checked separately. |
 | The nearest youth-group friend was too small and could cross the diagonal bus-stop curb. | Increase that friend's frame and move them onto the near pavement, checking every sole and wheelchair contact point while retaining separation from Jamie. |
 | Dedicated story/support artwork had inconsistent transparent padding beneath the soles. | Register the eight source variants to the same 97.5% sole line without stretching or replacing their artwork. |
