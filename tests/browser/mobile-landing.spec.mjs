@@ -90,7 +90,23 @@ function mobileLayout(view){
    // Range metrics. Direct-text controls and captions still use Range height.
    if(textLayout)for(const rect of textLayout.getClientRects()){
     if(!withinHeight(rect,bounds)){
-     errors.push(label+': text layout leaves its label ('+overflowDetails(rect,bounds,false,true)+')');
+     const geometry=r=>({top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height});
+     const style=getComputedStyle(textLayout),controlStyle=getComputedStyle(element),details=element.closest('details');
+     const parent=element.parentElement,parentStyle=getComputedStyle(parent);
+     const diagnostic={
+      viewport:{width:innerWidth,height:innerHeight,scrollY,dpr:devicePixelRatio,rootFont:getComputedStyle(root).fontSize,mobile:matchMedia('(max-width:42rem)').matches},
+      control:element.outerHTML.slice(0,1000),bounds:geometry(bounds),
+      controlSize:{offset:element.offsetHeight,client:element.clientHeight,scroll:element.scrollHeight},
+      controlStyle:{display:controlStyle.display,height:controlStyle.height,minHeight:controlStyle.minHeight,maxHeight:controlStyle.maxHeight,padding:controlStyle.padding,transform:controlStyle.transform,translate:controlStyle.translate},
+      layout:textLayout.outerHTML.slice(0,800),layoutBox:geometry(box(textLayout)),
+      layoutRects:[...textLayout.getClientRects()].map(geometry),
+      layoutSize:{offset:textLayout.offsetHeight,client:textLayout.clientHeight,scroll:textLayout.scrollHeight},
+      layoutStyle:{display:style.display,position:style.position,height:style.height,minHeight:style.minHeight,maxHeight:style.maxHeight,lineHeight:style.lineHeight,fontSize:style.fontSize,fontFamily:style.fontFamily,transform:style.transform,translate:style.translate,textSizeAdjust:style.getPropertyValue('-webkit-text-size-adjust'),margin:style.margin,padding:style.padding,flexShrink:style.flexShrink},
+      parent:{tag:parent.tagName,className:parent.className,box:geometry(box(parent)),display:parentStyle.display,rows:parentStyle.gridTemplateRows,columns:parentStyle.gridTemplateColumns},
+      textRects:[...range.getClientRects()].map(geometry),
+      details:details?{open:details.open,attribute:details.getAttribute('open'),closedMatch:details.matches('details:not([open])')}:null
+     };
+     errors.push(label+': text layout leaves its label ('+overflowDetails(rect,bounds,false,true)+') '+JSON.stringify(diagnostic));
     }
    }
    const rangeHeight=vertical&&!textLayout;
