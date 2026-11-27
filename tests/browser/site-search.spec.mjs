@@ -7,6 +7,29 @@ const phoneTest=test.extend({
  isMobile:async({browserName},use)=>use(browserName!=='firefox')
 });
 
+async function loadingPrivacySearchPoint(page){
+ // WebKit can suspend animation-frame actionability and fonts.ready while
+ // a deferred module is held. Poll the actual styled hit target with a timer.
+ const point=await page.waitForFunction(()=>{
+  const parsed=sheet=>{
+   try{
+    const rules=sheet?.cssRules;
+    return !!rules?.length&&[...rules].every(rule=>rule.type!==CSSRule.IMPORT_RULE||parsed(rule.styleSheet));
+   }catch{return false;}
+  };
+  const button=document.querySelector('html.privacy-page #site-search-trigger');
+  const links=[...document.querySelectorAll('link[rel~="stylesheet"]')];
+  if(!button||button.disabled||!links.length||!links.every(link=>parsed(link.sheet)))return false;
+  const style=getComputedStyle(button),box=button.getBoundingClientRect();
+  const font=`${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+  if(style.visibility!=='visible'||Number(style.opacity)===0||box.width<=0||box.height<=0||
+   !document.fonts.check(font))return false;
+  const x=box.left+box.width/2,y=box.top+box.height/2;
+  return button.contains(document.elementFromPoint(x,y))?{x,y}:false;
+ },undefined,{polling:50,timeout:10000});
+ return point.jsonValue();
+}
+
 for(const [path,role] of [['./','public'],['garda/','garda']]){
  phoneTest(`${role}: enlarged navigation leaves reading space and Search keeps its focused field visible on resize`,async({page})=>{
   await page.setViewportSize({width:280,height:653});
@@ -193,7 +216,8 @@ for(const role of ['public','garda']){
   try{
    await page.goto('privacy.html?perspective='+role+'&lang=fr',{waitUntil:'commit'});
    const privacy=page.locator('html.privacy-page');
-   await privacy.locator('#site-search-trigger').click();
+   const point=await loadingPrivacySearchPoint(page);
+   await page.mouse.click(point.x,point.y);
    await expect(privacy).toHaveAttribute('data-search-pending','');
    await expect(privacy.locator('#site-search-input')).toHaveCount(0);
   }finally{release();}
@@ -207,6 +231,33 @@ for(const role of ['public','garda']){
   await input.fill('legitimate interest in responding');
   await expect(dialog.locator('.site-search-result[href*="privacy.html"]')).toBeVisible();
   expect(errors).toEqual([]);
+ });
+ test(`${role}: privacy Search retains a pointer click while navigation is translated`,async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  let release;
+  const hold=new Promise(resolve=>{release=resolve;});
+  await page.route(url=>url.pathname.endsWith('/search/privacy-search.mjs'),async route=>{
+   await hold;await route.continue();
+  });
+  let pointerDown=false;
+  try{
+   await page.goto('privacy.html?perspective='+role+'&lang=fr',{waitUntil:'commit'});
+   const privacy=page.locator('html.privacy-page');
+   const point=await loadingPrivacySearchPoint(page);
+   await expect(privacy).toHaveAttribute('lang','en-IE');
+   await expect(privacy.locator('#site-search-trigger')).toHaveText('Search');
+   await page.mouse.move(point.x,point.y);
+   await page.mouse.down();pointerDown=true;
+   release();
+   await expect(privacy).toHaveAttribute('lang','fr');
+   // Release at the original English target, without following its new label.
+   await page.mouse.up();pointerDown=false;
+   await expect(privacy.locator('#site-search-input')).toBeFocused();
+   await expect(privacy.locator('#site-search-dialog')).toHaveAttribute('lang','fr');
+  }finally{
+   release();
+   if(pointerDown)await page.mouse.up();
+  }
  });
 }
 
@@ -276,7 +327,8 @@ test('A first click on the loading privacy notice opens search after the request
  await page.route(/\/privacy-search\.mjs(?:\?|$)/,async route=>{await hold;await route.continue();});
  await page.goto('privacy.html?lang=ar&perspective=garda',{waitUntil:'commit'});
  try{
-  await page.locator('#site-search-trigger').click();
+  const point=await loadingPrivacySearchPoint(page);
+  await page.mouse.click(point.x,point.y);
   await expect(page.locator('html')).toHaveAttribute('data-search-pending','');
  }finally{release();}
  await expect(page.locator('#site-search-input')).toBeFocused();

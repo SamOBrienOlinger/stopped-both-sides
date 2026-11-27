@@ -36,7 +36,7 @@ const castParts={
 const part=(key,x,width,bottom)=>({key,anchor:position(x,width,bottom)});
 // The near friend stands inside the diagonal curb, including all three
 // contact points when Jo's wheelchair fills this supporting role.
-const youthGroup=[part('friendA',26,23,.5),part('friendB',58,19,13),part('colleague',90.5,16.5,19)];
+const youthGroup=[part('friendA',26,23,.6),part('friendB',58,19,13),part('colleague',90.5,16.5,19)];
 const caseColleague=part('colleague',62,18,25);
 const quayColleague=part('colleague',81,23,2);
 // The pavement is deeper on the shop side of the quay. Keep distant passersby off the river wall.

@@ -87,6 +87,15 @@ valid ground.
 
 ## Validation and reproduction
 
+The wider regression run also exposed a privacy-navigation target that moved
+during translation. Search now has its own stable column, with a real-pointer
+regression that spans the English-to-French transition. Deliberately held-module
+startup tests retain their behavior assertions and use timer-polled stylesheet,
+font and hit-target readiness before native input, avoiding WebKit's suspended
+animation-frame actionability in that artificial loading state. The near youth
+figure also retains a small margin above the minimum frame boundary so subpixel
+rounding cannot turn an exact threshold into clipping.
+
 The `Browser compatibility` workflow has dedicated Chromium, Firefox and WebKit
 grounding jobs. Each saves complete JSON coverage/measurement diagnostics and
 selected Chromium screenshots. The general browser shards exclude the new spec
