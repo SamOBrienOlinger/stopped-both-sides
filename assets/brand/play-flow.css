@@ -212,7 +212,6 @@ html:lang(ar) .reference-landing.encounter-hero .landing-instructions :is(#paire
  .simple-setup .setup-role {gap:.25rem .75rem;margin-block:.5rem}
  .simple-setup .setup-role>strong {gap:.5rem;font-size:.9375rem}
  .simple-setup .setup-role>strong>.perspective-icon {inline-size:2rem}
- .simple-setup .setup-role details:not([open]) {flex:0 1 auto;inline-size:auto}
  .simple-setup .setup-role summary {min-block-size:44px;padding-block:.25rem;font-size:.875rem}
  .simple-setup .play-modes {gap:.5rem;margin-block:.65rem .85rem}
  .simple-setup .play-modes a {gap:.15rem;padding:.65rem .75rem;border-radius:.75rem;min-block-size:44px}
