@@ -1,0 +1,44 @@
+name: KeyboardAudit
+settings:
+  base:
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  KeyboardAudit:
+    type: application
+    platform: iOS
+    sources: [App]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.stoppedbothsides.keyboardaudit
+    info:
+      path: Generated/App-Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoadsInWebContent: true
+  KeyboardAuditUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [Tests]
+    dependencies:
+      - target: KeyboardAudit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.stoppedbothsides.keyboardaudit.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: KeyboardAudit
+schemes:
+  KeyboardAudit:
+    build:
+      targets:
+        KeyboardAudit: all
+        KeyboardAuditUITests: [test]
+    test:
+      gatherCoverageData: false
+      targets: [KeyboardAuditUITests]
