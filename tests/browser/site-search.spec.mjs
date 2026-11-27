@@ -162,17 +162,51 @@ for(const role of ['public','garda']){
   const input=page.locator('#site-search-input');
   await expect(input).toBeFocused();
   await input.fill('Privacy & local storage');
-  await page.locator('.site-search-result[href*="privacy.html"]').click();
-  await expect(page).toHaveURL(new RegExp('privacy\\.html\\?perspective='+role+'&lang=fr'));
-  await trigger.click();
-  await expect(input).toBeFocused();
-  await expect(page.locator('#site-search-dialog')).toHaveAttribute('lang','fr');
-  await input.fill('legitimate interest in responding');
+  const privacyURL=new RegExp('privacy\\.html\\?perspective='+role+'&lang=fr');
+  await Promise.all([
+   page.waitForURL(privacyURL,{waitUntil:'commit'}),
+   page.locator('.site-search-result[href*="privacy.html"]').click()
+  ]);
+  // The URL can change before the new document is installed, particularly
+  // in Firefox. The old app and privacy document both have this button ID.
+  const privacy=page.locator('html.privacy-page');
+  await expect(privacy).toBeAttached();
+  await privacy.locator('#site-search-trigger').click();
+  const privacyInput=privacy.locator('#site-search-input');
+  await expect(privacyInput).toBeFocused();
+  await expect(privacy.locator('#site-search-dialog')).toHaveAttribute('lang','fr');
+  await privacyInput.fill('legitimate interest in responding');
   await expect(page.locator('.site-search-result[href*="privacy.html"]')).toBeVisible();
-  await input.fill('Am I attending voluntarily, and can I leave?');
+  await privacyInput.fill('Am I attending voluntarily, and can I leave?');
   await page.locator('.site-search-result[href*="#scenario/street"]').first().click();
   await expect(page).toHaveURL(/\?lang=fr#scenario\/street$/);
   await expect(page.locator('html')).toHaveAttribute('lang','fr');
+ });
+ test(`${role}: privacy Search retains a click before its module starts`,async({page})=>{
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.setViewportSize({width:1440,height:900});
+  let release;
+  const hold=new Promise(resolve=>{release=resolve;});
+  await page.route(url=>url.pathname.endsWith('/search/privacy-search.mjs'),async route=>{
+   await hold;await route.continue();
+  });
+  try{
+   await page.goto('privacy.html?perspective='+role+'&lang=fr',{waitUntil:'commit'});
+   const privacy=page.locator('html.privacy-page');
+   await privacy.locator('#site-search-trigger').click();
+   await expect(privacy).toHaveAttribute('data-search-pending','');
+   await expect(privacy.locator('#site-search-input')).toHaveCount(0);
+  }finally{release();}
+  const dialog=page.locator('#site-search-dialog');
+  const input=dialog.locator('#site-search-input');
+  await expect(dialog).toHaveAttribute('lang','fr');
+  await expect(dialog).toHaveAttribute('open','');
+  await expect(input).toHaveCount(1);
+  await expect(input).toBeFocused();
+  await expect(page.locator('html')).not.toHaveAttribute('data-search-pending','');
+  await input.fill('legitimate interest in responding');
+  await expect(dialog.locator('.site-search-result[href*="privacy.html"]')).toBeVisible();
+  expect(errors).toEqual([]);
  });
 }
 

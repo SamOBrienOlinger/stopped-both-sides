@@ -557,7 +557,16 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   await expect(heading).toBeFocused();
   expect(Math.abs(await page.evaluate(()=>scrollY)-before),'a previously focused route heading must not pull back the reader').toBeLessThanOrEqual(2);
 
-  const control=page.locator('.learning-disclosure > summary');
+  const disclosure=page.locator('.learning-disclosure');
+  const control=disclosure.locator(':scope > summary');
+  // The partnership invitation moved this disclosure towards the end of
+  // the public About page. Expand real learning content below the control
+  // so document-end scroll clamping cannot prevent the occlusion setup.
+  await control.click();
+  await expect(disclosure).toHaveAttribute('open','');
+  const firstPanel=disclosure.locator('.learning-panel').first();
+  await firstPanel.locator(':scope > summary').click();
+  await expect(firstPanel).toHaveAttribute('open','');
   await control.focus();
   await scrollNearTop(control);
   const clearance=()=>control.evaluate(el=>el.getBoundingClientRect().top-document.querySelector('.header').getBoundingClientRect().bottom);

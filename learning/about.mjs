@@ -113,17 +113,20 @@ export function prototypeInput(siteRole='public') {
    <section class="contribution-contributors partnership-detail" aria-labelledby="partnership-evidence" lang="en-IE" dir="ltr" data-no-translate>
     <h3 id="partnership-evidence">Why community participation and evaluation matter</h3>
     <p>A systematic review of police-led interventions found benefits for satisfaction, confidence and perceived procedural fairness; the pooled legitimacy estimate remained uncertain. A later meta-analysis found that the relationship between procedural justice and legitimacy varies across social contexts and groups. These findings support attention to fair treatment, listening and community experience, not a claim that this prototype has achieved these outcomes.</p>
-    <p class="learning-citations">${external('https://consensus.app/papers/details/w:3484c66a-b6b2-4650-a464-7171b7c79188/?utm_source=chatgpt','Mazerolle et al. (2013) — Legitimacy in Policing: A Systematic Review')} · ${external('https://consensus.app/papers/details/w:6952f0a3-9eff-48b0-b49b-3b042649c47d/?utm_source=chatgpt','Chan, Bradford &amp; Stott (2023) — systematic review and meta-analysis')}</p>
+    <ul class="partnership-sources" role="list">
+     <li>${external('https://consensus.app/papers/details/w:3484c66a-b6b2-4650-a464-7171b7c79188/?utm_source=chatgpt','Mazerolle et al. (2013) — Legitimacy in Policing: A Systematic Review')}</li>
+     <li>${external('https://consensus.app/papers/details/w:6952f0a3-9eff-48b0-b49b-3b042649c47d/?utm_source=chatgpt','Chan, Bradford &amp; Stott (2023) — systematic review and meta-analysis')}</li>
+    </ul>
     <p>The educational approach and its separate proposed assessment framework are described on this page. Community-led review and independent evaluation would help determine whether the approach is useful in Ireland.</p>
    </section>
    <section class="contribution-contributors partnership-detail" aria-labelledby="partnership-funding" lang="en-IE" dir="ltr" data-no-translate>
     <h3 id="partnership-funding">Potential funding and research pathways</h3>
     <p>These are examples of relevant programmes or funders to explore with eligible partners, not confirmed funding, current open calls or endorsements. Eligibility and programme priorities would need to be checked before any application.</p>
-    <ul class="partnership-deliverables">
-     <li><strong>${external('https://www.researchireland.ie/funding/new-foundations/','Research Ireland — New Foundations')}</strong>: community-engaged research and knowledge exchange with eligible academic researchers. Previous calls have included a policing and community safety strand in partnership with the Policing and Community Safety Authority.</li>
-     <li><strong>${external('https://www.gov.ie/en/department-of-justice-home-affairs-and-migration/campaigns/ireland-against-racism-fund/','Ireland Against Racism Fund')}</strong>: potential fit for anti-racism education and community participation through an eligible NGO or community organisation.</li>
-     <li><strong>${external('https://rethinkireland.ie/our-funds/','Rethink Ireland')}</strong>: potential fit for a nonprofit-led social innovation project focused on equality or education, subject to the particular fund criteria. Standalone research projects and for-profit applicants are not eligible under its general criteria.</li>
-     <li><strong>${external('https://www.communityfoundation.ie/apply-for-funding/','Community Foundation Ireland')}</strong>: possible support for community-led equality and inclusion activity, depending on the grant round or donor priorities.</li>
+    <ul class="partnership-deliverables partnership-funding-list">
+     <li><strong>${external('https://www.researchireland.ie/funding/new-foundations/','Research Ireland — New Foundations')}</strong><p>community-engaged research and knowledge exchange with eligible academic researchers. Previous calls have included a policing and community safety strand in partnership with the Policing and Community Safety Authority.</p></li>
+     <li><strong>${external('https://www.gov.ie/en/department-of-justice-home-affairs-and-migration/campaigns/ireland-against-racism-fund/','Ireland Against Racism Fund')}</strong><p>potential fit for anti-racism education and community participation through an eligible NGO or community organisation.</p></li>
+     <li><strong>${external('https://rethinkireland.ie/our-funds/','Rethink Ireland')}</strong><p>potential fit for a nonprofit-led social innovation project focused on equality or education, subject to the particular fund criteria. Standalone research projects and for-profit applicants are not eligible under its general criteria.</p></li>
+     <li><strong>${external('https://www.communityfoundation.ie/apply-for-funding/','Community Foundation Ireland')}</strong><p>possible support for community-led equality and inclusion activity, depending on the grant round or donor priorities.</p></li>
     </ul>
     <p>Potential partners can help identify an appropriate lead organisation, funding route, governance arrangements and an achievable pilot.</p>
    </section>

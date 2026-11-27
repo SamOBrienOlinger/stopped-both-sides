@@ -252,4 +252,10 @@
 .partnership-overview .primary{max-inline-size:100%;white-space:normal;text-align:center;min-block-size:44px;overflow-wrap:anywhere}
 .partnership-deliverables{padding-inline-start:1.25em;margin-block:0 1rem}
 .partnership-deliverables li+li{margin-block-start:.75em}
-.partnership-detail a{overflow-wrap:anywhere}
+/* Use real wrapping link boxes (not fragmented inline boxes). This also gives
+   research and funding links a generous, keyboard-visible touch target. */
+.partnership-detail a{display:block;min-inline-size:0;max-inline-size:100%;min-block-size:44px;padding-block:.25em;line-height:1.5;overflow-wrap:anywhere}
+.partnership-sources{list-style:none;padding:0;margin-block:0 1rem}
+.partnership-sources li+li{margin-block-start:.5rem}
+.partnership-funding-list li>strong{display:block}
+.partnership-funding-list li>p{margin-block:.25em 0}

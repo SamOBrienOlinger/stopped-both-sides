@@ -20,9 +20,17 @@ for(const path of ['./','garda/'])for(const language of ['en','ar','ga','zh-Hans
   await expect(disclosure.locator('#partnership-funding + p')).toContainText('not confirmed funding');
   await expect(disclosure.locator('.contribution-organisations > li')).toHaveCount(9);
   await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
-  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);
-  await page.setViewportSize({width:1366,height:900});
-  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);
+  const links=disclosure.locator('.partnership-detail a');
+  await expect(links).toHaveCount(6);
+  for(const width of [280,320,1366]){
+   await page.setViewportSize({width,height:900});
+   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+2)).toBe(true);
+   await expect.poll(()=>links.evaluateAll(elements=>elements.every(link=>{
+    const box=link.getBoundingClientRect();
+    return link.clientWidth>0&&link.scrollWidth<=link.clientWidth+2&&box.height>=44&&
+     box.left>=-1&&box.right<=document.documentElement.clientWidth+1;
+   })),{message:'all six research and funding links have unclipped, usable link boxes at '+width+'px'}).toBe(true);
+  }
   expect(errors).toEqual([]);
  });
 }
