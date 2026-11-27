@@ -177,3 +177,6 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible),summary:focus:not(:
 .play-help p{font-size:.95rem;max-width:68ch}
 @media(min-width:48rem){.how-to-play ol{grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem}.recommended-situation>.primary{width:auto;min-width:14rem}.play-toolbar.perspective-bar{flex-direction:row;align-items:center}}
 @media(forced-colors:active){.start-panel,.scenario-library,.play-help{background:Canvas;border-color:CanvasText}.clear-intro .purpose-lead,.scenario-library>summary,.play-help>summary{color:CanvasText}}
+
+/* Reserve reading space until the route replaces its loading message. */
+#main:has(#loading){min-block-size:100svh}

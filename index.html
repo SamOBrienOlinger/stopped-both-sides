@@ -3,8 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link id="landing-backdrop-preload" as="image" fetchpriority="high" imagesizes="(min-width: 75rem) 72rem, 100vw"
+ imagesrcset="./assets/dublin-approved/gpo-city-480.webp?v=gpo-bus-eleven-20261126 480w, ./assets/dublin-approved/gpo-city-960.webp?v=gpo-bus-eleven-20261126 960w, ./assets/dublin-approved/gpo-city-1600.webp?v=gpo-bus-eleven-20261126 1600w">
 <script>
 {
+ // Hash routes share this document; only the landing page uses its hero.
+ if(!location.hash||location.hash==='#play')document.getElementById('landing-backdrop-preload').rel='preload';
  // Claim a refresh before the browser snapshots or restores its old offset.
  const reloading=performance.getEntriesByType('navigation')[0]?.type==='reload'||performance.navigation?.type===1;
  if('scrollRestoration' in history)history.scrollRestoration=reloading?'manual':'auto';
@@ -16,13 +20,15 @@
 <meta name="description" content="An interactive learning resource for the public and Gardaí. Explore human and civil rights, responsibilities and fair decision-making in Ireland.">
 <title>Stopped: Both Sides | Public perspective</title>
 <link rel="icon" href="./assets/brand/favicon-hexagon.png" type="image/png">
-<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./styles.css?v=responsive-fixes-20261127">
 <link rel="stylesheet" href="./encounters/styles.css">
 <link rel="stylesheet" href="./encounters/scenes.css?v=final-touches-20261125">
 <link rel="stylesheet" href="./accessibility/styles.css?v=sitewide-rendering-20261123">
 <link rel="stylesheet" href="./accessibility/perspectives.css">
-<link rel="stylesheet" href="./accessibility/responsive.css">
-<script type="module" src="./app.mjs?v=combined-how-to-20261126"></script>
+<link rel="stylesheet" href="./accessibility/responsive.css?v=responsive-fixes-20261127">
+<link rel="modulepreload" href="./encounters/catalog.mjs?v=site-repairs-20261125">
+<link rel="modulepreload" href="./encounters/scenes.mjs?v=responsive-fixes-20261127">
+<script type="module" src="./app.mjs?v=responsive-fixes-20261127"></script>
 <link rel="stylesheet" href="./assets/brand/landing.css?v=landing-about-copy-1">
 <link rel="stylesheet" href="./assets/brand/buttons.css?v=learning-flow-2">
 <link rel="stylesheet" href="./encounters/refinements.css?v=scene-above-context-1">
@@ -40,14 +46,14 @@
 <link rel="stylesheet" href="./encounters/scene-labels.css?v=caption-fit-20261122">
 <link rel="stylesheet" href="./encounters/turn-headshot.css?v=final-touches-20261125">
 <link rel="stylesheet" href="./assets/brand/site-polish.css?v=portfolio-entrance-20261123">
-<script type="module" src="./encounters/scene-labels.mjs?v=practice-consistency-20261126"></script>
-<link rel="stylesheet" href="./assets/brand/play-flow.css?v=practice-consistency-20261126">
+<script type="module" src="./encounters/scene-labels.mjs?v=responsive-fixes-20261127"></script>
+<link rel="stylesheet" href="./assets/brand/play-flow.css?v=responsive-fixes-20261127">
 <link rel="stylesheet" href="./assets/brand/back-to-top.css?v=responsive-layout-20261122">
 <script type="module" src="./assets/brand/back-to-top.mjs?v=footer-top-2"></script>
-<link rel="stylesheet" href="./search/site-search.css?v=site-repairs-20261125">
+<link rel="stylesheet" href="./search/site-search.css?v=responsive-fixes-20261127">
 <link rel="stylesheet" href="./assets/brand/card-headings.css?v=portfolio-entrance-20261123">
 <link rel="stylesheet" href="./assets/brand/typography.css?v=site-typography-20261123">
-<link rel="stylesheet" href="./assets/brand/navigation-footer.css?v=site-typography-20261123">
+<link rel="stylesheet" href="./assets/brand/navigation-footer.css?v=responsive-fixes-20261127">
 <link rel="stylesheet" href="./landing/poster-landing.css?v=combined-how-to-20261126">
 </head>
 <body>

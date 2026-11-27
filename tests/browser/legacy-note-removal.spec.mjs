@@ -5,7 +5,7 @@ const retired="The next scene is fictional. No choice guarantees an outcome or e
 test('public original single-role practice omits the retired note but preserves guidance links',async({page})=>{
  await page.goto('./?lang=en#play');
  await page.locator('.single-mode > summary').click();
-  await page.locator('.single-mode .practice-content a').click();
+  await page.locator('.single-mode').getByRole('link',{name:'Browse situations',exact:true}).click();
  await page.locator('.scenario-library .situation-topic>summary').first().click();
   await page.locator('.scenario-library [data-action="start"]').first().click();
  await expect(page).toHaveURL(/#scenario\//);

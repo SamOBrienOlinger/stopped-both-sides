@@ -2,7 +2,40 @@ import {test,expect} from '@playwright/test';
 import {openNavigation} from './navigation.mjs';
 import {decodeState} from '../../encounters/engine.mjs?v=site-repairs-20261125';
 
+const phoneTest=test.extend({
+ hasTouch:true,deviceScaleFactor:2,
+ isMobile:async({browserName},use)=>use(browserName!=='firefox')
+});
+
 for(const [path,role] of [['./','public'],['garda/','garda']]){
+ phoneTest(`${role}: enlarged navigation leaves reading space and Search keeps its focused field visible on resize`,async({page})=>{
+  await page.setViewportSize({width:280,height:653});
+  await page.goto(path+'?lang=ar#'+(role==='public'?'rights':'evidence'));
+  await expect(page.locator('html')).toHaveAttribute('lang','ar');
+  await page.evaluate(async()=>{
+   document.documentElement.style.setProperty('--reading-size','200%');
+   await document.fonts.ready;
+  });
+  await expect.poll(()=>page.locator('.header').evaluate(header=>header.getBoundingClientRect().height/innerHeight)).toBeLessThan(.25);
+  await page.setViewportSize({width:568,height:320});
+  await page.evaluate(()=>{
+   document.documentElement.style.setProperty('--reading-size','150%');
+   document.documentElement.classList.add('reading-spacious');
+  });
+  await openNavigation(page);await page.locator('#site-search-trigger').click();
+  const input=page.locator('#site-search-input');
+  await expect(input).toBeFocused();
+  await page.setViewportSize({width:568,height:240});
+  await input.pressSequentially('Garda');
+  await expect(page.locator('.site-search-result').first()).toBeAttached();
+  await expect.poll(()=>input.evaluate(field=>{
+   const box=field.getBoundingClientRect(),dialog=field.closest('dialog').getBoundingClientRect();
+   return field===document.activeElement&&box.top>=dialog.top-1&&box.bottom<=dialog.bottom+1&&
+    document.elementFromPoint(box.left+box.width/2,box.top+box.height/2)===field;
+  })).toBe(true);
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('.site-search-result').first()).toBeFocused();
+ });
  test(`${role}: keyword search opens from the requested navbar position, handles no results and preserves an answered game`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});

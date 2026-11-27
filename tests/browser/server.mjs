@@ -10,7 +10,7 @@ const root=fileURLToPath(new URL('../../',import.meta.url));
 const prefix='/stopped-both-sides/';
 const types={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8',
  '.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.jpg':'image/jpeg','.jpeg':'image/jpeg','.pdf':'application/pdf',
- '.svg':'image/svg+xml','.ttf':'font/ttf','.png':'image/png','.webp':'image/webp','.json':'application/json'};
+ '.svg':'image/svg+xml','.ttf':'font/ttf','.woff2':'font/woff2','.png':'image/png','.webp':'image/webp','.json':'application/json'};
 createServer(async(req,res)=>{
  try{
   const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);

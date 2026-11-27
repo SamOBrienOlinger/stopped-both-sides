@@ -205,7 +205,8 @@ for(const path of ['./','garda/']){
    }).observe(document,{subtree:true,attributes:true,attributeFilter:['data-motion']});
   });
   await page.goto(path);await page.evaluate(()=>document.fonts.ready);
-  const group=page.locator('.landing-role-actions'),button=group.locator('.perspective-card-link').first();
+  await page.locator('.single-mode > summary').click();
+  const group=page.locator('.landing-role-actions'),button=group.getByRole('link').first();
   await button.scrollIntoViewIfNeeded();
   const geometry=()=>group.evaluate(element=>[element,element.firstElementChild].map(target=>{
    const bounds=target.getBoundingClientRect();

@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-const hero="Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.";
+const hero="Explore realistic situations, choose how to respond, and see how the same encounter can be experienced differently by members of the public and Gardaí.";
 const overview=["Stopped: Both Sides explores human and civil rights and police powers through everyday encounters involving questioning, searches, arrest, young people and racism.","It helps the public understand their human and civil rights and access support, while encouraging Gardaí to reflect on evidence, bias and respectful communication.","Exploring both perspectives invites learners to question assumptions, while recognising Gardaí’s particular responsibility to exercise their powers fairly."];
 for(const path of ['./','garda/']){
  test(path+' home shows the revised invitation and both Browse labels',async({page})=>{

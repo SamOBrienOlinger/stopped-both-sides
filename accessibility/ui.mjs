@@ -1,7 +1,7 @@
-import {decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
+import {decodeState} from '../encounters/engine.mjs?v=responsive-fixes-20261127';
 import {createPreferences,defaults} from './preferences.mjs?v=learning-language-20261120';
 import {createDialogController} from './dialog.mjs?v=learning-language-20261120';
-import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/translate.mjs?v=practice-consistency-20261126';
+import {translateText,translateHTML,loadLanguage,languageLoaded,escapeHTML as esc} from '../locales/active-language.mjs';
 import {languages,languageInfo,normaliseLanguage} from '../locales/languages.mjs';
 const translateNotice='Working translation: independent Irish-language and legal review is still needed. You can return to English at any time.';
 const languageHelp='All nine languages cover shared situations and reference pages. Individual practice is also available in Portuguese, Arabic, Polish, Romanian, French, Spanish and Simplified Chinese.';
@@ -104,7 +104,7 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   }).catch(()=>{if(generation===loadGeneration)busy(false,loadError);return false;});
  }
  // Native select changes are deliberately inert until the form is submitted.
- dialog?.addEventListener('submit',event=>{event.preventDefault();const form=event.target;save({language:form.elements.language.value,size:Number(form.elements.size.value),contrast:form.elements.contrast.value,spacing:form.elements.spacing.checked,motion:form.elements.motion.checked});});
+ dialog?.addEventListener('submit',event=>{event.preventDefault();const form=event.target;return save({language:form.elements.language.value,size:Number(form.elements.size.value),contrast:form.elements.contrast.value,spacing:form.elements.spacing.checked,motion:form.elements.motion.checked});});
  dialog?.addEventListener('cancel',()=>{loadGeneration++;});
  document.addEventListener?.('click',event=>{
   const button=event.target.closest('button');if(!button)return;
@@ -112,17 +112,18 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
   else if(button.hasAttribute('data-reading-close'))close();
   else if(button.hasAttribute('data-reading-reset')){save({...defaults,language:activeLanguage});announce('Reading preferences reset.');}
  });
- function decorate(hash){
+ function decorate(hash,html){
   const perspective=perspectiveForRoute(hash,siteRole),language=activeLanguage,info=languageInfo(language);
   root?.setAttribute?.('data-perspective',perspective);
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content',perspective==='garda'?'#284f7e':'#175e61');
   main.setAttribute?.('lang',info.tag);
   main.setAttribute?.('dir',info.dir);
-  if(initialLoadFailed)main.innerHTML=`<div class="translation-note"><p>${esc(loadError)} <button class="plain-link" id="language-settings-recovery" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+main.innerHTML;
+  if(initialLoadFailed)html=`<div class="translation-note"><p>${esc(loadError)} <button class="plain-link" id="language-settings-recovery" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+html;
   if(language==='ga'){
-   main.innerHTML=`<div class="translation-note"><p>${esc(t(translateNotice))} <button class="plain-link" id="language-settings-irish-note" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+translateHTML(main.innerHTML,language);
-  }else if(language!=='en')main.innerHTML=translateHTML(main.innerHTML,language);
-  main.innerHTML=withTapIcons(transformContent(main.innerHTML,hash));
+   html=`<div class="translation-note"><p>${esc(t(translateNotice))} <button class="plain-link" id="language-settings-irish-note" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+translateHTML(html,language);
+  }else if(language!=='en')html=translateHTML(html,language);
+  // Commit the finished route once so intermediate images never start duplicate requests.
+  main.innerHTML=withTapIcons(transformContent(html,hash));
   main.querySelectorAll?.('h1,h2[id]').forEach(h=>h.setAttribute('tabindex','-1'));
   const referenceRoute=hash.split('~')[0];
   const evidenceGroup=referenceRoute.startsWith('evidence/')?document.getElementById?.('source-'+referenceRoute.slice(9))?.closest?.('.evidence-group')?.id:null;

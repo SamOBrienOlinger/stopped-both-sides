@@ -1,5 +1,5 @@
 import {privacyNotices} from './privacy-notice.mjs?v=site-repairs-20261125';
-import {learningCopy} from './play-copy.mjs?v=site-repairs-20261125';
+import {learningCopy} from './play-copy.mjs?v=responsive-fixes-20261127';
 import {discriminationLabels} from './discrimination-labels.mjs?v=site-repairs-20261125';
 import {discriminationIrish} from './discrimination-ga.mjs?v=site-repairs-20261125';
 import {messages} from './messages.mjs?v=site-repairs-20261125';
@@ -9,7 +9,8 @@ import {encounters} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 import {gaContent,gaPracticeCopy} from './ga-content.mjs?v=site-repairs-20261125';
 import {referenceIrish} from './reference-ga.mjs?v=site-repairs-20261125';
 import {refinementIrish} from './refinements-ga.mjs?v=human-civil-rights-20261122';
-export const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+import {escapeHTML} from './html.mjs';
+export {escapeHTML};
 const decode=value=>value.replace(/&(amp|lt|gt|quot|apos|#39);/g,(_,s)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",'#39':"'"}[s]));
 const dictionary=new Map();
 for(const e of Object.values(encounters)){

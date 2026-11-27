@@ -106,9 +106,9 @@ export function firstTimeGuide() {
  return `<section class="info-block first-time-guide" aria-labelledby="first-time-guide-heading">
   <h2 id="first-time-guide-heading">First-time user guide</h2>
   <div class="guide-layout">
-   <a class="guide-thumbnail" href="${pdf}" target="_blank" rel="noopener noreferrer" aria-label="Open the first-time user guide PDF">
+   <a class="guide-thumbnail" href="${pdf}" target="_blank" rel="noopener noreferrer" aria-labelledby="guide-open-label first-time-guide-heading">
     <span class="guide-preview"><img src="${preview}" width="1400" height="5943" alt="Preview of the first-time user guide" loading="lazy" decoding="async"></span>
-    <span class="guide-open">Open the full PDF</span>
+    <span class="guide-open" id="guide-open-label">Open the full PDF</span>
    </a>
    <div class="guide-introduction"><p>Learn how to choose a role, explore a situation, compare perspectives and review your decisions.</p></div>
   </div>

@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {messages} from '../locales/messages.mjs?v=site-repairs-20261125';
 import {languages,normaliseLanguage,languageInfo} from '../locales/languages.mjs';
-import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/translate.mjs?v=practice-consistency-20261126';
+import {loadLanguage,translateText,translateHTML,escapeHTML} from '../locales/active-language.mjs';
 import {createPreferences,defaults,LANGUAGE_KEY,preferencesStorageKey} from '../accessibility/preferences.mjs';
 import {encounters,roles,stageCount} from '../encounters/catalog.mjs?v=site-repairs-20261125';
 import {startEncounter,answer,continueEncounter,switchRole,stateHash,decodeState} from '../encounters/engine.mjs?v=site-repairs-20261125';
@@ -209,14 +209,20 @@ test('All venue-specific setting captions translate in every supported non-Engli
 test('Poster headings, scene descriptions and example responses translate in every supported language', async () => {
  route('#play');
  const phrases = [
-  'Interactive learning prototype',
+  'What will you do?',
+  'Explore realistic situations, choose how to respond, and see how the same encounter can be experienced differently by members of the public and Gardaí.',
+  'Start as a member of the public or a Garda.',
+  'Interact with a member of the public and/or with a Garda.',
+  'One situation. Two perspectives.',
   'Interactive learning about rights, choices and perspectives.',
   'Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.',
-  'Four steps of the learning experience',
-  'Read the situation',
+  'How it works',
+  'Choose a perspective',
+  'Understand the situation you are in',
+  'Choose a response',
   '“Can I have a word?”',
   'Ask why you are being stopped and whether you are free to leave.',
-  'Compare perspectives',
+  'Learn why it matters',
   'See the same situation from both sides.'
  ];
  for (const {id} of languages.filter(language => language.id !== 'en')) {

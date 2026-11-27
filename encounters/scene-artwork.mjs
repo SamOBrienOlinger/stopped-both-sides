@@ -1,4 +1,4 @@
-import {gardaArtwork} from './garda-artwork.mjs?v=learning-language-20261120';
+import {gardaArtwork} from './garda-artwork.mjs?v=responsive-fixes-20261127';
 import {publicArtwork} from './public-artwork.mjs?v=nia-public-20261123';
 
 // Measured source-cell boundaries preserve full feet and wheels even where the

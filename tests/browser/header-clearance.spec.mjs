@@ -133,8 +133,9 @@ async function savedCardGeometry(page,testInfo,label,selector){
     for(const r of range.getClientRects())if(r.width&&r.height)text.push({left:r.left,right:r.right,top:r.top,bottom:r.bottom});
    }
   }
-  const styles=getComputedStyle(element);
+  const styles=getComputedStyle(element),parent=element.parentElement,parentStyles=getComputedStyle(parent);
   return {card,copy:box(copy),title:box(title),meta:box(meta),action:box(action),text,
+   availableWidth:parent.clientWidth-parseFloat(parentStyles.paddingLeft)-parseFloat(parentStyles.paddingRight),
    rootFont:getComputedStyle(document.documentElement).fontSize,viewportWidth:innerWidth,
    paddingBlock:parseFloat(styles.paddingTop)+parseFloat(styles.paddingBottom),
    borderBlock:parseFloat(styles.borderTopWidth)+parseFloat(styles.borderBottomWidth),
@@ -154,6 +155,7 @@ async function savedCardGeometry(page,testInfo,label,selector){
  if(geometry.copy.height>geometry.title.height+geometry.meta.height+font*.75+1)issues.push('copy has excess empty height');
  if(geometry.action.height<44)issues.push('Resume tap target is too short');
  if(geometry.viewportWidth<=640){
+  if(Math.abs(geometry.card.width-geometry.availableWidth)>2)issues.push('phone card does not fill its available column');
   if(b.top<a.bottom-1)issues.push('phone Resume does not follow the copy');
   if(Math.abs(a.width-b.width)>1||Math.abs(a.left-b.left)>1)issues.push('phone copy and Resume do not share the card width');
   if(b.top-a.bottom>font*1.5+1)issues.push('excessive gap before Resume');
@@ -163,7 +165,6 @@ async function savedCardGeometry(page,testInfo,label,selector){
  reports.get(page).push({label,geometry,issues});
  await card.screenshot({path:testInfo.outputPath(label.replace(/[^a-z0-9]+/gi,'-')+'.png')});
  expect.soft(issues,label).toEqual([]);
- return geometry;
 }
 
 test.afterEach(async({page},testInfo)=>{
@@ -205,18 +206,13 @@ for(const [site,path] of [['public','./'],['garda','garda/']])for(const profile 
   await deepScroll(page);
   await nav(page,testInfo,'Reference page to Progress','progress',{context:'.progress-page > .eyebrow'});
   await page.locator('.saved-situations > .progress-disclosure > summary').first().click();
-  const progressGeometry=await savedCardGeometry(page,testInfo,'Progress Race resume card','.saved-situations .flow-save');
+  await savedCardGeometry(page,testInfo,'Progress Race resume card','.saved-situations .flow-save');
 
   await nav(page,testInfo,'Progress to About','about',{context:'.about-opening'});
   await deepScroll(page);
   await nav(page,testInfo,'About to Home','play',{context:'.reference-landing'});
-  const homeGeometry=await savedCardGeometry(page,testInfo,'Home Race resume card','.home-play .flow-save');
-  if(profile.width<=640){
-   expect.soft(Math.abs(homeGeometry.card.width-progressGeometry.card.width),
-    'the same saved card uses the available width on Home and Progress').toBeLessThanOrEqual(2);
-   expect.soft(Math.abs(homeGeometry.card.height-progressGeometry.card.height),
-    'Home does not stretch the same saved card into a tall empty panel').toBeLessThanOrEqual(20*profile.size/100);
-  }
+  await page.locator('.home-progress-disclosure > summary').click();
+  await savedCardGeometry(page,testInfo,'Home Race resume card','.home-play .flow-save');
   await deepScroll(page);
   await nav(page,testInfo,'Home same-route after scrolling','play',{context:'.reference-landing',sameRoute:true});
 

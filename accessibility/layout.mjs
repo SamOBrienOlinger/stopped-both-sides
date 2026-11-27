@@ -1,6 +1,6 @@
 // Presentation enhancements run after translation. Original wording, inline
 // citations, game state and language-pack lookup keys stay intact.
-import {decorateCardHeadings} from './card-headings.mjs?v=static-headings-20261123';
+import {decorateCardHeadings} from './card-headings.mjs?v=responsive-fixes-20261127';
 import {paceAnimations} from './animation-clock.mjs?v=learning-language-20261120';
 import {focusPageStart} from './focus.mjs?v=mobile-flow-20261123b';
 export function paragraphChunks(text,language='en'){

@@ -20,6 +20,8 @@ for(const path of ['./','garda/'])for(const {language,width,large} of variants){
   const section=page.locator('.learning-section');
   await expect(section.locator('h2')).toHaveText(translateText('Learning through choices',language));
   await expect(section.locator('.learning-goal')).toHaveCount(4);
+  await expect(page.locator('.guide-thumbnail')).toHaveAccessibleName(
+   translateText('Open the full PDF',language)+' '+translateText('First-time user guide',language));
   const disclosure=section.locator('.learning-disclosure');
   const trigger=disclosure.locator(':scope > summary');
   const panels=disclosure.locator('.learning-panel');

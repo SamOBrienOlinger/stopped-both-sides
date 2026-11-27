@@ -30,13 +30,14 @@ const staffRoles={
  'sexual-orientation':'steward',age:'organiser','religious-belief':'volunteer',
  'traveller-community':'caretaker',race:'steward',disability:'garda','housing-assistance':'agent'
 };
-const publicGestures=new URL('../assets/scenes/group-public-gestures.webp',import.meta.url).href;
+// Each character's four registered poses share a single narrow strip. A
+// scene needs only the strips for its visible cast, including when poses change.
 export function publicGestureArtwork(character,gesture,facingLeft){
- const match=/^public-([1-9])$/.exec(character.id);
- if(!match)return null;
- const column=Number(match[1])-1,row=(gesture==='listen'?2:0)+(facingLeft?1:0);
- return {src:publicGestures,width:2880,height:1280,
-  style:`left:${-column*100}%;top:${-row*100}%;width:900%;height:400%;clip-path:inset(${row*25}% ${(8-column)*100/9}% ${(3-row)*25}% ${column*100/9}%)`};
+ if(!/^public-[1-9]$/.test(character.id))return null;
+ const row=(gesture==='listen'?2:0)+(facingLeft?1:0);
+ return {src:new URL('../assets/scenes/public-gestures/'+character.id+'.webp',import.meta.url).href,
+  width:320,height:1280,
+  style:`left:0%;top:${-row*100}%;width:100%;height:400%;clip-path:inset(${row*25}% 0% ${(3-row)*25}% 0%)`};
 }
 
 // The supporting officer can only be Ciara or Rory: the roster reserves the

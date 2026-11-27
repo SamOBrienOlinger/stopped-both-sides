@@ -55,7 +55,7 @@ for(const role of ['public','garda']){
   await page.addInitScript(cast=>localStorage.setItem('stopped-both-sides:characters:v1',JSON.stringify(cast)),cast);
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
-  await page.locator('.single-mode .practice-content a').click();
+  await page.locator('.single-mode').getByRole('link',{name:'Browse situations',exact:true}).click();
   const topic=page.locator('.scenario-library .situation-topic').filter({has:page.locator('[data-action="start"][data-id="street"]')});
   await topic.locator(':scope > summary').click();
   await topic.locator('[data-action="start"][data-id="street"]').click();
@@ -212,7 +212,14 @@ for(const role of ['public','garda']){
   await reset(page);
   await openNavigation(page);await page.locator('.header [data-nav="progress"]').click();
   await expect(page.locator('.progress-page')).toBeVisible();
-  await expect.poll(async()=>kinds(page)).toContain('progress');
+  const roleSection=page.locator('.role-results [data-role-tone="'+role+'"]');
+  const meter=roleSection.locator('progress');
+  await expect(meter).toBeHidden();
+  await frames(page);
+  expect(await kinds(page),'collapsed role results stay stationary').not.toContain('progress');
+  await roleSection.locator('.progress-disclosure > summary').click();
+  await expect(meter).toBeVisible();
+  expect(await meter.evaluate(element=>element.value)).toBeGreaterThan(0);
   const before=await page.locator('.progress-page progress').evaluateAll(elements=>elements.map(element=>element.value));
   await reset(page);
   await page.locator('.progress-disclosure > summary').filter({hasText:'Manage your progress'}).click();

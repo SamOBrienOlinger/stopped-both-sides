@@ -43,8 +43,8 @@ test('The stadium opening places the spectator and steward either side of the re
  const state=startEncounter(id,'public',{cast});
  for(const html of [renderScene(state),renderScenePreview(id)]){
   assert.match(html,/data-held-by="public" data-scene-object="ticket"/);
-  assert.match(html,/group-public-gestures\.webp/);
-  assert.match(html,/garda-baseball-2026\.webp/);
+  assert.match(html,/public-gestures\/public-1\.webp/);
+  assert.match(html,/garda-uniforms\/garda-1\.webp/);
  }
  const next=continueEncounter(answer(state,0));
  assert.doesNotMatch(renderScene(next),/data-scene-object="ticket"/);

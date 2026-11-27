@@ -44,6 +44,7 @@
  .header .header-inner nav>:is(a,button) {flex:1 1 auto;inline-size:auto}
 }
 @media(max-width:71.999rem) {
+ .header {container-type:inline-size}
  .header .header-inner nav>:is(a,button) {
   inline-size:100%;
   max-inline-size:none;
@@ -67,6 +68,28 @@
   overscroll-behavior:contain;
   scroll-padding-block:.5rem;
  }
+}
+
+/* Respond to the width available at the reader's own font size. Keep the
+   site name and Menu legible before spending space on a second route label. */
+@container (max-width:18em) {
+ .header.navigation-ready .header-inner {
+  min-block-size:0;
+  padding-block:max(6px,env(safe-area-inset-top)) 6px;
+  padding-left:max(8px,env(safe-area-inset-left));
+  padding-right:max(8px,env(safe-area-inset-right));
+  gap:8px;
+ }
+ .header.navigation-ready .nav-toggle,
+ html:lang(ar) .header.navigation-ready .nav-toggle {
+  min-block-size:48px;
+  padding:.2em .5em;
+  gap:6px;
+ }
+ .header .nav-toggle [data-menu-current] {display:none}
+}
+@container (max-width:14em) {
+ .header .wordmark .nav-profiles,.header .nav-toggle .menu-icon {display:none}
 }
 
 .header .header-inner nav>a[aria-current="page"] {

@@ -35,7 +35,7 @@ test('Every stage and all 90 character pairs have a complete illustration',()=>{
      const actor=actors.get(key);
      assert.equal(actor?.id,character.id,e.id+'/'+nodeId+' '+key);
      const asset=character.sceneArtwork?new URL(character.sceneArtwork.src).pathname.split('/assets/')[1]:
-      role==='garda'?'characters/garda-baseball-2026.webp':
+      role==='garda'?'characters/garda-uniforms/'+character.id+'.webp':
       character.id==='public-10'?'characters/nia-public-20261123.png':'scenes/contextual-cast.webp';
      assert.ok(actor.src.includes('/assets/'+asset),e.id+'/'+nodeId+' '+key+' uses '+asset);
     }
@@ -56,7 +56,7 @@ test('Answers update the phase while the illustrated story identities stay consi
    const next=answer(state,index),model=sceneModel(next);
    assert.equal(initial.phase,'decision');
    assert.ok(renderScene(next).includes('data-scene-character="'+storyCharacter(next,'public',stage.id).id+'"'));
-   assert.match(renderScene(next),/characters\/garda-baseball-2026.webp/);
+   assert.ok(renderScene(next).includes('characters/garda-uniforms/'+storyCharacter(next,'garda').id+'.webp'));
    assert.equal(model.phase,'response');assert.equal(model.choice,choice);
    assert.deepEqual(next.cast,state.cast);assert.equal(model.stage,stage);
    const switched=switchRole(next);assert.deepEqual(switched.cast,state.cast);
@@ -95,7 +95,7 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
 
 test('Both entrypoints load scene styles and all locally delivered images exist',()=>{
  assert.ok(existsSync(new URL('../assets/scenes/contextual-cast.webp',import.meta.url)));
- assert.ok(existsSync(new URL('../assets/characters/garda-baseball-2026.webp',import.meta.url)));
+ for(const garda of characters.garda)assert.ok(existsSync(new URL('../assets/characters/garda-uniforms/'+garda.id+'.webp',import.meta.url)));
  assert.ok(existsSync(new URL('../assets/characters/nia-public-20261123.png',import.meta.url)));
  for(const place of sceneAssets){
   const src=backgroundImage(place)?.src||`../assets/scenes/${place}.webp`;

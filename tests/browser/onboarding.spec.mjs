@@ -5,12 +5,12 @@ const state=page=>decodeState(new URL(page.url()).hash.slice(11).split('~')[0]);
 for(const role of ['public','garda'])test(`${role} can start immediately or browse, then learn from a choice`,async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto(role==='public'?'./':'garda/');
- await expect(page.locator('.landing-deck')).toHaveText("Step into a real-world-style scenario, make decisions, and see how the same situation can look different from more than one perspective.");
+ await expect(page.locator('.landing-deck')).toHaveText("Explore realistic situations, choose how to respond, and see how the same encounter can be experienced differently by members of the public and Gardaí.");
  await expect(page.locator('#paired-title')).toHaveText('Stopped: Both Sides');
  await expect(page.locator('#perspectives-title')).toHaveText('One situation. Two perspectives.');
  await expect(page.locator('.about-opening')).toHaveCount(0);
  await expect(page.locator('.landing-character')).toHaveCount(0);
- await page.locator(`a.perspective-card-link[data-role-tone="${role}"]`).click();
+ await page.getByRole('link',{name:role==='public'?'Public perspective':'Garda perspective',exact:true}).click();
  await expect(page.locator('[data-action="paired-quick-start"]')).toBeVisible();
  await expect(page.locator('.character-option')).toHaveCount(0);
  await expect(page.locator('.scenario-library')).not.toHaveAttribute('open','');

@@ -53,9 +53,12 @@ async function hasCues(page,...expected){
 test('Pre-opened evidence details are not treated as a new disclosure interaction',async({page})=>{
  await page.goto('garda/#evidence/model');
  await expect(page.locator('.evidence-record[open]')).toHaveCount(1);
- const group=await page.locator('.evidence-record[open]').evaluate(element=>element.closest('.evidence-group').id);
- await expect(page.locator('.evidence-nav a[aria-current="location"]')).toHaveCount(1);
- await expect(page.locator('.evidence-nav a[aria-current="location"]')).toHaveAttribute('href','#evidence/'+group);
+ const group=page.locator('.rights-topics > details[open]');
+ await expect(group).toHaveCount(1);
+ await expect(group).toHaveAttribute('id','group-ireland');
+ const record=group.locator('.evidence-record[open]');
+ await expect(record).toHaveAttribute('id','source-model');
+ await expect(record).toBeFocused();
  await frames(page);
  expect(await cues(page)).not.toContain('disclosure');
 });
@@ -297,7 +300,7 @@ for(const role of ['public','garda']){
  test(`${role}: original practice also cues feedback and the next scene`,async({page})=>{
   await page.goto(paths[role]);
   await page.locator('.single-mode > summary').click();
-  await page.locator('.single-mode .practice-content a').click();
+  await page.locator('.single-mode').getByRole('link',{name:'Browse situations',exact:true}).click();
   await resetCues(page);
   await page.locator('.scenario-library .situation-topic>summary').first().click();
   await page.locator('.scenario-library [data-action="start"]').first().click();

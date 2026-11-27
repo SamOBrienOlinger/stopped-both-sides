@@ -1,13 +1,13 @@
-import {createSiteSearch} from "../search/site-search.mjs?v=practice-consistency-20261126";
+import {createSiteSearch} from "../search/site-search.mjs?v=responsive-fixes-20261127";
 import {focusControl,focusPageStart} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
-import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=site-repairs-20261125';
-import {createLayout} from '../accessibility/layout.mjs?v=poster-landing-20261125';
-import {supportRecap} from '../learning/support.mjs?v=site-repairs-20261125';
-import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=learning-cycle-20261126b';
+import {discussionLink,evidenceCheck,recapPractice,situationStory,termsInDecision,reviewExploration} from '../learning/play.mjs?v=responsive-fixes-20261127';
+import {createLayout} from '../accessibility/layout.mjs?v=responsive-fixes-20261127';
+import {supportRecap} from '../learning/support.mjs?v=rights-topics-20261126';
+import {learningAbout,prototypeInput,firstTimeGuide} from '../learning/about.mjs?v=responsive-fixes-20261127';
 import {hasOwn} from '../compatibility.mjs';
-import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=practice-consistency-20261126';
-import {createMotion} from '../accessibility/motion.mjs?v=site-repairs-20261125';
-import {createEncounterMode} from '../encounters/ui.mjs?v=combined-how-to-20261126';
+import {createReadingTools,accessibilityPage,perspectiveForRoute} from '../accessibility/ui.mjs?v=responsive-fixes-20261127';
+import {createMotion} from '../accessibility/motion.mjs?v=responsive-fixes-20261127';
+import {createEncounterMode} from '../encounters/ui.mjs?v=responsive-fixes-20261127';
 import {scenarios,scenarioById,sources,groups,PUBLIC_COMPANION} from './data.mjs?v=site-repairs-20261125';
 import {startSession,currentNode,choose,advance,previous,recap,remainingSteps} from './engine.mjs?v=site-repairs-20261125';
 const main=document.querySelector('#main');
@@ -66,32 +66,34 @@ ${learningAbout()} <section class="info-block important"><h2>A learning companio
 }
 function notFound(){return '<div class="content-page"><h1>This page was not found.</h1><p>Choose a situation or explore the evidence library.</p><a class="primary" href="#play">All situations</a></div>';}
 function render(focus=true,{position=focus}={}){
+ let html;
+
  try{
   let hash=paired.referenceRoute(location.hash.slice(1)||'play');
- if(hash==='accessibility'){main.innerHTML=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash);if(position)focusMain(focus);return;}
+ if(hash==='accessibility'){html=accessibilityPage();document.title='Accessibility | Stopped: Both Sides';paired.updateSiteLink(hash);document.querySelectorAll('[data-nav]').forEach(a=>a.removeAttribute('aria-current'));reading.decorate(hash,html);if(position)focusMain(focus);return;}
  if(paired.handles(hash)){
-  main.innerHTML=paired.view(hash);
+  html=paired.view(hash);
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===(hash.startsWith('progress')?'progress':'encounters'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  document.title='Explore | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash);if(position&&(!focus||!paired.focusReturnedList()))focusMain(focus);return;
+  document.title='Explore | Stopped: Both Sides';paired.updateSiteLink(hash);reading.decorate(hash,html);if(position&&(!focus||!paired.focusReturnedList()))focusMain(focus);return;
  }
  let view='play',target='';
   if(hash.startsWith('scenario/')){
    session=paired.practiceSession(hash,session,startSession);
-   if(!session){main.innerHTML=notFound();view='missing';}
+   if(!session){html=notFound();view='missing';}
    else{
     hash='scenario/'+session.scenarioId;
     if(reading.language==='ga'){paired.transferOriginal(session,focus);if(position&&!focus)focusMain(false);return;}
-    view='encounters';main.innerHTML=game();
+    view='encounters';html=game();
    }
-  }else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){main.innerHTML=notFound();view='missing';}else{main.innerHTML=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
-  else if(hash==='about'){view='about';main.innerHTML=about();}
-  else if(hash==='play'||hash==='main'){main.innerHTML=paired.landing();}
-  else{view='missing';main.innerHTML=notFound();}
+  }else if(hash==='evidence'||hash.startsWith('evidence/')){view='evidence';const id=hash.slice(9);if(id&&!hasOwn(sources,id)&&!(id.startsWith('group-')&&hasOwn(groups,id.slice(6)))){html=notFound();view='missing';}else{html=evidence(id);target=id?(hasOwn(sources,id)?`source-${id}`:id):'';}}
+  else if(hash==='about'){view='about';html=about();}
+  else if(hash==='play'||hash==='main'){html=paired.landing();}
+  else{view='missing';html=notFound();}
   document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   document.title=`${view==='evidence'?'Evidence & sources':view==='about'?'About the Garda perspective':view==='missing'?'Page not found':hash.startsWith('scenario/')&&session?scenarioById[session.scenarioId].title:'Stopped: Both Sides'} | Stopped: Both Sides — Garda perspective`;
-  paired.updateSiteLink(hash);reading.decorate(hash);
+  paired.updateSiteLink(hash);reading.decorate(hash,html);
   if(position){if(target){const element=document.getElementById(target);if(focus)element?.focus({preventScroll:true});element?.scrollIntoView({block:'start',behavior:'instant'});}else focusMain(focus);}
- }catch(error){main.innerHTML='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read the <a href="https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf">Garda Decision Making Model</a>.</p></div>';reading.decorate('error');if(position)focusMain(focus);console.error(error);}
+ }catch(error){html='<div class="error"><h1>The resource could not load.</h1><p>Refresh the page to try again. You can still read the <a href="https://www.garda.ie/en/about-us/publications/policy-documents/garda-decision-making-model.pdf">Garda Decision Making Model</a>.</p></div>';reading.decorate('error',html);if(position)focusMain(focus);console.error(error);}
 }
 main.addEventListener('click',event=>{if(paired.handleClick(event))return;
  const button=event.target.closest('button[data-action]');if(!button)return;

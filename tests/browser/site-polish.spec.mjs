@@ -64,10 +64,12 @@ for(const {path,role} of cases){
      expect(previous.height-compact.height,'the footer saves space through layout and spacing').toBeGreaterThanOrEqual(10);
      expect(compact.fonts,'footer text has not been shrunk').toEqual(previous.fonts);
      if(width>=768){
-      const centres=await footer.locator('.footer-identity').evaluate(element=>[...element.children].map(child=>{
-       const box=child.getBoundingClientRect();return box.top+box.height/2;
-      }));
-      expect(Math.max(...centres)-Math.min(...centres),'desktop identity and copyright share one row').toBeLessThanOrEqual(1);
+      await expect.poll(()=>footer.locator('.footer-identity').evaluate(element=>{
+       const centres=[...element.children].map(child=>{
+        const box=child.getBoundingClientRect();return box.top+box.height/2;
+       });
+       return Math.max(...centres)-Math.min(...centres);
+      }),'desktop identity and copyright share one row after the stylesheet is enabled').toBeLessThanOrEqual(1);
      }
      if(width===375||width===1366)await footer.screenshot({path:testInfo.outputPath(`${role}-compact-footer-${width}.png`)});
     }
@@ -164,18 +166,19 @@ for(const {path,role} of cases){
   for(const lang of ['en','ar']){
    await page.goto(path+'?lang='+lang);
    await expect(page.locator('.reference-landing')).toBeVisible();
+   await page.locator('.single-mode > summary').click();
    await page.evaluate(()=>document.documentElement.style.setProperty('--reading-size','200%'));
    for(const [width,height] of [[320,568],[390,844],[768,1024],[1366,768]]){
     await page.setViewportSize({width,height});
     await expect.poll(()=>page.evaluate(()=>{
      const section=document.querySelector('.reference-landing');
      const children=['#paired-title','#perspectives-title','.hero-question','.poster-overview','.learning-steps','.landing-role-actions']
-      .map(selector=>section.querySelector(selector)?.getBoundingClientRect());
+      .map(selector=>document.querySelector(selector)?.getBoundingClientRect());
      const root=document.documentElement;
      const box=section.getBoundingClientRect();
      return {
       present:children.every(Boolean),
-      verticalOrder:children.every((rect,i)=>!i||children[i-1].bottom<=rect.top+2),
+      verticalOrder:children.every((rect,i)=>rect?.height>0&&(!i||children[i-1].bottom<=rect.top+2)),
       withinViewport:box.left>=-2&&box.right<=root.clientWidth+2,
       withinPage:section.scrollWidth<=section.clientWidth+2&&root.scrollWidth<=root.clientWidth+2
      };
@@ -201,7 +204,7 @@ for(const {path,role} of cases){
 test('Garda individual practice omits the redundant patrol role and fictional situation strip',async({page})=>{
  await page.goto('garda/#play');
  await page.locator('.single-mode summary').click();
- await page.locator('.single-mode .practice-content a').click();
+ await page.locator('.single-mode').getByRole('link',{name:'Browse situations',exact:true}).click();
  await page.locator('.scenario-library .situation-topic>summary').first().click();
   await page.locator('.scenario-library [data-action="start"]').first().click();
  await expect(page.locator('.story')).toBeVisible();

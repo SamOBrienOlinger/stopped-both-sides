@@ -177,9 +177,18 @@ test('Unknown routes and corrupted progress show a recovery view while saved rec
  for(const hash of ['#encounters/nope','#encounter/broken','#encounter/evil~broken','#progress~broken']){route(hash);assert.match(main.innerHTML,/Unable to open this situation/);}
  assert.equal(memory.get(siteStorageKey),before);
 });
-test('Clearing requires the in-page confirmation and resets the local record and resume point',()=>{
- route('#progress');assert.ok(memory.has(siteStorageKey));action('paired-clear');assert.match(main.innerHTML,/Clear this site’s saved progress/);assert.ok(memory.has(siteStorageKey));
- action('paired-clear-cancel');assert.ok(memory.has(siteStorageKey));action('paired-clear');action('paired-clear-confirm');assert.equal(memory.has(siteStorageKey),false);assert.ok(main.innerHTML.includes(`0 <span>/ ${situationCount} situations completed`));
+test('Saved progress survives a cancelled deletion and clears only after final confirmation',()=>{
+ route('#progress');
+ const saved=memory.get(siteStorageKey);
+ assert.ok(saved);
+ action('paired-clear');action('paired-clear-confirm');
+ assert.match(main.innerHTML,/Are you sure you want to clear this site’s saved progress/);
+ assert.equal(memory.get(siteStorageKey),saved);
+ action('paired-clear-no');action('paired-clear-cancel');action('paired-clear-yes');
+ assert.equal(memory.get(siteStorageKey),saved);
+ action('paired-clear');action('paired-clear-confirm');action('paired-clear-yes');
+ assert.equal(memory.has(siteStorageKey),false);
+ assert.ok(main.innerHTML.includes(`0 <span>/ ${situationCount} situations completed`));
 });
 
 

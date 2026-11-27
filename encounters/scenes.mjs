@@ -1,13 +1,13 @@
-import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=role-cast-20261126b';
-import {originalSceneDetails} from './original-scene-props.mjs?v=role-cast-20261126b';
-import {renderGroupAction} from './group-staging.mjs';
+import {storyCharacter,fixedStoryCharacter} from './story-cast.mjs?v=responsive-fixes-20261127';
+import {originalSceneDetails} from './original-scene-props.mjs?v=responsive-fixes-20261127';
+import {renderGroupAction} from './group-staging.mjs?v=responsive-fixes-20261127';
 import {sceneActorLayout,sceneAnchorStyle,checkSceneArtwork} from './scene-layout.mjs?v=situation-locations-20261122';
 import {backgroundImage,interiorBackground} from './backgrounds.mjs?v=gpo-flags-20261125';
 import {encounters,roles,roleLabels} from './catalog.mjs?v=site-repairs-20261125';
-import {characterFor,defaultCast} from './characters.mjs?v=final-touches-20261125';
-import {sceneCharacterArtwork} from './scene-artwork.mjs?v=nia-public-20261123';
+import {characterFor,defaultCast} from './characters.mjs?v=responsive-fixes-20261127';
+import {sceneCharacterArtwork} from './scene-artwork.mjs?v=responsive-fixes-20261127';
 import {discriminationEncounters} from './discrimination.mjs?v=site-repairs-20261125';
-import {situationParticipants,participantLayout} from './situation-cast.mjs?v=role-cast-20261126b';
+import {situationParticipants,participantLayout} from './situation-cast.mjs?v=responsive-fixes-20261127';
 
 // Selected characters share a setting only while the written encounter places
 // them together. Later notes and confidential advice use independent panels.
@@ -125,7 +125,8 @@ function backdrop(place,art,{sizes,lazy}){
 
 function sceneActor(role,id,anchor,lazy,{key=role,number=null,character=characterFor(role,id)}={}){
  const art=sceneCharacterArtwork(character);
- return `<div class="scene-actor scene-actor--${role}" data-scene-character="${id}" data-scene-role="${key}" style="${sceneAnchorStyle(anchor)}${anchor.layer?'z-index:'+anchor.layer+';':''}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}" width="${art.width}" height="${art.height}" alt="" decoding="async"${lazy?' loading="lazy"':''} style="${art.style}"></div>${number?'<span class="scene-person-number">'+number+'</span>':''}</div>`;
+ const responsive=art.srcset?` srcset="${art.srcset}" sizes="${lazy?'auto, ':''}(max-width: 71rem) ${anchor.width}vw, ${anchor.width*.68}rem"`:'';
+ return `<div class="scene-actor scene-actor--${role}" data-scene-character="${id}" data-scene-role="${key}" style="${sceneAnchorStyle(anchor)}${anchor.layer?'z-index:'+anchor.layer+';':''}" aria-hidden="true"><div class="scene-sprite"><img src="${art.src}"${responsive} width="${art.width}" height="${art.height}" alt="" decoding="async"${lazy?' loading="lazy"':''} style="${art.style}"></div>${number?'<span class="scene-person-number">'+number+'</span>':''}</div>`;
 }
 
 function locationArt(place,art,actors,{className,sizes,lazy}){
