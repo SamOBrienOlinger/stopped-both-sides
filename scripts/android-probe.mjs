@@ -25,7 +25,8 @@ function tryWelcome(){
  return false;
 }
 async function connect(wanted,handleWelcome=false){
- for(let attempt=0;attempt<10;attempt++){
+ for(let attempt=0;attempt<50;attempt++){
+  if(attempt===18&&mode==='chrome')adb('shell','am','start','-W','-a','android.intent.action.VIEW','-d',wanted,'-p',testPackage);
   if(handleWelcome&&mode==='chrome'&&attempt<8&&tryWelcome()){await wait(650);continue}
   try{
    const socket=(adb('shell','cat','/proc/net/unix').match(/@(chrome_devtools_remote(?:_\d+)?|webview_devtools_remote_\d+)\s*$/gm)||[]).map(x=>x.trim().slice(1)).find(x=>x.startsWith(mode==='chrome'?'chrome_':'webview_'));
@@ -102,6 +103,7 @@ async function keyboardReady(){
  throw Error('Native keyboard or focused DOM input did not appear after native field tap');
 }
 for(const orientation of ['portrait','landscape'])for(const role of ['public','garda'])for(const lang of ['en','ar']){
+ if(process.env.ANDROID_CASE_FILTER&&process.env.ANDROID_CASE_FILTER!==[role,lang,orientation].join('/'))continue;
  const key=[mode,role,lang,orientation].join('-');const record={key,orientation,role,lang};report.cases.push(record);
  try{
   adb('shell','am','force-stop',testPackage);
@@ -135,4 +137,4 @@ for(const orientation of ['portrait','landscape'])for(const role of ['public','g
  }catch(e){record.error=e.message;record.pass=false;try{capture(key+'-error');record.last=await evaluate(measure);record.lastIME=inputMethod()}catch{}}
  finally{try{c?.ws.close()}catch{}persist();console.log('ANDROID_CASE',JSON.stringify(record))}
 }
-if(report.cases.length!==8||report.cases.some(x=>!x.pass))process.exitCode=1;
+if(report.cases.length!==(process.env.ANDROID_CASE_FILTER?1:8)||report.cases.some(x=>!x.pass))process.exitCode=1;

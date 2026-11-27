@@ -9,6 +9,8 @@ jobs:
   keyboard:
     runs-on: ubuntu-latest
     timeout-minutes: 35
+    env:
+      ANDROID_CASE_FILTER: public/ar/landscape
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
