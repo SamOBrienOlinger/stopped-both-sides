@@ -1,0 +1,70 @@
+name: iPhone WebView software keyboard regression
+on:
+  push:
+    branches: ['audit/ios-native-*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  keyboard:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Select the installed iPhone Simulator
+        run: |
+          mkdir -p audit-results/ios
+          xcodebuild -version | tee audit-results/ios/xcode.txt
+          command -v xcodegen || brew install xcodegen
+          xcodegen generate --spec tools/ios-native-audit/project.yml
+          xcrun simctl list devices available --json > audit-results/ios/devices.json
+          udid=$(node -e '
+            const {devices}=require("./audit-results/ios/devices.json");
+            const phones=Object.entries(devices).filter(([r])=>r.includes("SimRuntime.iOS-"))
+              .flatMap(([runtime,ds])=>ds.filter(d=>d.name.startsWith("iPhone")).map(d=>({...d,runtime})));
+            const rank=name=>/SE|mini/i.test(name)?0:/Plus|Max|Air/i.test(name)?2:1;
+            phones.sort((a,b)=>rank(a.name)-rank(b.name)||b.runtime.localeCompare(a.runtime,undefined,{numeric:true})||a.name.localeCompare(b.name));
+            if(!phones.length)throw Error("No iPhone runtime installed");
+            console.error(phones[0].runtime,phones[0].name);
+            console.log(phones[0].udid);')
+          echo "IOS_UDID=$udid" >> "$GITHUB_ENV"
+          defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false
+          defaults write com.apple.iphonesimulator DevicePreferences -dict-add "$udid" '{ConnectHardwareKeyboard = 0;}'
+      - name: Exercise the site with the iOS software keyboard
+        timeout-minutes: 22
+        run: |
+          node tests/browser/server.mjs --port 4173 > audit-results/ios/server.log 2>&1 &
+          http_pid=$!
+          trap 'kill "$http_pid" 2>/dev/null || true' EXIT
+          ready=false
+          for attempt in {1..90}; do
+            if curl --max-time 3 -sf http://127.0.0.1:4173/stopped-both-sides/ >/dev/null; then ready=true; break; fi
+            if ! kill -0 "$http_pid" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          cat audit-results/ios/server.log
+          if ! "$ready"; then echo "Local HTTP server did not start" >&2; exit 1; fi
+          xcrun simctl bootstatus "$IOS_UDID" -b
+          curl --max-time 20 -fsS http://127.0.0.1:4173/stopped-both-sides/ >/dev/null
+          set -o pipefail
+          xcodebuild test -project tools/ios-native-audit/KeyboardAudit.xcodeproj -scheme KeyboardAudit \
+            -destination "platform=iOS Simulator,id=$IOS_UDID" -parallel-testing-enabled NO \
+            -derivedDataPath "$RUNNER_TEMP/KeyboardAudit" \
+            -resultBundlePath "$GITHUB_WORKSPACE/audit-results/ios/Keyboard.xcresult" 2>&1 | tee audit-results/ios/test.log
+      - name: Extract native keyboard observations
+        if: always()
+        run: |
+          result=audit-results/ios/Keyboard.xcresult
+          if test -d "$result"; then
+            xcrun xcresulttool export attachments --path "$result" --output-path audit-results/ios/attachments || true
+            xcrun xcresulttool get test-results summary --path "$result" > audit-results/ios/summary.json || true
+            find audit-results/ios/attachments -name '*.txt' -exec cat {} \; > audit-results/ios/observations.log || true
+          fi
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: iphone-webview-keyboard
+          path: audit-results/ios/
+          retention-days: 7
