@@ -16,7 +16,10 @@ for(const viewport of [{width:390,height:844},{width:1366,height:768}]){
     });
     try{
      await page.goto(path+'?lang=en#play',{waitUntil:'commit'});
-     await expect(page.locator('#main .initial h1')).toBeInViewport();
+     const hero=page.locator('[data-initial-poster] .poster-hero');
+     await expect(hero.locator('#paired-title')).toBeInViewport();
+     await expect.poll(()=>hero.locator('.scene-backdrop img').evaluate(image=>image.complete&&image.naturalWidth>0)).toBe(true);
+     await hero.evaluate(element=>{window.__initialHero=element;});
      await expect(page.locator('#loading')).toBeVisible();
      const footer=page.locator('footer');
      await expect(footer).toBeVisible();
@@ -25,10 +28,33 @@ for(const viewport of [{width:390,height:844},{width:1366,height:768}]){
     }finally{release();}
     await expect(page.locator('#loading')).toHaveCount(0);
     await expect(page.locator('#paired-title')).toBeVisible();
+    expect(await page.locator('.poster-hero').evaluate(element=>element===window.__initialHero)).toBe(true);
     await expect(page.locator('.reference-landing .perspective-card')).toHaveCount(2);
     expect(errors).toEqual([]);
    });
   }
+ });
+}
+
+for(const [url,title] of [['./?lang=en#rights','Human and Civil Rights & sources'],['garda/?lang=en#evidence','Evidence & sources']]){
+ test('Keyboard skip preserves the loading reference route '+url,async({page})=>{
+  let release;
+  const gate=new Promise(resolve=>{release=resolve;});
+  await page.route(url=>url.pathname.endsWith('/app.mjs'),async route=>{
+   await gate;
+   await route.continue();
+  });
+  try{
+   await page.goto(url,{waitUntil:'commit'});
+   await expect(page.locator('#loading')).toBeVisible();
+   await page.keyboard.press('Tab');
+   await expect(page.locator('.skip')).toBeFocused();
+   await page.keyboard.press('Enter');
+   await expect(page.locator('#main')).toBeFocused();
+   expect(new URL(page.url()).hash).toBe(url.slice(url.indexOf('#')));
+  }finally{release();}
+  await expect(page.locator('#main h1')).toHaveText(title);
+  await expect(page.locator('#main')).toBeFocused();
  });
 }
 

@@ -29,7 +29,7 @@ for(const [path,role] of entrypoints){
    await page.goto(path+stateHash(startEncounter('public-street',role,{cast})),{waitUntil:'domcontentloaded'});
    await visibleActor(page,g.id);
    const scene=page.locator(stage);
-   await expect(scene.locator('[data-scene-character="public-3"] img')).toHaveAttribute('src',/contextual-cast\.webp/);
+   await expect(scene.locator('[data-scene-character="public-3"] img')).toHaveAttribute('src',/contextual-cast-1774\.webp/);
    await expect(scene.locator('[data-scene-label-role="garda"]')).toContainText(g.name);
    await expect(page.locator('.cast-character[data-character-id="'+g.id+'"] img')).toHaveAttribute('src',file(g.id));
    if(role==='garda')await imageLoaded(page.locator('.turn-avatar img'),g.id);
@@ -96,7 +96,7 @@ test('All 90 cast pairings use the matching Garda and public artwork in rendered
   for(const p of characters.public)for(const g of characters.garda){
    const html=renderScene(startEncounter('garda-search','garda',{cast:{public:p.id,garda:g.id}}));
    if(html.split('/garda-uniforms/'+g.id+'.webp').length!==2)return {checked,wrong:g.id+' '+p.id};
-   const publicImage=p.id==='public-10'?/nia-public-20261123\.png/g:/contextual-cast\.webp/g;
+   const publicImage=p.id==='public-10'?/nia-public-20261123\.webp/g:/contextual-cast-1774\.webp/g;
    if((html.match(publicImage)||[]).length!==1)return {checked,wrong:g.id+' '+p.id};
    if(!html.includes('data-scene-character="'+g.id+'"'))return {checked,wrong:g.id};
    checked++;

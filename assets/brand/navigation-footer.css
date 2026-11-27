@@ -73,7 +73,7 @@
 /* Respond to the width available at the reader's own font size. Keep the
    site name and Menu legible before spending space on a second route label. */
 @container (max-width:18em) {
- .header.navigation-ready .header-inner {
+ .header .header-inner {
   min-block-size:0;
   padding-block:max(6px,env(safe-area-inset-top)) 6px;
   padding-left:max(8px,env(safe-area-inset-left));

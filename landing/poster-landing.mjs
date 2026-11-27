@@ -1,21 +1,9 @@
 import {sites} from '../site.mjs';
+import {gpo,figure,renderPosterHero} from './poster-hero.mjs';
 
-const assets = new URL('../assets/', import.meta.url);
-const gpo = width => new URL(`dublin-approved/gpo-city-${width}.webp?v=gpo-bus-eleven-20261126`, assets).href;
-const figures = {
-  public: new URL('characters/poster-alex.webp?v=final-touches-20261125', assets).href,
-  garda: new URL('characters/poster-aisling.webp', assets).href,
-  publicBack: new URL('characters/poster-alex-back.webp', assets).href,
-  gardaBack: new URL('characters/poster-aisling-back.webp', assets).href
-};
 const roles = ['public', 'garda'];
 const labels = {public: 'Public perspective', garda: 'Garda perspective'};
 const roleHref = role => new URL(`#encounters/${role}`, sites.public).href;
-
-function figure(role, className, hero = false) {
-  return `<img class="${className}" src="${figures[role]}" alt="" decoding="async"
-    ${hero ? 'data-poster-reveal' : 'loading="lazy"'}>`;
-}
 
 function panel(role) {
   return `<a class="perspective-card" href="${roleHref(role)}">
@@ -50,23 +38,7 @@ export function renderPosterLanding({siteRole, perspectiveIcon}) {
     <p class="compare-caption">See the same situation from both sides.</p>`;
 
   return `<article class="reference-landing sbs-poster" aria-labelledby="paired-title">
-    <section class="poster-hero" aria-labelledby="paired-title">
-      <picture class="scene-backdrop" aria-hidden="true">
-        <img src="${gpo(960)}" srcset="${gpo(480)} 480w, ${gpo(960)} 960w, ${gpo(1600)} 1600w"
-          sizes="(min-width: 75rem) 72rem, 100vw" width="1600" height="900" fetchpriority="high" alt="">
-      </picture>
-      <header class="poster-brand">
-        <p class="brand-eyebrow"><img src="${new URL('brand/profiles-hexagon.webp', assets).href}" alt="" width="56" height="56"></p>
-        <h1 id="paired-title" lang="en-IE" dir="ltr" data-no-translate data-poster-reveal>Stopped: Both Sides</h1>
-        <p class="brand-subtitle" id="perspectives-title" data-poster-reveal>One situation. Two perspectives.</p>
-      </header>
-      <div class="hero-characters" role="img" aria-label="Alex and Garda Aisling outside the GPO on O’Connell Street, Dublin.">
-        ${figure('public', 'hero-public', true)}${figure('garda', 'hero-garda', true)}
-      </div>
-      <div class="hero-question">
-        <span>What will you do?</span>
-      </div>
-    </section>
+    ${renderPosterHero()}
     <section class="poster-overview" aria-labelledby="overview-title">
       <div class="poster-overview__text">
         <h2 id="overview-title">Interactive learning about rights, choices and perspectives.</h2>

@@ -70,6 +70,16 @@
  };
  addEventListener('error',failed,true);
  addEventListener('unhandledrejection',failed);
+ // A native #main jump would overwrite the pending hash route before the
+ // app can handle its skip link. Keep the intended route and focus the landmark.
+ document.addEventListener('click',event=>{
+  if(event.defaultPrevented||!event.target.closest?.('a.skip[href="#main"]'))return;
+  const main=document.querySelector('#main');
+  if(!main?.querySelector('#loading'))return;
+  event.preventDefault();
+  main.focus({preventScroll:true});
+  window.scrollTo({top:0,left:0,behavior:'instant'});
+ });
  if(!active)return;
  nativeRestoration('manual');
  // Native refresh, scroll anchoring and visual-viewport restoration emit
@@ -92,7 +102,7 @@
  let parserObserver=null;
  if(document.readyState==='loading'&&typeof MutationObserver==='function'){
   parserObserver=new MutationObserver(()=>{
-   if(active&&document.readyState==='loading'&&document.querySelector('#main .initial'))position();
+   if(active&&document.readyState==='loading'&&document.querySelector('#main .initial,#loading'))position();
   });
   parserObserver.observe(document,{childList:true,subtree:true});
   cleanup.push(()=>parserObserver?.disconnect());

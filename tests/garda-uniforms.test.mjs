@@ -43,7 +43,7 @@ test('Final atlas is a real WebP and supplies nine preserved cast identities',()
  }
  assert.equal(gardaArtwork(characters.public[0]),null);
  assert.match(characterArtwork(characters.public[0]).src,/\/characters\/cast\.webp/);
- assert.match(sceneCharacterArtwork(characters.public[0]).src,/\/scenes\/contextual-cast\.webp/);
+ assert.match(sceneCharacterArtwork(characters.public[0]).src,/\/scenes\/contextual-cast-1774\.webp/);
 });
 
 test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',()=>{
@@ -80,10 +80,10 @@ test('Every shared stage uses revised Garda artwork with each of 90 cast pairs',
       asset=imagePart(character.id);
       assert.ok(actor[4].includes('style="'+gardaArtwork(character).style+'"'),character.id+' uses its own uniform');
      }
-     else if(character.id==='public-10')asset='/characters/nia-public-20261123.png';
+     else if(character.id==='public-10')asset='/characters/nia-public-20261123.webp';
      else if(character.sceneArtwork&&(character.id.startsWith('support-')||character.id.startsWith('story-')))
       asset='/assets/'+new URL(character.sceneArtwork.src).pathname.split('/assets/')[1];
-     else asset=group||extras.some(person=>person.key===key)?'/scenes/public-gestures/'+character.id+'.webp':'/scenes/contextual-cast.webp';
+     else asset=group||extras.some(person=>person.key===key)?'/scenes/public-gestures/'+character.id+'.webp':'/scenes/contextual-cast-1774.webp';
      assert.ok(actor[4].includes(asset),character.id+' should use '+asset);
      assert.equal(actor[4].includes('clip-path:inset('),character.sceneArtwork?character.sceneArtwork.style.includes('clip-path:inset('):true);
     }

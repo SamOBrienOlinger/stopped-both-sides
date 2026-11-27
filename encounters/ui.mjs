@@ -1,5 +1,5 @@
 import {storyCharacter,fixedStoryCharacter,storyCastOptions} from './story-cast.mjs?v=responsive-fixes-20261127';
-import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=combined-how-to-20261126';
+import {renderPosterLanding,renderPosterPerspectiveActions} from '../landing/poster-landing.mjs?v=responsive-fixes-20261127';
 import {hasOwn} from '../compatibility.mjs';
 import {focusControl,focusContext} from '../accessibility/focus.mjs?v=mobile-flow-20261123b';
 import {

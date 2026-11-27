@@ -36,7 +36,7 @@ test('Every stage and all 90 character pairs have a complete illustration',()=>{
      assert.equal(actor?.id,character.id,e.id+'/'+nodeId+' '+key);
      const asset=character.sceneArtwork?new URL(character.sceneArtwork.src).pathname.split('/assets/')[1]:
       role==='garda'?'characters/garda-uniforms/'+character.id+'.webp':
-      character.id==='public-10'?'characters/nia-public-20261123.png':'scenes/contextual-cast.webp';
+      character.id==='public-10'?'characters/nia-public-20261123.webp':'scenes/contextual-cast-1774.webp';
      assert.ok(actor.src.includes('/assets/'+asset),e.id+'/'+nodeId+' '+key+' uses '+asset);
     }
     assert.doesNotMatch(html,/Separate reflections|scene-portraits|undefined|NaN/);
@@ -94,9 +94,9 @@ test('Recap pictures, replays and reloads keep the same pair throughout both per
 });
 
 test('Both entrypoints load scene styles and all locally delivered images exist',()=>{
- assert.ok(existsSync(new URL('../assets/scenes/contextual-cast.webp',import.meta.url)));
+ assert.ok(existsSync(new URL('../assets/scenes/contextual-cast-1774.webp',import.meta.url)));
  for(const garda of characters.garda)assert.ok(existsSync(new URL('../assets/characters/garda-uniforms/'+garda.id+'.webp',import.meta.url)));
- assert.ok(existsSync(new URL('../assets/characters/nia-public-20261123.png',import.meta.url)));
+ assert.ok(existsSync(new URL('../assets/characters/nia-public-20261123.webp',import.meta.url)));
  for(const place of sceneAssets){
   const src=backgroundImage(place)?.src||`../assets/scenes/${place}.webp`;
   assert.ok(existsSync(new URL(src,import.meta.url)),place);

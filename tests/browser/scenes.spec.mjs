@@ -103,9 +103,9 @@ async function characterGeometry(scene){
   const image=frame.querySelector('img'),bounds=frame.getBoundingClientRect(),art=image.getBoundingClientRect();
   const name=new URL(image.src).pathname.split('/').pop();
   const calibration={
-   'contextual-cast.webp':1774/320,
-   'nia-public-20261123.png':1254/1300,
-   'discrimination-support-20261122.png':2
+   'contextual-cast-1774.webp':1774/320,
+   'nia-public-20261123.webp':1254/1300,
+   'discrimination-support-20261122.webp':2
   };
   const columns=image.src.includes('/garda-uniforms/')?418/426:
    image.src.includes('/public-gestures/')||name.startsWith('story-')?1:calibration[name];

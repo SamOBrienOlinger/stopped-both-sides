@@ -123,7 +123,19 @@ export function createReadingTools({main,rerender,siteRole='public',transformCon
    html=`<div class="translation-note"><p>${esc(t(translateNotice))} <button class="plain-link" id="language-settings-irish-note" data-reading-open>${esc(t('Language & reading'))}</button></p></div>`+translateHTML(html,language);
   }else if(language!=='en')html=translateHTML(html,language);
   // Commit the finished route once so intermediate images never start duplicate requests.
-  main.innerHTML=withTapIcons(transformContent(html,hash));
+  const rendered=withTapIcons(transformContent(html,hash));
+  const initial=main.firstElementChild;
+  if(hash==='play'&&language==='en'&&!initialLoadFailed&&initial?.hasAttribute('data-initial-poster')){
+   // Preserve the painted hero and its image request when completing the homepage.
+   const template=document.createElement('template');
+   template.innerHTML=rendered;
+   const article=template.content.querySelector('.reference-landing');
+   article.querySelector('.poster-hero').remove();
+   initial.removeAttribute('data-initial-poster');
+   initial.append(...article.childNodes);
+   article.remove();
+   main.querySelector('#loading').replaceWith(template.content);
+  }else main.innerHTML=rendered;
   main.querySelectorAll?.('h1,h2[id]').forEach(h=>h.setAttribute('tabindex','-1'));
   const referenceRoute=hash.split('~')[0];
   const evidenceGroup=referenceRoute.startsWith('evidence/')?document.getElementById?.('source-'+referenceRoute.slice(9))?.closest?.('.evidence-group')?.id:null;

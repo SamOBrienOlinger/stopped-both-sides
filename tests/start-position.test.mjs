@@ -37,7 +37,7 @@ function browser(type='reload',offset=480){
  let finishFonts;
  const fonts={...surface(),ready:new Promise(resolve=>{finishFonts=resolve;})};
  const document={...surface(),documentElement:root,fonts,scrollingElement:{scrollHeight:4000},readyState:'loading',
-  querySelector:selector=>selector==='#main .initial'&&initialShell?{}:null};
+  querySelector:selector=>selector==='#main .initial,#loading'&&initialShell?{}:null};
  const frames=new Map(),writes=[];let nextFrame=0;
  const host={...surface(),document,history:{scrollRestoration:type==='reload'?'manual':'auto'},
   performance:{getEntriesByType:()=>[{type}]},innerHeight:800,scrollX:0,scrollY:offset,

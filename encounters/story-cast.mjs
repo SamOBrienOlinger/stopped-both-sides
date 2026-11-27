@@ -13,7 +13,7 @@ const alias=(id,name,modelId)=>({...characterFor('public',modelId),id,name,model
 const amina=figure('story-amina','Amina','story-amina.webp');
 const jamie=figure('story-jamie','Jamie','story-jamie.webp');
 const jamieComparison=figure('story-jamie-comparison','Jamie','story-jamie-comparison.webp');
-const alexComparison=figure('story-alex-comparison','Alex','story-alex-comparison-20261126.png');
+const alexComparison=figure('story-alex-comparison','Alex','story-alex-comparison-20261126.webp');
 const differentPerson={...figure('story-other-person','Person matching the fuller description','story-other-person.webp'),descriptive:true};
 const niamh=alias('story-niamh','Niamh','public-7');
 const patrick=alias('story-patrick','Patrick','public-8');

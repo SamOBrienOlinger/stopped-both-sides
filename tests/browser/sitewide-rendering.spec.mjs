@@ -139,7 +139,7 @@ async function prepare(page,role,profile){
   },{once:true});
   const sample=()=>{
    const main=document.querySelector('#main'),heading=main?.querySelector('h1'),skip=document.querySelector('.skip');
-   if(main?.querySelector('.initial')){
+   if(main?.querySelector('.initial,#loading')){
     const header=document.querySelector('.header'),nav=header?.querySelector('nav');
     const styles=[...document.querySelectorAll('head link[rel~="stylesheet"]')];
     const pendingStylesheets=styles.filter(link=>!link.sheet).map(link=>new URL(link.href).pathname);
@@ -154,7 +154,7 @@ async function prepare(page,role,profile){
      navigationType:performance.getEntriesByType('navigation')[0]?.type,
      visualViewport:window.visualViewport&&{offsetTop:visualViewport.offsetTop,pageTop:visualViewport.pageTop}});
    }
-   if(heading&&!main.querySelector('.initial')){
+   if(heading&&!main.querySelector('.initial,#loading')){
     if(firstAt===null){firstAt=performance.now();document.fonts.ready.then(()=>{fontsAt=performance.now();});}
     const header=document.querySelector('.header'),position=header&&getComputedStyle(header).position;
     const opening=options.target?document.querySelector(options.target):main.firstElementChild;
@@ -190,7 +190,7 @@ async function textFits(page){
 
 async function reloadRoute(page,testInfo,role,profile,route){
  await expect(page.locator('#main h1')).toBeAttached();
- await expect(page.locator('#main .initial,.error')).toHaveCount(0);
+ await expect(page.locator('#loading,.error')).toHaveCount(0);
  await page.evaluate(()=>document.fonts.ready);
  const keys={progress:progressStorageKey(role),preferences:preferencesStorageKey(role)};
  const storage=()=>page.evaluate(keys=>Object.fromEntries(Object.entries(keys)
@@ -439,7 +439,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
      await page.goto(path+'?lang=en'+hash);
      await expect(page.locator('#main h1')).toBeVisible();
      await page.reload();
-     await expect(page.locator('#main .initial,.error')).toHaveCount(0);
+     await expect(page.locator('#loading,.error')).toHaveCount(0);
      await expect(page.locator('#main h1')).toBeVisible();
      await page.evaluate(()=>document.fonts.ready);
      expect(await page.evaluate(()=>performance.getEntriesByType('navigation')[0]?.type)).toBe('reload');
@@ -521,7 +521,7 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   expect(await focused.evaluate(element=>parseFloat(getComputedStyle(element).outlineWidth))).toBeGreaterThan(0);
  });
 
- test(role+' changing header size does not pull a scrolled page back to its focused heading',async({page})=>{
+ test(role+' changing header size preserves the reading position and keeps a focused control visible',async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(path+'?lang=en#play');
@@ -529,28 +529,42 @@ for(const [role,path] of [['public','./'],['garda','garda/']]){
   const toggle=page.locator('[data-nav-toggle]');
   if(await toggle.isVisible())await toggle.click();
   await page.locator('#main-navigation [data-nav="about"]').click();
-  await expect(page.locator('#main h1')).toBeFocused();
+  const heading=page.locator('#main h1'),header=page.locator('.header');
+  await expect(heading).toBeFocused();
   await page.evaluate(()=>document.fonts.ready);
-  await page.evaluate(()=>{
-   // Isolate the application's resize handler from browser scroll anchoring.
-   // Text enlargement below changes the real header height and invokes its
-   // observer while the user's old heading still happens to hold focus.
-   document.documentElement.style.overflowAnchor='none';
-   const heading=document.querySelector('#main h1').getBoundingClientRect();
-   window.scrollTo({top:scrollY+heading.top-2,left:0,behavior:'instant'});
+  // The reader controls the scroll position. Disable native anchoring so a
+  // browser correction cannot mask the application's resize behavior.
+  await page.evaluate(()=>{document.documentElement.style.overflowAnchor='none';});
+  const growHeader=async()=>{
+   // Compact headers can keep their height as text scales. Grow the actual
+   // observed element and wait for the application's ResizeObserver to run.
+   const height=await header.evaluate(el=>{
+    const target=Math.ceil(el.getBoundingClientRect().height)+32;
+    el.style.minBlockSize=target+'px';
+    return target;
+   });
+   await expect.poll(()=>header.evaluate(el=>Math.ceil(el.getBoundingClientRect().height))).toBe(height);
+   await expect.poll(()=>page.evaluate(()=>document.documentElement.style.getPropertyValue('--navigation-height'))).toBe(height+'px');
+   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  };
+  const scrollNearTop=element=>element.evaluate(el=>{
+   scrollTo({top:scrollY+el.getBoundingClientRect().top-2,left:0,behavior:'instant'});
+   return scrollY;
   });
-  const before=await page.evaluate(()=>({scrollY,height:document.querySelector('.header').getBoundingClientRect().height}));
-  expect(before.scrollY).toBeGreaterThan(20);
-  await page.evaluate(()=>{document.documentElement.style.fontSize='150%';});
-  await expect.poll(()=>page.locator('.header').evaluate(header=>header.getBoundingClientRect().height))
-   .toBeGreaterThan(before.height+1);
-  await page.evaluate(()=>new Promise(resolve=>{
-   let count=0;const frame=()=>{if(++count===8)resolve();else requestAnimationFrame(frame);};requestAnimationFrame(frame);
-  }));
-  await expect(page.locator('#main h1')).toBeFocused();
-  const after=await page.evaluate(()=>({scrollY,height:document.querySelector('.header').getBoundingClientRect().height}));
-  expect(Math.abs(after.scrollY-before.scrollY),'header resize must not scroll a static previously focused heading into view')
-   .toBeLessThanOrEqual(2);
+  const before=await scrollNearTop(heading);
+  expect(before).toBeGreaterThan(20);
+  await growHeader();
+  await expect(heading).toBeFocused();
+  expect(Math.abs(await page.evaluate(()=>scrollY)-before),'a previously focused route heading must not pull back the reader').toBeLessThanOrEqual(2);
+
+  const control=page.locator('.learning-disclosure > summary');
+  await control.focus();
+  await scrollNearTop(control);
+  const clearance=()=>control.evaluate(el=>el.getBoundingClientRect().top-document.querySelector('.header').getBoundingClientRect().bottom);
+  expect(await clearance(),'the focused control starts partially behind the header').toBeLessThan(0);
+  await growHeader();
+  await expect(control).toBeFocused();
+  await expect.poll(clearance,'the header resize exposes the focused keyboard control').toBeGreaterThanOrEqual(-1);
  });
 }
 

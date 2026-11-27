@@ -20,7 +20,7 @@ function checkGeometry(locations){
    expect(actor.overflow,label+' retains the complete sprite').toBeLessThanOrEqual(.1);
    expect(actor.distortion,label+' preserves the sprite aspect ratio').toBeLessThan(.01);
    const standalone=/^characters\/story-(?:amina|jamie|jamie-comparison|other-person)\.webp$/.test(actor.source)||
-    (actor.character==='story-alex-comparison'&&actor.source==='characters/story-alex-comparison-20261126.png')||
+    (actor.character==='story-alex-comparison'&&actor.source==='characters/story-alex-comparison-20261126.webp')||
     (actor.character==='support-ticket-steward'&&actor.source==='characters/ticket-steward-768.webp');
    if(standalone){
     expect(actor.crop,label+' displays the whole standalone figure').toBe('none');
