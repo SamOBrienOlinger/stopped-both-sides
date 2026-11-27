@@ -80,13 +80,27 @@ function mobileLayout(view){
    }
    const range=document.createRange();
    range.setStart(node,start);range.setEnd(node,node.textContent.trimEnd().length);
+   let textLayout=null;
+   if(vertical){
+    for(let parent=node.parentElement;parent!==element;parent=parent.parentElement){
+     if(!['inline','contents'].includes(getComputedStyle(parent).display)){textLayout=parent;break;}
+    }
+   }
+   // Nested block/grid labels have layout boxes independent of fallback-font
+   // Range metrics. Direct-text controls and captions still use Range height.
+   if(textLayout)for(const rect of textLayout.getClientRects()){
+    if(!withinHeight(rect,bounds)){
+     errors.push(label+': text layout leaves its label ('+overflowDetails(rect,bounds,false,true)+')');
+    }
+   }
+   const rangeHeight=vertical&&!textLayout;
    for(const rect of range.getClientRects())if(rect.width>0&&rect.height>0){
     textRects.push(rect);
     // Font ascent/descent can exceed an uncropped heading's line-height.
     // Keep text inside controls/captions and every actual clipping ancestor,
     // while allowing ordinary document content to continue below the viewport.
-    if(!withinWidth(rect,bounds)||(vertical&&!withinHeight(rect,bounds))){
-     errors.push(label+': text leaves its label ('+overflowDetails(rect,bounds,true,vertical)+')');
+    if(!withinWidth(rect,bounds)||(rangeHeight&&!withinHeight(rect,bounds))){
+     errors.push(label+': text leaves its label ('+overflowDetails(rect,bounds,true,rangeHeight)+')');
     }
     if(clipping.some(clip=>(clip.x&&!withinWidth(rect,clip.bounds))||(clip.y&&!withinHeight(rect,clip.bounds)))){
      const details=clipping.map(clip=>overflowDetails(rect,clip.bounds,clip.x,clip.y)).filter(Boolean).join('; ');
