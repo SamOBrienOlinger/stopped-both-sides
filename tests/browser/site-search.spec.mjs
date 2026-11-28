@@ -232,31 +232,66 @@ for(const role of ['public','garda']){
   await expect(dialog.locator('.site-search-result[href*="privacy.html"]')).toBeVisible();
   expect(errors).toEqual([]);
  });
- test(`${role}: privacy Search retains a pointer click while navigation is translated`,async({page})=>{
+ test(`${role}: privacy Search retains a pointer click while navigation is translated`,async({page},testInfo)=>{
   await page.setViewportSize({width:1440,height:900});
-  let release;
-  const hold=new Promise(resolve=>{release=resolve;});
-  await page.route(url=>url.pathname.endsWith('/search/privacy-search.mjs'),async route=>{
-   await hold;await route.continue();
+  // Let the document finish loading before splitting the native pointer
+  // sequence. A held head-module response can suspend WebKit's mouse.move.
+  // The later import still executes the unmodified production translation.
+  await page.route(url=>url.pathname.endsWith('/search/privacy-search.mjs')&&
+   !url.searchParams.has('pointer-transition'),async route=>{
+   const url=new URL(route.request().url());url.searchParams.set('pointer-transition','1');
+   await route.fulfill({contentType:'text/javascript',
+    body:`window.__startPrivacyTranslation=()=>import(${JSON.stringify(url.href)});`});
   });
-  let pointerDown=false;
+  await page.goto('privacy.html?perspective='+role+'&lang=fr');
+  await page.evaluate(()=>document.fonts.ready);
+  const privacy=page.locator('html.privacy-page'),trigger=privacy.locator('#site-search-trigger');
+  const point=await loadingPrivacySearchPoint(page);
+  const pressedLabel=await trigger.evaluateHandle(button=>button.firstChild);
+  const sample=()=>page.evaluate(({point,label})=>{
+   const button=document.querySelector('#site-search-trigger'),box=button.getBoundingClientRect();
+   const hit=document.elementFromPoint(point.x,point.y);
+   return {language:document.documentElement.lang,text:button.textContent,box:box.toJSON(),
+    containsPoint:point.x>=box.left&&point.x<=box.right&&point.y>=box.top&&point.y<=box.bottom,
+    hitTarget:hit?.id||hit?.nodeName,labelConnected:label.isConnected,labelUnchanged:button.firstChild===label};
+  },{point,label:pressedLabel});
+  await page.evaluate(()=>{
+   window.__privacyPointerEvents=[];
+   for(const type of ['pointerdown','mousedown','pointerup','mouseup','click'])
+    document.addEventListener(type,event=>window.__privacyPointerEvents.push({
+     type:event.type,target:event.target.id||event.target.nodeName,isTrusted:event.isTrusted,
+     x:event.clientX,y:event.clientY,language:document.documentElement.lang
+    }),true);
+  });
+  const samples={point};let pointerDown=false;
   try{
-   await page.goto('privacy.html?perspective='+role+'&lang=fr',{waitUntil:'commit'});
-   const privacy=page.locator('html.privacy-page');
-   const point=await loadingPrivacySearchPoint(page);
    await expect(privacy).toHaveAttribute('lang','en-IE');
-   await expect(privacy.locator('#site-search-trigger')).toHaveText('Search');
+   await expect(trigger).toHaveText('Search');
+   samples.english=await sample();
+   expect(samples.english).toMatchObject({containsPoint:true,hitTarget:'site-search-trigger',
+    labelConnected:true,labelUnchanged:true});
    await page.mouse.move(point.x,point.y);
    await page.mouse.down();pointerDown=true;
-   release();
+   expect(await page.evaluate(()=>window.__privacyPointerEvents.find(event=>event.type==='mousedown')))
+    .toMatchObject({target:'site-search-trigger',isTrusted:true});
+   await page.evaluate(async()=>{await window.__startPrivacyTranslation();});
    await expect(privacy).toHaveAttribute('lang','fr');
+   samples.translated=await sample();
+   expect(samples.translated).toMatchObject({containsPoint:true,hitTarget:'site-search-trigger',
+    labelConnected:true,labelUnchanged:true});
    // Release at the original English target, without following its new label.
    await page.mouse.up();pointerDown=false;
+   expect(await page.evaluate(()=>window.__privacyPointerEvents.find(event=>event.type==='click')))
+    .toMatchObject({target:'site-search-trigger',isTrusted:true,language:'fr'});
    await expect(privacy.locator('#site-search-input')).toBeFocused();
    await expect(privacy.locator('#site-search-dialog')).toHaveAttribute('lang','fr');
   }finally{
-   release();
-   if(pointerDown)await page.mouse.up();
+   if(pointerDown&&!page.isClosed())await page.mouse.up();
+   samples.events=await page.evaluate(()=>window.__privacyPointerEvents).catch(error=>({error:error.message}));
+   await testInfo.attach('privacy-pointer-translation.json',{
+    body:Buffer.from(JSON.stringify(samples)),contentType:'application/json'
+   });
+   await pressedLabel.dispose();
   }
  });
 }

@@ -37,8 +37,10 @@ if(notice){
  document.querySelector('[data-back-to-top]').textContent=notice.top;
 }
 const trigger=document.querySelector('#site-search-trigger');
-trigger.textContent=translateText('Search',language);
-for(const link of document.querySelectorAll('main nav a'))link.textContent=translateText(link.textContent,language);
+// These static controls each have one text node. Retain that node while
+// translating so WebKit can complete a click already pressed on its label.
+trigger.firstChild.nodeValue=translateText('Search',language);
+for(const link of document.querySelectorAll('main nav a'))link.firstChild.nodeValue=translateText(link.textContent,language);
 for(const link of document.querySelectorAll('main a[href]')){
  const destination=new URL(link.href);
  if(destination.origin===location.origin){

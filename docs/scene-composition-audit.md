@@ -88,11 +88,17 @@ valid ground.
 ## Validation and reproduction
 
 The wider regression run also exposed a privacy-navigation target that moved
-during translation. Search now has its own stable column, with a real-pointer
-regression that spans the English-to-French transition. Deliberately held-module
-startup tests retain their behavior assertions and use timer-polled stylesheet,
-font and hit-target readiness before native input, avoiding WebKit's suspended
-animation-frame actionability in that artificial loading state. The near youth
+during translation. Search now has its own stable column, and its original text
+node is translated in place so WebKit can complete a click pressed before the
+language changes. A real-pointer regression spans the English-to-French
+transition, using the unmodified privacy module after a fully loaded deferred
+startup and asserting that the pressed label and hit target survive. This also
+covers the text-node removal behavior documented in
+[WebKit issue 252810](https://bugs.webkit.org/show_bug.cgi?id=252810).
+Separate held-module startup tests retain their behavior assertions and use
+timer-polled stylesheet, font and hit-target readiness before native input,
+avoiding WebKit's suspended animation-frame actionability in that artificial
+loading state. The near youth
 figure also retains a small margin above the minimum frame boundary so subpixel
 rounding cannot turn an exact threshold into clipping.
 
